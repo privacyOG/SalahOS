@@ -23,15 +23,15 @@ describe('localisation and RTL core', () => {
     expect(localeDirection('ar')).toBe('rtl');
   });
 
-  it('applies language and direction to the document root', () => {
-    const element = document.createElement('html');
-    applyDocumentLocale(element, 'ar');
-    expect(element.lang).toBe('ar');
-    expect(element.dir).toBe('rtl');
+  it('applies language and direction to a document-root compatible target', () => {
+    const target = { lang: '', dir: '' };
+    applyDocumentLocale(target, 'ar');
+    expect(target.lang).toBe('ar');
+    expect(target.dir).toBe('rtl');
 
-    applyDocumentLocale(element, 'en');
-    expect(element.lang).toBe('en');
-    expect(element.dir).toBe('ltr');
+    applyDocumentLocale(target, 'en');
+    expect(target.lang).toBe('en');
+    expect(target.dir).toBe('ltr');
   });
 
   it('formats 24-hour time predictably for both locales', () => {
