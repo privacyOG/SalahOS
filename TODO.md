@@ -194,7 +194,7 @@
 - [x] Implement `Calculated` prayer-time source mode
 - [x] Implement `Local Mosque` timetable source mode
 - [x] Implement `Calculated + Adjustments` source mode
-- [~] Show active source/provenance clearly in the UI
+- [x] Show active source/provenance clearly in the UI
 
 ### 5.2 Timetable management
 
@@ -214,14 +214,16 @@
 - [x] Support fixed Iqamah time
 - [x] Support Iqamah as `prayer start + N minutes`
 - [x] Support timetable-provided Iqamah times
-- [~] Clearly distinguish Adhan/start and Iqamah on smart displays
+- [x] Clearly distinguish Adhan/start and Iqamah on smart displays
 
 ### 5.4 Jumu'ah
 
-- [~] Detect Friday and support Jumu'ah presentation
+- [x] Detect Friday and support Jumu'ah presentation
 - [x] Support one or multiple Jumu'ah sessions
 - [x] Store Khutbah/Jumu'ah times independently of astronomical Dhuhr
 - [x] Allow mosque-specific Friday configuration
+
+**Source-presentation verification note (2026-08-16):** Quality Gate run `31905085674` passed formatting, typed lint, strict typecheck, source-domain tests and production build after integrating selected prayer sources. The dashboard now resolves calculated, calculated-with-adjustments and local-mosque modes explicitly; local-mosque mode replaces obligatory start times without silent calculated fallback, recomputes next-prayer/countdown from mosque times, shows configured Iqamah separately from prayer start and presents Friday Jumu'ah sessions. The source selector is disabled for local-mosque mode until a validated persisted timetable exists. Multiple saved mosques and a dedicated mosque picker remain open, so the combined mosque/source settings item remains partial.
 
 **Stage 5 verification note (2026-08-16):** read-only Quality Gate run `31901969127` passed formatting, typed lint, strict typecheck, the complete timetable/import suite and production build. The verified offline domain core implements explicit calculated/local-mosque/calculated-adjustments source modes, rejects silent source fallback, separates prayer start from fixed or +N Iqamah, supports one or multiple Friday Jumu'ah sessions independent of Dhuhr, and performs strict CSV plus runtime-structurally-validated JSON import/export. The CSV schema and sample are documented in `docs/MOSQUE_TIMETABLE.md` and `examples/mosque-timetable.csv`. Persistent local storage, UI entry/presentation and vetted optional remote integrations remain open.
 
@@ -258,7 +260,7 @@
 - [x] Live next-prayer countdown
 - [~] Highlight current/next prayer
 - [x] Calculation method/source indicator
-- [ ] Iqamah time where configured
+- [x] Iqamah time where configured
 - [~] High-latitude/manual-adjustment indicator when applicable
 
 ### 7.2 Responsive layouts
@@ -403,7 +405,7 @@
 - [x] High-latitude rule selector
 - [x] Manual prayer offsets
 - [ ] Location selector
-- [ ] Mosque/source selector
+- [~] Mosque/source selector
 - [x] Hijri correction
 - [x] Language selector
 - [x] Theme selector

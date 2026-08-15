@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { createCoordinates } from './domain/coordinates';
 import type { Coordinates } from './domain/coordinates';
 import { buildPrayerDashboard } from './domain/dashboard';
+import { applyPrayerSourceToDashboard } from './domain/sourcedDashboard';
 import { calculationMethods } from './domain/methods';
 import type { PrayerName } from './domain/prayerEngine';
 import {
@@ -34,6 +35,14 @@ const prayerTranslationKeys: Readonly<Record<PrayerName, TranslationKey>> = {
   asr: 'prayerAsr',
   maghrib: 'prayerMaghrib',
   isha: 'prayerIsha',
+};
+
+const sourceTranslationKeys: Readonly<
+  Record<PersistedSettings['prayerSourceMode'], TranslationKey>
+> = {
+  calculated: 'sourceCalculated',
+  'calculated-adjustments': 'sourceCalculatedAdjustments',
+  'local-mosque': 'sourceLocalMosque',
 };
 
 const adjustablePrayers: readonly PrayerName[] = [
@@ -126,6 +135,17 @@ export function App() {
             hijriCorrectionDays: settings.hijriCorrectionDays,
           }),
     [coordinates, now, settings],
+  );
+  const sourcedDashboard = useMemo(
+    () =>
+      dashboard === null
+        ? null
+        : applyPrayerSourceToDashboard({
+            dashboard,
+            sourceMode: settings.prayerSourceMode,
+            mosqueTimetable: settings.mosqueTimetable,
+          }),
+    [dashboard, settings.mosqueTimetable, settings.prayerSourceMode],
   );
   const direction = localeDirection(locale);
   const resolvedTimeZone = dashboard?.timeZone;
@@ -329,6 +349,27 @@ export function App() {
         <summary>{translate(locale, 'settings')}</summary>
         <div className="settings-grid">
           <label>
+            <span>{translate(locale, 'sourceMode')}</span>
+            <select
+              value={settings.prayerSourceMode}
+              onChange={(event) => {
+                setSettings((current) => ({
+                  ...current,
+                  prayerSourceMode: event.target.value as PersistedSettings['prayerSourceMode'],
+                }));
+              }}
+            >
+              <option value="calculated">{translate(locale, 'sourceCalculated')}</option>
+              <option value="calculated-adjustments">
+                {translate(locale, 'sourceCalculatedAdjustments')}
+              </option>
+              <option value="local-mosque" disabled={settings.mosqueTimetable === null}>
+                {translate(locale, 'sourceLocalMosque')}
+              </option>
+            </select>
+          </label>
+
+          <label>
             <span>{translate(locale, 'calculationMethod')}</span>
             <select
               value={settings.calculationMethodId}
@@ -434,6 +475,10 @@ export function App() {
           </label>
         </div>
 
+        {settings.mosqueTimetable === null && (
+          <p className="inline-message">{translate(locale, 'localMosqueUnavailable')}</p>
+        )}
+
         <fieldset className="offsets-fieldset">
           <legend>{translate(locale, 'prayerOffsets')}</legend>
           <div className="offset-grid">
@@ -503,16 +548,24 @@ export function App() {
           <p className="value">
             {dashboard === null
               ? translate(locale, 'notConfigured')
-              : translate(locale, 'sourceCalculated')}
+              : translate(locale, sourceTranslationKeys[settings.prayerSourceMode])}
           </p>
         </div>
         <div>
-          <p className="label">{translate(locale, 'method')}</p>
-          <p className="value">{dashboard?.method.name ?? translate(locale, 'notConfigured')}</p>
+          <p className="label">
+            {settings.prayerSourceMode === 'local-mosque'
+              ? translate(locale, 'selectedMosque')
+              : translate(locale, 'method')}
+          </p>
+          <p className="value">
+            {settings.prayerSourceMode === 'local-mosque'
+              ? (sourcedDashboard?.mosqueName ?? translate(locale, 'notConfigured'))
+              : (dashboard?.method.name ?? translate(locale, 'notConfigured'))}
+          </p>
         </div>
       </section>
 
-      {dashboard === null ? (
+      {dashboard === null || sourcedDashboard === null ? (
         <section className="prayer-panel" aria-labelledby="today-heading">
           <p className="next-prayer">{translate(locale, 'configureLocation')}</p>
         </section>
@@ -539,34 +592,68 @@ export function App() {
             <div className="next-prayer-block" aria-live="polite">
               <p className="label">{translate(locale, 'nextPrayer')}</p>
               <strong>
-                {dashboard.nextPrayer === null
+                {sourcedDashboard.nextPrayer === null
                   ? translate(locale, 'notConfigured')
-                  : translate(locale, prayerTranslationKeys[dashboard.nextPrayer])}
+                  : translate(locale, prayerTranslationKeys[sourcedDashboard.nextPrayer])}
               </strong>
-              {dashboard.nextPrayerDayOffset === 1 && <span>{translate(locale, 'tomorrow')}</span>}
+              {sourcedDashboard.nextPrayerDayOffset === 1 && (
+                <span>{translate(locale, 'tomorrow')}</span>
+              )}
               <p className="countdown">
-                {dashboard.secondsUntilNextPrayer === null
+                {sourcedDashboard.secondsUntilNextPrayer === null
                   ? '—'
-                  : formatCountdown(dashboard.secondsUntilNextPrayer, locale)}
+                  : formatCountdown(sourcedDashboard.secondsUntilNextPrayer, locale)}
               </p>
             </div>
           </div>
 
           <div className="prayer-grid">
-            {dashboard.prayers.map((prayer) => (
+            {sourcedDashboard.prayers.map((prayer) => (
               <article
                 className={`prayer-card${prayer.isNext ? ' prayer-card-next' : ''}${prayer.name === 'sunrise' ? ' prayer-card-supplementary' : ''}`}
                 key={prayer.name}
               >
                 <span>{translate(locale, prayerTranslationKeys[prayer.name])}</span>
-                <strong>
-                  {prayer.localMinutes === null
-                    ? '—'
-                    : formatLocalTime(prayer.localMinutes, locale, settings.timeFormat)}
-                </strong>
+                <div className="prayer-times">
+                  <span className="prayer-time-label">{translate(locale, 'prayerStart')}</span>
+                  <strong>
+                    {prayer.localMinutes === null
+                      ? '—'
+                      : formatLocalTime(prayer.localMinutes, locale, settings.timeFormat)}
+                  </strong>
+                  {prayer.name !== 'sunrise' && prayer.iqamahLocalMinutes !== null && (
+                    <>
+                      <span className="prayer-time-label">{translate(locale, 'iqamah')}</span>
+                      <strong className="iqamah-time">
+                        {formatLocalTime(prayer.iqamahLocalMinutes, locale, settings.timeFormat)}
+                      </strong>
+                    </>
+                  )}
+                </div>
               </article>
             ))}
           </div>
+
+          {sourcedDashboard.jumuahSessions.length > 0 && (
+            <section className="jumuah-panel" aria-label={translate(locale, 'jumuah')}>
+              <h3>{translate(locale, 'jumuah')}</h3>
+              <div className="jumuah-grid">
+                {sourcedDashboard.jumuahSessions.map((session) => (
+                  <article key={`${session.label}-${String(session.salahLocalMinutes)}`}>
+                    <strong>{session.label}</strong>
+                    <span>
+                      {translate(locale, 'khutbah')}:{' '}
+                      {formatLocalTime(session.khutbahLocalMinutes, locale, settings.timeFormat)}
+                    </span>
+                    <span>
+                      {translate(locale, 'salah')}:{' '}
+                      {formatLocalTime(session.salahLocalMinutes, locale, settings.timeFormat)}
+                    </span>
+                  </article>
+                ))}
+              </div>
+            </section>
+          )}
 
           {(dashboard.hasHighLatitudeFallback || dashboard.hasManualAdjustments) && (
             <div className="provenance-note" role="status">
