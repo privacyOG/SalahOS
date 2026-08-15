@@ -29,7 +29,9 @@ export function App() {
             <select
               aria-label={translate(locale, 'language')}
               value={locale}
-              onChange={(event) => setLocale(event.target.value as Locale)}
+              onChange={(event) => {
+                setLocale(event.target.value as Locale);
+              }}
             >
               <option value="en">{translate(locale, 'english')}</option>
               <option value="ar">{translate(locale, 'arabic')}</option>
