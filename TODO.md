@@ -95,8 +95,10 @@
 
 - [x] Support per-prayer minute offsets
 - [x] Keep adjustments separate from the underlying astronomical result
-- [ ] Show when a displayed time contains a manual adjustment
-- [ ] Allow reset-to-method-default
+- [x] Show when a displayed time contains a manual adjustment
+- [x] Allow reset-to-method-default
+
+**Manual-adjustment verification note (2026-08-16):** implementation Quality Gate run `31911208279` passed formatting, typed lint, strict typecheck, all tests and production build after integrating source-aware adjustment indicators and reset controls. Prayer cards now show the signed offset only when the displayed calculated time actually contains that adjustment; mosque-provided obligatory start times do not inherit a false badge, while calculated Sunrise remains correctly eligible in local-mosque mode. The dedicated reset clears only prayer offsets, returning displayed calculated times to the selected method defaults without resetting the selected method, location, mosque or other settings.
 
 **Stage 1 engine verification note (2026-08-16):** read-only Quality Gate run `31891501691` completed successfully after the expanded engine tests. The suite verifies five-prayer ordering, Standard/Hanafi Asr divergence, raw/base/adjusted/rounded separation, fixed-interval Isha, all three implemented high-latitude strategies, polar unavailability without fabricated events, and adjustment-range validation. Read-only Quality Gate run `31899800537` additionally verified explicit Imsak/Ishraq offsets, Islamic midnight, last-third calculations, next-obligatory-prayer selection and Isha → tomorrow Fajr rollover. Reference-parity evidence is recorded separately below.
 
