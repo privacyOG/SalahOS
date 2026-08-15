@@ -22,12 +22,12 @@
 - [x] Create `CHANGELOG.md`
 - [x] Choose and document the cross-platform framework and deployment strategy
 - [x] Define repository structure and coding conventions
-- [~] Configure formatter, linter, strict type checking and test runner
-- [~] Add CI workflow for lint, typecheck, tests and production build
-- [~] Pin dependencies and commit lockfile for reproducible builds
+- [x] Configure formatter, linter, strict type checking and test runner
+- [x] Add CI workflow for lint, typecheck, tests and production build
+- [x] Pin dependencies and commit lockfile for reproducible builds
 - [x] Define privacy principles: local-first operation, minimal telemetry, no unnecessary location transmission
 
-**Stage 0 verification note (2026-08-16):** documentation, scope, architecture, conventions and privacy principles are committed. Tooling and CI remain in progress until the branch quality gate executes successfully. Exact direct dependency versions are pinned; the lockfile remains outstanding and therefore reproducible-install completion is not claimed.
+**Stage 0 verification note (2026-08-16):** foundation documentation and tooling are committed. The read-only Quality Gate completed successfully from the committed lockfile on run `31891071518`, covering `npm ci`, formatting, lint, strict type checking, the current unit suite and the production web build. Dependency installation reported zero vulnerabilities.
 
 ---
 
@@ -36,10 +36,10 @@
 ### 1.1 Core astronomical engine
 
 - [~] Implement pure prayer-calculation engine with no UI, DOM or network dependency
-- [~] Implement Julian date / solar-position calculations
-- [~] Implement equation of time and solar declination calculations
-- [~] Implement solar noon calculation
-- [~] Implement sunrise and sunset calculations
+- [x] Implement Julian date / solar-position calculations
+- [x] Implement equation of time and solar declination calculations
+- [x] Implement solar noon calculation
+- [x] Implement sunrise and sunset calculations
 - [x] Document atmospheric refraction, sunrise/sunset depression and observer-elevation assumptions
 - [ ] Implement deterministic calculation rounding policy in a dedicated module
 - [ ] Keep raw calculated times separate from displayed/rounded times
@@ -437,7 +437,7 @@
 
 ### Unit tests
 
-- [~] Solar/astronomical math tests
+- [x] Solar/astronomical math tests
 - [ ] Prayer-engine tests
 - [ ] Calculation-method tests
 - [ ] Asr-method tests
@@ -478,13 +478,13 @@
 
 ## 18. Quality gates
 
-- [ ] Formatter clean
-- [ ] Linter clean
-- [ ] Strict typecheck clean
-- [ ] Unit tests green
+- [x] Formatter clean
+- [x] Linter clean
+- [x] Strict typecheck clean
+- [x] Unit tests green
 - [ ] Integration tests green
 - [ ] UI/component tests green
-- [ ] Production web build succeeds
+- [x] Production web build succeeds
 - [ ] Android build succeeds where SDK is available
 - [ ] iOS build succeeds where Xcode is available
 - [ ] Raspberry Pi/kiosk deployment script validated
