@@ -19,6 +19,8 @@ export interface SolarDayEvents {
   readonly sunsetUtcMinutes: number | null;
 }
 
+export type SolarEventDirection = 'morning' | 'evening';
+
 /** Convert a JavaScript instant to astronomical Julian Day. */
 export function julianDay(date: Date): number {
   return date.getTime() / DAY_MS + JULIAN_UNIX_EPOCH;
@@ -72,13 +74,17 @@ export function solarCoordinates(date: Date): SolarCoordinates {
   };
 }
 
-function hourAngleDegrees(latitudeDegrees: number, declinationDegrees: number): number | null {
+function hourAngleForAltitudeDegrees(
+  latitudeDegrees: number,
+  declinationDegrees: number,
+  altitudeDegrees: number,
+): number | null {
   const latitude = toRadians(latitudeDegrees);
   const declination = toRadians(declinationDegrees);
-  const zenith = toRadians(SUNRISE_ZENITH_DEGREES);
+  const altitude = toRadians(altitudeDegrees);
 
   const cosine =
-    (Math.cos(zenith) - Math.sin(latitude) * Math.sin(declination)) /
+    (Math.sin(altitude) - Math.sin(latitude) * Math.sin(declination)) /
     (Math.cos(latitude) * Math.cos(declination));
 
   if (cosine < -1 || cosine > 1) {
@@ -86,6 +92,57 @@ function hourAngleDegrees(latitudeDegrees: number, declinationDegrees: number): 
   }
 
   return toDegrees(Math.acos(cosine));
+}
+
+function validateCoordinates(latitudeDegrees: number, longitudeDegrees: number): void {
+  if (!Number.isFinite(latitudeDegrees) || latitudeDegrees < -90 || latitudeDegrees > 90) {
+    throw new RangeError('Latitude must be between -90 and 90 degrees');
+  }
+
+  if (!Number.isFinite(longitudeDegrees) || longitudeDegrees < -180 || longitudeDegrees > 180) {
+    throw new RangeError('Longitude must be between -180 and 180 degrees');
+  }
+}
+
+function utcMidday(date: Date): Date {
+  return new Date(
+    Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 12, 0, 0, 0),
+  );
+}
+
+/**
+ * Compute the UTC minute of a solar-altitude crossing for a civil date.
+ * Morning crossings are before solar noon; evening crossings are after it.
+ */
+export function solarEventUtcMinutes(
+  date: Date,
+  latitudeDegrees: number,
+  longitudeDegrees: number,
+  altitudeDegrees: number,
+  direction: SolarEventDirection,
+): number | null {
+  validateCoordinates(latitudeDegrees, longitudeDegrees);
+
+  if (!Number.isFinite(altitudeDegrees) || altitudeDegrees < -90 || altitudeDegrees > 90) {
+    throw new RangeError('Solar altitude must be between -90 and 90 degrees');
+  }
+
+  const coordinates = solarCoordinates(utcMidday(date));
+  const solarNoonUtcMinutes = 720 - 4 * longitudeDegrees - coordinates.equationOfTimeMinutes;
+  const hourAngle = hourAngleForAltitudeDegrees(
+    latitudeDegrees,
+    coordinates.declinationDegrees,
+    altitudeDegrees,
+  );
+
+  if (hourAngle === null) {
+    return null;
+  }
+
+  const deltaMinutes = 4 * hourAngle;
+  return direction === 'morning'
+    ? solarNoonUtcMinutes - deltaMinutes
+    : solarNoonUtcMinutes + deltaMinutes;
 }
 
 /**
@@ -97,35 +154,28 @@ export function solarDayEvents(
   latitudeDegrees: number,
   longitudeDegrees: number,
 ): SolarDayEvents {
-  if (!Number.isFinite(latitudeDegrees) || latitudeDegrees < -90 || latitudeDegrees > 90) {
-    throw new RangeError('Latitude must be between -90 and 90 degrees');
-  }
+  validateCoordinates(latitudeDegrees, longitudeDegrees);
 
-  if (!Number.isFinite(longitudeDegrees) || longitudeDegrees < -180 || longitudeDegrees > 180) {
-    throw new RangeError('Longitude must be between -180 and 180 degrees');
-  }
-
-  const midnightUtc = new Date(
-    Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 0, 0, 0, 0),
-  );
-  const coordinates = solarCoordinates(new Date(midnightUtc.getTime() + 12 * 60 * 60 * 1000));
+  const coordinates = solarCoordinates(utcMidday(date));
   const solarNoonUtcMinutes = 720 - 4 * longitudeDegrees - coordinates.equationOfTimeMinutes;
-  const hourAngle = hourAngleDegrees(latitudeDegrees, coordinates.declinationDegrees);
-
-  if (hourAngle === null) {
-    return {
-      solarNoonUtcMinutes,
-      sunriseUtcMinutes: null,
-      sunsetUtcMinutes: null,
-    };
-  }
-
-  const deltaMinutes = 4 * hourAngle;
+  const sunriseAltitudeDegrees = 90 - SUNRISE_ZENITH_DEGREES;
 
   return {
     solarNoonUtcMinutes,
-    sunriseUtcMinutes: solarNoonUtcMinutes - deltaMinutes,
-    sunsetUtcMinutes: solarNoonUtcMinutes + deltaMinutes,
+    sunriseUtcMinutes: solarEventUtcMinutes(
+      date,
+      latitudeDegrees,
+      longitudeDegrees,
+      sunriseAltitudeDegrees,
+      'morning',
+    ),
+    sunsetUtcMinutes: solarEventUtcMinutes(
+      date,
+      latitudeDegrees,
+      longitudeDegrees,
+      sunriseAltitudeDegrees,
+      'evening',
+    ),
   };
 }
 
