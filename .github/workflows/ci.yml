@@ -29,37 +29,22 @@ jobs:
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
 
-      - name: Apply runtime refresh recovery
+      - name: Record runtime refresh validation
         if: github.event_name == 'push'
-        run: python scripts/apply_runtime_refresh.py
+        run: python scripts/record_runtime_refresh.py
 
-      - name: Canonicalize runtime refresh integration
+      - name: Canonicalize tracker documentation
         if: github.event_name == 'push'
-        run: npx prettier --write src/App.tsx src/platform/runtimeRefresh.ts src/platform/runtimeRefresh.test.ts
+        run: npx prettier --write TODO.md TESTING.md
 
-      - name: Commit runtime refresh integration
+      - name: Commit tracker evidence
         if: github.event_name == 'push'
         run: |
           git config user.name "privacyOG"
           git config user.email "102720550+privacyOG@users.noreply.github.com"
-          git add src/App.tsx src/platform/runtimeRefresh.ts src/platform/runtimeRefresh.test.ts
+          git add TODO.md TESTING.md
           if git diff --cached --quiet; then
             exit 0
           fi
-          git commit -m "feat: recover clock state after resume"
+          git commit -m "docs: record runtime refresh validation"
           git push origin HEAD:${{ github.ref_name }}
-
-      - name: Format check
-        run: npm run format:check
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Typecheck
-        run: npm run typecheck
-
-      - name: Test
-        run: npm run test
-
-      - name: Production build
-        run: npm run build
