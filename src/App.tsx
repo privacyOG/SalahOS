@@ -3,6 +3,7 @@ import { createCoordinates } from './domain/coordinates';
 import type { Coordinates } from './domain/coordinates';
 import { buildPrayerDashboard } from './domain/dashboard';
 import { applyPrayerSourceToDashboard } from './domain/sourcedDashboard';
+import { parseMosqueTimetableCsv, parseMosqueTimetableJson } from './domain/timetableImport';
 import { calculationMethods } from './domain/methods';
 import type { PrayerName } from './domain/prayerEngine';
 import {
@@ -18,6 +19,14 @@ import {
 import type { Locale, TranslationKey } from './i18n/translations';
 import { requestBrowserLocation } from './platform/browserGeolocation';
 import type { BrowserLocationFailureReason } from './platform/browserGeolocation';
+import {
+  loadMosqueLibrary,
+  mosqueLibraryId,
+  removeMosqueTimetable,
+  saveMosqueLibrary,
+  upsertMosqueTimetable,
+} from './platform/mosqueLibrary';
+import type { MosqueLibraryEntry } from './platform/mosqueLibrary';
 import {
   loadSavedLocations,
   removeSavedLocation,
@@ -105,6 +114,17 @@ export function App() {
   });
   const [savedLocationLabel, setSavedLocationLabel] = useState('');
   const [locationMessage, setLocationMessage] = useState<TranslationKey | null>(null);
+  const [mosqueLibrary, setMosqueLibrary] = useState<readonly MosqueLibraryEntry[]>(() => {
+    try {
+      return loadMosqueLibrary(window.localStorage);
+    } catch {
+      return [];
+    }
+  });
+  const [mosqueImportFormat, setMosqueImportFormat] = useState<'json' | 'csv'>('json');
+  const [mosqueImportName, setMosqueImportName] = useState('');
+  const [mosqueImportPayload, setMosqueImportPayload] = useState('');
+  const [mosqueMessage, setMosqueMessage] = useState<TranslationKey | null>(null);
 
   useEffect(() => {
     applyDocumentLocale(document.documentElement, locale);
@@ -198,6 +218,14 @@ export function App() {
     }
   }, [savedLocations]);
 
+  useEffect(() => {
+    try {
+      saveMosqueLibrary(window.localStorage, mosqueLibrary);
+    } catch {
+      // The validated mosque library remains usable in memory when storage is unavailable.
+    }
+  }, [mosqueLibrary]);
+
   async function refreshLocation(): Promise<void> {
     const result = await requestBrowserLocation();
     if (result.ok) {
@@ -256,6 +284,50 @@ export function App() {
     const id = savedLocationId(coordinates);
     setSavedLocations((current) => removeSavedLocation(current, id));
     setLocationMessage('savedLocationRemoved');
+  }
+
+  function importMosqueTimetable(): void {
+    try {
+      const timetable =
+        mosqueImportFormat === 'json'
+          ? parseMosqueTimetableJson(mosqueImportPayload)
+          : parseMosqueTimetableCsv(mosqueImportPayload, mosqueImportName.trim());
+      setMosqueLibrary((current) => upsertMosqueTimetable(current, timetable));
+      setSettings((current) => ({
+        ...current,
+        mosqueTimetable: timetable,
+        prayerSourceMode: 'local-mosque',
+      }));
+      setMosqueImportName('');
+      setMosqueImportPayload('');
+      setMosqueMessage('mosqueTimetableImported');
+    } catch {
+      setMosqueMessage('mosqueTimetableImportError');
+    }
+  }
+
+  function selectMosqueTimetable(id: string): void {
+    const selected = mosqueLibrary.find((entry) => entry.id === id);
+    if (selected === undefined) return;
+    setSettings((current) => ({
+      ...current,
+      mosqueTimetable: selected.timetable,
+      prayerSourceMode: 'local-mosque',
+    }));
+    setMosqueMessage(null);
+  }
+
+  function removeSelectedMosqueTimetable(): void {
+    if (settings.mosqueTimetable === null) return;
+    const id = mosqueLibraryId(settings.mosqueTimetable.mosqueName);
+    setMosqueLibrary((current) => removeMosqueTimetable(current, id));
+    setSettings((current) => ({
+      ...current,
+      mosqueTimetable: null,
+      prayerSourceMode:
+        current.prayerSourceMode === 'local-mosque' ? 'calculated' : current.prayerSourceMode,
+    }));
+    setMosqueMessage('mosqueTimetableRemoved');
   }
 
   function updatePrayerOffset(prayer: PrayerName, rawValue: string): void {
@@ -587,6 +659,89 @@ export function App() {
             </select>
           </label>
         </div>
+
+        <section
+          className="mosque-library-controls"
+          aria-label={translate(locale, 'mosqueLibrary')}
+        >
+          <div className="mosque-library-row">
+            <label>
+              <span>{translate(locale, 'mosqueLibrary')}</span>
+              <select
+                value={
+                  settings.mosqueTimetable === null
+                    ? ''
+                    : mosqueLibraryId(settings.mosqueTimetable.mosqueName)
+                }
+                onChange={(event) => {
+                  selectMosqueTimetable(event.target.value);
+                }}
+              >
+                <option value="">{translate(locale, 'selectMosque')}</option>
+                {mosqueLibrary.map((entry) => (
+                  <option key={entry.id} value={entry.id}>
+                    {entry.timetable.mosqueName}
+                  </option>
+                ))}
+              </select>
+            </label>
+            <button
+              type="button"
+              disabled={settings.mosqueTimetable === null}
+              onClick={removeSelectedMosqueTimetable}
+            >
+              {translate(locale, 'removeMosque')}
+            </button>
+          </div>
+
+          <div className="mosque-import-grid">
+            <label>
+              <span>{translate(locale, 'timetableFormat')}</span>
+              <select
+                value={mosqueImportFormat}
+                onChange={(event) => {
+                  setMosqueImportFormat(event.target.value as 'json' | 'csv');
+                  setMosqueMessage(null);
+                }}
+              >
+                <option value="json">JSON</option>
+                <option value="csv">CSV</option>
+              </select>
+            </label>
+            {mosqueImportFormat === 'csv' && (
+              <label>
+                <span>{translate(locale, 'mosqueName')}</span>
+                <input
+                  value={mosqueImportName}
+                  maxLength={160}
+                  onChange={(event) => {
+                    setMosqueImportName(event.target.value);
+                    setMosqueMessage(null);
+                  }}
+                />
+              </label>
+            )}
+          </div>
+          <label className="mosque-import-payload">
+            <span>{translate(locale, 'timetableData')}</span>
+            <textarea
+              rows={7}
+              value={mosqueImportPayload}
+              onChange={(event) => {
+                setMosqueImportPayload(event.target.value);
+                setMosqueMessage(null);
+              }}
+            />
+          </label>
+          <button type="button" onClick={importMosqueTimetable}>
+            {translate(locale, 'importMosqueTimetable')}
+          </button>
+          {mosqueMessage !== null && (
+            <p className="inline-message" role="status">
+              {translate(locale, mosqueMessage)}
+            </p>
+          )}
+        </section>
 
         {settings.mosqueTimetable === null && (
           <p className="inline-message">{translate(locale, 'localMosqueUnavailable')}</p>
