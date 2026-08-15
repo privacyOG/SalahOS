@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import {
+  displayedManualPrayerAdjustmentMinutes,
   hasManualPrayerAdjustments,
   manualPrayerAdjustmentMinutes,
   resetManualPrayerAdjustments,
@@ -17,6 +18,13 @@ describe('manual prayer adjustment status', () => {
     expect(manualPrayerAdjustmentMinutes({}, 'dhuhr')).toBeNull();
     expect(manualPrayerAdjustmentMinutes({ asr: 0 }, 'asr')).toBeNull();
     expect(hasManualPrayerAdjustments({ maghrib: 0 })).toBe(false);
+  });
+
+  it('shows calculated adjustment provenance but suppresses it for local mosque times', () => {
+    expect(displayedManualPrayerAdjustmentMinutes(4, 'calculated')).toBe(4);
+    expect(displayedManualPrayerAdjustmentMinutes(-3, 'calculated-adjustments')).toBe(-3);
+    expect(displayedManualPrayerAdjustmentMinutes(4, 'local-mosque')).toBeNull();
+    expect(displayedManualPrayerAdjustmentMinutes(0, 'calculated')).toBeNull();
   });
 
   it('detects any non-zero manual offset', () => {
