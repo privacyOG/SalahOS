@@ -158,3 +158,14 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - CSV and JSON round-trip tests, invalid-schema/time tests, duplicate-date tests, source-isolation tests and Iqamah/Jumu'ah validation tests are included.
 - Read-only Quality Gate run `31901969127` completed successfully with clean lockfile install, formatting, typed lint, strict typecheck, tests and production build.
 - Persistence, UI editing/presentation and optional vetted remote integrations remain separate open work.
+
+### 2026-08-16 — English/Arabic localisation and RTL core
+
+- The current shared application shell uses a statically typed English/Arabic translation catalogue instead of hard-coded user-facing prose in `App.tsx`.
+- Arabic prayer names are explicitly covered for Fajr, Dhuhr, Asr, Maghrib and Isha.
+- Locale switching applies `lang` and `dir` to the document root while the shared shell also receives the matching direction.
+- RTL layout uses logical block properties and removes Latin-specific uppercase/letter-spacing treatment for Arabic.
+- Locale helpers cover explicit 12/24-hour-capable prayer-time formatting and host-timezone-independent Gregorian civil-date formatting through `Intl.DateTimeFormat`.
+- Tests run without a browser-global dependency by targeting the minimal document-root locale contract.
+- Read-only Quality Gate run `31902384992` completed successfully with clean lockfile install, formatting, typed lint, strict typecheck, all tests and production build.
+- Full mixed-script and RTL visual regression across every target breakpoint remains open for the responsive UI test stage.

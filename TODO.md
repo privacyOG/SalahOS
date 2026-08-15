@@ -229,16 +229,18 @@
 
 ## 6. Internationalisation, Arabic and RTL
 
-- [ ] Build localisation framework from the beginning
-- [ ] English translation complete
-- [ ] Arabic translation complete
-- [ ] Enable `dir="rtl"` correctly for Arabic
-- [ ] Verify mixed Arabic/Latin text rendering
-- [ ] Verify Arabic numerals/date/time formatting choices
-- [ ] Ensure prayer names have correct Arabic forms
-- [ ] Keep all user-facing text out of hard-coded components
-- [ ] Design translation structure for additional languages later
-- [ ] Test RTL at every major breakpoint
+- [x] Build localisation framework from the beginning
+- [x] English translation complete
+- [x] Arabic translation complete
+- [x] Enable `dir="rtl"` correctly for Arabic
+- [~] Verify mixed Arabic/Latin text rendering
+- [x] Verify Arabic numerals/date/time formatting choices
+- [x] Ensure prayer names have correct Arabic forms
+- [x] Keep all user-facing text out of hard-coded components
+- [x] Design translation structure for additional languages later
+- [~] Test RTL at every major breakpoint
+
+**Stage 6 verification note (2026-08-16):** read-only Quality Gate run `31902384992` passed formatting, typed lint, strict typecheck, the complete unit suite and production build. The current shared shell now uses a statically typed English/Arabic catalogue, runtime locale switching, Arabic prayer names, document `lang`/`dir` updates, RTL-safe logical CSS and locale-aware time/Gregorian-date helpers. All user-facing prose in the current `App` shell is catalogue-backed. Full visual RTL validation across phone, tablet, Raspberry Pi and kiosk breakpoints remains open until those responsive layouts and the visual suite exist.
 
 ---
 
@@ -398,7 +400,7 @@
 - [ ] Location selector
 - [ ] Mosque/source selector
 - [ ] Hijri correction
-- [ ] Language selector
+- [~] Language selector
 - [ ] Theme selector
 - [ ] Time format (12/24-hour)
 - [ ] Per-prayer notifications
@@ -476,13 +478,13 @@
 ### UI / visual regression
 
 - [ ] Phone portrait — English/light
-- [ ] Phone portrait — Arabic/RTL/dark
+- [~] Phone portrait — Arabic/RTL/dark
 - [ ] Phone landscape
 - [ ] Tablet
 - [ ] Raspberry Pi Touch Display 2
 - [ ] 1080p kiosk
 - [ ] Verify no clipping/overflow
-- [ ] Verify Arabic/RTL alignment
+- [~] Verify Arabic/RTL alignment
 - [ ] Verify scalable text/accessibility
 - [ ] Save screenshots/artifacts in CI where practical
 
@@ -580,7 +582,7 @@ SalahOS v1 must not be declared complete until the following are true:
 - [~] GPS/manual location and timezone handling work correctly
 - [~] DST/date rollover behaviour is tested
 - [~] Gregorian and Hijri dates work
-- [ ] English and Arabic/RTL are production-ready
+- [~] English and Arabic/RTL are production-ready
 - [ ] Mobile, Raspberry Pi and TV/kiosk layouts are validated
 - [ ] Offline prayer calculation is fully functional
 - [ ] Notifications/Adhan work on supported platforms within platform restrictions

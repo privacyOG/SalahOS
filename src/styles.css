@@ -39,7 +39,30 @@ select {
 
 .hero {
   max-width: 760px;
-  margin-bottom: 2rem;
+  margin-block-end: 2rem;
+}
+
+.hero-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.language-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: #c2cdc0;
+  font-size: 0.9rem;
+}
+
+.language-control select {
+  padding: 0.45rem 0.65rem;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 0.65rem;
+  color: inherit;
+  background: #1d281f;
 }
 
 .eyebrow,
@@ -52,6 +75,12 @@ select {
   text-transform: uppercase;
 }
 
+[dir='rtl'] .eyebrow,
+[dir='rtl'] .label {
+  letter-spacing: 0;
+  text-transform: none;
+}
+
 h1,
 h2,
 p {
@@ -59,14 +88,19 @@ p {
 }
 
 h1 {
-  margin-bottom: 0.8rem;
+  margin-block-end: 0.8rem;
   font-size: clamp(2.35rem, 7vw, 5.5rem);
   line-height: 0.98;
   letter-spacing: -0.055em;
 }
 
+[dir='rtl'] h1 {
+  letter-spacing: 0;
+  line-height: 1.15;
+}
+
 h2 {
-  margin-bottom: 0;
+  margin-block-end: 0;
   font-size: clamp(1.7rem, 3vw, 2.4rem);
 }
 
@@ -89,12 +123,12 @@ h2 {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 1rem;
-  margin-bottom: 1rem;
+  margin-block-end: 1rem;
   padding: 1.25rem;
 }
 
 .value {
-  margin-bottom: 0;
+  margin-block-end: 0;
   font-weight: 650;
 }
 
@@ -107,7 +141,7 @@ h2 {
   align-items: end;
   justify-content: space-between;
   gap: 1rem;
-  margin-bottom: 1.5rem;
+  margin-block-end: 1.5rem;
 }
 
 .next-prayer {
@@ -141,14 +175,15 @@ h2 {
 }
 
 @media (max-width: 760px) {
-  .status-card,
-  .prayer-grid {
-    grid-template-columns: 1fr;
-  }
-
+  .hero-toolbar,
   .section-heading {
     align-items: start;
     flex-direction: column;
+  }
+
+  .status-card,
+  .prayer-grid {
+    grid-template-columns: 1fr;
   }
 
   .prayer-card {
