@@ -12,10 +12,12 @@ export function manualPrayerAdjustmentMinutes(
 }
 
 export function displayedManualPrayerAdjustmentMinutes(
+  prayer: PrayerName,
   manualAdjustmentMinutes: number,
   sourceMode: PrayerSourceMode,
 ): number | null {
-  if (sourceMode === 'local-mosque' || manualAdjustmentMinutes === 0) {
+  const mosqueReplacesDisplayedTime = sourceMode === 'local-mosque' && prayer !== 'sunrise';
+  if (mosqueReplacesDisplayedTime || manualAdjustmentMinutes === 0) {
     return null;
   }
   return manualAdjustmentMinutes;
