@@ -44,18 +44,24 @@ describe('mosque timetable import and export', () => {
     ).toThrow(/CSV header/);
 
     expect(() =>
-      parseMosqueTimetableCsv(SAMPLE_CSV.replace('05:25', '25:99'), 'Example Mosque'),
+      parseMosqueTimetableCsv(
+        SAMPLE_CSV.replace('05:25', '25:99'),
+        'Example Mosque',
+      ),
     ).toThrow(RangeError);
 
     expect(() =>
-      parseMosqueTimetableCsv(SAMPLE_CSV.replace('05:25,+20', ',+20'), 'Example Mosque'),
+      parseMosqueTimetableCsv(
+        SAMPLE_CSV.replace('05:25,+20', ',+20'),
+        'Example Mosque',
+      ),
     ).toThrow(/cannot exist without/);
   });
 
   it('rejects malformed or structurally invalid JSON before activation', () => {
     expect(() => parseMosqueTimetableJson('{')).toThrow(/invalid/);
-    expect(() => parseMosqueTimetableJson(JSON.stringify({ mosqueName: '', days: [] }))).toThrow(
-      RangeError,
-    );
+    expect(() =>
+      parseMosqueTimetableJson(JSON.stringify({ mosqueName: '', days: [] })),
+    ).toThrow(RangeError);
   });
 });
