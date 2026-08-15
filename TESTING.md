@@ -252,3 +252,14 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - The duplicated mosque-library settings panel discovered during this integration was removed.
 - Read-only Quality Gate run `31908401807` passed the domain/persistence core; implementation Quality Gate run `31908480344` passed formatting, typed lint, strict typecheck, all tests and production build after UI integration.
 - Platform permission flows, notification scheduling, exact-alarm/reboot handling, duplicate suppression, DST rescheduling and actual Adhan audio delivery remain open.
+
+### 2026-08-16 — Duplicate-safe notification schedule core
+
+- Added deterministic notification intents with stable ids scoped by prayer date, prayer and delivery kind.
+- Reminder intents can normalize into the previous civil date without losing the original prayer date identity.
+- Repeated prayer inputs collapse to one intent id, preventing duplicate jobs at the domain boundary.
+- Reconciliation compares installed and desired intents and emits explicit cancellation plus scheduling sets when recalculated prayer times change.
+- Date rollover replaces prior-date jobs with next-date ids, while an already-correct schedule produces a no-op reconciliation.
+- Tests cover reminder/prayer-time/Adhan intent generation, prior-day reminder normalization, duplicate input, recalculation replacement, date rollover and no-op reconciliation.
+- Implementation Quality Gate run `31908783069` passed formatting, typed lint, strict typecheck, all tests and production build.
+- Timezone-to-instant conversion, DST delivery tests, platform scheduling, permission handling, reboot recovery and actual delivery remain open.
