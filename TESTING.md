@@ -179,3 +179,13 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Responsive CSS uses one shared app/data model across phone, tablet and large-display widths, with visible keyboard focus, touch-sized controls, semantic status/error messaging and reduced-motion handling.
 - Read-only Quality Gate run `31903663678` passed clean lockfile install, formatting, typed lint, strict typecheck, all tests and production build after canonical formatting.
 - Mosque selection/Iqamah presentation, persistent saved locations, theme controls, current-prayer highlighting and visual regression on physical target displays remain open.
+
+### 2026-08-16 — Offline-first and versioned local persistence core
+
+- Added a versioned `salahos.settings` storage envelope for selected coordinates/timezone, locale, theme/time-format preferences, built-in method, Asr convention, high-latitude rule, Hijri correction, prayer adjustments, source mode and a validated mosque timetable.
+- The current dashboard restores and persists its exposed locale and selected-location state, and stored calculation choices are consumed by the shared dashboard model rather than ignored.
+- Persistence tests cover complete round-trip, export/import primitives, reset, legacy unversioned migration, unsupported future versions, corrupt storage fallback, invalid coordinates and invalid mosque timetable rejection.
+- Added an installable web manifest, first-party SVG icon assets and a production-only same-origin service worker that precaches the shell metadata, runtime-caches successful same-origin GET assets, falls back to the cached root for navigation and deletes obsolete named caches on activation.
+- The web shell exposes a localised offline status only when the browser reports that networking is unavailable. No remote API is required for the prayer calculation pipeline.
+- Read-only Quality Gate run `31904178200` passed clean lockfile install, formatting, typed lint, strict typecheck, all tests and production build after the final persisted-calculation integration assertion.
+- Real-browser offline reload, cache upgrade across two deployed versions and platform-specific raster install-icon validation remain open.
