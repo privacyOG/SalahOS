@@ -554,3 +554,24 @@ h2 {
   border-radius: 0.85rem;
   background: rgba(197, 224, 190, 0.07);
 }
+
+.saved-location-controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)) auto auto;
+  align-items: end;
+  gap: 0.75rem;
+  margin-block-start: 1rem;
+}
+
+.saved-location-controls label {
+  display: grid;
+  gap: 0.35rem;
+  color: #c2cdc0;
+  font-size: 0.85rem;
+}
+
+@media (max-width: 760px) {
+  .saved-location-controls {
+    grid-template-columns: 1fr;
+  }
+}

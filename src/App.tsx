@@ -19,6 +19,14 @@ import type { Locale, TranslationKey } from './i18n/translations';
 import { requestBrowserLocation } from './platform/browserGeolocation';
 import type { BrowserLocationFailureReason } from './platform/browserGeolocation';
 import {
+  loadSavedLocations,
+  removeSavedLocation,
+  saveSavedLocations,
+  savedLocationId,
+  upsertSavedLocation,
+} from './platform/savedLocations';
+import type { SavedLocation } from './platform/savedLocations';
+import {
   defaultPersistedSettings,
   exportPersistedSettings,
   importPersistedSettings,
@@ -88,6 +96,15 @@ export function App() {
   const [online, setOnline] = useState(() => navigator.onLine);
   const [settingsPayload, setSettingsPayload] = useState('');
   const [settingsMessage, setSettingsMessage] = useState<TranslationKey | null>(null);
+  const [savedLocations, setSavedLocations] = useState<readonly SavedLocation[]>(() => {
+    try {
+      return loadSavedLocations(window.localStorage);
+    } catch {
+      return [];
+    }
+  });
+  const [savedLocationLabel, setSavedLocationLabel] = useState('');
+  const [locationMessage, setLocationMessage] = useState<TranslationKey | null>(null);
 
   useEffect(() => {
     applyDocumentLocale(document.documentElement, locale);
@@ -173,6 +190,14 @@ export function App() {
     }
   }, [effectiveSettings]);
 
+  useEffect(() => {
+    try {
+      saveSavedLocations(window.localStorage, savedLocations);
+    } catch {
+      // Saved favourites remain usable in memory when storage is unavailable.
+    }
+  }, [savedLocations]);
+
   async function refreshLocation(): Promise<void> {
     const result = await requestBrowserLocation();
     if (result.ok) {
@@ -195,6 +220,42 @@ export function App() {
     } catch {
       setManualError(true);
     }
+  }
+
+  function saveCurrentLocation(): void {
+    const label = savedLocationLabel.trim();
+    if (coordinates === null || label.length === 0) {
+      setLocationMessage('savedLocationNeedsLabel');
+      return;
+    }
+
+    const location: SavedLocation = {
+      id: savedLocationId(coordinates),
+      label,
+      coordinates,
+      ...(dashboard === null ? {} : { timeZone: dashboard.timeZone }),
+    };
+    setSavedLocations((current) => upsertSavedLocation(current, location));
+    setSavedLocationLabel('');
+    setLocationMessage('locationSaved');
+  }
+
+  function selectSavedLocation(id: string): void {
+    const selected = savedLocations.find((location) => location.id === id);
+    if (selected === undefined) return;
+    setCoordinates(selected.coordinates);
+    setLatitude(String(selected.coordinates.latitude));
+    setLongitude(String(selected.coordinates.longitude));
+    setLocationFailure(null);
+    setManualError(false);
+    setLocationMessage(null);
+  }
+
+  function removeCurrentSavedLocation(): void {
+    if (coordinates === null) return;
+    const id = savedLocationId(coordinates);
+    setSavedLocations((current) => removeSavedLocation(current, id));
+    setLocationMessage('savedLocationRemoved');
   }
 
   function updatePrayerOffset(prayer: PrayerName, rawValue: string): void {
@@ -333,6 +394,58 @@ export function App() {
             </button>
           </div>
         </div>
+        <div className="saved-location-controls">
+          <label>
+            <span>{translate(locale, 'savedLocations')}</span>
+            <select
+              value={
+                coordinates === null ||
+                !savedLocations.some((location) => location.id === savedLocationId(coordinates))
+                  ? ''
+                  : savedLocationId(coordinates)
+              }
+              onChange={(event) => {
+                selectSavedLocation(event.target.value);
+              }}
+            >
+              <option value="">{translate(locale, 'noSavedLocationSelected')}</option>
+              {savedLocations.map((location) => (
+                <option key={location.id} value={location.id}>
+                  {location.label}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label>
+            <span>{translate(locale, 'savedLocationLabel')}</span>
+            <input
+              value={savedLocationLabel}
+              maxLength={100}
+              onChange={(event) => {
+                setSavedLocationLabel(event.target.value);
+                setLocationMessage(null);
+              }}
+            />
+          </label>
+          <button type="button" disabled={coordinates === null} onClick={saveCurrentLocation}>
+            {translate(locale, 'saveCurrentLocation')}
+          </button>
+          <button
+            type="button"
+            disabled={
+              coordinates === null ||
+              !savedLocations.some((location) => location.id === savedLocationId(coordinates))
+            }
+            onClick={removeCurrentSavedLocation}
+          >
+            {translate(locale, 'removeSavedLocation')}
+          </button>
+        </div>
+        {locationMessage !== null && (
+          <p className="inline-message" role="status">
+            {translate(locale, locationMessage)}
+          </p>
+        )}
         {locationFailure !== null && (
           <p className="inline-message" role="status">
             {translate(locale, locationFailureKeys[locationFailure])}
