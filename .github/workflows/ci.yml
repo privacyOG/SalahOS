@@ -8,7 +8,7 @@ on:
   pull_request:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   quality:
@@ -17,8 +17,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref || github.ref_name }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -28,85 +26,6 @@ jobs:
 
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
-
-      - name: Record verified Stage 3 status
-        if: github.event_name == 'push'
-        run: |
-          python - <<'PY'
-          from pathlib import Path
-
-          todo = Path('TODO.md')
-          text = todo.read_text()
-          replacements = {
-              '- [ ] DST start transition': '- [x] DST start transition',
-              '- [ ] DST end transition': '- [x] DST end transition',
-              '- [ ] Timezone-offset changes': '- [x] Timezone-offset changes',
-              '- [ ] Southern-hemisphere DST direction': '- [x] Southern-hemisphere DST direction',
-              '- [ ] Implement browser geolocation adapter': '- [x] Implement browser geolocation adapter',
-              '- [ ] Support manual latitude/longitude entry': '- [~] Support manual latitude/longitude entry',
-              '- [ ] Support current-location refresh': '- [~] Support current-location refresh',
-              '- [ ] Handle denied-location-permission flow gracefully': '- [~] Handle denied-location-permission flow gracefully',
-              '- [ ] Handle unavailable GPS/location services gracefully': '- [~] Handle unavailable GPS/location services gracefully',
-              '- [ ] Resolve coordinates to an IANA timezone': '- [x] Resolve coordinates to an IANA timezone',
-              '- [ ] Cache timezone data for offline use': '- [~] Cache timezone data for offline use',
-              '- [ ] Use IANA timezone rules rather than deriving timezone from longitude': '- [x] Use IANA timezone rules rather than deriving timezone from longitude',
-              '- [ ] Correctly handle UTC offsets and daylight-saving changes': '- [x] Correctly handle UTC offsets and daylight-saving changes',
-              '- [ ] Avoid continuous GPS polling when not required': '- [x] Avoid continuous GPS polling when not required',
-              '- [ ] Avoid sending precise location to remote services unless required and explicitly disclosed': '- [x] Avoid sending precise location to remote services unless required and explicitly disclosed',
-              '- [ ] Timezone/DST tests': '- [x] Timezone/DST tests',
-              '- [ ] Location → timezone → prayer calculation flow': '- [x] Location → timezone → prayer calculation flow',
-              '- [ ] Integration tests green': '- [x] Integration tests green',
-              '- [ ] GPS/manual location and timezone handling work correctly': '- [~] GPS/manual location and timezone handling work correctly',
-              '- [ ] DST/date rollover behaviour is tested': '- [~] DST/date rollover behaviour is tested',
-          }
-          for old, new in replacements.items():
-              if old not in text:
-                  raise SystemExit(f'missing TODO marker: {old}')
-              text = text.replace(old, new, 1)
-
-          anchor = '- [x] Avoid sending precise location to remote services unless required and explicitly disclosed\n'
-          note = (
-              '\n**Stage 3 verification note (2026-08-16):** read-only Quality Gate run `31900763989` '
-              'passed the location/timezone core with a clean lockfile install, formatting, typed lint, strict typecheck, '
-              'unit/integration tests and production build. The verified core includes validated manual coordinates, one-shot '
-              'browser geolocation with typed failure states, bundled offline coordinate-to-IANA lookup, IANA/`Intl` DST '
-              'offset resolution, exact 2026 Sydney and London DST transition tests, local civil-date resolution and the '
-              'location → timezone → prayer-engine integration path. Saved locations, city search, native mobile adapters, '
-              'persistent timezone caching/override and UI permission/fallback flows remain open.\n'
-          )
-          if note.strip() not in text:
-              text = text.replace(anchor, anchor + note, 1)
-          todo.write_text(text)
-
-          testing = Path('TESTING.md')
-          validation = testing.read_text()
-          entry = '''
-
-### 2026-08-16 — Local-first location and IANA timezone core
-
-- `@photostructure/tz-lookup` is pinned in the dependency lockfile for offline coordinate-to-IANA resolution; boundary lookup is explicitly documented as approximate near timezone borders.
-- Browser location uses a one-shot current-position request and returns typed `permission-denied`, `unavailable`, `timeout`, `unsupported` and `unknown` states instead of continuous tracking.
-- Manual coordinates use the same validated coordinate model and are never converted to timezone by longitude arithmetic.
-- IANA timezone offsets are resolved for the target instant with `Intl.DateTimeFormat`, including exact 2026 DST start/end transition coverage for Sydney and London.
-- The integration suite proves Sydney coordinates → `Australia/Sydney` → correct civil date/UTC offset → local prayer schedule.
-- Quality Gate run `31900763989` completed successfully with clean lockfile install, formatting, typed lint, strict typecheck, unit/integration tests and production build.
-- Saved/favourite persistence, city search, native Android/iOS adapters, UI fallback flows and persistent/manual timezone override remain separate open work.
-'''
-          if '### 2026-08-16 — Local-first location and IANA timezone core' not in validation:
-              testing.write_text(validation.rstrip() + entry + '\n')
-          PY
-
-      - name: Commit tracker evidence
-        if: github.event_name == 'push'
-        run: |
-          git config user.name "privacyOG"
-          git config user.email "102720550+privacyOG@users.noreply.github.com"
-          git add TODO.md TESTING.md
-          if git diff --cached --quiet; then
-            exit 0
-          fi
-          git commit -m "docs: record location timezone validation"
-          git push origin HEAD:${{ github.ref_name }}
 
       - name: Format check
         run: npm run format:check
