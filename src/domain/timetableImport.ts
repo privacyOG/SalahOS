@@ -1,5 +1,6 @@
 import type {
   IqamahRule,
+  JumuahSession,
   MosqueDayTimetable,
   MosquePrayerTime,
   MosqueTimetable,
@@ -21,6 +22,12 @@ const CSV_HEADER = [
   'isha',
   'isha_iqamah',
 ] as const;
+
+type JsonRecord = Record<string, unknown>;
+
+function isRecord(value: unknown): value is JsonRecord {
+  return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
 
 function parseClock(value: string, label: string): number {
   if (!/^\d{2}:\d{2}$/.test(value)) {
@@ -64,6 +71,109 @@ function parsePrayer(start: string, iqamah: string, label: string): MosquePrayer
   return parsedIqamah === undefined
     ? { startLocalMinutes: parseClock(start, `${label} start`) }
     : { startLocalMinutes: parseClock(start, `${label} start`), iqamah: parsedIqamah };
+}
+
+function requireNumber(record: JsonRecord, key: string, label: string): number {
+  const value = record[key];
+  if (typeof value !== 'number' || !Number.isFinite(value)) {
+    throw new RangeError(`${label} must be a finite number`);
+  }
+  return value;
+}
+
+function parseJsonIqamah(value: unknown, label: string): IqamahRule {
+  if (!isRecord(value) || typeof value.kind !== 'string') {
+    throw new RangeError(`${label} must be an iqamah rule object`);
+  }
+
+  if (value.kind === 'fixed') {
+    return { kind: 'fixed', localMinutes: requireNumber(value, 'localMinutes', `${label} time`) };
+  }
+
+  if (value.kind === 'offset') {
+    return {
+      kind: 'offset',
+      offsetMinutes: requireNumber(value, 'offsetMinutes', `${label} offset`),
+    };
+  }
+
+  throw new RangeError(`${label} kind must be fixed or offset`);
+}
+
+function parseJsonPrayer(value: unknown, label: string): MosquePrayerTime {
+  if (!isRecord(value)) {
+    throw new RangeError(`${label} must be a prayer-time object`);
+  }
+
+  const startLocalMinutes = requireNumber(value, 'startLocalMinutes', `${label} start`);
+  if (value.iqamah === undefined) {
+    return { startLocalMinutes };
+  }
+
+  return {
+    startLocalMinutes,
+    iqamah: parseJsonIqamah(value.iqamah, `${label} iqamah`),
+  };
+}
+
+function parseJsonJumuah(value: unknown, label: string): JumuahSession {
+  if (!isRecord(value) || typeof value.label !== 'string') {
+    throw new RangeError(`${label} must be a Jumuah session object`);
+  }
+
+  return {
+    label: value.label,
+    khutbahLocalMinutes: requireNumber(value, 'khutbahLocalMinutes', `${label} khutbah`),
+    salahLocalMinutes: requireNumber(value, 'salahLocalMinutes', `${label} salah`),
+  };
+}
+
+function parseJsonDay(value: unknown, index: number): MosqueDayTimetable {
+  const label = `Timetable day ${String(index + 1)}`;
+  if (!isRecord(value) || typeof value.date !== 'string' || !isRecord(value.prayers)) {
+    throw new RangeError(`${label} must contain a date and prayers object`);
+  }
+
+  const unknownPrayerKeys = Object.keys(value.prayers).filter(
+    (key) => !PRAYERS.includes(key as ObligatoryPrayerName),
+  );
+  if (unknownPrayerKeys.length > 0) {
+    throw new RangeError(`${label} contains unknown prayer: ${unknownPrayerKeys[0]}`);
+  }
+
+  const prayers: Partial<Record<ObligatoryPrayerName, MosquePrayerTime>> = {};
+  for (const prayer of PRAYERS) {
+    const prayerValue = value.prayers[prayer];
+    if (prayerValue !== undefined) {
+      prayers[prayer] = parseJsonPrayer(prayerValue, `${label} ${prayer}`);
+    }
+  }
+
+  if (value.jumuahSessions === undefined) {
+    return { date: value.date, prayers };
+  }
+  if (!Array.isArray(value.jumuahSessions)) {
+    throw new RangeError(`${label} Jumuah sessions must be an array`);
+  }
+
+  return {
+    date: value.date,
+    prayers,
+    jumuahSessions: value.jumuahSessions.map((session, sessionIndex) =>
+      parseJsonJumuah(session, `${label} Jumuah ${String(sessionIndex + 1)}`),
+    ),
+  };
+}
+
+function parseJsonTimetable(value: unknown): MosqueTimetable {
+  if (!isRecord(value) || typeof value.mosqueName !== 'string' || !Array.isArray(value.days)) {
+    throw new RangeError('Timetable JSON must contain mosqueName and a days array');
+  }
+
+  return {
+    mosqueName: value.mosqueName,
+    days: value.days.map((day, index) => parseJsonDay(day, index)),
+  };
 }
 
 export function parseMosqueTimetableCsv(csv: string, mosqueName: string): MosqueTimetable {
@@ -137,11 +247,7 @@ export function parseMosqueTimetableJson(json: string): MosqueTimetable {
     throw new RangeError('Timetable JSON is invalid');
   }
 
-  if (typeof parsed !== 'object' || parsed === null) {
-    throw new RangeError('Timetable JSON must contain an object');
-  }
-
-  const timetable = parsed as MosqueTimetable;
+  const timetable = parseJsonTimetable(parsed);
   validateMosqueTimetable(timetable);
   return timetable;
 }
