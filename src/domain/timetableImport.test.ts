@@ -10,6 +10,10 @@ const SAMPLE_CSV = `date,fajr,fajr_iqamah,dhuhr,dhuhr_iqamah,asr,asr_iqamah,magh
 2026-08-21,05:25,+20,12:05,12:30,15:10,,17:35,+10,19:00,19:20
 2026-08-22,05:24,+20,12:05,12:30,15:11,,17:36,+10,19:01,19:20`;
 
+function expectInvalidJson(value: unknown): void {
+  expect(() => parseMosqueTimetableJson(JSON.stringify(value))).toThrow(RangeError);
+}
+
 describe('mosque timetable import and export', () => {
   it('parses strict CSV into validated prayer and iqamah entries', () => {
     const timetable = parseMosqueTimetableCsv(SAMPLE_CSV, 'Example Mosque');
@@ -54,8 +58,28 @@ describe('mosque timetable import and export', () => {
 
   it('rejects malformed or structurally invalid JSON before activation', () => {
     expect(() => parseMosqueTimetableJson('{')).toThrow(/invalid/);
-    expect(() => parseMosqueTimetableJson(JSON.stringify({ mosqueName: '', days: [] }))).toThrow(
-      RangeError,
-    );
+    expectInvalidJson({ mosqueName: '', days: [] });
+    expectInvalidJson({ mosqueName: 'Example Mosque', days: [{ date: '2026-08-21' }] });
+    expectInvalidJson({
+      mosqueName: 'Example Mosque',
+      days: [{ date: '2026-08-21', prayers: { fajr: { startLocalMinutes: '05:25' } } }],
+    });
+    expectInvalidJson({
+      mosqueName: 'Example Mosque',
+      days: [{ date: '2026-08-21', prayers: { zuhr: { startLocalMinutes: 725 } } }],
+    });
+    expectInvalidJson({
+      mosqueName: 'Example Mosque',
+      days: [
+        {
+          date: '2026-08-21',
+          prayers: { fajr: { startLocalMinutes: 325, iqamah: { kind: 'later' } } },
+        },
+      ],
+    });
+    expectInvalidJson({
+      mosqueName: 'Example Mosque',
+      days: [{ date: '2026-08-21', prayers: {}, jumuahSessions: '12:30' }],
+    });
   });
 });
