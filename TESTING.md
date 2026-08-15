@@ -371,3 +371,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Kept native shell, notification delivery, audio lifecycle, reboot recovery and signing/distribution items open until exercised in the required environment.
 - Explicitly prohibited committing signing certificates, private keys, provisioning profiles or distribution credentials.
 - Read-only Quality Gate run `31914072847` passed formatting, typed lint, strict typecheck, all tests and production build.
+
+### 2026-08-16 — iOS build and signing documentation
+
+- Added `docs/IOS_BUILD_SIGNING.md` with repository-safe local development, Release archive and CI signing procedures.
+- Documented capability/entitlement review and required evidence without pre-claiming native support.
+- Explicitly prohibited committing signing private keys, certificate bundles, account credentials, distribution API keys and CI secret values.
+- Kept actual Xcode build, archive, simulator/device and distribution validation open until executed in the required Apple environment.
+- Read-only Quality Gate run `31914265959` passed formatting, typed lint, strict typecheck, all tests and production build.
