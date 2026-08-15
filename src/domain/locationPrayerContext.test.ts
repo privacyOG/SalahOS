@@ -14,10 +14,7 @@ function expectAvailable(value: number | null): number {
 describe('location → timezone → prayer calculation integration', () => {
   it('resolves Sydney location context and calculates the local prayer schedule', () => {
     const coordinates = createCoordinates(-33.8688, 151.2093);
-    const context = createLocationPrayerContext(
-      new Date('2026-08-15T15:30:00.000Z'),
-      coordinates,
-    );
+    const context = createLocationPrayerContext(new Date('2026-08-15T15:30:00.000Z'), coordinates);
 
     expect(context.timeZone).toBe('Australia/Sydney');
     expect(context.utcOffsetMinutes).toBe(600);
