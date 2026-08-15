@@ -7,6 +7,10 @@ import { parseMosqueTimetableCsv, parseMosqueTimetableJson } from './domain/time
 import { calculationMethods } from './domain/methods';
 import type { PrayerName } from './domain/prayerEngine';
 import {
+  NOTIFICATION_PRAYERS,
+  updatePrayerNotificationPreference,
+} from './domain/notificationPreferences';
+import {
   applyDocumentLocale,
   formatCountdown,
   formatGregorianCivilDate,
@@ -750,89 +754,6 @@ export function App() {
           )}
         </section>
 
-        <section
-          className="mosque-library-controls"
-          aria-label={translate(locale, 'mosqueLibrary')}
-        >
-          <div className="mosque-library-row">
-            <label>
-              <span>{translate(locale, 'mosqueLibrary')}</span>
-              <select
-                value={
-                  settings.mosqueTimetable === null
-                    ? ''
-                    : mosqueLibraryId(settings.mosqueTimetable.mosqueName)
-                }
-                onChange={(event) => {
-                  selectMosqueTimetable(event.target.value);
-                }}
-              >
-                <option value="">{translate(locale, 'selectMosque')}</option>
-                {mosqueLibrary.map((entry) => (
-                  <option key={entry.id} value={entry.id}>
-                    {entry.timetable.mosqueName}
-                  </option>
-                ))}
-              </select>
-            </label>
-            <button
-              type="button"
-              disabled={settings.mosqueTimetable === null}
-              onClick={removeSelectedMosqueTimetable}
-            >
-              {translate(locale, 'removeMosque')}
-            </button>
-          </div>
-
-          <div className="mosque-import-grid">
-            <label>
-              <span>{translate(locale, 'timetableFormat')}</span>
-              <select
-                value={mosqueImportFormat}
-                onChange={(event) => {
-                  setMosqueImportFormat(event.target.value as 'json' | 'csv');
-                  setMosqueMessage(null);
-                }}
-              >
-                <option value="json">JSON</option>
-                <option value="csv">CSV</option>
-              </select>
-            </label>
-            {mosqueImportFormat === 'csv' && (
-              <label>
-                <span>{translate(locale, 'mosqueName')}</span>
-                <input
-                  value={mosqueImportName}
-                  maxLength={160}
-                  onChange={(event) => {
-                    setMosqueImportName(event.target.value);
-                    setMosqueMessage(null);
-                  }}
-                />
-              </label>
-            )}
-          </div>
-          <label className="mosque-import-payload">
-            <span>{translate(locale, 'timetableData')}</span>
-            <textarea
-              rows={7}
-              value={mosqueImportPayload}
-              onChange={(event) => {
-                setMosqueImportPayload(event.target.value);
-                setMosqueMessage(null);
-              }}
-            />
-          </label>
-          <button type="button" onClick={importMosqueTimetable}>
-            {translate(locale, 'importMosqueTimetable')}
-          </button>
-          {mosqueMessage !== null && (
-            <p className="inline-message" role="status">
-              {translate(locale, mosqueMessage)}
-            </p>
-          )}
-        </section>
-
         {settings.mosqueTimetable === null && (
           <p className="inline-message">{translate(locale, 'localMosqueUnavailable')}</p>
         )}
@@ -856,6 +777,138 @@ export function App() {
               </label>
             ))}
           </div>
+        </fieldset>
+
+        <fieldset className="notification-fieldset">
+          <legend>{translate(locale, 'notificationSettings')}</legend>
+          <div className="notification-grid">
+            {NOTIFICATION_PRAYERS.map((prayer) => {
+              const preference = settings.notifications[prayer];
+              return (
+                <article className="notification-card" key={prayer}>
+                  <h3>{translate(locale, prayerTranslationKeys[prayer])}</h3>
+                  <label className="toggle-row">
+                    <input
+                      type="checkbox"
+                      checked={preference.enabled}
+                      onChange={(event) => {
+                        setSettings((current) => ({
+                          ...current,
+                          notifications: updatePrayerNotificationPreference(
+                            current.notifications,
+                            prayer,
+                            { enabled: event.target.checked },
+                          ),
+                        }));
+                      }}
+                    />
+                    <span>{translate(locale, 'notificationEnabled')}</span>
+                  </label>
+                  <label>
+                    <span>{translate(locale, 'reminderMinutes')}</span>
+                    <input
+                      type="number"
+                      min="1"
+                      max="180"
+                      step="1"
+                      value={preference.reminderMinutes ?? ''}
+                      onChange={(event) => {
+                        const raw = event.target.value.trim();
+                        const reminderMinutes = raw === '' ? null : Number(raw);
+                        if (
+                          reminderMinutes !== null &&
+                          (!Number.isInteger(reminderMinutes) ||
+                            reminderMinutes < 1 ||
+                            reminderMinutes > 180)
+                        ) {
+                          return;
+                        }
+                        setSettings((current) => ({
+                          ...current,
+                          notifications: updatePrayerNotificationPreference(
+                            current.notifications,
+                            prayer,
+                            { reminderMinutes },
+                          ),
+                        }));
+                      }}
+                    />
+                  </label>
+                  <label className="toggle-row">
+                    <input
+                      type="checkbox"
+                      checked={preference.prayerTimeNotification}
+                      onChange={(event) => {
+                        setSettings((current) => ({
+                          ...current,
+                          notifications: updatePrayerNotificationPreference(
+                            current.notifications,
+                            prayer,
+                            { prayerTimeNotification: event.target.checked },
+                          ),
+                        }));
+                      }}
+                    />
+                    <span>{translate(locale, 'prayerTimeNotification')}</span>
+                  </label>
+                  <label>
+                    <span>{translate(locale, 'notificationSound')}</span>
+                    <select
+                      value={preference.sound}
+                      onChange={(event) => {
+                        setSettings((current) => ({
+                          ...current,
+                          notifications: updatePrayerNotificationPreference(
+                            current.notifications,
+                            prayer,
+                            { sound: event.target.value === 'silent' ? 'silent' : 'default' },
+                          ),
+                        }));
+                      }}
+                    >
+                      <option value="default">{translate(locale, 'soundDefault')}</option>
+                      <option value="silent">{translate(locale, 'soundSilent')}</option>
+                    </select>
+                  </label>
+                  <label className="toggle-row">
+                    <input
+                      type="checkbox"
+                      checked={preference.vibration}
+                      onChange={(event) => {
+                        setSettings((current) => ({
+                          ...current,
+                          notifications: updatePrayerNotificationPreference(
+                            current.notifications,
+                            prayer,
+                            { vibration: event.target.checked },
+                          ),
+                        }));
+                      }}
+                    />
+                    <span>{translate(locale, 'vibration')}</span>
+                  </label>
+                  <label className="toggle-row">
+                    <input
+                      type="checkbox"
+                      checked={preference.adhanEnabled}
+                      onChange={(event) => {
+                        setSettings((current) => ({
+                          ...current,
+                          notifications: updatePrayerNotificationPreference(
+                            current.notifications,
+                            prayer,
+                            { adhanEnabled: event.target.checked },
+                          ),
+                        }));
+                      }}
+                    />
+                    <span>{translate(locale, 'adhanEnabled')}</span>
+                  </label>
+                </article>
+              );
+            })}
+          </div>
+          <p className="settings-note">{translate(locale, 'notificationDeliveryPending')}</p>
         </fieldset>
 
         <div className="settings-transfer">
