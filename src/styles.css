@@ -616,3 +616,52 @@ h2 {
     grid-template-columns: 1fr;
   }
 }
+
+.notification-fieldset {
+  margin-block: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.9rem;
+}
+
+.notification-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0.8rem;
+}
+
+.notification-card {
+  display: grid;
+  gap: 0.7rem;
+  padding: 0.9rem;
+  border-radius: 0.8rem;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.notification-card h3 {
+  margin: 0;
+  font-size: 1rem;
+}
+
+.notification-card label {
+  display: grid;
+  gap: 0.3rem;
+  font-size: 0.82rem;
+}
+
+.notification-card .toggle-row {
+  grid-template-columns: auto 1fr;
+  align-items: center;
+}
+
+.notification-card .toggle-row input {
+  inline-size: 1.1rem;
+  block-size: 1.1rem;
+}
+
+.settings-note {
+  margin-block-end: 0;
+  color: #aeb9ac;
+  font-size: 0.8rem;
+  line-height: 1.45;
+}

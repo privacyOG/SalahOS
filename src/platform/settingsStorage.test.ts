@@ -57,6 +57,25 @@ function configuredSettings(): PersistedSettings {
       timeZone: 'Australia/Sydney',
     },
     mosqueTimetable,
+    notifications: {
+      ...defaultPersistedSettings.notifications,
+      fajr: {
+        enabled: true,
+        reminderMinutes: 15,
+        prayerTimeNotification: true,
+        sound: 'default',
+        vibration: true,
+        adhanEnabled: true,
+      },
+      maghrib: {
+        enabled: true,
+        reminderMinutes: null,
+        prayerTimeNotification: true,
+        sound: 'silent',
+        vibration: false,
+        adhanEnabled: false,
+      },
+    },
   };
 }
 
@@ -86,23 +105,65 @@ describe('versioned settings persistence', () => {
       }),
     );
 
-    expect(migrated.version).toBe(1);
+    expect(migrated.version).toBe(2);
     expect(migrated.locale).toBe('ar');
     expect(migrated.location).toEqual({
       coordinates: { latitude: 21.4225, longitude: 39.8262 },
       timeZone: 'Asia/Riyadh',
     });
     expect(migrated.calculationMethodId).toBe('muslim-world-league');
+    expect(migrated.notifications).toEqual(defaultPersistedSettings.notifications);
+  });
+
+  it('migrates version 1 settings without losing existing configuration', () => {
+    const migrated = importPersistedSettings(
+      JSON.stringify({
+        version: 1,
+        locale: 'ar',
+        theme: 'dark',
+        timeFormat: 'h12',
+        calculationMethodId: 'umm-al-qura',
+        asrConvention: 'hanafi',
+        highLatitudeRule: 'one-seventh',
+        hijriCorrectionDays: 1,
+        prayerAdjustments: { fajr: 2 },
+        prayerSourceMode: 'calculated-adjustments',
+        location: {
+          coordinates: { latitude: -33.8688, longitude: 151.2093 },
+          timeZone: 'Australia/Sydney',
+        },
+        mosqueTimetable: null,
+      }),
+    );
+
+    expect(migrated.version).toBe(2);
+    expect(migrated.locale).toBe('ar');
+    expect(migrated.theme).toBe('dark');
+    expect(migrated.calculationMethodId).toBe('umm-al-qura');
+    expect(migrated.prayerAdjustments).toEqual({ fajr: 2 });
+    expect(migrated.location?.timeZone).toBe('Australia/Sydney');
+    expect(migrated.notifications).toEqual(defaultPersistedSettings.notifications);
   });
 
   it('rejects unsupported future schema versions', () => {
     expect(() => importPersistedSettings('{"version":99}')).toThrow(RangeError);
   });
 
+  it('rejects invalid notification reminder data', () => {
+    expect(() =>
+      importPersistedSettings(
+        JSON.stringify({
+          version: 2,
+          notifications: { fajr: { enabled: true, reminderMinutes: 999 } },
+        }),
+      ),
+    ).toThrow(RangeError);
+  });
+
   it('drops invalid nested location and mosque data instead of activating it', () => {
     const settings = importPersistedSettings(
       JSON.stringify({
-        version: 1,
+        version: 2,
         location: { coordinates: { latitude: 200, longitude: 20 } },
         mosqueTimetable: { mosqueName: '', days: [] },
       }),

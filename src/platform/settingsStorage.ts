@@ -3,11 +3,16 @@ import type { Coordinates } from '../domain/coordinates';
 import type { CalculationMethodId } from '../domain/methods';
 import { validateMosqueTimetable } from '../domain/mosqueTimetable';
 import type { MosqueTimetable, PrayerSourceMode } from '../domain/mosqueTimetable';
+import {
+  defaultNotificationPreferences,
+  parseNotificationPreferences,
+} from '../domain/notificationPreferences';
+import type { NotificationPreferences } from '../domain/notificationPreferences';
 import type { AsrConvention, HighLatitudeRule, PrayerName } from '../domain/prayerEngine';
 import type { Locale } from '../i18n/translations';
 
 export const SETTINGS_STORAGE_KEY = 'salahos.settings';
-export const SETTINGS_SCHEMA_VERSION = 1;
+export const SETTINGS_SCHEMA_VERSION = 2;
 
 export type ThemePreference = 'system' | 'light' | 'dark';
 export type TimeFormatPreference = 'h12' | 'h23';
@@ -18,7 +23,7 @@ export interface PersistedLocation {
 }
 
 export interface PersistedSettings {
-  readonly version: 1;
+  readonly version: 2;
   readonly locale: Locale;
   readonly theme: ThemePreference;
   readonly timeFormat: TimeFormatPreference;
@@ -30,6 +35,7 @@ export interface PersistedSettings {
   readonly prayerSourceMode: PrayerSourceMode;
   readonly location: PersistedLocation | null;
   readonly mosqueTimetable: MosqueTimetable | null;
+  readonly notifications: NotificationPreferences;
 }
 
 export interface KeyValueStorage {
@@ -65,6 +71,7 @@ export const defaultPersistedSettings: PersistedSettings = Object.freeze({
   prayerSourceMode: 'calculated',
   location: null,
   mosqueTimetable: null,
+  notifications: defaultNotificationPreferences,
 });
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -167,18 +174,27 @@ function parseMosqueTimetable(value: unknown): MosqueTimetable | null {
   }
 }
 
-function migrateLegacySettings(value: Record<string, unknown>): Record<string, unknown> {
-  if ('version' in value) {
-    return value;
+function migrateSettings(value: Record<string, unknown>): Record<string, unknown> {
+  if (!('version' in value)) {
+    return {
+      version: SETTINGS_SCHEMA_VERSION,
+      locale: value.locale,
+      location: isRecord(value.coordinates)
+        ? { coordinates: value.coordinates, timeZone: value.timeZone }
+        : value.location,
+      notifications: defaultNotificationPreferences,
+    };
   }
 
-  return {
-    version: SETTINGS_SCHEMA_VERSION,
-    locale: value.locale,
-    location: isRecord(value.coordinates)
-      ? { coordinates: value.coordinates, timeZone: value.timeZone }
-      : value.location,
-  };
+  if (value.version === 1) {
+    return {
+      ...value,
+      version: SETTINGS_SCHEMA_VERSION,
+      notifications: defaultNotificationPreferences,
+    };
+  }
+
+  return value;
 }
 
 export function parsePersistedSettings(raw: string): PersistedSettings {
@@ -187,7 +203,7 @@ export function parsePersistedSettings(raw: string): PersistedSettings {
     throw new TypeError('Persisted settings must be an object');
   }
 
-  const migrated = migrateLegacySettings(parsed);
+  const migrated = migrateSettings(parsed);
   if (migrated.version !== SETTINGS_SCHEMA_VERSION) {
     throw new RangeError(`Unsupported settings schema version: ${String(migrated.version)}`);
   }
@@ -205,6 +221,7 @@ export function parsePersistedSettings(raw: string): PersistedSettings {
     prayerSourceMode: parseSourceMode(migrated.prayerSourceMode),
     location: parseLocation(migrated.location),
     mosqueTimetable: parseMosqueTimetable(migrated.mosqueTimetable),
+    notifications: parseNotificationPreferences(migrated.notifications),
   };
 }
 
