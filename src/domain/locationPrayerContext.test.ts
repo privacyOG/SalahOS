@@ -98,6 +98,13 @@ describe('location → timezone → prayer calculation integration', () => {
   const equinoxInstant = new Date('2026-03-20T12:00:00.000Z');
   const geographicCases = [
     {
+      name: 'Madinah',
+      latitude: 24.5247,
+      longitude: 39.5692,
+      timeZone: 'Asia/Riyadh',
+      utcOffsetMinutes: 180,
+    },
+    {
       name: 'Sydney',
       latitude: -33.8688,
       longitude: 151.2093,
@@ -184,5 +191,18 @@ describe('location → timezone → prayer calculation integration', () => {
     expect(geographicCases.some((location) => location.latitude > 0)).toBe(true);
     expect(geographicCases.some((location) => location.latitude < 0)).toBe(true);
     expect(geographicCases.some((location) => Math.abs(location.latitude) < 1)).toBe(true);
+  });
+
+  it('resolves Tromso seasonal IANA offsets without deriving them from longitude', () => {
+    const coordinates = createCoordinates(69.6492, 18.9553);
+    const summer = createLocationPrayerContext(new Date('2026-06-21T12:00:00.000Z'), coordinates);
+    const winter = createLocationPrayerContext(new Date('2026-12-21T12:00:00.000Z'), coordinates);
+
+    expect(summer.timeZone).toBe('Europe/Oslo');
+    expect(summer.utcOffsetMinutes).toBe(120);
+    expect(summer.civilDate.toISOString()).toBe('2026-06-21T00:00:00.000Z');
+    expect(winter.timeZone).toBe('Europe/Oslo');
+    expect(winter.utcOffsetMinutes).toBe(60);
+    expect(winter.civilDate.toISOString()).toBe('2026-12-21T00:00:00.000Z');
   });
 });
