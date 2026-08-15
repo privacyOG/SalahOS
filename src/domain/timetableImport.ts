@@ -138,7 +138,7 @@ function parseJsonDay(value: unknown, index: number): MosqueDayTimetable {
     (key) => !PRAYERS.includes(key as ObligatoryPrayerName),
   );
   if (unknownPrayerKeys.length > 0) {
-    throw new RangeError(`${label} contains unknown prayer: ${unknownPrayerKeys[0]}`);
+    throw new RangeError(`${label} contains unknown prayer: ${String(unknownPrayerKeys[0])}`);
   }
 
   const prayers: Partial<Record<ObligatoryPrayerName, MosquePrayerTime>> = {};
