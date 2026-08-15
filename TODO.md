@@ -15,17 +15,19 @@
 
 ## 0. Project foundation and research
 
-- [ ] Confirm project scope, supported platforms and MVP acceptance criteria
-- [ ] Create `DESIGN.md` for architecture and technical decisions
-- [ ] Create `RESEARCH.md` for prayer-calculation, platform and jurisprudential research
-- [ ] Create `TESTING.md` for test strategy, evidence and discrepancies
-- [ ] Create `CHANGELOG.md`
-- [ ] Choose and document the cross-platform framework and deployment strategy
-- [ ] Define repository structure and coding conventions
-- [ ] Configure formatter, linter, strict type checking and test runner
-- [ ] Add CI workflow for lint, typecheck, tests and production build
-- [ ] Pin dependencies and commit lockfile for reproducible builds
-- [ ] Define privacy principles: local-first operation, minimal telemetry, no unnecessary location transmission
+- [x] Confirm project scope, supported platforms and MVP acceptance criteria
+- [x] Create `DESIGN.md` for architecture and technical decisions
+- [x] Create `RESEARCH.md` for prayer-calculation, platform and jurisprudential research
+- [x] Create `TESTING.md` for test strategy, evidence and discrepancies
+- [x] Create `CHANGELOG.md`
+- [x] Choose and document the cross-platform framework and deployment strategy
+- [x] Define repository structure and coding conventions
+- [x] Configure formatter, linter, strict type checking and test runner
+- [x] Add CI workflow for lint, typecheck, tests and production build
+- [x] Pin dependencies and commit lockfile for reproducible builds
+- [x] Define privacy principles: local-first operation, minimal telemetry, no unnecessary location transmission
+
+**Stage 0 verification note (2026-08-16):** foundation documentation and tooling are committed. The read-only Quality Gate completed successfully from the committed lockfile on run `31891071518`, covering `npm ci`, formatting, lint, strict type checking, the current unit suite and the production web build. Dependency installation reported zero vulnerabilities.
 
 ---
 
@@ -33,24 +35,24 @@
 
 ### 1.1 Core astronomical engine
 
-- [ ] Implement pure prayer-calculation engine with no UI, DOM or network dependency
-- [ ] Implement Julian date / solar-position calculations
-- [ ] Implement equation of time and solar declination calculations
-- [ ] Implement solar noon calculation
-- [ ] Implement sunrise and sunset calculations
-- [ ] Document atmospheric refraction, sunrise/sunset depression and observer-elevation assumptions
-- [ ] Implement deterministic calculation rounding policy in a dedicated module
-- [ ] Keep raw calculated times separate from displayed/rounded times
-- [ ] Add provenance metadata to every calculated result
+- [x] Implement pure prayer-calculation engine with no UI, DOM or network dependency
+- [x] Implement Julian date / solar-position calculations
+- [x] Implement equation of time and solar declination calculations
+- [x] Implement solar noon calculation
+- [x] Implement sunrise and sunset calculations
+- [x] Document atmospheric refraction, sunrise/sunset depression and observer-elevation assumptions
+- [x] Implement deterministic calculation rounding policy in a dedicated module
+- [x] Keep raw calculated times separate from displayed/rounded times
+- [x] Add provenance metadata to every calculated result
 
 ### 1.2 Five daily prayers and supplementary times
 
-- [ ] Calculate Fajr
-- [ ] Calculate Dhuhr
-- [ ] Calculate Asr
-- [ ] Calculate Maghrib
-- [ ] Calculate Isha
-- [ ] Calculate and display Sunrise separately from the five obligatory prayers
+- [x] Calculate Fajr
+- [x] Calculate Dhuhr
+- [x] Calculate Asr
+- [x] Calculate Maghrib
+- [x] Calculate Isha
+- [~] Calculate and display Sunrise separately from the five obligatory prayers
 - [ ] Add optional Imsak/Suhur cutoff support
 - [ ] Add optional Duha/Ishraq support
 - [ ] Add optional Islamic midnight calculation
@@ -58,41 +60,45 @@
 
 ### 1.3 Calculation-method registry
 
-- [ ] Build an extensible calculation-method registry rather than hard-coding method logic throughout the engine
-- [ ] Record each method's Fajr angle, Isha angle/interval, Maghrib rule where applicable and authoritative source
-- [ ] Implement and verify Muslim World League method
-- [ ] Implement and verify Umm al-Qura / Makkah method
-- [ ] Implement and verify Egyptian method
-- [ ] Implement and verify University of Islamic Sciences, Karachi method
-- [ ] Implement and verify ISNA method
-- [ ] Research and add other reputable regional methods where appropriate, including Diyanet/Turkey, MUIS/Singapore, Dubai, Kuwait and Qatar
-- [ ] Provide custom calculation parameters for advanced users where safe and clearly labelled
-- [ ] Never silently change an explicitly selected calculation method
+- [x] Build an extensible calculation-method registry rather than hard-coding method logic throughout the engine
+- [~] Record each method's Fajr angle, Isha angle/interval, Maghrib rule where applicable and authoritative source
+- [~] Implement and verify Muslim World League method
+- [~] Implement and verify Umm al-Qura / Makkah method
+- [~] Implement and verify Egyptian method
+- [~] Implement and verify University of Islamic Sciences, Karachi method
+- [~] Implement and verify ISNA method
+- [~] Research and add other reputable regional methods where appropriate, including Diyanet/Turkey, MUIS/Singapore, Dubai, Kuwait and Qatar
+- [x] Provide custom calculation parameters for advanced users where safe and clearly labelled
+- [x] Never silently change an explicitly selected calculation method
+
+**Method-registry note (2026-08-16):** built-in numerical parameters are centralized and implemented, but individual regional methods remain `[~]` until their primary/authoritative references and parity results are archived. The code explicitly reports that verification state rather than presenting the parameters as independently verified.
 
 ### 1.4 Madhhab / Asr calculation
 
-- [ ] Implement Standard Asr shadow factor (Shafi'i, Maliki and Hanbali convention)
-- [ ] Implement Hanafi Asr shadow factor
-- [ ] Set Shafi'i/Standard as initial default while allowing user selection
-- [ ] Keep internal terminology mathematically precise (`Standard` / `Hanafi`) while explaining madhhab associations in UI
-- [ ] Add unit tests proving both shadow-factor branches differ correctly
+- [x] Implement Standard Asr shadow factor (Shafi'i, Maliki and Hanbali convention)
+- [x] Implement Hanafi Asr shadow factor
+- [x] Set Shafi'i/Standard as initial default while allowing user selection
+- [~] Keep internal terminology mathematically precise (`Standard` / `Hanafi`) while explaining madhhab associations in UI
+- [x] Add unit tests proving both shadow-factor branches differ correctly
 
 ### 1.5 High-latitude handling
 
-- [ ] Implement Middle of the Night rule
-- [ ] Implement One-Seventh of the Night rule
-- [ ] Implement Angle-Based portion-of-night rule
+- [x] Implement Middle of the Night rule
+- [x] Implement One-Seventh of the Night rule
+- [x] Implement Angle-Based portion-of-night rule
 - [ ] Research nearest-latitude / nearest-valid-day strategies for extreme polar conditions
-- [ ] Define behaviour for polar day and polar night when normal astronomical events are unavailable
-- [ ] Never fabricate an astronomical event without identifying the applied fallback rule
-- [ ] Surface active high-latitude rule in calculation provenance/settings
+- [x] Define behaviour for polar day and polar night when normal astronomical events are unavailable
+- [x] Never fabricate an astronomical event without identifying the applied fallback rule
+- [~] Surface active high-latitude rule in calculation provenance/settings
 
 ### 1.6 Manual adjustments
 
-- [ ] Support per-prayer minute offsets
-- [ ] Keep adjustments separate from the underlying astronomical result
+- [x] Support per-prayer minute offsets
+- [x] Keep adjustments separate from the underlying astronomical result
 - [ ] Show when a displayed time contains a manual adjustment
 - [ ] Allow reset-to-method-default
+
+**Stage 1 engine verification note (2026-08-16):** read-only Quality Gate run `31891501691` completed successfully after the expanded engine tests. The suite verifies five-prayer ordering, Standard/Hanafi Asr divergence, raw/base/adjusted/rounded separation, fixed-interval Isha, all three implemented high-latitude strategies, polar unavailability without fabricated events, and adjustment-range validation. Regional calculation-method source parity and UI presentation remain separate open work.
 
 ---
 
@@ -435,13 +441,13 @@
 
 ### Unit tests
 
-- [ ] Solar/astronomical math tests
-- [ ] Prayer-engine tests
-- [ ] Calculation-method tests
-- [ ] Asr-method tests
-- [ ] High-latitude tests
-- [ ] Rounding tests
-- [ ] Adjustment tests
+- [x] Solar/astronomical math tests
+- [x] Prayer-engine tests
+- [~] Calculation-method tests
+- [x] Asr-method tests
+- [x] High-latitude tests
+- [x] Rounding tests
+- [x] Adjustment tests
 - [ ] Next-prayer tests
 - [ ] Timezone/DST tests
 - [ ] Hijri-date tests
@@ -476,26 +482,26 @@
 
 ## 18. Quality gates
 
-- [ ] Formatter clean
-- [ ] Linter clean
-- [ ] Strict typecheck clean
-- [ ] Unit tests green
+- [x] Formatter clean
+- [x] Linter clean
+- [x] Strict typecheck clean
+- [x] Unit tests green
 - [ ] Integration tests green
 - [ ] UI/component tests green
-- [ ] Production web build succeeds
+- [x] Production web build succeeds
 - [ ] Android build succeeds where SDK is available
 - [ ] iOS build succeeds where Xcode is available
 - [ ] Raspberry Pi/kiosk deployment script validated
-- [ ] No unexplained widened test tolerances
-- [ ] No disabled failing tests without documented blocker
-- [ ] No placeholder implementation marked complete
+- [x] No unexplained widened test tolerances
+- [x] No disabled failing tests without documented blocker
+- [x] No placeholder implementation marked complete
 - [ ] Final dependency/license review
 
 ---
 
 ## 19. Documentation and deployment
 
-- [ ] Expand `README.md` with screenshots, features and platform status
+- [~] Expand `README.md` with screenshots, features and platform status
 - [ ] Create `BUILD.md`
 - [ ] Document web/PWA build and deployment
 - [ ] Document Android build/install
@@ -503,11 +509,11 @@
 - [ ] Document Raspberry Pi Touch Display 2 setup
 - [ ] Document TV/kiosk deployment
 - [ ] Document prayer calculation methods and references
-- [ ] Document privacy behaviour
+- [x] Document privacy behaviour
 - [ ] Document mosque timetable import format
 - [ ] Document notification platform limitations
 - [ ] Add troubleshooting section
-- [ ] Add contributor/development setup instructions
+- [x] Add contributor/development setup instructions
 
 ---
 
@@ -556,10 +562,10 @@
 
 SalahOS v1 must not be declared complete until the following are true:
 
-- [ ] Accurate five-prayer calculation engine is independently testable
+- [~] Accurate five-prayer calculation engine is independently testable
 - [ ] Major recognised calculation methods are implemented and documented
-- [ ] Standard/Shafi'i-family and Hanafi Asr calculations are validated
-- [ ] High-latitude handling is implemented and transparent
+- [x] Standard/Shafi'i-family and Hanafi Asr calculations are validated
+- [~] High-latitude handling is implemented and transparent
 - [ ] Local mosque timetable mode works offline
 - [ ] Prayer-start and Iqamah/Jama'ah times are distinct
 - [ ] Jumu'ah timetable support is functional
