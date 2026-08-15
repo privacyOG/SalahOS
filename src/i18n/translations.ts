@@ -48,6 +48,7 @@ export const translations = {
     manualAdjustment: 'Manual prayer adjustment applied',
     ummAlQuraCalendar: 'Umm al-Qura',
     afterMidnight: 'after midnight',
+    offline: 'Offline — saved settings and local prayer calculations remain available.',
   },
   ar: {
     appName: 'صلاح أو إس',
@@ -96,6 +97,7 @@ export const translations = {
     manualAdjustment: 'تم تطبيق تعديل يدوي للصلاة',
     ummAlQuraCalendar: 'أم القرى',
     afterMidnight: 'بعد منتصف الليل',
+    offline: 'غير متصل — تبقى الإعدادات المحفوظة وحسابات الصلاة المحلية متاحة.',
   },
 } as const;
 
