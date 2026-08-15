@@ -82,6 +82,8 @@ export const translations = {
     asrMethod: 'Asr method',
     asrStandard: "Standard / Shafi'i-family",
     asrHanafi: 'Hanafi',
+    asrConventionExplanation:
+      "Standard (Shafi'i, Maliki and Hanbali) uses shadow factor 1; Hanafi uses shadow factor 2. Both include the noon shadow.",
     highLatitudeRule: 'High-latitude rule',
     highLatitudeAngle: 'Angle based',
     highLatitudeMiddle: 'Middle of the night',
@@ -198,6 +200,8 @@ export const translations = {
     asrMethod: 'طريقة حساب العصر',
     asrStandard: 'القياسي / الشافعي',
     asrHanafi: 'الحنفي',
+    asrConventionExplanation:
+      'القياسي (الشافعي والمالكي والحنبلي) يستخدم معامل ظل 1؛ والحنفي يستخدم معامل ظل 2. ويُضاف ظل الزوال في الحالتين.',
     highLatitudeRule: 'قاعدة خطوط العرض العليا',
     highLatitudeAngle: 'حسب الزاوية',
     highLatitudeMiddle: 'منتصف الليل',

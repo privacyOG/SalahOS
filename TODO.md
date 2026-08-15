@@ -81,7 +81,10 @@
 - [x] Implement Standard Asr shadow factor (Shafi'i, Maliki and Hanbali convention)
 - [x] Implement Hanafi Asr shadow factor
 - [x] Set Shafi'i/Standard as initial default while allowing user selection
-- [~] Keep internal terminology mathematically precise (`Standard` / `Hanafi`) while explaining madhhab associations in UI
+- [x] Keep internal terminology mathematically precise (`Standard` / `Hanafi`) while explaining madhhab associations in UI
+
+**Asr convention explanation verification note (2026-08-16):** read-only Quality Gate run `31912659728` passed formatting, typed lint, strict typecheck, all tests and production build after adding bilingual explanatory copy while retaining the engine's precise Standard/Hanafi terminology. The presentation model records Standard as shadow factor 1 with Shafi'i, Maliki and Hanbali association, and Hanafi as shadow factor 2. The settings UI explains both factors and that each includes the noon shadow.
+
 - [x] Add unit tests proving both shadow-factor branches differ correctly
 
 ### 1.5 High-latitude handling

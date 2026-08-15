@@ -326,3 +326,12 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - The shared prayer-card UI now applies supplementary styling through the tested presentation role instead of a component-local prayer-name comparison.
 - Tests verify Sunrise's supplementary role and the obligatory role of all five daily prayers.
 - Read-only Quality Gate run `31912253750` passed formatting, typed lint, strict typecheck, all tests and production build.
+
+### 2026-08-16 — Asr convention terminology and explanation
+
+- Preserved `standard` and `hanafi` as the internal mathematical Asr conventions.
+- Added a typed presentation model proving Standard uses shadow factor 1 and Hanafi uses shadow factor 2.
+- Recorded the Standard association with Shafi'i, Maliki and Hanbali practice and the Hanafi association separately.
+- Added English and Arabic settings guidance that explains the two shadow factors and notes that both include the noon shadow.
+- Linked the selector to its explanatory text with `aria-describedby`.
+- Read-only Quality Gate run `31912659728` passed formatting, typed lint, strict typecheck, all tests and production build.
