@@ -32,18 +32,18 @@ SalahOS does not treat a method label as proof that its numerical parameters are
 
 ## Parameter consensus
 
-| SalahOS method | Fajr | Isha | Cross-check status |
-| --- | ---: | --- | --- |
-| Muslim World League | 18° | 17° | PrayTimes + Adhan JS + AlAdhan agree |
-| ISNA / North America | 15° | 15° | PrayTimes + Adhan JS + AlAdhan agree |
-| Egyptian General Authority of Survey | 19.5° | 17.5° | PrayTimes + Adhan JS + AlAdhan agree |
-| Umm al-Qura / Makkah | 18.5° | 90 min after Maghrib | PrayTimes + current Adhan JS + AlAdhan agree; Ramadan interval requires separate Hijri-aware handling |
-| University of Islamic Sciences, Karachi | 18° | 18° | PrayTimes + Adhan JS + AlAdhan agree |
-| MUIS / Singapore | 20° | 18° | PrayTimes + Adhan JS + AlAdhan agree |
-| Kuwait | 18° | 17.5° | Adhan JS + AlAdhan agree |
-| Qatar | 18° | 90 min after Maghrib | Adhan JS + AlAdhan agree |
-| Dubai | 18.2° | 18.2° | Batoul Apps-derived approximation; AlAdhan explicitly labels Dubai experimental |
-| Diyanet / Turkey | 18° | 17° in interoperability references | Adhan describes this as an approximation; AlAdhan labels it experimental; official Diyanet timetable parity is still required |
+| SalahOS method                          |  Fajr | Isha                               | Cross-check status                                                                                                            |
+| --------------------------------------- | ----: | ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- |
+| Muslim World League                     |   18° | 17°                                | PrayTimes + Adhan JS + AlAdhan agree                                                                                          |
+| ISNA / North America                    |   15° | 15°                                | PrayTimes + Adhan JS + AlAdhan agree                                                                                          |
+| Egyptian General Authority of Survey    | 19.5° | 17.5°                              | PrayTimes + Adhan JS + AlAdhan agree                                                                                          |
+| Umm al-Qura / Makkah                    | 18.5° | 90 min after Maghrib               | PrayTimes + current Adhan JS + AlAdhan agree; Ramadan interval requires separate Hijri-aware handling                         |
+| University of Islamic Sciences, Karachi |   18° | 18°                                | PrayTimes + Adhan JS + AlAdhan agree                                                                                          |
+| MUIS / Singapore                        |   20° | 18°                                | PrayTimes + Adhan JS + AlAdhan agree                                                                                          |
+| Kuwait                                  |   18° | 17.5°                              | Adhan JS + AlAdhan agree                                                                                                      |
+| Qatar                                   |   18° | 90 min after Maghrib               | Adhan JS + AlAdhan agree                                                                                                      |
+| Dubai                                   | 18.2° | 18.2°                              | Batoul Apps-derived approximation; AlAdhan explicitly labels Dubai experimental                                               |
+| Diyanet / Turkey                        |   18° | 17° in interoperability references | Adhan describes this as an approximation; AlAdhan labels it experimental; official Diyanet timetable parity is still required |
 
 ## Verification policy
 
