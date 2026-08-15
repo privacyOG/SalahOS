@@ -77,7 +77,7 @@ const highLatitudeRuleTranslationKeys: Readonly<
   Record<PersistedSettings['highLatitudeRule'], TranslationKey>
 > = {
   'angle-based': 'highLatitudeAngle',
-  'middle-of-night': 'highLatitudeMiddle',
+  'middle-of-the-night': 'highLatitudeMiddle',
   'one-seventh': 'highLatitudeSeventh',
 };
 
