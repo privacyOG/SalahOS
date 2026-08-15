@@ -145,6 +145,39 @@ describe('calculatePrayerSchedule', () => {
     expect(schedule.prayers.fajr.provenance.source).toBe('unavailable');
   });
 
+  it('handles Tromso polar summer without fabricating missing solar or twilight events', () => {
+    const schedule = calculatePrayerSchedule({
+      date: new Date('2026-06-21T00:00:00.000Z'),
+      latitude: 69.6492,
+      longitude: 18.9553,
+      utcOffsetMinutes: 120,
+      method: getCalculationMethod('muslim-world-league'),
+    });
+
+    for (const prayer of ['fajr', 'sunrise', 'maghrib', 'isha'] as const) {
+      expect(schedule.prayers[prayer].baseLocalMinutes).toBeNull();
+      expect(schedule.prayers[prayer].provenance.source).toBe('unavailable');
+      expect(schedule.prayers[prayer].provenance.highLatitudeRuleApplied).toBe(false);
+    }
+  });
+
+  it('handles Tromso polar winter without fabricating sunrise or sunset-based Maghrib', () => {
+    const schedule = calculatePrayerSchedule({
+      date: new Date('2026-12-21T00:00:00.000Z'),
+      latitude: 69.6492,
+      longitude: 18.9553,
+      utcOffsetMinutes: 60,
+      method: getCalculationMethod('muslim-world-league'),
+    });
+
+    expect(schedule.prayers.sunrise.baseLocalMinutes).toBeNull();
+    expect(schedule.prayers.sunrise.provenance.source).toBe('unavailable');
+    expect(schedule.prayers.maghrib.baseLocalMinutes).toBeNull();
+    expect(schedule.prayers.maghrib.provenance.source).toBe('unavailable');
+    expect(schedule.prayers.fajr.provenance.highLatitudeRuleApplied).toBe(false);
+    expect(schedule.prayers.isha.provenance.highLatitudeRuleApplied).toBe(false);
+  });
+
   it('rejects out-of-range manual adjustments', () => {
     expect(() =>
       calculatePrayerSchedule({
