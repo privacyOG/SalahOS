@@ -1,4 +1,9 @@
-import type { IqamahRule, MosqueDayTimetable, MosquePrayerTime, MosqueTimetable } from './mosqueTimetable';
+import type {
+  IqamahRule,
+  MosqueDayTimetable,
+  MosquePrayerTime,
+  MosqueTimetable,
+} from './mosqueTimetable';
 import { validateMosqueTimetable } from './mosqueTimetable';
 import type { ObligatoryPrayerName } from './prayerEngine';
 
@@ -73,14 +78,19 @@ export function parseMosqueTimetableCsv(csv: string, mosqueName: string): Mosque
   }
 
   const header = lines[0]?.split(',').map((value) => value.trim()) ?? [];
-  if (header.length !== CSV_HEADER.length || header.some((value, index) => value !== CSV_HEADER[index])) {
+  if (
+    header.length !== CSV_HEADER.length ||
+    header.some((value, index) => value !== CSV_HEADER[index])
+  ) {
     throw new RangeError(`CSV header must be exactly: ${CSV_HEADER.join(',')}`);
   }
 
   const days: MosqueDayTimetable[] = lines.slice(1).map((line, lineIndex) => {
     const values = line.split(',').map((value) => value.trim());
     if (values.length !== CSV_HEADER.length) {
-      throw new RangeError(`CSV row ${String(lineIndex + 2)} must contain ${String(CSV_HEADER.length)} columns`);
+      throw new RangeError(
+        `CSV row ${String(lineIndex + 2)} must contain ${String(CSV_HEADER.length)} columns`,
+      );
     }
 
     const prayers: Partial<Record<ObligatoryPrayerName, MosquePrayerTime>> = {};
