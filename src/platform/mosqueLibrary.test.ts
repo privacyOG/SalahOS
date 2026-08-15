@@ -62,7 +62,15 @@ describe('mosque timetable library', () => {
   it('rejects duplicate ids and invalid nested timetable data', () => {
     const id = mosqueLibraryId(timetable.mosqueName);
     expect(() =>
-      parseMosqueLibrary(JSON.stringify({ version: 1, entries: [{ id, timetable }, { id, timetable }] })),
+      parseMosqueLibrary(
+        JSON.stringify({
+          version: 1,
+          entries: [
+            { id, timetable },
+            { id, timetable },
+          ],
+        }),
+      ),
     ).toThrow(/Duplicate/);
 
     expect(() =>
