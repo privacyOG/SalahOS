@@ -36,7 +36,14 @@ const prayerTranslationKeys: Readonly<Record<PrayerName, TranslationKey>> = {
   isha: 'prayerIsha',
 };
 
-const adjustablePrayers: readonly PrayerName[] = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'];
+const adjustablePrayers: readonly PrayerName[] = [
+  'fajr',
+  'sunrise',
+  'dhuhr',
+  'asr',
+  'maghrib',
+  'isha',
+];
 
 const locationFailureKeys: Readonly<Record<BrowserLocationFailureReason, TranslationKey>> = {
   'permission-denied': 'locationPermissionDenied',
@@ -198,7 +205,9 @@ export function App() {
       setLocale(imported.locale);
       setCoordinates(imported.location?.coordinates ?? null);
       setLatitude(imported.location === null ? '' : String(imported.location.coordinates.latitude));
-      setLongitude(imported.location === null ? '' : String(imported.location.coordinates.longitude));
+      setLongitude(
+        imported.location === null ? '' : String(imported.location.coordinates.longitude),
+      );
       setLocationFailure(null);
       setManualError(false);
       setSettingsMessage('settingsImported');
@@ -326,7 +335,8 @@ export function App() {
               onChange={(event) => {
                 setSettings((current) => ({
                   ...current,
-                  calculationMethodId: event.target.value as PersistedSettings['calculationMethodId'],
+                  calculationMethodId: event.target
+                    .value as PersistedSettings['calculationMethodId'],
                 }));
               }}
             >
