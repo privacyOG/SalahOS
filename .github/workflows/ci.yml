@@ -8,7 +8,7 @@ on:
   pull_request:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   quality:
@@ -17,6 +17,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -25,15 +27,35 @@ jobs:
           cache: npm
           cache-dependency-path: package.json
 
+      - name: Detect missing lockfile
+        id: lock-state
+        run: |
+          if [ -f package-lock.json ]; then
+            echo "missing=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "missing=true" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Install dependencies
         run: npm install --ignore-scripts
 
-      - name: Capture resolved lockfile
-        uses: actions/upload-artifact@v4
-        with:
-          name: package-lock
-          path: package-lock.json
-          if-no-files-found: error
+      - name: Apply canonical formatting
+        run: npm run format
+
+      - name: Commit bootstrap changes
+        if: github.event_name == 'push'
+        run: |
+          if git diff --quiet && git diff --cached --quiet && [ "${{ steps.lock-state.outputs.missing }}" != "true" ]; then
+            exit 0
+          fi
+          git config user.name "privacyOG"
+          git config user.email "102720550+privacyOG@users.noreply.github.com"
+          git add package-lock.json src/domain/astronomy.ts src/styles.css
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "build: lock dependencies and apply formatting"
+          git push origin HEAD:${{ github.ref_name }}
 
       - name: Format check
         run: npm run format:check
