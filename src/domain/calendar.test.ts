@@ -49,6 +49,38 @@ describe('Gregorian and Hijri calendar domain', () => {
     });
   });
 
+  it('represents a Gregorian leap day and advances to March without skipping a civil date', () => {
+    expect(gregorianDateParts(utcDate('2024-02-29'))).toEqual({
+      calendar: 'gregory',
+      year: 2024,
+      month: 2,
+      day: 29,
+      source: 'civil-date',
+    });
+
+    const nextCivilDate = new Date(utcDate('2024-02-29').getTime() + 86_400_000);
+    expect(gregorianDateParts(nextCivilDate)).toEqual({
+      calendar: 'gregory',
+      year: 2024,
+      month: 3,
+      day: 1,
+      source: 'civil-date',
+    });
+  });
+
+  it('crosses the Gregorian year boundary on consecutive civil dates', () => {
+    expect(gregorianDateParts(utcDate('2026-12-31'))).toMatchObject({
+      year: 2026,
+      month: 12,
+      day: 31,
+    });
+    expect(gregorianDateParts(utcDate('2027-01-01'))).toMatchObject({
+      year: 2027,
+      month: 1,
+      day: 1,
+    });
+  });
+
   it('returns explicit Hijri calendar provenance and no implicit correction', () => {
     const result = hijriDateParts(utcDate('2026-08-16'));
 
