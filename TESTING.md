@@ -387,3 +387,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Added production IANA location-context coverage across Sydney local midnight from 23:59:59 to 00:00:00.
 - Verified the local civil date advances exactly at midnight while retaining the resolved Australia/Sydney timezone and expected UTC offset for the fixture.
 - Read-only Quality Gate run `31914501854` passed formatting, typed lint, strict typecheck, all tests and production build.
+
+### 2026-08-16 — geographic integration matrix
+
+- Expanded the production location → IANA timezone → prayer-calculation integration matrix on the March equinox.
+- Verified Sydney, Melbourne, Cairo, Istanbul, Karachi, Jakarta, London, New York, Oslo and Quito resolve through the offline timezone lookup with their expected UTC offsets.
+- Verified each ordinary-location fixture produces available Fajr, Sunrise, Dhuhr, Asr, Maghrib and Isha values in strict chronological order.
+- Explicitly covered northern, southern and equatorial latitude bands while keeping Tromsø and extreme-polar seasonal validation separate.
+- Read-only Quality Gate run `31914980103` passed formatting, typed lint, strict typecheck, all tests and production build.
