@@ -1,10 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import type { NotificationIntent } from '../domain/notificationSchedule';
 import type { NotificationInstantResolution } from '../domain/notificationInstant';
-import {
-  applyNotificationSchedulerPlan,
-  planNotificationScheduler,
-} from './notificationScheduler';
+import { applyNotificationSchedulerPlan, planNotificationScheduler } from './notificationScheduler';
 import type {
   NotificationSchedulerAdapter,
   ScheduledNotificationRecord,
@@ -100,9 +97,7 @@ describe('notification scheduler adapter', () => {
 
   it('cancels stale state before scheduling a changed exact instant', async () => {
     const adapter = new MemoryScheduler();
-    await applyNotificationSchedulerPlan(adapter, [
-      scheduled('fajr', '2026-08-15T19:30:00.000Z'),
-    ]);
+    await applyNotificationSchedulerPlan(adapter, [scheduled('fajr', '2026-08-15T19:30:00.000Z')]);
     adapter.operations.length = 0;
 
     const plan = await applyNotificationSchedulerPlan(adapter, [
@@ -163,10 +158,13 @@ describe('notification scheduler adapter', () => {
 
   it('rejects conflicting desired records that share one stable id', () => {
     expect(() =>
-      planNotificationScheduler([], [
-        scheduled('same', '2026-08-15T19:30:00.000Z'),
-        scheduled('same', '2026-08-15T19:31:00.000Z'),
-      ]),
+      planNotificationScheduler(
+        [],
+        [
+          scheduled('same', '2026-08-15T19:30:00.000Z'),
+          scheduled('same', '2026-08-15T19:31:00.000Z'),
+        ],
+      ),
     ).toThrow(RangeError);
   });
 });

@@ -59,9 +59,7 @@ function sameRecord(
   );
 }
 
-function desiredRecords(
-  resolutions: readonly NotificationInstantResolution[],
-): {
+function desiredRecords(resolutions: readonly NotificationInstantResolution[]): {
   readonly scheduled: readonly ScheduledNotificationRecord[];
   readonly skippedIds: readonly string[];
 } {
