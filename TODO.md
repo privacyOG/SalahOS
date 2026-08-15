@@ -210,6 +210,8 @@
 - [ ] Research optional reputable mosque APIs/integrations
 - [x] Do not rely on fragile arbitrary website scraping as an authoritative source
 
+**Mosque-library verification note (2026-08-16):** implementation Quality Gate run `31905789616` passed formatting, typed lint, strict typecheck, all tests and production build for the local mosque manager. Read-only Quality Gate run `31907837879` then passed after duplicate-state cleanup, duplicate-translation cleanup and restoration of the stricter persisted-timetable parser. The settings panel now stores multiple validated mosque timetables locally, imports documented CSV or JSON data through the existing strict parser, lets the user select or remove a mosque, and automatically activates the selected timetable as the local-mosque prayer source. Persisted library entries are revalidated through the strict timetable parser before use. Manual per-day timetable editing and optional vetted remote integrations remain open.
+
 ### 5.3 Salah start vs Iqamah/Jama'ah
 
 - [x] Model prayer-start time separately from Iqamah/Jama'ah time
@@ -255,7 +257,7 @@
 - [x] Current local time
 - [x] Gregorian date
 - [x] Hijri date
-- [~] Current location / selected mosque
+- [x] Current location / selected mosque
 - [x] Today's five prayer times
 - [x] Sunrise as supplementary information
 - [x] Next-prayer indicator
@@ -407,7 +409,7 @@
 - [x] High-latitude rule selector
 - [x] Manual prayer offsets
 - [x] Location selector
-- [~] Mosque/source selector
+- [x] Mosque/source selector
 - [x] Hijri correction
 - [x] Language selector
 - [x] Theme selector
