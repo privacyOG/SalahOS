@@ -220,3 +220,15 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Saved favourites remain independent of reset-to-defaults for calculation preferences and require no remote service.
 - Read-only Quality Gate run `31905379677` passed the storage/test core; implementation Quality Gate run `31905467110` passed formatting, typed lint, strict typecheck, all tests and production build after UI integration.
 - Manual city/location search and native Android/iOS location adapters remain open.
+
+### 2026-08-16 — Local mosque timetable library and picker
+
+- Added a separate versioned local library for multiple mosque timetables.
+- Library entries use a normalized mosque-name identifier and reject duplicate identifiers.
+- Persisted entries are reconstructed through the same strict JSON timetable parser used by imports before they can be activated.
+- Unit tests cover storage round-trip, upsert/remove behavior, duplicate ids, malformed timetable content, corrupt storage fallback and strict persistence validation.
+- The settings panel imports documented JSON or CSV timetables, stores multiple mosques locally, selects a mosque for immediate local-mosque activation, and removes the selected mosque safely.
+- Selecting or importing a mosque switches the prayer source to local-mosque; removing the active mosque returns local-mosque mode to calculated rather than leaving an unavailable source active.
+- Implementation Quality Gate run `31905789616` passed formatting, typed lint, strict typecheck, all tests and production build for the manager integration.
+- Read-only Quality Gate run `31907837879` passed after duplicate-state and translation cleanup with the strict persisted-timetable parser active.
+- Manual per-day timetable editing, optional vetted remote integrations and physical-display visual validation remain open.

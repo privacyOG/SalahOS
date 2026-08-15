@@ -575,3 +575,44 @@ h2 {
     grid-template-columns: 1fr;
   }
 }
+
+.mosque-library-controls {
+  display: grid;
+  gap: 0.85rem;
+  margin-block: 1rem;
+  padding: 1rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 0.9rem;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.mosque-library-row,
+.mosque-import-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 0.75rem;
+}
+
+.mosque-import-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.mosque-library-controls label {
+  display: grid;
+  gap: 0.35rem;
+  color: #c2cdc0;
+  font-size: 0.85rem;
+}
+
+.mosque-import-payload textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+@media (max-width: 760px) {
+  .mosque-library-row,
+  .mosque-import-grid {
+    grid-template-columns: 1fr;
+  }
+}
