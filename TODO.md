@@ -52,7 +52,10 @@
 - [x] Calculate Asr
 - [x] Calculate Maghrib
 - [x] Calculate Isha
-- [~] Calculate and display Sunrise separately from the five obligatory prayers
+- [x] Calculate and display Sunrise separately from the five obligatory prayers
+
+**Sunrise supplementary verification note (2026-08-16):** read-only Quality Gate run `31912253750` passed formatting, typed lint, strict typecheck, all tests and production build after formalising the presentation role. The shared dashboard already calculates and exposes Sunrise as a sixth row between Fajr and Dhuhr, while next/current prayer selection remains restricted to the five obligatory prayers. The shared UI now derives supplementary styling from the tested presentation role rather than a component-local string check.
+
 - [x] Add optional Imsak/Suhur cutoff support
 - [x] Add optional Duha/Ishraq support
 - [x] Add optional Islamic midnight calculation

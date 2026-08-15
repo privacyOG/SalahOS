@@ -318,3 +318,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Current and next prayer cards use distinct classes; the current card also carries a localised English/Arabic current-prayer badge.
 - Source-domain tests cover local-mosque current selection, Sunrise exclusion, post-Isha rollover and the pre-Fajr no-current case.
 - Read-only Quality Gate run `31911967092` passed formatting, typed lint, strict typecheck, all tests and production build.
+
+### 2026-08-16 — Sunrise supplementary presentation
+
+- Formalised prayer presentation roles so Sunrise is the sole supplementary row and Fajr, Dhuhr, Asr, Maghrib and Isha remain obligatory.
+- The shared dashboard already exposes Sunrise separately in the six-row daily sequence, and selected-source current/next state excludes Sunrise from obligatory prayer selection.
+- The shared prayer-card UI now applies supplementary styling through the tested presentation role instead of a component-local prayer-name comparison.
+- Tests verify Sunrise's supplementary role and the obligatory role of all five daily prayers.
+- Read-only Quality Gate run `31912253750` passed formatting, typed lint, strict typecheck, all tests and production build.
