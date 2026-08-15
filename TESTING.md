@@ -199,3 +199,14 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Local persistence now depends on effective configuration/location changes rather than the per-second dashboard refresh, avoiding unnecessary storage writes.
 - Read-only Quality Gate run `31904751213` passed clean lockfile install, formatting, typed lint, strict typecheck, all tests and production build after the strict settings lint fixes.
 - Visual validation of light/dark/system themes and full component-level interaction testing remain open.
+
+### 2026-08-16 — Selected source, Iqamah and Jumu'ah presentation
+
+- Added a source-aware dashboard projection over the existing calculation and mosque timetable domains rather than duplicating prayer calculations.
+- Local-mosque mode uses only timetable-provided obligatory prayer starts; a missing mosque entry stays unavailable instead of silently falling back to a calculated time.
+- Next-prayer and countdown selection are recomputed from the active source across today and tomorrow.
+- Dashboard prayer cards display prayer start and configured Iqamah separately, while Sunrise remains supplementary information.
+- Friday timetable sessions are presented with independent Khutbah and Salah times.
+- Source-domain tests cover calculated mode, local mosque starts/Iqamah, missing-entry isolation and next-day mosque Fajr rollover.
+- Quality Gate run `31905085674` passed formatting, typed lint, strict typecheck, all tests and production build for the implementation.
+- Multiple saved mosques, dedicated mosque management and physical-display visual validation remain open.
