@@ -26,8 +26,8 @@ describe('solarDayEvents', () => {
 
     expect(result.sunriseUtcMinutes).not.toBeNull();
     expect(result.sunsetUtcMinutes).not.toBeNull();
-    expect(result.sunriseUtcMinutes as number).toBeLessThan(result.solarNoonUtcMinutes);
-    expect(result.solarNoonUtcMinutes).toBeLessThan(result.sunsetUtcMinutes as number);
+    expect(result.sunriseUtcMinutes!).toBeLessThan(result.solarNoonUtcMinutes);
+    expect(result.solarNoonUtcMinutes).toBeLessThan(result.sunsetUtcMinutes!);
   });
 
   it('reports unavailable events rather than fabricating them in polar day/night', () => {
