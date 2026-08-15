@@ -342,7 +342,10 @@
 - [ ] Test iPhone responsive layout
 - [ ] Test iPad responsive layout
 - [ ] Test offline cold start
-- [ ] Prepare signing/build documentation without committing credentials
+- [x] Prepare signing/build documentation without committing credentials
+
+**iOS build/signing documentation note (2026-08-16):** read-only Quality Gate run `31914265959` passed formatting, typed lint, strict typecheck, all tests and production build after adding `docs/IOS_BUILD_SIGNING.md`. The guide covers local development signing, capability/entitlement review, Release archives, CI secret injection, credential cleanup and distribution-path separation while explicitly prohibiting committed signing keys, certificates, account passwords and distribution secrets. Native Xcode build/archive/device execution remains open until performed on the required Apple environment.
+
 - [ ] Run on simulator/device when macOS/Xcode environment is available
 - [x] Document untested iOS items honestly when unavailable on development host
 
