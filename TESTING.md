@@ -335,3 +335,12 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Added English and Arabic settings guidance that explains the two shadow factors and notes that both include the noon shadow.
 - Linked the selector to its explanatory text with `aria-describedby`.
 - Read-only Quality Gate run `31912659728` passed formatting, typed lint, strict typecheck, all tests and production build.
+
+### 2026-08-16 — Runtime light, dark and system themes
+
+- Added a runtime theme adapter used by the shared application shell.
+- Explicit Light and Dark preferences apply their effective theme directly without a system listener.
+- Follow-system resolves the operating-system color-scheme preference and reacts to later preference changes.
+- Listener cleanup is verified so changing theme mode or unmounting does not retain stale handlers.
+- Existing persisted theme selection and CSS variables remain the shared styling source across form factors.
+- Read-only Quality Gate run `31912934726` passed formatting, typed lint, strict typecheck, all tests and production build.

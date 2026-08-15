@@ -56,6 +56,7 @@ import {
 } from './platform/settingsStorage';
 import type { PersistedSettings } from './platform/settingsStorage';
 import { installRuntimeRefreshListeners } from './platform/runtimeRefresh';
+import { installThemePreference } from './platform/themePreference';
 
 const prayerTranslationKeys: Readonly<Record<PrayerName, TranslationKey>> = {
   fajr: 'prayerFajr',
@@ -151,7 +152,10 @@ export function App() {
   }, [locale]);
 
   useEffect(() => {
-    document.documentElement.dataset.theme = settings.theme;
+    return installThemePreference(settings.theme, {
+      documentTarget: document,
+      windowTarget: window,
+    });
   }, [settings.theme]);
 
   useEffect(() => {

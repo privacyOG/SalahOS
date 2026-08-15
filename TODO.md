@@ -294,9 +294,12 @@
 
 ### 7.3 Themes and accessibility
 
-- [~] Light theme
-- [~] Dark theme
-- [~] Follow-system theme
+- [x] Light theme
+- [x] Dark theme
+- [x] Follow-system theme
+
+**Runtime theme verification note (2026-08-16):** read-only Quality Gate run `31912934726` passed formatting, typed lint, strict typecheck, all tests and production build after adding a runtime theme adapter. Explicit Light and Dark preferences apply immediately. Follow-system resolves the current operating-system color-scheme preference, listens for later changes, updates the effective document theme, and removes the listener when the mode changes or the application unmounts.
+
 - [~] High-contrast readable typography
 - [x] Scalable text
 - [x] Keyboard navigation
