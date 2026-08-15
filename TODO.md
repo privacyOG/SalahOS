@@ -126,7 +126,7 @@
 ### Geographic test matrix
 
 - [x] Makkah
-- [ ] Madinah
+- [x] Madinah
 - [x] Sydney
 - [x] Melbourne
 - [x] Cairo
@@ -137,15 +137,17 @@
 - [x] London
 - [x] New York
 - [x] Oslo
-- [ ] Tromsø
+- [x] Tromsø
 - [x] Equatorial location
 - [x] Northern-hemisphere location
 - [x] Southern-hemisphere location
 
 **Geographic matrix verification note (2026-08-16):** read-only Quality Gate run `31914980103` passed formatting, typed lint, strict typecheck, all tests and production build after expanding the production location → IANA timezone → prayer-calculation integration matrix. March-equinox fixtures now cover Sydney, Melbourne, Cairo, Istanbul, Karachi, Jakarta, London, New York, Oslo and Quito, assert the expected offline-resolved IANA timezone and UTC offset, and verify all six displayed prayer/sunrise times are available and strictly ordered. The matrix also explicitly covers northern, southern and equatorial latitude bands. Madinah, Tromsø and the extreme high-latitude seasonal cases remain open.
 
-- [ ] Extreme high-latitude summer case
-- [ ] Extreme high-latitude winter case
+- [x] Extreme high-latitude summer case
+- [x] Extreme high-latitude winter case
+
+**Madinah/Tromsø geographic verification note (2026-08-16):** read-only Quality Gate run `31915190467` passed formatting, typed lint, strict typecheck, all tests and production build. Madinah resolves through the offline IANA lookup to `Asia/Riyadh` at UTC+03 and produces an ordered equinox prayer schedule. Tromsø resolves to `Europe/Oslo` with UTC+02 in summer and UTC+01 in winter. The polar-summer fixture deliberately leaves Fajr, Sunrise, Maghrib and Isha unavailable rather than fabricating events, while the polar-winter fixture leaves unavailable Sunrise and sunset-based Maghrib explicitly unavailable; neither case falsely reports a high-latitude fallback when the prerequisite night bounds do not exist.
 
 ### Date/time edge cases
 

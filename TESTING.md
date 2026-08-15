@@ -395,3 +395,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Verified each ordinary-location fixture produces available Fajr, Sunrise, Dhuhr, Asr, Maghrib and Isha values in strict chronological order.
 - Explicitly covered northern, southern and equatorial latitude bands while keeping Tromsø and extreme-polar seasonal validation separate.
 - Read-only Quality Gate run `31914980103` passed formatting, typed lint, strict typecheck, all tests and production build.
+
+### 2026-08-16 — Madinah and Tromsø polar-season validation
+
+- Added Madinah to the ordinary-location equinox matrix and verified `Asia/Riyadh`, UTC+03 and strict prayer/sunrise ordering.
+- Verified Tromsø resolves to `Europe/Oslo`, using UTC+02 for the June fixture and UTC+01 for the December fixture.
+- Verified polar summer does not fabricate Fajr, Sunrise, Maghrib or Isha when the required astronomical events/night bounds are unavailable.
+- Verified polar winter keeps unavailable Sunrise and sunset-based Maghrib explicit and does not falsely claim a high-latitude fallback.
+- Read-only Quality Gate run `31915190467` passed formatting, typed lint, strict typecheck, all tests and production build.
