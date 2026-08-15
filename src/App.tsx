@@ -4,7 +4,6 @@ import type { Coordinates } from './domain/coordinates';
 import { buildPrayerDashboard } from './domain/dashboard';
 import { applyPrayerSourceToDashboard } from './domain/sourcedDashboard';
 import { parseMosqueTimetableCsv, parseMosqueTimetableJson } from './domain/timetableImport';
-import { parseMosqueTimetableCsv, parseMosqueTimetableJson } from './domain/timetableImport';
 import { calculationMethods } from './domain/methods';
 import type { PrayerName } from './domain/prayerEngine';
 import {
@@ -20,14 +19,6 @@ import {
 import type { Locale, TranslationKey } from './i18n/translations';
 import { requestBrowserLocation } from './platform/browserGeolocation';
 import type { BrowserLocationFailureReason } from './platform/browserGeolocation';
-import {
-  loadMosqueLibrary,
-  mosqueLibraryId,
-  removeMosqueTimetable,
-  saveMosqueLibrary,
-  upsertMosqueTimetable,
-} from './platform/mosqueLibrary';
-import type { MosqueLibraryEntry } from './platform/mosqueLibrary';
 import {
   loadMosqueLibrary,
   mosqueLibraryId,
@@ -123,17 +114,6 @@ export function App() {
   });
   const [savedLocationLabel, setSavedLocationLabel] = useState('');
   const [locationMessage, setLocationMessage] = useState<TranslationKey | null>(null);
-  const [mosqueLibrary, setMosqueLibrary] = useState<readonly MosqueLibraryEntry[]>(() => {
-    try {
-      return loadMosqueLibrary(window.localStorage);
-    } catch {
-      return [];
-    }
-  });
-  const [mosqueImportFormat, setMosqueImportFormat] = useState<'json' | 'csv'>('json');
-  const [mosqueImportName, setMosqueImportName] = useState('');
-  const [mosqueImportPayload, setMosqueImportPayload] = useState('');
-  const [mosqueMessage, setMosqueMessage] = useState<TranslationKey | null>(null);
   const [mosqueLibrary, setMosqueLibrary] = useState<readonly MosqueLibraryEntry[]>(() => {
     try {
       return loadMosqueLibrary(window.localStorage);
@@ -246,14 +226,6 @@ export function App() {
     }
   }, [mosqueLibrary]);
 
-  useEffect(() => {
-    try {
-      saveMosqueLibrary(window.localStorage, mosqueLibrary);
-    } catch {
-      // The validated mosque library remains usable in memory when storage is unavailable.
-    }
-  }, [mosqueLibrary]);
-
   async function refreshLocation(): Promise<void> {
     const result = await requestBrowserLocation();
     if (result.ok) {
@@ -312,50 +284,6 @@ export function App() {
     const id = savedLocationId(coordinates);
     setSavedLocations((current) => removeSavedLocation(current, id));
     setLocationMessage('savedLocationRemoved');
-  }
-
-  function importMosqueTimetable(): void {
-    try {
-      const timetable =
-        mosqueImportFormat === 'json'
-          ? parseMosqueTimetableJson(mosqueImportPayload)
-          : parseMosqueTimetableCsv(mosqueImportPayload, mosqueImportName.trim());
-      setMosqueLibrary((current) => upsertMosqueTimetable(current, timetable));
-      setSettings((current) => ({
-        ...current,
-        mosqueTimetable: timetable,
-        prayerSourceMode: 'local-mosque',
-      }));
-      setMosqueImportName('');
-      setMosqueImportPayload('');
-      setMosqueMessage('mosqueTimetableImported');
-    } catch {
-      setMosqueMessage('mosqueTimetableImportError');
-    }
-  }
-
-  function selectMosqueTimetable(id: string): void {
-    const selected = mosqueLibrary.find((entry) => entry.id === id);
-    if (selected === undefined) return;
-    setSettings((current) => ({
-      ...current,
-      mosqueTimetable: selected.timetable,
-      prayerSourceMode: 'local-mosque',
-    }));
-    setMosqueMessage(null);
-  }
-
-  function removeSelectedMosqueTimetable(): void {
-    if (settings.mosqueTimetable === null) return;
-    const id = mosqueLibraryId(settings.mosqueTimetable.mosqueName);
-    setMosqueLibrary((current) => removeMosqueTimetable(current, id));
-    setSettings((current) => ({
-      ...current,
-      mosqueTimetable: null,
-      prayerSourceMode:
-        current.prayerSourceMode === 'local-mosque' ? 'calculated' : current.prayerSourceMode,
-    }));
-    setMosqueMessage('mosqueTimetableRemoved');
   }
 
   function importMosqueTimetable(): void {
