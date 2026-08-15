@@ -6,6 +6,7 @@ import { applyPrayerSourceToDashboard } from './domain/sourcedDashboard';
 import { parseMosqueTimetableCsv, parseMosqueTimetableJson } from './domain/timetableImport';
 import { calculationMethods } from './domain/methods';
 import type { PrayerName } from './domain/prayerEngine';
+import { isSupplementaryPrayer } from './domain/prayerPresentation';
 import {
   displayedManualPrayerAdjustmentMinutes,
   hasManualPrayerAdjustments,
@@ -1062,7 +1063,7 @@ export function App() {
               );
               return (
                 <article
-                  className={`prayer-card${prayer.isCurrent ? ' prayer-card-current' : ''}${prayer.isNext ? ' prayer-card-next' : ''}${prayer.name === 'sunrise' ? ' prayer-card-supplementary' : ''}`}
+                  className={`prayer-card${prayer.isCurrent ? ' prayer-card-current' : ''}${prayer.isNext ? ' prayer-card-next' : ''}${isSupplementaryPrayer(prayer.name) ? ' prayer-card-supplementary' : ''}`}
                   key={prayer.name}
                 >
                   <div className="prayer-card-heading">
