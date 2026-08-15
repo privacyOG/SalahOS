@@ -357,7 +357,10 @@
 - [~] Vibration option where supported
 - [~] Adhan enable/disable
 - [ ] User-selectable/local Adhan audio
-- [ ] Do not bundle copyrighted Adhan recordings without suitable rights
+- [x] Do not bundle copyrighted Adhan recordings without suitable rights
+
+**Adhan audio-rights verification note (2026-08-16):** read-only Quality Gate run `31913475048` passed formatting, typed lint, strict typecheck, all tests and production build after adding an executable bundled-audio rights policy and `docs/ADHAN_AUDIO_RIGHTS.md`. Bundled recordings require a stable id, title, rights basis, rights holder/source authority, evidence reference and attribution where required. Public availability is not treated as redistribution permission. Future user-selected local audio remains a separate open feature and must not silently become a bundled project asset.
+
 - [~] Reschedule notifications after timezone/location/method changes
 - [ ] Reschedule notifications after device reboot where platform requires it
 - [~] Reschedule future prayer notifications at date rollover

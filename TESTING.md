@@ -354,3 +354,12 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Documented iOS/iPadOS constraints around user-controlled permission, operating-system presentation, background execution and notification/audio policy.
 - Documented Raspberry Pi/desktop/kiosk behaviour across active sessions, sleep, termination, power loss and startup recalculation.
 - Read-only Quality Gate run `31913144213` passed formatting, typed lint, strict typecheck, all tests and production build.
+
+### 2026-08-16 — Adhan audio redistribution rights policy
+
+- Added `src/domain/adhanAudioRights.ts` with a minimum completeness rule for any future project-bundled Adhan recording.
+- Accepted rights bases are public domain, permissive licence or direct permission; each record still requires identified rights evidence.
+- Tests reject missing recording identity, title, rights holder/source authority, evidence reference and invalid blank attribution.
+- Added `docs/ADHAN_AUDIO_RIGHTS.md` clarifying that public availability does not imply redistribution rights and that uncertain recordings are not eligible for bundling.
+- Kept future user-selected local audio separate from project-bundled assets; this batch does not claim local audio selection or playback is implemented.
+- Read-only Quality Gate run `31913475048` passed formatting, typed lint, strict typecheck, all tests and production build.
