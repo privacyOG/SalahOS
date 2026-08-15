@@ -55,7 +55,10 @@ function shiftCivilDate(date: string, days: number): string {
   ].join('-');
 }
 
-function normalizeDelivery(date: string, localMinutes: number): {
+function normalizeDelivery(
+  date: string,
+  localMinutes: number,
+): {
   readonly date: string;
   readonly localMinutes: number;
 } {
@@ -67,7 +70,11 @@ function normalizeDelivery(date: string, localMinutes: number): {
   return { date: shiftCivilDate(date, dayOffset), localMinutes: normalizedMinutes };
 }
 
-function intentId(date: string, prayer: NotificationPrayerName, kind: NotificationIntentKind): string {
+function intentId(
+  date: string,
+  prayer: NotificationPrayerName,
+  kind: NotificationIntentKind,
+): string {
   return `${date}:${prayer}:${kind}`;
 }
 
@@ -93,7 +100,11 @@ function createIntent(
 
 function validatePrayerInput(input: PrayerScheduleInput): void {
   parseCivilDate(input.date);
-  if (!Number.isInteger(input.localMinutes) || input.localMinutes < 0 || input.localMinutes >= 1_440) {
+  if (
+    !Number.isInteger(input.localMinutes) ||
+    input.localMinutes < 0 ||
+    input.localMinutes >= 1_440
+  ) {
     throw new RangeError('Prayer local minutes must be an integer from 0 through 1439');
   }
 }

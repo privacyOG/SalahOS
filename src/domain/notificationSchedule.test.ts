@@ -59,10 +59,14 @@ describe('notification schedule core', () => {
   });
 
   it('deduplicates repeated prayer inputs by stable intent id', () => {
-    const preferences = updatePrayerNotificationPreference(defaultNotificationPreferences, 'maghrib', {
-      enabled: true,
-      prayerTimeNotification: true,
-    });
+    const preferences = updatePrayerNotificationPreference(
+      defaultNotificationPreferences,
+      'maghrib',
+      {
+        enabled: true,
+        prayerTimeNotification: true,
+      },
+    );
     const input = { date: '2026-08-16', prayer: 'maghrib' as const, localMinutes: 1_050 };
 
     const intents = buildNotificationIntents([input, input], preferences);
@@ -112,10 +116,14 @@ describe('notification schedule core', () => {
   });
 
   it('does nothing when the desired schedule is already installed', () => {
-    const preferences = updatePrayerNotificationPreference(defaultNotificationPreferences, 'dhuhr', {
-      enabled: true,
-      reminderMinutes: 10,
-    });
+    const preferences = updatePrayerNotificationPreference(
+      defaultNotificationPreferences,
+      'dhuhr',
+      {
+        enabled: true,
+        reminderMinutes: 10,
+      },
+    );
     const desired = buildNotificationIntents(
       [{ date: '2026-08-16', prayer: 'dhuhr', localMinutes: 730 }],
       preferences,
