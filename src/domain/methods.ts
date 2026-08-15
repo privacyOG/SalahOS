@@ -47,81 +47,84 @@ const method = (
  * Entries remain marked pending until their primary/authoritative references are
  * archived in project research documentation.
  */
-export const calculationMethods: Readonly<Record<Exclude<CalculationMethodId, 'custom'>, CalculationMethod>> =
-  Object.freeze({
-    'muslim-world-league': method(
-      'muslim-world-league',
-      'Muslim World League',
-      18,
-      { kind: 'angle', angleDegrees: 17 },
-      'Commonly published MWL parameters; authoritative source verification pending.',
-    ),
-    'umm-al-qura': method(
-      'umm-al-qura',
-      'Umm al-Qura / Makkah',
-      18.5,
-      { kind: 'interval', minutesAfterMaghrib: 90 },
-      'Commonly published Umm al-Qura parameters; Ramadan-specific interval requires Hijri integration and authoritative source verification.',
-    ),
-    egyptian: method(
-      'egyptian',
-      'Egyptian General Authority of Survey',
-      19.5,
-      { kind: 'angle', angleDegrees: 17.5 },
-      'Commonly published Egyptian parameters; authoritative source verification pending.',
-    ),
-    karachi: method(
-      'karachi',
-      'University of Islamic Sciences, Karachi',
-      18,
-      { kind: 'angle', angleDegrees: 18 },
-      'Commonly published Karachi parameters; authoritative source verification pending.',
-    ),
-    isna: method(
-      'isna',
-      'Islamic Society of North America',
-      15,
-      { kind: 'angle', angleDegrees: 15 },
-      'Commonly published ISNA parameters; authoritative source verification pending.',
-    ),
-    diyanet: method(
-      'diyanet',
-      'Diyanet / Turkey',
-      18,
-      { kind: 'angle', angleDegrees: 17 },
-      'Initial interoperable parameters; authoritative Diyanet rule verification pending.',
-    ),
-    muis: method(
-      'muis',
-      'MUIS / Singapore',
-      20,
-      { kind: 'angle', angleDegrees: 18 },
-      'Commonly published MUIS parameters; authoritative source verification pending.',
-    ),
-    dubai: method(
-      'dubai',
-      'Dubai',
-      18.2,
-      { kind: 'angle', angleDegrees: 18.2 },
-      'Commonly published Dubai parameters; authoritative source verification pending.',
-    ),
-    kuwait: method(
-      'kuwait',
-      'Kuwait',
-      18,
-      { kind: 'angle', angleDegrees: 17.5 },
-      'Commonly published Kuwait parameters; authoritative source verification pending.',
-    ),
-    qatar: method(
-      'qatar',
-      'Qatar',
-      18,
-      { kind: 'interval', minutesAfterMaghrib: 90 },
-      'Commonly published Qatar parameters; authoritative source verification pending.',
-    ),
-  });
+export const calculationMethods: Readonly<
+  Record<Exclude<CalculationMethodId, 'custom'>, CalculationMethod>
+> = Object.freeze({
+  'muslim-world-league': method(
+    'muslim-world-league',
+    'Muslim World League',
+    18,
+    { kind: 'angle', angleDegrees: 17 },
+    'Commonly published MWL parameters; authoritative source verification pending.',
+  ),
+  'umm-al-qura': method(
+    'umm-al-qura',
+    'Umm al-Qura / Makkah',
+    18.5,
+    { kind: 'interval', minutesAfterMaghrib: 90 },
+    'Commonly published Umm al-Qura parameters; Ramadan-specific interval requires Hijri integration and authoritative source verification.',
+  ),
+  egyptian: method(
+    'egyptian',
+    'Egyptian General Authority of Survey',
+    19.5,
+    { kind: 'angle', angleDegrees: 17.5 },
+    'Commonly published Egyptian parameters; authoritative source verification pending.',
+  ),
+  karachi: method(
+    'karachi',
+    'University of Islamic Sciences, Karachi',
+    18,
+    { kind: 'angle', angleDegrees: 18 },
+    'Commonly published Karachi parameters; authoritative source verification pending.',
+  ),
+  isna: method(
+    'isna',
+    'Islamic Society of North America',
+    15,
+    { kind: 'angle', angleDegrees: 15 },
+    'Commonly published ISNA parameters; authoritative source verification pending.',
+  ),
+  diyanet: method(
+    'diyanet',
+    'Diyanet / Turkey',
+    18,
+    { kind: 'angle', angleDegrees: 17 },
+    'Initial interoperable parameters; authoritative Diyanet rule verification pending.',
+  ),
+  muis: method(
+    'muis',
+    'MUIS / Singapore',
+    20,
+    { kind: 'angle', angleDegrees: 18 },
+    'Commonly published MUIS parameters; authoritative source verification pending.',
+  ),
+  dubai: method(
+    'dubai',
+    'Dubai',
+    18.2,
+    { kind: 'angle', angleDegrees: 18.2 },
+    'Commonly published Dubai parameters; authoritative source verification pending.',
+  ),
+  kuwait: method(
+    'kuwait',
+    'Kuwait',
+    18,
+    { kind: 'angle', angleDegrees: 17.5 },
+    'Commonly published Kuwait parameters; authoritative source verification pending.',
+  ),
+  qatar: method(
+    'qatar',
+    'Qatar',
+    18,
+    { kind: 'interval', minutesAfterMaghrib: 90 },
+    'Commonly published Qatar parameters; authoritative source verification pending.',
+  ),
+});
 
-export function getCalculationMethod(id: Exclude<CalculationMethodId, 'custom'>): CalculationMethod {
+export function getCalculationMethod(
+  id: Exclude<CalculationMethodId, 'custom'>,
+): CalculationMethod {
   return calculationMethods[id];
 }
 

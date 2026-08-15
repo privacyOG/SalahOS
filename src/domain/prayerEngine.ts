@@ -81,7 +81,11 @@ function addDays(date: Date, days: number): Date {
 }
 
 function validateInput(input: PrayerCalculationInput): void {
-  if (!Number.isFinite(input.utcOffsetMinutes) || input.utcOffsetMinutes < -840 || input.utcOffsetMinutes > 840) {
+  if (
+    !Number.isFinite(input.utcOffsetMinutes) ||
+    input.utcOffsetMinutes < -840 ||
+    input.utcOffsetMinutes > 840
+  ) {
     throw new RangeError('UTC offset must be between -840 and 840 minutes');
   }
 
@@ -92,7 +96,11 @@ function validateInput(input: PrayerCalculationInput): void {
   }
 }
 
-function asrAltitudeDegrees(date: Date, latitudeDegrees: number, convention: AsrConvention): number {
+function asrAltitudeDegrees(
+  date: Date,
+  latitudeDegrees: number,
+  convention: AsrConvention,
+): number {
   const midday = new Date(
     Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate(), 12, 0, 0, 0),
   );
@@ -198,7 +206,8 @@ function applyIshaHighLatitudeRule(
 
   const nightDuration = bounds.nextSunrise - bounds.sunset;
   const limit = bounds.sunset + nightDuration * highLatitudePortion(rule, angleDegrees);
-  const comparableRaw = rawUtcMinutes === null || rawUtcMinutes < bounds.sunset ? null : rawUtcMinutes;
+  const comparableRaw =
+    rawUtcMinutes === null || rawUtcMinutes < bounds.sunset ? null : rawUtcMinutes;
   const requiresFallback = comparableRaw === null || comparableRaw > limit;
 
   return {
@@ -360,7 +369,14 @@ export function calculatePrayerSchedule(input: PrayerCalculationInput): PrayerSc
     asrConvention,
     highLatitudeRule,
     prayers: {
-      fajr: makePrayerResult('fajr', events.fajr, input, asrConvention, highLatitudeRule, roundingPolicy),
+      fajr: makePrayerResult(
+        'fajr',
+        events.fajr,
+        input,
+        asrConvention,
+        highLatitudeRule,
+        roundingPolicy,
+      ),
       sunrise: makePrayerResult(
         'sunrise',
         events.sunrise,
@@ -377,7 +393,14 @@ export function calculatePrayerSchedule(input: PrayerCalculationInput): PrayerSc
         highLatitudeRule,
         roundingPolicy,
       ),
-      asr: makePrayerResult('asr', events.asr, input, asrConvention, highLatitudeRule, roundingPolicy),
+      asr: makePrayerResult(
+        'asr',
+        events.asr,
+        input,
+        asrConvention,
+        highLatitudeRule,
+        roundingPolicy,
+      ),
       maghrib: makePrayerResult(
         'maghrib',
         events.maghrib,
@@ -386,7 +409,14 @@ export function calculatePrayerSchedule(input: PrayerCalculationInput): PrayerSc
         highLatitudeRule,
         roundingPolicy,
       ),
-      isha: makePrayerResult('isha', events.isha, input, asrConvention, highLatitudeRule, roundingPolicy),
+      isha: makePrayerResult(
+        'isha',
+        events.isha,
+        input,
+        asrConvention,
+        highLatitudeRule,
+        roundingPolicy,
+      ),
     },
   };
 }
