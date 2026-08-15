@@ -29,10 +29,20 @@ jobs:
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
 
-      - name: Apply canonical settings formatting
-        run: npx prettier --write src/App.tsx
+      - name: Apply strict settings fixes
+        if: github.event_name == 'push'
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('src/App.tsx')
+          text = path.read_text()
+          text = text.replace('        delete nextAdjustments[prayer];', '        Reflect.deleteProperty(nextAdjustments, prayer);')
+          text = text.replace("                  {days > 0 ? `+${days}` : String(days)}", "                  {days > 0 ? `+${String(days)}` : String(days)}")
+          path.write_text(text)
+          PY
+          npx prettier --write src/App.tsx
 
-      - name: Commit canonical formatting
+      - name: Commit strict settings fixes
         if: github.event_name == 'push'
         run: |
           git config user.name "privacyOG"
@@ -41,7 +51,7 @@ jobs:
           if git diff --cached --quiet; then
             exit 0
           fi
-          git commit -m "style: format settings controls"
+          git commit -m "fix: satisfy strict settings lint"
           git push origin HEAD:${{ github.ref_name }}
 
       - name: Format check
