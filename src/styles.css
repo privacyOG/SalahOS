@@ -665,3 +665,29 @@ h2 {
   font-size: 0.8rem;
   line-height: 1.45;
 }
+
+.offset-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-block-start: 0.8rem;
+}
+
+.prayer-card-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+.adjustment-badge {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 1.75rem;
+  padding-inline: 0.55rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.2;
+}

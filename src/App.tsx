@@ -7,6 +7,11 @@ import { parseMosqueTimetableCsv, parseMosqueTimetableJson } from './domain/time
 import { calculationMethods } from './domain/methods';
 import type { PrayerName } from './domain/prayerEngine';
 import {
+  displayedManualPrayerAdjustmentMinutes,
+  hasManualPrayerAdjustments,
+  resetManualPrayerAdjustments,
+} from './domain/prayerAdjustments';
+import {
   NOTIFICATION_PRAYERS,
   updatePrayerNotificationPreference,
 } from './domain/notificationPreferences';
@@ -355,6 +360,13 @@ export function App() {
       }
       return { ...current, prayerAdjustments: nextAdjustments };
     });
+  }
+
+  function resetPrayerOffsets(): void {
+    setSettings((current) => ({
+      ...current,
+      prayerAdjustments: resetManualPrayerAdjustments(),
+    }));
   }
 
   function exportSettings(): void {
@@ -777,6 +789,15 @@ export function App() {
               </label>
             ))}
           </div>
+          <div className="offset-actions">
+            <button
+              type="button"
+              disabled={!hasManualPrayerAdjustments(settings.prayerAdjustments)}
+              onClick={resetPrayerOffsets}
+            >
+              {translate(locale, 'resetPrayerOffsets')}
+            </button>
+          </div>
         </fieldset>
 
         <fieldset className="notification-fieldset">
@@ -1019,30 +1040,45 @@ export function App() {
           </div>
 
           <div className="prayer-grid">
-            {sourcedDashboard.prayers.map((prayer) => (
-              <article
-                className={`prayer-card${prayer.isNext ? ' prayer-card-next' : ''}${prayer.name === 'sunrise' ? ' prayer-card-supplementary' : ''}`}
-                key={prayer.name}
-              >
-                <span>{translate(locale, prayerTranslationKeys[prayer.name])}</span>
-                <div className="prayer-times">
-                  <span className="prayer-time-label">{translate(locale, 'prayerStart')}</span>
-                  <strong>
-                    {prayer.localMinutes === null
-                      ? '—'
-                      : formatLocalTime(prayer.localMinutes, locale, settings.timeFormat)}
-                  </strong>
-                  {prayer.name !== 'sunrise' && prayer.iqamahLocalMinutes !== null && (
-                    <>
-                      <span className="prayer-time-label">{translate(locale, 'iqamah')}</span>
-                      <strong className="iqamah-time">
-                        {formatLocalTime(prayer.iqamahLocalMinutes, locale, settings.timeFormat)}
-                      </strong>
-                    </>
-                  )}
-                </div>
-              </article>
-            ))}
+            {sourcedDashboard.prayers.map((prayer) => {
+              const displayedAdjustment = displayedManualPrayerAdjustmentMinutes(
+                prayer.name,
+                prayer.manualAdjustmentMinutes,
+                prayer.source,
+              );
+              return (
+                <article
+                  className={`prayer-card${prayer.isNext ? ' prayer-card-next' : ''}${prayer.name === 'sunrise' ? ' prayer-card-supplementary' : ''}`}
+                  key={prayer.name}
+                >
+                  <div className="prayer-card-heading">
+                    <span>{translate(locale, prayerTranslationKeys[prayer.name])}</span>
+                    {displayedAdjustment !== null && (
+                      <span className="adjustment-badge">
+                        {translate(locale, 'manualOffset')} {displayedAdjustment > 0 ? '+' : ''}
+                        {String(displayedAdjustment)} {translate(locale, 'minutesShort')}
+                      </span>
+                    )}
+                  </div>
+                  <div className="prayer-times">
+                    <span className="prayer-time-label">{translate(locale, 'prayerStart')}</span>
+                    <strong>
+                      {prayer.localMinutes === null
+                        ? '—'
+                        : formatLocalTime(prayer.localMinutes, locale, settings.timeFormat)}
+                    </strong>
+                    {prayer.name !== 'sunrise' && prayer.iqamahLocalMinutes !== null && (
+                      <>
+                        <span className="prayer-time-label">{translate(locale, 'iqamah')}</span>
+                        <strong className="iqamah-time">
+                          {formatLocalTime(prayer.iqamahLocalMinutes, locale, settings.timeFormat)}
+                        </strong>
+                      </>
+                    )}
+                  </div>
+                </article>
+              );
+            })}
           </div>
 
           {sourcedDashboard.jumuahSessions.length > 0 && (

@@ -285,3 +285,14 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - An in-memory conformance adapter verifies initial scheduling, idempotence, recalculation replacement, DST-gap cancellation, metadata replacement and conflicting-id rejection.
 - Read-only Quality Gate run `31910761615` passed formatting, typed lint, strict typecheck, all tests and production build.
 - Native platform scheduling, notification permissions, reboot restoration and background/exact-delivery constraints remain open.
+
+### 2026-08-16 — Manual prayer adjustment indicators and reset
+
+- Added pure helpers for detecting non-zero prayer offsets, resetting only the adjustment set and deciding whether an applied adjustment belongs to the currently displayed source.
+- Prayer cards use the calculation provenance value rather than merely echoing persisted settings, so the signed badge reflects the adjustment that was actually applied by the prayer engine.
+- Local-mosque obligatory start times suppress calculated adjustment badges because the mosque timetable replaces those displayed values; Sunrise remains calculated and can still show its own applied offset.
+- Added a dedicated reset-to-method-default action that clears only manual prayer offsets while preserving calculation method, Asr convention, high-latitude rule, location, mosque, notifications and other settings.
+- English and Arabic labels plus responsive badge/reset styling were added to the shared settings/dashboard shell.
+- Tests cover positive and negative offsets, zero/missing offsets, source-aware display, the Sunrise/local-mosque exception, active-adjustment detection and non-mutating reset behaviour.
+- Implementation Quality Gate run `31911208279` passed formatting, typed lint, strict typecheck, all tests and production build.
+- The combined Stage 7 high-latitude/manual-adjustment indicator remains partial until the high-latitude visual indicator is completed and verified.
