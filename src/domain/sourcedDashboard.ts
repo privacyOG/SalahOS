@@ -75,7 +75,7 @@ function findNextResolvedPrayer(
 
   for (const prayer of OBLIGATORY_PRAYERS) {
     const todayMinutes = today[prayer].startLocalMinutes;
-    if (todayMinutes !== null && todayMinutes >= currentLocalMinutes) {
+    if (todayMinutes !== null && todayMinutes > currentLocalMinutes) {
       candidates.push({
         prayer,
         dayOffset: 0,
