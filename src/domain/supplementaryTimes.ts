@@ -20,7 +20,7 @@ function requireOffset(value: number, label: string): void {
 }
 
 function available(minutes: number | null): number | null {
-  return minutes === null ? null : minutes;
+  return minutes;
 }
 
 /**
