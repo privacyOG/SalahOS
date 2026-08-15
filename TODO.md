@@ -173,15 +173,17 @@
 
 ## 4. Gregorian and Hijri calendar subsystem
 
-- [ ] Display Gregorian date
-- [ ] Implement Hijri date support
-- [ ] Support Umm al-Qura / selected calculated Hijri calendar where platform/runtime permits
-- [ ] Clearly identify whether Hijri date is calculated or based on a selected calendar convention
-- [ ] Allow manual Hijri day correction (for example ±1/±2 days)
-- [ ] Test Hijri month boundaries
-- [ ] Test Hijri year boundaries
-- [ ] Test Ramadan boundary behaviour
+- [~] Display Gregorian date
+- [x] Implement Hijri date support
+- [x] Support Umm al-Qura / selected calculated Hijri calendar where platform/runtime permits
+- [x] Clearly identify whether Hijri date is calculated or based on a selected calendar convention
+- [x] Allow manual Hijri day correction (for example ±1/±2 days)
+- [x] Test Hijri month boundaries
+- [x] Test Hijri year boundaries
+- [x] Test Ramadan boundary behaviour
 - [ ] Ensure date changes update without requiring app restart
+
+**Stage 4 verification note (2026-08-16):** read-only Quality Gate run `31901367515` passed the Gregorian/Hijri domain core after canonical formatting, including typed lint, strict typecheck, calendar unit tests and production build. The verified core derives Gregorian parts from the already-resolved local civil date, supports runtime `islamic-umalqura` with explicit `runtime-intl-calendar` provenance, applies only explicit integer Hijri corrections from -2 through +2 days, and tests Hijri month/year transitions plus entry into Ramadan. UI rendering, locale-specific presentation and live date rollover remain open.
 
 ---
 
@@ -454,7 +456,7 @@
 - [x] Adjustment tests
 - [x] Next-prayer tests
 - [x] Timezone/DST tests
-- [ ] Hijri-date tests
+- [x] Hijri-date tests
 - [ ] Mosque timetable tests
 - [ ] CSV/JSON import/export tests
 - [ ] Iqamah-rule tests
@@ -575,7 +577,7 @@ SalahOS v1 must not be declared complete until the following are true:
 - [ ] Jumu'ah timetable support is functional
 - [~] GPS/manual location and timezone handling work correctly
 - [~] DST/date rollover behaviour is tested
-- [ ] Gregorian and Hijri dates work
+- [~] Gregorian and Hijri dates work
 - [ ] English and Arabic/RTL are production-ready
 - [ ] Mobile, Raspberry Pi and TV/kiosk layouts are validated
 - [ ] Offline prayer calculation is fully functional
