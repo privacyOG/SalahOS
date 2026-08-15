@@ -136,3 +136,14 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - The integration suite proves Sydney coordinates → `Australia/Sydney` → correct civil date/UTC offset → local prayer schedule.
 - Quality Gate run `31900763989` completed successfully with clean lockfile install, formatting, typed lint, strict typecheck, unit/integration tests and production build.
 - Saved/favourite persistence, city search, native Android/iOS adapters, UI fallback flows and persistent/manual timezone override remain separate open work.
+
+### 2026-08-16 — Gregorian and Umm al-Qura Hijri calendar core
+
+- The calendar domain requires an already-resolved local civil date represented at UTC midnight, preventing the host device timezone from silently changing the intended date.
+- Gregorian parts are derived directly from that civil date; prayer calculation remains independent of display-calendar convention.
+- Hijri conversion initially supports the runtime `islamic-umalqura` calendar and verifies the resolved calendar identifier before accepting the result.
+- Hijri results retain the selected calendar, `runtime-intl-calendar` provenance and the explicit manual correction value.
+- Manual Hijri correction is constrained to integer values from -2 through +2 days and is tested in both directions.
+- Automated tests cover Hijri month rollover, Hijri year rollover and entry into Ramadan (month 9), plus invalid correction/non-civil-date rejection.
+- Read-only Quality Gate run `31901367515` passed formatting, typed lint, strict typecheck, the complete unit suite and production build after canonical test formatting.
+- UI date presentation, locale-specific formatting and automatic live date rollover remain separate open work.
