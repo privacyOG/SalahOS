@@ -17,7 +17,9 @@ const verified: BundledAdhanAudioRights = {
 describe('Adhan audio rights policy', () => {
   it('accepts a bundled recording only when complete rights evidence is present', () => {
     expect(bundledAdhanAudioHasSuitableRights(verified)).toBe(true);
-    expect(() => assertBundledAdhanAudioRights(verified)).not.toThrow();
+    expect(() => {
+      assertBundledAdhanAudioRights(verified);
+    }).not.toThrow();
   });
 
   it('allows no attribution only when the rights record is otherwise complete', () => {
@@ -32,8 +34,8 @@ describe('Adhan audio rights policy', () => {
     ['blank attribution', { ...verified, attribution: ' ' }],
   ])('rejects bundled audio with missing %s', (_label, candidate) => {
     expect(bundledAdhanAudioHasSuitableRights(candidate)).toBe(false);
-    expect(() => assertBundledAdhanAudioRights(candidate)).toThrow(
-      'Bundled Adhan audio requires complete rights evidence',
-    );
+    expect(() => {
+      assertBundledAdhanAudioRights(candidate);
+    }).toThrow('Bundled Adhan audio requires complete rights evidence');
   });
 });
