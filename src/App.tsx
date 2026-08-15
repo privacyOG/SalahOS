@@ -1152,10 +1152,7 @@ export function App() {
             <div>
               <p className="eyebrow">{translate(locale, 'dailyPrayers')}</p>
               <h2>
-                {translate(
-                  locale,
-                  prayerTranslationKeys[sourcedDashboard.nextPrayer ?? 'fajr'],
-                )}
+                {translate(locale, prayerTranslationKeys[sourcedDashboard.nextPrayer ?? 'fajr'])}
               </h2>
             </div>
             <div className="next-prayer-block">
@@ -1172,9 +1169,7 @@ export function App() {
                   ? '—'
                   : formatCountdown(sourcedDashboard.secondsUntilNextPrayer, locale)}
               </p>
-              {sourcedDashboard.nextPrayerDayOffset === 1 && (
-                <p>{translate(locale, 'tomorrow')}</p>
-              )}
+              {sourcedDashboard.nextPrayerDayOffset === 1 && <p>{translate(locale, 'tomorrow')}</p>}
             </div>
           </div>
 
@@ -1245,7 +1240,8 @@ export function App() {
                     )}
                     {manualPrayerAdjustmentMinutes !== 0 && (
                       <span className="prayer-indicator manual-adjustment-indicator">
-                        {translate(locale, 'manualOffset')} {manualPrayerAdjustmentMinutes > 0 ? '+' : ''}
+                        {translate(locale, 'manualOffset')}{' '}
+                        {manualPrayerAdjustmentMinutes > 0 ? '+' : ''}
                         {String(manualPrayerAdjustmentMinutes)} {translate(locale, 'minutesShort')}
                       </span>
                     )}
