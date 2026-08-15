@@ -24,7 +24,7 @@ export function displayedManualPrayerAdjustmentMinutes(
 }
 
 export function hasManualPrayerAdjustments(adjustments: PrayerAdjustments): boolean {
-  return Object.values(adjustments).some((minutes) => minutes !== undefined && minutes !== 0);
+  return Object.values(adjustments).some((minutes) => minutes !== 0);
 }
 
 export function resetManualPrayerAdjustments(): PrayerAdjustments {
