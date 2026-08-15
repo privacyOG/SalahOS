@@ -181,7 +181,7 @@ export function App() {
     setSettings((current) => {
       const nextAdjustments = { ...current.prayerAdjustments };
       if (rawValue.trim() === '') {
-        delete nextAdjustments[prayer];
+        Reflect.deleteProperty(nextAdjustments, prayer);
       } else {
         const value = Number(rawValue);
         if (!Number.isInteger(value) || value < -180 || value > 180) {
@@ -394,7 +394,7 @@ export function App() {
             >
               {[-2, -1, 0, 1, 2].map((days) => (
                 <option key={days} value={days}>
-                  {days > 0 ? `+${days}` : String(days)}
+                  {days > 0 ? `+${String(days)}` : String(days)}
                 </option>
               ))}
             </select>
