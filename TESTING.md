@@ -363,3 +363,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Added `docs/ADHAN_AUDIO_RIGHTS.md` clarifying that public availability does not imply redistribution rights and that uncertain recordings are not eligible for bundling.
 - Kept future user-selected local audio separate from project-bundled assets; this batch does not claim local audio selection or playback is implemented.
 - Read-only Quality Gate run `31913475048` passed formatting, typed lint, strict typecheck, all tests and production build.
+
+### 2026-08-16 — iOS and iPadOS validation evidence boundary
+
+- Added `docs/IOS_VALIDATION_STATUS.md` to distinguish shared application CI from native Apple-platform validation.
+- Recorded which checks require macOS/Xcode and which require a physical iPhone or iPad.
+- Kept native shell, notification delivery, audio lifecycle, reboot recovery and signing/distribution items open until exercised in the required environment.
+- Explicitly prohibited committing signing certificates, private keys, provisioning profiles or distribution credentials.
+- Read-only Quality Gate run `31914072847` passed formatting, typed lint, strict typecheck, all tests and production build.
