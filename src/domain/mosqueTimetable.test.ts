@@ -103,7 +103,7 @@ describe('mosque timetable domain', () => {
   });
 
   it('rejects invalid iqamah rollover and invalid Jumuah ordering', () => {
-    expect(() =>
+    expect(() => {
       validateMosqueDay({
         date: '2026-08-21',
         prayers: {
@@ -112,10 +112,10 @@ describe('mosque timetable domain', () => {
             iqamah: { kind: 'offset', offsetMinutes: 20 },
           },
         },
-      }),
-    ).toThrow(RangeError);
+      });
+    }).toThrow(RangeError);
 
-    expect(() =>
+    expect(() => {
       validateMosqueDay({
         date: '2026-08-21',
         prayers: {},
@@ -126,8 +126,8 @@ describe('mosque timetable domain', () => {
             salahLocalMinutes: 12 * 60 + 55,
           },
         ],
-      }),
-    ).toThrow(RangeError);
+      });
+    }).toThrow(RangeError);
   });
 
   it('rejects duplicate civil dates in one timetable', () => {
@@ -135,6 +135,8 @@ describe('mosque timetable domain', () => {
       mosqueName: 'Example Mosque',
       days: [friday, { ...friday }],
     };
-    expect(() => validateMosqueTimetable(timetable)).toThrow(/Duplicate timetable date/);
+    expect(() => {
+      validateMosqueTimetable(timetable);
+    }).toThrow(/Duplicate timetable date/);
   });
 });
