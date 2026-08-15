@@ -16,12 +16,8 @@ describe('offline IANA timezone resolution', () => {
   });
 
   it('uses IANA rules to apply Sydney daylight saving instead of deriving offsets from longitude', () => {
-    expect(utcOffsetMinutesAt(new Date('2026-01-15T00:00:00.000Z'), 'Australia/Sydney')).toBe(
-      660,
-    );
-    expect(utcOffsetMinutesAt(new Date('2026-07-15T00:00:00.000Z'), 'Australia/Sydney')).toBe(
-      600,
-    );
+    expect(utcOffsetMinutesAt(new Date('2026-01-15T00:00:00.000Z'), 'Australia/Sydney')).toBe(660);
+    expect(utcOffsetMinutesAt(new Date('2026-07-15T00:00:00.000Z'), 'Australia/Sydney')).toBe(600);
   });
 
   it('uses IANA rules across a northern-hemisphere DST zone', () => {
@@ -30,10 +26,7 @@ describe('offline IANA timezone resolution', () => {
   });
 
   it('derives the correct local civil date across a UTC day boundary', () => {
-    const localDate = civilDateInTimeZone(
-      new Date('2026-08-15T15:30:00.000Z'),
-      'Australia/Sydney',
-    );
+    const localDate = civilDateInTimeZone(new Date('2026-08-15T15:30:00.000Z'), 'Australia/Sydney');
     expect(localDate.toISOString()).toBe('2026-08-16T00:00:00.000Z');
   });
 

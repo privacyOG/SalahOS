@@ -2,11 +2,7 @@ import { createCoordinates } from '../domain/coordinates';
 import type { Coordinates } from '../domain/coordinates';
 
 export type BrowserLocationFailureReason =
-  | 'unsupported'
-  | 'permission-denied'
-  | 'unavailable'
-  | 'timeout'
-  | 'unknown';
+  'unsupported' | 'permission-denied' | 'unavailable' | 'timeout' | 'unknown';
 
 export interface BrowserLocationFix {
   readonly coordinates: Coordinates;
@@ -50,8 +46,9 @@ function failureReason(error: GeolocationPositionError): BrowserLocationFailureR
  * is required.
  */
 export function requestBrowserLocation(
-  geolocation: Geolocation | undefined =
-    typeof navigator === 'undefined' ? undefined : navigator.geolocation,
+  geolocation: Geolocation | undefined = typeof navigator === 'undefined'
+    ? undefined
+    : navigator.geolocation,
   options: BrowserLocationOptions = {},
 ): Promise<BrowserLocationResult> {
   if (geolocation === undefined) {
