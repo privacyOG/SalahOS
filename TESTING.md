@@ -307,3 +307,14 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Tests cover calculated and calculated-adjustment sources, no-fallback cases, local-mosque obligatory suppression and the Sunrise/local-mosque exception.
 - Read-only Quality Gate run `31911591791` passed formatting, typed lint, strict typecheck, all tests and production build.
 - Nearest-latitude and nearest-valid-day strategies for extreme polar conditions remain open research and are not implied by this UI completion.
+
+### 2026-08-16 — Current and next prayer highlighting
+
+- Added selected-source current-prayer state alongside the existing next-prayer state.
+- Current prayer is the latest available obligatory start at or before the current local time; Sunrise remains supplementary and is never treated as the current obligatory prayer.
+- Before the first available obligatory prayer of the civil day, current prayer is null rather than fabricating a previous-day state.
+- After Isha, Isha remains current while next prayer rolls to tomorrow Fajr using the existing tomorrow-source schedule.
+- Today's next-prayer comparison is strict, so at an exact prayer start the new prayer is current and the following obligatory prayer is next rather than one card being both.
+- Current and next prayer cards use distinct classes; the current card also carries a localised English/Arabic current-prayer badge.
+- Source-domain tests cover local-mosque current selection, Sunrise exclusion, post-Isha rollover and the pre-Fajr no-current case.
+- Read-only Quality Gate run `31911967092` passed formatting, typed lint, strict typecheck, all tests and production build.

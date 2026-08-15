@@ -268,7 +268,10 @@
 - [x] Sunrise as supplementary information
 - [x] Next-prayer indicator
 - [x] Live next-prayer countdown
-- [~] Highlight current/next prayer
+- [x] Highlight current/next prayer
+
+**Current/next prayer verification note (2026-08-16):** read-only Quality Gate run `31911967092` passed formatting, typed lint, strict typecheck, all tests and production build after adding selected-source current-prayer state. The dashboard now marks the latest entered obligatory prayer as current, keeps Sunrise supplementary, preserves Isha as current after Isha while next rolls to tomorrow Fajr, and reports no current prayer before the first available obligatory start of the civil day. Current and next use distinct visual labels/styles, and exact prayer-start boundaries advance next to the following obligatory prayer instead of marking one prayer as both current and next.
+
 - [x] Calculation method/source indicator
 - [x] Iqamah time where configured
 - [x] High-latitude/manual-adjustment indicator when applicable
