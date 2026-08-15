@@ -11,11 +11,18 @@ describe('calculation method registry', () => {
     });
   });
 
-  it('marks built-in values as pending primary-source verification', () => {
+  it('records a non-empty provenance and an explicit verification state for every built-in', () => {
     for (const item of Object.values(calculationMethods)) {
-      expect(item.verification).toBe('pending-authoritative-source');
+      expect(['cross-checked-reference', 'pending-authoritative-source']).toContain(
+        item.verification,
+      );
       expect(item.provenance.length).toBeGreaterThan(0);
     }
+  });
+
+  it('keeps methods with known approximation or experimental caveats pending', () => {
+    expect(getCalculationMethod('diyanet').verification).toBe('pending-authoritative-source');
+    expect(getCalculationMethod('dubai').verification).toBe('pending-authoritative-source');
   });
 
   it('creates validated custom parameters', () => {
