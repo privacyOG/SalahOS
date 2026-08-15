@@ -92,12 +92,15 @@
 - [x] Implement Middle of the Night rule
 - [x] Implement One-Seventh of the Night rule
 - [x] Implement Angle-Based portion-of-night rule
-- [ ] Research nearest-latitude / nearest-valid-day strategies for extreme polar conditions
+- [x] Research nearest-latitude / nearest-valid-day strategies for extreme polar conditions
+
+**Polar-resolution research note (2026-08-16):** read-only Quality Gate run `31915439365` passed formatting, typed lint, strict typecheck, all tests and production build after adding `docs/POLAR_RESOLUTION_RESEARCH.md`. The research separates high-latitude night-fraction rules from true polar-circle resolution, documents Aqrab al-Bilad (nearest location/latitude) and Aqrab al-Ayyam (nearest valid day), and retains `unresolved` as the safe default. Any future polar estimation must be explicit, preserve the actual observer location/date, record the borrowed reference latitude or date in provenance, and never silently claim that an estimated event was astronomical at the observer's location.
+
 - [x] Define behaviour for polar day and polar night when normal astronomical events are unavailable
 - [x] Never fabricate an astronomical event without identifying the applied fallback rule
 - [x] Surface active high-latitude rule in calculation provenance/settings
 
-**High-latitude indicator verification note (2026-08-16):** read-only Quality Gate run `31911591791` passed formatting, typed lint, strict typecheck, all tests and production build after adding source-aware fallback indicators. Prayer cards now identify when the displayed calculated time actually used a high-latitude fallback and name the active rule (Angle Based, Middle of the Night or One Seventh). Mosque-provided obligatory start times suppress calculated fallback badges because those values are replaced by the timetable, while calculated Sunrise remains eligible. The shared provenance note uses the same source-aware rule. Nearest-latitude/nearest-valid-day research for extreme polar conditions remains open.
+**High-latitude indicator verification note (2026-08-16):** read-only Quality Gate run `31911591791` passed formatting, typed lint, strict typecheck, all tests and production build after adding source-aware fallback indicators. Prayer cards now identify when the displayed calculated time actually used a high-latitude fallback and name the active rule (Angle Based, Middle of the Night or One Seventh). Mosque-provided obligatory start times suppress calculated fallback badges because those values are replaced by the timetable, while calculated Sunrise remains eligible. The shared provenance note uses the same source-aware rule. Nearest-latitude/nearest-valid-day research was still open at this verification point.
 
 ### 1.6 Manual adjustments
 
