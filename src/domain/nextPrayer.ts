@@ -24,7 +24,11 @@ export function findNextPrayer(
   today: PrayerSchedule,
   tomorrow: PrayerSchedule,
 ): NextPrayerResult | null {
-  if (!Number.isFinite(currentLocalMinutes) || currentLocalMinutes < 0 || currentLocalMinutes >= 1_440) {
+  if (
+    !Number.isFinite(currentLocalMinutes) ||
+    currentLocalMinutes < 0 ||
+    currentLocalMinutes >= 1_440
+  ) {
     throw new RangeError('Current local minutes must be between 0 and 1439.999...');
   }
 
