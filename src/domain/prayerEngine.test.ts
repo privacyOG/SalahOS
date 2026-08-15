@@ -108,6 +108,27 @@ describe('calculatePrayerSchedule', () => {
     expect(schedule.prayers.isha.baseLocalMinutes).not.toBeNull();
   });
 
+  it('supports middle-of-night, one-seventh and angle-based high-latitude rules', () => {
+    const rules = ['middle-of-the-night', 'one-seventh', 'angle-based'] as const;
+    const fajrTimes = rules.map((highLatitudeRule) => {
+      const schedule = calculatePrayerSchedule({
+        date: new Date('2026-06-21T00:00:00.000Z'),
+        latitude: 51.5074,
+        longitude: -0.1278,
+        utcOffsetMinutes: 60,
+        method: getCalculationMethod('muslim-world-league'),
+        highLatitudeRule,
+      });
+
+      expect(schedule.prayers.fajr.provenance.highLatitudeRule).toBe(highLatitudeRule);
+      expect(schedule.prayers.fajr.provenance.highLatitudeRuleApplied).toBe(true);
+      expect(schedule.prayers.isha.provenance.highLatitudeRuleApplied).toBe(true);
+      return expectAvailable(schedule.prayers.fajr.baseLocalMinutes);
+    });
+
+    expect(new Set(fajrTimes).size).toBe(3);
+  });
+
   it('does not fabricate sunrise, sunset-based Maghrib, or twilight during polar day', () => {
     const schedule = calculatePrayerSchedule({
       date: new Date('2026-06-21T00:00:00.000Z'),
