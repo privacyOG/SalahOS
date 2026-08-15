@@ -1,9 +1,17 @@
 const CACHE_NAME = 'salahos-shell-v1';
-const SHELL_URLS = ['/', '/manifest.webmanifest', '/icons/salahos.svg', '/icons/salahos-maskable.svg'];
+const SHELL_URLS = [
+  '/',
+  '/manifest.webmanifest',
+  '/icons/salahos.svg',
+  '/icons/salahos-maskable.svg',
+];
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(SHELL_URLS)).then(() => self.skipWaiting()),
+    caches
+      .open(CACHE_NAME)
+      .then((cache) => cache.addAll(SHELL_URLS))
+      .then(() => self.skipWaiting()),
   );
 });
 

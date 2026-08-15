@@ -56,10 +56,14 @@ export function App() {
     persistedSettings.location?.coordinates ?? null,
   );
   const [latitude, setLatitude] = useState(
-    persistedSettings.location === null ? '' : String(persistedSettings.location.coordinates.latitude),
+    persistedSettings.location === null
+      ? ''
+      : String(persistedSettings.location.coordinates.latitude),
   );
   const [longitude, setLongitude] = useState(
-    persistedSettings.location === null ? '' : String(persistedSettings.location.coordinates.longitude),
+    persistedSettings.location === null
+      ? ''
+      : String(persistedSettings.location.coordinates.longitude),
   );
   const [locationFailure, setLocationFailure] = useState<BrowserLocationFailureReason | null>(null);
   const [manualError, setManualError] = useState(false);
@@ -326,11 +330,7 @@ export function App() {
                 <strong>
                   {prayer.localMinutes === null
                     ? '—'
-                    : formatLocalTime(
-                        prayer.localMinutes,
-                        locale,
-                        persistedSettings.timeFormat,
-                      )}
+                    : formatLocalTime(prayer.localMinutes, locale, persistedSettings.timeFormat)}
                 </strong>
               </article>
             ))}

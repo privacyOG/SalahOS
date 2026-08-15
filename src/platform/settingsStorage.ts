@@ -84,7 +84,10 @@ function parseTimeFormat(value: unknown): TimeFormatPreference {
 }
 
 function parseMethod(value: unknown): PersistedSettings['calculationMethodId'] {
-  if (typeof value === 'string' && BUILT_IN_METHODS.has(value as PersistedSettings['calculationMethodId'])) {
+  if (
+    typeof value === 'string' &&
+    BUILT_IN_METHODS.has(value as PersistedSettings['calculationMethodId'])
+  ) {
     return value as PersistedSettings['calculationMethodId'];
   }
   return defaultPersistedSettings.calculationMethodId;
@@ -122,7 +125,8 @@ function parseLocation(value: unknown): PersistedLocation | null {
       Number(value.coordinates.latitude),
       Number(value.coordinates.longitude),
     );
-    const timeZone = typeof value.timeZone === 'string' && value.timeZone.trim() ? value.timeZone : undefined;
+    const timeZone =
+      typeof value.timeZone === 'string' && value.timeZone.trim() ? value.timeZone : undefined;
     return timeZone === undefined ? { coordinates } : { coordinates, timeZone };
   } catch {
     return null;
@@ -171,10 +175,9 @@ function migrateLegacySettings(value: Record<string, unknown>): Record<string, u
   return {
     version: SETTINGS_SCHEMA_VERSION,
     locale: value.locale,
-    location:
-      isRecord(value.coordinates)
-        ? { coordinates: value.coordinates, timeZone: value.timeZone }
-        : value.location,
+    location: isRecord(value.coordinates)
+      ? { coordinates: value.coordinates, timeZone: value.timeZone }
+      : value.location,
   };
 }
 
