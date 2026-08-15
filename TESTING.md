@@ -87,4 +87,19 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Quality Gate run `31891071518` completed successfully using a read-only checkout and `npm ci`.
 - Formatting, typed lint, strict TypeScript typecheck, current unit tests and production Vite build all passed.
 - Solar primitive tests cover J2000 Julian Day, equinox declination, equation-of-time sanity, Sydney event ordering, polar unavailability and coordinate validation.
-- Five-prayer calculations and external timetable/reference parity remain unverified and are not marked complete.
+
+### 2026-08-16 — Five-prayer domain engine
+
+- Quality Gate run `31891402804` completed successfully using the committed lockfile and read-only workflow.
+- The pure domain engine calculates Fajr, Dhuhr, Asr, Maghrib, Isha and sunrise without UI, DOM, storage or network dependencies.
+- Tests verify chronological prayer ordering for Sydney, Standard versus Hanafi Asr divergence, fixed-interval Isha, deterministic rounding, adjustment separation and calculation provenance.
+- Raw astronomical times, high-latitude fallback/base times, manual-adjusted times and rounded display times remain distinct fields.
+- Polar-day handling returns unavailable events instead of fabricating sunrise, Maghrib, Fajr or Isha.
+
+### 2026-08-16 — High-latitude strategy coverage
+
+- Quality Gate run `31891501691` completed successfully: clean lockfile install, formatting, typed lint, strict typecheck, unit tests and production build.
+- Middle of the Night, One-Seventh of the Night and Angle-Based strategies are each executed and verified by the unit suite for high-latitude twilight conditions.
+- Active fallback strategy and whether it was applied are retained in provenance.
+- Nearest-latitude / nearest-valid-day polar strategies remain separate open research and implementation work.
+- Built-in regional calculation-method parameters remain explicitly pending authoritative-source/parity verification and are not recorded as independently verified.
