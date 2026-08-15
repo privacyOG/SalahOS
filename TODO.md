@@ -344,7 +344,9 @@
 - [ ] Test offline cold start
 - [ ] Prepare signing/build documentation without committing credentials
 - [ ] Run on simulator/device when macOS/Xcode environment is available
-- [ ] Document untested iOS items honestly when unavailable on development host
+- [x] Document untested iOS items honestly when unavailable on development host
+
+**iOS validation-status note (2026-08-16):** read-only Quality Gate run `31914072847` passed formatting, typed lint, strict typecheck, all tests and production build after adding `docs/IOS_VALIDATION_STATUS.md`. The document separates shared CI evidence from macOS/Xcode simulator checks and physical iPhone/iPad checks, and requires native-specific tracker items to remain open until the corresponding evidence is recorded. Signing credentials and private keys are explicitly excluded from the repository.
 
 ---
 
