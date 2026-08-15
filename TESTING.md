@@ -344,3 +344,13 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Listener cleanup is verified so changing theme mode or unmounting does not retain stale handlers.
 - Existing persisted theme selection and CSS variables remain the shared styling source across form factors.
 - Read-only Quality Gate run `31912934726` passed formatting, typed lint, strict typecheck, all tests and production build.
+
+### 2026-08-16 — Notification platform limitations
+
+- Added `docs/NOTIFICATION_LIMITATIONS.md` as the shared product contract for notification and Adhan delivery claims.
+- Distinguished deterministic local scheduling intent from operating-system or browser delivery guarantees.
+- Documented Web/PWA limits around permissions, closed/suspended pages, event-driven service workers and kiosk process lifetime.
+- Documented Android constraints around permission policy, exact scheduling restrictions, battery/background controls, reboot reconstruction and audio lifecycle.
+- Documented iOS/iPadOS constraints around user-controlled permission, operating-system presentation, background execution and notification/audio policy.
+- Documented Raspberry Pi/desktop/kiosk behaviour across active sessions, sleep, termination, power loss and startup recalculation.
+- Read-only Quality Gate run `31913144213` passed formatting, typed lint, strict typecheck, all tests and production build.

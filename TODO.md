@@ -363,7 +363,9 @@
 - [~] Reschedule future prayer notifications at date rollover
 - [~] Prevent duplicate notifications
 - [~] Test notification behaviour across DST transition
-- [ ] Document platform-specific limitations instead of promising impossible exact behaviour
+- [x] Document platform-specific limitations instead of promising impossible exact behaviour
+
+**Notification platform-limitations verification note (2026-08-16):** read-only Quality Gate run `31913144213` passed formatting, typed lint, strict typecheck, all tests and production build after adding `docs/NOTIFICATION_LIMITATIONS.md`. The document separates deterministic scheduling intent from final delivery and records Web/PWA, Android, iOS/iPadOS and Raspberry Pi/desktop/kiosk constraints around permissions, background execution, suspend/reboot, exact scheduling and Adhan playback. Product wording must not promise exact delivery until a target-platform adapter is implemented and verified.
 
 **Notification scheduler-adapter verification note (2026-08-16):** read-only Quality Gate run `31910761615` passed formatting, typed lint, strict typecheck, all tests and production build for the platform-neutral scheduling contract. The shared executor now lists installed notification records, reconciles them against exact resolved intents, cancels stale records before replacement, applies new records, treats a second identical application as a no-op, and removes installed jobs that become invalid because their local wall-clock time falls in a DST gap. Conflicting records sharing one stable id are rejected. Real platform adapters, permission/background constraints and reboot persistence remain open, so delivery-related tracker statuses remain partial.
 
