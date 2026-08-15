@@ -38,6 +38,7 @@ export interface SourcedPrayerDashboard {
   readonly nextPrayerDayOffset: 0 | 1 | null;
   readonly nextPrayerLocalMinutes: number | null;
   readonly secondsUntilNextPrayer: number | null;
+  readonly hasHighLatitudeFallback: boolean;
   readonly jumuahSessions: readonly JumuahSession[];
 }
 
@@ -156,6 +157,12 @@ export function applyPrayerSourceToDashboard(input: {
     };
   });
 
+  const hasHighLatitudeFallback = prayers.some(
+    (row) =>
+      row.highLatitudeRuleApplied &&
+      !(input.sourceMode === 'local-mosque' && row.name !== 'sunrise'),
+  );
+
   return {
     base: input.dashboard,
     sourceMode: input.sourceMode,
@@ -167,6 +174,7 @@ export function applyPrayerSourceToDashboard(input: {
     nextPrayerDayOffset: next?.dayOffset ?? null,
     nextPrayerLocalMinutes: next?.localMinutes ?? null,
     secondsUntilNextPrayer: next === null ? null : Math.max(0, Math.round(next.minutesUntil * 60)),
+    hasHighLatitudeFallback,
     jumuahSessions:
       input.sourceMode === 'local-mosque' && todayMosqueDay !== null
         ? jumuahSessionsForDate(todayMosqueDay)

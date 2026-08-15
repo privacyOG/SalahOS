@@ -1133,17 +1133,17 @@ export function App() {
             <div>
               <p className="label">{translate(locale, 'gregorianDate')}</p>
               <p className="value">
-                {formatGregorianCivilDate(
-                  sourcedDashboard.gregorian,
-                  locale,
-                  sourcedDashboard.timeZone,
-                )}
+                {formatGregorianCivilDate(sourcedDashboard.base.civilDate, locale)}
               </p>
             </div>
             <div>
               <p className="label">{translate(locale, 'hijriDate')}</p>
               <p className="value">
-                {formatHijriCivilDate(sourcedDashboard.hijri, locale, sourcedDashboard.timeZone)}
+                {formatHijriCivilDate(
+                  sourcedDashboard.base.civilDate,
+                  locale,
+                  settings.hijriCorrectionDays,
+                )}
               </p>
             </div>
           </div>
@@ -1234,11 +1234,11 @@ export function App() {
                         {translate(locale, 'highLatitudeAdjustment')} ·{' '}
                         {translate(
                           locale,
-                          highLatitudeRuleTranslationKeys[sourcedDashboard.highLatitudeRule],
+                          highLatitudeRuleTranslationKeys[sourcedDashboard.base.highLatitudeRule],
                         )}
                       </span>
                     )}
-                    {manualPrayerAdjustmentMinutes !== 0 && (
+                    {manualPrayerAdjustmentMinutes !== null && (
                       <span className="prayer-indicator manual-adjustment-indicator">
                         {translate(locale, 'manualOffset')}{' '}
                         {manualPrayerAdjustmentMinutes > 0 ? '+' : ''}
@@ -1276,10 +1276,10 @@ export function App() {
               {translate(locale, sourceTranslationKeys[sourcedDashboard.sourceMode])}
             </span>
             <span>
-              {translate(locale, 'method')}: {sourcedDashboard.method.name}
+              {translate(locale, 'method')}: {sourcedDashboard.base.method.name}
             </span>
             <span>
-              {translate(locale, 'timezone')}: {sourcedDashboard.timeZone}
+              {translate(locale, 'timezone')}: {sourcedDashboard.base.timeZone}
             </span>
             {sourcedDashboard.mosqueName !== null && (
               <span>
@@ -1291,7 +1291,7 @@ export function App() {
                 {translate(locale, 'highLatitudeAdjustment')} ·{' '}
                 {translate(
                   locale,
-                  highLatitudeRuleTranslationKeys[sourcedDashboard.highLatitudeRule],
+                  highLatitudeRuleTranslationKeys[sourcedDashboard.base.highLatitudeRule],
                 )}
               </span>
             )}
