@@ -65,6 +65,15 @@ select {
   padding: clamp(1.5rem, 4vw, 4rem) 0;
 }
 
+.offline-banner {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid rgba(241, 201, 167, 0.35);
+  border-radius: 0.8rem;
+  color: #f1c9a7;
+  background: rgba(99, 67, 37, 0.3);
+}
+
 .hero {
   max-width: 900px;
   margin-block-end: 2rem;

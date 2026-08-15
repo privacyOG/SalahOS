@@ -159,7 +159,7 @@
 - [x] Support current-location refresh
 - [x] Handle denied-location-permission flow gracefully
 - [x] Handle unavailable GPS/location services gracefully
-- [~] Fall back to saved/manual location without breaking prayer calculations
+- [x] Fall back to saved/manual location without breaking prayer calculations
 - [x] Resolve coordinates to an IANA timezone
 - [~] Cache timezone data for offline use
 - [x] Use IANA timezone rules rather than deriving timezone from longitude
@@ -204,7 +204,7 @@
 - [x] Ship sample timetable file
 - [x] Support JSON import/export
 - [x] Validate imported timetable data before activation
-- [ ] Preserve mosque timetable offline
+- [x] Preserve mosque timetable offline
 - [ ] Research optional reputable mosque APIs/integrations
 - [x] Do not rely on fragile arbitrary website scraping as an authoritative source
 
@@ -381,16 +381,18 @@
 
 ## 13. Offline-first / PWA capability
 
-- [ ] Create web app manifest
-- [ ] Add installable PWA icons/assets
-- [ ] Implement service worker/static application shell caching
-- [ ] Keep prayer calculation engine fully local/offline
-- [ ] Persist selected location/timezone/calculation settings locally
-- [ ] Persist mosque timetable locally
-- [ ] Provide clear online/offline state only where relevant
-- [ ] Verify app remains useful with internet disabled
-- [ ] Test offline page reload
-- [ ] Test cache/version migration after app upgrade
+- [x] Create web app manifest
+- [~] Add installable PWA icons/assets
+- [x] Implement service worker/static application shell caching
+- [x] Keep prayer calculation engine fully local/offline
+- [x] Persist selected location/timezone/calculation settings locally
+- [x] Persist mosque timetable locally
+- [x] Provide clear online/offline state only where relevant
+- [~] Verify app remains useful with internet disabled
+- [~] Test offline page reload
+- [~] Test cache/version migration after app upgrade
+
+**Offline/persistence verification note (2026-08-16):** read-only Quality Gate run `31904178200` passed formatting, typed lint, strict typecheck, the complete unit/integration suite and production build. The web build now has a manifest, first-party SVG icon assets, a production-only same-origin service worker, a localised offline indicator and a versioned local settings envelope. The current UI restores/persists locale and selected coordinates; the same validated envelope stores timezone, calculation method, Asr convention, high-latitude rule, Hijri correction, time format, prayer adjustments, source mode and mosque timetable. Tests cover full settings round-trip, legacy migration, future-version rejection, corrupt-storage fallback, invalid nested location/timetable rejection and propagation of stored calculation choices into the dashboard. A real-browser install/disconnect/reload test and two-version cache-upgrade test remain open; SVG icons also remain partial until platform-specific raster install assets are added and validated.
 
 ---
 
@@ -409,24 +411,24 @@
 - [ ] Per-prayer notifications
 - [ ] Adhan settings
 - [ ] Iqamah settings
-- [ ] Export settings
-- [ ] Import settings
-- [ ] Reset to defaults
-- [ ] Version/migration system for persisted configuration
+- [~] Export settings
+- [~] Import settings
+- [~] Reset to defaults
+- [x] Version/migration system for persisted configuration
 
 ---
 
 ## 15. Runtime reliability
 
-- [ ] Recompute prayer schedule when local date changes
-- [ ] Recompute after location change
+- [x] Recompute prayer schedule when local date changes
+- [x] Recompute after location change
 - [ ] Recompute after calculation-method change
 - [ ] Recompute after Asr-method change
-- [ ] Recompute after timezone/DST change
+- [x] Recompute after timezone/DST change
 - [ ] Re-sync clock/countdown after app resumes from background
 - [ ] Recover correctly after system sleep/wake
 - [ ] Detect significant system-clock changes
-- [ ] Avoid countdown drift from long-running intervals
+- [x] Avoid countdown drift from long-running intervals
 - [ ] Handle invalid system time gracefully
 - [ ] Handle unavailable calculation results gracefully
 - [ ] Add structured error logging without exposing private location unnecessarily
@@ -437,15 +439,15 @@
 
 - [ ] Document threat/privacy model
 - [ ] Minimise collection of precise location data
-- [ ] Keep prayer calculations local by default
-- [ ] No mandatory account for core prayer-time functionality
-- [ ] No unnecessary analytics/telemetry
-- [ ] Obtain explicit permission before using location
+- [x] Keep prayer calculations local by default
+- [x] No mandatory account for core prayer-time functionality
+- [x] No unnecessary analytics/telemetry
+- [x] Obtain explicit permission before using location
 - [ ] Secure any optional remote API calls
 - [ ] Do not commit secrets/API keys
 - [ ] Dependency vulnerability review
 - [ ] Content Security Policy for web/PWA where applicable
-- [ ] Validate imported CSV/JSON data safely
+- [x] Validate imported CSV/JSON data safely
 - [ ] Review native permissions and remove unnecessary ones
 
 ---
@@ -467,7 +469,7 @@
 - [x] Mosque timetable tests
 - [x] CSV/JSON import/export tests
 - [x] Iqamah-rule tests
-- [ ] Settings persistence/migration tests
+- [x] Settings persistence/migration tests
 
 ### Integration tests
 

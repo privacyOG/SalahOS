@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="SalahOS">
+  <rect width="512" height="512" rx="112" fill="#101510"/>
+  <path d="M256 76c54 62 86 126 86 192 0 80-38 138-86 168-48-30-86-88-86-168 0-66 32-130 86-192Z" fill="#c5e0be"/>
+  <path d="M256 152c-30 42-46 82-46 120 0 51 18 90 46 116 28-26 46-65 46-116 0-38-16-78-46-120Z" fill="#101510"/>
+  <circle cx="256" cy="270" r="28" fill="#c5e0be"/>
+</svg>

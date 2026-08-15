@@ -5,7 +5,13 @@ import { calculationMethods } from './methods';
 import type { CalculationMethod } from './methods';
 import { findNextPrayer } from './nextPrayer';
 import { calculatePrayerSchedule } from './prayerEngine';
-import type { ObligatoryPrayerName, PrayerName, PrayerSchedule } from './prayerEngine';
+import type {
+  AsrConvention,
+  HighLatitudeRule,
+  ObligatoryPrayerName,
+  PrayerName,
+  PrayerSchedule,
+} from './prayerEngine';
 import { utcOffsetMinutesAt } from './timezone';
 
 const DAY_MS = 86_400_000;
@@ -36,6 +42,8 @@ export interface PrayerDashboardModel {
   readonly gregorian: ReturnType<typeof calendarDate>['gregorian'];
   readonly hijri: ReturnType<typeof calendarDate>['hijri'];
   readonly method: CalculationMethod;
+  readonly asrConvention: AsrConvention;
+  readonly highLatitudeRule: HighLatitudeRule;
   readonly today: PrayerSchedule;
   readonly tomorrow: PrayerSchedule;
   readonly prayers: readonly DashboardPrayerRow[];
@@ -99,6 +107,9 @@ function scheduleFor(
   coordinates: Coordinates,
   utcOffsetMinutes: number,
   method: CalculationMethod,
+  asrConvention: AsrConvention,
+  highLatitudeRule: HighLatitudeRule,
+  adjustments: Readonly<Partial<Record<PrayerName, number>>>,
 ): PrayerSchedule {
   return calculatePrayerSchedule({
     date: civilDate,
@@ -106,8 +117,9 @@ function scheduleFor(
     longitude: coordinates.longitude,
     utcOffsetMinutes,
     method,
-    asrConvention: 'standard',
-    highLatitudeRule: 'angle-based',
+    asrConvention,
+    highLatitudeRule,
+    adjustments,
   });
 }
 
@@ -115,18 +127,35 @@ export function buildPrayerDashboard(input: {
   readonly instant: Date;
   readonly coordinates: Coordinates;
   readonly method?: CalculationMethod;
+  readonly asrConvention?: AsrConvention;
+  readonly highLatitudeRule?: HighLatitudeRule;
+  readonly adjustments?: Readonly<Partial<Record<PrayerName, number>>>;
   readonly hijriCorrectionDays?: number;
 }): PrayerDashboardModel {
   const method = input.method ?? calculationMethods['muslim-world-league'];
+  const asrConvention = input.asrConvention ?? 'standard';
+  const highLatitudeRule = input.highLatitudeRule ?? 'angle-based';
+  const adjustments = input.adjustments ?? {};
   const context = createLocationPrayerContext(input.instant, input.coordinates);
   const clock = localClockParts(input.instant, context.timeZone);
-  const today = scheduleFor(context.civilDate, input.coordinates, context.utcOffsetMinutes, method);
+  const today = scheduleFor(
+    context.civilDate,
+    input.coordinates,
+    context.utcOffsetMinutes,
+    method,
+    asrConvention,
+    highLatitudeRule,
+    adjustments,
+  );
   const tomorrowCivilDate = addCivilDays(context.civilDate, 1);
   const tomorrow = scheduleFor(
     tomorrowCivilDate,
     input.coordinates,
     offsetForCivilDate(tomorrowCivilDate, context.timeZone),
     method,
+    asrConvention,
+    highLatitudeRule,
+    adjustments,
   );
   const next = findNextPrayer(clock.localMinutes, today, tomorrow);
   const calendar = calendarDate(context.civilDate, input.hijriCorrectionDays ?? 0);
@@ -155,6 +184,8 @@ export function buildPrayerDashboard(input: {
     gregorian: calendar.gregorian,
     hijri: calendar.hijri,
     method,
+    asrConvention,
+    highLatitudeRule,
     today,
     tomorrow,
     prayers,

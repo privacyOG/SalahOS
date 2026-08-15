@@ -9,6 +9,10 @@ if (rootElement === null) {
   throw new Error('SalahOS root element is missing');
 }
 
+if ('serviceWorker' in navigator && import.meta.env.PROD) {
+  void navigator.serviceWorker.register('/sw.js');
+}
+
 createRoot(rootElement).render(
   <StrictMode>
     <App />

@@ -1,0 +1,25 @@
+{
+  "name": "SalahOS",
+  "short_name": "SalahOS",
+  "description": "Privacy-focused local prayer times and smart display",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#0d120e",
+  "theme_color": "#101510",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "/icons/salahos.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/salahos-maskable.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ]
+}
