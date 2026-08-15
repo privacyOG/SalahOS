@@ -563,10 +563,6 @@ export function App() {
               : (dashboard?.method.name ?? translate(locale, 'notConfigured'))}
           </p>
         </div>
-        <div className="source-detail">
-          <p className="label">{translate(locale, 'method')}</p>
-          <p className="value">{dashboard?.method.name ?? translate(locale, 'notConfigured')}</p>
-        </div>
       </section>
 
       {dashboard === null || sourcedDashboard === null ? (
