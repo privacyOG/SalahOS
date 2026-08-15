@@ -155,7 +155,7 @@
 - [ ] Implement native Android/iOS location adapter
 - [x] Support manual latitude/longitude entry
 - [ ] Support manual city/location search
-- [ ] Support saved/favourite locations
+- [x] Support saved/favourite locations
 - [x] Support current-location refresh
 - [x] Handle denied-location-permission flow gracefully
 - [x] Handle unavailable GPS/location services gracefully
@@ -166,6 +166,8 @@
 - [x] Correctly handle UTC offsets and daylight-saving changes
 - [x] Avoid continuous GPS polling when not required
 - [x] Avoid sending precise location to remote services unless required and explicitly disclosed
+
+**Saved-location verification note (2026-08-16):** read-only Quality Gate run `31905379677` passed the versioned saved-location store and tests, and implementation Quality Gate run `31905467110` passed formatting, typed lint, strict typecheck, all tests and production build after the UI integration. The web shell now stores validated favourites locally in a separate versioned library, supports labelled save/update/remove operations, and lets a user select a favourite to immediately update coordinates and recompute timezone/prayer data. Corrupt saved location data fails closed to an empty library; no remote service is required. Manual city-name search and native mobile location adapters remain open.
 
 **Stage 3 verification note (2026-08-16):** read-only Quality Gate run `31900763989` passed the location/timezone core with a clean lockfile install, formatting, typed lint, strict typecheck, unit/integration tests and production build. The verified core includes validated manual coordinates, one-shot browser geolocation with typed failure states, bundled offline coordinate-to-IANA lookup, IANA/`Intl` DST offset resolution, exact 2026 Sydney and London DST transition tests, local civil-date resolution and the location → timezone → prayer-engine integration path. Saved locations, city search, native mobile adapters, persistent timezone caching/override and UI permission/fallback flows remain open.
 
@@ -404,7 +406,7 @@
 - [x] Asr method selector
 - [x] High-latitude rule selector
 - [x] Manual prayer offsets
-- [ ] Location selector
+- [x] Location selector
 - [~] Mosque/source selector
 - [x] Hijri correction
 - [x] Language selector

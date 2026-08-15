@@ -210,3 +210,13 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Source-domain tests cover calculated mode, local mosque starts/Iqamah, missing-entry isolation and next-day mosque Fajr rollover.
 - Quality Gate run `31905085674` passed formatting, typed lint, strict typecheck, all tests and production build for the implementation.
 - Multiple saved mosques, dedicated mosque management and physical-display visual validation remain open.
+
+### 2026-08-16 — Persistent saved locations
+
+- Added a separate versioned local saved-location library so favourites can evolve without forcing a migration of the core settings envelope.
+- Saved locations validate labels, stable ids and coordinates, reject duplicate ids, and fall back to an empty library when persisted data is corrupt.
+- Unit tests cover storage round-trip, immutable upsert/remove behavior, duplicate-id rejection, invalid-coordinate rejection and corrupt-storage fallback.
+- The location panel now supports saving the active coordinates under a user label, selecting a favourite to recalculate immediately, and removing a saved location.
+- Saved favourites remain independent of reset-to-defaults for calculation preferences and require no remote service.
+- Read-only Quality Gate run `31905379677` passed the storage/test core; implementation Quality Gate run `31905467110` passed formatting, typed lint, strict typecheck, all tests and production build after UI integration.
+- Manual city/location search and native Android/iOS location adapters remain open.
