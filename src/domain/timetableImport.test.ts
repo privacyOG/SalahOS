@@ -39,29 +39,23 @@ describe('mosque timetable import and export', () => {
   });
 
   it('rejects unexpected CSV schemas, invalid times and orphan iqamah values', () => {
-    expect(() =>
-      parseMosqueTimetableCsv('date,fajr\n2026-08-21,05:25', 'Example Mosque'),
-    ).toThrow(/CSV header/);
+    expect(() => parseMosqueTimetableCsv('date,fajr\n2026-08-21,05:25', 'Example Mosque')).toThrow(
+      /CSV header/,
+    );
 
     expect(() =>
-      parseMosqueTimetableCsv(
-        SAMPLE_CSV.replace('05:25', '25:99'),
-        'Example Mosque',
-      ),
+      parseMosqueTimetableCsv(SAMPLE_CSV.replace('05:25', '25:99'), 'Example Mosque'),
     ).toThrow(RangeError);
 
     expect(() =>
-      parseMosqueTimetableCsv(
-        SAMPLE_CSV.replace('05:25,+20', ',+20'),
-        'Example Mosque',
-      ),
+      parseMosqueTimetableCsv(SAMPLE_CSV.replace('05:25,+20', ',+20'), 'Example Mosque'),
     ).toThrow(/cannot exist without/);
   });
 
   it('rejects malformed or structurally invalid JSON before activation', () => {
     expect(() => parseMosqueTimetableJson('{')).toThrow(/invalid/);
-    expect(() =>
-      parseMosqueTimetableJson(JSON.stringify({ mosqueName: '', days: [] })),
-    ).toThrow(RangeError);
+    expect(() => parseMosqueTimetableJson(JSON.stringify({ mosqueName: '', days: [] }))).toThrow(
+      RangeError,
+    );
   });
 });
