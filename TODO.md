@@ -346,8 +346,10 @@
 - [ ] Reschedule notifications after device reboot where platform requires it
 - [~] Reschedule future prayer notifications at date rollover
 - [~] Prevent duplicate notifications
-- [ ] Test notification behaviour across DST transition
+- [~] Test notification behaviour across DST transition
 - [ ] Document platform-specific limitations instead of promising impossible exact behaviour
+
+**Notification-DST verification note (2026-08-16):** read-only Quality Gate run `31910410104` passed formatting, typed lint, strict typecheck, all tests and production build for IANA wall-clock-to-instant resolution. The scheduling domain now resolves notification civil times against the selected IANA timezone, including Sydney and London DST transitions. Repeated wall-clock times are represented explicitly and notification scheduling chooses the earlier occurrence deterministically; nonexistent spring-forward times are skipped rather than silently shifted or fabricated. Actual platform notification delivery across DST has not yet been exercised, so the delivery-level DST tracker item remains partial.
 
 **Notification-schedule verification note (2026-08-16):** implementation Quality Gate run `31908783069` passed formatting, typed lint, strict typecheck, all tests and production build for the deterministic scheduling core. The domain now builds stable per-date/per-prayer reminder, prayer-time and Adhan intents; normalizes reminders that fall on the prior civil date; deduplicates repeated inputs; and reconciles an installed schedule against recalculated desired jobs with explicit cancellation and replacement sets. Tests cover changed prayer times, date rollover, duplicate input and no-op reconciliation. No platform scheduler consumes these intents yet, so rescheduling and duplicate prevention remain partial. Reboot recovery, timezone-to-instant/DST delivery validation and permission/background handling remain open.
 
