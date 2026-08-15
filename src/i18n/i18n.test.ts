@@ -1,8 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import {
   applyDocumentLocale,
+  formatCountdown,
   formatGregorianCivilDate,
+  formatHijriCivilDate,
   formatLocalTime,
+  formatZonedInstantTime,
   localeDirection,
   translate,
 } from './i18n';
@@ -39,19 +42,32 @@ describe('localisation and RTL core', () => {
     expect(formatLocalTime(17 * 60 + 42, 'ar', 'h23')).toContain(':');
   });
 
-  it('formats the same Gregorian civil date using the selected locale', () => {
+  it('formats an instant in the selected IANA timezone', () => {
+    const instant = new Date('2026-08-16T00:05:06.000Z');
+    expect(formatZonedInstantTime(instant, 'Australia/Sydney', 'en')).toContain('10:05:06');
+  });
+
+  it('formats Gregorian and Umm al-Qura dates using the selected locale', () => {
     const date = new Date('2026-08-16T00:00:00.000Z');
     const english = formatGregorianCivilDate(date, 'en');
     const arabic = formatGregorianCivilDate(date, 'ar');
+    const hijri = formatHijriCivilDate(date, 'en');
 
     expect(english).not.toBe(arabic);
     expect(english.length).toBeGreaterThan(0);
     expect(arabic.length).toBeGreaterThan(0);
+    expect(hijri.length).toBeGreaterThan(0);
   });
 
-  it('rejects invalid local minute values', () => {
+  it('formats countdowns without host-timezone dependence', () => {
+    expect(formatCountdown(3_661, 'en')).toBe('01:01:01');
+    expect(formatCountdown(0, 'en')).toBe('00:00:00');
+  });
+
+  it('rejects invalid local minute and countdown values', () => {
     expect(() => formatLocalTime(-1, 'en')).toThrow(RangeError);
     expect(() => formatLocalTime(1_440, 'en')).toThrow(RangeError);
     expect(() => formatLocalTime(10.5, 'en')).toThrow(RangeError);
+    expect(() => formatCountdown(-1, 'en')).toThrow(RangeError);
   });
 });
