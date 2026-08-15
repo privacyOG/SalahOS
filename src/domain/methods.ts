@@ -15,6 +15,11 @@ export type IshaRule =
   | { readonly kind: 'angle'; readonly angleDegrees: number }
   | { readonly kind: 'interval'; readonly minutesAfterMaghrib: number };
 
+export type MethodVerification =
+  | 'cross-checked-reference'
+  | 'pending-authoritative-source'
+  | 'custom';
+
 export interface CalculationMethod {
   readonly id: CalculationMethodId;
   readonly name: string;
@@ -22,7 +27,7 @@ export interface CalculationMethod {
   readonly ishaRule: IshaRule;
   readonly maghribRule: { readonly kind: 'sunset' };
   readonly provenance: string;
-  readonly verification: 'pending-authoritative-source' | 'custom';
+  readonly verification: MethodVerification;
 }
 
 const method = (
@@ -31,6 +36,7 @@ const method = (
   fajrAngleDegrees: number,
   ishaRule: IshaRule,
   provenance: string,
+  verification: Exclude<MethodVerification, 'custom'>,
 ): CalculationMethod => ({
   id,
   name,
@@ -38,14 +44,15 @@ const method = (
   ishaRule,
   maghribRule: { kind: 'sunset' },
   provenance,
-  verification: 'pending-authoritative-source',
+  verification,
 });
 
 /**
  * Built-in method registry. Numerical parameters are explicit and centralized so
  * method provenance can be audited independently from the calculation engine.
- * Entries remain marked pending until their primary/authoritative references are
- * archived in project research documentation.
+ * `cross-checked-reference` means the parameters agree with the reference set
+ * documented in docs/PRAYER_METHOD_REFERENCES.md; it is not institutional
+ * certification and does not replace geographic timetable parity testing.
  */
 export const calculationMethods: Readonly<
   Record<Exclude<CalculationMethodId, 'custom'>, CalculationMethod>
@@ -55,70 +62,80 @@ export const calculationMethods: Readonly<
     'Muslim World League',
     18,
     { kind: 'angle', angleDegrees: 17 },
-    'Commonly published MWL parameters; authoritative source verification pending.',
+    '18° Fajr / 17° Isha cross-checked against PrayTimes, Adhan JS 4.4.4 and AlAdhan.',
+    'cross-checked-reference',
   ),
   'umm-al-qura': method(
     'umm-al-qura',
     'Umm al-Qura / Makkah',
     18.5,
     { kind: 'interval', minutesAfterMaghrib: 90 },
-    'Commonly published Umm al-Qura parameters; Ramadan-specific interval requires Hijri integration and authoritative source verification.',
+    '18.5° Fajr / 90-minute Isha cross-checked against PrayTimes, Adhan JS 4.4.4 and AlAdhan; Ramadan interval remains separate Hijri-aware work.',
+    'cross-checked-reference',
   ),
   egyptian: method(
     'egyptian',
     'Egyptian General Authority of Survey',
     19.5,
     { kind: 'angle', angleDegrees: 17.5 },
-    'Commonly published Egyptian parameters; authoritative source verification pending.',
+    '19.5° Fajr / 17.5° Isha cross-checked against PrayTimes, Adhan JS 4.4.4 and AlAdhan.',
+    'cross-checked-reference',
   ),
   karachi: method(
     'karachi',
     'University of Islamic Sciences, Karachi',
     18,
     { kind: 'angle', angleDegrees: 18 },
-    'Commonly published Karachi parameters; authoritative source verification pending.',
+    '18° Fajr / 18° Isha cross-checked against PrayTimes, Adhan JS 4.4.4 and AlAdhan.',
+    'cross-checked-reference',
   ),
   isna: method(
     'isna',
     'Islamic Society of North America',
     15,
     { kind: 'angle', angleDegrees: 15 },
-    'Commonly published ISNA parameters; authoritative source verification pending.',
+    '15° Fajr / 15° Isha cross-checked against PrayTimes, Adhan JS 4.4.4 and AlAdhan.',
+    'cross-checked-reference',
   ),
   diyanet: method(
     'diyanet',
     'Diyanet / Turkey',
     18,
     { kind: 'angle', angleDegrees: 17 },
-    'Initial interoperable parameters; authoritative Diyanet rule verification pending.',
+    '18°/17° interoperability approximation; Adhan JS describes Turkey as an approximation and AlAdhan marks it experimental. Official timetable parity pending.',
+    'pending-authoritative-source',
   ),
   muis: method(
     'muis',
     'MUIS / Singapore',
     20,
     { kind: 'angle', angleDegrees: 18 },
-    'Commonly published MUIS parameters; authoritative source verification pending.',
+    '20° Fajr / 18° Isha cross-checked against PrayTimes, Adhan JS 4.4.4 and AlAdhan.',
+    'cross-checked-reference',
   ),
   dubai: method(
     'dubai',
     'Dubai',
     18.2,
     { kind: 'angle', angleDegrees: 18.2 },
-    'Commonly published Dubai parameters; authoritative source verification pending.',
+    '18.2° angles follow Batoul Apps research; AlAdhan explicitly labels Dubai experimental and additional per-prayer offsets remain unmodelled.',
+    'pending-authoritative-source',
   ),
   kuwait: method(
     'kuwait',
     'Kuwait',
     18,
     { kind: 'angle', angleDegrees: 17.5 },
-    'Commonly published Kuwait parameters; authoritative source verification pending.',
+    '18° Fajr / 17.5° Isha cross-checked against Adhan JS 4.4.4 and AlAdhan.',
+    'cross-checked-reference',
   ),
   qatar: method(
     'qatar',
     'Qatar',
     18,
     { kind: 'interval', minutesAfterMaghrib: 90 },
-    'Commonly published Qatar parameters; authoritative source verification pending.',
+    '18° Fajr / 90-minute Isha cross-checked against Adhan JS 4.4.4 and AlAdhan.',
+    'cross-checked-reference',
   ),
 });
 
