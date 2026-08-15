@@ -1,8 +1,4 @@
-import {
-  jumuahSessionsForDate,
-  mosqueDayForDate,
-  resolvePrayerSource,
-} from './mosqueTimetable';
+import { jumuahSessionsForDate, mosqueDayForDate, resolvePrayerSource } from './mosqueTimetable';
 import type {
   JumuahSession,
   MosqueTimetable,
@@ -136,7 +132,8 @@ export function applyPrayerSourceToDashboard(input: {
   return {
     base: input.dashboard,
     sourceMode: input.sourceMode,
-    mosqueName: input.sourceMode === 'local-mosque' ? (input.mosqueTimetable?.mosqueName ?? null) : null,
+    mosqueName:
+      input.sourceMode === 'local-mosque' ? (input.mosqueTimetable?.mosqueName ?? null) : null,
     prayers,
     nextPrayer: next?.prayer ?? null,
     nextPrayerDayOffset: next?.dayOffset ?? null,
