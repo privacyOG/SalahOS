@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { createCoordinates } from './domain/coordinates';
 import type { Coordinates } from './domain/coordinates';
 import { buildPrayerDashboard } from './domain/dashboard';
+import { calculationMethods } from './domain/methods';
 import type { PrayerName } from './domain/prayerEngine';
 import {
   applyDocumentLocale,
@@ -16,6 +17,12 @@ import {
 import type { Locale, TranslationKey } from './i18n/translations';
 import { requestBrowserLocation } from './platform/browserGeolocation';
 import type { BrowserLocationFailureReason } from './platform/browserGeolocation';
+import {
+  defaultPersistedSettings,
+  loadPersistedSettings,
+  savePersistedSettings,
+} from './platform/settingsStorage';
+import type { PersistedSettings } from './platform/settingsStorage';
 
 const prayerTranslationKeys: Readonly<Record<PrayerName, TranslationKey>> = {
   fajr: 'prayerFajr',
@@ -34,14 +41,30 @@ const locationFailureKeys: Readonly<Record<BrowserLocationFailureReason, Transla
   unknown: 'locationUnknownError',
 };
 
+function initialSettings(): PersistedSettings {
+  try {
+    return loadPersistedSettings(window.localStorage);
+  } catch {
+    return defaultPersistedSettings;
+  }
+}
+
 export function App() {
-  const [locale, setLocale] = useState<Locale>('en');
-  const [coordinates, setCoordinates] = useState<Coordinates | null>(null);
-  const [latitude, setLatitude] = useState('');
-  const [longitude, setLongitude] = useState('');
+  const [persistedSettings] = useState(initialSettings);
+  const [locale, setLocale] = useState<Locale>(persistedSettings.locale);
+  const [coordinates, setCoordinates] = useState<Coordinates | null>(
+    persistedSettings.location?.coordinates ?? null,
+  );
+  const [latitude, setLatitude] = useState(
+    persistedSettings.location === null ? '' : String(persistedSettings.location.coordinates.latitude),
+  );
+  const [longitude, setLongitude] = useState(
+    persistedSettings.location === null ? '' : String(persistedSettings.location.coordinates.longitude),
+  );
   const [locationFailure, setLocationFailure] = useState<BrowserLocationFailureReason | null>(null);
   const [manualError, setManualError] = useState(false);
   const [now, setNow] = useState(() => new Date());
+  const [online, setOnline] = useState(() => navigator.onLine);
 
   useEffect(() => {
     applyDocumentLocale(document.documentElement, locale);
@@ -56,11 +79,55 @@ export function App() {
     };
   }, []);
 
+  useEffect(() => {
+    const markOnline = () => {
+      setOnline(true);
+    };
+    const markOffline = () => {
+      setOnline(false);
+    };
+    window.addEventListener('online', markOnline);
+    window.addEventListener('offline', markOffline);
+    return () => {
+      window.removeEventListener('online', markOnline);
+      window.removeEventListener('offline', markOffline);
+    };
+  }, []);
+
   const dashboard = useMemo(
-    () => (coordinates === null ? null : buildPrayerDashboard({ instant: now, coordinates })),
-    [coordinates, now],
+    () =>
+      coordinates === null
+        ? null
+        : buildPrayerDashboard({
+            instant: now,
+            coordinates,
+            method: calculationMethods[persistedSettings.calculationMethodId],
+            asrConvention: persistedSettings.asrConvention,
+            highLatitudeRule: persistedSettings.highLatitudeRule,
+            adjustments: persistedSettings.prayerAdjustments,
+            hijriCorrectionDays: persistedSettings.hijriCorrectionDays,
+          }),
+    [coordinates, now, persistedSettings],
   );
   const direction = localeDirection(locale);
+
+  useEffect(() => {
+    try {
+      savePersistedSettings(window.localStorage, {
+        ...persistedSettings,
+        locale,
+        location:
+          coordinates === null
+            ? null
+            : {
+                coordinates,
+                ...(dashboard === null ? {} : { timeZone: dashboard.timeZone }),
+              },
+      });
+    } catch {
+      // Storage can be unavailable in privacy-restricted browser contexts.
+    }
+  }, [coordinates, dashboard, locale, persistedSettings]);
 
   async function refreshLocation(): Promise<void> {
     const result = await requestBrowserLocation();
@@ -92,11 +159,18 @@ export function App() {
           hour: '2-digit',
           minute: '2-digit',
           second: '2-digit',
+          hourCycle: persistedSettings.timeFormat,
         }).format(now)
-      : formatZonedInstantTime(now, dashboard.timeZone, locale);
+      : formatZonedInstantTime(now, dashboard.timeZone, locale, persistedSettings.timeFormat);
 
   return (
     <main className="app-shell" dir={direction}>
+      {!online && (
+        <p className="offline-banner" role="status">
+          {translate(locale, 'offline')}
+        </p>
+      )}
+
       <header className="hero">
         <div className="hero-toolbar">
           <div>
@@ -211,7 +285,13 @@ export function App() {
             </div>
             <div>
               <p className="label">{translate(locale, 'hijriDate')}</p>
-              <p className="value">{formatHijriCivilDate(dashboard.civilDate, locale)}</p>
+              <p className="value">
+                {formatHijriCivilDate(
+                  dashboard.civilDate,
+                  locale,
+                  persistedSettings.hijriCorrectionDays,
+                )}
+              </p>
             </div>
           </div>
 
@@ -246,7 +326,11 @@ export function App() {
                 <strong>
                   {prayer.localMinutes === null
                     ? '—'
-                    : formatLocalTime(prayer.localMinutes, locale)}
+                    : formatLocalTime(
+                        prayer.localMinutes,
+                        locale,
+                        persistedSettings.timeFormat,
+                      )}
                 </strong>
               </article>
             ))}
