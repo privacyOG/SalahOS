@@ -169,3 +169,13 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Tests run without a browser-global dependency by targeting the minimal document-root locale contract.
 - Read-only Quality Gate run `31902384992` completed successfully with clean lockfile install, formatting, typed lint, strict typecheck, all tests and production build.
 - Full mixed-script and RTL visual regression across every target breakpoint remains open for the responsive UI test stage.
+
+### 2026-08-16 — Live shared prayer dashboard
+
+- A pure dashboard model composes coordinates, offline IANA timezone resolution, local clock extraction, Gregorian/Umm al-Qura dates, today/tomorrow prayer schedules and next-prayer selection without duplicating prayer formulas in React.
+- The web shell supports one-shot browser location refresh and validated manual latitude/longitude entry; typed permission/unavailable/timeout/unsupported failures direct the user to the manual path.
+- The dashboard displays live local time, Gregorian and Hijri dates, coordinates/timezone, calculation method/source, the five obligatory prayers, Sunrise, next-prayer highlighting and a per-second countdown.
+- Tomorrow Fajr rollover after Isha and host-timezone-independent clock extraction are covered by dashboard tests.
+- Responsive CSS uses one shared app/data model across phone, tablet and large-display widths, with visible keyboard focus, touch-sized controls, semantic status/error messaging and reduced-motion handling.
+- Read-only Quality Gate run `31903663678` passed clean lockfile install, formatting, typed lint, strict typecheck, all tests and production build after canonical formatting.
+- Mosque selection/Iqamah presentation, persistent saved locations, theme controls, current-prayer highlighting and visual regression on physical target displays remain open.

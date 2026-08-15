@@ -153,13 +153,13 @@
 
 - [x] Implement browser geolocation adapter
 - [ ] Implement native Android/iOS location adapter
-- [~] Support manual latitude/longitude entry
+- [x] Support manual latitude/longitude entry
 - [ ] Support manual city/location search
 - [ ] Support saved/favourite locations
-- [~] Support current-location refresh
-- [~] Handle denied-location-permission flow gracefully
-- [~] Handle unavailable GPS/location services gracefully
-- [ ] Fall back to saved/manual location without breaking prayer calculations
+- [x] Support current-location refresh
+- [x] Handle denied-location-permission flow gracefully
+- [x] Handle unavailable GPS/location services gracefully
+- [~] Fall back to saved/manual location without breaking prayer calculations
 - [x] Resolve coordinates to an IANA timezone
 - [~] Cache timezone data for offline use
 - [x] Use IANA timezone rules rather than deriving timezone from longitude
@@ -173,7 +173,7 @@
 
 ## 4. Gregorian and Hijri calendar subsystem
 
-- [~] Display Gregorian date
+- [x] Display Gregorian date
 - [x] Implement Hijri date support
 - [x] Support Umm al-Qura / selected calculated Hijri calendar where platform/runtime permits
 - [x] Clearly identify whether Hijri date is calculated or based on a selected calendar convention
@@ -181,7 +181,7 @@
 - [x] Test Hijri month boundaries
 - [x] Test Hijri year boundaries
 - [x] Test Ramadan boundary behaviour
-- [ ] Ensure date changes update without requiring app restart
+- [x] Ensure date changes update without requiring app restart
 
 **Stage 4 verification note (2026-08-16):** read-only Quality Gate run `31901367515` passed the Gregorian/Hijri domain core after canonical formatting, including typed lint, strict typecheck, calendar unit tests and production build. The verified core derives Gregorian parts from the already-resolved local civil date, supports runtime `islamic-umalqura` with explicit `runtime-intl-calendar` provenance, applies only explicit integer Hijri corrections from -2 through +2 days, and tests Hijri month/year transitions plus entry into Ramadan. UI rendering, locale-specific presentation and live date rollover remain open.
 
@@ -248,41 +248,44 @@
 
 ### 7.1 Shared prayer dashboard
 
-- [ ] Current local time
-- [ ] Gregorian date
-- [ ] Hijri date
-- [ ] Current location / selected mosque
-- [ ] Today's five prayer times
-- [ ] Sunrise as supplementary information
-- [ ] Next-prayer indicator
-- [ ] Live next-prayer countdown
-- [ ] Highlight current/next prayer
-- [ ] Calculation method/source indicator
+- [x] Current local time
+- [x] Gregorian date
+- [x] Hijri date
+- [~] Current location / selected mosque
+- [x] Today's five prayer times
+- [x] Sunrise as supplementary information
+- [x] Next-prayer indicator
+- [x] Live next-prayer countdown
+- [~] Highlight current/next prayer
+- [x] Calculation method/source indicator
 - [ ] Iqamah time where configured
-- [ ] High-latitude/manual-adjustment indicator when applicable
+- [~] High-latitude/manual-adjustment indicator when applicable
 
 ### 7.2 Responsive layouts
 
-- [ ] Phone portrait layout
-- [ ] Phone landscape layout
-- [ ] Tablet layout
-- [ ] Raspberry Pi Touch Display 2 first-class layout
-- [ ] 1920×1080 TV/kiosk layout
-- [ ] Large-format display layout
-- [ ] Avoid separate duplicated application logic for each form factor
+- [~] Phone portrait layout
+- [~] Phone landscape layout
+- [~] Tablet layout
+- [~] Raspberry Pi Touch Display 2 first-class layout
+- [~] 1920×1080 TV/kiosk layout
+- [~] Large-format display layout
+- [x] Avoid separate duplicated application logic for each form factor
 
 ### 7.3 Themes and accessibility
 
 - [ ] Light theme
 - [ ] Dark theme
 - [ ] Follow-system theme
-- [ ] High-contrast readable typography
-- [ ] Scalable text
-- [ ] Keyboard navigation
-- [ ] Touch-friendly controls
-- [ ] Appropriate semantic/ARIA roles on web targets
-- [ ] Visible focus state
-- [ ] Respect reduced-motion preference where applicable
+- [~] High-contrast readable typography
+- [x] Scalable text
+- [x] Keyboard navigation
+- [x] Touch-friendly controls
+- [x] Appropriate semantic/ARIA roles on web targets
+- [x] Visible focus state
+- [x] Respect reduced-motion preference where applicable
+
+**Stage 7 dashboard verification note (2026-08-16):** read-only Quality Gate run `31903663678` passed formatting, typed lint, strict typecheck, the expanded dashboard/localisation tests and production build. The shared web shell now accepts one-shot browser location or validated manual coordinates, resolves the IANA timezone locally, refreshes the live clock every second, recomputes Gregorian/Hijri dates and today/tomorrow prayer schedules from shared domain logic, shows the five prayers plus Sunrise, identifies the next prayer, runs a live countdown and exposes calculation source/method. The responsive CSS uses one shared application model across phone/tablet/display widths with keyboard focus, touch-sized controls, ARIA status/error regions and reduced-motion handling. Mosque selection/Iqamah presentation, current-prayer highlighting, persistent saved locations, themes and visual regression on physical target displays remain open.
+
 - [ ] Validate TV readability from several metres away
 
 ---
