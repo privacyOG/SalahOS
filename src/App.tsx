@@ -19,7 +19,10 @@ import { requestBrowserLocation } from './platform/browserGeolocation';
 import type { BrowserLocationFailureReason } from './platform/browserGeolocation';
 import {
   defaultPersistedSettings,
+  exportPersistedSettings,
+  importPersistedSettings,
   loadPersistedSettings,
+  resetPersistedSettings,
   savePersistedSettings,
 } from './platform/settingsStorage';
 import type { PersistedSettings } from './platform/settingsStorage';
@@ -32,6 +35,15 @@ const prayerTranslationKeys: Readonly<Record<PrayerName, TranslationKey>> = {
   maghrib: 'prayerMaghrib',
   isha: 'prayerIsha',
 };
+
+const adjustablePrayers: readonly PrayerName[] = [
+  'fajr',
+  'sunrise',
+  'dhuhr',
+  'asr',
+  'maghrib',
+  'isha',
+];
 
 const locationFailureKeys: Readonly<Record<BrowserLocationFailureReason, TranslationKey>> = {
   'permission-denied': 'locationPermissionDenied',
@@ -50,29 +62,31 @@ function initialSettings(): PersistedSettings {
 }
 
 export function App() {
-  const [persistedSettings] = useState(initialSettings);
-  const [locale, setLocale] = useState<Locale>(persistedSettings.locale);
+  const [settings, setSettings] = useState(initialSettings);
+  const [locale, setLocale] = useState<Locale>(settings.locale);
   const [coordinates, setCoordinates] = useState<Coordinates | null>(
-    persistedSettings.location?.coordinates ?? null,
+    settings.location?.coordinates ?? null,
   );
   const [latitude, setLatitude] = useState(
-    persistedSettings.location === null
-      ? ''
-      : String(persistedSettings.location.coordinates.latitude),
+    settings.location === null ? '' : String(settings.location.coordinates.latitude),
   );
   const [longitude, setLongitude] = useState(
-    persistedSettings.location === null
-      ? ''
-      : String(persistedSettings.location.coordinates.longitude),
+    settings.location === null ? '' : String(settings.location.coordinates.longitude),
   );
   const [locationFailure, setLocationFailure] = useState<BrowserLocationFailureReason | null>(null);
   const [manualError, setManualError] = useState(false);
   const [now, setNow] = useState(() => new Date());
   const [online, setOnline] = useState(() => navigator.onLine);
+  const [settingsPayload, setSettingsPayload] = useState('');
+  const [settingsMessage, setSettingsMessage] = useState<TranslationKey | null>(null);
 
   useEffect(() => {
     applyDocumentLocale(document.documentElement, locale);
   }, [locale]);
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = settings.theme;
+  }, [settings.theme]);
 
   useEffect(() => {
     const timer = window.setInterval(() => {
@@ -105,33 +119,39 @@ export function App() {
         : buildPrayerDashboard({
             instant: now,
             coordinates,
-            method: calculationMethods[persistedSettings.calculationMethodId],
-            asrConvention: persistedSettings.asrConvention,
-            highLatitudeRule: persistedSettings.highLatitudeRule,
-            adjustments: persistedSettings.prayerAdjustments,
-            hijriCorrectionDays: persistedSettings.hijriCorrectionDays,
+            method: calculationMethods[settings.calculationMethodId],
+            asrConvention: settings.asrConvention,
+            highLatitudeRule: settings.highLatitudeRule,
+            adjustments: settings.prayerAdjustments,
+            hijriCorrectionDays: settings.hijriCorrectionDays,
           }),
-    [coordinates, now, persistedSettings],
+    [coordinates, now, settings],
   );
   const direction = localeDirection(locale);
+  const resolvedTimeZone = dashboard?.timeZone;
+
+  const effectiveSettings = useMemo<PersistedSettings>(
+    () => ({
+      ...settings,
+      locale,
+      location:
+        coordinates === null
+          ? null
+          : {
+              coordinates,
+              ...(resolvedTimeZone === undefined ? {} : { timeZone: resolvedTimeZone }),
+            },
+    }),
+    [coordinates, locale, resolvedTimeZone, settings],
+  );
 
   useEffect(() => {
     try {
-      savePersistedSettings(window.localStorage, {
-        ...persistedSettings,
-        locale,
-        location:
-          coordinates === null
-            ? null
-            : {
-                coordinates,
-                ...(dashboard === null ? {} : { timeZone: dashboard.timeZone }),
-              },
-      });
+      savePersistedSettings(window.localStorage, effectiveSettings);
     } catch {
       // Storage can be unavailable in privacy-restricted browser contexts.
     }
-  }, [coordinates, dashboard, locale, persistedSettings]);
+  }, [effectiveSettings]);
 
   async function refreshLocation(): Promise<void> {
     const result = await requestBrowserLocation();
@@ -157,15 +177,71 @@ export function App() {
     }
   }
 
+  function updatePrayerOffset(prayer: PrayerName, rawValue: string): void {
+    setSettings((current) => {
+      const nextAdjustments = { ...current.prayerAdjustments };
+      if (rawValue.trim() === '') {
+        Reflect.deleteProperty(nextAdjustments, prayer);
+      } else {
+        const value = Number(rawValue);
+        if (!Number.isInteger(value) || value < -180 || value > 180) {
+          return current;
+        }
+        nextAdjustments[prayer] = value;
+      }
+      return { ...current, prayerAdjustments: nextAdjustments };
+    });
+  }
+
+  function exportSettings(): void {
+    setSettingsPayload(exportPersistedSettings(effectiveSettings));
+    setSettingsMessage(null);
+  }
+
+  function importSettings(): void {
+    try {
+      const imported = importPersistedSettings(settingsPayload);
+      setSettings(imported);
+      setLocale(imported.locale);
+      setCoordinates(imported.location?.coordinates ?? null);
+      setLatitude(imported.location === null ? '' : String(imported.location.coordinates.latitude));
+      setLongitude(
+        imported.location === null ? '' : String(imported.location.coordinates.longitude),
+      );
+      setLocationFailure(null);
+      setManualError(false);
+      setSettingsMessage('settingsImported');
+    } catch {
+      setSettingsMessage('settingsImportError');
+    }
+  }
+
+  function resetSettings(): void {
+    try {
+      resetPersistedSettings(window.localStorage);
+    } catch {
+      // Reset still applies in memory when browser storage is unavailable.
+    }
+    setSettings(defaultPersistedSettings);
+    setLocale(defaultPersistedSettings.locale);
+    setCoordinates(null);
+    setLatitude('');
+    setLongitude('');
+    setLocationFailure(null);
+    setManualError(false);
+    setSettingsPayload('');
+    setSettingsMessage('settingsReset');
+  }
+
   const currentClock =
     dashboard === null
       ? new Intl.DateTimeFormat(locale === 'ar' ? 'ar' : 'en-AU', {
           hour: '2-digit',
           minute: '2-digit',
           second: '2-digit',
-          hourCycle: persistedSettings.timeFormat,
+          hourCycle: settings.timeFormat,
         }).format(now)
-      : formatZonedInstantTime(now, dashboard.timeZone, locale, persistedSettings.timeFormat);
+      : formatZonedInstantTime(now, dashboard.timeZone, locale, settings.timeFormat);
 
   return (
     <main className="app-shell" dir={direction}>
@@ -249,6 +325,166 @@ export function App() {
         )}
       </section>
 
+      <details className="settings-panel">
+        <summary>{translate(locale, 'settings')}</summary>
+        <div className="settings-grid">
+          <label>
+            <span>{translate(locale, 'calculationMethod')}</span>
+            <select
+              value={settings.calculationMethodId}
+              onChange={(event) => {
+                setSettings((current) => ({
+                  ...current,
+                  calculationMethodId: event.target
+                    .value as PersistedSettings['calculationMethodId'],
+                }));
+              }}
+            >
+              {Object.values(calculationMethods).map((method) => (
+                <option key={method.id} value={method.id}>
+                  {method.name}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label>
+            <span>{translate(locale, 'asrMethod')}</span>
+            <select
+              value={settings.asrConvention}
+              onChange={(event) => {
+                setSettings((current) => ({
+                  ...current,
+                  asrConvention: event.target.value as PersistedSettings['asrConvention'],
+                }));
+              }}
+            >
+              <option value="standard">{translate(locale, 'asrStandard')}</option>
+              <option value="hanafi">{translate(locale, 'asrHanafi')}</option>
+            </select>
+          </label>
+
+          <label>
+            <span>{translate(locale, 'highLatitudeRule')}</span>
+            <select
+              value={settings.highLatitudeRule}
+              onChange={(event) => {
+                setSettings((current) => ({
+                  ...current,
+                  highLatitudeRule: event.target.value as PersistedSettings['highLatitudeRule'],
+                }));
+              }}
+            >
+              <option value="angle-based">{translate(locale, 'highLatitudeAngle')}</option>
+              <option value="middle-of-the-night">{translate(locale, 'highLatitudeMiddle')}</option>
+              <option value="one-seventh">{translate(locale, 'highLatitudeSeventh')}</option>
+            </select>
+          </label>
+
+          <label>
+            <span>{translate(locale, 'hijriCorrection')}</span>
+            <select
+              value={settings.hijriCorrectionDays}
+              onChange={(event) => {
+                setSettings((current) => ({
+                  ...current,
+                  hijriCorrectionDays: Number(event.target.value),
+                }));
+              }}
+            >
+              {[-2, -1, 0, 1, 2].map((days) => (
+                <option key={days} value={days}>
+                  {days > 0 ? `+${String(days)}` : String(days)}
+                </option>
+              ))}
+            </select>
+          </label>
+
+          <label>
+            <span>{translate(locale, 'timeFormat')}</span>
+            <select
+              value={settings.timeFormat}
+              onChange={(event) => {
+                setSettings((current) => ({
+                  ...current,
+                  timeFormat: event.target.value as PersistedSettings['timeFormat'],
+                }));
+              }}
+            >
+              <option value="h23">{translate(locale, 'time24')}</option>
+              <option value="h12">{translate(locale, 'time12')}</option>
+            </select>
+          </label>
+
+          <label>
+            <span>{translate(locale, 'theme')}</span>
+            <select
+              value={settings.theme}
+              onChange={(event) => {
+                setSettings((current) => ({
+                  ...current,
+                  theme: event.target.value as PersistedSettings['theme'],
+                }));
+              }}
+            >
+              <option value="system">{translate(locale, 'themeSystem')}</option>
+              <option value="light">{translate(locale, 'themeLight')}</option>
+              <option value="dark">{translate(locale, 'themeDark')}</option>
+            </select>
+          </label>
+        </div>
+
+        <fieldset className="offsets-fieldset">
+          <legend>{translate(locale, 'prayerOffsets')}</legend>
+          <div className="offset-grid">
+            {adjustablePrayers.map((prayer) => (
+              <label key={prayer}>
+                <span>{translate(locale, prayerTranslationKeys[prayer])}</span>
+                <input
+                  type="number"
+                  min="-180"
+                  max="180"
+                  step="1"
+                  value={settings.prayerAdjustments[prayer] ?? ''}
+                  onChange={(event) => {
+                    updatePrayerOffset(prayer, event.target.value);
+                  }}
+                />
+              </label>
+            ))}
+          </div>
+        </fieldset>
+
+        <div className="settings-transfer">
+          <label>
+            <span>{translate(locale, 'settingsPayload')}</span>
+            <textarea
+              rows={5}
+              value={settingsPayload}
+              onChange={(event) => {
+                setSettingsPayload(event.target.value);
+              }}
+            />
+          </label>
+          <div className="settings-actions">
+            <button type="button" onClick={exportSettings}>
+              {translate(locale, 'exportSettings')}
+            </button>
+            <button type="button" onClick={importSettings}>
+              {translate(locale, 'importSettings')}
+            </button>
+            <button type="button" onClick={resetSettings}>
+              {translate(locale, 'resetSettings')}
+            </button>
+          </div>
+          {settingsMessage !== null && (
+            <p className="inline-message" role="status">
+              {translate(locale, settingsMessage)}
+            </p>
+          )}
+        </div>
+      </details>
+
       <section className="status-card" aria-labelledby="today-heading">
         <div>
           <p className="label">{translate(locale, 'currentLocation')}</p>
@@ -290,11 +526,7 @@ export function App() {
             <div>
               <p className="label">{translate(locale, 'hijriDate')}</p>
               <p className="value">
-                {formatHijriCivilDate(
-                  dashboard.civilDate,
-                  locale,
-                  persistedSettings.hijriCorrectionDays,
-                )}
+                {formatHijriCivilDate(dashboard.civilDate, locale, settings.hijriCorrectionDays)}
               </p>
             </div>
           </div>
@@ -330,7 +562,7 @@ export function App() {
                 <strong>
                   {prayer.localMinutes === null
                     ? '—'
-                    : formatLocalTime(prayer.localMinutes, locale, persistedSettings.timeFormat)}
+                    : formatLocalTime(prayer.localMinutes, locale, settings.timeFormat)}
                 </strong>
               </article>
             ))}

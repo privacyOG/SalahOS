@@ -273,9 +273,9 @@
 
 ### 7.3 Themes and accessibility
 
-- [ ] Light theme
-- [ ] Dark theme
-- [ ] Follow-system theme
+- [~] Light theme
+- [~] Dark theme
+- [~] Follow-system theme
 - [~] High-contrast readable typography
 - [x] Scalable text
 - [x] Keyboard navigation
@@ -398,23 +398,25 @@
 
 ## 14. Settings and persistent configuration
 
-- [ ] Calculation method selector
-- [ ] Asr method selector
-- [ ] High-latitude rule selector
-- [ ] Manual prayer offsets
+- [x] Calculation method selector
+- [x] Asr method selector
+- [x] High-latitude rule selector
+- [x] Manual prayer offsets
 - [ ] Location selector
 - [ ] Mosque/source selector
-- [ ] Hijri correction
-- [~] Language selector
-- [ ] Theme selector
-- [ ] Time format (12/24-hour)
+- [x] Hijri correction
+- [x] Language selector
+- [x] Theme selector
+- [x] Time format (12/24-hour)
 - [ ] Per-prayer notifications
 - [ ] Adhan settings
 - [ ] Iqamah settings
-- [~] Export settings
-- [~] Import settings
-- [~] Reset to defaults
+- [x] Export settings
+- [x] Import settings
+- [x] Reset to defaults
 - [x] Version/migration system for persisted configuration
+
+**Settings-controls verification note (2026-08-16):** read-only Quality Gate run `31904751213` passed formatting, typed lint, strict typecheck, the complete unit/integration suite and production build. The settings panel now exposes calculation method, Asr convention, high-latitude rule, per-prayer minute offsets, Hijri correction, language, 12/24-hour time format and system/light/dark theme controls. Settings export, validated import and reset-to-defaults are wired to the versioned persistence core. Method/Asr changes feed the shared dashboard model immediately, and persistence no longer rewrites local storage on each one-second clock refresh. Theme controls are functional, while visual validation of light/dark/system appearance remains partial.
 
 ---
 
@@ -422,8 +424,8 @@
 
 - [x] Recompute prayer schedule when local date changes
 - [x] Recompute after location change
-- [ ] Recompute after calculation-method change
-- [ ] Recompute after Asr-method change
+- [x] Recompute after calculation-method change
+- [x] Recompute after Asr-method change
 - [x] Recompute after timezone/DST change
 - [ ] Re-sync clock/countdown after app resumes from background
 - [ ] Recover correctly after system sleep/wake

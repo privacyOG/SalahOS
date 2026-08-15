@@ -189,3 +189,13 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - The web shell exposes a localised offline status only when the browser reports that networking is unavailable. No remote API is required for the prayer calculation pipeline.
 - Read-only Quality Gate run `31904178200` passed clean lockfile install, formatting, typed lint, strict typecheck, all tests and production build after the final persisted-calculation integration assertion.
 - Real-browser offline reload, cache upgrade across two deployed versions and platform-specific raster install-icon validation remain open.
+
+### 2026-08-16 — Persistent settings controls
+
+- Added user-facing selectors for calculation method, Asr convention, high-latitude rule, Hijri correction, 12/24-hour time format and system/light/dark theme preference.
+- Added per-prayer minute adjustment inputs and wired them directly into the shared prayer dashboard calculation model.
+- Added functional settings export, validated import and reset-to-defaults controls backed by the versioned local persistence layer.
+- Changing method, Asr convention, high-latitude rule, Hijri correction or prayer offsets recomputes the shared dashboard without duplicated calculation logic.
+- Local persistence now depends on effective configuration/location changes rather than the per-second dashboard refresh, avoiding unnecessary storage writes.
+- Read-only Quality Gate run `31904751213` passed clean lockfile install, formatting, typed lint, strict typecheck, all tests and production build after the strict settings lint fixes.
+- Visual validation of light/dark/system themes and full component-level interaction testing remain open.
