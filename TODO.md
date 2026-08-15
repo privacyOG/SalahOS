@@ -127,20 +127,23 @@
 
 - [x] Makkah
 - [ ] Madinah
-- [ ] Sydney
-- [ ] Melbourne
-- [ ] Cairo
-- [ ] Istanbul
-- [ ] Karachi
-- [ ] Jakarta
+- [x] Sydney
+- [x] Melbourne
+- [x] Cairo
+- [x] Istanbul
+- [x] Karachi
+- [x] Jakarta
 - [x] Singapore
-- [ ] London
-- [ ] New York
-- [ ] Oslo
+- [x] London
+- [x] New York
+- [x] Oslo
 - [ ] Tromsø
-- [ ] Equatorial location
-- [ ] Northern-hemisphere location
-- [ ] Southern-hemisphere location
+- [x] Equatorial location
+- [x] Northern-hemisphere location
+- [x] Southern-hemisphere location
+
+**Geographic matrix verification note (2026-08-16):** read-only Quality Gate run `31914980103` passed formatting, typed lint, strict typecheck, all tests and production build after expanding the production location → IANA timezone → prayer-calculation integration matrix. March-equinox fixtures now cover Sydney, Melbourne, Cairo, Istanbul, Karachi, Jakarta, London, New York, Oslo and Quito, assert the expected offline-resolved IANA timezone and UTC offset, and verify all six displayed prayer/sunrise times are available and strictly ordered. The matrix also explicitly covers northern, southern and equatorial latitude bands. Madinah, Tromsø and the extreme high-latitude seasonal cases remain open.
+
 - [ ] Extreme high-latitude summer case
 - [ ] Extreme high-latitude winter case
 
