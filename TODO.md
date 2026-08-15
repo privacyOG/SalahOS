@@ -136,14 +136,14 @@
 
 ### Date/time edge cases
 
-- [ ] DST start transition
-- [ ] DST end transition
+- [x] DST start transition
+- [x] DST end transition
 - [ ] Leap year
 - [ ] Gregorian year boundary
 - [ ] Local midnight rollover
 - [x] Next-prayer calculation after Isha → tomorrow's Fajr
-- [ ] Timezone-offset changes
-- [ ] Southern-hemisphere DST direction
+- [x] Timezone-offset changes
+- [x] Southern-hemisphere DST direction
 - [ ] Device clock correction while app is running
 - [ ] System suspend/resume recovery
 
@@ -151,21 +151,23 @@
 
 ## 3. Location and timezone subsystem
 
-- [ ] Implement browser geolocation adapter
+- [x] Implement browser geolocation adapter
 - [ ] Implement native Android/iOS location adapter
-- [ ] Support manual latitude/longitude entry
+- [~] Support manual latitude/longitude entry
 - [ ] Support manual city/location search
 - [ ] Support saved/favourite locations
-- [ ] Support current-location refresh
-- [ ] Handle denied-location-permission flow gracefully
-- [ ] Handle unavailable GPS/location services gracefully
+- [~] Support current-location refresh
+- [~] Handle denied-location-permission flow gracefully
+- [~] Handle unavailable GPS/location services gracefully
 - [ ] Fall back to saved/manual location without breaking prayer calculations
-- [ ] Resolve coordinates to an IANA timezone
-- [ ] Cache timezone data for offline use
-- [ ] Use IANA timezone rules rather than deriving timezone from longitude
-- [ ] Correctly handle UTC offsets and daylight-saving changes
-- [ ] Avoid continuous GPS polling when not required
-- [ ] Avoid sending precise location to remote services unless required and explicitly disclosed
+- [x] Resolve coordinates to an IANA timezone
+- [~] Cache timezone data for offline use
+- [x] Use IANA timezone rules rather than deriving timezone from longitude
+- [x] Correctly handle UTC offsets and daylight-saving changes
+- [x] Avoid continuous GPS polling when not required
+- [x] Avoid sending precise location to remote services unless required and explicitly disclosed
+
+**Stage 3 verification note (2026-08-16):** read-only Quality Gate run `31900763989` passed the location/timezone core with a clean lockfile install, formatting, typed lint, strict typecheck, unit/integration tests and production build. The verified core includes validated manual coordinates, one-shot browser geolocation with typed failure states, bundled offline coordinate-to-IANA lookup, IANA/`Intl` DST offset resolution, exact 2026 Sydney and London DST transition tests, local civil-date resolution and the location → timezone → prayer-engine integration path. Saved locations, city search, native mobile adapters, persistent timezone caching/override and UI permission/fallback flows remain open.
 
 ---
 
@@ -451,7 +453,7 @@
 - [x] Rounding tests
 - [x] Adjustment tests
 - [x] Next-prayer tests
-- [ ] Timezone/DST tests
+- [x] Timezone/DST tests
 - [ ] Hijri-date tests
 - [ ] Mosque timetable tests
 - [ ] CSV/JSON import/export tests
@@ -460,7 +462,7 @@
 
 ### Integration tests
 
-- [ ] Location → timezone → prayer calculation flow
+- [x] Location → timezone → prayer calculation flow
 - [ ] Mosque source-selection isolation
 - [ ] Settings → recalculation flow
 - [ ] Date rollover flow
@@ -488,7 +490,7 @@
 - [x] Linter clean
 - [x] Strict typecheck clean
 - [x] Unit tests green
-- [ ] Integration tests green
+- [x] Integration tests green
 - [ ] UI/component tests green
 - [x] Production web build succeeds
 - [ ] Android build succeeds where SDK is available
@@ -571,8 +573,8 @@ SalahOS v1 must not be declared complete until the following are true:
 - [ ] Local mosque timetable mode works offline
 - [ ] Prayer-start and Iqamah/Jama'ah times are distinct
 - [ ] Jumu'ah timetable support is functional
-- [ ] GPS/manual location and timezone handling work correctly
-- [ ] DST/date rollover behaviour is tested
+- [~] GPS/manual location and timezone handling work correctly
+- [~] DST/date rollover behaviour is tested
 - [ ] Gregorian and Hijri dates work
 - [ ] English and Arabic/RTL are production-ready
 - [ ] Mobile, Raspberry Pi and TV/kiosk layouts are validated
