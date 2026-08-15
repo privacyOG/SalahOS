@@ -1,5 +1,10 @@
 import { describe, expect, it } from 'vitest';
-import { calendarDate, gregorianDateParts, hijriDateParts, supportsHijriCalendar } from './calendar';
+import {
+  calendarDate,
+  gregorianDateParts,
+  hijriDateParts,
+  supportsHijriCalendar,
+} from './calendar';
 
 function utcDate(isoDate: string): Date {
   return new Date(`${isoDate}T00:00:00.000Z`);
@@ -8,7 +13,10 @@ function utcDate(isoDate: string): Date {
 function findHijriTransition(
   start: Date,
   days: number,
-  predicate: (previous: ReturnType<typeof hijriDateParts>, current: ReturnType<typeof hijriDateParts>) => boolean,
+  predicate: (
+    previous: ReturnType<typeof hijriDateParts>,
+    current: ReturnType<typeof hijriDateParts>,
+  ) => boolean,
 ): { previousDate: Date; currentDate: Date } | null {
   let previousDate = start;
   let previous = hijriDateParts(previousDate);
