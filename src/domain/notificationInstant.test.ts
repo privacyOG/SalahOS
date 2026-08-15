@@ -37,10 +37,7 @@ describe('notification instant resolution', () => {
   });
 
   it('chooses and marks the earlier occurrence of an ambiguous London time', () => {
-    const resolution = resolveNotificationIntentInstant(
-      intent('2026-10-25', 90),
-      'Europe/London',
-    );
+    const resolution = resolveNotificationIntentInstant(intent('2026-10-25', 90), 'Europe/London');
 
     expect(resolution.status).toBe('scheduled');
     if (resolution.status !== 'scheduled') return;
@@ -63,10 +60,7 @@ describe('notification instant resolution', () => {
   it('resolves a batch without changing intent order or identity', () => {
     const first = intent('2026-08-16', 300, 'first');
     const second = intent('2026-08-16', 720, 'second');
-    const resolved = resolveNotificationScheduleInstants(
-      [first, second],
-      'Australia/Sydney',
-    );
+    const resolved = resolveNotificationScheduleInstants([first, second], 'Australia/Sydney');
 
     expect(resolved.map((item) => item.intent.id)).toEqual(['first', 'second']);
     expect(resolved.every((item) => item.status === 'scheduled')).toBe(true);

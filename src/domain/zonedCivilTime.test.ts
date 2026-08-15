@@ -46,10 +46,7 @@ describe('IANA civil-time resolution', () => {
     }
 
     expect(
-      resolveZonedCivilTime(
-        { date: '2026-10-04', localMinutes: 150 },
-        'Australia/Sydney',
-      ),
+      resolveZonedCivilTime({ date: '2026-10-04', localMinutes: 150 }, 'Australia/Sydney'),
     ).toEqual({ status: 'nonexistent' });
   });
 

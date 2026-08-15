@@ -50,7 +50,10 @@ function validateLocalMinutes(localMinutes: number): void {
   }
 }
 
-function localPartsAt(instant: Date, timeZone: string): readonly [number, number, number, number, number] {
+function localPartsAt(
+  instant: Date,
+  timeZone: string,
+): readonly [number, number, number, number, number] {
   const formatter = new Intl.DateTimeFormat('en-CA', {
     timeZone,
     year: 'numeric',
