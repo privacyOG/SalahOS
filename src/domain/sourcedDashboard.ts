@@ -57,7 +57,11 @@ function findCurrentResolvedPrayer(
 
   for (const prayer of OBLIGATORY_PRAYERS) {
     const localMinutes = today[prayer].startLocalMinutes;
-    if (localMinutes !== null && localMinutes <= currentLocalMinutes && localMinutes >= latestStart) {
+    if (
+      localMinutes !== null &&
+      localMinutes <= currentLocalMinutes &&
+      localMinutes >= latestStart
+    ) {
       current = prayer;
       latestStart = localMinutes;
     }
