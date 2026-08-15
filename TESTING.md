@@ -232,3 +232,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Implementation Quality Gate run `31905789616` passed formatting, typed lint, strict typecheck, all tests and production build for the manager integration.
 - Read-only Quality Gate run `31907837879` passed after duplicate-state and translation cleanup with the strict persisted-timetable parser active.
 - Manual per-day timetable editing, optional vetted remote integrations and physical-display visual validation remain open.
+
+### 2026-08-16 — Device clock and resume recovery
+
+- Added a small platform adapter that installs focus, restored-page and visibility-change refresh listeners without coupling the prayer domain to browser globals.
+- The existing one-second clock now uses the same refresh callback, so system clock corrections are reflected from a newly sampled `Date` on the next tick.
+- Focus, `pageshow` and `visibilitychange` trigger an immediate refresh after a suspended, backgrounded or restored display becomes active again.
+- Unit tests verify all three event paths and confirm listener cleanup prevents refreshes after unmount.
+- Implementation Quality Gate run `31908092487` passed formatting, typed lint, strict typecheck, all tests and production build.

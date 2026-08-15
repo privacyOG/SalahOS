@@ -144,8 +144,10 @@
 - [x] Next-prayer calculation after Isha → tomorrow's Fajr
 - [x] Timezone-offset changes
 - [x] Southern-hemisphere DST direction
-- [ ] Device clock correction while app is running
-- [ ] System suspend/resume recovery
+- [x] Device clock correction while app is running
+- [x] System suspend/resume recovery
+
+**Runtime-refresh verification note (2026-08-16):** implementation Quality Gate run `31908092487` passed formatting, typed lint, strict typecheck, all tests and production build after adding the runtime refresh adapter. The shared shell continues to sample a fresh system `Date` every second, so a device-clock correction is absorbed on the next tick, and it now also refreshes immediately on window focus, restored-page (`pageshow`) and document visibility changes. Unit tests verify all three recovery events and complete listener cleanup.
 
 ---
 
