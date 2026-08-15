@@ -15,17 +15,19 @@
 
 ## 0. Project foundation and research
 
-- [ ] Confirm project scope, supported platforms and MVP acceptance criteria
-- [ ] Create `DESIGN.md` for architecture and technical decisions
-- [ ] Create `RESEARCH.md` for prayer-calculation, platform and jurisprudential research
-- [ ] Create `TESTING.md` for test strategy, evidence and discrepancies
-- [ ] Create `CHANGELOG.md`
-- [ ] Choose and document the cross-platform framework and deployment strategy
-- [ ] Define repository structure and coding conventions
-- [ ] Configure formatter, linter, strict type checking and test runner
-- [ ] Add CI workflow for lint, typecheck, tests and production build
-- [ ] Pin dependencies and commit lockfile for reproducible builds
-- [ ] Define privacy principles: local-first operation, minimal telemetry, no unnecessary location transmission
+- [x] Confirm project scope, supported platforms and MVP acceptance criteria
+- [x] Create `DESIGN.md` for architecture and technical decisions
+- [x] Create `RESEARCH.md` for prayer-calculation, platform and jurisprudential research
+- [x] Create `TESTING.md` for test strategy, evidence and discrepancies
+- [x] Create `CHANGELOG.md`
+- [x] Choose and document the cross-platform framework and deployment strategy
+- [x] Define repository structure and coding conventions
+- [~] Configure formatter, linter, strict type checking and test runner
+- [~] Add CI workflow for lint, typecheck, tests and production build
+- [~] Pin dependencies and commit lockfile for reproducible builds
+- [x] Define privacy principles: local-first operation, minimal telemetry, no unnecessary location transmission
+
+**Stage 0 verification note (2026-08-16):** documentation, scope, architecture, conventions and privacy principles are committed. Tooling and CI remain in progress until the branch quality gate executes successfully. Exact direct dependency versions are pinned; the lockfile remains outstanding and therefore reproducible-install completion is not claimed.
 
 ---
 
@@ -33,12 +35,12 @@
 
 ### 1.1 Core astronomical engine
 
-- [ ] Implement pure prayer-calculation engine with no UI, DOM or network dependency
-- [ ] Implement Julian date / solar-position calculations
-- [ ] Implement equation of time and solar declination calculations
-- [ ] Implement solar noon calculation
-- [ ] Implement sunrise and sunset calculations
-- [ ] Document atmospheric refraction, sunrise/sunset depression and observer-elevation assumptions
+- [~] Implement pure prayer-calculation engine with no UI, DOM or network dependency
+- [~] Implement Julian date / solar-position calculations
+- [~] Implement equation of time and solar declination calculations
+- [~] Implement solar noon calculation
+- [~] Implement sunrise and sunset calculations
+- [x] Document atmospheric refraction, sunrise/sunset depression and observer-elevation assumptions
 - [ ] Implement deterministic calculation rounding policy in a dedicated module
 - [ ] Keep raw calculated times separate from displayed/rounded times
 - [ ] Add provenance metadata to every calculated result
@@ -435,7 +437,7 @@
 
 ### Unit tests
 
-- [ ] Solar/astronomical math tests
+- [~] Solar/astronomical math tests
 - [ ] Prayer-engine tests
 - [ ] Calculation-method tests
 - [ ] Asr-method tests
@@ -495,7 +497,7 @@
 
 ## 19. Documentation and deployment
 
-- [ ] Expand `README.md` with screenshots, features and platform status
+- [~] Expand `README.md` with screenshots, features and platform status
 - [ ] Create `BUILD.md`
 - [ ] Document web/PWA build and deployment
 - [ ] Document Android build/install
@@ -507,7 +509,7 @@
 - [ ] Document mosque timetable import format
 - [ ] Document notification platform limitations
 - [ ] Add troubleshooting section
-- [ ] Add contributor/development setup instructions
+- [x] Add contributor/development setup instructions
 
 ---
 
