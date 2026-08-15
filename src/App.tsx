@@ -187,7 +187,9 @@ export function App() {
         <div>
           <p className="label">{translate(locale, 'calculationSource')}</p>
           <p className="value">
-            {dashboard === null ? translate(locale, 'notConfigured') : translate(locale, 'sourceCalculated')}
+            {dashboard === null
+              ? translate(locale, 'notConfigured')
+              : translate(locale, 'sourceCalculated')}
           </p>
         </div>
         <div>
@@ -242,7 +244,9 @@ export function App() {
               >
                 <span>{translate(locale, prayerTranslationKeys[prayer.name])}</span>
                 <strong>
-                  {prayer.localMinutes === null ? '—' : formatLocalTime(prayer.localMinutes, locale)}
+                  {prayer.localMinutes === null
+                    ? '—'
+                    : formatLocalTime(prayer.localMinutes, locale)}
                 </strong>
               </article>
             ))}
@@ -253,7 +257,9 @@ export function App() {
               {dashboard.hasHighLatitudeFallback && (
                 <span>{translate(locale, 'highLatitudeAdjustment')}</span>
               )}
-              {dashboard.hasManualAdjustments && <span>{translate(locale, 'manualAdjustment')}</span>}
+              {dashboard.hasManualAdjustments && (
+                <span>{translate(locale, 'manualAdjustment')}</span>
+              )}
             </div>
           )}
         </section>

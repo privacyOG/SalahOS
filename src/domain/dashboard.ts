@@ -120,12 +120,7 @@ export function buildPrayerDashboard(input: {
   const method = input.method ?? calculationMethods['muslim-world-league'];
   const context = createLocationPrayerContext(input.instant, input.coordinates);
   const clock = localClockParts(input.instant, context.timeZone);
-  const today = scheduleFor(
-    context.civilDate,
-    input.coordinates,
-    context.utcOffsetMinutes,
-    method,
-  );
+  const today = scheduleFor(context.civilDate, input.coordinates, context.utcOffsetMinutes, method);
   const tomorrowCivilDate = addCivilDays(context.civilDate, 1);
   const tomorrow = scheduleFor(
     tomorrowCivilDate,

@@ -71,11 +71,7 @@ export function formatGregorianCivilDate(civilDate: Date, locale: Locale): strin
   }).format(civilDate);
 }
 
-export function formatHijriCivilDate(
-  civilDate: Date,
-  locale: Locale,
-  correctionDays = 0,
-): string {
+export function formatHijriCivilDate(civilDate: Date, locale: Locale, correctionDays = 0): string {
   if (!Number.isFinite(civilDate.getTime())) {
     throw new RangeError('Civil date must be valid');
   }
