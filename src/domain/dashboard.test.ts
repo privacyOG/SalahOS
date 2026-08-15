@@ -81,7 +81,9 @@ describe('shared prayer dashboard model', () => {
     expect(configured.method.id).toBe('umm-al-qura');
     expect(configured.asrConvention).toBe('hanafi');
     expect(configured.highLatitudeRule).toBe('one-seventh');
-    expect(configured.prayers.find((prayer) => prayer.name === 'fajr')?.manualAdjustmentMinutes).toBe(2);
+    expect(
+      configured.prayers.find((prayer) => prayer.name === 'fajr')?.manualAdjustmentMinutes,
+    ).toBe(2);
     expect(configured.hasManualAdjustments).toBe(true);
   });
 });
