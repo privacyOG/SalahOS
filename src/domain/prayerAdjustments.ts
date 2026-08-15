@@ -1,3 +1,4 @@
+import type { PrayerSourceMode } from './mosqueTimetable';
 import type { PrayerName } from './prayerEngine';
 
 export type PrayerAdjustments = Readonly<Partial<Record<PrayerName, number>>>;
@@ -8,6 +9,16 @@ export function manualPrayerAdjustmentMinutes(
 ): number | null {
   const minutes = adjustments[prayer];
   return minutes === undefined || minutes === 0 ? null : minutes;
+}
+
+export function displayedManualPrayerAdjustmentMinutes(
+  manualAdjustmentMinutes: number,
+  sourceMode: PrayerSourceMode,
+): number | null {
+  if (sourceMode === 'local-mosque' || manualAdjustmentMinutes === 0) {
+    return null;
+  }
+  return manualAdjustmentMinutes;
 }
 
 export function hasManualPrayerAdjustments(adjustments: PrayerAdjustments): boolean {
