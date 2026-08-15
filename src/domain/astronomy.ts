@@ -49,14 +49,11 @@ export function solarCoordinates(date: Date): SolarCoordinates {
   const apparentLongitude = trueLongitude - 0.00569 - 0.00478 * Math.sin(toRadians(omega));
 
   const meanObliquity =
-    23 +
-    (26 + (21.448 - t * (46.815 + t * (0.00059 - t * 0.001813))) / 60) / 60;
+    23 + (26 + (21.448 - t * (46.815 + t * (0.00059 - t * 0.001813))) / 60) / 60;
   const correctedObliquity = meanObliquity + 0.00256 * Math.cos(toRadians(omega));
 
   const declinationDegrees = toDegrees(
-    Math.asin(
-      Math.sin(toRadians(correctedObliquity)) * Math.sin(toRadians(apparentLongitude)),
-    ),
+    Math.asin(Math.sin(toRadians(correctedObliquity)) * Math.sin(toRadians(apparentLongitude))),
   );
 
   const y = Math.tan(toRadians(correctedObliquity) / 2) ** 2;
@@ -95,7 +92,11 @@ function hourAngleDegrees(latitudeDegrees: number, declinationDegrees: number): 
  * Compute UTC minutes from 00:00 UTC for solar noon, sunrise and sunset.
  * Longitude is east-positive and latitude is north-positive.
  */
-export function solarDayEvents(date: Date, latitudeDegrees: number, longitudeDegrees: number): SolarDayEvents {
+export function solarDayEvents(
+  date: Date,
+  latitudeDegrees: number,
+  longitudeDegrees: number,
+): SolarDayEvents {
   if (!Number.isFinite(latitudeDegrees) || latitudeDegrees < -90 || latitudeDegrees > 90) {
     throw new RangeError('Latitude must be between -90 and 90 degrees');
   }
