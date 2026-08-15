@@ -52,18 +52,20 @@ class MemoryScheduler implements NotificationSchedulerAdapter {
   readonly records = new Map<string, ScheduledNotificationRecord>();
   readonly operations: string[] = [];
 
-  async listScheduled(): Promise<readonly ScheduledNotificationRecord[]> {
-    return [...this.records.values()];
+  listScheduled(): Promise<readonly ScheduledNotificationRecord[]> {
+    return Promise.resolve([...this.records.values()]);
   }
 
-  async schedule(notification: ScheduledNotificationRecord): Promise<void> {
+  schedule(notification: ScheduledNotificationRecord): Promise<void> {
     this.operations.push(`schedule:${notification.id}`);
     this.records.set(notification.id, notification);
+    return Promise.resolve();
   }
 
-  async cancel(id: string): Promise<void> {
+  cancel(id: string): Promise<void> {
     this.operations.push(`cancel:${id}`);
     this.records.delete(id);
+    return Promise.resolve();
   }
 }
 
