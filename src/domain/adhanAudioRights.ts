@@ -1,7 +1,4 @@
-export type AdhanAudioRightsBasis =
-  | 'public-domain'
-  | 'permissive-license'
-  | 'direct-permission';
+export type AdhanAudioRightsBasis = 'public-domain' | 'permissive-license' | 'direct-permission';
 
 export interface BundledAdhanAudioRights {
   readonly recordingId: string;
@@ -16,9 +13,7 @@ function nonEmpty(value: string): boolean {
   return value.trim().length > 0;
 }
 
-export function bundledAdhanAudioHasSuitableRights(
-  rights: BundledAdhanAudioRights,
-): boolean {
+export function bundledAdhanAudioHasSuitableRights(rights: BundledAdhanAudioRights): boolean {
   return (
     nonEmpty(rights.recordingId) &&
     nonEmpty(rights.title) &&
