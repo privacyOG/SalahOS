@@ -9,6 +9,7 @@ def replace_once(text: str, old: str, new: str) -> str:
 
 app_path = Path("src/App.tsx")
 app = app_path.read_text()
+app = app.replace("'middle-of-night': 'highLatitudeMiddle'", "'middle-of-the-night': 'highLatitudeMiddle'")
 
 manual_import = """import {
   displayedManualPrayerAdjustmentMinutes,
@@ -34,7 +35,7 @@ const highLatitudeRuleTranslationKeys: Readonly<
   Record<PersistedSettings['highLatitudeRule'], TranslationKey>
 > = {
   'angle-based': 'highLatitudeAngle',
-  'middle-of-night': 'highLatitudeMiddle',
+  'middle-of-the-night': 'highLatitudeMiddle',
   'one-seventh': 'highLatitudeSeventh',
 };
 """
