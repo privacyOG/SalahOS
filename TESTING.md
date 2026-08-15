@@ -403,3 +403,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Verified polar summer does not fabricate Fajr, Sunrise, Maghrib or Isha when the required astronomical events/night bounds are unavailable.
 - Verified polar winter keeps unavailable Sunrise and sunset-based Maghrib explicit and does not falsely claim a high-latitude fallback.
 - Read-only Quality Gate run `31915190467` passed formatting, typed lint, strict typecheck, all tests and production build.
+
+### 2026-08-16 — polar-resolution strategy research
+
+- Added `docs/POLAR_RESOLUTION_RESEARCH.md` separating ordinary high-latitude night-fraction adjustments from true polar-circle estimation.
+- Documented nearest-location/latitude (Aqrab al-Bilad) and nearest-valid-day (Aqrab al-Ayyam) approaches against the pinned calculation reference and published prayer-time guidance.
+- Retained unresolved polar events as the default and specified that future estimated values must be explicit opt-in choices with reference latitude/date provenance.
+- Defined deterministic acceptance criteria for bounded nearest-latitude and nearest-valid-day searches without implementing either strategy prematurely.
+- Read-only Quality Gate run `31915439365` passed formatting, typed lint, strict typecheck, all tests and production build.
