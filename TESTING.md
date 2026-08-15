@@ -33,6 +33,8 @@ The domain engine requires deterministic unit tests for:
 - manual offsets kept separate from raw results;
 - next-prayer rollover after Isha;
 - supplementary Imsak/Ishraq and night-division calculations;
+- method registry/reference parameters;
+- frozen external timetable parity fixtures;
 - provenance metadata.
 
 ## Geographic reference matrix
@@ -55,6 +57,8 @@ Fixtures include:
 ## Reference parity
 
 Comparisons must record method inputs, coordinates, IANA timezone, date, raw times, rounded times, adjustments, reference source, observed difference, and an explanation where known. Differences are not hidden by arbitrary offsets merely to force parity.
+
+Reference metadata and caveats are maintained in `docs/PRAYER_METHOD_REFERENCES.md`. External fixtures must be frozen/version-pinned so CI does not depend on a live prayer-time API.
 
 ## UI validation
 
@@ -112,3 +116,13 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Islamic midnight and final-third calculations support an explicit Fajr or sunrise night-end convention and retain provenance describing the selected convention.
 - Next-prayer selection excludes sunrise from the obligatory sequence and correctly rolls from Isha to the following day's Fajr.
 - Invalid supplementary offsets and unavailable prerequisite events are covered by unit tests.
+
+### 2026-08-16 — Calculation-method references and frozen timetable parity
+
+- Adhan JS version `4.4.4` is pinned at commit `a6f1a5c4a00105103f310ef18200b95f7184d2e7`; PrayTimes and AlAdhan method definitions are documented as corroborating references.
+- Quality Gate run `31900180792` passed the frozen parameter-reference tests under the restored read-only workflow.
+- MWL, Umm al-Qura, Egyptian, Karachi, ISNA, MUIS, Kuwait and Qatar parameters are recorded as `cross-checked-reference`; Diyanet/Turkey and Dubai remain `pending-authoritative-source` because their reference profiles are documented as approximation/experimental or require additional offsets.
+- Quality Gate run `31900228992` passed frozen Makkah/Umm al-Qura and Singapore/MUIS timetable fixtures.
+- Quality Gate run `31900274451` additionally passed Doha/Qatar and Kuwait City/Kuwait frozen timetable fixtures.
+- The Makkah fixture traces to an Umm al-Qura source; Singapore traces to MUIS; Doha traces to Qatar's ministry source. Their reference adjustment ranges are preserved rather than widened merely to force parity.
+- The broader geographic, DST, high-latitude and direct canonical-algorithm parity matrices remain open and are not claimed complete.
