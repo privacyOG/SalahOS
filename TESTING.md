@@ -147,3 +147,15 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Automated tests cover Hijri month rollover, Hijri year rollover and entry into Ramadan (month 9), plus invalid correction/non-civil-date rejection.
 - Read-only Quality Gate run `31901367515` passed formatting, typed lint, strict typecheck, the complete unit suite and production build after canonical test formatting.
 - UI date presentation, locale-specific formatting and automatic live date rollover remain separate open work.
+
+### 2026-08-16 — Local mosque timetable, Iqamah and Jumu'ah domain core
+
+- Prayer source mode is explicit: `calculated`, `local-mosque` or `calculated-adjustments`; missing mosque entries remain unavailable instead of silently falling back to calculated values.
+- Prayer start and Iqamah/Jama'ah are separate values. Fixed local-time and prayer-start-plus-offset Iqamah rules are validated, including prevention of next-day rollover.
+- Friday detection supports one or multiple mosque-specific Jumu'ah sessions with Khutbah and Salah stored independently of astronomical Dhuhr.
+- CSV import uses the documented fixed schema, 24-hour `HH:MM` prayer times and either fixed `HH:MM` or `+N` Iqamah values. A sample file is committed under `examples/`.
+- JSON import reconstructs the domain structure through runtime guards before activation, rejecting malformed nested prayer, Iqamah and Jumu'ah objects and unknown prayer keys rather than trusting a TypeScript cast.
+- CSV and JSON round-trip tests, invalid-schema/time tests, duplicate-date tests, source-isolation tests and Iqamah/Jumu'ah validation tests are included.
+- Read-only Quality Gate run `31901969127` completed successfully with clean lockfile install, formatting, typed lint, strict typecheck, tests and production build.
+- Persistence, UI editing/presentation and optional vetted remote integrations remain separate open work.
+

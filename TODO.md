@@ -191,37 +191,39 @@
 
 ### 5.1 Source modes
 
-- [ ] Implement `Calculated` prayer-time source mode
-- [ ] Implement `Local Mosque` timetable source mode
-- [ ] Implement `Calculated + Adjustments` source mode
-- [ ] Show active source/provenance clearly in the UI
+- [x] Implement `Calculated` prayer-time source mode
+- [x] Implement `Local Mosque` timetable source mode
+- [x] Implement `Calculated + Adjustments` source mode
+- [~] Show active source/provenance clearly in the UI
 
 ### 5.2 Timetable management
 
-- [ ] Support manual mosque timetable entry
-- [ ] Support CSV timetable import
-- [ ] Define and document CSV schema
-- [ ] Ship sample timetable file
-- [ ] Support JSON import/export
-- [ ] Validate imported timetable data before activation
+- [~] Support manual mosque timetable entry
+- [x] Support CSV timetable import
+- [x] Define and document CSV schema
+- [x] Ship sample timetable file
+- [x] Support JSON import/export
+- [x] Validate imported timetable data before activation
 - [ ] Preserve mosque timetable offline
 - [ ] Research optional reputable mosque APIs/integrations
-- [ ] Do not rely on fragile arbitrary website scraping as an authoritative source
+- [x] Do not rely on fragile arbitrary website scraping as an authoritative source
 
 ### 5.3 Salah start vs Iqamah/Jama'ah
 
-- [ ] Model prayer-start time separately from Iqamah/Jama'ah time
-- [ ] Support fixed Iqamah time
-- [ ] Support Iqamah as `prayer start + N minutes`
-- [ ] Support timetable-provided Iqamah times
-- [ ] Clearly distinguish Adhan/start and Iqamah on smart displays
+- [x] Model prayer-start time separately from Iqamah/Jama'ah time
+- [x] Support fixed Iqamah time
+- [x] Support Iqamah as `prayer start + N minutes`
+- [x] Support timetable-provided Iqamah times
+- [~] Clearly distinguish Adhan/start and Iqamah on smart displays
 
 ### 5.4 Jumu'ah
 
-- [ ] Detect Friday and support Jumu'ah presentation
-- [ ] Support one or multiple Jumu'ah sessions
-- [ ] Store Khutbah/Jumu'ah times independently of astronomical Dhuhr
-- [ ] Allow mosque-specific Friday configuration
+- [~] Detect Friday and support Jumu'ah presentation
+- [x] Support one or multiple Jumu'ah sessions
+- [x] Store Khutbah/Jumu'ah times independently of astronomical Dhuhr
+- [x] Allow mosque-specific Friday configuration
+
+**Stage 5 verification note (2026-08-16):** read-only Quality Gate run `31901969127` passed formatting, typed lint, strict typecheck, the complete timetable/import suite and production build. The verified offline domain core implements explicit calculated/local-mosque/calculated-adjustments source modes, rejects silent source fallback, separates prayer start from fixed or +N Iqamah, supports one or multiple Friday Jumu'ah sessions independent of Dhuhr, and performs strict CSV plus runtime-structurally-validated JSON import/export. The CSV schema and sample are documented in `docs/MOSQUE_TIMETABLE.md` and `examples/mosque-timetable.csv`. Persistent local storage, UI entry/presentation and vetted optional remote integrations remain open.
 
 ---
 
@@ -457,15 +459,15 @@
 - [x] Next-prayer tests
 - [x] Timezone/DST tests
 - [x] Hijri-date tests
-- [ ] Mosque timetable tests
-- [ ] CSV/JSON import/export tests
-- [ ] Iqamah-rule tests
+- [x] Mosque timetable tests
+- [x] CSV/JSON import/export tests
+- [x] Iqamah-rule tests
 - [ ] Settings persistence/migration tests
 
 ### Integration tests
 
 - [x] Location → timezone → prayer calculation flow
-- [ ] Mosque source-selection isolation
+- [x] Mosque source-selection isolation
 - [ ] Settings → recalculation flow
 - [ ] Date rollover flow
 - [ ] Notification scheduling flow
@@ -516,7 +518,7 @@
 - [ ] Document TV/kiosk deployment
 - [x] Document prayer calculation methods and references
 - [x] Document privacy behaviour
-- [ ] Document mosque timetable import format
+- [x] Document mosque timetable import format
 - [ ] Document notification platform limitations
 - [ ] Add troubleshooting section
 - [x] Add contributor/development setup instructions
@@ -572,9 +574,9 @@ SalahOS v1 must not be declared complete until the following are true:
 - [~] Major recognised calculation methods are implemented and documented
 - [x] Standard/Shafi'i-family and Hanafi Asr calculations are validated
 - [~] High-latitude handling is implemented and transparent
-- [ ] Local mosque timetable mode works offline
-- [ ] Prayer-start and Iqamah/Jama'ah times are distinct
-- [ ] Jumu'ah timetable support is functional
+- [~] Local mosque timetable mode works offline
+- [x] Prayer-start and Iqamah/Jama'ah times are distinct
+- [~] Jumu'ah timetable support is functional
 - [~] GPS/manual location and timezone handling work correctly
 - [~] DST/date rollover behaviour is tested
 - [~] Gregorian and Hijri dates work
