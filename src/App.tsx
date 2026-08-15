@@ -44,6 +44,7 @@ import {
   savePersistedSettings,
 } from './platform/settingsStorage';
 import type { PersistedSettings } from './platform/settingsStorage';
+import { installRuntimeRefreshListeners } from './platform/runtimeRefresh';
 
 const prayerTranslationKeys: Readonly<Record<PrayerName, TranslationKey>> = {
   fajr: 'prayerFajr',
@@ -135,11 +136,17 @@ export function App() {
   }, [settings.theme]);
 
   useEffect(() => {
-    const timer = window.setInterval(() => {
+    const refreshNow = () => {
       setNow(new Date());
-    }, 1_000);
+    };
+    const timer = window.setInterval(refreshNow, 1_000);
+    const removeRuntimeListeners = installRuntimeRefreshListeners(
+      { windowTarget: window, documentTarget: document },
+      refreshNow,
+    );
     return () => {
       window.clearInterval(timer);
+      removeRuntimeListeners();
     };
   }, []);
 
