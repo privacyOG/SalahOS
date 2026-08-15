@@ -114,11 +114,11 @@ export function resolveZonedCivilTime(
     return { status: 'nonexistent' };
   }
   if (candidates.length === 1) {
-    return { status: 'exact', candidate: candidates[0] };
+    return { status: 'exact', candidate: candidates[0]! };
   }
   return {
     status: 'ambiguous',
-    earlier: candidates[0],
-    later: candidates[candidates.length - 1],
+    earlier: candidates[0]!,
+    later: candidates[candidates.length - 1]!,
   };
 }
