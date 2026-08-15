@@ -240,3 +240,15 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Focus, `pageshow` and `visibilitychange` trigger an immediate refresh after a suspended, backgrounded or restored display becomes active again.
 - Unit tests verify all three event paths and confirm listener cleanup prevents refreshes after unmount.
 - Implementation Quality Gate run `31908092487` passed formatting, typed lint, strict typecheck, all tests and production build.
+
+### 2026-08-16 — Notification and Adhan preference core
+
+- Added a shared per-prayer preference model for Fajr, Dhuhr, Asr, Maghrib and Isha; Sunrise is intentionally excluded from obligatory-prayer delivery preferences.
+- Notifications are opt-in by default, with optional 1–180 minute reminders, prayer-time alerts, default/silent sound, vibration and per-prayer Adhan enable flags.
+- Preference parsing rejects invalid reminder ranges and safely defaults missing prayer entries.
+- Settings persistence advanced from schema v1 to v2 with an explicit migration that preserves existing location, calculation, adjustment, source and mosque data while adding safe notification defaults.
+- Settings export/import includes the new validated notification configuration.
+- The shared settings UI exposes all current preference fields and explicitly states that actual delivery depends on a later platform scheduler and permission/background constraints.
+- The duplicated mosque-library settings panel discovered during this integration was removed.
+- Read-only Quality Gate run `31908401807` passed the domain/persistence core; implementation Quality Gate run `31908480344` passed formatting, typed lint, strict typecheck, all tests and production build after UI integration.
+- Platform permission flows, notification scheduling, exact-alarm/reboot handling, duplicate suppression, DST rescheduling and actual Adhan audio delivery remain open.

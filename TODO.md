@@ -334,12 +334,12 @@
 
 ## 10. Notifications and Adhan
 
-- [ ] Per-prayer notification enable/disable
-- [ ] Reminder N minutes before prayer
-- [ ] Prayer-time notification
-- [ ] Per-prayer sound choice
-- [ ] Vibration option where supported
-- [ ] Adhan enable/disable
+- [~] Per-prayer notification enable/disable
+- [~] Reminder N minutes before prayer
+- [~] Prayer-time notification
+- [~] Per-prayer sound choice
+- [~] Vibration option where supported
+- [~] Adhan enable/disable
 - [ ] User-selectable/local Adhan audio
 - [ ] Do not bundle copyrighted Adhan recordings without suitable rights
 - [ ] Reschedule notifications after timezone/location/method changes
@@ -348,6 +348,8 @@
 - [ ] Prevent duplicate notifications
 - [ ] Test notification behaviour across DST transition
 - [ ] Document platform-specific limitations instead of promising impossible exact behaviour
+
+**Notification-preferences verification note (2026-08-16):** read-only Quality Gate run `31908401807` passed the notification preference domain and settings-schema v2 migration, and implementation Quality Gate run `31908480344` passed formatting, typed lint, strict typecheck, all tests and production build after the settings UI integration. Each obligatory prayer now has locally persisted enable, 1–180 minute reminder, prayer-time alert, default/silent sound, vibration and Adhan-enable preferences. Existing v1 settings migrate to v2 without losing location, calculation or mosque configuration. No platform notification scheduler, permission request or Adhan audio delivery is implemented yet, so delivery-related tracker items remain partial rather than complete.
 
 ---
 
@@ -416,8 +418,8 @@
 - [x] Language selector
 - [x] Theme selector
 - [x] Time format (12/24-hour)
-- [ ] Per-prayer notifications
-- [ ] Adhan settings
+- [~] Per-prayer notifications
+- [~] Adhan settings
 - [ ] Iqamah settings
 - [x] Export settings
 - [x] Import settings
