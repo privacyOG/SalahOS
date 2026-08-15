@@ -110,15 +110,19 @@ export function resolveZonedCivilTime(
     .filter((candidate) => sameCivilTime(candidate.instant, timeZone, expected))
     .sort((left, right) => left.instant.getTime() - right.instant.getTime());
 
-  if (candidates.length === 0) {
+  const first = candidates[0];
+  if (first === undefined) {
     return { status: 'nonexistent' };
   }
-  if (candidates.length === 1) {
-    return { status: 'exact', candidate: candidates[0]! };
+
+  const last = candidates.at(-1);
+  if (last === undefined || first.instant.getTime() === last.instant.getTime()) {
+    return { status: 'exact', candidate: first };
   }
+
   return {
     status: 'ambiguous',
-    earlier: candidates[0]!,
-    later: candidates[candidates.length - 1]!,
+    earlier: first,
+    later: last,
   };
 }
