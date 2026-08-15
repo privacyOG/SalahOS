@@ -3,6 +3,11 @@ import type { Locale, TranslationKey } from './translations';
 
 export type TextDirection = 'ltr' | 'rtl';
 
+export interface DocumentLocaleTarget {
+  lang: string;
+  dir: string;
+}
+
 export function translate(locale: Locale, key: TranslationKey): string {
   return translations[locale][key];
 }
@@ -47,7 +52,7 @@ export function formatGregorianCivilDate(civilDate: Date, locale: Locale): strin
   }).format(civilDate);
 }
 
-export function applyDocumentLocale(documentElement: HTMLElement, locale: Locale): void {
-  documentElement.lang = locale;
-  documentElement.dir = localeDirection(locale);
+export function applyDocumentLocale(target: DocumentLocaleTarget, locale: Locale): void {
+  target.lang = locale;
+  target.dir = localeDirection(locale);
 }
