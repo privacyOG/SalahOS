@@ -71,6 +71,59 @@ describe('selected prayer source dashboard', () => {
     });
   });
 
+  it('marks the latest entered obligatory mosque prayer as current', () => {
+    const base = buildPrayerDashboard({
+      instant: new Date('2026-08-16T08:45:00.000Z'),
+      coordinates: sydney,
+    });
+    const sourced = applyPrayerSourceToDashboard({
+      dashboard: base,
+      sourceMode: 'local-mosque',
+      mosqueTimetable,
+    });
+
+    expect(base.clock.localMinutes).toBe(1_125);
+    expect(sourced.currentPrayer).toBe('maghrib');
+    expect(sourced.prayers.find((row) => row.name === 'maghrib')?.isCurrent).toBe(true);
+    expect(sourced.prayers.find((row) => row.name === 'isha')?.isNext).toBe(true);
+    expect(sourced.prayers.find((row) => row.name === 'sunrise')?.isCurrent).toBe(false);
+  });
+
+  it('keeps Isha current after Isha while next prayer rolls to tomorrow Fajr', () => {
+    const base = buildPrayerDashboard({
+      instant: new Date('2026-08-16T13:59:30.000Z'),
+      coordinates: sydney,
+    });
+    const sourced = applyPrayerSourceToDashboard({
+      dashboard: base,
+      sourceMode: 'local-mosque',
+      mosqueTimetable,
+    });
+
+    expect(sourced.currentPrayer).toBe('isha');
+    expect(sourced.prayers.find((row) => row.name === 'isha')?.isCurrent).toBe(true);
+    expect(sourced.nextPrayer).toBe('fajr');
+    expect(sourced.nextPrayerDayOffset).toBe(1);
+    expect(sourced.nextPrayerLocalMinutes).toBe(329);
+  });
+
+  it('has no current prayer before the first available obligatory prayer of the civil day', () => {
+    const base = buildPrayerDashboard({
+      instant: new Date('2026-08-15T18:30:00.000Z'),
+      coordinates: sydney,
+    });
+    const sourced = applyPrayerSourceToDashboard({
+      dashboard: base,
+      sourceMode: 'local-mosque',
+      mosqueTimetable,
+    });
+
+    expect(base.clock.localMinutes).toBe(270);
+    expect(sourced.currentPrayer).toBeNull();
+    expect(sourced.prayers.some((row) => row.isCurrent)).toBe(false);
+    expect(sourced.nextPrayer).toBe('fajr');
+  });
+
   it('marks a missing mosque prayer unavailable instead of falling back', () => {
     const incomplete: MosqueTimetable = {
       mosqueName: 'Incomplete Mosque',
