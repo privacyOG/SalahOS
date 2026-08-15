@@ -32,6 +32,7 @@ The domain engine requires deterministic unit tests for:
 - deterministic rounding;
 - manual offsets kept separate from raw results;
 - next-prayer rollover after Isha;
+- supplementary Imsak/Ishraq and night-division calculations;
 - provenance metadata.
 
 ## Geographic reference matrix
@@ -103,3 +104,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Active fallback strategy and whether it was applied are retained in provenance.
 - Nearest-latitude / nearest-valid-day polar strategies remain separate open research and implementation work.
 - Built-in regional calculation-method parameters remain explicitly pending authoritative-source/parity verification and are not recorded as independently verified.
+
+### 2026-08-16 — Supplementary and next-prayer domain utilities
+
+- Quality Gate run `31899800537` completed successfully with clean lockfile install, formatting, typed lint, strict typecheck, unit tests and production build.
+- Optional Imsak/Suhur cutoff and Ishraq/Duha-after-sunrise helpers require explicit caller-selected minute offsets; no hidden jurisprudential default is imposed.
+- Islamic midnight and final-third calculations support an explicit Fajr or sunrise night-end convention and retain provenance describing the selected convention.
+- Next-prayer selection excludes sunrise from the obligatory sequence and correctly rolls from Isha to the following day's Fajr.
+- Invalid supplementary offsets and unavailable prerequisite events are covered by unit tests.

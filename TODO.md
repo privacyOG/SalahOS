@@ -53,10 +53,10 @@
 - [x] Calculate Maghrib
 - [x] Calculate Isha
 - [~] Calculate and display Sunrise separately from the five obligatory prayers
-- [ ] Add optional Imsak/Suhur cutoff support
-- [ ] Add optional Duha/Ishraq support
-- [ ] Add optional Islamic midnight calculation
-- [ ] Add optional last-third-of-the-night calculation
+- [x] Add optional Imsak/Suhur cutoff support
+- [x] Add optional Duha/Ishraq support
+- [x] Add optional Islamic midnight calculation
+- [x] Add optional last-third-of-the-night calculation
 
 ### 1.3 Calculation-method registry
 
@@ -98,7 +98,7 @@
 - [ ] Show when a displayed time contains a manual adjustment
 - [ ] Allow reset-to-method-default
 
-**Stage 1 engine verification note (2026-08-16):** read-only Quality Gate run `31891501691` completed successfully after the expanded engine tests. The suite verifies five-prayer ordering, Standard/Hanafi Asr divergence, raw/base/adjusted/rounded separation, fixed-interval Isha, all three implemented high-latitude strategies, polar unavailability without fabricated events, and adjustment-range validation. Regional calculation-method source parity and UI presentation remain separate open work.
+**Stage 1 engine verification note (2026-08-16):** read-only Quality Gate run `31891501691` completed successfully after the expanded engine tests. The suite verifies five-prayer ordering, Standard/Hanafi Asr divergence, raw/base/adjusted/rounded separation, fixed-interval Isha, all three implemented high-latitude strategies, polar unavailability without fabricated events, and adjustment-range validation. Read-only Quality Gate run `31899800537` additionally verified explicit Imsak/Ishraq offsets, Islamic midnight, last-third calculations, next-obligatory-prayer selection and Isha → tomorrow Fajr rollover. Regional calculation-method source parity and UI presentation remain separate open work.
 
 ---
 
@@ -139,7 +139,7 @@
 - [ ] Leap year
 - [ ] Gregorian year boundary
 - [ ] Local midnight rollover
-- [ ] Next-prayer calculation after Isha → tomorrow's Fajr
+- [x] Next-prayer calculation after Isha → tomorrow's Fajr
 - [ ] Timezone-offset changes
 - [ ] Southern-hemisphere DST direction
 - [ ] Device clock correction while app is running
@@ -448,7 +448,7 @@
 - [x] High-latitude tests
 - [x] Rounding tests
 - [x] Adjustment tests
-- [ ] Next-prayer tests
+- [x] Next-prayer tests
 - [ ] Timezone/DST tests
 - [ ] Hijri-date tests
 - [ ] Mosque timetable tests
