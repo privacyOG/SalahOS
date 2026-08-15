@@ -158,4 +158,3 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - CSV and JSON round-trip tests, invalid-schema/time tests, duplicate-date tests, source-isolation tests and Iqamah/Jumu'ah validation tests are included.
 - Read-only Quality Gate run `31901969127` completed successfully with clean lockfile install, formatting, typed lint, strict typecheck, tests and production build.
 - Persistence, UI editing/presentation and optional vetted remote integrations remain separate open work.
-
