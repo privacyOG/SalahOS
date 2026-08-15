@@ -2,6 +2,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { createCoordinates } from './domain/coordinates';
 import type { Coordinates } from './domain/coordinates';
 import { buildPrayerDashboard } from './domain/dashboard';
+import {
+  buildManualMosqueDay,
+  MANUAL_MOSQUE_PRAYERS,
+  upsertManualMosqueDay,
+} from './domain/manualMosqueEntry';
+import type { ManualMosquePrayerDrafts } from './domain/manualMosqueEntry';
 import { applyPrayerSourceToDashboard } from './domain/sourcedDashboard';
 import { parseMosqueTimetableCsv, parseMosqueTimetableJson } from './domain/timetableImport';
 import { calculationMethods } from './domain/methods';
@@ -100,6 +106,16 @@ const locationFailureKeys: Readonly<Record<BrowserLocationFailureReason, Transla
   unknown: 'locationUnknownError',
 };
 
+function emptyManualMosqueDrafts(): ManualMosquePrayerDrafts {
+  return {
+    fajr: { start: '', iqamah: '' },
+    dhuhr: { start: '', iqamah: '' },
+    asr: { start: '', iqamah: '' },
+    maghrib: { start: '', iqamah: '' },
+    isha: { start: '', iqamah: '' },
+  };
+}
+
 function initialSettings(): PersistedSettings {
   try {
     return loadPersistedSettings(window.localStorage);
@@ -145,6 +161,12 @@ export function App() {
   const [mosqueImportFormat, setMosqueImportFormat] = useState<'json' | 'csv'>('json');
   const [mosqueImportName, setMosqueImportName] = useState('');
   const [mosqueImportPayload, setMosqueImportPayload] = useState('');
+  const [manualMosqueName, setManualMosqueName] = useState(
+    settings.mosqueTimetable?.mosqueName ?? '',
+  );
+  const [manualMosqueDate, setManualMosqueDate] = useState('');
+  const [manualMosqueDrafts, setManualMosqueDrafts] =
+    useState<ManualMosquePrayerDrafts>(emptyManualMosqueDrafts);
   const [mosqueMessage, setMosqueMessage] = useState<TranslationKey | null>(null);
 
   useEffect(() => {
@@ -316,6 +338,45 @@ export function App() {
     setLocationMessage('savedLocationRemoved');
   }
 
+  function updateManualMosqueDraft(
+    prayer: (typeof MANUAL_MOSQUE_PRAYERS)[number],
+    field: 'start' | 'iqamah',
+    value: string,
+  ): void {
+    setManualMosqueDrafts((current) => ({
+      ...current,
+      [prayer]: { ...current[prayer], [field]: value },
+    }));
+    setMosqueMessage(null);
+  }
+
+  function saveManualMosqueDay(): void {
+    try {
+      const name = manualMosqueName.trim();
+      const id = mosqueLibraryId(name);
+      const libraryTimetable = mosqueLibrary.find((entry) => entry.id === id)?.timetable ?? null;
+      const selectedTimetable =
+        settings.mosqueTimetable !== null &&
+        mosqueLibraryId(settings.mosqueTimetable.mosqueName) === id
+          ? settings.mosqueTimetable
+          : null;
+      const day = buildManualMosqueDay(manualMosqueDate, manualMosqueDrafts);
+      const timetable = upsertManualMosqueDay(libraryTimetable ?? selectedTimetable, name, day);
+      setMosqueLibrary((current) => upsertMosqueTimetable(current, timetable));
+      setSettings((current) => ({
+        ...current,
+        mosqueTimetable: timetable,
+        prayerSourceMode: 'local-mosque',
+      }));
+      setManualMosqueName(timetable.mosqueName);
+      setManualMosqueDate('');
+      setManualMosqueDrafts(emptyManualMosqueDrafts());
+      setMosqueMessage('manualMosqueDaySaved');
+    } catch {
+      setMosqueMessage('manualMosqueDayError');
+    }
+  }
+
   function importMosqueTimetable(): void {
     try {
       const timetable =
@@ -344,6 +405,7 @@ export function App() {
       mosqueTimetable: selected.timetable,
       prayerSourceMode: 'local-mosque',
     }));
+    setManualMosqueName(selected.timetable.mosqueName);
     setMosqueMessage(null);
   }
 
@@ -734,6 +796,68 @@ export function App() {
               {translate(locale, 'removeMosque')}
             </button>
           </div>
+
+          <fieldset className="manual-mosque-fieldset">
+            <legend>{translate(locale, 'manualMosqueEntry')}</legend>
+            <p className="setting-help">{translate(locale, 'manualMosqueEntryHelp')}</p>
+            <div className="manual-mosque-header">
+              <label>
+                <span>{translate(locale, 'mosqueName')}</span>
+                <input
+                  value={manualMosqueName}
+                  maxLength={160}
+                  onChange={(event) => {
+                    setManualMosqueName(event.target.value);
+                    setMosqueMessage(null);
+                  }}
+                />
+              </label>
+              <label>
+                <span>{translate(locale, 'timetableDate')}</span>
+                <input
+                  type="date"
+                  value={manualMosqueDate}
+                  onChange={(event) => {
+                    setManualMosqueDate(event.target.value);
+                    setMosqueMessage(null);
+                  }}
+                />
+              </label>
+            </div>
+            <div className="manual-mosque-prayer-grid">
+              {MANUAL_MOSQUE_PRAYERS.map((prayer) => (
+                <article className="manual-mosque-prayer" key={prayer}>
+                  <h4>{translate(locale, prayerTranslationKeys[prayer])}</h4>
+                  <label>
+                    <span>{translate(locale, 'prayerStartTime')}</span>
+                    <input
+                      type="time"
+                      step="60"
+                      required
+                      value={manualMosqueDrafts[prayer].start}
+                      onChange={(event) => {
+                        updateManualMosqueDraft(prayer, 'start', event.target.value);
+                      }}
+                    />
+                  </label>
+                  <label>
+                    <span>{translate(locale, 'iqamahTimeOptional')}</span>
+                    <input
+                      type="time"
+                      step="60"
+                      value={manualMosqueDrafts[prayer].iqamah}
+                      onChange={(event) => {
+                        updateManualMosqueDraft(prayer, 'iqamah', event.target.value);
+                      }}
+                    />
+                  </label>
+                </article>
+              ))}
+            </div>
+            <button type="button" onClick={saveManualMosqueDay}>
+              {translate(locale, 'saveManualMosqueDay')}
+            </button>
+          </fieldset>
 
           <div className="mosque-import-grid">
             <label>

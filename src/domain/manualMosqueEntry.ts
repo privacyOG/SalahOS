@@ -28,7 +28,14 @@ export function parseLocalClockTime(value: string): number {
 
   const hour = Number(match[1]);
   const minute = Number(match[2]);
-  if (!Number.isInteger(hour) || hour < 0 || hour > 23 || !Number.isInteger(minute) || minute < 0 || minute > 59) {
+  if (
+    !Number.isInteger(hour) ||
+    hour < 0 ||
+    hour > 23 ||
+    !Number.isInteger(minute) ||
+    minute < 0 ||
+    minute > 59
+  ) {
     throw new RangeError('Prayer time must use a valid 24-hour HH:MM value');
   }
   return hour * 60 + minute;
@@ -80,7 +87,8 @@ export function upsertManualMosqueDay(
     throw new RangeError('Existing timetable name must match the manual mosque name');
   }
 
-  const days = existing === null ? [day] : [...existing.days.filter((entry) => entry.date !== day.date), day];
+  const days =
+    existing === null ? [day] : [...existing.days.filter((entry) => entry.date !== day.date), day];
   days.sort((left, right) => left.date.localeCompare(right.date));
   const timetable: MosqueTimetable = { mosqueName: normalizedName, days };
   validateMosqueTimetable(timetable);
