@@ -20,9 +20,26 @@ describe('offline IANA timezone resolution', () => {
     expect(utcOffsetMinutesAt(new Date('2026-07-15T00:00:00.000Z'), 'Australia/Sydney')).toBe(600);
   });
 
+  it('handles the 2026 Sydney DST end boundary', () => {
+    expect(utcOffsetMinutesAt(new Date('2026-04-04T15:59:00.000Z'), 'Australia/Sydney')).toBe(660);
+    expect(utcOffsetMinutesAt(new Date('2026-04-04T16:01:00.000Z'), 'Australia/Sydney')).toBe(600);
+  });
+
+  it('handles the 2026 Sydney DST start boundary', () => {
+    expect(utcOffsetMinutesAt(new Date('2026-10-03T15:59:00.000Z'), 'Australia/Sydney')).toBe(600);
+    expect(utcOffsetMinutesAt(new Date('2026-10-03T16:01:00.000Z'), 'Australia/Sydney')).toBe(660);
+  });
+
   it('uses IANA rules across a northern-hemisphere DST zone', () => {
     expect(utcOffsetMinutesAt(new Date('2026-01-15T00:00:00.000Z'), 'Europe/London')).toBe(0);
     expect(utcOffsetMinutesAt(new Date('2026-07-15T00:00:00.000Z'), 'Europe/London')).toBe(60);
+  });
+
+  it('handles the 2026 London DST transition boundaries', () => {
+    expect(utcOffsetMinutesAt(new Date('2026-03-29T00:59:00.000Z'), 'Europe/London')).toBe(0);
+    expect(utcOffsetMinutesAt(new Date('2026-03-29T01:01:00.000Z'), 'Europe/London')).toBe(60);
+    expect(utcOffsetMinutesAt(new Date('2026-10-25T00:59:00.000Z'), 'Europe/London')).toBe(60);
+    expect(utcOffsetMinutesAt(new Date('2026-10-25T01:01:00.000Z'), 'Europe/London')).toBe(0);
   });
 
   it('derives the correct local civil date across a UTC day boundary', () => {
