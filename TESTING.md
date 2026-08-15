@@ -263,3 +263,13 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Tests cover reminder/prayer-time/Adhan intent generation, prior-day reminder normalization, duplicate input, recalculation replacement, date rollover and no-op reconciliation.
 - Implementation Quality Gate run `31908783069` passed formatting, typed lint, strict typecheck, all tests and production build.
 - Timezone-to-instant conversion, DST delivery tests, platform scheduling, permission handling, reboot recovery and actual delivery remain open.
+
+### 2026-08-16 — Notification IANA/DST instant resolution
+
+- Added wall-clock civil-time resolution against IANA timezone rules without deriving offsets from longitude or assuming one fixed offset for a date.
+- Ordinary local times resolve to one exact instant and the offset used for that instant is retained.
+- Repeated DST-end local times return both chronological candidates; notification scheduling selects and marks the earlier occurrence deterministically.
+- Nonexistent DST-start wall-clock times return an explicit skipped result rather than being silently shifted or fabricated.
+- Tests cover exact Sydney resolution, London repeated/skipped hours, Sydney repeated/skipped hours, invalid civil input and notification intent resolution policy.
+- Read-only Quality Gate run `31910410104` passed formatting, typed lint, strict typecheck, all tests and production build.
+- End-to-end Android/iOS/web delivery, permission/background behaviour and real platform DST scheduling remain open.
