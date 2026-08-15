@@ -610,6 +610,7 @@ export function App() {
           <label>
             <span>{translate(locale, 'asrMethod')}</span>
             <select
+              aria-describedby="asr-convention-help"
               value={settings.asrConvention}
               onChange={(event) => {
                 setSettings((current) => ({
@@ -621,6 +622,9 @@ export function App() {
               <option value="standard">{translate(locale, 'asrStandard')}</option>
               <option value="hanafi">{translate(locale, 'asrHanafi')}</option>
             </select>
+            <small className="setting-help" id="asr-convention-help">
+              {translate(locale, 'asrConventionExplanation')}
+            </small>
           </label>
 
           <label>

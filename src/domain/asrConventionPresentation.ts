@@ -8,9 +8,7 @@ export interface AsrConventionPresentation {
   readonly madhhabAssociation: AsrMadhhabAssociation;
 }
 
-export function asrConventionPresentation(
-  convention: AsrConvention,
-): AsrConventionPresentation {
+export function asrConventionPresentation(convention: AsrConvention): AsrConventionPresentation {
   return convention === 'standard'
     ? {
         convention,
