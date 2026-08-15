@@ -63,7 +63,7 @@
 - [x] Build an extensible calculation-method registry rather than hard-coding method logic throughout the engine
 - [~] Record each method's Fajr angle, Isha angle/interval, Maghrib rule where applicable and authoritative source
 - [~] Implement and verify Muslim World League method
-- [~] Implement and verify Umm al-Qura / Makkah method
+- [x] Implement and verify Umm al-Qura / Makkah method
 - [~] Implement and verify Egyptian method
 - [~] Implement and verify University of Islamic Sciences, Karachi method
 - [~] Implement and verify ISNA method
@@ -71,7 +71,7 @@
 - [x] Provide custom calculation parameters for advanced users where safe and clearly labelled
 - [x] Never silently change an explicitly selected calculation method
 
-**Method-registry note (2026-08-16):** built-in numerical parameters are centralized and implemented, but individual regional methods remain `[~]` until their primary/authoritative references and parity results are archived. The code explicitly reports that verification state rather than presenting the parameters as independently verified.
+**Method-registry note (2026-08-16):** built-in numerical parameters are centralized and cross-checked against pinned/reference sources. MWL, Umm al-Qura, Egyptian, Karachi, ISNA, MUIS, Kuwait and Qatar are tagged `cross-checked-reference`; Diyanet/Turkey and Dubai remain `pending-authoritative-source` because the upstream references themselves describe those profiles as approximation/experimental or require unmodelled offsets. Institutional timetable parity remains a separate requirement from parameter agreement.
 
 ### 1.4 Madhhab / Asr calculation
 
@@ -98,22 +98,24 @@
 - [ ] Show when a displayed time contains a manual adjustment
 - [ ] Allow reset-to-method-default
 
-**Stage 1 engine verification note (2026-08-16):** read-only Quality Gate run `31891501691` completed successfully after the expanded engine tests. The suite verifies five-prayer ordering, Standard/Hanafi Asr divergence, raw/base/adjusted/rounded separation, fixed-interval Isha, all three implemented high-latitude strategies, polar unavailability without fabricated events, and adjustment-range validation. Read-only Quality Gate run `31899800537` additionally verified explicit Imsak/Ishraq offsets, Islamic midnight, last-third calculations, next-obligatory-prayer selection and Isha → tomorrow Fajr rollover. Regional calculation-method source parity and UI presentation remain separate open work.
+**Stage 1 engine verification note (2026-08-16):** read-only Quality Gate run `31891501691` completed successfully after the expanded engine tests. The suite verifies five-prayer ordering, Standard/Hanafi Asr divergence, raw/base/adjusted/rounded separation, fixed-interval Isha, all three implemented high-latitude strategies, polar unavailability without fabricated events, and adjustment-range validation. Read-only Quality Gate run `31899800537` additionally verified explicit Imsak/Ishraq offsets, Islamic midnight, last-third calculations, next-obligatory-prayer selection and Isha → tomorrow Fajr rollover. Reference-parity evidence is recorded separately below.
 
 ---
 
 ## 2. Prayer-calculation validation and reference parity
 
-- [ ] Archive or pin the canonical reference implementation used for algorithm comparison
-- [ ] Create independent cross-check dataset instead of treating one online API as absolute ground truth
-- [ ] Compare against canonical calculation implementation
-- [ ] Compare against AlAdhan or another reputable independent calculator as a secondary cross-check
-- [ ] Compare against authoritative published timetables where practical
-- [ ] Record rounding, offsets and methodology differences instead of forcing false parity
+- [x] Archive or pin the canonical reference implementation used for algorithm comparison
+- [x] Create independent cross-check dataset instead of treating one online API as absolute ground truth
+- [~] Compare against canonical calculation implementation
+- [x] Compare against AlAdhan or another reputable independent calculator as a secondary cross-check
+- [x] Compare against authoritative published timetables where practical
+- [x] Record rounding, offsets and methodology differences instead of forcing false parity
+
+**Stage 2 verification note (2026-08-16):** Adhan JS `4.4.4` is pinned at commit `a6f1a5c4a00105103f310ef18200b95f7184d2e7`; PrayTimes and AlAdhan method definitions are documented as additional cross-checks in `docs/PRAYER_METHOD_REFERENCES.md`. Read-only Quality Gate run `31900274451` passed frozen external timetable parity fixtures for Makkah/Umm al-Qura, Singapore/MUIS, Doha/Qatar and Kuwait City/Kuwait within the published/reference adjustment ranges. The broader geographic matrix and direct canonical-algorithm parity remain open.
 
 ### Geographic test matrix
 
-- [ ] Makkah
+- [x] Makkah
 - [ ] Madinah
 - [ ] Sydney
 - [ ] Melbourne
@@ -121,7 +123,7 @@
 - [ ] Istanbul
 - [ ] Karachi
 - [ ] Jakarta
-- [ ] Singapore
+- [x] Singapore
 - [ ] London
 - [ ] New York
 - [ ] Oslo
@@ -443,7 +445,7 @@
 
 - [x] Solar/astronomical math tests
 - [x] Prayer-engine tests
-- [~] Calculation-method tests
+- [x] Calculation-method tests
 - [x] Asr-method tests
 - [x] High-latitude tests
 - [x] Rounding tests
@@ -508,7 +510,7 @@
 - [ ] Document iOS build/install
 - [ ] Document Raspberry Pi Touch Display 2 setup
 - [ ] Document TV/kiosk deployment
-- [ ] Document prayer calculation methods and references
+- [x] Document prayer calculation methods and references
 - [x] Document privacy behaviour
 - [ ] Document mosque timetable import format
 - [ ] Document notification platform limitations
@@ -562,8 +564,8 @@
 
 SalahOS v1 must not be declared complete until the following are true:
 
-- [~] Accurate five-prayer calculation engine is independently testable
-- [ ] Major recognised calculation methods are implemented and documented
+- [x] Accurate five-prayer calculation engine is independently testable
+- [~] Major recognised calculation methods are implemented and documented
 - [x] Standard/Shafi'i-family and Hanafi Asr calculations are validated
 - [~] High-latitude handling is implemented and transparent
 - [ ] Local mosque timetable mode works offline
