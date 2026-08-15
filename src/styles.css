@@ -7,10 +7,73 @@
     BlinkMacSystemFont,
     'Segoe UI',
     sans-serif;
-  color: #f3f7f0;
-  background: #0d120e;
+  color-scheme: dark;
+  --page: #0d120e;
+  --page-glow: rgba(102, 139, 96, 0.2);
+  --text: #f3f7f0;
+  --muted: #c2cdc0;
+  --label: #a7bea4;
+  --card: rgba(22, 30, 23, 0.82);
+  --control: #1d281f;
+  --control-border: rgba(255, 255, 255, 0.14);
+  --card-border: rgba(255, 255, 255, 0.1);
+  --divider: rgba(255, 255, 255, 0.08);
+  --accent: #c5e0be;
+  --next-card: #27372a;
+  --warning: #f1c9a7;
+  --warning-bg: rgba(99, 67, 37, 0.3);
+  --provenance: #d9cda9;
+  --shadow: rgba(0, 0, 0, 0.2);
+  color: var(--text);
+  background: var(--page);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
+}
+
+:root[data-theme='light'] {
+  color-scheme: light;
+  --page: #f4f7f2;
+  --page-glow: rgba(67, 112, 65, 0.12);
+  --text: #172019;
+  --muted: #4e5f51;
+  --label: #4e684f;
+  --card: rgba(255, 255, 255, 0.9);
+  --control: #ffffff;
+  --control-border: rgba(23, 32, 25, 0.2);
+  --card-border: rgba(23, 32, 25, 0.12);
+  --divider: rgba(23, 32, 25, 0.1);
+  --accent: #2d6636;
+  --next-card: #e3eee1;
+  --warning: #75451c;
+  --warning-bg: rgba(196, 145, 93, 0.16);
+  --provenance: #70551f;
+  --shadow: rgba(23, 32, 25, 0.1);
+}
+
+:root[data-theme='dark'] {
+  color-scheme: dark;
+}
+
+@media (prefers-color-scheme: light) {
+  :root[data-theme='system'] {
+    color-scheme: light;
+    --page: #f4f7f2;
+    --page-glow: rgba(67, 112, 65, 0.12);
+    --text: #172019;
+    --muted: #4e5f51;
+    --label: #4e684f;
+    --card: rgba(255, 255, 255, 0.9);
+    --control: #ffffff;
+    --control-border: rgba(23, 32, 25, 0.2);
+    --card-border: rgba(23, 32, 25, 0.12);
+    --divider: rgba(23, 32, 25, 0.1);
+    --accent: #2d6636;
+    --next-card: #e3eee1;
+    --warning: #75451c;
+    --warning-bg: rgba(196, 145, 93, 0.16);
+    --provenance: #70551f;
+    --shadow: rgba(23, 32, 25, 0.1);
+  }
 }
 
 * {
@@ -21,24 +84,32 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  color: var(--text);
   background:
-    radial-gradient(circle at top right, rgba(102, 139, 96, 0.2), transparent 34rem), #0d120e;
+    radial-gradient(circle at top right, var(--page-glow), transparent 34rem), var(--page);
 }
 
 button,
 input,
-select {
+select,
+textarea {
   font: inherit;
+}
+
+button,
+select,
+input,
+textarea {
+  border: 1px solid var(--control-border);
+  border-radius: 0.7rem;
+  color: var(--text);
+  background: var(--control);
 }
 
 button,
 select,
 input {
   min-height: 2.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 0.7rem;
-  color: #f3f7f0;
-  background: #1d281f;
 }
 
 button {
@@ -49,14 +120,22 @@ button {
 
 button:focus-visible,
 input:focus-visible,
-select:focus-visible {
-  outline: 3px solid #c5e0be;
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+  outline: 3px solid var(--accent);
   outline-offset: 3px;
 }
 
 input,
-select {
-  padding-inline: 0.7rem;
+select,
+textarea {
+  padding: 0.65rem 0.7rem;
+}
+
+textarea {
+  width: 100%;
+  resize: vertical;
 }
 
 .app-shell {
@@ -68,10 +147,10 @@ select {
 .offline-banner {
   margin: 0 0 1rem;
   padding: 0.75rem 1rem;
-  border: 1px solid rgba(241, 201, 167, 0.35);
+  border: 1px solid color-mix(in srgb, var(--warning) 35%, transparent);
   border-radius: 0.8rem;
-  color: #f1c9a7;
-  background: rgba(99, 67, 37, 0.3);
+  color: var(--warning);
+  background: var(--warning-bg);
 }
 
 .hero {
@@ -97,14 +176,14 @@ select {
   display: inline-flex;
   align-items: center;
   gap: 0.55rem;
-  color: #c2cdc0;
+  color: var(--muted);
   font-size: 0.9rem;
 }
 
 .eyebrow,
 .label {
   margin: 0 0 0.45rem;
-  color: #a7bea4;
+  color: var(--label);
   font-size: 0.78rem;
   font-weight: 700;
   letter-spacing: 0.14em;
@@ -142,23 +221,70 @@ h2 {
 
 .hero-copy {
   max-width: 60ch;
-  color: #c2cdc0;
+  color: var(--muted);
   font-size: clamp(1rem, 2vw, 1.2rem);
   line-height: 1.65;
 }
 
 .location-panel,
+.settings-panel,
 .status-card,
 .prayer-panel {
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--card-border);
   border-radius: 1.25rem;
-  background: rgba(22, 30, 23, 0.82);
-  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.2);
+  background: var(--card);
+  box-shadow: 0 1.5rem 4rem var(--shadow);
 }
 
-.location-panel {
+.location-panel,
+.settings-panel {
   margin-block-end: 1rem;
   padding: 1rem;
+}
+
+.settings-panel summary {
+  cursor: pointer;
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.settings-grid,
+.offset-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.9rem;
+  margin-block-start: 1rem;
+}
+
+.settings-grid label,
+.offset-grid label,
+.settings-transfer label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+
+.offsets-fieldset {
+  margin-block: 1.25rem;
+  border: 1px solid var(--card-border);
+  border-radius: 0.9rem;
+}
+
+.offsets-fieldset legend {
+  padding-inline: 0.4rem;
+  font-weight: 700;
+}
+
+.settings-transfer {
+  display: grid;
+  gap: 0.8rem;
+}
+
+.settings-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem;
 }
 
 .location-actions,
@@ -176,7 +302,7 @@ h2 {
 .manual-location label {
   display: grid;
   gap: 0.35rem;
-  color: #c2cdc0;
+  color: var(--muted);
   font-size: 0.85rem;
 }
 
@@ -186,7 +312,7 @@ h2 {
 
 .inline-message {
   margin: 0.9rem 0 0;
-  color: #f1c9a7;
+  color: var(--warning);
 }
 
 .status-card,
@@ -204,7 +330,7 @@ h2 {
 .date-strip {
   margin-block-end: 1.5rem;
   padding-block-end: 1.25rem;
-  border-block-end: 1px solid rgba(255, 255, 255, 0.08);
+  border-block-end: 1px solid var(--divider);
 }
 
 .date-strip > div {
@@ -235,14 +361,14 @@ h2 {
 }
 
 .next-prayer {
-  color: #c2cdc0;
+  color: var(--muted);
 }
 
 .next-prayer-block {
   min-width: min(20rem, 100%);
   padding: 1rem;
   border-radius: 1rem;
-  background: rgba(197, 224, 190, 0.08);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
 }
 
 .next-prayer-block strong {
@@ -272,13 +398,13 @@ h2 {
   padding: 1rem;
   border: 1px solid transparent;
   border-radius: 1rem;
-  background: #1d281f;
+  background: var(--control);
 }
 
 .prayer-card-next {
-  border-color: rgba(197, 224, 190, 0.8);
-  background: #27372a;
-  box-shadow: 0 0 0 2px rgba(197, 224, 190, 0.08);
+  border-color: color-mix(in srgb, var(--accent) 80%, transparent);
+  background: var(--next-card);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 8%, transparent);
 }
 
 .prayer-card-supplementary {
@@ -286,7 +412,7 @@ h2 {
 }
 
 .prayer-card span {
-  color: #b9c6b7;
+  color: var(--muted);
 }
 
 .prayer-card strong {
@@ -299,12 +425,14 @@ h2 {
   flex-wrap: wrap;
   gap: 0.65rem;
   margin-block-start: 1rem;
-  color: #d9cda9;
+  color: var(--provenance);
   font-size: 0.9rem;
 }
 
 @media (max-width: 1000px) {
-  .prayer-grid {
+  .prayer-grid,
+  .settings-grid,
+  .offset-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 
@@ -341,7 +469,9 @@ h2 {
 
   .status-card,
   .date-strip,
-  .prayer-grid {
+  .prayer-grid,
+  .settings-grid,
+  .offset-grid {
     grid-template-columns: 1fr;
   }
 
