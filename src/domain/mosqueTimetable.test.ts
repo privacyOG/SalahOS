@@ -70,7 +70,12 @@ describe('mosque timetable domain', () => {
   it('does not silently fall back to calculated time when a mosque entry is missing', () => {
     const incomplete: MosqueDayTimetable = {
       date: friday.date,
-      prayers: { fajr: friday.prayers.fajr },
+      prayers: {
+        fajr: {
+          startLocalMinutes: 5 * 60 + 25,
+          iqamah: { kind: 'offset', offsetMinutes: 20 },
+        },
+      },
     };
     const resolved = resolvePrayerSource('local-mosque', calculatedSchedule(), incomplete);
 
