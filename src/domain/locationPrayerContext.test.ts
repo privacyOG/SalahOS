@@ -42,4 +42,22 @@ describe('location → timezone → prayer calculation integration', () => {
     expect(asr).toBeLessThan(maghrib);
     expect(maghrib).toBeLessThan(isha);
   });
+
+  it('rolls the Sydney civil date exactly at local midnight', () => {
+    const coordinates = createCoordinates(-33.8688, 151.2093);
+    const beforeMidnight = createLocationPrayerContext(
+      new Date('2026-08-16T13:59:59.000Z'),
+      coordinates,
+    );
+    const atMidnight = createLocationPrayerContext(
+      new Date('2026-08-16T14:00:00.000Z'),
+      coordinates,
+    );
+
+    expect(beforeMidnight.timeZone).toBe('Australia/Sydney');
+    expect(beforeMidnight.utcOffsetMinutes).toBe(600);
+    expect(beforeMidnight.civilDate.toISOString()).toBe('2026-08-16T00:00:00.000Z');
+    expect(atMidnight.utcOffsetMinutes).toBe(600);
+    expect(atMidnight.civilDate.toISOString()).toBe('2026-08-17T00:00:00.000Z');
+  });
 });
