@@ -67,7 +67,7 @@ function civilDateKey(date: Date): string {
   const year = date.getUTCFullYear();
   const month = String(date.getUTCMonth() + 1).padStart(2, '0');
   const day = String(date.getUTCDate()).padStart(2, '0');
-  return `${year}-${month}-${day}`;
+  return `${String(year)}-${month}-${day}`;
 }
 
 function normalizeDayMinutes(minutes: number): number {
@@ -165,7 +165,7 @@ function applyFajrHighLatitudeRule(
       rawUtcMinutes,
       effectiveUtcMinutes: rawUtcMinutes,
       source: rawUtcMinutes === null ? 'unavailable' : 'astronomical',
-      formula: `Sun altitude -${angleDegrees}° before solar noon`,
+      formula: `Sun altitude -${String(angleDegrees)}° before solar noon`,
       highLatitudeRuleApplied: false,
     };
   }
@@ -180,7 +180,7 @@ function applyFajrHighLatitudeRule(
     source: requiresFallback ? 'high-latitude-fallback' : 'astronomical',
     formula: requiresFallback
       ? `${rule} Fajr portion of previous night`
-      : `Sun altitude -${angleDegrees}° before solar noon`,
+      : `Sun altitude -${String(angleDegrees)}° before solar noon`,
     highLatitudeRuleApplied: requiresFallback,
   };
 }
@@ -199,7 +199,7 @@ function applyIshaHighLatitudeRule(
       rawUtcMinutes,
       effectiveUtcMinutes: rawUtcMinutes,
       source: rawUtcMinutes === null ? 'unavailable' : 'astronomical',
-      formula: `Sun altitude -${angleDegrees}° after solar noon`,
+      formula: `Sun altitude -${String(angleDegrees)}° after solar noon`,
       highLatitudeRuleApplied: false,
     };
   }
@@ -216,7 +216,7 @@ function applyIshaHighLatitudeRule(
     source: requiresFallback ? 'high-latitude-fallback' : 'astronomical',
     formula: requiresFallback
       ? `${rule} Isha portion of following night`
-      : `Sun altitude -${angleDegrees}° after solar noon`,
+      : `Sun altitude -${String(angleDegrees)}° after solar noon`,
     highLatitudeRuleApplied: requiresFallback,
   };
 }
@@ -329,7 +329,7 @@ export function calculatePrayerSchedule(input: PrayerCalculationInput): PrayerSc
         : dayEvents.sunsetUtcMinutes + input.method.ishaRule.minutesAfterMaghrib;
     isha = directEvent(
       ishaRaw,
-      `${input.method.ishaRule.minutesAfterMaghrib} minutes after Maghrib`,
+      `${String(input.method.ishaRule.minutesAfterMaghrib)} minutes after Maghrib`,
       'fixed-interval',
     );
   } else {
@@ -356,7 +356,7 @@ export function calculatePrayerSchedule(input: PrayerCalculationInput): PrayerSc
     dhuhr: directEvent(dayEvents.solarNoonUtcMinutes, 'Local apparent solar noon'),
     asr: directEvent(
       asrRaw,
-      `${asrConvention === 'standard' ? 1 : 2}× shadow-length Asr convention`,
+      `${String(asrConvention === 'standard' ? 1 : 2)}× shadow-length Asr convention`,
     ),
     maghrib,
     isha,
