@@ -296,3 +296,14 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Tests cover positive and negative offsets, zero/missing offsets, source-aware display, the Sunrise/local-mosque exception, active-adjustment detection and non-mutating reset behaviour.
 - Implementation Quality Gate run `31911208279` passed formatting, typed lint, strict typecheck, all tests and production build.
 - The combined Stage 7 high-latitude/manual-adjustment indicator remains partial until the high-latitude visual indicator is completed and verified.
+
+### 2026-08-16 — Source-aware high-latitude fallback indicators
+
+- Added a pure display helper that decides whether a high-latitude fallback belongs to the currently displayed prayer source.
+- Prayer cards now show a fallback badge only when the displayed calculated time actually used the configured high-latitude rule.
+- The badge names the active rule using the existing localised Angle Based, Middle of the Night or One Seventh labels.
+- Local-mosque obligatory start times suppress calculated fallback indicators because the timetable replaces those displayed values; Sunrise remains calculated and is still eligible.
+- The shared provenance note now uses the same source-aware decision and names the configured rule instead of reporting a hidden calculated fallback.
+- Tests cover calculated and calculated-adjustment sources, no-fallback cases, local-mosque obligatory suppression and the Sunrise/local-mosque exception.
+- Read-only Quality Gate run `31911591791` passed formatting, typed lint, strict typecheck, all tests and production build.
+- Nearest-latitude and nearest-valid-day strategies for extreme polar conditions remain open research and are not implied by this UI completion.

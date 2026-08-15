@@ -89,7 +89,9 @@
 - [ ] Research nearest-latitude / nearest-valid-day strategies for extreme polar conditions
 - [x] Define behaviour for polar day and polar night when normal astronomical events are unavailable
 - [x] Never fabricate an astronomical event without identifying the applied fallback rule
-- [~] Surface active high-latitude rule in calculation provenance/settings
+- [x] Surface active high-latitude rule in calculation provenance/settings
+
+**High-latitude indicator verification note (2026-08-16):** read-only Quality Gate run `31911591791` passed formatting, typed lint, strict typecheck, all tests and production build after adding source-aware fallback indicators. Prayer cards now identify when the displayed calculated time actually used a high-latitude fallback and name the active rule (Angle Based, Middle of the Night or One Seventh). Mosque-provided obligatory start times suppress calculated fallback badges because those values are replaced by the timetable, while calculated Sunrise remains eligible. The shared provenance note uses the same source-aware rule. Nearest-latitude/nearest-valid-day research for extreme polar conditions remains open.
 
 ### 1.6 Manual adjustments
 
@@ -269,7 +271,7 @@
 - [~] Highlight current/next prayer
 - [x] Calculation method/source indicator
 - [x] Iqamah time where configured
-- [~] High-latitude/manual-adjustment indicator when applicable
+- [x] High-latitude/manual-adjustment indicator when applicable
 
 ### 7.2 Responsive layouts
 
