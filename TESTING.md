@@ -16,7 +16,7 @@ Every change must be suitable for the following gate:
 4. unit/integration tests;
 5. production build.
 
-CI mirrors the documented local commands once the application scaffold and dependency lockfile are committed.
+CI uses a read-only checkout and installs dependencies with `npm ci` from the committed lockfile before running the quality gate.
 
 ## Prayer engine testing
 
@@ -79,8 +79,12 @@ When a milestone is verified, add a dated entry under `Validation log` including
 
 ## Validation log
 
-### 2026-08-16 — Foundation documentation
+### 2026-08-16 — Foundation and solar primitives
 
 - Repository scope and MVP acceptance criteria documented in `DESIGN.md`.
-- Research and validation policy documented.
-- No application/runtime claim is marked verified yet; tooling and CI remain subject to successful execution after the scaffold and lockfile are complete.
+- Research, privacy and validation policies documented.
+- Dependency lockfile committed; the clean CI install reported zero dependency vulnerabilities.
+- Quality Gate run `31891071518` completed successfully using a read-only checkout and `npm ci`.
+- Formatting, typed lint, strict TypeScript typecheck, current unit tests and production Vite build all passed.
+- Solar primitive tests cover J2000 Julian Day, equinox declination, equation-of-time sanity, Sydney event ordering, polar unavailability and coordinate validation.
+- Five-prayer calculations and external timetable/reference parity remain unverified and are not marked complete.
