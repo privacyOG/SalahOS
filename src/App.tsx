@@ -11,6 +11,7 @@ import {
   hasManualPrayerAdjustments,
   resetManualPrayerAdjustments,
 } from './domain/prayerAdjustments';
+import { displayedHighLatitudeRuleApplied } from './domain/highLatitudeIndicators';
 import {
   NOTIFICATION_PRAYERS,
   updatePrayerNotificationPreference,
@@ -70,6 +71,14 @@ const sourceTranslationKeys: Readonly<
   calculated: 'sourceCalculated',
   'calculated-adjustments': 'sourceCalculatedAdjustments',
   'local-mosque': 'sourceLocalMosque',
+};
+
+const highLatitudeRuleTranslationKeys: Readonly<
+  Record<PersistedSettings['highLatitudeRule'], TranslationKey>
+> = {
+  'angle-based': 'highLatitudeAngle',
+  'middle-of-night': 'highLatitudeMiddle',
+  'one-seventh': 'highLatitudeSeventh',
 };
 
 const adjustablePrayers: readonly PrayerName[] = [
@@ -1046,6 +1055,11 @@ export function App() {
                 prayer.manualAdjustmentMinutes,
                 prayer.source,
               );
+              const displayedHighLatitude = displayedHighLatitudeRuleApplied(
+                prayer.name,
+                prayer.highLatitudeRuleApplied,
+                prayer.source,
+              );
               return (
                 <article
                   className={`prayer-card${prayer.isNext ? ' prayer-card-next' : ''}${prayer.name === 'sunrise' ? ' prayer-card-supplementary' : ''}`}
@@ -1053,12 +1067,23 @@ export function App() {
                 >
                   <div className="prayer-card-heading">
                     <span>{translate(locale, prayerTranslationKeys[prayer.name])}</span>
-                    {displayedAdjustment !== null && (
-                      <span className="adjustment-badge">
-                        {translate(locale, 'manualOffset')} {displayedAdjustment > 0 ? '+' : ''}
-                        {String(displayedAdjustment)} {translate(locale, 'minutesShort')}
-                      </span>
-                    )}
+                    <div className="prayer-indicators">
+                      {displayedHighLatitude && (
+                        <span className="adjustment-badge high-latitude-badge">
+                          {translate(locale, 'highLatitudeAdjustment')} ·{' '}
+                          {translate(
+                            locale,
+                            highLatitudeRuleTranslationKeys[settings.highLatitudeRule],
+                          )}
+                        </span>
+                      )}
+                      {displayedAdjustment !== null && (
+                        <span className="adjustment-badge">
+                          {translate(locale, 'manualOffset')} {displayedAdjustment > 0 ? '+' : ''}
+                          {String(displayedAdjustment)} {translate(locale, 'minutesShort')}
+                        </span>
+                      )}
+                    </div>
                   </div>
                   <div className="prayer-times">
                     <span className="prayer-time-label">{translate(locale, 'prayerStart')}</span>
@@ -1102,14 +1127,42 @@ export function App() {
             </section>
           )}
 
-          {(dashboard.hasHighLatitudeFallback || dashboard.hasManualAdjustments) && (
+          {(sourcedDashboard.prayers.some((prayer) =>
+            displayedHighLatitudeRuleApplied(
+              prayer.name,
+              prayer.highLatitudeRuleApplied,
+              prayer.source,
+            ),
+          ) ||
+            sourcedDashboard.prayers.some(
+              (prayer) =>
+                displayedManualPrayerAdjustmentMinutes(
+                  prayer.name,
+                  prayer.manualAdjustmentMinutes,
+                  prayer.source,
+                ) !== null,
+            )) && (
             <div className="provenance-note" role="status">
-              {dashboard.hasHighLatitudeFallback && (
-                <span>{translate(locale, 'highLatitudeAdjustment')}</span>
+              {sourcedDashboard.prayers.some((prayer) =>
+                displayedHighLatitudeRuleApplied(
+                  prayer.name,
+                  prayer.highLatitudeRuleApplied,
+                  prayer.source,
+                ),
+              ) && (
+                <span>
+                  {translate(locale, 'highLatitudeAdjustment')}:{' '}
+                  {translate(locale, highLatitudeRuleTranslationKeys[settings.highLatitudeRule])}
+                </span>
               )}
-              {dashboard.hasManualAdjustments && (
-                <span>{translate(locale, 'manualAdjustment')}</span>
-              )}
+              {sourcedDashboard.prayers.some(
+                (prayer) =>
+                  displayedManualPrayerAdjustmentMinutes(
+                    prayer.name,
+                    prayer.manualAdjustmentMinutes,
+                    prayer.source,
+                  ) !== null,
+              ) && <span>{translate(locale, 'manualAdjustment')}</span>}
             </div>
           )}
         </section>
