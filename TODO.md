@@ -342,12 +342,14 @@
 - [~] Adhan enable/disable
 - [ ] User-selectable/local Adhan audio
 - [ ] Do not bundle copyrighted Adhan recordings without suitable rights
-- [ ] Reschedule notifications after timezone/location/method changes
+- [~] Reschedule notifications after timezone/location/method changes
 - [ ] Reschedule notifications after device reboot where platform requires it
-- [ ] Reschedule future prayer notifications at date rollover
-- [ ] Prevent duplicate notifications
+- [~] Reschedule future prayer notifications at date rollover
+- [~] Prevent duplicate notifications
 - [ ] Test notification behaviour across DST transition
 - [ ] Document platform-specific limitations instead of promising impossible exact behaviour
+
+**Notification-schedule verification note (2026-08-16):** implementation Quality Gate run `31908783069` passed formatting, typed lint, strict typecheck, all tests and production build for the deterministic scheduling core. The domain now builds stable per-date/per-prayer reminder, prayer-time and Adhan intents; normalizes reminders that fall on the prior civil date; deduplicates repeated inputs; and reconciles an installed schedule against recalculated desired jobs with explicit cancellation and replacement sets. Tests cover changed prayer times, date rollover, duplicate input and no-op reconciliation. No platform scheduler consumes these intents yet, so rescheduling and duplicate prevention remain partial. Reboot recovery, timezone-to-instant/DST delivery validation and permission/background handling remain open.
 
 **Notification-preferences verification note (2026-08-16):** read-only Quality Gate run `31908401807` passed the notification preference domain and settings-schema v2 migration, and implementation Quality Gate run `31908480344` passed formatting, typed lint, strict typecheck, all tests and production build after the settings UI integration. Each obligatory prayer now has locally persisted enable, 1–180 minute reminder, prayer-time alert, default/silent sound, vibration and Adhan-enable preferences. Existing v1 settings migrate to v2 without losing location, calculation or mosque configuration. No platform notification scheduler, permission request or Adhan audio delivery is implemented yet, so delivery-related tracker items remain partial rather than complete.
 
