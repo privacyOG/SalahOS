@@ -273,3 +273,15 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Tests cover exact Sydney resolution, London repeated/skipped hours, Sydney repeated/skipped hours, invalid civil input and notification intent resolution policy.
 - Read-only Quality Gate run `31910410104` passed formatting, typed lint, strict typecheck, all tests and production build.
 - End-to-end Android/iOS/web delivery, permission/background behaviour and real platform DST scheduling remain open.
+
+### 2026-08-16 — Platform-neutral notification scheduler adapter
+
+- Added an asynchronous scheduler adapter contract with list, schedule and cancel operations that can be implemented by Android, iOS or another supported runtime.
+- Exact notification records retain stable id, prayer, delivery kind, epoch instant, IANA timezone, resolved offset, DST ambiguity policy, sound and vibration metadata.
+- The executor reconciles installed records against desired exact-instant resolutions and cancels stale records before scheduling replacements.
+- Reapplying an identical desired schedule is a no-op, which prevents repeated duplicate scheduling at the adapter boundary.
+- Notifications that resolve to nonexistent DST-gap local times cancel any previously installed record and are not rescheduled.
+- Conflicting desired or installed records sharing one stable id are rejected rather than silently choosing one.
+- An in-memory conformance adapter verifies initial scheduling, idempotence, recalculation replacement, DST-gap cancellation, metadata replacement and conflicting-id rejection.
+- Read-only Quality Gate run `31910761615` passed formatting, typed lint, strict typecheck, all tests and production build.
+- Native platform scheduling, notification permissions, reboot restoration and background/exact-delivery constraints remain open.
