@@ -20,11 +20,12 @@ describe('manual prayer adjustment status', () => {
     expect(hasManualPrayerAdjustments({ maghrib: 0 })).toBe(false);
   });
 
-  it('shows calculated adjustment provenance but suppresses it for local mosque times', () => {
-    expect(displayedManualPrayerAdjustmentMinutes(4, 'calculated')).toBe(4);
-    expect(displayedManualPrayerAdjustmentMinutes(-3, 'calculated-adjustments')).toBe(-3);
-    expect(displayedManualPrayerAdjustmentMinutes(4, 'local-mosque')).toBeNull();
-    expect(displayedManualPrayerAdjustmentMinutes(0, 'calculated')).toBeNull();
+  it('shows calculated adjustment provenance but suppresses replaced mosque prayer times', () => {
+    expect(displayedManualPrayerAdjustmentMinutes('fajr', 4, 'calculated')).toBe(4);
+    expect(displayedManualPrayerAdjustmentMinutes('isha', -3, 'calculated-adjustments')).toBe(-3);
+    expect(displayedManualPrayerAdjustmentMinutes('fajr', 4, 'local-mosque')).toBeNull();
+    expect(displayedManualPrayerAdjustmentMinutes('sunrise', 4, 'local-mosque')).toBe(4);
+    expect(displayedManualPrayerAdjustmentMinutes('asr', 0, 'calculated')).toBeNull();
   });
 
   it('detects any non-zero manual offset', () => {
