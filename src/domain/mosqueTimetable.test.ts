@@ -23,15 +23,35 @@ function calculatedSchedule() {
 const friday: MosqueDayTimetable = {
   date: '2026-08-21',
   prayers: {
-    fajr: { startLocalMinutes: 5 * 60 + 25, iqamah: { kind: 'offset', offsetMinutes: 20 } },
-    dhuhr: { startLocalMinutes: 12 * 60 + 5, iqamah: { kind: 'fixed', localMinutes: 12 * 60 + 30 } },
+    fajr: {
+      startLocalMinutes: 5 * 60 + 25,
+      iqamah: { kind: 'offset', offsetMinutes: 20 },
+    },
+    dhuhr: {
+      startLocalMinutes: 12 * 60 + 5,
+      iqamah: { kind: 'fixed', localMinutes: 12 * 60 + 30 },
+    },
     asr: { startLocalMinutes: 15 * 60 + 10 },
-    maghrib: { startLocalMinutes: 17 * 60 + 35, iqamah: { kind: 'offset', offsetMinutes: 10 } },
-    isha: { startLocalMinutes: 19 * 60, iqamah: { kind: 'fixed', localMinutes: 19 * 60 + 20 } },
+    maghrib: {
+      startLocalMinutes: 17 * 60 + 35,
+      iqamah: { kind: 'offset', offsetMinutes: 10 },
+    },
+    isha: {
+      startLocalMinutes: 19 * 60,
+      iqamah: { kind: 'fixed', localMinutes: 19 * 60 + 20 },
+    },
   },
   jumuahSessions: [
-    { label: 'First', khutbahLocalMinutes: 12 * 60 + 15, salahLocalMinutes: 12 * 60 + 35 },
-    { label: 'Second', khutbahLocalMinutes: 13 * 60 + 15, salahLocalMinutes: 13 * 60 + 35 },
+    {
+      label: 'First',
+      khutbahLocalMinutes: 12 * 60 + 15,
+      salahLocalMinutes: 12 * 60 + 35,
+    },
+    {
+      label: 'Second',
+      khutbahLocalMinutes: 13 * 60 + 15,
+      salahLocalMinutes: 13 * 60 + 35,
+    },
   ],
 };
 
@@ -87,7 +107,10 @@ describe('mosque timetable domain', () => {
       validateMosqueDay({
         date: '2026-08-21',
         prayers: {
-          isha: { startLocalMinutes: 23 * 60 + 50, iqamah: { kind: 'offset', offsetMinutes: 20 } },
+          isha: {
+            startLocalMinutes: 23 * 60 + 50,
+            iqamah: { kind: 'offset', offsetMinutes: 20 },
+          },
         },
       }),
     ).toThrow(RangeError);
@@ -97,7 +120,11 @@ describe('mosque timetable domain', () => {
         date: '2026-08-21',
         prayers: {},
         jumuahSessions: [
-          { label: 'First', khutbahLocalMinutes: 13 * 60, salahLocalMinutes: 12 * 60 + 55 },
+          {
+            label: 'First',
+            khutbahLocalMinutes: 13 * 60,
+            salahLocalMinutes: 12 * 60 + 55,
+          },
         ],
       }),
     ).toThrow(RangeError);
