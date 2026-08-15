@@ -148,9 +148,12 @@
 
 - [x] DST start transition
 - [x] DST end transition
-- [ ] Leap year
-- [ ] Gregorian year boundary
-- [ ] Local midnight rollover
+- [x] Leap year
+- [x] Gregorian year boundary
+- [x] Local midnight rollover
+
+**Calendar edge-case verification note (2026-08-16):** read-only Quality Gate run `31914501854` passed formatting, typed lint, strict typecheck, all tests and production build. Gregorian calendar tests now verify 2024-02-29 and the following March 1 civil date, plus consecutive 2026-12-31/2027-01-01 year-boundary dates. The production IANA location context is also tested across Sydney local midnight, proving the resolved civil date changes from 2026-08-16 to 2026-08-17 exactly between 23:59:59 and 00:00:00 local time.
+
 - [x] Next-prayer calculation after Isha → tomorrow's Fajr
 - [x] Timezone-offset changes
 - [x] Southern-hemisphere DST direction

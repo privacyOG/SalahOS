@@ -379,3 +379,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Explicitly prohibited committing signing private keys, certificate bundles, account credentials, distribution API keys and CI secret values.
 - Kept actual Xcode build, archive, simulator/device and distribution validation open until executed in the required Apple environment.
 - Read-only Quality Gate run `31914265959` passed formatting, typed lint, strict typecheck, all tests and production build.
+
+### 2026-08-16 — Gregorian leap year, year boundary and local midnight
+
+- Added Gregorian leap-day coverage for 2024-02-29 and its transition to 2024-03-01.
+- Added consecutive Gregorian year-boundary coverage for 2026-12-31 and 2027-01-01.
+- Added production IANA location-context coverage across Sydney local midnight from 23:59:59 to 00:00:00.
+- Verified the local civil date advances exactly at midnight while retaining the resolved Australia/Sydney timezone and expected UTC offset for the fixture.
+- Read-only Quality Gate run `31914501854` passed formatting, typed lint, strict typecheck, all tests and production build.
