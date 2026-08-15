@@ -126,3 +126,13 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Quality Gate run `31900274451` additionally passed Doha/Qatar and Kuwait City/Kuwait frozen timetable fixtures.
 - The Makkah fixture traces to an Umm al-Qura source; Singapore traces to MUIS; Doha traces to Qatar's ministry source. Their reference adjustment ranges are preserved rather than widened merely to force parity.
 - The broader geographic, DST, high-latitude and direct canonical-algorithm parity matrices remain open and are not claimed complete.
+
+### 2026-08-16 — Local-first location and IANA timezone core
+
+- `@photostructure/tz-lookup` is pinned in the dependency lockfile for offline coordinate-to-IANA resolution; boundary lookup is explicitly documented as approximate near timezone borders.
+- Browser location uses a one-shot current-position request and returns typed `permission-denied`, `unavailable`, `timeout`, `unsupported` and `unknown` states instead of continuous tracking.
+- Manual coordinates use the same validated coordinate model and are never converted to timezone by longitude arithmetic.
+- IANA timezone offsets are resolved for the target instant with `Intl.DateTimeFormat`, including exact 2026 DST start/end transition coverage for Sydney and London.
+- The integration suite proves Sydney coordinates → `Australia/Sydney` → correct civil date/UTC offset → local prayer schedule.
+- Quality Gate run `31900763989` completed successfully with clean lockfile install, formatting, typed lint, strict typecheck, unit/integration tests and production build.
+- Saved/favourite persistence, city search, native Android/iOS adapters, UI fallback flows and persistent/manual timezone override remain separate open work.
