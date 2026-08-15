@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 import { createCoordinates } from './coordinates';
 import { buildPrayerDashboard, localClockParts } from './dashboard';
+import { calculationMethods } from './methods';
 
 describe('shared prayer dashboard model', () => {
   const sydney = createCoordinates(-33.8688, 151.2093);
@@ -65,5 +66,22 @@ describe('shared prayer dashboard model', () => {
     });
 
     expect(corrected.hijri.correctionDays).toBe(2);
+  });
+
+  it('composes selected calculation settings and prayer adjustments', () => {
+    const configured = buildPrayerDashboard({
+      instant: new Date('2026-08-16T02:00:00.000Z'),
+      coordinates: sydney,
+      method: calculationMethods['umm-al-qura'],
+      asrConvention: 'hanafi',
+      highLatitudeRule: 'one-seventh',
+      adjustments: { fajr: 2 },
+    });
+
+    expect(configured.method.id).toBe('umm-al-qura');
+    expect(configured.asrConvention).toBe('hanafi');
+    expect(configured.highLatitudeRule).toBe('one-seventh');
+    expect(configured.prayers.find((prayer) => prayer.name === 'fajr')?.manualAdjustmentMinutes).toBe(2);
+    expect(configured.hasManualAdjustments).toBe(true);
   });
 });
