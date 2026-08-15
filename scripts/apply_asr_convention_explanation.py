@@ -59,8 +59,8 @@ if "asrConventionExplanation:" not in translations:
     )
     translations = replace_once(
         translations,
-        "    asrHanafi: 'حنفي',\n",
-        "    asrHanafi: 'حنفي',\n    asrConventionExplanation:\n      'القياسي (الشافعي والمالكي والحنبلي) يستخدم معامل ظل 1؛ والحنفي يستخدم معامل ظل 2. ويُضاف ظل الزوال في الحالتين.',\n",
+        "    asrHanafi: 'الحنفي',\n",
+        "    asrHanafi: 'الحنفي',\n    asrConventionExplanation:\n      'القياسي (الشافعي والمالكي والحنبلي) يستخدم معامل ظل 1؛ والحنفي يستخدم معامل ظل 2. ويُضاف ظل الزوال في الحالتين.',\n",
     )
 translations_path.write_text(translations)
 
