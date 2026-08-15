@@ -20,6 +20,7 @@ export interface SourcedDashboardPrayerRow {
   readonly name: PrayerName;
   readonly localMinutes: number | null;
   readonly iqamahLocalMinutes: number | null;
+  readonly isCurrent: boolean;
   readonly isNext: boolean;
   readonly highLatitudeRuleApplied: boolean;
   readonly manualAdjustmentMinutes: number;
@@ -32,6 +33,7 @@ export interface SourcedPrayerDashboard {
   readonly sourceMode: PrayerSourceMode;
   readonly mosqueName: string | null;
   readonly prayers: readonly SourcedDashboardPrayerRow[];
+  readonly currentPrayer: ObligatoryPrayerName | null;
   readonly nextPrayer: ObligatoryPrayerName | null;
   readonly nextPrayerDayOffset: 0 | 1 | null;
   readonly nextPrayerLocalMinutes: number | null;
@@ -46,6 +48,28 @@ interface NextCandidate {
   readonly minutesUntil: number;
 }
 
+function findCurrentResolvedPrayer(
+  currentLocalMinutes: number,
+  today: Readonly<Record<ObligatoryPrayerName, ResolvedPrayerTime>>,
+): ObligatoryPrayerName | null {
+  let current: ObligatoryPrayerName | null = null;
+  let latestStart = Number.NEGATIVE_INFINITY;
+
+  for (const prayer of OBLIGATORY_PRAYERS) {
+    const localMinutes = today[prayer].startLocalMinutes;
+    if (
+      localMinutes !== null &&
+      localMinutes <= currentLocalMinutes &&
+      localMinutes >= latestStart
+    ) {
+      current = prayer;
+      latestStart = localMinutes;
+    }
+  }
+
+  return current;
+}
+
 function findNextResolvedPrayer(
   currentLocalMinutes: number,
   today: Readonly<Record<ObligatoryPrayerName, ResolvedPrayerTime>>,
@@ -55,7 +79,7 @@ function findNextResolvedPrayer(
 
   for (const prayer of OBLIGATORY_PRAYERS) {
     const todayMinutes = today[prayer].startLocalMinutes;
-    if (todayMinutes !== null && todayMinutes >= currentLocalMinutes) {
+    if (todayMinutes !== null && todayMinutes > currentLocalMinutes) {
       candidates.push({
         prayer,
         dayOffset: 0,
@@ -101,6 +125,7 @@ export function applyPrayerSourceToDashboard(input: {
     input.dashboard.tomorrow,
     tomorrowMosqueDay,
   );
+  const current = findCurrentResolvedPrayer(input.dashboard.clock.localMinutes, resolvedToday);
   const next = findNextResolvedPrayer(
     input.dashboard.clock.localMinutes,
     resolvedToday,
@@ -114,6 +139,7 @@ export function applyPrayerSourceToDashboard(input: {
         iqamahLocalMinutes: null,
         source: input.sourceMode,
         available: row.localMinutes !== null,
+        isCurrent: false,
         isNext: false,
       };
     }
@@ -125,6 +151,7 @@ export function applyPrayerSourceToDashboard(input: {
       iqamahLocalMinutes: resolved.iqamahLocalMinutes,
       source: resolved.source,
       available: resolved.available,
+      isCurrent: current === row.name,
       isNext: next?.dayOffset === 0 && next.prayer === row.name,
     };
   });
@@ -135,6 +162,7 @@ export function applyPrayerSourceToDashboard(input: {
     mosqueName:
       input.sourceMode === 'local-mosque' ? (input.mosqueTimetable?.mosqueName ?? null) : null,
     prayers,
+    currentPrayer: current,
     nextPrayer: next?.prayer ?? null,
     nextPrayerDayOffset: next?.dayOffset ?? null,
     nextPrayerLocalMinutes: next?.localMinutes ?? null,

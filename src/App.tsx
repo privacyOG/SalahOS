@@ -1062,12 +1062,17 @@ export function App() {
               );
               return (
                 <article
-                  className={`prayer-card${prayer.isNext ? ' prayer-card-next' : ''}${prayer.name === 'sunrise' ? ' prayer-card-supplementary' : ''}`}
+                  className={`prayer-card${prayer.isCurrent ? ' prayer-card-current' : ''}${prayer.isNext ? ' prayer-card-next' : ''}${prayer.name === 'sunrise' ? ' prayer-card-supplementary' : ''}`}
                   key={prayer.name}
                 >
                   <div className="prayer-card-heading">
                     <span>{translate(locale, prayerTranslationKeys[prayer.name])}</span>
                     <div className="prayer-indicators">
+                      {prayer.isCurrent && (
+                        <span className="current-prayer-badge">
+                          {translate(locale, 'currentPrayer')}
+                        </span>
+                      )}
                       {displayedHighLatitude && (
                         <span className="adjustment-badge high-latitude-badge">
                           {translate(locale, 'highLatitudeAdjustment')} ·{' '}
