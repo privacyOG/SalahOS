@@ -84,9 +84,10 @@ Physical Raspberry Pi Touch Display 2, television/CEC/remote and final real-devi
 - reviewed source and merged-manifest permission contracts;
 - cleartext network traffic disabled;
 - application backup disabled with explicit cloud/device-transfer exclusion rules;
-- local notification and reboot scheduling paths.
+- local notification and reboot scheduling paths;
+- unused Google Services build/plugin auto-activation removed, with `google-services.json` rejected by the sensitive-file gate.
 
-The new permanent emulator/screenshot gate is candidate infrastructure until it passes on the exact candidate head and its retained images are inspected. A successful Android build/emulator run does not represent broad physical-device or store-distribution acceptance.
+The new permanent emulator/screenshot and native hardening gates are candidate infrastructure until they pass on the exact candidate head and retained images are inspected where applicable. A successful Android build/emulator run does not represent broad physical-device or store-distribution acceptance.
 
 ### iOS / iPadOS
 
@@ -108,7 +109,8 @@ The new iPhone/iPad screenshot path is candidate infrastructure until it passes 
 - privacy-safe structured error logging;
 - sensitive-file and dependency-vulnerability gates;
 - dependency-license policy;
-- Web/PWA Content Security Policy baseline;
+- reviewed native dependency-surface gate that pins the committed Capacitor/AndroidX/Cordova/Swift-package declarations and rejects unreviewed local Android `.jar/.aar` binaries;
+- Web/PWA Content Security Policy baseline with same-origin networking and loopback-only development WebSocket exceptions;
 - optional remote API boundary using explicit HTTPS origins, no browser credentials, no redirect following, no referrer disclosure and no cache reuse;
 - direct unreviewed production networking primitives rejected by repository policy;
 - native permission/backup/transport review gates;
