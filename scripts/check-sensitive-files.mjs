@@ -19,6 +19,7 @@ const blockedNames = new Set([
   'secrets.json',
   'credentials.yaml',
   'secrets.yaml',
+  'google-services.json',
 ]);
 
 function normalize(relativePath) {

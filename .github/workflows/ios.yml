@@ -5,6 +5,7 @@ on:
   push:
     branches:
       - main
+      - 'agent/**'
 
 permissions:
   contents: read
@@ -12,6 +13,7 @@ permissions:
 jobs:
   ios:
     runs-on: macos-15
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -26,6 +28,8 @@ jobs:
         run: npm run check
       - name: Synchronize iOS application
         run: npx cap sync ios
+      - name: Verify synchronized native dependency surface
+        run: npm run verify:native-dependencies
       - name: Build iOS simulator application
         run: |
           xcodebuild \
@@ -37,3 +41,103 @@ jobs:
             -derivedDataPath "$RUNNER_TEMP/SalahOSDerivedData" \
             CODE_SIGNING_ALLOWED=NO \
             build
+          APP_BUNDLE="$(find "$RUNNER_TEMP/SalahOSDerivedData/Build/Products" -path '*Debug-iphonesimulator/App.app' -print -quit)"
+          test -n "$APP_BUNDLE"
+          test -s "$APP_BUNDLE/public/index.html"
+          echo "APP_BUNDLE=$APP_BUNDLE" >> "$GITHUB_ENV"
+      - name: Select iPhone and iPad Simulators
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess
+
+          devices = json.loads(
+              subprocess.check_output(['xcrun', 'simctl', 'list', 'devices', 'available', '-j'])
+          )['devices']
+          iphone = None
+          ipad = None
+          for runtime, entries in reversed(list(devices.items())):
+              for device in entries:
+                  name = device.get('name', '')
+                  if iphone is None and name.startswith('iPhone'):
+                      iphone = (name, device['udid'], runtime)
+                  if ipad is None and name.startswith('iPad'):
+                      ipad = (name, device['udid'], runtime)
+              if iphone is not None and ipad is not None:
+                  break
+
+          if iphone is None:
+              raise SystemExit('No available iPhone Simulator')
+          if ipad is None:
+              raise SystemExit('No available iPad Simulator')
+
+          print('Selected iPhone:', iphone)
+          print('Selected iPad:', ipad)
+          with open(os.environ['GITHUB_ENV'], 'a') as env:
+              env.write(f'IPHONE_NAME={iphone[0]}\nIPHONE_UDID={iphone[1]}\n')
+              env.write(f'IPAD_NAME={ipad[0]}\nIPAD_UDID={ipad[1]}\n')
+          PY
+      - name: Capture iPhone and iPad visual evidence
+        timeout-minutes: 10
+        run: |
+          mkdir -p simulator-evidence
+
+          capture_device() {
+            local udid="$1"
+            local label="$2"
+
+            xcrun simctl shutdown "$udid" 2>/dev/null || true
+            xcrun simctl boot "$udid"
+            xcrun simctl bootstatus "$udid" -b
+            xcrun simctl install "$udid" "$APP_BUNDLE"
+            xcrun simctl terminate "$udid" com.privacyog.salahos 2>/dev/null || true
+
+            launch_output="$(xcrun simctl launch "$udid" com.privacyog.salahos)"
+            echo "$launch_output"
+            grep -F 'com.privacyog.salahos:' <<<"$launch_output"
+
+            sleep 5
+            xcrun simctl io "$udid" screenshot "simulator-evidence/${label}-5s.png"
+            sleep 15
+            xcrun simctl io "$udid" screenshot "simulator-evidence/${label}-20s.png"
+            xcrun simctl get_app_container "$udid" com.privacyog.salahos app
+
+            python3 - "$label" <<'PY'
+          import struct
+          import sys
+          from pathlib import Path
+
+          label = sys.argv[1]
+
+          def png_size(path: Path) -> tuple[int, int]:
+              data = path.read_bytes()
+              if len(data) < 24 or data[:8] != b'\x89PNG\r\n\x1a\n' or data[12:16] != b'IHDR':
+                  raise SystemExit(f'Invalid PNG screenshot: {path}')
+              width, height = struct.unpack('>II', data[16:24])
+              if width <= 0 or height <= 0:
+                  raise SystemExit(f'Invalid PNG dimensions for {path}: {width}x{height}')
+              return width, height
+
+          first_path = Path(f'simulator-evidence/{label}-5s.png')
+          second_path = Path(f'simulator-evidence/{label}-20s.png')
+          first = png_size(first_path)
+          second = png_size(second_path)
+          if first != second:
+              raise SystemExit(
+                  f'{label} screenshot dimensions changed between captures: {first} != {second}'
+              )
+          print(f'{label} simulator screenshots verified at {first[0]}x{first[1]}')
+          PY
+
+            xcrun simctl shutdown "$udid"
+          }
+
+          capture_device "$IPHONE_UDID" iphone
+          capture_device "$IPAD_UDID" ipad
+      - name: Upload iOS simulator visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-simulator-visual-${{ github.sha }}
+          path: simulator-evidence/*.png
+          if-no-files-found: ignore
+          retention-days: 14
