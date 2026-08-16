@@ -758,3 +758,10 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Unit coverage verifies granted exact capability, denied inexact fallback, unsupported targets, explicit settings navigation and display-permission ordering.
 - The settings UI warns when precise access is off and capability changes trigger notification reconciliation.
 - Doze/idle behavior, battery optimisation/vendor restrictions, reboot recovery and physical/emulator timing evidence remain open.
+
+### 2026-08-16 — Android background restrictions
+
+- Validation run `31939465371` passed the complete repository quality gate and Android debug assembly.
+- Android notification reconciliation is now forced through the existing tested focus, pageshow and visible-document runtime recovery path when the app returns to the foreground.
+- English and Arabic UI text explicitly names Doze, Battery Saver and manufacturer background restrictions and states that SalahOS does not request an unrestricted battery-optimisation exemption.
+- Exact-alarm access is not represented as bypassing Android power policy. Physical-device Doze/vendor delivery timing and reboot recovery remain separate acceptance work.

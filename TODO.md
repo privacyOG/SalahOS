@@ -356,7 +356,10 @@
 
 **Android exact-alarm verification note (2026-08-16):** the Android manifest declares user-managed `SCHEDULE_EXACT_ALARM` access. The native notification adapter checks the current exact-alarm setting without opening system settings automatically, reports exact versus inexact scheduling capability, and continues with an explicit inexact fallback when access is unavailable. The notification settings UI explains that Android may delay alerts while precise access is off and offers a user-initiated path to the system exact-alarm settings. Capability changes on return trigger notification reconciliation so current prayer jobs are rescheduled under the new precision state. Validation run `31938706626` passed the complete repository quality gate and Capacitor/Gradle Android debug assembly. Tests cover granted, denied/fallback, unsupported-target, explicit-settings-action and display-permission ordering behavior. Doze/idle delivery, battery optimisation, vendor restrictions, reboot recovery and physical/emulator timing evidence remain separately open.
 
-- [ ] Handle Android battery optimisation/background restrictions honestly
+- [x] Handle Android battery optimisation/background restrictions honestly
+
+**Android background-restriction verification note (2026-08-16):** SalahOS now treats Android background delivery as conditional rather than guaranteed. Focus, restored-page and visible-document recovery use the existing tested runtime-refresh path to force native prayer-notification reconciliation after the app returns to the foreground. English and Arabic settings copy explicitly warns that Doze, Battery Saver and manufacturer background restrictions can delay alerts even when precise alarms are allowed, and states that SalahOS does not request an unrestricted battery-optimisation exemption. Validation run `31939465371` passed the complete repository quality gate and Capacitor/Gradle Android debug assembly. Physical-device Doze/vendor timing evidence remains part of the separate emulator/device acceptance item and is not claimed here.
+
 - [ ] Implement Adhan playback policy compatible with Android lifecycle constraints
 - [x] Handle notification permission versions correctly
 

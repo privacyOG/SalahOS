@@ -140,7 +140,7 @@ export const translations = {
     vibration: 'Vibration where supported',
     adhanEnabled: 'Enable Adhan playback',
     notificationDeliveryPending:
-      'Android local notifications are scheduled on-device after notification permission is granted. Exact delivery still depends on Android alarm, battery and background restrictions; other targets remain platform-dependent.',
+      'Android may delay prayer alerts under Doze, Battery Saver, or manufacturer background restrictions even when precise alarms are allowed. SalahOS does not request an unrestricted battery-optimisation exemption. Returning to the app reconciles the current prayer schedule; other targets remain platform-dependent.',
     exportSettings: 'Export settings',
     importSettings: 'Import settings',
     resetSettings: 'Reset to defaults',
@@ -287,7 +287,7 @@ export const translations = {
     vibration: 'الاهتزاز حيثما كان مدعوماً',
     adhanEnabled: 'تفعيل تشغيل الأذان',
     notificationDeliveryPending:
-      'يعتمد التسليم والتوقيت الدقيق على أذونات المنصة وقيود العمل في الخلفية؛ تُحفظ هذه الإعدادات محلياً إلى أن يتم تفعيل مجدول خاص بالمنصة.',
+      'قد يؤخر أندرويد تنبيهات الصلاة بسبب وضع السكون أو توفير البطارية أو قيود الشركة المصنّعة حتى عند السماح بالمنبّهات الدقيقة. لا يطلب صلاح أو إس استثناءً غير مقيّد من تحسين البطارية، وعند العودة إلى التطبيق تتم مطابقة جدول الصلاة الحالي من جديد.',
     exportSettings: 'تصدير الإعدادات',
     importSettings: 'استيراد الإعدادات',
     resetSettings: 'إعادة الإعدادات الافتراضية',
