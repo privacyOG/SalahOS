@@ -86,4 +86,39 @@ describe('shared prayer dashboard model', () => {
     ).toBe(2);
     expect(configured.hasManualAdjustments).toBe(true);
   });
+
+  it('resolves Umm al-Qura Isha separately across the Ramadan to Shawwal boundary', () => {
+    const makkah = createCoordinates(21.3891, 39.8579);
+    const model = buildPrayerDashboard({
+      instant: new Date('2026-03-19T12:00:00.000Z'),
+      coordinates: makkah,
+      timeZone: 'Asia/Riyadh',
+      method: calculationMethods['umm-al-qura'],
+      hijriCorrectionDays: 2,
+    });
+
+    expect(model.today.date).toBe('2026-03-19');
+    expect(model.tomorrow.date).toBe('2026-03-20');
+    expect(model.hijri.month).toBe(10);
+    expect(model.hijri.correctionDays).toBe(2);
+    expect(model.today.method.ishaRule).toEqual({
+      kind: 'interval',
+      minutesAfterMaghrib: 120,
+    });
+    expect(model.tomorrow.method.ishaRule).toEqual({
+      kind: 'interval',
+      minutesAfterMaghrib: 90,
+    });
+
+    const todayMaghrib = model.today.prayers.maghrib.roundedLocalMinutes;
+    const todayIsha = model.today.prayers.isha.roundedLocalMinutes;
+    const tomorrowMaghrib = model.tomorrow.prayers.maghrib.roundedLocalMinutes;
+    const tomorrowIsha = model.tomorrow.prayers.isha.roundedLocalMinutes;
+    expect(todayMaghrib).not.toBeNull();
+    expect(todayIsha).not.toBeNull();
+    expect(tomorrowMaghrib).not.toBeNull();
+    expect(tomorrowIsha).not.toBeNull();
+    expect((todayIsha ?? 0) - (todayMaghrib ?? 0)).toBe(120);
+    expect((tomorrowIsha ?? 0) - (tomorrowMaghrib ?? 0)).toBe(90);
+  });
 });

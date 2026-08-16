@@ -1,0 +1,7 @@
+.app-shell {
+  min-height: 100dvh;
+  padding-block-start: max(clamp(1.5rem, 4vw, 4rem), env(safe-area-inset-top, 0px));
+  padding-block-end: max(clamp(1.5rem, 4vw, 4rem), env(safe-area-inset-bottom, 0px));
+  padding-inline-start: env(safe-area-inset-left, 0px);
+  padding-inline-end: env(safe-area-inset-right, 0px);
+}
