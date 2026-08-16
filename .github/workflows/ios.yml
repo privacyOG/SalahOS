@@ -28,6 +28,8 @@ jobs:
         run: npm run check
       - name: Synchronize iOS application
         run: npx cap sync ios
+      - name: Verify synchronized Capacitor configuration
+        run: npm run verify:capacitor-config
       - name: Verify synchronized native dependency surface
         run: npm run verify:native-dependencies
       - name: Build iOS simulator application
