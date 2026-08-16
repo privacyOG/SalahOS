@@ -1,0 +1,95 @@
+name: Generate PWA Icons
+
+on:
+  push:
+    branches:
+      - agent/pwa-raster-icons
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    if: github.ref == 'refs/heads/agent/pwa-raster-icons'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: agent/pwa-raster-icons
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies from lockfile
+        run: npm ci --ignore-scripts
+
+      - name: Sensitive-file policy
+        run: npm run security:sensitive-files
+
+      - name: Dependency vulnerability audit
+        run: npm run security:audit
+
+      - name: Dependency license policy
+        run: npm run security:licenses
+
+      - name: Documentation link verification
+        run: npm run docs:links
+
+      - name: Generate raster install icons
+        run: |
+          set -euo pipefail
+          if command -v rsvg-convert >/dev/null 2>&1; then
+            render() { rsvg-convert -w "$2" -h "$2" "$1" -o "$3"; }
+          elif command -v magick >/dev/null 2>&1; then
+            render() { magick -background none "$1" -resize "$2x$2" "$3"; }
+          elif command -v convert >/dev/null 2>&1; then
+            render() { convert -background none "$1" -resize "$2x$2" "$3"; }
+          else
+            echo "No SVG rasterizer is available on the runner" >&2
+            exit 1
+          fi
+
+          render public/icons/salahos.svg 192 public/icons/salahos-192.png
+          render public/icons/salahos.svg 512 public/icons/salahos-512.png
+          render public/icons/salahos-maskable.svg 192 public/icons/salahos-maskable-192.png
+          render public/icons/salahos-maskable.svg 512 public/icons/salahos-maskable-512.png
+
+          python - <<'PY'
+          from pathlib import Path
+          from struct import unpack
+
+          expected = {
+              'public/icons/salahos-192.png': (192, 192),
+              'public/icons/salahos-512.png': (512, 512),
+              'public/icons/salahos-maskable-192.png': (192, 192),
+              'public/icons/salahos-maskable-512.png': (512, 512),
+          }
+          signature = b'\x89PNG\r\n\x1a\n'
+          for filename, dimensions in expected.items():
+              data = Path(filename).read_bytes()
+              if data[:8] != signature:
+                  raise SystemExit(f'{filename}: invalid PNG signature')
+              width, height = unpack('>II', data[16:24])
+              if (width, height) != dimensions:
+                  raise SystemExit(f'{filename}: expected {dimensions}, got {(width, height)}')
+              if len(data) < 256:
+                  raise SystemExit(f'{filename}: unexpectedly small PNG')
+              print(f'{filename}: {width}x{height}, {len(data)} bytes')
+          PY
+
+      - name: Commit generated icons
+        run: |
+          if git status --porcelain -- public/icons/*.png | grep -q .; then
+            git config user.name privacyOG
+            git config user.email 102720550+privacyOG@users.noreply.github.com
+            git add public/icons/*.png
+            git commit -m "assets: add raster PWA install icons"
+            git push origin HEAD:agent/pwa-raster-icons
+          else
+            echo "Raster icons already match generated output"
+          fi
