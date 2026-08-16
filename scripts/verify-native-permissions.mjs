@@ -20,6 +20,11 @@ if (declaredLocalNotificationsVersion !== reviewedLocalNotificationsVersion) {
   );
 }
 
+const androidBuild = readFileSync(new URL('../android/build.gradle', import.meta.url), 'utf8');
+const androidAppBuild = readFileSync(
+  new URL('../android/app/build.gradle', import.meta.url),
+  'utf8',
+);
 const androidManifest = readFileSync(
   new URL('../android/app/src/main/AndroidManifest.xml', import.meta.url),
   'utf8',
@@ -41,6 +46,21 @@ const currentLocation = readFileSync(
   new URL('../src/platform/currentLocation.ts', import.meta.url),
   'utf8',
 );
+
+for (const forbiddenNativeServiceHook of [
+  'com.google.gms:google-services',
+  'com.google.gms.google-services',
+  'google-services.json',
+]) {
+  if (
+    androidBuild.includes(forbiddenNativeServiceHook) ||
+    androidAppBuild.includes(forbiddenNativeServiceHook)
+  ) {
+    throw new Error(
+      `Dormant native service integration requires an explicit privacy/security review: ${forbiddenNativeServiceHook}`,
+    );
+  }
+}
 
 const expectedAndroidPermissions = new Set([
   'android.permission.ACCESS_COARSE_LOCATION',
@@ -142,5 +162,5 @@ if (/\bwatchPosition\s*\(/.test(currentLocation)) {
 }
 
 console.log(
-  `Native permission/privacy contract passed for reviewed Geolocation ${reviewedGeolocationVersion} and Local Notifications ${reviewedLocalNotificationsVersion}: ${declaredAndroidPermissions.length} reviewed app-owned Android permissions, Android backup/transfer and cleartext exclusions, default iOS transport security, and one-shot native location with the two required iOS usage-description keys.`,
+  `Native permission/privacy contract passed for reviewed Geolocation ${reviewedGeolocationVersion} and Local Notifications ${reviewedLocalNotificationsVersion}: ${declaredAndroidPermissions.length} reviewed app-owned Android permissions, no dormant external-service Gradle hook, Android backup/transfer and cleartext exclusions, default iOS transport security, and one-shot native location with the two required iOS usage-description keys.`,
 );
