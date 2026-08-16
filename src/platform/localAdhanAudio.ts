@@ -74,7 +74,7 @@ function transactionRequest<T>(
       new Promise<T>((resolve, reject) => {
         const transaction = database.transaction(STORE_NAME, mode);
         const request = action(transaction.objectStore(STORE_NAME));
-        let requestResult: T;
+        let requestResult: T | undefined;
         let requestSucceeded = false;
         let settled = false;
 
@@ -100,7 +100,7 @@ function transactionRequest<T>(
           }
           settled = true;
           database.close();
-          resolve(requestResult);
+          resolve(requestResult as T);
         };
         transaction.onerror = () => {
           closeAndReject(transaction.error ?? new Error('Local media storage transaction failed'));
