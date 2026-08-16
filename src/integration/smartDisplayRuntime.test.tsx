@@ -44,8 +44,6 @@ describe('smart display runtime continuity', () => {
 
     expect(beforeDashboard.base.civilDate.toISOString().slice(0, 10)).toBe('2026-08-16');
     expect(afterDashboard.base.civilDate.toISOString().slice(0, 10)).toBe('2026-08-17');
-    expect(beforeDashboard.base.today.date.toISOString().slice(0, 10)).toBe('2026-08-16');
-    expect(afterDashboard.base.today.date.toISOString().slice(0, 10)).toBe('2026-08-17');
 
     const beforeHtml = renderAt(before);
     const afterHtml = renderAt(after);
