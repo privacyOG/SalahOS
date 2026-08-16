@@ -1,5 +1,5 @@
 import type { NotificationPreferences } from '../domain/notificationPreferences';
-import type { ObligatoryPrayerName } from '../domain/prayerEngine';
+import type { PrayerName } from '../domain/prayerEngine';
 
 const DATABASE_NAME = 'salahos-local-media';
 const DATABASE_VERSION = 1;
@@ -16,7 +16,7 @@ export interface LocalAdhanAudioRecord {
 }
 
 export interface LocalAdhanPrayerRow {
-  readonly name: string;
+  readonly name: PrayerName;
   readonly localMinutes: number | null;
 }
 
@@ -50,14 +50,18 @@ function openDatabase(): Promise<IDBDatabase> {
 
   return new Promise((resolve, reject) => {
     const request = indexedDB.open(DATABASE_NAME, DATABASE_VERSION);
-    request.onerror = () => reject(request.error ?? new Error('Unable to open local media storage'));
+    request.onerror = () => {
+      reject(request.error ?? new Error('Unable to open local media storage'));
+    };
     request.onupgradeneeded = () => {
       const database = request.result;
       if (!database.objectStoreNames.contains(STORE_NAME)) {
         database.createObjectStore(STORE_NAME);
       }
     };
-    request.onsuccess = () => resolve(request.result);
+    request.onsuccess = () => {
+      resolve(request.result);
+    };
   });
 }
 
@@ -70,9 +74,15 @@ function transactionRequest<T>(
       new Promise<T>((resolve, reject) => {
         const transaction = database.transaction(STORE_NAME, mode);
         const request = action(transaction.objectStore(STORE_NAME));
-        request.onerror = () => reject(request.error ?? new Error('Local media storage request failed'));
-        request.onsuccess = () => resolve(request.result);
-        transaction.oncomplete = () => database.close();
+        request.onerror = () => {
+          reject(request.error ?? new Error('Local media storage request failed'));
+        };
+        request.onsuccess = () => {
+          resolve(request.result);
+        };
+        transaction.oncomplete = () => {
+          database.close();
+        };
         transaction.onerror = () => {
           database.close();
           reject(transaction.error ?? new Error('Local media storage transaction failed'));
@@ -82,8 +92,9 @@ function transactionRequest<T>(
 }
 
 export async function loadLocalAdhanAudio(): Promise<LocalAdhanAudioRecord | null> {
-  const result = await transactionRequest<LocalAdhanAudioRecord | undefined>('readonly', (store) =>
-    store.get(SELECTED_AUDIO_KEY),
+  const result = await transactionRequest<LocalAdhanAudioRecord | undefined>(
+    'readonly',
+    (store) => store.get(SELECTED_AUDIO_KEY) as IDBRequest<LocalAdhanAudioRecord | undefined>,
   );
   if (result === undefined) {
     return null;
@@ -104,14 +115,16 @@ export async function saveLocalAdhanAudio(file: File): Promise<LocalAdhanAudioRe
     size: file.size,
     blob: file,
   };
-  await transactionRequest<IDBValidKey>('readwrite', (store) =>
-    store.put(record, SELECTED_AUDIO_KEY),
-  );
+  await transactionRequest<IDBValidKey>('readwrite', (store) => {
+    return store.put(record, SELECTED_AUDIO_KEY);
+  });
   return record;
 }
 
 export async function removeLocalAdhanAudio(): Promise<void> {
-  await transactionRequest<undefined>('readwrite', (store) => store.delete(SELECTED_AUDIO_KEY));
+  await transactionRequest<undefined>('readwrite', (store) => {
+    return store.delete(SELECTED_AUDIO_KEY);
+  });
 }
 
 export function foregroundAdhanPlaybackKey(input: {
@@ -129,9 +142,8 @@ export function foregroundAdhanPlaybackKey(input: {
     if (prayer.name === 'sunrise' || prayer.localMinutes === null) {
       continue;
     }
-    const preference = input.notifications[prayer.name as ObligatoryPrayerName];
+    const preference = input.notifications[prayer.name];
     if (
-      preference !== undefined &&
       preference.enabled &&
       preference.adhanEnabled &&
       Math.floor(prayer.localMinutes) === currentMinute
