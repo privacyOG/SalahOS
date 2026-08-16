@@ -268,7 +268,10 @@
 - [x] English translation complete
 - [x] Arabic translation complete
 - [x] Enable `dir="rtl"` correctly for Arabic
-- [~] Verify mixed Arabic/Latin text rendering
+- [x] Verify mixed Arabic/Latin text rendering
+
+**Mixed-direction text verification note (2026-08-16):** read-only Quality Gate run `31917001417` passed formatting, typed lint, strict typecheck, all tests and production build on exact cleaned head `11a0459595e36c7981ccbe72c133b92ec5d3ce67`. Dynamic user/provider values that can contain Arabic, Latin text, identifiers or numerals now use automatic bidirectional isolation: rendered method names, timezone identifiers, mosque names and Jumu'ah labels are wrapped in semantic `<bdi dir="auto">`, while editable/selectable saved-location, method and mosque values use `dir="auto"`. Static-render tests verify mixed Arabic/Latin text and `Australia/Sydney` identifiers produce isolated markup without forcing the surrounding page direction. Full visual RTL verification across every major breakpoint remains a separate partial item.
+
 - [x] Verify Arabic numerals/date/time formatting choices
 - [x] Ensure prayer names have correct Arabic forms
 - [x] Keep all user-facing text out of hard-coded components

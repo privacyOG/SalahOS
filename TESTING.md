@@ -430,3 +430,12 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Required future provider adapters to terminate at the existing validated `MosqueTimetable` model, retain offline last-known-good data, preserve provider/mosque provenance and surface stale/error state without silent calculated fallback.
 - Kept all direct remote provider adapters unimplemented; this milestone closes research only.
 - Read-only Quality Gate run `31916720065` passed formatting, typed lint, strict typecheck, all tests and production build.
+
+### 2026-08-16 — mixed-direction text isolation
+
+- Added a reusable semantic `BidiText` renderer using `<bdi dir="auto">` for dynamic values embedded in localized UI text.
+- Isolated rendered calculation-method names, IANA timezone identifiers, mosque names and Jumu'ah session labels from the surrounding document direction.
+- Added `dir="auto"` to dynamic saved-location, calculation-method and mosque option/input values so user-entered Arabic/Latin content can determine its own direction.
+- Added static-render tests proving mixed Arabic/Latin content and an IANA timezone identifier produce bidirectionally isolated markup without changing the parent page direction.
+- Kept the separate RTL-at-every-breakpoint tracker item partial because deterministic markup tests do not replace visual browser validation.
+- Read-only Quality Gate run `31917001417` passed formatting, typed lint, strict typecheck, all tests and production build on exact cleaned head `11a0459595e36c7981ccbe72c133b92ec5d3ce67`.
