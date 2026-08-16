@@ -85,6 +85,9 @@ describe('notification scheduling integration flow', () => {
       '2026-08-16:fajr:prayer-time',
     )?.instantEpochMilliseconds;
     expect(initialPrayerInstant).toBeTypeOf('number');
+    if (initialPrayerInstant === undefined) {
+      throw new Error('Expected initial Fajr prayer-time notification to be scheduled');
+    }
 
     adapter.operations.length = 0;
     const recalculatedIntents = buildNotificationIntents(prayerInputs({ fajr: 5 }), preferences);
@@ -112,7 +115,7 @@ describe('notification scheduling integration flow', () => {
     const recalculatedPrayerInstant = adapter.records.get(
       '2026-08-16:fajr:prayer-time',
     )?.instantEpochMilliseconds;
-    expect(recalculatedPrayerInstant).toBe(initialPrayerInstant! + 5 * 60_000);
+    expect(recalculatedPrayerInstant).toBe(initialPrayerInstant + 5 * 60_000);
     expect(adapter.records.get('2026-08-16:fajr:prayer-time')).toMatchObject({
       timeZone: 'Australia/Sydney',
       sound: 'silent',
