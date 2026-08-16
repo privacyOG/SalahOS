@@ -64,6 +64,7 @@ import type { PersistedSettings } from './platform/settingsStorage';
 import { installRuntimeRefreshListeners } from './platform/runtimeRefresh';
 import { createSystemClockChangeDetector } from './platform/systemClockChange';
 import { createSystemSleepWakeDetector } from './platform/systemSleepWake';
+import { readSystemTime, systemTimeFromMilliseconds } from './platform/systemTime';
 import { installThemePreference } from './platform/themePreference';
 import { BidiText } from './ui/BidiText';
 
@@ -141,7 +142,7 @@ export function App() {
   );
   const [locationFailure, setLocationFailure] = useState<BrowserLocationFailureReason | null>(null);
   const [manualError, setManualError] = useState(false);
-  const [now, setNow] = useState(() => new Date());
+  const [now, setNow] = useState<Date | null>(() => readSystemTime());
   const [online, setOnline] = useState(() => navigator.onLine);
   const [settingsPayload, setSettingsPayload] = useState('');
   const [settingsMessage, setSettingsMessage] = useState<TranslationKey | null>(null);
@@ -184,31 +185,64 @@ export function App() {
   }, [settings.theme]);
 
   useEffect(() => {
-    const initialSample = { wallTimeMs: Date.now(), monotonicTimeMs: performance.now() };
-    const clockChangeDetector = createSystemClockChangeDetector(initialSample);
-    const sleepWakeDetector = createSystemSleepWakeDetector({
-      wallTimeMs: initialSample.wallTimeMs,
-    });
-    const sampleNow = () => ({
-      wallTimeMs: Date.now(),
-      monotonicTimeMs: performance.now(),
-    });
+    let clockChangeDetector: ReturnType<typeof createSystemClockChangeDetector> | null = null;
+    let sleepWakeDetector: ReturnType<typeof createSystemSleepWakeDetector> | null = null;
+
+    const sampleNow = () => {
+      const wallTimeMs = Date.now();
+      const monotonicTimeMs = performance.now();
+      const instant = systemTimeFromMilliseconds(wallTimeMs);
+      if (instant === null || !Number.isFinite(monotonicTimeMs)) {
+        return null;
+      }
+      return { wallTimeMs, monotonicTimeMs, instant };
+    };
+    const invalidateRuntimeClock = () => {
+      clockChangeDetector = null;
+      sleepWakeDetector = null;
+      setNow(null);
+    };
+    const resetFromSample = (sample: NonNullable<ReturnType<typeof sampleNow>>) => {
+      if (clockChangeDetector === null) {
+        clockChangeDetector = createSystemClockChangeDetector(sample);
+      } else {
+        clockChangeDetector.reset(sample);
+      }
+      if (sleepWakeDetector === null) {
+        sleepWakeDetector = createSystemSleepWakeDetector({ wallTimeMs: sample.wallTimeMs });
+      } else {
+        sleepWakeDetector.reset({ wallTimeMs: sample.wallTimeMs });
+      }
+      setNow(sample.instant);
+    };
     const refreshNow = () => {
       const sample = sampleNow();
-      clockChangeDetector.reset(sample);
-      sleepWakeDetector.reset({ wallTimeMs: sample.wallTimeMs });
-      setNow(new Date(sample.wallTimeMs));
+      if (sample === null) {
+        invalidateRuntimeClock();
+        return;
+      }
+      resetFromSample(sample);
     };
     const tick = () => {
       const sample = sampleNow();
+      if (sample === null) {
+        invalidateRuntimeClock();
+        return;
+      }
+      if (clockChangeDetector === null || sleepWakeDetector === null) {
+        resetFromSample(sample);
+        return;
+      }
       const resumedFromSleep = sleepWakeDetector.sample({ wallTimeMs: sample.wallTimeMs });
       if (resumedFromSleep) {
         clockChangeDetector.reset(sample);
       } else {
         clockChangeDetector.sample(sample);
       }
-      setNow(new Date(sample.wallTimeMs));
+      setNow(sample.instant);
     };
+
+    refreshNow();
     const timer = window.setInterval(tick, 1_000);
     const removeRuntimeListeners = installRuntimeRefreshListeners(
       { windowTarget: window, documentTarget: document },
@@ -237,7 +271,7 @@ export function App() {
 
   const dashboard = useMemo(
     () =>
-      coordinates === null
+      coordinates === null || now === null
         ? null
         : buildPrayerDashboard({
             instant: now,
@@ -512,14 +546,16 @@ export function App() {
   }
 
   const currentClock =
-    dashboard === null
-      ? new Intl.DateTimeFormat(locale === 'ar' ? 'ar' : 'en-AU', {
-          hour: '2-digit',
-          minute: '2-digit',
-          second: '2-digit',
-          hourCycle: settings.timeFormat,
-        }).format(now)
-      : formatZonedInstantTime(now, dashboard.timeZone, locale, settings.timeFormat);
+    now === null
+      ? '—'
+      : dashboard === null
+        ? new Intl.DateTimeFormat(locale === 'ar' ? 'ar' : 'en-AU', {
+            hour: '2-digit',
+            minute: '2-digit',
+            second: '2-digit',
+            hourCycle: settings.timeFormat,
+          }).format(now)
+        : formatZonedInstantTime(now, dashboard.timeZone, locale, settings.timeFormat);
 
   return (
     <main className="app-shell" dir={direction}>
@@ -1134,7 +1170,17 @@ export function App() {
         </section>
       </details>
 
-      {sourcedDashboard === null ? (
+      {now === null ? (
+        <section className="status-card" role="alert">
+          <div>
+            <p className="label">{translate(locale, 'currentTime')}</p>
+            <p className="value">{translate(locale, 'systemTimeInvalid')}</p>
+          </div>
+          <div>
+            <p className="value">{translate(locale, 'systemTimeInvalidHelp')}</p>
+          </div>
+        </section>
+      ) : sourcedDashboard === null ? (
         <section className="status-card">
           <div>
             <p className="label">{translate(locale, 'currentLocation')}</p>
