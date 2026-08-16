@@ -43,23 +43,11 @@ jobs:
 
       - name: Generate raster install icons
         run: |
-          set -euo pipefail
-          if command -v rsvg-convert >/dev/null 2>&1; then
-            render() { rsvg-convert -w "$2" -h "$2" "$1" -o "$3"; }
-          elif command -v magick >/dev/null 2>&1; then
-            render() { magick -background none "$1" -resize "$2x$2" "$3"; }
-          elif command -v convert >/dev/null 2>&1; then
-            render() { convert -background none "$1" -resize "$2x$2" "$3"; }
-          else
-            echo "No SVG rasterizer is available on the runner" >&2
-            exit 1
-          fi
+          python scripts/generate_pwa_icons.py
+          python scripts/generate_pwa_icons.py --check
 
-          render public/icons/salahos.svg 192 public/icons/salahos-192.png
-          render public/icons/salahos.svg 512 public/icons/salahos-512.png
-          render public/icons/salahos-maskable.svg 192 public/icons/salahos-maskable-192.png
-          render public/icons/salahos-maskable.svg 512 public/icons/salahos-maskable-512.png
-
+      - name: Validate PNG signatures and dimensions
+        run: |
           python - <<'PY'
           from pathlib import Path
           from struct import unpack
