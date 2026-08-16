@@ -177,7 +177,10 @@
 - [x] Implement browser geolocation adapter
 - [ ] Implement native Android/iOS location adapter
 - [x] Support manual latitude/longitude entry
-- [ ] Support manual city/location search
+- [x] Support manual city/location search
+
+**Manual location-search verification note (2026-08-16):** read-only Quality Gate run `31924790649` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, all 231 tests and production build after adding a fully local city/location search path. The app vendors the IANA tzdb 2026c `zone1970.tab` principal-location catalogue at development time, searches more than 300 representative locations locally by city, country, ISO country code, timezone and comments, and never sends the user's query to a remote service. Selecting a result supplies validated representative coordinates to the existing local timezone/prayer-calculation pipeline; integration coverage verifies a Sydney search resolves through the production dashboard as `Australia/Sydney`. English and Arabic UI text explicitly identifies the catalogue as offline/local. Native mobile location adapters and persistent timezone-cache work remain separately open.
+
 - [x] Support saved/favourite locations
 - [x] Support current-location refresh
 - [x] Handle denied-location-permission flow gracefully

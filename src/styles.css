@@ -362,6 +362,53 @@ h2 {
   width: min(13rem, 40vw);
 }
 
+.location-search {
+  display: grid;
+  gap: 0.65rem;
+  margin-block-start: 1rem;
+}
+
+.location-search > label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.4;
+}
+
+.location-search-help {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.location-search-results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+  gap: 0.55rem;
+}
+
+.location-search-result {
+  display: grid;
+  justify-items: start;
+  gap: 0.2rem;
+  min-width: 0;
+  padding-block: 0.7rem;
+  text-align: start;
+}
+
+.location-search-result span,
+.location-search-result small {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+
+.location-search-result small {
+  color: var(--muted);
+  font-weight: 500;
+}
+
 .inline-message {
   margin: 0.9rem 0 0;
   color: var(--warning);

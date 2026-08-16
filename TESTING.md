@@ -564,3 +564,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - It verifies the restored method, Hijri correction, manual prayer adjustment, Sydney timezone, civil date and six prayer rows.
 - This fixture covers the application startup/data path; browser service-worker cache/offline reload validation remains a separate PWA verification item.
 - Read-only Quality Gate run `31923333276` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, all tests and production build.
+
+### 2026-08-16 — offline manual city/location search
+
+- Added a vendored IANA tzdb 2026c principal-location catalogue generated from public-domain `zone1970.tab`; runtime search requires no geocoding service or network request.
+- Added `src/domain/locationSearch.ts` with normalized/ranked search across city, country names, ISO country codes, timezone paths and IANA comments, capped to a small result set for the UI.
+- Added English/Arabic location-search UI, privacy guidance, responsive result controls and immediate selection into the existing coordinate/prayer-calculation path.
+- Added domain coverage for catalogue size, Sydney coordinates/timezone, country-name/code queries, accent/separator normalization and limits, plus `src/integration/manualLocationSearch.test.ts` to verify search result → production dashboard resolution.
+- Read-only Quality Gate run `31924790649` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, all 231 tests and production build.

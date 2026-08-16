@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { createCoordinates } from './domain/coordinates';
 import type { Coordinates } from './domain/coordinates';
 import { buildPrayerDashboardResult } from './domain/dashboardResult';
+import { searchLocations, type LocationSearchResult } from './domain/locationSearch';
 import {
   buildManualMosqueDay,
   MANUAL_MOSQUE_PRAYERS,
@@ -156,7 +157,12 @@ export function App() {
     }
   });
   const [savedLocationLabel, setSavedLocationLabel] = useState('');
+  const [locationQuery, setLocationQuery] = useState('');
   const [locationMessage, setLocationMessage] = useState<TranslationKey | null>(null);
+  const locationSearchResults = useMemo(
+    () => searchLocations(locationQuery, { locale, limit: 8 }),
+    [locale, locationQuery],
+  );
   const [mosqueLibrary, setMosqueLibrary] = useState<readonly MosqueLibraryEntry[]>(() => {
     try {
       return loadMosqueLibrary(window.localStorage);
@@ -376,6 +382,16 @@ export function App() {
     } catch {
       setManualError(true);
     }
+  }
+
+  function selectSearchedLocation(result: LocationSearchResult): void {
+    setCoordinates(result.coordinates);
+    setLatitude(String(result.coordinates.latitude));
+    setLongitude(String(result.coordinates.longitude));
+    setLocationQuery('');
+    setLocationFailure(null);
+    setManualError(false);
+    setLocationMessage('locationSearchSelected');
   }
 
   function saveCurrentLocation(): void {
@@ -643,6 +659,45 @@ export function App() {
               {translate(locale, 'applyCoordinates')}
             </button>
           </div>
+        </div>
+        <div className="location-search">
+          <label>
+            <span>{translate(locale, 'locationSearch')}</span>
+            <input
+              value={locationQuery}
+              dir="auto"
+              autoComplete="off"
+              placeholder={translate(locale, 'locationSearchPlaceholder')}
+              onChange={(event) => {
+                setLocationQuery(event.target.value);
+                setLocationMessage(null);
+              }}
+            />
+          </label>
+          <p className="location-search-help">{translate(locale, 'locationSearchHelp')}</p>
+          {locationSearchResults.length > 0 && (
+            <div className="location-search-results" role="list">
+              {locationSearchResults.map((result) => (
+                <button
+                  type="button"
+                  className="location-search-result"
+                  key={result.id}
+                  role="listitem"
+                  onClick={() => {
+                    selectSearchedLocation(result);
+                  }}
+                >
+                  <span dir="auto">
+                    {result.city} — {result.countryNames.join(', ')}
+                  </span>
+                  <small dir="ltr">{result.timeZone}</small>
+                </button>
+              ))}
+            </div>
+          )}
+          {locationQuery.trim().length >= 2 && locationSearchResults.length === 0 && (
+            <p className="inline-message">{translate(locale, 'locationSearchNoResults')}</p>
+          )}
         </div>
         <div className="saved-location-controls">
           <label>
