@@ -82,7 +82,7 @@ describe('settings to prayer recalculation flow', () => {
     expect(recalculatedFajr?.manualAdjustmentMinutes).toBe(7);
     expect(recalculatedDashboard.hasManualAdjustments).toBe(true);
 
-    expect(initialAsr?.displayLocalMinutes).not.toBe(recalculatedAsr?.displayLocalMinutes);
-    expect(initialFajr?.displayLocalMinutes).not.toBe(recalculatedFajr?.displayLocalMinutes);
+    expect(initialAsr?.localMinutes).not.toBe(recalculatedAsr?.localMinutes);
+    expect(initialFajr?.localMinutes).not.toBe(recalculatedFajr?.localMinutes);
   });
 });
