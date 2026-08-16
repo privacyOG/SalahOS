@@ -24,8 +24,6 @@
 	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>SalahOS uses your location only when you ask it to calculate prayer times for your current position.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>SalahOS uses your location only when you ask it to calculate prayer times for your current position.</string>
 	<key>UILaunchStoryboardName</key>
