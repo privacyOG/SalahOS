@@ -13,7 +13,7 @@ permissions:
 jobs:
   android:
     runs-on: ubuntu-24.04
-    timeout-minutes: 40
+    timeout-minutes: 45
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -35,6 +35,9 @@ jobs:
 
       - name: Build Android debug APK
         run: npm run android:build
+
+      - name: Build unsigned Android release APK and verify effective permissions
+        run: npm run android:release-check
 
       - name: Enable KVM
         run: |
