@@ -83,8 +83,22 @@ class NativePreferencesStorage implements FlushableKeyValueStorage {
 
   async flush(): Promise<void> {
     await this.pendingWrite;
+    let firstFailure: unknown;
+    let failed = false;
+
     for (const [key, value] of [...this.pendingMutations]) {
-      await this.applyMutation(key, value);
+      try {
+        await this.applyMutation(key, value);
+      } catch (error) {
+        if (!failed) {
+          firstFailure = error;
+          failed = true;
+        }
+      }
+    }
+
+    if (failed) {
+      throw firstFailure;
     }
   }
 }
