@@ -453,9 +453,12 @@
 
 **Smart-display mode verification note (2026-08-16):** read-only Quality Gate run `31932489699` passed the sensitive-file policy, dependency vulnerability audit, dependency-license policy, documentation-link verification across 29 Markdown files, PWA raster-icon reproducibility, formatting, typed lint, strict typecheck, 54 test files / 258 tests, production build and deploy-artifact verification. The live `?mode=smart-display` presentation is rendered inside the normal application runtime and consumes the shared sourced prayer dashboard rather than duplicating prayer calculations. It presents a large live clock and next-prayer countdown, the five obligatory prayers at a glance, configured Iqamah, current/next highlighting, and configured date-scoped Jumu'ah sessions, with English/Arabic presentation and offline/unconfigured/error states. The existing Chromium launcher accepts `SALAHOS_KIOSK_URL`; the Raspberry Pi kiosk guide now documents launching the smart-display URL directly under the validated full-screen kiosk flags. Automatic daily rollover, timezone/DST update, sleep/wake recovery, burn-in behaviour, remote/keyboard navigation and broader TV deployment documentation remain separate Stage 12 verification items.
 
-- [ ] Automatic daily schedule rollover
-- [ ] Automatic timezone/DST update
-- [ ] Sleep/wake recovery
+- [x] Automatic daily schedule rollover
+- [x] Automatic timezone/DST update
+- [x] Sleep/wake recovery
+
+**Smart-display runtime-continuity verification note (2026-08-16):** read-only Quality Gate run `31932809636` passed the sensitive-file policy, dependency vulnerability audit, dependency-license policy, documentation-link verification across 29 Markdown files, PWA raster-icon reproducibility, formatting, typed lint, strict typecheck, 55 test files / 261 tests, production build and deploy-artifact verification. Three display-specific integration tests render the production `SmartDisplay` from the shared sourced dashboard before and after runtime transitions: Sydney local midnight from 2026-08-16 to 2026-08-17, the 2026-10-04 daylight-saving jump from UTC+10 to UTC+11 with the local clock advancing from 01:59 to 03:00, and a simulated multi-hour sleep/wake gap detected by the existing sleep/wake detector followed by a fresh wall-time dashboard/render. This proves repository-side display continuity through those transitions without duplicating prayer logic. Physical Raspberry Pi/TV suspend, reboot and long-duration acceptance remain separate hardware evidence; burn-in-conscious behaviour, remote/keyboard navigation and broader TV deployment documentation remain open.
+
 - [ ] Burn-in-conscious layout behaviour where practical
 - [ ] Remote-control/keyboard navigation where practical
 - [ ] Document supported TV deployment paths rather than claiming unsupported native platforms
