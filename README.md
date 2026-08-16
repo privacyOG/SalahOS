@@ -22,7 +22,17 @@ SalahOS is designed around accurate local prayer calculations, selectable calcul
 - PWA/browser deployment for web, Raspberry Pi Chromium kiosk, TV browser, and generic kiosk targets.
 - Vitest, ESLint, Prettier, strict TypeScript, and GitHub Actions quality gates.
 
-See `DESIGN.md`, `RESEARCH.md`, `TESTING.md`, `PRIVACY.md`, and `TODO.md` for architecture, research assumptions, verification policy, privacy principles, and implementation status.
+## Documentation
+
+- [Build and Web/PWA deployment](BUILD.md)
+- [Troubleshooting](docs/TROUBLESHOOTING.md)
+- [Notification and Adhan platform limitations](docs/NOTIFICATION_LIMITATIONS.md)
+- [Dependency license review](docs/DEPENDENCY_LICENSE_REVIEW.md)
+- [Privacy behaviour](PRIVACY.md)
+- [Architecture and design](DESIGN.md)
+- [Research and calculation references](RESEARCH.md)
+- [Verification evidence](TESTING.md)
+- [Implementation tracker](TODO.md)
 
 ## Development
 
