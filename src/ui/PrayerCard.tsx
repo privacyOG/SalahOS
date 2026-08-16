@@ -54,9 +54,7 @@ export function PrayerCard({
       </div>
       <div className="prayer-card-badges">
         {highLatitudeIndicator !== null && (
-          <span className="prayer-indicator high-latitude-indicator">
-            {highLatitudeIndicator}
-          </span>
+          <span className="prayer-indicator high-latitude-indicator">{highLatitudeIndicator}</span>
         )}
         {manualAdjustmentIndicator !== null && (
           <span className="prayer-indicator manual-adjustment-indicator">

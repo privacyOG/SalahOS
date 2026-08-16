@@ -69,6 +69,8 @@ import { createSystemSleepWakeDetector } from './platform/systemSleepWake';
 import { readSystemTime, systemTimeFromMilliseconds } from './platform/systemTime';
 import { installThemePreference } from './platform/themePreference';
 import { BidiText } from './ui/BidiText';
+import { NextPrayerBlock } from './ui/NextPrayerBlock';
+import { PrayerCard } from './ui/PrayerCard';
 
 const prayerTranslationKeys: Readonly<Record<PrayerName, TranslationKey>> = {
   fajr: 'prayerFajr',
@@ -1367,22 +1369,22 @@ export function App() {
                 {translate(locale, prayerTranslationKeys[sourcedDashboard.nextPrayer ?? 'fajr'])}
               </h2>
             </div>
-            <div className="next-prayer-block">
-              <p>{translate(locale, 'nextPrayer')}</p>
-              {sourcedDashboard.nextPrayer === null ? (
-                <strong>{translate(locale, 'notConfigured')}</strong>
-              ) : (
-                <strong>
-                  {translate(locale, prayerTranslationKeys[sourcedDashboard.nextPrayer])}
-                </strong>
-              )}
-              <p className="countdown">
-                {sourcedDashboard.secondsUntilNextPrayer === null
+            <NextPrayerBlock
+              nextPrayerLabel={
+                sourcedDashboard.nextPrayer === null
+                  ? null
+                  : translate(locale, prayerTranslationKeys[sourcedDashboard.nextPrayer])
+              }
+              countdown={
+                sourcedDashboard.secondsUntilNextPrayer === null
                   ? '—'
-                  : formatCountdown(sourcedDashboard.secondsUntilNextPrayer, locale)}
-              </p>
-              {sourcedDashboard.nextPrayerDayOffset === 1 && <p>{translate(locale, 'tomorrow')}</p>}
-            </div>
+                  : formatCountdown(sourcedDashboard.secondsUntilNextPrayer, locale)
+              }
+              tomorrow={sourcedDashboard.nextPrayerDayOffset === 1}
+              nextPrayerText={translate(locale, 'nextPrayer')}
+              notConfiguredText={translate(locale, 'notConfigured')}
+              tomorrowText={translate(locale, 'tomorrow')}
+            />
           </div>
 
           <div className="prayer-grid">
@@ -1398,67 +1400,41 @@ export function App() {
                 prayer.highLatitudeRuleApplied,
                 sourcedDashboard.sourceMode,
               );
-              const classes = [
-                'prayer-card',
-                prayer.isCurrent ? 'prayer-card-current' : '',
-                prayer.isNext ? 'prayer-card-next' : '',
-                isSupplementary ? 'prayer-card-supplementary' : '',
-              ]
-                .filter(Boolean)
-                .join(' ');
+              const highLatitudeIndicator = highLatitudeRuleApplied
+                ? `${translate(locale, 'highLatitudeAdjustment')} · ${translate(
+                    locale,
+                    highLatitudeRuleTranslationKeys[sourcedDashboard.base.highLatitudeRule],
+                  )}`
+                : null;
+              const manualAdjustmentIndicator =
+                manualPrayerAdjustmentMinutes === null
+                  ? null
+                  : `${translate(locale, 'manualOffset')} ${
+                      manualPrayerAdjustmentMinutes > 0 ? '+' : ''
+                    }${String(manualPrayerAdjustmentMinutes)} ${translate(locale, 'minutesShort')}`;
               return (
-                <article className={classes} key={prayer.name}>
-                  <div>
-                    <span>{translate(locale, prayerTranslationKeys[prayer.name])}</span>
-                    {prayer.isCurrent && (
-                      <span className="current-prayer-badge">
-                        {translate(locale, 'currentPrayer')}
-                      </span>
-                    )}
-                  </div>
-                  <div className="prayer-times">
-                    <div>
-                      <span className="prayer-time-label">{translate(locale, 'prayerStart')}</span>
-                      <strong>
-                        {prayer.localMinutes === null
-                          ? '—'
-                          : formatLocalTime(prayer.localMinutes, locale, settings.timeFormat)}
-                      </strong>
-                    </div>
-                    {!isSupplementary && (
-                      <div>
-                        <span className="prayer-time-label">{translate(locale, 'iqamah')}</span>
-                        <strong className="iqamah-time">
-                          {prayer.iqamahLocalMinutes === null
-                            ? translate(locale, 'noIqamah')
-                            : formatLocalTime(
-                                prayer.iqamahLocalMinutes,
-                                locale,
-                                settings.timeFormat,
-                              )}
-                        </strong>
-                      </div>
-                    )}
-                  </div>
-                  <div className="prayer-card-badges">
-                    {highLatitudeRuleApplied && (
-                      <span className="prayer-indicator high-latitude-indicator">
-                        {translate(locale, 'highLatitudeAdjustment')} ·{' '}
-                        {translate(
-                          locale,
-                          highLatitudeRuleTranslationKeys[sourcedDashboard.base.highLatitudeRule],
-                        )}
-                      </span>
-                    )}
-                    {manualPrayerAdjustmentMinutes !== null && (
-                      <span className="prayer-indicator manual-adjustment-indicator">
-                        {translate(locale, 'manualOffset')}{' '}
-                        {manualPrayerAdjustmentMinutes > 0 ? '+' : ''}
-                        {String(manualPrayerAdjustmentMinutes)} {translate(locale, 'minutesShort')}
-                      </span>
-                    )}
-                  </div>
-                </article>
+                <PrayerCard
+                  key={prayer.name}
+                  prayerName={translate(locale, prayerTranslationKeys[prayer.name])}
+                  isCurrent={prayer.isCurrent}
+                  isNext={prayer.isNext}
+                  isSupplementary={isSupplementary}
+                  currentPrayerLabel={translate(locale, 'currentPrayer')}
+                  prayerStartLabel={translate(locale, 'prayerStart')}
+                  startTime={
+                    prayer.localMinutes === null
+                      ? '—'
+                      : formatLocalTime(prayer.localMinutes, locale, settings.timeFormat)
+                  }
+                  iqamahLabel={translate(locale, 'iqamah')}
+                  iqamahTime={
+                    prayer.iqamahLocalMinutes === null
+                      ? translate(locale, 'noIqamah')
+                      : formatLocalTime(prayer.iqamahLocalMinutes, locale, settings.timeFormat)
+                  }
+                  highLatitudeIndicator={highLatitudeIndicator}
+                  manualAdjustmentIndicator={manualAdjustmentIndicator}
+                />
               );
             })}
           </div>
