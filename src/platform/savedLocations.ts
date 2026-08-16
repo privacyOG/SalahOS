@@ -22,6 +22,10 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
 }
 
+export function savedLocationId(coordinates: Coordinates): string {
+  return `${coordinates.latitude.toFixed(6)},${coordinates.longitude.toFixed(6)}`;
+}
+
 function parseSavedLocation(value: unknown): SavedLocation {
   if (!isRecord(value) || !isRecord(value.coordinates)) {
     throw new TypeError('Saved location must be an object with coordinates');
@@ -48,16 +52,17 @@ function parseSavedLocation(value: unknown): SavedLocation {
   }
 
   const coordinates = createCoordinates(latitude, longitude);
+  const canonicalId = savedLocationId(coordinates);
+  if (id !== canonicalId) {
+    throw new RangeError(`Saved location id must match its coordinates: ${canonicalId}`);
+  }
+
   const timeZone =
     typeof value.timeZone === 'string' && value.timeZone.trim().length > 0
       ? assertIanaTimeZone(value.timeZone.trim())
       : undefined;
 
   return timeZone === undefined ? { id, label, coordinates } : { id, label, coordinates, timeZone };
-}
-
-export function savedLocationId(coordinates: Coordinates): string {
-  return `${coordinates.latitude.toFixed(6)},${coordinates.longitude.toFixed(6)}`;
 }
 
 export function parseSavedLocations(raw: string): readonly SavedLocation[] {
