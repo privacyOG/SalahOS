@@ -689,13 +689,16 @@
 
 ## 20. Final verification / release readiness
 
-- [ ] Run clean install from lockfile
-- [ ] Run complete test suite from a clean checkout
-- [ ] Run lint + typecheck + production build
-- [ ] Run prayer-time parity/reference suite
-- [ ] Run DST/high-latitude regression suite
+- [x] Run clean install from lockfile
+- [x] Run complete test suite from a clean checkout
+- [x] Run lint + typecheck + production build
+- [x] Run prayer-time parity/reference suite
+- [x] Run DST/high-latitude regression suite
 - [ ] Run English + Arabic/RTL visual suite
-- [ ] Validate offline operation
+- [x] Validate offline operation
+
+**Core release-verification note (2026-08-16):** main-branch Quality Gate run `31934011315` checked out exact commit `49ac83379cdc357cd5ecb43d964291ec44793906` into a clean hosted workspace, installed the committed lockfile with `npm ci --ignore-scripts` (139 packages installed, 140 audited, zero vulnerabilities), passed repository security/license/documentation/icon-reproducibility policies, formatting, lint, strict typecheck, 58 test files / 269 tests, production build and deploy-artifact verification. The passing suite includes `referenceParity.test.ts` and `methods.reference.test.ts` for prayer-time/reference parity; `timezone.test.ts`, `zonedCivilTime.test.ts`, `highLatitudeIndicators.test.ts`, prayer-engine coverage and smart-display DST integration for DST/high-latitude regression; and `offlineStartup.test.ts`, `service-worker-validation.test.mjs` plus `kioskContinuity.test.ts` for deterministic offline startup/cache/kiosk operation. Visual suites, physical phone/Raspberry Pi/TV layouts, native notification environments, final code review, blocker reconciliation, release notes and release tagging remain open and are not implied by this evidence.
+
 - [ ] Validate phone layout
 - [ ] Validate Raspberry Pi layout
 - [ ] Validate TV/kiosk layout
