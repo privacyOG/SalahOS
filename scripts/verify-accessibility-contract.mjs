@@ -56,6 +56,8 @@ if (!workflow.includes('run: npm run verify:accessibility-browser')) {
 
 for (const browserContract of [
   "style.textContent = ':root { font-size: 200% !important; }'",
+  "session.send('Page.bringToFront')",
+  'active.blur()',
   "key: 'Tab'",
   "name: 'prefers-reduced-motion', value: 'reduce'",
   "path: '/?mode=smart-display'",
@@ -67,5 +69,5 @@ for (const browserContract of [
 }
 
 console.log(
-  'Accessibility contract passed: keyboard focus, minimum controls, 200% browser reflow, reduced motion, and CI wiring are preserved.',
+  'Accessibility contract passed: deterministic keyboard focus, minimum controls, 200% browser reflow, reduced motion, and CI wiring are preserved.',
 );
