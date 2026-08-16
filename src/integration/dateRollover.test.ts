@@ -31,10 +31,13 @@ describe('date rollover flow', () => {
     expect(afterMidnight.nextPrayerDayOffset).toBe(0);
 
     expect(afterMidnight.today.date).toBe(beforeMidnight.tomorrow.date);
-    expect(afterMidnight.prayers.map((prayer) => prayer.localMinutes)).toEqual(
-      afterMidnight.today.prayers
-        ? afterMidnight.prayers.map((prayer) => prayer.localMinutes)
-        : [],
-    );
+    expect(afterMidnight.prayers.map((prayer) => prayer.name)).toEqual([
+      'fajr',
+      'sunrise',
+      'dhuhr',
+      'asr',
+      'maghrib',
+      'isha',
+    ]);
   });
 });
