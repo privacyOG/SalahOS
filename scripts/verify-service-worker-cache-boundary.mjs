@@ -4,7 +4,7 @@ const serviceWorker = readFileSync(new URL('../public/sw.js', import.meta.url), 
 const main = readFileSync(new URL('../src/main.tsx', import.meta.url), 'utf8');
 
 for (const required of [
-  "const CACHE_NAME = `${CACHE_PREFIX}v4`;",
+  "const CACHE_NAME = `${CACHE_PREFIX}v5`;",
   "const CACHEABLE_STATIC_PREFIXES = ['/assets/', '/icons/'];",
   "const CACHEABLE_STATIC_PATHS = new Set(['/manifest.webmanifest']);",
   "'/icons/salahos-192.png'",
@@ -16,6 +16,11 @@ for (const required of [
   "fetch('/', { cache: 'no-store' })",
   'const assetUrls = assetUrlsFromHtml(html);',
   "url.pathname.startsWith('/assets/')",
+  'function assertSalahOsShellHtml(html, assetUrls)',
+  "html.includes('id=\"root\"')",
+  "html.includes('manifest.webmanifest')",
+  'assetUrls.length === 0',
+  'assertSalahOsShellHtml(html, assetUrls);',
   'async function cacheApplicationShell(cache, shellResponse, includeStaticShell)',
   'await cache.addAll(requiredUrls);',
   "await cache.put('/', shellResponse);",
@@ -57,19 +62,24 @@ if (!/function\s+assetUrlsFromHtml\s*\([^)]*\)\s*{[\s\S]*?\/assets\//.test(servi
   throw new Error('Service-worker shell caching must derive first-party build assets from HTML');
 }
 
+const identityHelperStart = serviceWorker.indexOf('function assertSalahOsShellHtml(html, assetUrls)');
 const shellHelperStart = serviceWorker.indexOf(
   'async function cacheApplicationShell(cache, shellResponse, includeStaticShell)',
 );
+const identityCallIndex = serviceWorker.indexOf('assertSalahOsShellHtml(html, assetUrls);', shellHelperStart);
 const shellAddIndex = serviceWorker.indexOf('await cache.addAll(requiredUrls);', shellHelperStart);
 const shellPutIndex = serviceWorker.indexOf("await cache.put('/', shellResponse);", shellHelperStart);
 if (
+  identityHelperStart < 0 ||
   shellHelperStart < 0 ||
+  identityCallIndex < 0 ||
   shellAddIndex < 0 ||
   shellPutIndex < 0 ||
+  shellAddIndex < identityCallIndex ||
   shellPutIndex < shellAddIndex
 ) {
   throw new Error(
-    'Service-worker shell updates must cache referenced assets before replacing the cached root HTML',
+    'Service-worker shell updates must verify SalahOS shell identity, cache referenced assets, then replace cached root HTML in that order',
   );
 }
 
@@ -95,5 +105,5 @@ if (/url\.origin\s*!==\s*self\.location\.origin/.test(serviceWorker) === false) 
 }
 
 console.log(
-  'Service-worker cache boundary passed: install and navigation upgrades atomically protect the complete first-party application shell, navigation awaits the cache transaction, runtime caching is limited to explicit static asset paths, and registration is browser/PWA-only.',
+  'Service-worker cache boundary passed: only verified SalahOS application HTML can replace the offline root shell, install/navigation upgrades are atomic and awaited, runtime caching is limited to explicit static asset paths, and registration is browser/PWA-only.',
 );
