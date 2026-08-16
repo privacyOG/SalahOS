@@ -527,3 +527,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Added `docs/SECRETS_POLICY.md` requiring encrypted CI/platform secret stores, prohibiting committed credentials/API keys and documenting revocation/rotation after accidental exposure.
 - The repository-side guard intentionally rejects high-risk file classes without claiming filename checks can detect every possible inline secret; future network integrations still require diff review and hosting-platform secret scanning.
 - Read-only Quality Gate run `31921396802` passed the sensitive-file policy, formatting, typed lint, strict typecheck, all tests and production build.
+
+### 2026-08-16 — dependency vulnerability review
+
+- Added `npm run security:audit` using `npm audit --audit-level=moderate` and wired it into both local `npm run check` and the read-only Quality Gate.
+- CI continues to install the committed lockfile with `npm ci --ignore-scripts` before auditing the resolved dependency graph.
+- Added `docs/DEPENDENCY_SECURITY.md` documenting the minimal direct runtime dependency surface, exact-version/lockfile review policy and release-time re-audit requirement.
+- The audit result is treated as point-in-time advisory evidence rather than a permanent guarantee; the threshold must not be weakened merely to make CI pass.
+- Read-only Quality Gate run `31921578803` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, all tests and production build.
