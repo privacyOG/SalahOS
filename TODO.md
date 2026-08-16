@@ -233,7 +233,10 @@
 - [x] Support JSON import/export
 - [x] Validate imported timetable data before activation
 - [x] Preserve mosque timetable offline
-- [ ] Research optional reputable mosque APIs/integrations
+- [x] Research optional reputable mosque APIs/integrations
+
+**Mosque-integration research note (2026-08-16):** read-only Quality Gate run `31916720065` passed formatting, typed lint, strict typecheck, all tests and production build after adding `docs/MOSQUE_INTEGRATION_RESEARCH.md`. MAWAQIT is recorded as a vetted future direct-integration candidate because its provider-maintained ecosystem exposes account-based nearby-mosque selection plus prayer, Iqamah, Shuruq and Jumu'ah data, but direct SalahOS network support remains gated on a documented or explicitly authorized provider contract. Masjidbox explicitly provides no public prayer-times API, so its approved integration paths are its provider-supported iCal and CSV/Excel portability mechanisms rather than scraping or private-endpoint dependencies. No remote provider adapter is marked implemented by this research.
+
 - [x] Do not rely on fragile arbitrary website scraping as an authoritative source
 
 **Mosque-library verification note (2026-08-16):** implementation Quality Gate run `31905789616` passed formatting, typed lint, strict typecheck, all tests and production build for the local mosque manager. Read-only Quality Gate run `31907837879` then passed after duplicate-state cleanup, duplicate-translation cleanup and restoration of the stricter persisted-timetable parser. The settings panel now stores multiple validated mosque timetables locally, imports documented CSV or JSON data through the existing strict parser, lets the user select or remove a mosque, and automatically activates the selected timetable as the local-mosque prayer source. Persisted library entries are revalidated through the strict timetable parser before use. Manual per-day timetable editing was still open at this verification point; optional vetted remote integrations remain open.

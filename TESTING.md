@@ -421,3 +421,12 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Added tests for clock parsing, complete day creation, invalid/missing values, deterministic replacement and mosque-name mismatch protection.
 - Repaired the sourced-dashboard presentation contract exposed by strict typechecking, keeping calculation metadata under the base dashboard and computing source-aware aggregate high-latitude fallback state.
 - Read-only Quality Gate run `31916508659` passed formatting, typed lint, strict typecheck, all tests and production build on exact cleaned head `3d50f0204b7a2162ab92af891467852364ff1f48`.
+
+### 2026-08-16 — mosque integration research
+
+- Added `docs/MOSQUE_INTEGRATION_RESEARCH.md` with provider-selection and failure-handling requirements for optional remote mosque sources.
+- Recorded MAWAQIT as a vetted future direct-integration candidate while requiring a documented or explicitly authorized provider interface before implementation.
+- Recorded Masjidbox's provider-supported iCal and CSV/Excel portability paths and its explicit lack of a public prayer-times API.
+- Required future provider adapters to terminate at the existing validated `MosqueTimetable` model, retain offline last-known-good data, preserve provider/mosque provenance and surface stale/error state without silent calculated fallback.
+- Kept all direct remote provider adapters unimplemented; this milestone closes research only.
+- Read-only Quality Gate run `31916720065` passed formatting, typed lint, strict typecheck, all tests and production build.
