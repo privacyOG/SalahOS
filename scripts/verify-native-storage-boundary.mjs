@@ -8,6 +8,10 @@ const storageSource = readFileSync(
 for (const required of [
   'Capacitor.isNativePlatform()',
   'preferences: Preferences',
+  'private readonly pendingMutations = new Map<string, string | null>();',
+  'this.pendingMutations.set(key, value);',
+  '// Keep the latest mutation pending so flush() can retry it.',
+  'for (const [key, value] of [...this.pendingMutations])',
   'async function migrateLegacyWebStorage(',
   'await migrateLegacyWebStorage(webStorage, storage);',
   'await storage.flush();',
@@ -21,6 +25,28 @@ for (const required of [
 if (/getPlatform\(\)\s*!==\s*['"]android['"]/.test(storageSource)) {
   throw new Error(
     'Native application storage must not special-case Android and leave iOS on Web Storage',
+  );
+}
+
+const queueStart = storageSource.indexOf('private queueMutation(key: string, value: string | null)');
+const queueCatch = storageSource.indexOf('} catch {', queueStart);
+const flushStart = storageSource.indexOf('async flush(): Promise<void>');
+const retryLoop = storageSource.indexOf(
+  'for (const [key, value] of [...this.pendingMutations])',
+  flushStart,
+);
+const retryCatch = storageSource.indexOf('} catch (error) {', retryLoop);
+const finalThrow = storageSource.indexOf('throw firstFailure;', retryCatch);
+if (
+  queueStart < 0 ||
+  queueCatch < 0 ||
+  flushStart < 0 ||
+  retryLoop < 0 ||
+  retryCatch < 0 ||
+  finalThrow < 0
+) {
+  throw new Error(
+    'Native Preferences writes must keep failed mutations pending, retry all unresolved keys during flush, and report failure only after retry attempts',
   );
 }
 
@@ -44,5 +70,5 @@ if (!storageSource.includes(authoritativeCheck)) {
 }
 
 console.log(
-  'Native storage boundary passed: every Capacitor native platform uses Preferences, legacy Web Storage migrates only into missing native keys, and legacy removal occurs after persistence flush.',
+  'Native storage boundary passed: every Capacitor native platform uses Preferences, failed writes remain retryable without poisoning later keys, legacy Web Storage migrates only into missing native keys, and legacy removal occurs after persistence flush.',
 );
