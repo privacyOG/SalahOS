@@ -4,10 +4,7 @@ import {
   defaultNotificationPreferences,
   updatePrayerNotificationPreference,
 } from '../domain/notificationPreferences';
-import {
-  buildNotificationIntents,
-  type PrayerScheduleInput,
-} from '../domain/notificationSchedule';
+import { buildNotificationIntents, type PrayerScheduleInput } from '../domain/notificationSchedule';
 import {
   applyNotificationSchedulerPlan,
   type NotificationSchedulerAdapter,
@@ -101,10 +98,7 @@ describe('notification delivery lifecycle integration', () => {
     );
 
     scheduler.operations.length = 0;
-    const identical = await applyNotificationSchedulerPlan(
-      scheduler,
-      resolve([fajr], preferences),
-    );
+    const identical = await applyNotificationSchedulerPlan(scheduler, resolve([fajr], preferences));
     expect(identical).toEqual({ schedule: [], cancelIds: [], skippedIds: [] });
     expect(scheduler.operations).toEqual([]);
   });
@@ -154,10 +148,7 @@ describe('notification delivery lifecycle integration', () => {
       resolve([nextDayFajr], preferences),
     );
 
-    expect(rollover.cancelIds).toEqual([
-      '2026-08-16:fajr:prayer-time',
-      '2026-08-16:fajr:reminder',
-    ]);
+    expect(rollover.cancelIds).toEqual(['2026-08-16:fajr:prayer-time', '2026-08-16:fajr:reminder']);
     expect(rollover.schedule.map((record) => record.id)).toEqual([
       '2026-08-17:fajr:reminder',
       '2026-08-17:fajr:prayer-time',
