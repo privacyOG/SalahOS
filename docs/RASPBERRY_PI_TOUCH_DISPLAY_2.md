@@ -134,6 +134,24 @@ bash scripts/kiosk/install-labwc-autostart.sh
 
 That installer manages session autostart only. An unattended appliance must separately configure and validate the Raspberry Pi OS graphical boot/login policy appropriate to the installation.
 
+## Repository layout fixture
+
+SalahOS includes a deterministic browser fixture for the production prayer presentation components. It is intended for responsive and RTL inspection and later screenshot automation without depending on saved browser state.
+
+Run the development server or production preview, then open URLs such as:
+
+```text
+/?fixture=touch-display-2&display=5&orientation=portrait&locale=en
+/?fixture=touch-display-2&display=7&orientation=landscape&locale=en
+/?fixture=touch-display-2&display=10&orientation=portrait&locale=ar
+```
+
+Supported fixture parameters are `display=5|7|10`, `orientation=portrait|landscape`, and `locale=en|ar`.
+
+The fixture exposes the corresponding native pixel contract in its markup, uses the production `NextPrayerBlock` and `PrayerCard` components, and provides deterministic sample prayer, Iqamah and current/next state. Visual automation must still set the browser viewport to the matching dimensions before capturing evidence.
+
+The fixture is repository validation infrastructure, not proof that a physical panel is visually correct or touch-ergonomic.
+
 ## Acceptance matrix still requiring hardware
 
 Repository CI cannot close these checks:
