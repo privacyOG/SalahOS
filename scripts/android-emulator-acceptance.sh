@@ -39,7 +39,7 @@ adb shell am force-stop "$PACKAGE"
 
 (
   cd android
-  ./gradlew connectedDebugAndroidTest
+  ./gradlew :app:connectedDebugAndroidTest
 )
 
 echo "Android emulator orientation and instrumentation acceptance passed."
