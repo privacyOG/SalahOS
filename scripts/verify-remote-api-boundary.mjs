@@ -59,11 +59,21 @@ const connectDirective = csp
 if (connectDirective === undefined) {
   throw new Error('CSP connect-src directive is missing');
 }
-if (/\*|https?:/.test(connectDirective)) {
+const connectSources = connectDirective.split(/\s+/).slice(1);
+if (connectSources.includes('*') || connectSources.some((source) => /^https?:$/i.test(source))) {
   throw new Error(`CSP connect-src must not enable arbitrary remote HTTP origins: ${connectDirective}`);
 }
-if (!connectDirective.split(/\s+/).includes("'self'")) {
+if (connectSources.some((source) => /^wss?:$/i.test(source))) {
+  throw new Error(`CSP connect-src must not enable scheme-wide WebSocket access: ${connectDirective}`);
+}
+if (!connectSources.includes("'self'")) {
   throw new Error(`CSP connect-src must retain the local self boundary: ${connectDirective}`);
+}
+for (const source of connectSources) {
+  if (source === "'self'" || source === 'ws://localhost:*' || source === 'ws://127.0.0.1:*') {
+    continue;
+  }
+  throw new Error(`CSP connect-src contains an unreviewed source: ${source}`);
 }
 
 console.log('Optional remote API boundary passed.');
