@@ -1,0 +1,106 @@
+name: Android Background Restriction Finalization
+
+on:
+  push:
+    branches:
+      - privacyog/android-background-restrictions
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    if: ${{ !contains(github.event.head_commit.message, '[background-verified]') }}
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: privacyog/android-background-restrictions
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Implement honest Android background restriction handling
+        env:
+          VALIDATION_RUN: ${{ github.run_id }}
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+
+          function replaceExact(path, before, after) {
+            let source = fs.readFileSync(path, 'utf8');
+            if (!source.includes(before)) throw new Error(`Expected text not found in ${path}`);
+            source = source.replace(before, after);
+            fs.writeFileSync(path, source);
+          }
+
+          replaceExact(
+            'src/App.tsx',
+            `    const removeRuntimeListeners = installRuntimeRefreshListeners(\n      { windowTarget: window, documentTarget: document },\n      refreshNow,\n    );`,
+            `    const refreshRuntimeAndNotifications = () => {\n      refreshNow();\n      setNotificationSyncRevision((current) => current + 1);\n    };\n    const removeRuntimeListeners = installRuntimeRefreshListeners(\n      { windowTarget: window, documentTarget: document },\n      refreshRuntimeAndNotifications,\n    );`,
+          );
+
+          replaceExact(
+            'src/i18n/translations.ts',
+            `    notificationDeliveryPending:\n      'Android local notifications are scheduled on-device after notification permission is granted. Exact delivery still depends on Android alarm, battery and background restrictions; other targets remain platform-dependent.',`,
+            `    notificationDeliveryPending:\n      'Android may delay prayer alerts under Doze, Battery Saver, or manufacturer background restrictions even when precise alarms are allowed. SalahOS does not request an unrestricted battery-optimisation exemption. Returning to the app reconciles the current prayer schedule; other targets remain platform-dependent.',`,
+          );
+
+          replaceExact(
+            'src/i18n/translations.ts',
+            `    notificationDeliveryPending:\n      'يعتمد التسليم والتوقيت الدقيق على أذونات المنصة وقيود العمل في الخلفية؛ تُحفظ هذه الإعدادات محلياً إلى أن يتم تفعيل مجدول خاص بالمنصة.',`,
+            `    notificationDeliveryPending:\n      'قد يؤخر أندرويد تنبيهات الصلاة بسبب وضع السكون أو توفير البطارية أو قيود الشركة المصنّعة حتى عند السماح بالمنبّهات الدقيقة. لا يطلب صلاح أو إس استثناءً غير مقيّد من تحسين البطارية، وعند العودة إلى التطبيق تتم مطابقة جدول الصلاة الحالي من جديد.',`,
+          );
+
+          replaceExact(
+            'TODO.md',
+            '- [ ] Handle Android battery optimisation/background restrictions honestly',
+            '- [x] Handle Android battery optimisation/background restrictions honestly',
+          );
+          let todo = fs.readFileSync('TODO.md', 'utf8');
+          const marker = '- [x] Handle Android battery optimisation/background restrictions honestly';
+          const markerIndex = todo.indexOf(marker);
+          const insertion = todo.indexOf('\n- [ ] Implement Adhan playback policy compatible with Android lifecycle constraints', markerIndex);
+          if (markerIndex < 0 || insertion < 0) throw new Error('Android background tracker anchor missing');
+          const note = `\n\n**Android background-restriction verification note (2026-08-16):** SalahOS now treats Android background delivery as conditional rather than guaranteed. Focus, restored-page and visible-document recovery use the existing tested runtime-refresh path to force native prayer-notification reconciliation after the app returns to the foreground. English and Arabic settings copy explicitly warns that Doze, Battery Saver and manufacturer background restrictions can delay alerts even when precise alarms are allowed, and states that SalahOS does not request an unrestricted battery-optimisation exemption. Validation run \`${process.env.VALIDATION_RUN}\` passed the complete repository quality gate and Capacitor/Gradle Android debug assembly. Physical-device Doze/vendor timing evidence remains part of the separate emulator/device acceptance item and is not claimed here.`;
+          todo = todo.slice(0, insertion) + note + todo.slice(insertion);
+          fs.writeFileSync('TODO.md', todo);
+
+          replaceExact(
+            'docs/ANDROID.md',
+            'A capability change detected after returning to the app triggers scheduler reconciliation so current jobs are rebuilt under the new precision state. Exact scheduling is not described as a guarantee against Doze, battery optimisation, OEM restrictions, reboot/power-off or user notification settings. Those lifecycle and device-level items remain open.',
+            'A capability change detected after returning to the app triggers scheduler reconciliation so current jobs are rebuilt under the new precision state. The same tested focus, restored-page and visibility recovery path also reconciles prayer notifications whenever the app returns to the foreground.\n\nSalahOS does not request an unrestricted battery-optimisation exemption. Doze, Battery Saver, manufacturer background controls, notification-channel settings and device power state can still delay or suppress presentation even when precise-alarm access is granted. The settings UI states this explicitly in English and Arabic rather than promising guaranteed background delivery. Reboot recovery, Adhan playback and physical/emulator timing evidence remain separately tracked.',
+          );
+
+          replaceExact(
+            'docs/NOTIFICATION_LIMITATIONS.md',
+            'Exact-alarm access still does not bypass Doze, battery optimisation, OEM background restrictions, notification-channel settings, device power-off or reboot behavior. Reboot recovery, idle/battery handling, Adhan playback and physical/emulator timing verification remain separately tracked.',
+            'Exact-alarm access still does not bypass Doze, Battery Saver, OEM background restrictions, notification-channel settings, device power-off or reboot behavior. SalahOS does not request an unrestricted battery-optimisation exemption. When the app returns to the foreground, the existing focus/pageshow/visibility recovery path rechecks current time and reconciles the native prayer-notification schedule. This improves recovery without claiming that foreground code can override Android background policy. Reboot recovery, Adhan playback and physical/emulator timing verification remain separately tracked.',
+          );
+
+          let testing = fs.readFileSync('TESTING.md', 'utf8');
+          if (!testing.includes('### 2026-08-16 — Android background restrictions')) {
+            testing += `\n\n### 2026-08-16 — Android background restrictions\n\n- Validation run \`${process.env.VALIDATION_RUN}\` passed the complete repository quality gate and Android debug assembly.\n- Android notification reconciliation is now forced through the existing tested focus, pageshow and visible-document runtime recovery path when the app returns to the foreground.\n- English and Arabic UI text explicitly names Doze, Battery Saver and manufacturer background restrictions and states that SalahOS does not request an unrestricted battery-optimisation exemption.\n- Exact-alarm access is not represented as bypassing Android power policy. Physical-device Doze/vendor delivery timing and reboot recovery remain separate acceptance work.\n`;
+          }
+          fs.writeFileSync('TESTING.md', testing);
+          NODE
+      - name: Format
+        run: npm run format
+      - name: Repository quality gate
+        run: npm run check
+      - name: Android debug assembly
+        run: npm run android:build
+      - name: Commit verified batch
+        run: |
+          rm .github/workflows/android-background-finalize.yml
+          git config user.name privacyOG
+          git config user.email privacyOG@users.noreply.github.com
+          git add -A
+          git commit -m "Handle Android background delivery restrictions [background-verified]"
+          git push origin HEAD:privacyog/android-background-restrictions
