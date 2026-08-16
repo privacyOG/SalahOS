@@ -66,7 +66,9 @@ SalahOS does not bundle an unlicensed Adhan recording and does not upload a user
 - smart-display mode for kiosk/TV browser use;
 - responsive phone/tablet/kiosk styling;
 - deterministic browser visual-regression matrix with English/light, Arabic/RTL/dark, phone portrait/landscape, tablet, 1080p kiosk and increased-text-size captures;
-- CI screenshot artifact upload for visual review.
+- browser accessibility regression for 200% text reflow, real keyboard-visible focus and reduced-motion smart-display behavior;
+- static accessibility contracts protecting focus indicators, minimum control height and reduced-motion styling;
+- CI screenshot artifact upload for visual/accessibility review.
 
 Physical Raspberry Pi Touch Display 2, television/CEC/remote and final real-device visual acceptance remain separate release gates.
 
@@ -74,14 +76,17 @@ Physical Raspberry Pi Touch Display 2, television/CEC/remote and final real-devi
 
 - committed Capacitor Android project;
 - reproducible debug/release build commands;
-- emulator acceptance coverage;
+- previously validated Android 35 emulator acceptance coverage;
+- permanent Android 35 / Google APIs / x86_64 / Pixel 7 Pro emulator gate on the release candidate;
+- offline force-stop/cold-launch and native orientation instrumentation;
+- retained portrait/landscape/portrait-restored emulator screenshots with PNG-dimension orientation validation;
 - release signing configuration through environment-provided credentials;
 - reviewed source and merged-manifest permission contracts;
 - cleartext network traffic disabled;
 - application backup disabled with explicit cloud/device-transfer exclusion rules;
 - local notification and reboot scheduling paths.
 
-A successful Android build/emulator run does not represent broad physical-device or store-distribution acceptance.
+The new permanent emulator/screenshot gate is candidate infrastructure until it passes on the exact candidate head and its retained images are inspected. A successful Android build/emulator run does not represent broad physical-device or store-distribution acceptance.
 
 ### iOS / iPadOS
 
@@ -89,10 +94,11 @@ A successful Android build/emulator run does not represent broad physical-device
 - automated unsigned iOS Simulator build path;
 - current-location and local-notification native adapters;
 - safe-area viewport/CSS handling;
+- permanent candidate workflow that selects one available iPhone and one available iPad Simulator, installs the exact built `App.app`, cold-launches both and retains 5-second/20-second screenshots;
 - documented Xcode and physical-development-device workflow;
 - foreground-only SalahOS location behaviour while retaining the usage-description keys required by the pinned geolocation dependency.
 
-iPhone/iPad physical acceptance, distribution signing and native notification validation in supported environments remain release gates.
+The new iPhone/iPad screenshot path is candidate infrastructure until it passes on the exact candidate head and the retained screenshots are inspected. Physical-device acceptance, distribution signing and native notification validation in supported environments remain release gates.
 
 ### Privacy and security
 
@@ -124,12 +130,15 @@ No optional remote provider is enabled by default.
 
 The repository already contains extensive unit, integration, component, offline, calculation-parity and native-build evidence from earlier validated heads. The consolidated release candidate must still pass its own exact-head Quality, Android and iOS workflow gates before merge.
 
+Candidate browser, Android-emulator and iPhone/iPad-Simulator screenshot infrastructure is not itself evidence of a passing layout. The workflows must execute successfully on the exact candidate head and the retained images must be inspected before applicable visual TODO items are promoted.
+
 The following evidence remains separate and must not be inferred from automated repository checks:
 
 - physical Raspberry Pi Touch Display 2 acceptance;
 - physical TV/remote/CEC/viewing-distance acceptance;
 - final physical Android/iPhone/iPad acceptance where required by `TODO.md`;
 - native notification behaviour across platform-specific lifecycle/power-management conditions not covered by the available environment;
+- screen-reader and physical-device accessibility acceptance beyond the explicit automated browser checks;
 - final visual artifact inspection and accessibility review;
 - any items explicitly marked blocked or partial in `TODO.md`.
 
