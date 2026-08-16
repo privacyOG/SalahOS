@@ -106,7 +106,11 @@ for (const icon of [
   { path: 'icons/salahos-maskable.svg', purpose: 'maskable' },
 ]) {
   const declared = manifestIcons.find((entry) => entry?.src?.replace(/^\//, '') === icon.path);
-  if (declared?.sizes !== 'any' || declared?.type !== 'image/svg+xml' || declared?.purpose !== icon.purpose) {
+  if (
+    declared?.sizes !== 'any' ||
+    declared?.type !== 'image/svg+xml' ||
+    declared?.purpose !== icon.purpose
+  ) {
     throw new Error(`Built manifest does not retain required SVG icon fallback: ${icon.path}`);
   }
 }
