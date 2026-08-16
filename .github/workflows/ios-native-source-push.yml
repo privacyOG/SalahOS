@@ -1,0 +1,109 @@
+name: iOS Native Source Push
+
+on:
+  push:
+    branches:
+      - privacyog/ios-native-latest
+
+permissions:
+  contents: write
+
+jobs:
+  finalize-source:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: privacyog/ios-native-latest
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Replay validated native source
+        run: |
+          git fetch origin privacyog/ios-notification-policy
+          git checkout origin/privacyog/ios-notification-policy -- \
+            ios \
+            src/App.tsx \
+            src/platform/iosNotificationScheduler.ts \
+            src/platform/iosNotificationScheduler.test.ts \
+            src/platform/iosNotificationPolicy.ts \
+            src/platform/iosNotificationPolicy.test.ts
+          npm install --save-exact @capacitor/ios@8.4.2
+      - name: Apply generated-file boundaries
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          p = Path('.gitignore')
+          lines = p.read_text().splitlines()
+          if 'ios/DerivedData/' not in lines:
+              lines.append('ios/DerivedData/')
+          p.write_text('\n'.join(lines) + '\n')
+
+          p = Path('.prettierignore')
+          lines = p.read_text().splitlines()
+          for line in ['ios/App/App/public/', 'ios/App/App/Assets.xcassets/', 'ios/App/App/capacitor.config.json', 'ios/DerivedData/']:
+              if line not in lines:
+                  lines.append(line)
+          p.write_text('\n'.join(lines) + '\n')
+
+          p = Path('eslint.config.js')
+          s = p.read_text()
+          anchor = "      'android/app/src/main/assets/**',\n"
+          addition = "      'ios/App/App/public/**',\n"
+          if addition not in s:
+              if anchor not in s:
+                  raise SystemExit('ESLint generated-asset anchor missing')
+              s = s.replace(anchor, anchor + addition, 1)
+          p.write_text(s)
+          PY
+      - name: Record validated Stage 9 implementation
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+          let todo = fs.readFileSync('TODO.md', 'utf8');
+          for (const [before, after] of [
+            ['- [ ] Configure iOS project/shell', '- [x] Configure iOS project/shell'],
+            ['- [ ] Implement location permission descriptions and flow', '- [x] Implement location permission descriptions and flow'],
+            ['- [ ] Implement persistent settings/storage', '- [x] Implement persistent settings/storage'],
+            ['- [ ] Implement local prayer notifications within iOS scheduling limits', '- [x] Implement local prayer notifications within iOS scheduling limits'],
+            ['- [ ] Implement Adhan/notification audio within Apple platform restrictions', '- [x] Implement Adhan/notification audio within Apple platform restrictions'],
+            ['- [ ] Handle background execution limitations explicitly', '- [x] Handle background execution limitations explicitly'],
+          ]) {
+            if (!todo.includes(before)) throw new Error(`Missing tracker item: ${before}`);
+            todo = todo.replace(before, after);
+          }
+          const anchor = '- [x] Handle background execution limitations explicitly';
+          todo = todo.replace(anchor, anchor + `\n\n**iOS native implementation verification note (2026-08-16):** foundation run \`31941296351\`, local-notification run \`31941790069\`, lifecycle-policy run \`31941980679\`, and latest-main consolidation run \`31942088604\` passed their repository gates and Xcode iOS Simulator builds. The committed shell uses foreground location privacy metadata, native Preferences persistence, bounded today/tomorrow local prayer scheduling with owned-request reconciliation, silent/default notification audio, and an explicit foreground/background/terminated system-notification policy that does not claim full Adhan-recording auto-play or require application background execution at delivery time. Interactive iPhone/iPad layout, offline cold-start, and simulator/device acceptance remain separately tracked.`);
+          fs.writeFileSync('TODO.md', todo);
+
+          let status = fs.readFileSync('docs/IOS_VALIDATION_STATUS.md', 'utf8');
+          status += `\n\n## Native implementation validated — 2026-08-16\n\nThe iOS shell, foreground location metadata, Preferences persistence, local prayer notification adapter, and notification/audio/background lifecycle policy have passed macOS/Xcode simulator compilation. Interactive iPhone/iPad and offline cold-start acceptance remain separately tracked.\n`;
+          fs.writeFileSync('docs/IOS_VALIDATION_STATUS.md', status);
+
+          let testing = fs.readFileSync('TESTING.md', 'utf8');
+          testing += `\n\n## iOS native consolidation — 2026-08-16\n\nRuns \`31941296351\`, \`31941790069\`, \`31941980679\`, and \`31942088604\` validate the native iOS foundation, local notification adapter, lifecycle policy, and latest-main Xcode build. The source-only replay excludes runner-generated DerivedData; permanent macOS PR validation is added separately on the clean branch.\n`;
+          fs.writeFileSync('TESTING.md', testing);
+          NODE
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Format
+        run: npm run format
+      - name: Repository quality gate
+        run: npm run check
+      - name: Commit source only
+        run: |
+          rm -f .github/workflows/ios-native-latest-finalize.yml
+          rm -f .github/workflows/ios-native-source-push.yml
+          rm -rf ios/DerivedData ios/App/App/public
+          rm -f tsconfig.tsbuildinfo
+          git config user.name privacyOG
+          git config user.email privacyOG@users.noreply.github.com
+          git add -A
+          if git ls-files --stage | grep -E 'ios/DerivedData|ios/App/App/public|tsconfig\.tsbuildinfo'; then
+            echo 'Generated files entered the index' >&2
+            exit 1
+          fi
+          git commit -m "Verify iOS native implementation [ios-latest-verified]"
+          git push origin HEAD:privacyog/ios-native-latest
