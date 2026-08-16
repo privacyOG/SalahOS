@@ -11,6 +11,7 @@
     "verify:web-build": "node scripts/verify-web-build.mjs",
     "verify:service-worker-cache-boundary": "node scripts/verify-service-worker-cache-boundary.mjs",
     "verify:release-version": "node scripts/verify-release-version.mjs",
+    "verify:capacitor-config": "node scripts/verify-capacitor-config.mjs",
     "verify:ios-safe-area": "node scripts/verify-ios-safe-area.mjs",
     "verify:ios-visual-wiring": "node scripts/verify-ios-visual-wiring.mjs",
     "verify:native-dependencies": "node scripts/verify-native-dependency-surface.mjs",
@@ -35,8 +36,8 @@
     "security:sensitive-files": "node scripts/check-sensitive-files.mjs",
     "security:audit": "npm audit --audit-level=moderate",
     "security:licenses": "node scripts/check-dependency-licenses.mjs",
-    "check": "npm run security:sensitive-files && npm run security:audit && npm run security:licenses && npm run docs:links && npm run verify:authorship && npm run verify:service-worker-cache-boundary && npm run verify:release-version && npm run verify:native-dependencies && npm run verify:ios-safe-area && npm run verify:ios-visual-wiring && npm run verify:native-permissions && npm run verify:android-emulator-wiring && npm run verify:remote-api-boundary && npm run verify:local-adhan-audio && npm run verify:notification-capabilities && npm run verify:visual-regression-wiring && npm run verify:accessibility-contract && npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build && npm run verify:web-build",
-    "android:sync": "npm run build && cap sync android && npm run verify:native-dependencies",
+    "check": "npm run security:sensitive-files && npm run security:audit && npm run security:licenses && npm run docs:links && npm run verify:authorship && npm run verify:service-worker-cache-boundary && npm run verify:release-version && npm run verify:capacitor-config && npm run verify:native-dependencies && npm run verify:ios-safe-area && npm run verify:ios-visual-wiring && npm run verify:native-permissions && npm run verify:android-emulator-wiring && npm run verify:remote-api-boundary && npm run verify:local-adhan-audio && npm run verify:notification-capabilities && npm run verify:visual-regression-wiring && npm run verify:accessibility-contract && npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build && npm run verify:web-build",
+    "android:sync": "npm run build && cap sync android && npm run verify:capacitor-config && npm run verify:native-dependencies",
     "android:build": "npm run android:sync && cd android && ./gradlew assembleDebug && cd .. && npm run verify:android-reboot && npm run verify:android-merged-permissions",
     "android:release-check": "npm run android:sync && cd android && ./gradlew assembleRelease && cd .. && npm run verify:android-merged-permissions",
     "verify:android-reboot": "node scripts/verify-android-notification-reboot.mjs"
