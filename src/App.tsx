@@ -40,6 +40,7 @@ import {
 import type { Locale, TranslationKey } from './i18n/translations';
 import { requestCurrentLocation } from './platform/currentLocation';
 import { synchronizeAndroidPrayerNotifications } from './platform/androidNotificationScheduler';
+import { getApplicationStorage } from './platform/applicationStorage';
 import type { LocationFailureReason } from './platform/currentLocation';
 import { createStructuredErrorLogger } from './platform/errorLog';
 import {
@@ -132,7 +133,7 @@ function emptyManualMosqueDrafts(): ManualMosquePrayerDrafts {
 
 function initialSettings(): PersistedSettings {
   try {
-    return loadPersistedSettings(window.localStorage);
+    return loadPersistedSettings(getApplicationStorage());
   } catch {
     return defaultPersistedSettings;
   }
@@ -162,7 +163,7 @@ export function App() {
   const [settingsMessage, setSettingsMessage] = useState<TranslationKey | null>(null);
   const [savedLocations, setSavedLocations] = useState<readonly SavedLocation[]>(() => {
     try {
-      return loadSavedLocations(window.localStorage);
+      return loadSavedLocations(getApplicationStorage());
     } catch {
       return [];
     }
@@ -176,7 +177,7 @@ export function App() {
   );
   const [mosqueLibrary, setMosqueLibrary] = useState<readonly MosqueLibraryEntry[]>(() => {
     try {
-      return loadMosqueLibrary(window.localStorage);
+      return loadMosqueLibrary(getApplicationStorage());
     } catch {
       return [];
     }
@@ -381,7 +382,7 @@ export function App() {
 
   useEffect(() => {
     try {
-      savePersistedSettings(window.localStorage, effectiveSettings);
+      savePersistedSettings(getApplicationStorage(), effectiveSettings);
     } catch {
       // Storage can be unavailable in privacy-restricted browser contexts.
     }
@@ -389,7 +390,7 @@ export function App() {
 
   useEffect(() => {
     try {
-      saveSavedLocations(window.localStorage, savedLocations);
+      saveSavedLocations(getApplicationStorage(), savedLocations);
     } catch {
       // Saved favourites remain usable in memory when storage is unavailable.
     }
@@ -397,7 +398,7 @@ export function App() {
 
   useEffect(() => {
     try {
-      saveMosqueLibrary(window.localStorage, mosqueLibrary);
+      saveMosqueLibrary(getApplicationStorage(), mosqueLibrary);
     } catch {
       // The validated mosque library remains usable in memory when storage is unavailable.
     }
@@ -622,7 +623,7 @@ export function App() {
 
   function resetSettings(): void {
     try {
-      resetPersistedSettings(window.localStorage);
+      resetPersistedSettings(getApplicationStorage());
     } catch {
       // Reset still applies in memory when browser storage is unavailable.
     }
