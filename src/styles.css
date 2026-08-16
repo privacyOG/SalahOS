@@ -638,7 +638,7 @@ h2 {
 }
 
 .prayer-time-label {
-  color: #9eae9b;
+  color: var(--muted);
   font-size: 0.875rem;
   font-weight: 750;
   line-height: 1.35;
@@ -652,13 +652,13 @@ h2 {
 }
 
 .iqamah-time {
-  color: #c5e0be;
+  color: var(--accent);
 }
 
 .jumuah-panel {
   margin-block-start: 1.25rem;
   padding-block-start: 1.25rem;
-  border-block-start: 1px solid rgba(255, 255, 255, 0.08);
+  border-block-start: 1px solid var(--divider);
 }
 
 .jumuah-panel h3 {
@@ -677,7 +677,7 @@ h2 {
   gap: 0.35rem;
   padding: 0.9rem;
   border-radius: 0.85rem;
-  background: rgba(197, 224, 190, 0.07);
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
 }
 
 .saved-location-controls {
@@ -691,7 +691,7 @@ h2 {
 .saved-location-controls label {
   display: grid;
   gap: 0.35rem;
-  color: #c2cdc0;
+  color: var(--muted);
   font-size: 0.9rem;
   line-height: 1.4;
 }
@@ -707,9 +707,9 @@ h2 {
   gap: 0.85rem;
   margin-block: 1rem;
   padding: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--card-border);
   border-radius: 0.9rem;
-  background: rgba(255, 255, 255, 0.025);
+  background: color-mix(in srgb, var(--text) 2.5%, transparent);
 }
 
 .mosque-library-row,
@@ -727,7 +727,7 @@ h2 {
 .mosque-library-controls label {
   display: grid;
   gap: 0.35rem;
-  color: #c2cdc0;
+  color: var(--muted);
   font-size: 0.9rem;
   line-height: 1.4;
 }
@@ -747,7 +747,7 @@ h2 {
 .notification-fieldset {
   margin-block: 1rem;
   padding: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  border: 1px solid var(--card-border);
   border-radius: 0.9rem;
 }
 
@@ -762,7 +762,7 @@ h2 {
   gap: 0.7rem;
   padding: 0.9rem;
   border-radius: 0.8rem;
-  background: rgba(255, 255, 255, 0.025);
+  background: color-mix(in srgb, var(--text) 2.5%, transparent);
 }
 
 .notification-card h3 {
@@ -789,7 +789,7 @@ h2 {
 
 .settings-note {
   margin-block-end: 0;
-  color: #aeb9ac;
+  color: var(--muted);
   font-size: 0.9rem;
   line-height: 1.55;
 }
