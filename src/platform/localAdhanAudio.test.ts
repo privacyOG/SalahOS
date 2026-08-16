@@ -1,5 +1,8 @@
 import { describe, expect, it } from 'vitest';
-import { defaultNotificationPreferences, updatePrayerNotificationPreference } from '../domain/notificationPreferences';
+import {
+  defaultNotificationPreferences,
+  updatePrayerNotificationPreference,
+} from '../domain/notificationPreferences';
 import {
   foregroundAdhanPlaybackKey,
   MAX_LOCAL_ADHAN_AUDIO_BYTES,
@@ -8,25 +11,25 @@ import {
 
 describe('local Adhan audio', () => {
   it('accepts a bounded local audio file without requiring redistribution metadata', () => {
-    expect(() =>
-      validateLocalAdhanAudio({ name: 'my-adhan.mp3', type: 'audio/mpeg', size: 1_024 }),
-    ).not.toThrow();
+    expect(() => {
+      validateLocalAdhanAudio({ name: 'my-adhan.mp3', type: 'audio/mpeg', size: 1_024 });
+    }).not.toThrow();
   });
 
   it('rejects non-audio, empty and oversized local files', () => {
-    expect(() =>
-      validateLocalAdhanAudio({ name: 'notes.txt', type: 'text/plain', size: 100 }),
-    ).toThrow(TypeError);
-    expect(() =>
-      validateLocalAdhanAudio({ name: 'empty.mp3', type: 'audio/mpeg', size: 0 }),
-    ).toThrow(RangeError);
-    expect(() =>
+    expect(() => {
+      validateLocalAdhanAudio({ name: 'notes.txt', type: 'text/plain', size: 100 });
+    }).toThrow(TypeError);
+    expect(() => {
+      validateLocalAdhanAudio({ name: 'empty.mp3', type: 'audio/mpeg', size: 0 });
+    }).toThrow(RangeError);
+    expect(() => {
       validateLocalAdhanAudio({
         name: 'huge.mp3',
         type: 'audio/mpeg',
         size: MAX_LOCAL_ADHAN_AUDIO_BYTES + 1,
-      }),
-    ).toThrow(RangeError);
+      });
+    }).toThrow(RangeError);
   });
 
   it('returns one stable foreground playback key only at an enabled Adhan prayer minute', () => {
@@ -39,7 +42,7 @@ describe('local Adhan audio', () => {
       { name: 'fajr', localMinutes: 330 },
       { name: 'sunrise', localMinutes: 410 },
       { name: 'dhuhr', localMinutes: 720 },
-    ];
+    ] as const;
 
     expect(
       foregroundAdhanPlaybackKey({
@@ -63,7 +66,7 @@ describe('local Adhan audio', () => {
     const prayers = [
       { name: 'fajr', localMinutes: 330 },
       { name: 'sunrise', localMinutes: 410 },
-    ];
+    ] as const;
     const adhanDisabled = updatePrayerNotificationPreference(
       defaultNotificationPreferences,
       'fajr',
