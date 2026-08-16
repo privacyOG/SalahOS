@@ -385,7 +385,10 @@
 - [x] Configure iOS project/shell
 - [x] Implement location permission descriptions and flow
 - [x] Implement persistent settings/storage
-- [ ] Implement local prayer notifications within iOS scheduling limits
+- [x] Implement local prayer notifications within iOS scheduling limits
+
+**iOS local-notification verification note (2026-08-16):** SalahOS now consumes the shared today/tomorrow notification intents through the installed Capacitor Local Notifications iOS bridge. The adapter owns only namespaced SalahOS requests, uses deterministic positive identifiers, round-trips scheduling metadata through pending-request `extra`, cancels stale requests before replacement, requests display permission only when future configured alerts need delivery, and fails closed when permission remains denied. The bounded two-day horizon can produce at most 30 reminder/prayer-time/Adhan-alert requests (five prayers × three optional alerts × two dates), rather than accumulating an unbounded queue. Silent preferences use the iOS `silent` path with no notification sound; non-silent alerts request the platform-default sound fallback. Validation includes focused adapter tests, the complete repository quality gate and an Xcode iOS Simulator build. Custom/full Adhan audio, background-delivery policy, interactive simulator permission acceptance and iPhone/iPad layout evidence remain separate Stage 9/10 items.
+
 - [ ] Implement Adhan/notification audio within Apple platform restrictions
 - [ ] Handle background execution limitations explicitly
 - [ ] Test iPhone responsive layout

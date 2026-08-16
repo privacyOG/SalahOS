@@ -777,3 +777,7 @@ When a milestone is verified, add a dated entry under `Validation log` including
 ## iOS native foundation — 2026-08-16
 
 The macOS validation workflow installs the pinned iOS runtime, generates/synchronises the native project, asserts both required location usage-description keys, rejects accidental background-location mode, runs the complete repository quality gate, and compiles the `App` scheme for a generic iOS Simulator with `CODE_SIGNING_ALLOWED=NO`. This validates project generation, privacy metadata and compilation only; interactive simulator/device acceptance remains separately open.
+
+## iOS local notification adapter — 2026-08-16
+
+The iOS adapter is tested with a fake native client for stable identifiers, permission prompt/grant, denied permission, silent delivery metadata, default audible fallback, cancellation of owned stale requests and unsupported-platform no-op behavior. The production App sends the same resolved today/tomorrow intents to Android and iOS adapters; each adapter self-selects its native platform. The macOS validation gate also synchronizes the iOS project and compiles the simulator target. Interactive notification delivery remains separately tracked.

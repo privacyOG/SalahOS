@@ -46,3 +46,7 @@ An iOS/iPadOS tracker item may move to complete only when its implementation exi
 ## Native foundation validation — 2026-08-16
 
 The committed iOS shell is generated from the shared SalahOS web application and uses the same `com.privacyog.salahos` application identifier. The iOS target includes `NSLocationWhenInUseUsageDescription` and `NSLocationAlwaysAndWhenInUseUsageDescription` as required by the installed geolocation bridge, does not enable background location, and builds for an iOS Simulator with code signing disabled. The shared native Preferences adapter provides the same versioned settings, saved-location and mosque-library storage contract used on Android. Simulator/device interaction remains separately tracked.
+
+## Local notification scheduling
+
+The iOS runtime uses the first-party Local Notifications bridge with the same deterministic shared prayer notification intents as Android. Scheduling is bounded to today and tomorrow, permission denial fails closed, and only SalahOS-namespaced pending requests are reconciled. This repository validation does not claim custom Adhan playback, unrestricted background execution, or exact wall-clock delivery under every Apple power/focus state.
