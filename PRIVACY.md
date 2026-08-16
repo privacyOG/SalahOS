@@ -35,6 +35,14 @@ The Capacitor native shells load the application bundled from the local `dist` b
 
 `npm run verify:capacitor-config` checks that source contract and re-runs after `cap sync` on both Android and iOS so generated native configuration is also rejected if it acquires a `server` block or unexpected application identity/web-directory value. A future remote-hosted native WebView mode therefore requires an explicit privacy/security review rather than a configuration-only change.
 
+### Native persisted-storage boundary
+
+Capacitor native shells use `@capacitor/preferences` for SalahOS settings, saved locations and mosque-library state. Browser/PWA targets continue to use the browser Web Storage implementation supplied at startup.
+
+Earlier iOS candidate builds used the WebView Web Storage path. During native initialization, an existing Preferences value remains authoritative. A missing native key may be migrated from the legacy Web Storage copy, but any required Preferences writes are flushed before that legacy copy is removed. This prevents the storage transition from deleting the only persisted copy before native persistence succeeds.
+
+`npm run verify:native-storage` protects the native-platform selection and migration ordering contract. The user-selected local Adhan recording is stored separately in IndexedDB and is not part of this settings/location/mosque migration.
+
 ## Local data backup and transfer
 
 The Android application disables application backup and supplies explicit exclusion rules for both legacy backup handling and Android 12+ cloud-backup/device-transfer paths. This is intended to keep SalahOS-owned local location, mosque, settings and media state from being copied through Android application-backup mechanisms by default.
@@ -89,6 +97,7 @@ Network loss must not prevent locally calculable prayer schedules, access to pre
 
 - HTTPS-only reviewed optional remote request boundary.
 - Native Capacitor shells load bundled application content and reject unreviewed remote-server/origin overrides.
+- Native persisted settings/location/mosque state uses Preferences with ordered legacy Web Storage migration on native shells.
 - Bounded Web/PWA service-worker cache allowlist; arbitrary same-origin API/data responses are not cached by default.
 - Strict validation of CSV/JSON imports.
 - Content Security Policy on web/PWA targets where applicable.
