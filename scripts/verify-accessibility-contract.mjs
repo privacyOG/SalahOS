@@ -2,6 +2,12 @@ import { readFileSync } from 'node:fs';
 
 const sharedCss = readFileSync(new URL('../src/styles.css', import.meta.url), 'utf8');
 const smartDisplayCss = readFileSync(new URL('../src/smart-display.css', import.meta.url), 'utf8');
+const packageJson = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
+const workflow = readFileSync(new URL('../.github/workflows/ci.yml', import.meta.url), 'utf8');
+const browserHarness = readFileSync(
+  new URL('./accessibility-browser-regression.mjs', import.meta.url),
+  'utf8',
+);
 
 const requiredSharedContracts = [
   'button:focus-visible',
@@ -30,13 +36,36 @@ if (!smartDisplayCss.includes('animation: smart-display-pixel-shift')) {
   throw new Error('Smart-display burn-in movement contract is missing');
 }
 
-const minimumControlRem = Number.parseFloat(
-  sharedCss.match(/min-height:\s*([0-9.]+)rem/)?.[1] ?? '0',
+const controlHeightMatch = sharedCss.match(
+  /button,\s*select,\s*input\s*\{[^}]*min-height:\s*([0-9.]+)rem/s,
 );
+const minimumControlRem = Number.parseFloat(controlHeightMatch?.[1] ?? '0');
 if (!Number.isFinite(minimumControlRem) || minimumControlRem < 2.75) {
   throw new Error('Interactive control minimum height must remain at least 2.75rem');
 }
 
+if (
+  packageJson.scripts?.['verify:accessibility-browser'] !==
+  'node scripts/accessibility-browser-regression.mjs'
+) {
+  throw new Error('Accessibility browser regression package command is missing or changed');
+}
+if (!workflow.includes('run: npm run verify:accessibility-browser')) {
+  throw new Error('Quality Gate no longer executes the accessibility browser regression');
+}
+
+for (const browserContract of [
+  "style.textContent = ':root { font-size: 200% !important; }'",
+  "key: 'Tab'",
+  "name: 'prefers-reduced-motion', value: 'reduce'",
+  "path: '/?mode=smart-display'",
+  "'phone-portrait-en-light-text-200.png'",
+]) {
+  if (!browserHarness.includes(browserContract)) {
+    throw new Error(`Accessibility browser contract is missing: ${browserContract}`);
+  }
+}
+
 console.log(
-  'Accessibility styling contract passed: visible keyboard focus, 2.75rem minimum controls, and reduced-motion smart-display behavior are preserved.',
+  'Accessibility contract passed: keyboard focus, minimum controls, 200% browser reflow, reduced motion, and CI wiring are preserved.',
 );
