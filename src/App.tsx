@@ -63,6 +63,7 @@ import {
 import type { PersistedSettings } from './platform/settingsStorage';
 import { installRuntimeRefreshListeners } from './platform/runtimeRefresh';
 import { createSystemClockChangeDetector } from './platform/systemClockChange';
+import { createSystemSleepWakeDetector } from './platform/systemSleepWake';
 import { installThemePreference } from './platform/themePreference';
 import { BidiText } from './ui/BidiText';
 
@@ -185,6 +186,9 @@ export function App() {
   useEffect(() => {
     const initialSample = { wallTimeMs: Date.now(), monotonicTimeMs: performance.now() };
     const clockChangeDetector = createSystemClockChangeDetector(initialSample);
+    const sleepWakeDetector = createSystemSleepWakeDetector({
+      wallTimeMs: initialSample.wallTimeMs,
+    });
     const sampleNow = () => ({
       wallTimeMs: Date.now(),
       monotonicTimeMs: performance.now(),
@@ -192,11 +196,17 @@ export function App() {
     const refreshNow = () => {
       const sample = sampleNow();
       clockChangeDetector.reset(sample);
+      sleepWakeDetector.reset({ wallTimeMs: sample.wallTimeMs });
       setNow(new Date(sample.wallTimeMs));
     };
     const tick = () => {
       const sample = sampleNow();
-      clockChangeDetector.sample(sample);
+      const resumedFromSleep = sleepWakeDetector.sample({ wallTimeMs: sample.wallTimeMs });
+      if (resumedFromSleep) {
+        clockChangeDetector.reset(sample);
+      } else {
+        clockChangeDetector.sample(sample);
+      }
       setNow(new Date(sample.wallTimeMs));
     };
     const timer = window.setInterval(tick, 1_000);
