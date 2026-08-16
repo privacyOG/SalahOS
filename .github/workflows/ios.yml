@@ -101,6 +101,7 @@ jobs:
             sips -g pixelWidth -g pixelHeight \
               "simulator-evidence/${label}-5s.png" \
               "simulator-evidence/${label}-20s.png"
+            xcrun simctl shutdown "$udid"
           }
 
           capture_device "$IPHONE_UDID" iphone
