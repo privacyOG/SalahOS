@@ -1,4 +1,6 @@
-export type StructuredErrorCode = 'invalid-system-time' | 'prayer-calculation-unavailable';
+export type StructuredErrorCode =
+  | 'invalid-system-time'
+  | 'prayer-calculation-unavailable';
 
 export interface StructuredErrorEvent {
   readonly component: 'runtime-clock' | 'prayer-calculation';
