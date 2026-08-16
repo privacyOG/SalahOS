@@ -31,7 +31,10 @@ describe('native application storage', () => {
   it('hydrates the persisted application keys before synchronous reads', async () => {
     const preferences = new MemoryPreferences();
     preferences.values.set(PERSISTED_APPLICATION_KEYS[0], '{"version":2}');
-    preferences.values.set(PERSISTED_APPLICATION_KEYS[1], '{"version":1,"locations":[]}');
+    preferences.values.set(
+      PERSISTED_APPLICATION_KEYS[1],
+      '{"version":1,"locations":[]}',
+    );
 
     const storage = await createNativePreferencesStorage(preferences);
 
