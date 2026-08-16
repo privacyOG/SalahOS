@@ -19,13 +19,13 @@
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(MARKETING_VERSION)</string>
+	<string>0.1.0</string>
 	<key>CFBundleVersion</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<string>1</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-	<string>SalahOS uses your location only when you ask it to calculate prayer times for your current position.</string>
+	<string>SalahOS uses your location only when you ask it to calculate prayer times for your current position. Background location is not used.</string>
 	<key>NSLocationWhenInUseUsageDescription</key>
 	<string>SalahOS uses your location only when you ask it to calculate prayer times for your current position.</string>
 	<key>UILaunchStoryboardName</key>

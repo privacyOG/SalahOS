@@ -1,5 +1,6 @@
 import { calendarDate } from './calendar';
 import type { Coordinates } from './coordinates';
+import { applyInstitutionalAdjustments } from './institutionalAdjustments';
 import { createLocationPrayerContext } from './locationPrayerContext';
 import { calculationMethods } from './methods';
 import type { CalculationMethod } from './methods';
@@ -111,16 +112,18 @@ function scheduleFor(
   highLatitudeRule: HighLatitudeRule,
   adjustments: Readonly<Partial<Record<PrayerName, number>>>,
 ): PrayerSchedule {
-  return calculatePrayerSchedule({
-    date: civilDate,
-    latitude: coordinates.latitude,
-    longitude: coordinates.longitude,
-    utcOffsetMinutes,
-    method,
-    asrConvention,
-    highLatitudeRule,
-    adjustments,
-  });
+  return applyInstitutionalAdjustments(
+    calculatePrayerSchedule({
+      date: civilDate,
+      latitude: coordinates.latitude,
+      longitude: coordinates.longitude,
+      utcOffsetMinutes,
+      method,
+      asrConvention,
+      highLatitudeRule,
+      adjustments,
+    }),
+  );
 }
 
 export function buildPrayerDashboard(input: {
@@ -184,7 +187,7 @@ export function buildPrayerDashboard(input: {
     clock,
     gregorian: calendar.gregorian,
     hijri: calendar.hijri,
-    method,
+    method: today.method,
     asrConvention,
     highLatitudeRule,
     today,
