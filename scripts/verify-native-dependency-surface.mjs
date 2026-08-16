@@ -36,11 +36,10 @@ for (const contract of [
   "androidxFragmentVersion = '1.8.9'",
   "coreSplashScreenVersion = '1.2.0'",
   "androidxWebkitVersion = '1.14.0'",
-  "cordovAndroidVersion = '14.0.1'",
+  "cordovaAndroidVersion = '14.0.1'",
 ]) {
-  const normalized = contract.replace('cordovAndroidVersion', 'cordovaAndroidVersion');
-  if (!androidVariables.includes(normalized)) {
-    throw new Error(`Reviewed Android native dependency contract changed: ${normalized}`);
+  if (!androidVariables.includes(contract)) {
+    throw new Error(`Reviewed Android native dependency contract changed: ${contract}`);
   }
 }
 
