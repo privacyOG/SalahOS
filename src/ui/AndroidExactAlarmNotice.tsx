@@ -1,10 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Locale } from '../i18n/translations';
 import {
   openAndroidExactAlarmSettings,
   readAndroidExactAlarmCapability,
   type AndroidExactAlarmCapability,
 } from '../platform/androidNotificationScheduler';
+
+export const ANDROID_EXACT_ALARM_CAPABILITY_CHANGE_EVENT =
+  'salahos-exact-alarm-capability-change';
 
 const copy: Readonly<
   Record<
@@ -29,14 +32,20 @@ const copy: Readonly<
 
 export interface AndroidExactAlarmNoticeProps {
   readonly locale: Locale;
-  readonly onCapabilityChange?: (capability: AndroidExactAlarmCapability) => void;
 }
 
-export function AndroidExactAlarmNotice({
-  locale,
-  onCapabilityChange,
-}: AndroidExactAlarmNoticeProps) {
+export function AndroidExactAlarmNotice({ locale }: AndroidExactAlarmNoticeProps) {
   const [capability, setCapability] = useState<AndroidExactAlarmCapability | null>(null);
+  const previousCapability = useRef<AndroidExactAlarmCapability | null>(null);
+
+  const applyCapability = (next: AndroidExactAlarmCapability) => {
+    const previous = previousCapability.current;
+    previousCapability.current = next;
+    setCapability(next);
+    if (previous !== null && previous !== next) {
+      window.dispatchEvent(new Event(ANDROID_EXACT_ALARM_CAPABILITY_CHANGE_EVENT));
+    }
+  };
 
   useEffect(() => {
     let active = true;
@@ -44,37 +53,33 @@ export function AndroidExactAlarmNotice({
     const refresh = async () => {
       try {
         const next = await readAndroidExactAlarmCapability();
-        if (!active) return;
-        setCapability(next);
-        onCapabilityChange?.(next);
+        if (active) applyCapability(next);
       } catch {
-        if (!active) return;
-        setCapability('unsupported');
-        onCapabilityChange?.('unsupported');
+        if (active) applyCapability('unsupported');
       }
     };
-
+    const handleFocus = () => {
+      void refresh();
+    };
     const handleVisibilityChange = () => {
       if (document.visibilityState === 'visible') void refresh();
     };
 
     void refresh();
-    window.addEventListener('focus', refresh);
+    window.addEventListener('focus', handleFocus);
     document.addEventListener('visibilitychange', handleVisibilityChange);
     return () => {
       active = false;
-      window.removeEventListener('focus', refresh);
+      window.removeEventListener('focus', handleFocus);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
     };
-  }, [onCapabilityChange]);
+  }, []);
 
   if (capability !== 'inexact') return null;
 
   const openSettings = async () => {
     try {
-      const next = await openAndroidExactAlarmSettings();
-      setCapability(next);
-      onCapabilityChange?.(next);
+      applyCapability(await openAndroidExactAlarmSettings());
     } catch {
       // Keep the honest inexact-delivery notice visible when settings cannot be opened.
     }
