@@ -1,6 +1,7 @@
 node_modules/
 dist/
 coverage/
+artifacts/
 
 # Local environment and secret files
 .env
