@@ -44,6 +44,7 @@ The current release candidate additionally enforces:
 - `usesCleartextTraffic=false` for the packaged application;
 - reviewed native dependency versions and exact direct Gradle/Capacitor dependency declarations, with unreviewed local `.jar/.aar` binaries rejected;
 - removal of the dormant Google Services Gradle auto-activation path, with `google-services.json` rejected by the sensitive-file policy;
+- bundled-only Capacitor content configuration with synchronized native config re-verification after `cap sync`;
 - a permanent Android 35 / Google APIs / x86_64 / Pixel 7 Pro emulator step using the previously validated offline-cold-start and orientation instrumentation path;
 - retained cold-start portrait, landscape and restored-portrait PNG evidence whose dimensions are checked before upload.
 
@@ -59,23 +60,27 @@ Verified on previously validated heads:
 
 - committed Capacitor/Xcode native project with Swift Package Manager integration;
 - native foreground geolocation path using the shared location boundary;
-- native Preferences-backed storage path;
-- bounded local prayer-notification scheduling through the iOS native adapter;
+- local prayer-notification scheduling through the iOS native adapter;
 - explicit background/terminated notification policy that does not claim unrestricted full-Adhan playback;
 - permanent `macos-15` Xcode Simulator build gate with signing disabled;
 - successful Simulator installation/launch evidence from the native acceptance work.
 
-The current release candidate retains one-shot foreground location behaviour and documents/enforces the two iOS location usage-description keys required by pinned Capacitor Geolocation 8.2.0. The dependency-mandated `NSLocationAlwaysAndWhenInUseUsageDescription` key is not a claim that SalahOS requests background location: the app does not use `watchPosition()` or declare location `UIBackgroundModes`.
+Earlier iOS application state remained in the Capacitor WebView's Web Storage path rather than the Preferences-backed native storage path used on Android. The prior platform-status wording that described iOS storage as already Preferences-backed was therefore too broad and has been corrected.
 
-The candidate also adds:
+The current release candidate moves all Capacitor native shells, including iOS/iPadOS, onto the same Preferences-backed application-storage abstraction. It migrates missing persisted settings, saved locations and mosque-library values from the legacy Web Storage copy into Preferences, flushes those writes before removal, treats an existing Preferences value as authoritative, and leaves browser/PWA storage unchanged.
+
+The current release candidate also retains one-shot foreground location behaviour and documents/enforces the two iOS location usage-description keys required by pinned Capacitor Geolocation 8.2.0. The dependency-mandated `NSLocationAlwaysAndWhenInUseUsageDescription` key is not a claim that SalahOS requests background location: the app does not use `watchPosition()` or declare location `UIBackgroundModes`.
+
+The candidate additionally adds:
 
 - safe-area verification and stricter native permission/transport checks;
 - reviewed exact Swift package/product dependency declarations tied to the pinned first-party native packages;
+- bundled-only Capacitor content configuration with synchronized native config re-verification after `cap sync`;
 - permanent dynamic selection of one available iPhone Simulator and one available iPad Simulator from the same macOS build job;
 - cold installation/launch of the exact unsigned `App.app` build product on each selected Simulator;
 - retained 5-second and 20-second screenshots for both device classes.
 
-Those candidate changes require fresh exact-head iOS execution and screenshot inspection. Workflow configuration alone is not visual evidence.
+Those candidate changes require fresh exact-head iOS execution and screenshot inspection. Workflow configuration alone is not visual evidence, and the new iOS Preferences migration remains candidate-only until the exact candidate test/build gate passes.
 
 Still open: final iPhone safe-area/phone-layout acceptance on the candidate, iPad visual acceptance, enforced offline cold-start acceptance, physical iPhone/iPad testing, signing/distribution and real native notification-delivery acceptance.
 
@@ -110,14 +115,14 @@ Still open: physical TV/browser full-screen behavior, actual remote mappings, HD
 
 ## Automated repository baseline
 
-The Quality Gate uses a clean GitHub-hosted workspace with Node.js 22, installs the committed lockfile and executes repository policies, documentation checks, authorship/native dependency/native permission contracts, formatting, lint, strict typecheck, automated tests, the production Web/PWA build and deploy-artifact verification.
+The Quality Gate uses a clean GitHub-hosted workspace with Node.js 22, installs the committed lockfile and executes repository policies, documentation checks, authorship/native dependency/native permission/Capacitor configuration contracts, formatting, lint, strict typecheck, automated tests, the production Web/PWA build and deploy-artifact verification.
 
 The release candidate extends that workflow with deterministic headless browser visual regression, a browser accessibility regression covering 200% text reflow, keyboard-visible focus and reduced-motion behavior, plus screenshot artifact upload. A screenshot is evidence only after the exact candidate workflow executes and passes and the retained file is inspected; workflow configuration alone is not evidence.
 
 Permanent native workflows add target-specific integration:
 
-- Android builds debug and unsigned release variants, verifies the packaged permission/reboot contracts, then provisions the pinned Android 35 emulator acceptance environment and retains layout screenshots;
-- iOS runs repository validation, Capacitor synchronisation, an unsigned Xcode Simulator build, and exact-built-app cold-launch screenshot capture on one available iPhone and one available iPad Simulator on `macos-15`.
+- Android builds debug and unsigned release variants, re-verifies synchronized Capacitor/native dependency configuration, verifies the packaged permission/reboot contracts, then provisions the pinned Android 35 emulator acceptance environment and retains layout screenshots;
+- iOS runs repository validation, Capacitor synchronisation, re-verifies synchronized Capacitor/native dependency configuration, performs an unsigned Xcode Simulator build, and captures exact-built-app cold-launch screenshots on one available iPhone and one available iPad Simulator on `macos-15`.
 
 A platform-specific workflow proves only the capabilities it actually executes.
 
@@ -131,6 +136,8 @@ The notification path reconciles a bounded desired schedule into native local no
 
 The candidate reviews both app-owned and dependency-contributed effective permissions. Backup/data-transfer and cleartext-network restrictions are explicit native policy rather than platform-default assumptions. The direct native dependency surface is also fail-closed: generated/app Gradle dependency declarations are allowlisted, local native binary injection is rejected, and an unused external-service plugin cannot be activated merely by adding a configuration file.
 
+The Capacitor source configuration keeps native execution on the bundled `dist` application and rejects unreviewed remote-server, navigation, cleartext, hostname or custom-scheme overrides. The generated Android configuration is rechecked after synchronization.
+
 The permanent emulator path is repeatable native-shell evidence, not a substitute for physical-OEM acceptance. Its screenshot orientation is verified from PNG dimensions before artifact upload, while application orientation survival is independently exercised by the native instrumentation test.
 
 Release signing support is configuration infrastructure, not evidence that a public release has been distributed.
@@ -139,9 +146,13 @@ Release signing support is configuration infrastructure, not evidence that a pub
 
 iOS/iPadOS has a real native project and automated Simulator build path. It uses the same shared prayer application and native bridges rather than a parallel implementation.
 
+The candidate now uses Capacitor Preferences for persisted application settings on iOS/iPadOS as well as Android. On upgrade from the earlier Web Storage path, only missing native values are migrated; successful persistence occurs before the legacy copy is removed. Browser/PWA storage remains on Web Storage.
+
 SalahOS itself requests a one-shot foreground location fix and does not enable continuous/background location. Pinned Capacitor Geolocation 8.2.0 nevertheless requires both `NSLocationWhenInUseUsageDescription` and `NSLocationAlwaysAndWhenInUseUsageDescription` because of its underlying iOS dependency. The second description is therefore treated as a dependency compatibility declaration while background modes and continuous location APIs remain forbidden by the candidate permission verifier.
 
 The candidate native dependency contract also pins the exact Swift package and product declaration set used by the generated SPM bridge. Additional package/product declarations require an explicit native dependency review.
+
+The Capacitor configuration keeps iOS/iPadOS on the bundled application instead of a remote WebView server. Generated configuration is rechecked after synchronization so a `server` block or identity/web-directory drift cannot silently enter the native build.
 
 Local notifications are scheduled for a bounded future horizon and are expected to be delivered by the operating system according to user permission and platform scheduling behavior. Background or terminated delivery must not be described as unrestricted application execution. Full user-selected Adhan recording playback is a separate capability from a system notification sound.
 
