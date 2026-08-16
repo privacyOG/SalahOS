@@ -108,6 +108,27 @@ function browserCommand() {
   return found;
 }
 
+function browserArguments() {
+  const args = [
+    '--headless=new',
+    '--disable-background-networking',
+    '--disable-default-apps',
+    '--disable-dev-shm-usage',
+    '--disable-extensions',
+    '--disable-gpu',
+    '--disable-sync',
+    '--metrics-recording-only',
+    '--no-first-run',
+    '--remote-debugging-port=9222',
+    `--user-data-dir=${BROWSER_PROFILE_DIRECTORY}`,
+    'about:blank',
+  ];
+  if (typeof process.getuid === 'function' && process.getuid() === 0) {
+    args.splice(args.length - 1, 0, '--no-sandbox');
+  }
+  return args;
+}
+
 async function waitForHttp(url, timeoutMs = 15_000) {
   const started = Date.now();
   let lastError;
@@ -289,22 +310,9 @@ const preview = spawn(
   ['run', 'preview', '--', '--host', '127.0.0.1', '--port', '4173', '--strictPort'],
   { stdio: ['ignore', 'inherit', 'inherit'] },
 );
-const browser = spawn(
-  browserCommand(),
-  [
-    '--headless=new',
-    '--disable-background-networking',
-    '--disable-default-apps',
-    '--disable-extensions',
-    '--disable-sync',
-    '--metrics-recording-only',
-    '--no-first-run',
-    '--remote-debugging-port=9222',
-    `--user-data-dir=${BROWSER_PROFILE_DIRECTORY}`,
-    'about:blank',
-  ],
-  { stdio: ['ignore', 'ignore', 'inherit'] },
-);
+const browser = spawn(browserCommand(), browserArguments(), {
+  stdio: ['ignore', 'ignore', 'inherit'],
+});
 
 let session;
 try {
