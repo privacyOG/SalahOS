@@ -1,0 +1,86 @@
+name: Apply system sleep wake integration
+
+on:
+  push:
+    branches:
+      - agent/system-sleep-wake-recovery
+    paths:
+      - .github/workflows/apply-system-sleep-wake.yml
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: agent/system-sleep-wake-recovery
+      - name: Apply integration
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('src/App.tsx')
+          text = path.read_text()
+          text = text.replace(
+              "import { createSystemClockChangeDetector } from './platform/systemClockChange';\n",
+              "import { createSystemClockChangeDetector } from './platform/systemClockChange';\nimport { createSystemSleepWakeDetector } from './platform/systemSleepWake';\n",
+              1,
+          )
+          old = """  useEffect(() => {
+    const initialSample = { wallTimeMs: Date.now(), monotonicTimeMs: performance.now() };
+    const clockChangeDetector = createSystemClockChangeDetector(initialSample);
+    const sampleNow = () => ({
+      wallTimeMs: Date.now(),
+      monotonicTimeMs: performance.now(),
+    });
+    const refreshNow = () => {
+      const sample = sampleNow();
+      clockChangeDetector.reset(sample);
+      setNow(new Date(sample.wallTimeMs));
+    };
+    const tick = () => {
+      const sample = sampleNow();
+      clockChangeDetector.sample(sample);
+      setNow(new Date(sample.wallTimeMs));
+    };
+"""
+          new = """  useEffect(() => {
+    const initialSample = { wallTimeMs: Date.now(), monotonicTimeMs: performance.now() };
+    const clockChangeDetector = createSystemClockChangeDetector(initialSample);
+    const sleepWakeDetector = createSystemSleepWakeDetector({
+      wallTimeMs: initialSample.wallTimeMs,
+    });
+    const sampleNow = () => ({
+      wallTimeMs: Date.now(),
+      monotonicTimeMs: performance.now(),
+    });
+    const refreshNow = () => {
+      const sample = sampleNow();
+      clockChangeDetector.reset(sample);
+      sleepWakeDetector.reset({ wallTimeMs: sample.wallTimeMs });
+      setNow(new Date(sample.wallTimeMs));
+    };
+    const tick = () => {
+      const sample = sampleNow();
+      const resumedFromSleep = sleepWakeDetector.sample({ wallTimeMs: sample.wallTimeMs });
+      if (resumedFromSleep) {
+        clockChangeDetector.reset(sample);
+      } else {
+        clockChangeDetector.sample(sample);
+      }
+      setNow(new Date(sample.wallTimeMs));
+    };
+"""
+          if old not in text:
+              raise SystemExit('Expected App runtime clock block not found')
+          path.write_text(text.replace(old, new, 1))
+          PY
+          git diff --check
+          git config user.name privacyOG
+          git config user.email '102720550+privacyOG@users.noreply.github.com'
+          git add src/App.tsx
+          git commit -m 'feat: recover after system sleep wake'
+          git push origin HEAD:agent/system-sleep-wake-recovery
