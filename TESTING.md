@@ -519,3 +519,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - The adapter retains only latitude/longitude needed for local timezone and prayer calculations plus the source marker; accuracy, altitude, heading, speed and browser capture timestamp are discarded immediately.
 - High-accuracy acquisition requires an explicit caller opt-in.
 - Read-only Quality Gate run `31920709447` passed formatting, typed lint, strict typecheck, all tests and production build.
+
+### 2026-08-16 — secrets and credential policy
+
+- Added a root `.gitignore` covering local environment files, private keys/certificates, signing stores and platform-local configuration.
+- Added `scripts/check-sensitive-files.mjs` and wired it into both `npm run check` and the read-only Quality Gate before the existing verification steps.
+- Added `docs/SECRETS_POLICY.md` requiring encrypted CI/platform secret stores, prohibiting committed credentials/API keys and documenting revocation/rotation after accidental exposure.
+- The repository-side guard intentionally rejects high-risk file classes without claiming filename checks can detect every possible inline secret; future network integrations still require diff review and hosting-platform secret scanning.
+- Read-only Quality Gate run `31921396802` passed the sensitive-file policy, formatting, typed lint, strict typecheck, all tests and production build.
