@@ -5,6 +5,13 @@ const root = new URL('..', import.meta.url);
 const srcDirectory = new URL('../src/', import.meta.url);
 const allowedFetchFile = 'src/platform/remoteApi.ts';
 
+const forbiddenNetworkApis = [
+  { label: 'XMLHttpRequest', pattern: /\bXMLHttpRequest\b/ },
+  { label: 'WebSocket', pattern: /\bWebSocket\b/ },
+  { label: 'EventSource', pattern: /\bEventSource\b/ },
+  { label: 'navigator.sendBeacon', pattern: /\bnavigator\s*\.\s*sendBeacon\s*\(/ },
+];
+
 function sourceFiles(directoryPath) {
   const files = [];
   for (const entry of readdirSync(directoryPath)) {
@@ -23,12 +30,20 @@ function sourceFiles(directoryPath) {
 
 for (const path of sourceFiles(srcDirectory.pathname)) {
   const repositoryPath = relative(root.pathname, path).replaceAll('\\', '/');
-  if (repositoryPath === allowedFetchFile) continue;
   const source = readFileSync(path, 'utf8');
-  if (/\bfetch\s*\(/.test(source)) {
+
+  if (repositoryPath !== allowedFetchFile && /\bfetch\s*\(/.test(source)) {
     throw new Error(
       `Direct production fetch() is not allowed in ${repositoryPath}; use src/platform/remoteApi.ts`,
     );
+  }
+
+  for (const api of forbiddenNetworkApis) {
+    if (api.pattern.test(source)) {
+      throw new Error(
+        `${api.label} is not an approved production network path in ${repositoryPath}; use the reviewed remote API boundary`,
+      );
+    }
   }
 }
 
@@ -46,6 +61,9 @@ if (connectDirective === undefined) {
 }
 if (/\*|https?:/.test(connectDirective)) {
   throw new Error(`CSP connect-src must not enable arbitrary remote HTTP origins: ${connectDirective}`);
+}
+if (!connectDirective.split(/\s+/).includes("'self'")) {
+  throw new Error(`CSP connect-src must retain the local self boundary: ${connectDirective}`);
 }
 
 console.log('Optional remote API boundary passed.');
