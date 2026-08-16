@@ -7,6 +7,7 @@ export default tseslint.config(
       'dist/**',
       'coverage/**',
       'node_modules/**',
+      'android/app/src/main/assets/**',
       'public/sw.js',
       'eslint.config.js',
       'scripts/*.mjs',
