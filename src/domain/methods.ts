@@ -18,12 +18,22 @@ export type IshaRule =
 export type MethodVerification =
   'cross-checked-reference' | 'pending-authoritative-source' | 'custom';
 
+export interface MethodAdjustments {
+  readonly fajr?: number;
+  readonly sunrise?: number;
+  readonly dhuhr?: number;
+  readonly asr?: number;
+  readonly maghrib?: number;
+  readonly isha?: number;
+}
+
 export interface CalculationMethod {
   readonly id: CalculationMethodId;
   readonly name: string;
   readonly fajrAngleDegrees: number;
   readonly ishaRule: IshaRule;
   readonly maghribRule: { readonly kind: 'sunset' };
+  readonly institutionalAdjustments: Readonly<MethodAdjustments>;
   readonly provenance: string;
   readonly verification: MethodVerification;
 }
@@ -35,12 +45,14 @@ const method = (
   ishaRule: IshaRule,
   provenance: string,
   verification: Exclude<MethodVerification, 'custom'>,
+  institutionalAdjustments: Readonly<MethodAdjustments> = {},
 ): CalculationMethod => ({
   id,
   name,
   fajrAngleDegrees,
   ishaRule,
   maghribRule: { kind: 'sunset' },
+  institutionalAdjustments,
   provenance,
   verification,
 });
@@ -51,6 +63,11 @@ const method = (
  * `cross-checked-reference` means the parameters agree with the reference set
  * documented in docs/PRAYER_METHOD_REFERENCES.md; it is not institutional
  * certification and does not replace geographic timetable parity testing.
+ *
+ * `institutionalAdjustments` records published authority-specific corrections
+ * separately from user/manual prayer offsets. The astronomical engine does not
+ * silently apply these values until the corresponding method policy has been
+ * validated end-to-end against authoritative timetable output.
  */
 export const calculationMethods: Readonly<
   Record<Exclude<CalculationMethodId, 'custom'>, CalculationMethod>
@@ -100,8 +117,9 @@ export const calculationMethods: Readonly<
     'Diyanet / Turkey',
     18,
     { kind: 'angle', angleDegrees: 17 },
-    '18°/17° interoperability approximation; Adhan JS describes Turkey as an approximation and AlAdhan marks it experimental. Official timetable parity pending.',
+    '18°/17° interoperability approximation. Diyanet officially publishes -7 min Sunrise, +5 min Dhuhr, +4 min Asr and +7 min Maghrib corrections; Imsak/Fajr and Isha receive no temkin adjustment. Twilight-angle parity with official Diyanet output remains pending.',
     'pending-authoritative-source',
+    { sunrise: -7, dhuhr: 5, asr: 4, maghrib: 7 },
   ),
   muis: method(
     'muis',
@@ -116,7 +134,7 @@ export const calculationMethods: Readonly<
     'Dubai',
     18.2,
     { kind: 'angle', angleDegrees: 18.2 },
-    '18.2° angles follow Batoul Apps research; AlAdhan explicitly labels Dubai experimental and additional per-prayer offsets remain unmodelled.',
+    '18.2° angles follow Batoul Apps research. Dubai IACAD describes its official prayer-time service as using government astronomical/Sharia criteria supervised with the International Astronomical Center, but the official material reviewed does not establish 18.2°/18.2° as the authority formula. Official service parity remains pending.',
     'pending-authoritative-source',
   ),
   kuwait: method(
@@ -168,6 +186,7 @@ export function createCustomCalculationMethod(input: {
     fajrAngleDegrees: input.fajrAngleDegrees,
     ishaRule: input.ishaRule,
     maghribRule: { kind: 'sunset' },
+    institutionalAdjustments: {},
     provenance: 'User-defined custom calculation parameters.',
     verification: 'custom',
   };
