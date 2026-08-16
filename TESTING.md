@@ -549,3 +549,10 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - At 23:59:59 the production dashboard keeps August 16 as today and identifies tomorrow Fajr; at 00:00:01 it advances today/tomorrow to August 17/18 and re-bases Fajr to the current civil day.
 - The fixture verifies local clock, Gregorian date, today/tomorrow schedules, next-prayer day offset and the six-row dashboard prayer presentation move together.
 - Read-only Quality Gate run `31921977275` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, all tests and production build.
+
+### 2026-08-16 — notification scheduling integration
+
+- Added `src/integration/notificationScheduling.test.ts` across dashboard prayer calculation, notification preferences, intent generation, IANA civil-time resolution and the scheduler adapter.
+- The fixture schedules Fajr reminder/prayer-time jobs, changes the calculated Fajr time by +5 minutes, and verifies stale jobs are cancelled before replacement at the new exact instants.
+- A third application of the same resolved schedule performs no operations, proving scheduler reconciliation is idempotent and does not duplicate jobs.
+- Read-only Quality Gate run `31923105355` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, all tests and production build.
