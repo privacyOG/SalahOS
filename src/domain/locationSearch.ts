@@ -55,12 +55,12 @@ function matchScore(record: PrincipalLocationRecord, query: string, locale: stri
   const countryNames = displayCountryNames(record.countryCodes, locale).map(normalizeSearchText);
 
   if (city === query) return 0;
-  if (city.startsWith(query)) return 1;
-  if (city.includes(query)) return 2;
-  if (countryNames.some((name) => name === query)) return 3;
-  if (countryNames.some((name) => name.startsWith(query))) return 4;
-  if (countryNames.some((name) => name.includes(query))) return 5;
-  if (countryCodes.some((code) => code === query)) return 6;
+  if (countryCodes.some((code) => code === query)) return 1;
+  if (city.startsWith(query)) return 2;
+  if (city.includes(query)) return 3;
+  if (countryNames.some((name) => name === query)) return 4;
+  if (countryNames.some((name) => name.startsWith(query))) return 5;
+  if (countryNames.some((name) => name.includes(query))) return 6;
   if (timeZone.includes(query)) return 7;
   if (comments.includes(query)) return 8;
   return null;
