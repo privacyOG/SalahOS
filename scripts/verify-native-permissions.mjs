@@ -1,5 +1,24 @@
 import { readFileSync } from 'node:fs';
 
+const packageJson = JSON.parse(
+  readFileSync(new URL('../package.json', import.meta.url), 'utf8'),
+);
+const reviewedGeolocationVersion = '8.2.0';
+const reviewedLocalNotificationsVersion = '8.2.1';
+const declaredGeolocationVersion = packageJson.dependencies?.['@capacitor/geolocation'];
+const declaredLocalNotificationsVersion = packageJson.dependencies?.['@capacitor/local-notifications'];
+
+if (declaredGeolocationVersion !== reviewedGeolocationVersion) {
+  throw new Error(
+    `@capacitor/geolocation changed from reviewed version ${reviewedGeolocationVersion} to ${String(declaredGeolocationVersion)}; perform a fresh native permission review before updating this contract`,
+  );
+}
+if (declaredLocalNotificationsVersion !== reviewedLocalNotificationsVersion) {
+  throw new Error(
+    `@capacitor/local-notifications changed from reviewed version ${reviewedLocalNotificationsVersion} to ${String(declaredLocalNotificationsVersion)}; perform a fresh native permission/manifest review before updating this contract`,
+  );
+}
+
 const androidManifest = readFileSync(
   new URL('../android/app/src/main/AndroidManifest.xml', import.meta.url),
   'utf8',
@@ -84,7 +103,7 @@ for (const requiredIosLocationKey of [
 ]) {
   if (!iosInfo.includes(`<key>${requiredIosLocationKey}</key>`)) {
     throw new Error(
-      `Pinned Capacitor Geolocation 8.2.0 requires iOS usage-description key: ${requiredIosLocationKey}`,
+      `Pinned Capacitor Geolocation ${reviewedGeolocationVersion} requires iOS usage-description key: ${requiredIosLocationKey}`,
     );
   }
 }
@@ -122,5 +141,5 @@ if (/\bwatchPosition\s*\(/.test(currentLocation)) {
 }
 
 console.log(
-  `Native permission/privacy contract passed: ${declaredAndroidPermissions.length} reviewed app-owned Android permissions, Android backup/transfer and cleartext exclusions, default iOS transport security, and one-shot native location with the two usage-description keys required by Capacitor Geolocation 8.2.0.`,
+  `Native permission/privacy contract passed for reviewed Geolocation ${reviewedGeolocationVersion} and Local Notifications ${reviewedLocalNotificationsVersion}: ${declaredAndroidPermissions.length} reviewed app-owned Android permissions, Android backup/transfer and cleartext exclusions, default iOS transport security, and one-shot native location with the two required iOS usage-description keys.`,
 );
