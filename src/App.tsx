@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 import { createCoordinates } from './domain/coordinates';
 import type { Coordinates } from './domain/coordinates';
-import { buildPrayerDashboard } from './domain/dashboard';
+import { buildPrayerDashboardResult } from './domain/dashboardResult';
 import {
   buildManualMosqueDay,
   MANUAL_MOSQUE_PRAYERS,
@@ -269,11 +269,11 @@ export function App() {
     };
   }, []);
 
-  const dashboard = useMemo(
+  const dashboardResult = useMemo(
     () =>
       coordinates === null || now === null
         ? null
-        : buildPrayerDashboard({
+        : buildPrayerDashboardResult({
             instant: now,
             coordinates,
             method: calculationMethods[settings.calculationMethodId],
@@ -284,6 +284,9 @@ export function App() {
           }),
     [coordinates, now, settings],
   );
+  const dashboard = dashboardResult?.ok === true ? dashboardResult.dashboard : null;
+  const calculationUnavailable = dashboardResult?.ok === false;
+  const unavailablePrayers = dashboardResult?.ok === true ? dashboardResult.unavailablePrayers : [];
   const sourcedDashboard = useMemo(
     () =>
       dashboard === null
@@ -1180,6 +1183,16 @@ export function App() {
             <p className="value">{translate(locale, 'systemTimeInvalidHelp')}</p>
           </div>
         </section>
+      ) : calculationUnavailable ? (
+        <section className="status-card" role="alert">
+          <div>
+            <p className="label">{translate(locale, 'dailyPrayers')}</p>
+            <p className="value">{translate(locale, 'calculationUnavailable')}</p>
+          </div>
+          <div>
+            <p className="value">{translate(locale, 'calculationUnavailableHelp')}</p>
+          </div>
+        </section>
       ) : sourcedDashboard === null ? (
         <section className="status-card">
           <div>
@@ -1326,6 +1339,12 @@ export function App() {
               );
             })}
           </div>
+
+          {unavailablePrayers.length > 0 && (
+            <p className="inline-message" role="status">
+              {translate(locale, 'somePrayerTimesUnavailable')}
+            </p>
+          )}
 
           {sourcedDashboard.jumuahSessions.length > 0 && (
             <div className="jumuah-panel">
