@@ -153,7 +153,7 @@ function parsePrayerAdjustments(value: unknown): PersistedSettings['prayerAdjust
     const adjustment = value[prayer];
     if (
       adjustment !== undefined &&
-      Number.isFinite(adjustment) &&
+      Number.isInteger(adjustment) &&
       Number(adjustment) >= -180 &&
       Number(adjustment) <= 180
     ) {
