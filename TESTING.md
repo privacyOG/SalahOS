@@ -495,3 +495,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - The first subsequent valid sample re-establishes sleep/wake and clock-change detector baselines and resumes live calculation automatically.
 - Added deterministic coverage for valid current/pre-epoch values, non-finite values, JavaScript Date-range overflow and injected wall-clock readers.
 - Read-only Quality Gate run `31920144935` passed formatting, typed lint, strict typecheck, all tests and production build on the cleaned implementation head.
+
+### 2026-08-16 — unavailable calculation results
+
+- Added an explicit dashboard calculation-result boundary that distinguishes successful schedules from calculation failure.
+- Successful schedules report prayer rows whose astronomical result remains unavailable; the UI keeps the neutral dash and shows localized guidance instead of inventing a time.
+- Calculation exceptions degrade to a localized non-crashing state that directs the user to verify location and calculation settings.
+- Added deterministic coverage for a normal Sydney schedule, polar-day partial unavailability and conversion of a rejected calculation input into the safe unavailable result.
+- Read-only Quality Gate run `31920344383` passed formatting, typed lint, strict typecheck, all tests and production build on the cleaned implementation head.
