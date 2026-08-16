@@ -8,6 +8,7 @@ import type {
 import type { NotificationPrayerName } from '../domain/notificationPreferences';
 import type { NotificationInstantResolution } from '../domain/notificationInstant';
 import type { Locale } from '../i18n/translations';
+import { iosNotificationPoliciesForRecord } from './iosNotificationPolicy';
 import {
   applyNotificationSchedulerPlan,
   type NotificationSchedulerAdapter,
@@ -28,6 +29,7 @@ interface LocalNotificationsClient {
 interface StoredNotificationExtra {
   readonly namespace: typeof extraNamespace;
   readonly record: ScheduledNotificationRecord;
+  readonly deliveryPolicies: ReturnType<typeof iosNotificationPoliciesForRecord>;
 }
 
 const prayerNames: Readonly<Record<Locale, Readonly<Record<NotificationPrayerName, string>>>> = {
@@ -109,7 +111,11 @@ class IosNotificationScheduler implements NotificationSchedulerAdapter {
 
   async schedule(record: ScheduledNotificationRecord): Promise<void> {
     const copy = notificationCopy(this.locale, record);
-    const extra: StoredNotificationExtra = { namespace: extraNamespace, record };
+    const extra: StoredNotificationExtra = {
+      namespace: extraNamespace,
+      record,
+      deliveryPolicies: iosNotificationPoliciesForRecord(record),
+    };
     await this.client.schedule({
       notifications: [
         {

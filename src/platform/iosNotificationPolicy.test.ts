@@ -24,9 +24,9 @@ describe('iOS notification delivery policy', () => {
 
   it('never represents scheduled Adhan alerts as full recording playback', () => {
     for (const lifecycle of IOS_NOTIFICATION_LIFECYCLES) {
-      expect(iosNotificationDeliveryPolicy({ sound: 'default' }, lifecycle).fullAdhanAutoPlayback).toBe(
-        false,
-      );
+      expect(
+        iosNotificationDeliveryPolicy({ sound: 'default' }, lifecycle).fullAdhanAutoPlayback,
+      ).toBe(false);
     }
   });
 });

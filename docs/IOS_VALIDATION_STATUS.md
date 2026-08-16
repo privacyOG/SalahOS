@@ -50,3 +50,7 @@ The committed iOS shell is generated from the shared SalahOS web application and
 ## Local notification scheduling
 
 The iOS runtime uses the first-party Local Notifications bridge with the same deterministic shared prayer notification intents as Android. Scheduling is bounded to today and tomorrow, permission denial fails closed, and only SalahOS-namespaced pending requests are reconciled. This repository validation does not claim custom Adhan playback, unrestricted background execution, or exact wall-clock delivery under every Apple power/focus state.
+
+## Notification audio and background lifecycle policy
+
+SalahOS uses scheduled system local notifications rather than requiring application background execution at prayer time. The iOS adapter supports silent alerts or the platform-default notification sound and records foreground/background/terminated delivery policy in SalahOS-owned request metadata. Full Adhan recording auto-play is deliberately not claimed or implemented by this policy; user-selected/local recordings remain a separate feature. iOS may still delay or suppress presentation according to notification authorization, Focus and system policy.

@@ -102,6 +102,23 @@ describe('iOS local notification scheduler', () => {
     expect(client.scheduled[0]?.extra).toMatchObject({
       namespace: 'salahos-prayer-v1',
       record: futureRecord,
+      deliveryPolicies: [
+        {
+          lifecycle: 'foreground',
+          requiresAppBackgroundExecution: false,
+          fullAdhanAutoPlayback: false,
+        },
+        {
+          lifecycle: 'background',
+          requiresAppBackgroundExecution: false,
+          fullAdhanAutoPlayback: false,
+        },
+        {
+          lifecycle: 'terminated',
+          requiresAppBackgroundExecution: false,
+          fullAdhanAutoPlayback: false,
+        },
+      ],
     });
   });
 

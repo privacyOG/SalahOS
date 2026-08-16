@@ -781,3 +781,7 @@ The macOS validation workflow installs the pinned iOS runtime, generates/synchro
 ## iOS local notification adapter — 2026-08-16
 
 The iOS adapter is tested with a fake native client for stable identifiers, permission prompt/grant, denied permission, silent delivery metadata, default audible fallback, cancellation of owned stale requests and unsupported-platform no-op behavior. The production App sends the same resolved today/tomorrow intents to Android and iOS adapters; each adapter self-selects its native platform. The macOS validation gate also synchronizes the iOS project and compiles the simulator target. Interactive notification delivery remains separately tracked.
+
+## iOS notification/audio lifecycle policy — 2026-08-16
+
+Policy tests cover foreground, background and terminated lifecycle states and lock the invariant that scheduled delivery uses the system local-notification path, never depends on SalahOS background execution, and never represents an Adhan alert as full-recording auto-play. Scheduler tests assert the policy metadata is embedded in owned pending requests. macOS CI then runs the complete repository gate, synchronizes the iOS shell and compiles the simulator target.
