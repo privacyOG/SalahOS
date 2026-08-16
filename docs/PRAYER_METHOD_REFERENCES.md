@@ -14,6 +14,7 @@ SalahOS does not treat a method label as proof that its numerical parameters are
 - Version inspected: `4.4.4`
 - Commit: `a6f1a5c4a00105103f310ef18200b95f7184d2e7`
 - Method guide: `METHODS.md`
+- Canonical output fixture source: `test/adhan.test.ts`
 - Role: independent, well-tested calculation-library reference.
 
 ### PrayTimes
@@ -44,6 +45,22 @@ SalahOS does not treat a method label as proof that its numerical parameters are
 | Qatar                                   |   18° | 90 min after Maghrib               | Adhan JS + AlAdhan agree                                                                                                      |
 | Dubai                                   | 18.2° | 18.2°                              | Batoul Apps-derived approximation; AlAdhan explicitly labels Dubai experimental                                               |
 | Diyanet / Turkey                        |   18° | 17° in interoperability references | Adhan describes this as an approximation; AlAdhan labels it experimental; official Diyanet timetable parity is still required |
+
+## Direct canonical-output parity
+
+`src/domain/canonicalAdhanParity.test.ts` freezes output examples copied from the pinned Adhan JS `test/adhan.test.ts` at commit `a6f1a5c4a00105103f310ef18200b95f7184d2e7`. These are direct implementation-output comparisons rather than method-parameter comparisons.
+
+The matrix currently covers:
+
+- North America / ISNA with Hanafi Asr in Raleigh, North Carolina on 2015-07-12;
+- Egyptian in Cairo on 2020-01-01;
+- Singapore/MUIS on 2021-06-14.
+
+All six daily values used by the shared SalahOS dashboard—Fajr, Sunrise, Dhuhr, Asr, Maghrib and Isha—are compared. The bound is two minutes per event. This is intentionally narrow: it allows second-level astronomical/rounding differences and known preset-policy differences without treating a materially different calculation as parity.
+
+Adhan JS method presets are not angle-only profiles. At the pinned commit, its North America and Egyptian presets add one minute to Dhuhr; its Singapore preset also adds one minute to Dhuhr and uses upward rounding. SalahOS keeps raw astronomical results, named-method parameters, manual adjustments and presentation rounding as separate concepts. The canonical-output test therefore records those upstream preset differences instead of silently copying them into the SalahOS method registry.
+
+Direct canonical-output parity is separate from official timetable parity. A passing canonical fixture does not mean an institution has certified SalahOS, and a published timetable may include local policy offsets not present in either calculation engine.
 
 ## Verification policy
 
