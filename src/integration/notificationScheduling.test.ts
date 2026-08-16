@@ -38,7 +38,9 @@ class MemoryScheduler implements NotificationSchedulerAdapter {
 const sydney = createCoordinates(-33.8688, 151.2093);
 const instant = new Date('2026-08-16T02:00:00.000Z');
 
-function prayerInputs(adjustments: Readonly<Partial<Record<NotificationPrayerName, number>>> = {}) {
+function prayerInputs(
+  adjustments: Readonly<Partial<Record<NotificationPrayerName, number>>> = {},
+) {
   const dashboard = buildPrayerDashboard({
     instant,
     coordinates: sydney,
@@ -123,9 +125,7 @@ describe('notification scheduling integration flow', () => {
       '2026-08-16:fajr:prayer-time',
     )?.instantEpochMilliseconds;
     expect(recalculatedPrayerInstant).toBe(initialPrayerInstant! + 5 * 60_000);
-    expect(
-      adapter.records.get('2026-08-16:fajr:prayer-time'),
-    ).toMatchObject({
+    expect(adapter.records.get('2026-08-16:fajr:prayer-time')).toMatchObject({
       timeZone: 'Australia/Sydney',
       sound: 'silent',
       vibration: false,
