@@ -85,15 +85,15 @@ self.addEventListener('fetch', (event) => {
   if (request.mode === 'navigate') {
     event.respondWith(
       fetch(request)
-        .then((response) => {
+        .then(async (response) => {
           if (isSuccessfulHtml(response)) {
             const candidateShell = response.clone();
-            event.waitUntil(
-              caches
-                .open(CACHE_NAME)
-                .then((cache) => cacheApplicationShell(cache, candidateShell, false))
-                .catch(() => undefined),
-            );
+            try {
+              const cache = await caches.open(CACHE_NAME);
+              await cacheApplicationShell(cache, candidateShell, false);
+            } catch {
+              // Preserve the previously cached complete shell if the candidate cannot be cached atomically.
+            }
           }
           return response;
         })
