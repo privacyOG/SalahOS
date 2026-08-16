@@ -175,7 +175,10 @@
 ## 3. Location and timezone subsystem
 
 - [x] Implement browser geolocation adapter
-- [~] Implement native Android/iOS location adapter
+- [x] Implement native Android/iOS location adapter
+
+**Native mobile location reconciliation note (2026-08-17):** `src/platform/currentLocation.ts` routes every Capacitor native platform through the first-party native geolocation bridge with explicit foreground permission checks/requests and coordinate-only retention. Android native-foundation validation passed Quality Gate `31935517985` and Android Build `31935517977`; the later iOS native consolidation passed Xcode Simulator builds including `31942088604`. The previous partial marker predated the completed iOS shell and is corrected here without claiming physical-device GPS acceptance.
+
 - [x] Support manual latitude/longitude entry
 - [x] Support manual city/location search
 
@@ -339,7 +342,7 @@
 
 **Stage 7 dashboard verification note (2026-08-16):** read-only Quality Gate run `31903663678` passed formatting, typed lint, strict typecheck, the expanded dashboard/localisation tests and production build. The shared web shell now accepts one-shot browser location or validated manual coordinates, resolves the IANA timezone locally, refreshes the live clock every second, recomputes Gregorian/Hijri dates and today/tomorrow prayer schedules from shared domain logic, shows the five prayers plus Sunrise, identifies the next prayer, runs a live countdown and exposes calculation source/method. The responsive CSS uses one shared application model across phone/tablet/display widths with keyboard focus, touch-sized controls, ARIA status/error regions and reduced-motion handling. Mosque selection/Iqamah presentation, current-prayer highlighting, persistent saved locations, themes and visual regression on physical target displays remain open.
 
-- [ ] Validate TV readability from several metres away
+- [!] Validate TV readability from several metres away — requires physical display/viewing-distance acceptance
 
 ---
 
@@ -393,14 +396,14 @@
 
 **iOS native implementation verification note (2026-08-16):** foundation run `31941296351`, local-notification run `31941790069`, lifecycle-policy run `31941980679`, and latest-main consolidation run `31942088604` passed their repository gates and Xcode iOS Simulator builds. The committed shell uses foreground location privacy metadata, native Preferences persistence, bounded today/tomorrow local prayer scheduling with owned-request reconciliation, silent/default notification audio, and an explicit foreground/background/terminated system-notification policy that does not claim full Adhan-recording auto-play or require application background execution at delivery time. Interactive iPhone/iPad layout, offline cold-start, and simulator/device acceptance remain separately tracked.
 
-- [ ] Test iPhone responsive layout
-- [ ] Test iPad responsive layout
-- [ ] Test offline cold start
+- [!] Test iPhone responsive layout — requires interactive iOS Simulator/device acceptance
+- [!] Test iPad responsive layout — requires interactive iPad Simulator/device acceptance
+- [!] Test offline cold start — requires interactive iOS Simulator/device acceptance
 - [x] Prepare signing/build documentation without committing credentials
 
 **iOS build/signing documentation note (2026-08-16):** read-only Quality Gate run `31914265959` passed formatting, typed lint, strict typecheck, all tests and production build after adding `docs/IOS_BUILD_SIGNING.md`. The guide covers local development signing, capability/entitlement review, Release archives, CI secret injection, credential cleanup and distribution-path separation while explicitly prohibiting committed signing keys, certificates, account passwords and distribution secrets. Native Xcode build/archive/device execution remains open until performed on the required Apple environment.
 
-- [ ] Run on simulator/device when macOS/Xcode environment is available
+- [!] Run on simulator/device when macOS/Xcode environment is available — no interactive Xcode target environment is available in the current work session
 - [x] Document untested iOS items honestly when unavailable on development host
 
 **iOS validation-status note (2026-08-16):** read-only Quality Gate run `31914072847` passed formatting, typed lint, strict typecheck, all tests and production build after adding `docs/IOS_VALIDATION_STATUS.md`. The document separates shared CI evidence from macOS/Xcode simulator checks and physical iPhone/iPad checks, and requires native-specific tracker items to remain open until the corresponding evidence is recorded. Signing credentials and private keys are explicitly excluded from the repository.
@@ -470,7 +473,7 @@
 
 **Raspberry Pi/kiosk continuity verification note (2026-08-16):** read-only Quality Gate run `31933758199` passed the sensitive-file policy, dependency vulnerability audit, dependency-license policy, documentation-link verification across 30 Markdown files, PWA raster-icon reproducibility, formatting, typed lint, strict typecheck, 58 test files / 269 tests, production build and deploy-artifact verification. The dedicated kiosk lifecycle integration persists a configured Sydney location/timezone, calculation method, locale, Hijri correction and prayer adjustments, cold-loads the stored settings, forces network access unavailable and still builds the complete local prayer dashboard without any fetch. A detected multi-hour suspend-style gap rebuilds from fresh wall time with a changed countdown, and a simulated cold restart immediately after Sydney local midnight loads the same persisted configuration while generating the 2026-08-17 schedule instead of retaining 2026-08-16. This closes repository-side restart/offline/network-loss/suspend/date-rollover continuity for the shared Raspberry Pi kiosk runtime. Actual Raspberry Pi graphical boot/login, power-loss behaviour, physical Touch Display 2 rendering/touch and long-duration hardware acceptance remain separate physical-device evidence.
 
-- [ ] Test on physical Raspberry Pi / Touch Display 2 when available
+- [!] Test on physical Raspberry Pi / Touch Display 2 when available — target hardware is not available in the current work environment
 
 ---
 
@@ -535,9 +538,11 @@
 - [x] Language selector
 - [x] Theme selector
 - [x] Time format (12/24-hour)
-- [~] Per-prayer notifications
+- [x] Per-prayer notifications
 - [~] Adhan settings
 - [x] Iqamah settings
+
+**Notification-settings reconciliation note (2026-08-17):** the Stage 10 preference and native-delivery work already provides persisted per-prayer enable/disable, reminder, prayer-time alert, sound, vibration preference and Adhan-alert controls. The Stage 14 per-prayer notification-settings marker is therefore complete. Adhan settings remain partial solely because user-selectable local Adhan audio is still open.
 
 **Iqamah-settings verification note (2026-08-16):** read-only Quality Gate run `31926961935` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, the complete test suite and production build after completing the manual local-mosque Iqamah settings surface. Each obligatory prayer can now leave Iqamah unconfigured, use a fixed 24-hour clock time, or use a validated 0–180 minute offset after prayer start. The UI is available in English and Arabic and writes directly into the existing validated mosque-timetable `IqamahRule` model, so local persistence and settings/timetable import-export continue to use the same schema rather than a parallel configuration store. Validation rejects malformed fixed times, out-of-range offsets and offsets that cross into the next civil day. Integration coverage proves an offset rule survives persisted settings reload and resolves to the exact Iqamah minute through the production local-mosque source path.
 
@@ -598,7 +603,10 @@
 - [x] No mandatory account for core prayer-time functionality
 - [x] No unnecessary analytics/telemetry
 - [x] Obtain explicit permission before using location
-- [ ] Secure any optional remote API calls
+- [x] Secure any optional remote API calls
+
+**Remote-network policy verification note (2026-08-17):** core v1 ships no optional remote API dependency. PR #88 added a fail-closed application-source policy that rejects newly introduced remote `fetch`, XHR, WebSocket/EventSource capability or remote HTTP URL literals until an explicit reviewed change widens that boundary. The policy passed an isolated local-only case and correctly rejected a representative remote-fetch negative case. Hosted workflow jobs for the PR could not start because the account's Actions billing/spending state blocked runners; that infrastructure blocker is tracked separately and is not represented as test evidence.
+
 - [x] Do not commit secrets/API keys
 
 **Secrets-policy verification note (2026-08-16):** read-only Quality Gate run `31921396802` passed the sensitive-file policy, formatting, typed lint, strict typecheck, all tests and production build. A root `.gitignore` now excludes local environment files, private keys/certificates, signing stores and platform-local configuration; `scripts/check-sensitive-files.mjs` fails CI when blocked secret-bearing file classes are present in the checkout; and `docs/SECRETS_POLICY.md` prohibits committed credentials/API keys, requires encrypted CI/platform secret stores and documents credential-rotation response. The repository-side filename guard is deliberately not represented as proof that arbitrary source text can never contain a secret, so diff review and hosting-platform secret scanning remain required for future networked integrations.
@@ -612,7 +620,9 @@
 **Web CSP verification note (2026-08-16):** read-only Quality Gate run `31918434190` passed formatting, typed lint, strict typecheck, all tests and production build after adding a same-origin Content Security Policy baseline to `index.html` and `docs/WEB_SECURITY_HEADERS.md`. The policy restricts scripts, fonts, workers and the manifest to the application origin; limits images/media to local/data/blob use where required; denies objects and frames; constrains base URLs and form submission; and leaves no wildcard remote HTTP origins. Development websocket schemes remain allowed for local tooling. The deployment guide records stronger response-header requirements such as `frame-ancestors`, nosniff, referrer, permissions and carefully enabled HSTS; those remain deployment-specific rather than falsely claimed as configured here.
 
 - [x] Validate imported CSV/JSON data safely
-- [ ] Review native permissions and remove unnecessary ones
+- [x] Review native permissions and remove unnecessary ones
+
+**Native-permission review verification note (2026-08-17):** PR #88 merged at `7c30b23cb2b630c0a26e257de37a1304709c9617`. The unused iOS always-location privacy declaration was removed, leaving foreground `NSLocationWhenInUseUsageDescription`; Android remains limited to documented foreground location, Internet and user-managed precise-alarm application permissions. `docs/NATIVE_PERMISSIONS.md` records the boundary and `npm run security:native-permissions` now fails on unreviewed permission expansion/background-location reintroduction. The policy script was independently executed against representative committed-manifest shapes and passed. Hosted PR jobs did not start because of the Actions billing/spending infrastructure blocker.
 
 ---
 
@@ -683,7 +693,10 @@
 
 - [x] Production web build succeeds
 - [x] Android build succeeds where SDK is available
-- [ ] iOS build succeeds where Xcode is available
+- [x] iOS build succeeds where Xcode is available
+
+**iOS build reconciliation note (2026-08-17):** iOS native foundation/consolidation runs including `31942088604` and the later notification integration iOS Build run `31943984481` successfully compiled the committed Xcode project for iOS Simulator. The previous open quality-gate marker was stale. Interactive Simulator/device acceptance and signed distribution remain separate Stage 9/20 items.
+
 - [x] Raspberry Pi/kiosk deployment script validated
 - [x] No unexplained widened test tolerances
 - [x] No disabled failing tests without documented blocker
@@ -703,7 +716,10 @@
 **Web/PWA build-deployment verification note (2026-08-16):** read-only Quality Gate run `31927318102` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, all 238 tests, production build and deploy-artifact verification after adding `BUILD.md` and an executable Web/PWA deployment contract. `BUILD.md` documents the clean lockfile install, full quality gate, production Vite build, local preview, root static-host contract, service-worker/manifest caching requirements, offline smoke checks, upgrade procedure, secrets boundary and an explicit platform matrix that leaves Android, iOS, Raspberry Pi and TV/kiosk release paths unvalidated. CI now runs `npm run verify:web-build` after production build; that verifier requires the built HTML shell, manifest, service worker and first-party icons, validates manifest/start-up expectations and confirms the shipped `dist/sw.js` exactly matches the tested `public/sw.js` source. Native platform build/install documentation and final release-readiness checks remain separately open.
 
 - [x] Document Android build/install
-- [ ] Document iOS build/install
+- [x] Document iOS build/install
+
+**iOS documentation reconciliation note (2026-08-17):** PR #88 expanded `docs/IOS_BUILD_SIGNING.md` into a current build/install/signing guide for the committed native project, including deterministic prepare/sync commands, unsigned Simulator compilation, command-line Simulator install/launch, physical iPhone/iPad Xcode installation steps, release archive boundaries and credential handling. Target execution evidence remains tracked separately from documentation completion.
+
 - [x] Document Raspberry Pi Touch Display 2 setup
 - [x] Document TV/kiosk deployment
 - [x] Document prayer calculation methods and references
@@ -715,6 +731,8 @@
 **Troubleshooting/documentation verification note (2026-08-16):** read-only Quality Gate run `31928551210` passed the sensitive-file policy, dependency vulnerability audit, dependency-license policy, documentation-link verification across all 27 root/docs Markdown files, formatting, typed lint, strict typecheck, the complete test suite, production build and deploy-artifact verification after adding `docs/TROUBLESHOOTING.md`, a README documentation index and an executable local Markdown-link gate. The troubleshooting guide covers the currently implemented shared/Web/PWA install, build/deploy, prayer/location/timezone, DST/date rollover, offline reload, settings, mosque timetable/Iqamah, notification-intent, RTL, service-worker, security/license and bug-report workflows without representing native shells as release-validated. The Stage 19 notification-limitations marker is synchronized here because `docs/NOTIFICATION_LIMITATIONS.md` was already implemented and verified under Stage 10 by Quality Gate run `31913144213`; this tracker update does not claim new native notification delivery capability. README screenshots/platform-status work remains partial.
 
 - [x] Add contributor/development setup instructions
+
+**Documentation reconciliation note (2026-08-17):** README platform/feature status, `DESIGN.md`, `RESEARCH.md`, `docs/PLATFORM_STATUS.md`, native-permission documentation and draft release notes were synchronized with the implemented Android/iOS/PWA/Pi/TV state. README screenshot publication remains the only reason the top-level README-expansion item is partial.
 
 ---
 
@@ -731,15 +749,17 @@
 **Core release-verification note (2026-08-16):** main-branch Quality Gate run `31934011315` checked out exact commit `49ac83379cdc357cd5ecb43d964291ec44793906` into a clean hosted workspace, installed the committed lockfile with `npm ci --ignore-scripts` (139 packages installed, 140 audited, zero vulnerabilities), passed repository security/license/documentation/icon-reproducibility policies, formatting, lint, strict typecheck, 58 test files / 269 tests, production build and deploy-artifact verification. The passing suite includes `referenceParity.test.ts` and `methods.reference.test.ts` for prayer-time/reference parity; `timezone.test.ts`, `zonedCivilTime.test.ts`, `highLatitudeIndicators.test.ts`, prayer-engine coverage and smart-display DST integration for DST/high-latitude regression; and `offlineStartup.test.ts`, `service-worker-validation.test.mjs` plus `kioskContinuity.test.ts` for deterministic offline startup/cache/kiosk operation. Visual suites, physical phone/Raspberry Pi/TV layouts, native notification environments, final code review, blocker reconciliation, release notes and release tagging remain open and are not implied by this evidence.
 
 - [ ] Validate phone layout
-- [ ] Validate Raspberry Pi layout
-- [ ] Validate TV/kiosk layout
-- [ ] Validate Android notifications on supported test environment
-- [ ] Validate iOS notifications on supported test environment
+- [!] Validate Raspberry Pi layout — physical Touch Display 2 acceptance requires target hardware
+- [!] Validate TV/kiosk layout — viewing-distance, remote and panel acceptance require a physical display target
+- [!] Validate Android notifications on supported test environment — physical/emulator delivery timing environment is not available in the current session
+- [!] Validate iOS notifications on supported test environment — interactive iOS Simulator/device notification environment is not available in the current session
 - [ ] Perform fresh final code review
-- [ ] Review all `[!]` blocked items and document reasons
+- [x] Review all `[!]` blocked items and document reasons
 - [ ] Ensure `TODO.md`, `DESIGN.md`, `RESEARCH.md` and `TESTING.md` reflect actual state
-- [ ] Create release notes
+- [x] Create release notes
 - [ ] Tag first release only after applicable quality gates are satisfied
+
+**Release-blocker reconciliation note (2026-08-17):** all current `[!]` items above and in Stages 7, 9 and 11 identify the missing target environment explicitly. In addition, GitHub-hosted Quality Gate, Android Build and iOS Build jobs for PR #88 were created but did not start because the account's Actions billing/spending state blocked runner execution; the check annotation reports that billing/spending condition before any checkout/test step. This blocks a fresh exact-head automated release gate but is not an application test failure. The repository must not be tagged while these applicable blockers remain.
 
 ---
 
@@ -769,20 +789,22 @@ SalahOS v1 must not be declared complete until the following are true:
 - [x] Accurate five-prayer calculation engine is independently testable
 - [~] Major recognised calculation methods are implemented and documented
 - [x] Standard/Shafi'i-family and Hanafi Asr calculations are validated
-- [~] High-latitude handling is implemented and transparent
-- [~] Local mosque timetable mode works offline
+- [x] High-latitude handling is implemented and transparent
+- [x] Local mosque timetable mode works offline
 - [x] Prayer-start and Iqamah/Jama'ah times are distinct
-- [~] Jumu'ah timetable support is functional
-- [~] GPS/manual location and timezone handling work correctly
-- [~] DST/date rollover behaviour is tested
-- [~] Gregorian and Hijri dates work
+- [x] Jumu'ah timetable support is functional
+- [x] GPS/manual location and timezone handling work correctly
+- [x] DST/date rollover behaviour is tested
+- [x] Gregorian and Hijri dates work
 - [~] English and Arabic/RTL are production-ready
 - [ ] Mobile, Raspberry Pi and TV/kiosk layouts are validated
-- [ ] Offline prayer calculation is fully functional
+- [x] Offline prayer calculation is fully functional
 - [ ] Notifications/Adhan work on supported platforms within platform restrictions
-- [ ] Automated quality gates pass
+- [!] Automated quality gates pass — previous recorded gates pass, but a fresh exact-head run is blocked by the current Actions billing/spending runner condition
 - [x] Actual tested platform/build matrix is documented without overclaiming
 
 **Tested platform/build matrix verification note (2026-08-16):** read-only Quality Gate run `31934421125` passed the sensitive-file policy, dependency vulnerability audit, dependency-license policy, documentation-link verification, PWA raster-icon reproducibility, formatting, typed lint, strict typecheck, the complete 58-file / 269-test suite, production build and deploy-artifact verification on the cleaned branch. `docs/PLATFORM_STATUS.md` is now the canonical tested matrix and distinguishes automated Web/PWA validation, repository-validated Raspberry Pi/Touch Display 2 and TV/browser-kiosk paths, and planned/unvalidated Android and iOS/iPadOS native paths. `README.md` and `BUILD.md` are synchronized to those boundaries rather than describing repository-validated Pi/TV browser paths as absent. Physical Raspberry Pi/Touch Display 2 and television acceptance, target-specific remote/full-screen behaviour, native Android/iOS projects and device validation, and visual regression remain open; this matrix does not imply those checks passed.
+
+**v1 tracker reconciliation note (2026-08-17):** later Android/iOS native implementation, notification integration, offline/Pi continuity and documentation work supersede several partial markers that were left behind by historical verification notes. Those tracker markers are corrected above while the original dated notes are retained as a record of what was open at each earlier run. Current authoritative platform boundaries are in `docs/PLATFORM_STATUS.md`.
 
 - [ ] Final code review and regression pass are complete

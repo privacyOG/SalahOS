@@ -2,7 +2,7 @@
 
 A privacy-focused, cross-platform Islamic prayer-time application and smart-display ecosystem for Android, iOS/iPadOS, Raspberry Pi, TV, browser/PWA, and kiosk displays.
 
-SalahOS is designed around accurate local prayer calculations, selectable calculation methods and madhhab/Asr conventions, local mosque timetables, Adhan and notifications, Hijri dates, Arabic/RTL support, and useful offline operation.
+SalahOS is designed around accurate local prayer calculations, selectable calculation methods and madhhab/Asr conventions, local mosque timetables, Adhan alerts and notifications, Hijri dates, Arabic/RTL support, and useful offline operation.
 
 ## Project principles
 
@@ -12,20 +12,38 @@ SalahOS is designed around accurate local prayer calculations, selectable calcul
 - Explicit calculation provenance and no fabricated astronomical events.
 - Shared application logic across mobile, Raspberry Pi, TV, PWA, and kiosk deployments.
 - English and Arabic/RTL treated as first-class requirements.
+- Least-privilege native permissions and no unnecessary remote application networking.
 
-## Initial architecture
+## Architecture
 
 - TypeScript + React shared application.
 - Vite production/development tooling.
 - Pure TypeScript astronomical/prayer calculation modules under `src/domain/`.
-- Capacitor native shell for Android, with iOS/iPadOS native work still tracked separately.
+- Capacitor native shells for Android and iOS/iPadOS using the same shared application/domain logic.
 - PWA/browser deployment for web, Raspberry Pi Chromium kiosk, TV browser, and generic kiosk targets.
-- Vitest, ESLint, Prettier, strict TypeScript, and GitHub Actions quality gates.
+- Vitest, ESLint, Prettier, strict TypeScript, and hosted workflow quality gates.
+
+## Implemented v1 capabilities
+
+- Five obligatory prayer times plus Sunrise, current/next prayer state and live countdown.
+- Standard/Shafi'i-family and Hanafi Asr conventions.
+- Multiple recognised calculation-method profiles, high-latitude strategies and explicit manual adjustments.
+- Gregorian and Hijri/Umm al-Qura date presentation with manual correction.
+- Browser/native current location, manual coordinates, offline city search, saved locations and offline IANA timezone resolution.
+- Calculated, adjusted and local-mosque prayer sources with CSV/JSON timetable import/export.
+- Fixed or offset Iqamah rules and one or multiple mosque-specific Jumu'ah sessions.
+- English and Arabic localisation with RTL and bidirectional isolation.
+- Light, dark and follow-system themes plus keyboard/touch/accessibility support.
+- Android and iOS/iPadOS native local-prayer notification adapters with explicit lifecycle/platform constraints.
+- Web/PWA offline shell and locally persisted settings/timetables.
+- Raspberry Pi Touch Display 2 fixture/deployment tooling and browser-based smart-display mode for TV/kiosk use.
 
 ## Documentation
 
 - [Build and Web/PWA deployment](BUILD.md)
 - [Android build and install](docs/ANDROID.md)
+- [iOS/iPadOS build, install and signing](docs/IOS_BUILD_SIGNING.md)
+- [Native permission review](docs/NATIVE_PERMISSIONS.md)
 - [Tested platform/build status](docs/PLATFORM_STATUS.md)
 - [Troubleshooting](docs/TROUBLESHOOTING.md)
 - [Notification and Adhan platform limitations](docs/NOTIFICATION_LIMITATIONS.md)
@@ -35,35 +53,38 @@ SalahOS is designed around accurate local prayer calculations, selectable calcul
 - [Research and calculation references](RESEARCH.md)
 - [Verification evidence](TESTING.md)
 - [Implementation tracker](TODO.md)
+- [Draft v1 release notes](RELEASE_NOTES.md)
 
 ## Platform status
 
-- **Web / PWA:** automated build and repository verification path.
-- **Android:** Capacitor native shell, foreground native location adapter and automated debug-APK build path; emulator/physical-device acceptance, native notifications/Adhan and release signing remain open.
-- **Raspberry Pi / Touch Display 2:** repository-validated browser/kiosk deployment path; physical Touch Display 2 acceptance remains open.
-- **TV / generic kiosk:** repository-validated browser-hosted smart-display path; target TV/remote acceptance remains open.
-- **iOS / iPadOS:** native shell/build and native adapters remain planned, not validated.
+- **Web / PWA:** production build, install assets, service-worker offline lifecycle, local persistence and deploy-artifact verification are implemented and previously validated.
+- **Android:** Capacitor shell, foreground native location, native persistence, local prayer notifications, exact-alarm fallback policy, reboot restoration contract, release-signing configuration and Android 35 emulator acceptance have recorded evidence. Physical OEM notification timing remains a target-device validation item.
+- **iOS / iPadOS:** Capacitor shell, foreground native location, native persistence, bounded local prayer notifications and lifecycle policy are implemented. Xcode iOS Simulator compilation has recorded evidence; interactive iPhone/iPad layout, cold-start and physical-device notification acceptance remain open.
+- **Raspberry Pi / Touch Display 2:** repository-validated browser/kiosk deployment, touch-display fixtures and offline continuity paths are implemented; physical Touch Display 2 acceptance remains open.
+- **TV / generic kiosk:** repository-validated browser-hosted smart-display mode, runtime rollover/recovery and practical keyboard/remote exit handling are implemented; physical TV readability/remote/panel acceptance remains open.
 
-See [Tested platform/build status](docs/PLATFORM_STATUS.md) for the exact evidence and capability boundaries.
+See [Tested platform/build status](docs/PLATFORM_STATUS.md) and [Implementation tracker](TODO.md) for the exact evidence, unresolved validation items and blockers.
 
 ## Development
 
+Install the exact committed dependency graph and start the development server:
+
 ```bash
-npm install
+npm ci --ignore-scripts
 npm run dev
 ```
 
-Quality gate:
+Run the complete repository quality gate:
 
 ```bash
 npm run check
 ```
 
-The dependency lockfile is intentionally not considered complete until dependency resolution has been generated and verified.
+The dependency lockfile is committed and pinned for reproducible installation. Native build commands and platform-specific prerequisites are documented in the platform guides above.
 
-## Status
+## Release status
 
-SalahOS is under active development. `TODO.md` is the authoritative implementation tracker; items are checked only after implementation and relevant verification.
+SalahOS v1 is not tagged yet. The implementation tracker remains authoritative and release tagging is blocked until the applicable visual/device validation, notification/Adhan, remaining method/reference work and a fresh exact-head quality-gate run are complete. Hosted workflow runners are currently unable to start because the repository account's Actions billing/spending state requires attention; this is recorded as an infrastructure blocker rather than a passing or failing application test.
 
 ## Author
 

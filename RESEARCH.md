@@ -2,7 +2,7 @@
 
 **Author:** privacyOG
 
-This document records research assumptions that must be validated against authoritative references before a calculation rule is treated as final.
+This document records research assumptions and the current evidence boundary. Calculation parameters are not treated as authoritative merely because they are common in secondary implementations.
 
 ## Prayer-time calculation model
 
@@ -17,22 +17,22 @@ Prayer calculations are based on the Sun's apparent position for a geographic co
 - **Asr:** determined from the shadow-length factor. Standard uses factor 1; Hanafi uses factor 2.
 - **Maghrib:** normally sunset unless a calculation method explicitly defines an additional angle/interval rule.
 
-## Astronomical assumptions to document in engine code
+## Astronomical assumptions
 
-The implementation must explicitly identify:
+The implemented engine keeps explicit documentation/provenance for:
 
 - Julian date convention and UTC conversion;
 - solar declination and equation-of-time model;
 - apparent sunrise/sunset depression;
-- treatment of observer elevation;
+- observer-elevation treatment;
 - atmospheric refraction assumptions;
 - numerical precision and deterministic display rounding.
 
-Raw astronomical results must remain distinct from presentation rounding and user/mosque adjustments.
+Raw astronomical results remain distinct from fallback/base values, manual adjustments and display rounding.
 
-## Calculation methods to support
+## Calculation-method registry
 
-The registry is designed for at least:
+The registry currently contains profiles for:
 
 - Muslim World League;
 - Umm al-Qura / Makkah;
@@ -46,7 +46,9 @@ The registry is designed for at least:
 - Qatar;
 - explicit custom parameters.
 
-Each registry entry must include source/provenance notes. Parameter values must be verified from authoritative or primary published material before being considered production-verified.
+Current reference status is recorded in `docs/PRAYER_METHOD_REFERENCES.md`. MWL, Umm al-Qura, Egyptian, Karachi, ISNA, MUIS, Kuwait and Qatar parameters have cross-checked reference evidence. Diyanet/Turkey and Dubai still require stronger authoritative/primary parameter evidence or explicit modelling of provider-specific offsets before their registry profiles should be described as institutionally verified.
+
+Umm al-Qura/Makkah, MUIS/Singapore, Qatar/Doha and Kuwait City also have frozen published/reference timetable parity fixtures. Direct canonical-algorithm parity remains a separate open tracker item and must not be inferred from parameter or timetable agreement.
 
 ## Madhhab and Asr
 
@@ -59,18 +61,17 @@ The initial user-facing default is Standard/Shafi'i while preserving explicit us
 
 ## High-latitude behaviour
 
-Required fallback strategies include:
+Implemented night-fraction strategies are:
 
 - Middle of the Night;
 - One-Seventh of the Night;
-- Angle-Based portion of night;
-- researched nearest-latitude / nearest-valid-day handling for polar edge cases.
+- Angle-Based portion of night.
 
-A fallback result is never presented as if the astronomical event occurred normally. Provenance must identify the fallback used.
+Nearest-location/latitude and nearest-valid-day polar strategies have been researched in `docs/POLAR_RESOLUTION_RESEARCH.md`. They are not silently applied. When the astronomical prerequisites needed for an implemented fallback do not exist, the affected event remains unavailable. A fallback result is never presented as if the astronomical event occurred normally; provenance identifies the strategy actually applied.
 
 ## Timezones
 
-Longitude must not be converted directly into a timezone. Coordinates are resolved to an IANA timezone, and civil-time calculations use that timezone's historical/seasonal offset rules. Offline operation requires caching or bundling the required timezone mapping/data strategy.
+Longitude is never converted directly into a fixed timezone. Coordinates are resolved locally to an IANA timezone and civil-time calculations use that timezone's historical/seasonal rules. The IANA mapping data is bundled for local operation, and persisted locations retain a validated timezone for offline reuse.
 
 ## Local mosque timetables
 
@@ -81,31 +82,41 @@ A mosque timetable is an independent prayer source, not a hidden adjustment to c
 - one or more Jumu'ah sessions;
 - source identity and import provenance.
 
-CSV/JSON imports must be schema-validated before activation.
+Manual entry and validated CSV/JSON import/export are implemented. Timetables are preserved locally. Optional provider integration research is documented in `docs/MOSQUE_INTEGRATION_RESEARCH.md`; no remote provider is required by core v1 operation.
 
 ## Hijri calendar
 
-Hijri presentation can differ by convention and local moon-sighting practice. SalahOS must identify the selected convention and permit a small manual day correction rather than presenting a calculated date as universally authoritative.
+Hijri presentation can differ by convention and local moon-sighting practice. SalahOS identifies the runtime Umm al-Qura convention where available and permits an explicit small manual day correction rather than presenting a calculated date as universally authoritative.
 
-## Platform research baseline
+## Platform research and implementation boundary
 
-### Mobile
+### Android
 
-Android and iOS have materially different background execution, notification scheduling, exact-alarm, audio, and permission constraints. The UI must describe limitations instead of guaranteeing behaviour the operating system does not guarantee.
+The native shell implements foreground current-location access, native persistence, local prayer notifications, exact-alarm fallback policy, reboot restoration and explicit background-delivery limitations. Android operating-system and manufacturer power policy can still delay delivery, so physical target timing remains an acceptance concern rather than a guaranteed property.
+
+### iOS / iPadOS
+
+The native shell implements foreground location, native persistence and bounded local prayer notifications. Background/terminated delivery relies on scheduled system notifications; unrestricted full-recording auto-play is not claimed. The current permission design uses foreground location only. Xcode Simulator compilation is recorded, while interactive/physical-device acceptance remains separately open.
 
 ### Raspberry Pi Touch Display 2
 
-The Pi target is a browser-based kiosk shell using the shared production application. Display resolution/orientation, touch ergonomics, auto-start, sleep/wake recovery, and offline cold start require physical validation.
+The Pi target is a browser-based kiosk using the shared production application. Target viewport fixtures, deployment tooling and offline/runtime continuity are repository-validated. Physical display rendering, touch ergonomics, boot/power-loss behavior and long-duration acceptance still require target hardware.
 
 ### TV/kiosk
 
-The primary target is a standards-compliant browser in full-screen/kiosk mode. Native TV packaging is not assumed unless separately implemented and tested.
+The primary target is a standards-compliant browser in full-screen/kiosk mode. Smart-display runtime behavior is implemented and repository-tested. Physical viewing-distance readability, remote/HDMI-CEC mappings and long-duration panel behavior remain target-specific validation work.
+
+## Privacy/network research boundary
+
+Core v1 does not require a remote prayer-time or mosque API. Production application source is guarded against unreviewed remote networking. A future optional provider integration must define its transmitted data, authentication/secrets handling, TLS, response validation, caching/offline degradation and user disclosure before the local-first network policy is widened.
 
 ## Validation policy
 
 No single online calculator is treated as absolute ground truth. Verification uses:
 
 1. a pinned/canonical reference implementation;
-2. an independent calculator/API;
+2. an independent calculator/API or frozen reference dataset;
 3. authoritative published timetables where practical;
 4. documented comparison tolerances that distinguish algorithm, method, timezone, adjustment, and rounding differences.
+
+Current open research/validation work is intentionally visible in `TODO.md`, especially Diyanet/Dubai authoritative parameter evidence and direct canonical-algorithm parity.
