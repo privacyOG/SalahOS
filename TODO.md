@@ -586,7 +586,9 @@
 
 **Notification-scheduling integration verification note (2026-08-16):** read-only Quality Gate run `31923105355` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, all tests and production build after adding an integration fixture across the production notification pipeline. The fixture derives Sydney prayer rows from the production dashboard, creates Fajr reminder and prayer-time intents from user preferences, resolves those civil times through the IANA timezone layer, applies them through the scheduler adapter, then changes the Fajr prayer adjustment by +5 minutes and proves the stable jobs are cancelled and replaced at the new exact instants. Re-applying the same resolved schedule is verified as idempotent with no duplicate scheduling operations.
 
-- [ ] Offline startup flow
+- [x] Offline startup flow
+
+**Offline-startup integration verification note (2026-08-16):** read-only Quality Gate run `31923333276` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, all tests and production build after adding an integration fixture for a previously configured device starting with network access unavailable. The fixture persists Sydney location and calculation settings, replaces network fetch with a failing stub, reloads the stored configuration, and successfully builds the production prayer dashboard locally with the saved method, Hijri correction and prayer adjustment while proving the startup calculation path makes no network request. This verifies the application startup/data path only; browser service-worker cache/offline reload validation remains separately tracked in the PWA stage and is not claimed by this item.
 
 ### UI / visual regression
 
