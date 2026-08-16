@@ -702,3 +702,13 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Verified a simulated cold restart just after Sydney local midnight generates 2026-08-17 rather than retaining the previous day's schedule.
 - Read-only Quality Gate run `31933758199` passed 58 test files / 269 tests plus security, dependency, documentation, raster reproducibility, formatting, lint, strict typecheck, production build and deploy-artifact verification.
 - Physical Raspberry Pi boot/login policy, power-loss/reboot behaviour, Touch Display 2 rendering/touch and long-duration hardware acceptance remain device-only checks.
+
+### 2026-08-16 — Core release verification on main
+
+- Quality Gate run `31934011315` checked out exact merged main commit `49ac83379cdc357cd5ecb43d964291ec44793906` in a clean hosted workspace.
+- Clean lockfile installation used `npm ci --ignore-scripts`: 139 packages installed, 140 audited and zero vulnerabilities reported.
+- Formatting, lint, strict typecheck, 58 test files / 269 tests, production build and deploy-artifact verification all passed.
+- Prayer parity/reference coverage passed through `referenceParity.test.ts` and `methods.reference.test.ts`.
+- DST/high-latitude regression coverage passed through timezone/zoned-civil-time/high-latitude tests plus prayer-engine and smart-display runtime coverage.
+- Deterministic offline verification passed through offline startup, service-worker lifecycle and Raspberry Pi/kiosk continuity suites.
+- English/Arabic visual regression, physical layout/device acceptance, Android/iOS notification validation, final review, blocker reconciliation, release notes and release tagging remain open.
