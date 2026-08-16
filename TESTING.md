@@ -765,3 +765,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Android notification reconciliation is now forced through the existing tested focus, pageshow and visible-document runtime recovery path when the app returns to the foreground.
 - English and Arabic UI text explicitly names Doze, Battery Saver and manufacturer background restrictions and states that SalahOS does not request an unrestricted battery-optimisation exemption.
 - Exact-alarm access is not represented as bypassing Android power policy. Physical-device Doze/vendor delivery timing and reboot recovery remain separate acceptance work.
+
+### 2026-08-16 — Android Adhan lifecycle policy
+
+- Validation run `31939789143` passed the complete repository quality gate and Android debug assembly.
+- Unit coverage locks foreground, background and terminated policy decisions and prevents full-audio auto-play from being implied before a supported local-audio implementation exists.
+- Android Adhan notification metadata records the notification-alert policy for Adhan jobs.
+- English and Arabic settings text describes the current control as an Adhan alert, not full background playback.
+- User-selectable/local audio and audio-focus/interruption behavior remain separate open work.
