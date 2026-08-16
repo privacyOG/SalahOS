@@ -103,17 +103,24 @@ export function androidLocalNotificationsSupported(): boolean {
 export type AndroidAlarmPrecision = 'exact' | 'inexact';
 export type AndroidExactAlarmCapability = 'unsupported' | AndroidAlarmPrecision;
 
+type ExactAlarmCheckClient = Pick<LocalNotificationsClient, 'checkExactNotificationSetting'>;
+
+async function readSupportedAndroidAlarmPrecision(
+  client: ExactAlarmCheckClient,
+): Promise<AndroidAlarmPrecision> {
+  const status = await client.checkExactNotificationSetting();
+  return status.exact_alarm === 'granted' ? 'exact' : 'inexact';
+}
+
 export async function readAndroidExactAlarmCapability(
   options: {
-    readonly client?: Pick<LocalNotificationsClient, 'checkExactNotificationSetting'>;
+    readonly client?: ExactAlarmCheckClient;
     readonly supported?: boolean;
   } = {},
 ): Promise<AndroidExactAlarmCapability> {
   const supported = options.supported ?? androidLocalNotificationsSupported();
   if (!supported) return 'unsupported';
-  const client = options.client ?? LocalNotifications;
-  const status = await client.checkExactNotificationSetting();
-  return status.exact_alarm === 'granted' ? 'exact' : 'inexact';
+  return readSupportedAndroidAlarmPrecision(options.client ?? LocalNotifications);
 }
 
 export async function openAndroidExactAlarmSettings(
@@ -226,7 +233,7 @@ export async function synchronizeAndroidPrayerNotifications(
 
   if (futureDesired.length === 0) {
     const plan = await applyNotificationSchedulerPlan(adapter, []);
-    const alarmPrecision = await readAndroidExactAlarmCapability({ client, supported: true });
+    const alarmPrecision = await readSupportedAndroidAlarmPrecision(client);
     return { status: 'synchronized', plan, alarmPrecision };
   }
 
@@ -234,7 +241,7 @@ export async function synchronizeAndroidPrayerNotifications(
   if (permission.display !== 'granted') permission = await client.requestPermissions();
   if (permission.display !== 'granted') return { status: 'permission-denied' };
 
-  const alarmPrecision = await readAndroidExactAlarmCapability({ client, supported: true });
+  const alarmPrecision = await readSupportedAndroidAlarmPrecision(client);
   await ensureSilentChannels(client, locale);
   const plan = await applyNotificationSchedulerPlan(adapter, futureDesired);
   return { status: 'synchronized', plan, alarmPrecision };
