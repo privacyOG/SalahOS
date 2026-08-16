@@ -37,6 +37,22 @@ jobs:
       - name: Install pinned local notifications plugin
         run: npm install --save-exact @capacitor/local-notifications@8.2.1
 
+      - name: Normalize branch-only integration helper
+        run: |
+          sed -i 's/settings\.notificationPreferences/settings.notifications/g' scripts/apply_android_local_notifications.py
+          sed -i 's/, iqamah: null//g' scripts/apply_android_local_notifications.py
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/apply_android_local_notifications.py')
+          text = path.read_text()
+          text = text.replace(
+              "    dashboard?.timeZone,\n    locale,",
+              "    dashboard?.timeZone,\n    coordinates?.latitude,\n    coordinates?.longitude,\n    locale,",
+              1,
+          )
+          path.write_text(text)
+          PY
+
       - name: Apply Android notification integration
         run: python scripts/apply_android_local_notifications.py
 
