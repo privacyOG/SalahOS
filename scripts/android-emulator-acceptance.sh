@@ -3,6 +3,9 @@ set -euo pipefail
 
 PACKAGE="com.privacyog.salahos"
 ACTIVITY="${PACKAGE}/.MainActivity"
+EVIDENCE_DIR="${ANDROID_EMULATOR_EVIDENCE_DIR:-artifacts/android-emulator}"
+
+mkdir -p "$EVIDENCE_DIR"
 
 adb wait-for-device
 adb shell cmd connectivity airplane-mode enable >/dev/null 2>&1 || {
@@ -26,7 +29,7 @@ adb shell am force-stop "$PACKAGE"
 start_output="$(adb shell am start -W -n "$ACTIVITY")"
 printf '%s\n' "$start_output"
 grep -q "Status: ok" <<<"$start_output"
-sleep 2
+sleep 5
 
 pid="$(adb shell pidof "$PACKAGE" | tr -d '\r')"
 if [[ -z "$pid" ]]; then
@@ -34,7 +37,22 @@ if [[ -z "$pid" ]]; then
   exit 1
 fi
 
+adb exec-out screencap -p > "$EVIDENCE_DIR/android-portrait-cold-start.png"
+test -s "$EVIDENCE_DIR/android-portrait-cold-start.png"
+
 echo "Offline cold start succeeded for $PACKAGE with pid $pid while airplane mode was enabled."
+
+adb shell settings put system accelerometer_rotation 0
+adb shell settings put system user_rotation 1
+sleep 3
+adb exec-out screencap -p > "$EVIDENCE_DIR/android-landscape.png"
+test -s "$EVIDENCE_DIR/android-landscape.png"
+
+adb shell settings put system user_rotation 0
+sleep 3
+adb exec-out screencap -p > "$EVIDENCE_DIR/android-portrait-restored.png"
+test -s "$EVIDENCE_DIR/android-portrait-restored.png"
+
 adb shell am force-stop "$PACKAGE"
 
 (
@@ -42,4 +60,4 @@ adb shell am force-stop "$PACKAGE"
   ./gradlew :app:connectedDebugAndroidTest
 )
 
-echo "Android emulator orientation and instrumentation acceptance passed."
+echo "Android emulator offline cold-start, orientation, screenshot, and instrumentation acceptance passed."
