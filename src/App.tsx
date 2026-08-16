@@ -185,7 +185,6 @@ export function App() {
   useEffect(() => {
     const initialSample = { wallTimeMs: Date.now(), monotonicTimeMs: performance.now() };
     const clockChangeDetector = createSystemClockChangeDetector(initialSample);
-
     const sampleNow = () => ({
       wallTimeMs: Date.now(),
       monotonicTimeMs: performance.now(),
@@ -197,11 +196,9 @@ export function App() {
     };
     const tick = () => {
       const sample = sampleNow();
-      const systemClockChanged = clockChangeDetector.sample(sample);
+      clockChangeDetector.sample(sample);
       setNow(new Date(sample.wallTimeMs));
-      if (systemClockChanged) clockChangeDetector.reset(sample);
     };
-
     const timer = window.setInterval(tick, 1_000);
     const removeRuntimeListeners = installRuntimeRefreshListeners(
       { windowTarget: window, documentTarget: document },
@@ -445,26 +442,16 @@ export function App() {
     setSettings((current) => {
       const nextAdjustments = { ...current.prayerAdjustments };
       if (rawValue.trim() === '') {
-        delete nextAdjustments[prayer];
+        Reflect.deleteProperty(nextAdjustments, prayer);
       } else {
-        nextAdjustments[prayer] = Number(rawValue);
+        const value = Number(rawValue);
+        if (!Number.isInteger(value) || value < -180 || value > 180) {
+          return current;
+        }
+        nextAdjustments[prayer] = value;
       }
       return { ...current, prayerAdjustments: nextAdjustments };
     });
-  }
-
-  function updateNotificationPreference(
-    prayer: (typeof NOTIFICATION_PRAYERS)[number],
-    patch: Parameters<typeof updatePrayerNotificationPreference>[2],
-  ): void {
-    setSettings((current) => ({
-      ...current,
-      notificationPreferences: updatePrayerNotificationPreference(
-        current.notificationPreferences,
-        prayer,
-        patch,
-      ),
-    }));
   }
 
   function resetPrayerOffsets(): void {
@@ -474,14 +461,9 @@ export function App() {
     }));
   }
 
-  function selectPrayerSource(mode: PersistedSettings['prayerSourceMode']): void {
-    if (mode === 'local-mosque' && settings.mosqueTimetable === null) return;
-    setSettings((current) => ({ ...current, prayerSourceMode: mode }));
-  }
-
   function exportSettings(): void {
     setSettingsPayload(exportPersistedSettings(effectiveSettings));
-    setSettingsMessage('settingsExported');
+    setSettingsMessage(null);
   }
 
   function importSettings(): void {
@@ -494,7 +476,8 @@ export function App() {
       setLongitude(
         imported.location === null ? '' : String(imported.location.coordinates.longitude),
       );
-      setManualMosqueName(imported.mosqueTimetable?.mosqueName ?? '');
+      setLocationFailure(null);
+      setManualError(false);
       setSettingsMessage('settingsImported');
     } catch {
       setSettingsMessage('settingsImportError');
@@ -502,31 +485,31 @@ export function App() {
   }
 
   function resetSettings(): void {
-    const defaults = resetPersistedSettings();
-    setSettings(defaults);
-    setLocale(defaults.locale);
+    try {
+      resetPersistedSettings(window.localStorage);
+    } catch {
+      // Reset still applies in memory when browser storage is unavailable.
+    }
+    setSettings(defaultPersistedSettings);
+    setLocale(defaultPersistedSettings.locale);
     setCoordinates(null);
     setLatitude('');
     setLongitude('');
-    setManualMosqueName('');
+    setLocationFailure(null);
+    setManualError(false);
     setSettingsPayload('');
     setSettingsMessage('settingsReset');
   }
 
-  function removeMosqueTimetableFromLibrary(id: string): void {
-    setMosqueLibrary((current) => removeMosqueTimetable(current, id));
-    if (
-      settings.mosqueTimetable !== null &&
-      mosqueLibraryId(settings.mosqueTimetable.mosqueName) === id
-    ) {
-      setSettings((current) => ({
-        ...current,
-        mosqueTimetable: null,
-        prayerSourceMode:
-          current.prayerSourceMode === 'local-mosque' ? 'calculated' : current.prayerSourceMode,
-      }));
-    }
-  }
+  const currentClock =
+    dashboard === null
+      ? new Intl.DateTimeFormat(locale === 'ar' ? 'ar' : 'en-AU', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+          hourCycle: settings.timeFormat,
+        }).format(now)
+      : formatZonedInstantTime(now, dashboard.timeZone, locale, settings.timeFormat);
 
   return (
     <main className="app-shell" dir={direction}>
@@ -535,17 +518,19 @@ export function App() {
           {translate(locale, 'offline')}
         </p>
       )}
+
       <header className="hero">
         <div className="hero-toolbar">
           <div>
-            <p className="eyebrow">{translate(locale, 'livePrayerTime')}</p>
-            <p className="live-clock">
-              {formatZonedInstantTime(now, dashboard?.timeZone, locale, settings.timeFormat)}
+            <p className="eyebrow">{translate(locale, 'appName')}</p>
+            <p className="live-clock" aria-label={translate(locale, 'currentTime')}>
+              {currentClock}
             </p>
           </div>
           <label className="language-control">
             <span>{translate(locale, 'language')}</span>
             <select
+              aria-label={translate(locale, 'language')}
               value={locale}
               onChange={(event) => {
                 setLocale(event.target.value as Locale);
@@ -669,7 +654,10 @@ export function App() {
             <select
               value={settings.prayerSourceMode}
               onChange={(event) => {
-                selectPrayerSource(event.target.value as PersistedSettings['prayerSourceMode']);
+                setSettings((current) => ({
+                  ...current,
+                  prayerSourceMode: event.target.value as PersistedSettings['prayerSourceMode'],
+                }));
               }}
             >
               <option value="calculated">{translate(locale, 'sourceCalculated')}</option>
@@ -975,10 +963,9 @@ export function App() {
 
         <fieldset className="notification-fieldset">
           <legend>{translate(locale, 'notificationSettings')}</legend>
-          <p className="settings-note">{translate(locale, 'notificationLimitations')}</p>
           <div className="notification-grid">
             {NOTIFICATION_PRAYERS.map((prayer) => {
-              const preference = settings.notificationPreferences[prayer];
+              const preference = settings.notifications[prayer];
               return (
                 <article className="notification-card" key={prayer}>
                   <h3>{translate(locale, prayerTranslationKeys[prayer])}</h3>
@@ -987,23 +974,45 @@ export function App() {
                       type="checkbox"
                       checked={preference.enabled}
                       onChange={(event) => {
-                        updateNotificationPreference(prayer, { enabled: event.target.checked });
+                        setSettings((current) => ({
+                          ...current,
+                          notifications: updatePrayerNotificationPreference(
+                            current.notifications,
+                            prayer,
+                            { enabled: event.target.checked },
+                          ),
+                        }));
                       }}
                     />
                     <span>{translate(locale, 'notificationEnabled')}</span>
                   </label>
                   <label>
-                    <span>{translate(locale, 'notificationReminderMinutes')}</span>
+                    <span>{translate(locale, 'reminderMinutes')}</span>
                     <input
                       type="number"
                       min="1"
                       max="180"
-                      value={preference.reminderMinutesBefore ?? ''}
+                      step="1"
+                      value={preference.reminderMinutes ?? ''}
                       onChange={(event) => {
-                        const value = event.target.value.trim();
-                        updateNotificationPreference(prayer, {
-                          reminderMinutesBefore: value === '' ? null : Number(value),
-                        });
+                        const raw = event.target.value.trim();
+                        const reminderMinutes = raw === '' ? null : Number(raw);
+                        if (
+                          reminderMinutes !== null &&
+                          (!Number.isInteger(reminderMinutes) ||
+                            reminderMinutes < 1 ||
+                            reminderMinutes > 180)
+                        ) {
+                          return;
+                        }
+                        setSettings((current) => ({
+                          ...current,
+                          notifications: updatePrayerNotificationPreference(
+                            current.notifications,
+                            prayer,
+                            { reminderMinutes },
+                          ),
+                        }));
                       }}
                     />
                   </label>
@@ -1012,27 +1021,35 @@ export function App() {
                       type="checkbox"
                       checked={preference.prayerTimeNotification}
                       onChange={(event) => {
-                        updateNotificationPreference(prayer, {
-                          prayerTimeNotification: event.target.checked,
-                        });
+                        setSettings((current) => ({
+                          ...current,
+                          notifications: updatePrayerNotificationPreference(
+                            current.notifications,
+                            prayer,
+                            { prayerTimeNotification: event.target.checked },
+                          ),
+                        }));
                       }}
                     />
-                    <span>{translate(locale, 'notificationAtPrayerTime')}</span>
+                    <span>{translate(locale, 'prayerTimeNotification')}</span>
                   </label>
                   <label>
                     <span>{translate(locale, 'notificationSound')}</span>
                     <select
                       value={preference.sound}
                       onChange={(event) => {
-                        updateNotificationPreference(prayer, {
-                          sound: event.target.value as typeof preference.sound,
-                        });
+                        setSettings((current) => ({
+                          ...current,
+                          notifications: updatePrayerNotificationPreference(
+                            current.notifications,
+                            prayer,
+                            { sound: event.target.value === 'silent' ? 'silent' : 'default' },
+                          ),
+                        }));
                       }}
                     >
-                      <option value="default">
-                        {translate(locale, 'notificationSoundDefault')}
-                      </option>
-                      <option value="silent">{translate(locale, 'notificationSoundSilent')}</option>
+                      <option value="default">{translate(locale, 'soundDefault')}</option>
+                      <option value="silent">{translate(locale, 'soundSilent')}</option>
                     </select>
                   </label>
                   <label className="toggle-row">
@@ -1040,19 +1057,31 @@ export function App() {
                       type="checkbox"
                       checked={preference.vibration}
                       onChange={(event) => {
-                        updateNotificationPreference(prayer, { vibration: event.target.checked });
+                        setSettings((current) => ({
+                          ...current,
+                          notifications: updatePrayerNotificationPreference(
+                            current.notifications,
+                            prayer,
+                            { vibration: event.target.checked },
+                          ),
+                        }));
                       }}
                     />
-                    <span>{translate(locale, 'notificationVibration')}</span>
+                    <span>{translate(locale, 'vibration')}</span>
                   </label>
                   <label className="toggle-row">
                     <input
                       type="checkbox"
                       checked={preference.adhanEnabled}
                       onChange={(event) => {
-                        updateNotificationPreference(prayer, {
-                          adhanEnabled: event.target.checked,
-                        });
+                        setSettings((current) => ({
+                          ...current,
+                          notifications: updatePrayerNotificationPreference(
+                            current.notifications,
+                            prayer,
+                            { adhanEnabled: event.target.checked },
+                          ),
+                        }));
                       }}
                     />
                     <span>{translate(locale, 'adhanEnabled')}</span>
@@ -1061,6 +1090,7 @@ export function App() {
               );
             })}
           </div>
+          <p className="setting-help">{translate(locale, 'notificationDeliveryPending')}</p>
         </fieldset>
 
         <section className="settings-transfer">
