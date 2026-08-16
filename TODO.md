@@ -534,7 +534,10 @@
 - [x] No unnecessary analytics/telemetry
 - [x] Obtain explicit permission before using location
 - [ ] Secure any optional remote API calls
-- [ ] Do not commit secrets/API keys
+- [x] Do not commit secrets/API keys
+
+**Secrets-policy verification note (2026-08-16):** read-only Quality Gate run `31921396802` passed the sensitive-file policy, formatting, typed lint, strict typecheck, all tests and production build. A root `.gitignore` now excludes local environment files, private keys/certificates, signing stores and platform-local configuration; `scripts/check-sensitive-files.mjs` fails CI when blocked secret-bearing file classes are present in the checkout; and `docs/SECRETS_POLICY.md` prohibits committed credentials/API keys, requires encrypted CI/platform secret stores and documents credential-rotation response. The repository-side filename guard is deliberately not represented as proof that arbitrary source text can never contain a secret, so diff review and hosting-platform secret scanning remain required for future networked integrations.
+
 - [ ] Dependency vulnerability review
 - [x] Content Security Policy for web/PWA where applicable
 
