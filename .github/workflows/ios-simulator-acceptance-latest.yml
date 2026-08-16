@@ -69,7 +69,9 @@ jobs:
           xcrun simctl bootstatus "$IPHONE_UDID" -b
           xcrun simctl install "$IPHONE_UDID" "$APP_BUNDLE"
           xcrun simctl terminate "$IPHONE_UDID" com.privacyog.salahos 2>/dev/null || true
-          launch_output="$(xcrun simctl launch --console-pty "$IPHONE_UDID" com.privacyog.salahos 2>&1 & echo $!)"
+          output="$(xcrun simctl launch "$IPHONE_UDID" com.privacyog.salahos)"
+          echo "$output"
+          grep -F 'com.privacyog.salahos:' <<<"$output"
           sleep 5
           xcrun simctl io "$IPHONE_UDID" screenshot simulator-evidence/iphone-5s.png
           sleep 15
@@ -86,7 +88,9 @@ jobs:
           xcrun simctl bootstatus "$IPAD_UDID" -b
           xcrun simctl install "$IPAD_UDID" "$APP_BUNDLE"
           xcrun simctl terminate "$IPAD_UDID" com.privacyog.salahos 2>/dev/null || true
-          xcrun simctl launch "$IPAD_UDID" com.privacyog.salahos
+          output="$(xcrun simctl launch "$IPAD_UDID" com.privacyog.salahos)"
+          echo "$output"
+          grep -F 'com.privacyog.salahos:' <<<"$output"
           sleep 5
           xcrun simctl io "$IPAD_UDID" screenshot simulator-evidence/ipad-5s.png
           sleep 15
