@@ -320,7 +320,10 @@
 
 **Runtime theme verification note (2026-08-16):** read-only Quality Gate run `31912934726` passed formatting, typed lint, strict typecheck, all tests and production build after adding a runtime theme adapter. Explicit Light and Dark preferences apply immediately. Follow-system resolves the current operating-system color-scheme preference, listens for later changes, updates the effective document theme, and removes the listener when the mode changes or the application unmounts.
 
-- [~] High-contrast readable typography
+- [x] High-contrast readable typography
+
+**Readable-typography verification note (2026-08-16):** read-only Quality Gate run `31917294038` passed formatting, typed lint, strict typecheck, all tests and production build on exact cleaned head `c23c76db4ac07b5da9b3c3406b4d63c2cebb0c91`. Supporting labels, prayer-time captions, settings notes, notification labels and adjustment badges now use larger minimum text sizes with explicit readable line heights. Theme-specific hard-coded secondary text/border colors were replaced with semantic variables so light, dark and system themes remain consistent. `prefers-contrast: more` increases secondary-text contrast, structural border weight and removes supplementary-card fading, while `forced-colors: active` maps the interface to system colors instead of defeating operating-system high-contrast modes.
+
 - [x] Scalable text
 - [x] Keyboard navigation
 - [x] Touch-friendly controls
