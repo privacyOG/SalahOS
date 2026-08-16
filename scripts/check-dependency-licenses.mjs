@@ -1,8 +1,14 @@
 import { readFile } from 'node:fs/promises';
 
-const lockfile = JSON.parse(await readFile(new URL('../package-lock.json', import.meta.url), 'utf8'));
+const lockfile = JSON.parse(
+  await readFile(new URL('../package-lock.json', import.meta.url), 'utf8'),
+);
 
-if (lockfile.lockfileVersion !== 3 || typeof lockfile.packages !== 'object' || lockfile.packages === null) {
+if (
+  lockfile.lockfileVersion !== 3 ||
+  typeof lockfile.packages !== 'object' ||
+  lockfile.packages === null
+) {
   throw new Error('Dependency-license policy requires an npm lockfileVersion 3 packages map.');
 }
 
@@ -40,7 +46,8 @@ function validateLicenseExpression(expression, packageClass) {
     return { valid: false, reason: 'empty license expression' };
   }
 
-  const allowedLicenses = packageClass === 'development-only' ? developmentOnlyLicenses : permissiveLicenses;
+  const allowedLicenses =
+    packageClass === 'development-only' ? developmentOnlyLicenses : permissiveLicenses;
   let licenseCount = 0;
 
   for (const token of tokens) {
@@ -53,7 +60,8 @@ function validateLicenseExpression(expression, packageClass) {
 
     licenseCount += 1;
     if (!allowedLicenses.has(token)) {
-      const scope = packageClass === 'development-only' ? 'approved development-tool' : 'permissive production';
+      const scope =
+        packageClass === 'development-only' ? 'approved development-tool' : 'permissive production';
       return { valid: false, reason: `license is not on the ${scope} allowlist: ${token}` };
     }
   }
@@ -107,7 +115,9 @@ if (findings.length > 0) {
     `Dependency-license policy passed for ${productionPackages} production and ${developmentOnlyPackages} development-only lockfile packages.`,
   );
   console.log('Observed approved license expressions by dependency class:');
-  for (const [key, count] of [...counts.entries()].sort(([left], [right]) => left.localeCompare(right))) {
+  for (const [key, count] of [...counts.entries()].sort(([left], [right]) =>
+    left.localeCompare(right),
+  )) {
     console.log(`- ${key}: ${count}`);
   }
 }
