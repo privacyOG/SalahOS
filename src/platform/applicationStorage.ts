@@ -28,6 +28,7 @@ export interface ApplicationStorageDependencies {
 
 class NativePreferencesStorage implements FlushableKeyValueStorage {
   private readonly cache = new Map<string, string>();
+  private readonly pendingMutations = new Map<string, string | null>();
   private pendingWrite: Promise<void> = Promise.resolve();
 
   constructor(private readonly preferences: PreferencesStore) {}
@@ -47,18 +48,44 @@ class NativePreferencesStorage implements FlushableKeyValueStorage {
     return this.cache.get(key) ?? null;
   }
 
+  private async applyMutation(key: string, value: string | null): Promise<void> {
+    if (value === null) {
+      await this.preferences.remove({ key });
+    } else {
+      await this.preferences.set({ key, value });
+    }
+
+    if (this.pendingMutations.get(key) === value) {
+      this.pendingMutations.delete(key);
+    }
+  }
+
+  private queueMutation(key: string, value: string | null): void {
+    this.pendingMutations.set(key, value);
+    this.pendingWrite = this.pendingWrite.then(async () => {
+      try {
+        await this.applyMutation(key, value);
+      } catch {
+        // Keep the latest mutation pending so flush() can retry it.
+      }
+    });
+  }
+
   setItem(key: string, value: string): void {
     this.cache.set(key, value);
-    this.pendingWrite = this.pendingWrite.then(() => this.preferences.set({ key, value }));
+    this.queueMutation(key, value);
   }
 
   removeItem(key: string): void {
     this.cache.delete(key);
-    this.pendingWrite = this.pendingWrite.then(() => this.preferences.remove({ key }));
+    this.queueMutation(key, null);
   }
 
   async flush(): Promise<void> {
     await this.pendingWrite;
+    for (const [key, value] of [...this.pendingMutations]) {
+      await this.applyMutation(key, value);
+    }
   }
 }
 
