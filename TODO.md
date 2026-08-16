@@ -409,24 +409,27 @@
 
 ## 10. Notifications and Adhan
 
-- [~] Per-prayer notification enable/disable
-- [~] Reminder N minutes before prayer
-- [~] Prayer-time notification
-- [~] Per-prayer sound choice
+- [x] Per-prayer notification enable/disable
+- [x] Reminder N minutes before prayer
+- [x] Prayer-time notification
+- [x] Per-prayer sound choice
 - [~] Vibration option where supported
-- [~] Adhan enable/disable
+- [x] Adhan enable/disable
 - [ ] User-selectable/local Adhan audio
+
+**Notification delivery integration verification note (2026-08-16):** PR #81 merged at `2f99d7e7c04b26b23ab9c45df8db5e14b257e653` after exact-head Quality Gate run `31943984379`, Android Build run `31943984406`, and iOS Build run `31943984481` all passed. The production application rebuilds notification intents from the selected location/timezone, calculation method, prayer source, adjustments and per-prayer preferences, then feeds the same resolved schedule into the merged Android and iOS adapters. Integration coverage verifies reminder/prayer-time/Adhan preference propagation, owned-job cancellation when a prayer is disabled, a second identical reconciliation as a no-op, civil-date rollover replacement without duplicate jobs, and removal of a previously installed notification if recalculation lands in a nonexistent DST wall-clock time. This closes deterministic scheduling/rescheduling and duplicate-prevention behavior through both native adapter entry points. Independent vibration control remains partial where platform notification-channel semantics prevent an exact mapping, actual native delivery across a DST transition remains partial until exercised, and user-selected local Adhan recordings remain a separate open feature.
+
 - [x] Do not bundle copyrighted Adhan recordings without suitable rights
 
 **Adhan audio-rights verification note (2026-08-16):** read-only Quality Gate run `31913475048` passed formatting, typed lint, strict typecheck, all tests and production build after adding an executable bundled-audio rights policy and `docs/ADHAN_AUDIO_RIGHTS.md`. Bundled recordings require a stable id, title, rights basis, rights holder/source authority, evidence reference and attribution where required. Public availability is not treated as redistribution permission. Future user-selected local audio remains a separate open feature and must not silently become a bundled project asset.
 
-- [~] Reschedule notifications after timezone/location/method changes
+- [x] Reschedule notifications after timezone/location/method changes
 - [x] Reschedule notifications after device reboot where platform requires it
 
 **Android notification reboot-restoration verification note (2026-08-16):** SalahOS pins `@capacitor/local-notifications` and verifies its Android reboot-restoration contract during every `npm run android:build`. The verifier requires the installed version to equal the repository dependency, requires the plugin manifest to register `LocalNotificationRestoreReceiver` for locked/normal boot with `RECEIVE_BOOT_COMPLETED`, requires the receiver source to reload saved notification IDs and reschedule them, and scans Gradle build intermediates to prove the receiver and permission survive manifest merging into the application. Clean validation run `31940265725` passed the full repository quality gate, Android debug assembly and the permanent reboot verifier on the post-Adhan mainline. Physical-device reboot timing remains part of separate device acceptance and is not claimed here.
 
-- [~] Reschedule future prayer notifications at date rollover
-- [~] Prevent duplicate notifications
+- [x] Reschedule future prayer notifications at date rollover
+- [x] Prevent duplicate notifications
 - [~] Test notification behaviour across DST transition
 - [x] Document platform-specific limitations instead of promising impossible exact behaviour
 
