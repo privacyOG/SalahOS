@@ -35,8 +35,8 @@ import {
   translate,
 } from './i18n/i18n';
 import type { Locale, TranslationKey } from './i18n/translations';
-import { requestBrowserLocation } from './platform/browserGeolocation';
-import type { BrowserLocationFailureReason } from './platform/browserGeolocation';
+import { requestCurrentLocation } from './platform/currentLocation';
+import type { LocationFailureReason } from './platform/currentLocation';
 import { createStructuredErrorLogger } from './platform/errorLog';
 import {
   loadMosqueLibrary,
@@ -108,7 +108,7 @@ const adjustablePrayers: readonly PrayerName[] = [
   'isha',
 ];
 
-const locationFailureKeys: Readonly<Record<BrowserLocationFailureReason, TranslationKey>> = {
+const locationFailureKeys: Readonly<Record<LocationFailureReason, TranslationKey>> = {
   'permission-denied': 'locationPermissionDenied',
   unavailable: 'locationUnavailable',
   timeout: 'locationTimeout',
@@ -150,7 +150,7 @@ export function App() {
   const [longitude, setLongitude] = useState(
     settings.location === null ? '' : String(settings.location.coordinates.longitude),
   );
-  const [locationFailure, setLocationFailure] = useState<BrowserLocationFailureReason | null>(null);
+  const [locationFailure, setLocationFailure] = useState<LocationFailureReason | null>(null);
   const [manualError, setManualError] = useState(false);
   const [now, setNow] = useState<Date | null>(() => readSystemTime());
   const [online, setOnline] = useState(() => navigator.onLine);
@@ -369,7 +369,7 @@ export function App() {
   }, [mosqueLibrary]);
 
   async function refreshLocation(): Promise<void> {
-    const result = await requestBrowserLocation();
+    const result = await requestCurrentLocation();
     if (result.ok) {
       setCoordinates(result.location.coordinates);
       setTimeZoneOverride(null);

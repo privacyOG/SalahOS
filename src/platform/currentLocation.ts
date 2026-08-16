@@ -2,10 +2,7 @@ import { Capacitor } from '@capacitor/core';
 import { Geolocation } from '@capacitor/geolocation';
 import { createCoordinates } from '../domain/coordinates';
 import type { Coordinates } from '../domain/coordinates';
-import {
-  requestBrowserLocation,
-  type BrowserLocationFailureReason,
-} from './browserGeolocation';
+import { requestBrowserLocation, type BrowserLocationFailureReason } from './browserGeolocation';
 
 export type LocationFailureReason = BrowserLocationFailureReason;
 
