@@ -11,6 +11,7 @@ const androidCapacitorBuild = readFileSync(
   'utf8',
 );
 const iosPackage = readFileSync(resolve(root, 'ios/App/CapApp-SPM/Package.swift'), 'utf8');
+const iosWorkflow = readFileSync(resolve(root, '.github/workflows/ios.yml'), 'utf8');
 
 const expectedPackages = new Map([
   ['@capacitor/android', '8.4.2'],
@@ -31,6 +32,20 @@ for (const [name, expectedVersion] of expectedPackages) {
 }
 if (packageJson.devDependencies?.['@capacitor/cli'] !== '8.4.2') {
   throw new Error('@capacitor/cli changed from reviewed native tooling version 8.4.2');
+}
+
+if (
+  packageJson.scripts?.['android:sync'] !==
+  'npm run build && cap sync android && npm run verify:native-dependencies'
+) {
+  throw new Error('Android sync must re-verify the native dependency surface after Capacitor sync');
+}
+if (
+  !/run: npx cap sync ios\n\s+- name: Verify synchronized native dependency surface\n\s+run: npm run verify:native-dependencies/.test(
+    iosWorkflow,
+  )
+) {
+  throw new Error('iOS workflow must re-verify the native dependency surface immediately after sync');
 }
 
 for (const contract of [
@@ -135,5 +150,5 @@ if (unreviewedBinaries.length > 0) {
 }
 
 console.log(
-  'Native dependency surface passed: reviewed Capacitor/AndroidX/Cordova versions and direct native dependency declarations are pinned, with no unreviewed local Android binaries.',
+  'Native dependency surface passed: reviewed Capacitor/AndroidX/Cordova versions and direct native dependency declarations are pinned, post-sync verification is enforced, and no unreviewed local Android binaries are present.',
 );
