@@ -1,0 +1,29 @@
+node_modules/
+dist/
+coverage/
+
+# Local environment and secret files
+.env
+.env.*
+!.env.example
+*.local
+
+# Private keys, certificates and signing material
+*.key
+*.pem
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.mobileprovision
+
+# Platform-local configuration
+local.properties
+*.xcuserstate
+xcuserdata/
+
+# Editor / OS noise
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
