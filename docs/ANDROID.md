@@ -89,7 +89,7 @@ A hide/page-leave lifecycle event requests completion of queued native writes. C
 
 ## Notifications and Adhan
 
-The Android shell in this stage does **not** complete native local prayer notifications, exact-alarm handling, notification permission-version logic, reboot rescheduling, battery-optimisation handling or native Adhan lifecycle policy. Those items remain open in `TODO.md` and must not be inferred from the existence of the native project.
+Android local prayer notifications, display-permission handling and the exact-alarm capability/fallback strategy are implemented. Reboot recovery, battery/idle/vendor-background handling, native Adhan lifecycle policy and physical/emulator timing acceptance remain separately tracked in `TODO.md`.
 
 ## Signing and release builds
 
@@ -103,4 +103,6 @@ The app reconciles its pending native notifications against the shared prayer sc
 
 Silent notifications use dedicated Android channels, including a silent-with-vibration channel. Default-sound behavior uses the platform default channel. Android 8+ channel behavior means sound/vibration combinations are partly channel-controlled and remain subject to user notification settings.
 
-This implementation deliberately does **not** request `SCHEDULE_EXACT_ALARM`. Android can therefore defer delivery under alarm, Doze, battery-optimisation or vendor background policies. Exact-alarm policy, reboot recovery, Adhan audio playback and physical/emulator delivery testing remain separate tracker items and must not be represented as complete.
+The manifest declares `android.permission.SCHEDULE_EXACT_ALARM`. On supported Android versions this is user-managed special access: SalahOS checks the current exact-alarm setting, never opens the system settings screen automatically, and exposes a user-initiated settings action when precise access is off. With access granted, the Local Notifications plugin can use exact alarms for scheduled `at` notifications. Without access, SalahOS continues scheduling the same prayer alerts as an inexact fallback and explicitly tells the user that Android may delay delivery.
+
+A capability change detected after returning to the app triggers scheduler reconciliation so current jobs are rebuilt under the new precision state. Exact scheduling is not described as a guarantee against Doze, battery optimisation, OEM restrictions, reboot/power-off or user notification settings. Those lifecycle and device-level items remain open.
