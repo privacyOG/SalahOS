@@ -6,7 +6,7 @@ SalahOS includes a Capacitor Android shell that embeds the same shared TypeScrip
 
 Previously validated heads have passed the permanent Android debug build, release-signing configuration checks and Android 35 x86_64 emulator acceptance, including install/cold launch, airplane-mode execution and orientation instrumentation.
 
-The current consolidated release candidate adds stricter native permission, backup/data-transfer, cleartext-transport and local-Adhan integration checks. Those candidate additions require their own exact-head Android workflow before they are promoted to verified release evidence.
+The current consolidated release candidate adds stricter native permission, backup/data-transfer, cleartext-transport and local-Adhan integration checks. It also promotes the previously exercised Android 35 emulator recipe into the permanent Android workflow and adds portrait/landscape screenshot artifacts plus PNG-dimension assertions. Those candidate additions require their own exact-head Android workflow before they are promoted to verified release evidence.
 
 Physical-device notification timing, manufacturer battery/background behaviour, broad device coverage and public store distribution remain separately tracked in `TODO.md`.
 
@@ -148,4 +148,8 @@ Release signing infrastructure is implemented and was validated on an earlier ex
 
 ## Emulator acceptance
 
-Validation run `31941025342` enabled airplane mode, performed a force-stop/cold launch of the real SalahOS activity, confirmed the process was alive, and passed app-only landscape/portrait instrumentation. The committed script and instrumentation test preserve this repeatable acceptance path; manufacturer-specific physical-device behavior remains device-dependent.
+The emulator acceptance command is `scripts/android-emulator-acceptance.sh`. The permanent candidate workflow provisions Android 35 / Google APIs / x86_64 using a Pixel 7 Pro profile and the same pinned emulator-runner revision used by the earlier exercised acceptance path. It enables airplane mode, installs and cold-launches `com.privacyog.salahos/.MainActivity`, requires a live SalahOS process, captures portrait/landscape/restored-portrait screenshots, verifies the PNG dimensions match the claimed orientation, and runs the app-only native orientation instrumentation.
+
+Historical workflow run `31941025342` is **not** treated as an overall green release gate: its Android emulator acceptance step passed, but a later generated-evidence repository quality re-check failed and the workflow therefore concluded failure. The finalized committed acceptance head `d203424cfbf52e965d555fd61407f1201f6f5e2a` subsequently passed Quality Gate run `31941896432` and Android Build run `31941896401`. That establishes the earlier committed emulator acceptance assets and repository state; it does not pre-validate the release candidate's new screenshot/dimension/security changes.
+
+Candidate screenshot artifacts are retained as `android-emulator-visual-<commit>` when the permanent workflow executes. They must be inspected before promoting the applicable visual TODO items. Emulator evidence still does not substitute for manufacturer-specific physical-device notification, battery-management, touch, accessibility or distribution acceptance.
