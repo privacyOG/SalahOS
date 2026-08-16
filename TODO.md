@@ -442,14 +442,17 @@
 
 ## 12. TV and kiosk display mode
 
-- [ ] Create dedicated smart-display mode using shared app logic
-- [ ] Large current clock
-- [ ] Large next-prayer countdown
-- [ ] Five-prayer timetable visible at a glance
-- [ ] Iqamah/Jama'ah display where configured
-- [ ] Jumu'ah display on Fridays
-- [ ] Current/next-prayer highlighting
-- [ ] Full-screen/kiosk operation
+- [x] Create dedicated smart-display mode using shared app logic
+- [x] Large current clock
+- [x] Large next-prayer countdown
+- [x] Five-prayer timetable visible at a glance
+- [x] Iqamah/Jama'ah display where configured
+- [x] Jumu'ah display on Fridays
+- [x] Current/next-prayer highlighting
+- [x] Full-screen/kiosk operation
+
+**Smart-display mode verification note (2026-08-16):** read-only Quality Gate run `31932489699` passed the sensitive-file policy, dependency vulnerability audit, dependency-license policy, documentation-link verification across 29 Markdown files, PWA raster-icon reproducibility, formatting, typed lint, strict typecheck, 54 test files / 258 tests, production build and deploy-artifact verification. The live `?mode=smart-display` presentation is rendered inside the normal application runtime and consumes the shared sourced prayer dashboard rather than duplicating prayer calculations. It presents a large live clock and next-prayer countdown, the five obligatory prayers at a glance, configured Iqamah, current/next highlighting, and configured date-scoped Jumu'ah sessions, with English/Arabic presentation and offline/unconfigured/error states. The existing Chromium launcher accepts `SALAHOS_KIOSK_URL`; the Raspberry Pi kiosk guide now documents launching the smart-display URL directly under the validated full-screen kiosk flags. Automatic daily rollover, timezone/DST update, sleep/wake recovery, burn-in behaviour, remote/keyboard navigation and broader TV deployment documentation remain separate Stage 12 verification items.
+
 - [ ] Automatic daily schedule rollover
 - [ ] Automatic timezone/DST update
 - [ ] Sleep/wake recovery
