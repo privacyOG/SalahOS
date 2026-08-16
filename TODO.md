@@ -483,7 +483,10 @@
 - [x] Time format (12/24-hour)
 - [~] Per-prayer notifications
 - [~] Adhan settings
-- [ ] Iqamah settings
+- [x] Iqamah settings
+
+**Iqamah-settings verification note (2026-08-16):** read-only Quality Gate run `31926961935` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, the complete test suite and production build after completing the manual local-mosque Iqamah settings surface. Each obligatory prayer can now leave Iqamah unconfigured, use a fixed 24-hour clock time, or use a validated 0–180 minute offset after prayer start. The UI is available in English and Arabic and writes directly into the existing validated mosque-timetable `IqamahRule` model, so local persistence and settings/timetable import-export continue to use the same schema rather than a parallel configuration store. Validation rejects malformed fixed times, out-of-range offsets and offsets that cross into the next civil day. Integration coverage proves an offset rule survives persisted settings reload and resolves to the exact Iqamah minute through the production local-mosque source path.
+
 - [x] Export settings
 - [x] Import settings
 - [x] Reset to defaults

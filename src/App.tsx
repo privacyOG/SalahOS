@@ -8,7 +8,7 @@ import {
   MANUAL_MOSQUE_PRAYERS,
   upsertManualMosqueDay,
 } from './domain/manualMosqueEntry';
-import type { ManualMosquePrayerDrafts } from './domain/manualMosqueEntry';
+import type { ManualIqamahMode, ManualMosquePrayerDrafts } from './domain/manualMosqueEntry';
 import { applyPrayerSourceToDashboard } from './domain/sourcedDashboard';
 import { parseMosqueTimetableCsv, parseMosqueTimetableJson } from './domain/timetableImport';
 import { calculationMethods } from './domain/methods';
@@ -114,11 +114,11 @@ const locationFailureKeys: Readonly<Record<BrowserLocationFailureReason, Transla
 
 function emptyManualMosqueDrafts(): ManualMosquePrayerDrafts {
   return {
-    fajr: { start: '', iqamah: '' },
-    dhuhr: { start: '', iqamah: '' },
-    asr: { start: '', iqamah: '' },
-    maghrib: { start: '', iqamah: '' },
-    isha: { start: '', iqamah: '' },
+    fajr: { start: '', iqamahMode: 'none', iqamah: '' },
+    dhuhr: { start: '', iqamahMode: 'none', iqamah: '' },
+    asr: { start: '', iqamahMode: 'none', iqamah: '' },
+    maghrib: { start: '', iqamahMode: 'none', iqamah: '' },
+    isha: { start: '', iqamahMode: 'none', iqamah: '' },
   };
 }
 
@@ -446,6 +446,17 @@ export function App() {
     setManualMosqueDrafts((current) => ({
       ...current,
       [prayer]: { ...current[prayer], [field]: value },
+    }));
+    setMosqueMessage(null);
+  }
+
+  function updateManualIqamahMode(
+    prayer: (typeof MANUAL_MOSQUE_PRAYERS)[number],
+    iqamahMode: ManualIqamahMode,
+  ): void {
+    setManualMosqueDrafts((current) => ({
+      ...current,
+      [prayer]: { ...current[prayer], iqamahMode, iqamah: '' },
     }));
     setMosqueMessage(null);
   }
@@ -987,16 +998,49 @@ export function App() {
                     />
                   </label>
                   <label>
-                    <span>{translate(locale, 'iqamahTimeOptional')}</span>
-                    <input
-                      type="time"
-                      step="60"
-                      value={manualMosqueDrafts[prayer].iqamah}
+                    <span>{translate(locale, 'iqamahSetting')}</span>
+                    <select
+                      value={manualMosqueDrafts[prayer].iqamahMode}
                       onChange={(event) => {
-                        updateManualMosqueDraft(prayer, 'iqamah', event.target.value);
+                        updateManualIqamahMode(prayer, event.target.value as ManualIqamahMode);
                       }}
-                    />
+                    >
+                      <option value="none">{translate(locale, 'noIqamah')}</option>
+                      <option value="fixed">{translate(locale, 'iqamahFixed')}</option>
+                      <option value="offset">{translate(locale, 'iqamahOffset')}</option>
+                    </select>
                   </label>
+                  {manualMosqueDrafts[prayer].iqamahMode === 'fixed' && (
+                    <label>
+                      <span>{translate(locale, 'iqamahFixedTime')}</span>
+                      <input
+                        type="time"
+                        step="60"
+                        required
+                        value={manualMosqueDrafts[prayer].iqamah}
+                        onChange={(event) => {
+                          updateManualMosqueDraft(prayer, 'iqamah', event.target.value);
+                        }}
+                      />
+                    </label>
+                  )}
+                  {manualMosqueDrafts[prayer].iqamahMode === 'offset' && (
+                    <label>
+                      <span>{translate(locale, 'iqamahOffsetMinutes')}</span>
+                      <input
+                        type="number"
+                        min="0"
+                        max="180"
+                        step="1"
+                        required
+                        inputMode="numeric"
+                        value={manualMosqueDrafts[prayer].iqamah}
+                        onChange={(event) => {
+                          updateManualMosqueDraft(prayer, 'iqamah', event.target.value);
+                        }}
+                      />
+                    </label>
+                  )}
                 </article>
               ))}
             </div>

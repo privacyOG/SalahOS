@@ -1,4 +1,4 @@
-import type { MosqueDayTimetable, MosqueTimetable } from './mosqueTimetable';
+import type { IqamahRule, MosqueDayTimetable, MosqueTimetable } from './mosqueTimetable';
 import { validateMosqueDay, validateMosqueTimetable } from './mosqueTimetable';
 import type { ObligatoryPrayerName } from './prayerEngine';
 
@@ -10,8 +10,11 @@ export const MANUAL_MOSQUE_PRAYERS: readonly ObligatoryPrayerName[] = [
   'isha',
 ];
 
+export type ManualIqamahMode = 'none' | 'fixed' | 'offset';
+
 export interface ManualMosquePrayerDraft {
   readonly start: string;
+  readonly iqamahMode: ManualIqamahMode;
   readonly iqamah: string;
 }
 
@@ -41,6 +44,34 @@ export function parseLocalClockTime(value: string): number {
   return hour * 60 + minute;
 }
 
+function parseIqamahOffset(value: string): number {
+  const trimmed = value.trim();
+  if (!/^\d{1,3}$/.test(trimmed)) {
+    throw new RangeError('Iqamah offset must be an integer from 0 through 180 minutes');
+  }
+  const offsetMinutes = Number(trimmed);
+  if (!Number.isInteger(offsetMinutes) || offsetMinutes < 0 || offsetMinutes > 180) {
+    throw new RangeError('Iqamah offset must be an integer from 0 through 180 minutes');
+  }
+  return offsetMinutes;
+}
+
+function iqamahRuleFromDraft(draft: ManualMosquePrayerDraft): IqamahRule | undefined {
+  if (draft.iqamahMode === 'none') {
+    return undefined;
+  }
+  if (draft.iqamahMode === 'fixed') {
+    return {
+      kind: 'fixed',
+      localMinutes: parseLocalClockTime(draft.iqamah),
+    };
+  }
+  return {
+    kind: 'offset',
+    offsetMinutes: parseIqamahOffset(draft.iqamah),
+  };
+}
+
 export function buildManualMosqueDay(
   date: string,
   drafts: ManualMosquePrayerDrafts,
@@ -49,19 +80,12 @@ export function buildManualMosqueDay(
     MANUAL_MOSQUE_PRAYERS.map((prayer) => {
       const draft = drafts[prayer];
       const startLocalMinutes = parseLocalClockTime(draft.start);
-      const iqamahText = draft.iqamah.trim();
+      const iqamah = iqamahRuleFromDraft(draft);
       return [
         prayer,
         {
           startLocalMinutes,
-          ...(iqamahText === ''
-            ? {}
-            : {
-                iqamah: {
-                  kind: 'fixed' as const,
-                  localMinutes: parseLocalClockTime(iqamahText),
-                },
-              }),
+          ...(iqamah === undefined ? {} : { iqamah }),
         },
       ];
     }),
