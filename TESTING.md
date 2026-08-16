@@ -479,3 +479,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Integrated detector sampling into the live one-second runtime clock loop while resetting its baseline on explicit focus/page-restore/visible-resume refreshes.
 - Kept system sleep/wake recovery open because browser monotonic-clock behavior across operating-system sleep is platform-dependent and has not been physically verified.
 - Read-only Quality Gate run `31919019029` passed formatting, typed lint, strict typecheck, all tests and production build.
+
+### 2026-08-16 — system sleep/wake recovery
+
+- Added a platform-neutral elapsed-gap detector for runtime timer gaps representative of operating-system sleep/wake suspension.
+- Integrated the detector with the live one-second clock loop so a resumed runtime re-baselines clock-discontinuity detection and immediately recomputes state from fresh wall time.
+- Explicit focus, page-restore and visible-resume refreshes reset both runtime baselines, keeping those recovery paths deterministic and separate from clock-correction classification.
+- Added deterministic coverage for ordinary progression, configurable threshold behavior, long gaps, backward wall-clock corrections, explicit reset and invalid input.
+- Read-only Quality Gate run `31919909102` passed formatting, typed lint, strict typecheck, all tests and production build on the cleaned implementation head.
