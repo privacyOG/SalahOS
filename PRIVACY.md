@@ -41,9 +41,9 @@ Capacitor native shells use `@capacitor/preferences` for SalahOS settings, saved
 
 Earlier iOS candidate builds used the WebView Web Storage path. During native initialization, an existing Preferences value remains authoritative. A missing native key may be migrated from the legacy Web Storage copy, but any required Preferences writes are flushed before that legacy copy is removed. This prevents the storage transition from deleting the only persisted copy before native persistence succeeds.
 
-Native Preferences writes keep the latest unresolved mutation per SalahOS key. A transient failed write does not poison later writes; lifecycle flush retries unresolved mutations. A final flush failure is reported only through the fixed `application-storage` / `storage-persistence-unavailable` structured event, without serializing storage keys, values, coordinates, mosque data, exception messages or stack traces.
+Native Preferences writes keep the latest unresolved mutation per SalahOS key. A transient failed write does not poison later writes; lifecycle flush retries every unresolved key before reporting a remaining failure. A final flush failure is reported only through the fixed `application-storage` / `storage-persistence-unavailable` structured event, without serializing storage keys, values, coordinates, mosque data, exception messages or stack traces.
 
-`npm run verify:native-storage` protects the native-platform selection and migration ordering contract. The user-selected local Adhan recording is stored separately in IndexedDB and is not part of this settings/location/mosque migration.
+`npm run verify:native-storage` protects the native-platform selection, retry and migration-ordering contracts. The user-selected local Adhan recording is stored separately in IndexedDB and is not part of this settings/location/mosque migration.
 
 ## Local data backup and transfer
 
@@ -65,11 +65,13 @@ The selected recording is used only for visible-foreground playback. Background/
 
 ## Web/PWA offline-cache boundary
 
-The service worker caches only the application shell and explicit first-party static paths required for offline startup: generated `/assets/`, `/icons/`, and `manifest.webmanifest`. Arbitrary same-origin GET/API/data responses bypass service-worker runtime caching rather than being persisted automatically.
+The service worker caches only the SalahOS application shell and explicit first-party static paths required for offline startup: generated `/assets/`, `/icons/`, and `manifest.webmanifest`. Arbitrary same-origin GET/API/data responses bypass service-worker runtime caching rather than being persisted automatically.
 
-Installation and later online navigation upgrades use an asset-first shell transaction: every first-party asset referenced by the candidate HTML is cached before the cached root HTML is replaced. If a navigation-time candidate cannot be cached completely, the online response may still load but the previous complete offline shell remains authoritative. The navigation response promise itself awaits that transaction rather than relying on a late `FetchEvent.waitUntil` call.
+Before candidate HTML can replace the cached root shell, it must contain the SalahOS root mount, the web-manifest reference and at least one first-party `/assets/` application bundle. This prevents unrelated successful HTML from another same-origin route from becoming the offline SalahOS root.
 
-The service-worker cache namespace is versioned; the current narrowed/atomic policy uses `salahos-shell-v4`, so older broader or non-atomic cache namespaces are removed during activation after a successful worker upgrade.
+Installation and later online navigation upgrades use an asset-first shell transaction: every first-party asset referenced by the verified candidate HTML is cached before the cached root HTML is replaced. If a navigation-time candidate cannot be verified or cached completely, the online response may still load but the previous complete offline shell remains authoritative. The navigation response promise itself awaits that transaction rather than relying on a late `FetchEvent.waitUntil` call.
+
+The service-worker cache namespace is versioned; the current verified/atomic policy uses `salahos-shell-v5`, so older broader, non-atomic or unverified-shell cache namespaces are removed during activation after a successful worker upgrade.
 
 `npm run verify:service-worker-cache-boundary` enforces these rules. A future feature that needs offline caching of API or user-derived content therefore requires an explicit privacy/storage review rather than inheriting a broad same-origin cache policy.
 
@@ -102,8 +104,8 @@ Network loss must not prevent locally calculable prayer schedules, access to pre
 - HTTPS-only reviewed optional remote request boundary.
 - Native Capacitor shells load bundled application content and reject unreviewed remote-server/origin overrides.
 - Native persisted settings/location/mosque state uses Preferences with ordered legacy Web Storage migration and retryable latest-mutation persistence on native shells.
-- Bounded Web/PWA service-worker cache allowlist with atomic asset-first shell upgrades; arbitrary same-origin API/data responses are not cached by default.
-- Strict validation of CSV/JSON imports, including strict numeric coordinate types and bounded integer-minute prayer adjustments.
+- Bounded Web/PWA service-worker cache allowlist with verified SalahOS shell identity and atomic asset-first shell upgrades; arbitrary same-origin API/data responses are not cached by default.
+- Strict validation of CSV/JSON imports, including strict numeric coordinate types, canonical saved-location identity and bounded integer-minute prayer adjustments.
 - Content Security Policy on web/PWA targets where applicable.
 - Reviewed source and effective native permissions.
 - Android backup/device-transfer exclusion and cleartext-traffic restriction.
