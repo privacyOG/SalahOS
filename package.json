@@ -17,7 +17,8 @@
     "format:check": "prettier --check .",
     "security:sensitive-files": "node scripts/check-sensitive-files.mjs",
     "security:audit": "npm audit --audit-level=moderate",
-    "check": "npm run security:sensitive-files && npm run security:audit && npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build && npm run verify:web-build"
+    "security:licenses": "node scripts/check-dependency-licenses.mjs",
+    "check": "npm run security:sensitive-files && npm run security:audit && npm run security:licenses && npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build && npm run verify:web-build"
   },
   "dependencies": {
     "@photostructure/tz-lookup": "11.6.0",
