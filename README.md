@@ -37,6 +37,7 @@ SalahOS is designed around accurate local prayer calculations, selectable calcul
 - [Notification and Adhan platform limitations](docs/NOTIFICATION_LIMITATIONS.md)
 - [Notification capability matrix](docs/NOTIFICATION_CAPABILITY_MATRIX.md)
 - [Native permission review](docs/NATIVE_PERMISSION_REVIEW.md)
+- [Native dependency review](docs/NATIVE_DEPENDENCY_REVIEW.md)
 - [Optional remote API security boundary](docs/REMOTE_API_SECURITY.md)
 - [Dependency license review](docs/DEPENDENCY_LICENSE_REVIEW.md)
 - [Privacy behaviour](PRIVACY.md)
