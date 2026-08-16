@@ -6,7 +6,8 @@ const packageJson = JSON.parse(
 const reviewedGeolocationVersion = '8.2.0';
 const reviewedLocalNotificationsVersion = '8.2.1';
 const declaredGeolocationVersion = packageJson.dependencies?.['@capacitor/geolocation'];
-const declaredLocalNotificationsVersion = packageJson.dependencies?.['@capacitor/local-notifications'];
+const declaredLocalNotificationsVersion =
+  packageJson.dependencies?.['@capacitor/local-notifications'];
 
 if (declaredGeolocationVersion !== reviewedGeolocationVersion) {
   throw new Error(
