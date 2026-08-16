@@ -721,3 +721,14 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Kept Android and iOS/iPadOS native shells, native adapters, builds and device validation explicitly planned/unvalidated.
 - Read-only Quality Gate run `31934421125` passed the complete 58-file / 269-test suite plus security, dependency, documentation, raster reproducibility, formatting, lint, strict typecheck, production build and deploy-artifact verification.
 - README screenshots, visual regression, native mobile work and physical target-device acceptance remain separately open.
+
+### 2026-08-16 — Android native foundation
+
+- Added the committed Capacitor Android project and app identity `com.privacyog.salahos`, reusing the shared React/prayer-domain implementation.
+- Added a native-aware current-location adapter that keeps the browser path intact and uses the first-party Capacitor geolocation bridge on native Android.
+- Verified foreground permission check/request, fail-closed denial, one-shot low-accuracy-default acquisition, timeout normalization and coordinate-only data retention with four deterministic tests.
+- Android manifest permissions are limited to foreground coarse/fine location plus the generated Internet permission; no background-location permission is requested.
+- Added `npm run android:sync` and `npm run android:build`, a permanent read-only Android Build workflow, and `docs/ANDROID.md` build/install documentation.
+- Cleaned Quality Gate run `31935517985` passed 59 test files / 273 tests plus all repository security, dependency, documentation, formatting, lint, strict typecheck and Web/PWA build gates.
+- Permanent Android Build run `31935517977` passed the committed lockfile install, shared-app build/sync and Gradle `assembleDebug` with Node 22 and Java 21.
+- Emulator/physical-device execution, persistent-storage device lifecycle, orientation, notifications/Adhan, background/battery restrictions, release signing/distribution and iOS native work remain open.
