@@ -35,10 +35,11 @@ for (const scriptContract of [
   'android-portrait-cold-start.png',
   'android-landscape.png',
   'android-portrait-restored.png',
-  "signature != b'\\x89PNG\\r\\n\\x1a\\n'",
-  "if not portrait_cold[0] < portrait_cold[1]",
-  "if not landscape[0] > landscape[1]",
-  "if not portrait_restored[0] < portrait_restored[1]",
+  'def png_size(path):',
+  'PNG IHDR missing',
+  'if not portrait_cold[0] < portrait_cold[1]',
+  'if not landscape[0] > landscape[1]',
+  'if not portrait_restored[0] < portrait_restored[1]',
   ':app:connectedDebugAndroidTest',
 ]) {
   if (!acceptanceScript.includes(scriptContract)) {
