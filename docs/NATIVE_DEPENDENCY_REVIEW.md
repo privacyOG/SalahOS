@@ -24,13 +24,21 @@ The Android Gradle plugin is pinned to `8.13.0`. It is build tooling rather than
 
 Build-tool upgrades still require intentional review because they can change generated manifests, packaging behavior and transitive dependency resolution even when they are not shipped as ordinary application libraries.
 
+## Direct declaration boundary
+
+The executable native dependency contract allowlists the complete direct dependency declarations in both Android Gradle files that contribute application/plugin dependencies. An additional `implementation`, `testImplementation` or `androidTestImplementation` declaration fails the repository gate until reviewed.
+
+The iOS package contract likewise allowlists the complete `.package(...)` and `.product(...)` declaration sets. Adding another Swift package or exposing another package product therefore requires an intentional review rather than silently widening the native graph.
+
+This declaration-level check is important because pinning only version variables would not detect a newly added dependency that introduced its own literal version or project module.
+
 ## Local native binary boundary
 
 The generated Android template contains local library search paths for compatibility with native/Cordova plugins. SalahOS currently relies on no reviewed local `.jar` or `.aar` binary in those paths.
 
 `scripts/verify-native-dependency-surface.mjs` therefore fails if a local Android `.jar` or `.aar` appears under the application or generated Cordova-plugin library directories. A future native binary must be source/license/security reviewed before the verifier is deliberately updated.
 
-## Version enforcement
+## Version and surface enforcement
 
 `npm run verify:native-dependencies` locks the reviewed native dependency surface:
 
@@ -41,14 +49,15 @@ The generated Android template contains local library search paths for compatibi
 - Capacitor CLI `8.4.2`;
 - generated AndroidX/Cordova version declarations currently committed under `android/variables.gradle`;
 - Android Gradle plugin `8.13.0`;
-- iOS `capacitor-swift-pm` exact `8.4.2` and local first-party plugin package paths;
+- the exact reviewed Android application and generated Capacitor dependency declaration sets;
+- iOS `capacitor-swift-pm` exact `8.4.2`, the local first-party plugin package paths, and the exact reviewed Swift package/product declaration sets;
 - absence of unreviewed local Android `.jar/.aar` binaries.
 
-A dependency upgrade is not forbidden. It must be intentional and accompanied by an updated dependency/license/security review instead of silently changing the generated native graph.
+A dependency upgrade or addition is not forbidden. It must be intentional and accompanied by an updated dependency/license/security review instead of silently changing the generated native graph.
 
 ## Evidence boundary
 
-This repository review verifies direct committed version declarations, known upstream license families and absence of local native binary injection. It does not claim that every transitive artifact downloaded by Gradle or Swift Package Manager has been independently relicensed by SalahOS. Exact resolved-build evidence still comes from the Android/iOS candidate workflows and must pass on the release-candidate head before the tracker is synchronized.
+This repository review verifies direct committed version/dependency declarations, known upstream license families and absence of local native binary injection. It does not claim that every transitive artifact downloaded by Gradle or Swift Package Manager has been independently relicensed by SalahOS. Exact resolved-build evidence still comes from the Android/iOS candidate workflows and must pass on the release-candidate head before the tracker is synchronized.
 
 ---
 
