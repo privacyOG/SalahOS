@@ -4,6 +4,7 @@ import { App } from './App';
 import { readTouchDisplayFixtureConfig, TouchDisplayFixture } from './ui/TouchDisplayFixture';
 import './styles.css';
 import './touch-display-fixture.css';
+import './smart-display.css';
 
 const rootElement = document.getElementById('root');
 
