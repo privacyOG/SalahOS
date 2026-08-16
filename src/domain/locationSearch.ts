@@ -47,6 +47,10 @@ function resultFromRecord(record: PrincipalLocationRecord, locale: string): Loca
   };
 }
 
+function containsAllQueryTerms(value: string, query: string): boolean {
+  return query.split(' ').every((term) => value.includes(term));
+}
+
 function matchScore(record: PrincipalLocationRecord, query: string, locale: string): number | null {
   const city = normalizeSearchText(record.city);
   const timeZone = normalizeSearchText(record.timeZone);
@@ -61,8 +65,8 @@ function matchScore(record: PrincipalLocationRecord, query: string, locale: stri
   if (countryNames.some((name) => name === query)) return 4;
   if (countryNames.some((name) => name.startsWith(query))) return 5;
   if (countryNames.some((name) => name.includes(query))) return 6;
-  if (timeZone.includes(query)) return 7;
-  if (comments.includes(query)) return 8;
+  if (timeZone.includes(query) || containsAllQueryTerms(timeZone, query)) return 7;
+  if (comments.includes(query) || containsAllQueryTerms(comments, query)) return 8;
   return null;
 }
 
