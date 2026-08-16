@@ -43,8 +43,11 @@ jobs:
               text = text.replace(marker, replacement, 1)
           path.write_text(text)
           PY
-      - name: Canonical formatting
-        run: npx prettier --write src/App.tsx src/platform/localAdhanAudio.ts src/platform/localAdhanAudio.test.ts src/ui/LocalAdhanAudioSettings.tsx
+      - name: Canonical formatting and strict lint fixes
+        run: |
+          npx prettier --write src/App.tsx src/platform/localAdhanAudio.ts src/platform/localAdhanAudio.test.ts src/ui/LocalAdhanAudioSettings.tsx
+          npx eslint --fix src/App.tsx src/platform/localAdhanAudio.ts src/platform/localAdhanAudio.test.ts src/ui/LocalAdhanAudioSettings.tsx
+          npx prettier --write src/App.tsx src/platform/localAdhanAudio.ts src/platform/localAdhanAudio.test.ts src/ui/LocalAdhanAudioSettings.tsx
       - name: Full repository gate
         run: npm run check
       - name: Commit validated integration
