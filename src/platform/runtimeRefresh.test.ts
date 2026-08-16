@@ -1,6 +1,11 @@
 import { describe, expect, it, vi } from 'vitest';
 import { installRuntimeRefreshListeners } from './runtimeRefresh';
-import type { RuntimeEventTarget, RuntimeRefreshEvent } from './runtimeRefresh';
+import type {
+  RuntimeDocumentTarget,
+  RuntimeEventTarget,
+  RuntimeRefreshEvent,
+  RuntimeVisibilityState,
+} from './runtimeRefresh';
 
 class FakeEventTarget implements RuntimeEventTarget {
   private readonly listeners = new Map<RuntimeRefreshEvent, Set<() => void>>();
@@ -20,10 +25,14 @@ class FakeEventTarget implements RuntimeEventTarget {
   }
 }
 
+class FakeDocumentTarget extends FakeEventTarget implements RuntimeDocumentTarget {
+  visibilityState: RuntimeVisibilityState = 'visible';
+}
+
 describe('installRuntimeRefreshListeners', () => {
-  it('refreshes immediately on focus, page restore and visibility changes', () => {
+  it('refreshes immediately on focus, page restore and visible document changes', () => {
     const windowTarget = new FakeEventTarget();
-    const documentTarget = new FakeEventTarget();
+    const documentTarget = new FakeDocumentTarget();
     const onRefresh = vi.fn();
 
     installRuntimeRefreshListeners({ windowTarget, documentTarget }, onRefresh);
@@ -35,9 +44,25 @@ describe('installRuntimeRefreshListeners', () => {
     expect(onRefresh).toHaveBeenCalledTimes(3);
   });
 
+  it('does not refresh while hidden and refreshes immediately when the app becomes visible', () => {
+    const windowTarget = new FakeEventTarget();
+    const documentTarget = new FakeDocumentTarget();
+    const onRefresh = vi.fn();
+
+    installRuntimeRefreshListeners({ windowTarget, documentTarget }, onRefresh);
+
+    documentTarget.visibilityState = 'hidden';
+    documentTarget.dispatch('visibilitychange');
+    expect(onRefresh).not.toHaveBeenCalled();
+
+    documentTarget.visibilityState = 'visible';
+    documentTarget.dispatch('visibilitychange');
+    expect(onRefresh).toHaveBeenCalledTimes(1);
+  });
+
   it('removes every listener during cleanup', () => {
     const windowTarget = new FakeEventTarget();
-    const documentTarget = new FakeEventTarget();
+    const documentTarget = new FakeDocumentTarget();
     const onRefresh = vi.fn();
     const cleanup = installRuntimeRefreshListeners({ windowTarget, documentTarget }, onRefresh);
 
