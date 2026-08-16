@@ -351,6 +351,9 @@
 **Android native-foundation verification note (2026-08-16):** the committed Capacitor Android project reuses the shared SalahOS application and prayer engine rather than duplicating prayer logic. The application location action now crosses a native-aware platform boundary: browser builds retain the existing one-shot browser adapter, while Android uses the first-party Capacitor geolocation bridge, explicitly checks/requests foreground permission, defaults to non-high-accuracy acquisition with a five-minute reusable-fix window, and discards native accuracy/altitude/heading/speed/timestamp metadata before retaining latitude/longitude. The Android manifest declares foreground `ACCESS_COARSE_LOCATION` and `ACCESS_FINE_LOCATION` plus the generated Internet permission and does not request background location. Cleaned read-only Quality Gate run `31935517985` passed security, dependency/license, documentation, formatting, lint, strict typecheck, 59 test files / 273 tests, production Web/PWA build and artifact verification. Independent permanent Android Build run `31935517977` installed the committed lockfile on Ubuntu with Node 22 and Java 21, ran `npm run android:build`, synchronised the shared app into the native project and passed Gradle `assembleDebug`. `docs/ANDROID.md` records the local build/install path and explicit boundaries. Emulator/physical-device acceptance, persistent-storage device lifecycle, orientation acceptance, native notifications/Adhan, battery/background restrictions, release signing/distribution and all iOS native work remain open.
 
 - [x] Implement persistent settings/storage
+
+**iOS native-foundation verification note (2026-08-16):** macOS validation run `31941296351` generated and synchronised the committed Capacitor iOS shell with `@capacitor/ios` pinned to the same 8.4.2 runtime line as the existing core/Android packages, added both Apple-required location privacy descriptions without enabling background-location mode, and built the `App` scheme for a generic iOS Simulator with code signing disabled. The shared one-shot native geolocation adapter checks/requests Capacitor location permission and retains only latitude/longitude, while the existing native Preferences-backed application storage is platform-neutral and hydrates settings, saved locations and mosque timetables before React mounts. Actual simulator permission-prompt interaction, offline launch, notification delivery and iPhone/iPad layout acceptance remain separate open items.
+
 - [x] Implement local prayer notifications
 - [x] Implement Android exact-alarm strategy where permitted and required
 
@@ -379,9 +382,9 @@
 
 ## 9. iOS / iPadOS application
 
-- [ ] Configure iOS project/shell
-- [ ] Implement location permission descriptions and flow
-- [ ] Implement persistent settings/storage
+- [x] Configure iOS project/shell
+- [x] Implement location permission descriptions and flow
+- [x] Implement persistent settings/storage
 - [ ] Implement local prayer notifications within iOS scheduling limits
 - [ ] Implement Adhan/notification audio within Apple platform restrictions
 - [ ] Handle background execution limitations explicitly

@@ -773,3 +773,7 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Android Adhan notification metadata records the notification-alert policy for Adhan jobs.
 - English and Arabic settings text describes the current control as an Adhan alert, not full background playback.
 - User-selectable/local audio and audio-focus/interruption behavior remain separate open work.
+
+## iOS native foundation — 2026-08-16
+
+The macOS validation workflow installs the pinned iOS runtime, generates/synchronises the native project, asserts both required location usage-description keys, rejects accidental background-location mode, runs the complete repository quality gate, and compiles the `App` scheme for a generic iOS Simulator with `CODE_SIGNING_ALLOWED=NO`. This validates project generation, privacy metadata and compilation only; interactive simulator/device acceptance remains separately open.

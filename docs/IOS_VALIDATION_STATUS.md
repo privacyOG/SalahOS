@@ -42,3 +42,7 @@ Signing certificates, private keys, provisioning profiles, App Store Connect cre
 ## Completion rule
 
 An iOS/iPadOS tracker item may move to complete only when its implementation exists and the required validation evidence is recorded in `TESTING.md`. If macOS/Xcode or physical hardware is unavailable, the item stays open or partial and this limitation is stated explicitly rather than inferred away from shared web-domain test coverage.
+
+## Native foundation validation — 2026-08-16
+
+The committed iOS shell is generated from the shared SalahOS web application and uses the same `com.privacyog.salahos` application identifier. The iOS target includes `NSLocationWhenInUseUsageDescription` and `NSLocationAlwaysAndWhenInUseUsageDescription` as required by the installed geolocation bridge, does not enable background location, and builds for an iOS Simulator with code signing disabled. The shared native Preferences adapter provides the same versioned settings, saved-location and mosque-library storage contract used on Android. Simulator/device interaction remains separately tracked.
