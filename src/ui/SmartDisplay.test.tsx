@@ -69,7 +69,7 @@ describe('SmartDisplay', () => {
     );
 
     expect(html).toContain('data-mode="smart-display"');
-    expect(html.match(/class="prayer-card/g)).toHaveLength(5);
+    expect(html.match(/<article class="prayer-card/g)).toHaveLength(5);
     expect(html).toContain('Fajr');
     expect(html).toContain('Dhuhr');
     expect(html).toContain('Asr');
