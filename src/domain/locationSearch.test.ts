@@ -29,7 +29,7 @@ describe('offline manual location search', () => {
   });
 
   it('normalizes accents, case and timezone separators', () => {
-    expect(searchLocations('reykjavik')[0]?.timeZone).toBe('Atlantic/Reykjavik');
+    expect(searchLocations('são paulo')[0]?.timeZone).toBe('America/Sao_Paulo');
     expect(searchLocations('america buenos aires')[0]?.timeZone).toBe(
       'America/Argentina/Buenos_Aires',
     );
