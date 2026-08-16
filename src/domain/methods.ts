@@ -38,6 +38,16 @@ export interface CalculationMethod {
   readonly verification: MethodVerification;
 }
 
+function validateInstitutionalAdjustments(adjustments: Readonly<MethodAdjustments>): void {
+  for (const [prayer, minutes] of Object.entries(adjustments)) {
+    if (!Number.isInteger(minutes) || minutes < -60 || minutes > 60) {
+      throw new RangeError(
+        `${prayer} institutional adjustment must be an integer between -60 and 60 minutes`,
+      );
+    }
+  }
+}
+
 const method = (
   id: Exclude<CalculationMethodId, 'custom'>,
   name: string,
@@ -46,16 +56,19 @@ const method = (
   provenance: string,
   verification: Exclude<MethodVerification, 'custom'>,
   institutionalAdjustments: Readonly<MethodAdjustments> = {},
-): CalculationMethod => ({
-  id,
-  name,
-  fajrAngleDegrees,
-  ishaRule,
-  maghribRule: { kind: 'sunset' },
-  institutionalAdjustments,
-  provenance,
-  verification,
-});
+): CalculationMethod => {
+  validateInstitutionalAdjustments(institutionalAdjustments);
+  return {
+    id,
+    name,
+    fajrAngleDegrees,
+    ishaRule,
+    maghribRule: { kind: 'sunset' },
+    institutionalAdjustments: Object.freeze({ ...institutionalAdjustments }),
+    provenance,
+    verification,
+  };
+};
 
 /**
  * Built-in method registry. Numerical parameters are explicit and centralized so
@@ -186,7 +199,7 @@ export function createCustomCalculationMethod(input: {
     fajrAngleDegrees: input.fajrAngleDegrees,
     ishaRule: input.ishaRule,
     maghribRule: { kind: 'sunset' },
-    institutionalAdjustments: {},
+    institutionalAdjustments: Object.freeze({}),
     provenance: 'User-defined custom calculation parameters.',
     verification: 'custom',
   };
