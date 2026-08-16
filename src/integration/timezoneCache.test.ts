@@ -38,14 +38,16 @@ describe('persisted timezone cache integration', () => {
 
     const restored = loadPersistedSettings(storage);
     if (restored.location === null) throw new Error('Expected persisted location');
+    const cachedTimeZone = restored.location.timeZone;
+    if (cachedTimeZone === undefined) throw new Error('Expected persisted IANA timezone');
 
     const dashboard = buildPrayerDashboard({
       instant: new Date('2026-08-16T12:00:00.000Z'),
       coordinates: restored.location.coordinates,
-      timeZone: restored.location.timeZone,
+      timeZone: cachedTimeZone,
     });
 
-    expect(restored.location.timeZone).toBe('America/Los_Angeles');
+    expect(cachedTimeZone).toBe('America/Los_Angeles');
     expect(dashboard.timeZone).toBe('America/Los_Angeles');
     expect(dashboard.utcOffsetMinutes).toBe(-420);
   });
