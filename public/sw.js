@@ -1,5 +1,5 @@
 const CACHE_PREFIX = 'salahos-shell-';
-const CACHE_NAME = `${CACHE_PREFIX}v3`;
+const CACHE_NAME = `${CACHE_PREFIX}v4`;
 const STATIC_SHELL_URLS = [
   '/manifest.webmanifest',
   '/icons/salahos-192.png',
@@ -35,6 +35,15 @@ function assetUrlsFromHtml(html) {
   return [...urls];
 }
 
+async function cacheApplicationShell(cache, shellResponse, includeStaticShell) {
+  const html = await shellResponse.clone().text();
+  const assetUrls = assetUrlsFromHtml(html);
+  const requiredUrls = includeStaticShell ? [...STATIC_SHELL_URLS, ...assetUrls] : assetUrls;
+
+  await cache.addAll(requiredUrls);
+  await cache.put('/', shellResponse);
+}
+
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches
@@ -45,10 +54,7 @@ self.addEventListener('install', (event) => {
           throw new Error('Unable to install an offline shell from a successful HTML response');
         }
 
-        const html = await shellResponse.clone().text();
-        const assetUrls = assetUrlsFromHtml(html);
-        await cache.put('/', shellResponse.clone());
-        await cache.addAll([...STATIC_SHELL_URLS, ...assetUrls]);
+        await cacheApplicationShell(cache, shellResponse.clone(), true);
       })
       .then(() => self.skipWaiting()),
   );
@@ -81,8 +87,13 @@ self.addEventListener('fetch', (event) => {
       fetch(request)
         .then((response) => {
           if (isSuccessfulHtml(response)) {
-            const copy = response.clone();
-            void caches.open(CACHE_NAME).then((cache) => cache.put('/', copy));
+            const candidateShell = response.clone();
+            event.waitUntil(
+              caches
+                .open(CACHE_NAME)
+                .then((cache) => cacheApplicationShell(cache, candidateShell, false))
+                .catch(() => undefined),
+            );
           }
           return response;
         })
