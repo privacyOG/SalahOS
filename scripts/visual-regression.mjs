@@ -1,11 +1,13 @@
 import { spawn, spawnSync } from 'node:child_process';
 import { mkdirSync, writeFileSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { resolve } from 'node:path';
 
 const PREVIEW_ORIGIN = 'http://127.0.0.1:4173';
 const DEBUG_ORIGIN = 'http://127.0.0.1:9222';
 const OUTPUT_DIRECTORY = resolve('artifacts/visual-regression');
 const SETTINGS_STORAGE_KEY = 'salahos.settings';
+const BROWSER_PROFILE_DIRECTORY = resolve(tmpdir(), `salahos-visual-${String(process.pid)}`);
 
 const visualCases = [
   {
@@ -285,7 +287,7 @@ mkdirSync(OUTPUT_DIRECTORY, { recursive: true });
 const preview = spawn(
   npmCommand,
   ['run', 'preview', '--', '--host', '127.0.0.1', '--port', '4173', '--strictPort'],
-  { stdio: ['ignore', 'pipe', 'pipe'] },
+  { stdio: ['ignore', 'inherit', 'inherit'] },
 );
 const browser = spawn(
   browserCommand(),
@@ -298,10 +300,10 @@ const browser = spawn(
     '--metrics-recording-only',
     '--no-first-run',
     '--remote-debugging-port=9222',
-    '--user-data-dir=/tmp/salahos-visual-regression-chrome',
+    `--user-data-dir=${BROWSER_PROFILE_DIRECTORY}`,
     'about:blank',
   ],
-  { stdio: ['ignore', 'ignore', 'pipe'] },
+  { stdio: ['ignore', 'ignore', 'inherit'] },
 );
 
 let session;
