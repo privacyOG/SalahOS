@@ -4,7 +4,7 @@ const serviceWorker = readFileSync(new URL('../public/sw.js', import.meta.url), 
 const main = readFileSync(new URL('../src/main.tsx', import.meta.url), 'utf8');
 
 for (const required of [
-  "const CACHE_NAME = `${CACHE_PREFIX}v3`;",
+  "const CACHE_NAME = `${CACHE_PREFIX}v4`;",
   "const CACHEABLE_STATIC_PREFIXES = ['/assets/', '/icons/'];",
   "const CACHEABLE_STATIC_PATHS = new Set(['/manifest.webmanifest']);",
   "'/icons/salahos-192.png'",
@@ -16,13 +16,15 @@ for (const required of [
   "fetch('/', { cache: 'no-store' })",
   'const assetUrls = assetUrlsFromHtml(html);',
   "url.pathname.startsWith('/assets/')",
-  "await cache.put('/', shellResponse.clone());",
-  'await cache.addAll([...STATIC_SHELL_URLS, ...assetUrls]);',
+  'async function cacheApplicationShell(cache, shellResponse, includeStaticShell)',
+  'await cache.addAll(requiredUrls);',
+  "await cache.put('/', shellResponse);",
+  'cacheApplicationShell(cache, shellResponse.clone(), true)',
+  'cacheApplicationShell(cache, candidateShell, false)',
   'if (!isCacheableStaticPath(url.pathname)) return;',
   "response.headers.get('content-type')",
   "includes('text/html')",
   "response.ok && response.type === 'basic'",
-  "cache.put('/', copy)",
   'cache.put(request, copy)',
 ]) {
   if (!serviceWorker.includes(required)) {
@@ -52,7 +54,23 @@ if (
 }
 
 if (!/function\s+assetUrlsFromHtml\s*\([^)]*\)\s*{[\s\S]*?\/assets\//.test(serviceWorker)) {
-  throw new Error('Service-worker installation must derive first-party build assets from HTML');
+  throw new Error('Service-worker shell caching must derive first-party build assets from HTML');
+}
+
+const shellHelperStart = serviceWorker.indexOf(
+  'async function cacheApplicationShell(cache, shellResponse, includeStaticShell)',
+);
+const shellAddIndex = serviceWorker.indexOf('await cache.addAll(requiredUrls);', shellHelperStart);
+const shellPutIndex = serviceWorker.indexOf("await cache.put('/', shellResponse);", shellHelperStart);
+if (
+  shellHelperStart < 0 ||
+  shellAddIndex < 0 ||
+  shellPutIndex < 0 ||
+  shellPutIndex < shellAddIndex
+) {
+  throw new Error(
+    'Service-worker shell updates must cache referenced assets before replacing the cached root HTML',
+  );
 }
 
 if (/CACHEABLE_STATIC_PREFIXES[\s\S]*?['"]\/api\//.test(serviceWorker)) {
@@ -64,5 +82,5 @@ if (/url\.origin\s*!==\s*self\.location\.origin/.test(serviceWorker) === false) 
 }
 
 console.log(
-  'Service-worker cache boundary passed: install completion protects the complete first-party application shell, navigation shell updates require successful HTML, runtime caching is limited to explicit static asset paths, and registration is browser/PWA-only.',
+  'Service-worker cache boundary passed: install and navigation upgrades atomically protect the complete first-party application shell, runtime caching is limited to explicit static asset paths, and registration is browser/PWA-only.',
 );
