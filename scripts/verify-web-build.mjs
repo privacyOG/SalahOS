@@ -49,9 +49,10 @@ for (const icon of ['icons/salahos.svg', 'icons/salahos-maskable.svg']) {
   }
 }
 
-const serviceWorker = await readFile(path.join(dist, 'sw.js'), 'utf8');
-if (!serviceWorker.includes('salahos-shell-v2')) {
-  throw new Error('Built service worker does not contain the expected shell cache version');
+const builtServiceWorker = await readFile(path.join(dist, 'sw.js'), 'utf8');
+const sourceServiceWorker = await readFile(path.resolve('public/sw.js'), 'utf8');
+if (builtServiceWorker !== sourceServiceWorker) {
+  throw new Error('Built service worker does not exactly match the tested public/sw.js source');
 }
 
 console.log('Web/PWA build artifact verification passed.');
