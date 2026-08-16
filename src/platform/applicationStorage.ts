@@ -79,6 +79,31 @@ export async function createNativePreferencesStorage(
   return storage;
 }
 
+async function migrateLegacyWebStorage(
+  webStorage: KeyValueStorage,
+  storage: FlushableKeyValueStorage,
+  keys: readonly string[] = PERSISTED_APPLICATION_KEYS,
+): Promise<void> {
+  let migrated = false;
+  for (const key of keys) {
+    if (storage.getItem(key) !== null) continue;
+    const legacyValue = webStorage.getItem(key);
+    if (legacyValue === null) continue;
+    storage.setItem(key, legacyValue);
+    migrated = true;
+  }
+
+  if (migrated) {
+    await storage.flush();
+  }
+
+  for (const key of keys) {
+    if (storage.getItem(key) !== null) {
+      webStorage.removeItem(key);
+    }
+  }
+}
+
 export async function initializeApplicationStorage(
   webStorage: KeyValueStorage,
   dependencies: ApplicationStorageDependencies = defaultDependencies,
@@ -90,6 +115,7 @@ export async function initializeApplicationStorage(
   }
 
   const storage = await createNativePreferencesStorage(dependencies.preferences);
+  await migrateLegacyWebStorage(webStorage, storage);
   activeStorage = storage;
   nativeStorage = storage;
 }
