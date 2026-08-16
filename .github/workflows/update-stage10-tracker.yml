@@ -1,0 +1,60 @@
+name: Update Stage 10 tracker
+
+on:
+  push:
+    branches:
+      - privacyog/notification-stage10-tracker
+    paths:
+      - .github/workflows/update-stage10-tracker.yml
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: privacyog/notification-stage10-tracker
+      - name: Update validated Stage 10 items
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('TODO.md')
+          text = path.read_text()
+          replacements = {
+              '- [~] Per-prayer notification enable/disable': '- [x] Per-prayer notification enable/disable',
+              '- [~] Reminder N minutes before prayer': '- [x] Reminder N minutes before prayer',
+              '- [~] Prayer-time notification': '- [x] Prayer-time notification',
+              '- [~] Per-prayer sound choice': '- [x] Per-prayer sound choice',
+              '- [~] Adhan enable/disable': '- [x] Adhan enable/disable',
+              '- [~] Reschedule notifications after timezone/location/method changes': '- [x] Reschedule notifications after timezone/location/method changes',
+              '- [~] Reschedule future prayer notifications at date rollover': '- [x] Reschedule future prayer notifications at date rollover',
+              '- [~] Prevent duplicate notifications': '- [x] Prevent duplicate notifications',
+          }
+          for old, new in replacements.items():
+              if old not in text:
+                  raise SystemExit(f'missing tracker entry: {old}')
+              text = text.replace(old, new, 1)
+          marker = '- [ ] User-selectable/local Adhan audio\n'
+          note = '''\n**Notification delivery integration verification note (2026-08-16):** PR #81 merged at `2f99d7e7c04b26b23ab9c45df8db5e14b257e653` after exact-head Quality Gate run `31943984379`, Android Build run `31943984406`, and iOS Build run `31943984481` all passed. The production application rebuilds notification intents from the selected location/timezone, calculation method, prayer source, adjustments and per-prayer preferences, then feeds the same resolved schedule into the merged Android and iOS adapters. Integration coverage verifies reminder/prayer-time/Adhan preference propagation, owned-job cancellation when a prayer is disabled, a second identical reconciliation as a no-op, civil-date rollover replacement without duplicate jobs, and removal of a previously installed notification if recalculation lands in a nonexistent DST wall-clock time. This closes deterministic scheduling/rescheduling and duplicate-prevention behavior through both native adapter entry points. Independent vibration control remains partial where platform notification-channel semantics prevent an exact mapping, actual native delivery across a DST transition remains partial until exercised, and user-selected local Adhan recordings remain a separate open feature.\n\n'''
+          if marker not in text:
+              raise SystemExit('missing local Adhan audio marker')
+          text = text.replace(marker, marker + note, 1)
+          path.write_text(text)
+          PY
+      - name: Validate tracker diff
+        run: |
+          grep -F -- '- [x] Per-prayer notification enable/disable' TODO.md
+          grep -F -- '- [~] Vibration option where supported' TODO.md
+          grep -F -- '- [ ] User-selectable/local Adhan audio' TODO.md
+          grep -F -- '- [~] Test notification behaviour across DST transition' TODO.md
+          git diff --check
+      - name: Commit tracker evidence
+        run: |
+          git config user.name privacyOG
+          git config user.email privacyOG@users.noreply.github.com
+          git add TODO.md
+          git commit -m 'Record validated notification delivery lifecycle coverage'
+          git push origin HEAD:privacyog/notification-stage10-tracker
