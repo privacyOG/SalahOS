@@ -416,9 +416,12 @@
 
 ## 11. Raspberry Pi Touch Display 2
 
-- [ ] Research and document Raspberry Pi Touch Display 2 resolution/orientation constraints
+- [x] Research and document Raspberry Pi Touch Display 2 resolution/orientation constraints
 - [ ] Build touch-first layout fixture for the display
-- [ ] Provide Raspberry Pi OS installation instructions
+- [x] Provide Raspberry Pi OS installation instructions
+
+**Raspberry Pi Touch Display 2 documentation verification note (2026-08-16):** read-only Quality Gate run `31931305063` passed the sensitive-file policy, dependency vulnerability audit, dependency-license policy, documentation-link verification across 29 Markdown files, PWA raster-icon reproducibility, formatting, typed lint, strict typecheck, the complete test suite, production build and deploy-artifact verification after adding `docs/RASPBERRY_PI_TOUCH_DISPLAY_2.md`. The guide documents the current 5-inch and 7-inch 720×1280 variants plus the 10-inch 1200×1920 variant, portrait-native orientation, Raspberry Pi OS Desktop rotation through Control Centre, supported Raspberry Pi generations/cabling boundaries, Raspberry Pi Imager installation, touch/on-screen-keyboard behavior, brightness controls, and the existing SalahOS Chromium/labwc kiosk deployment path. The document keeps physical Touch Display 2 rendering, touch ergonomics, rotation acceptance, boot/autostart behavior and long-duration device testing explicitly open. The touch-first layout fixture remains a separate implementation item.
+
 - [x] Provide one-command or simple launcher script
 - [~] Provide optional automatic launch on boot
 - [x] Implement Chromium/full-screen kiosk mode where applicable
@@ -656,7 +659,7 @@
 
 - [ ] Document Android build/install
 - [ ] Document iOS build/install
-- [ ] Document Raspberry Pi Touch Display 2 setup
+- [x] Document Raspberry Pi Touch Display 2 setup
 - [ ] Document TV/kiosk deployment
 - [x] Document prayer calculation methods and references
 - [x] Document privacy behaviour
