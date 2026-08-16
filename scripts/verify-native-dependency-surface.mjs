@@ -5,6 +5,11 @@ const root = process.cwd();
 const packageJson = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8'));
 const androidVariables = readFileSync(resolve(root, 'android/variables.gradle'), 'utf8');
 const androidBuild = readFileSync(resolve(root, 'android/build.gradle'), 'utf8');
+const androidAppBuild = readFileSync(resolve(root, 'android/app/build.gradle'), 'utf8');
+const androidCapacitorBuild = readFileSync(
+  resolve(root, 'android/app/capacitor.build.gradle'),
+  'utf8',
+);
 const iosPackage = readFileSync(resolve(root, 'ios/App/CapApp-SPM/Package.swift'), 'utf8');
 
 const expectedPackages = new Map([
@@ -47,16 +52,64 @@ if (!androidBuild.includes("classpath 'com.android.tools.build:gradle:8.13.0'"))
   throw new Error('Android Gradle plugin changed from reviewed tooling version 8.13.0');
 }
 
-for (const contract of [
+function dependencyLines(source) {
+  return source
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter((line) =>
+      /^(?:implementation|testImplementation|androidTestImplementation)\b/.test(line),
+    );
+}
+
+function assertExactLines(label, actualLines, expectedLines) {
+  const actual = [...actualLines].sort();
+  const expected = [...expectedLines].sort();
+  if (JSON.stringify(actual) !== JSON.stringify(expected)) {
+    throw new Error(
+      `${label} dependency declarations changed; review the native dependency surface before updating this contract`,
+    );
+  }
+}
+
+assertExactLines('Android app', dependencyLines(androidAppBuild), [
+  "implementation fileTree(include: ['*.jar'], dir: 'libs')",
+  'implementation "androidx.appcompat:appcompat:$androidxAppCompatVersion"',
+  'implementation "androidx.coordinatorlayout:coordinatorlayout:$androidxCoordinatorLayoutVersion"',
+  'implementation "androidx.core:core-splashscreen:$coreSplashScreenVersion"',
+  "implementation project(':capacitor-android')",
+  'testImplementation "junit:junit:$junitVersion"',
+  'androidTestImplementation "androidx.test.ext:junit:$androidxJunitVersion"',
+  'androidTestImplementation "androidx.test.espresso:espresso-core:$androidxEspressoCoreVersion"',
+  "implementation project(':capacitor-cordova-android-plugins')",
+]);
+
+assertExactLines('Generated Capacitor Android', dependencyLines(androidCapacitorBuild), [
+  "implementation project(':capacitor-geolocation')",
+  "implementation project(':capacitor-local-notifications')",
+  "implementation project(':capacitor-preferences')",
+]);
+
+function swiftManifestLines(prefix) {
+  return iosPackage
+    .split(/\r?\n/)
+    .map((line) => line.trim().replace(/,$/, ''))
+    .filter((line) => line.startsWith(prefix));
+}
+
+assertExactLines('iOS Swift package', swiftManifestLines('.package('), [
   '.package(url: "https://github.com/ionic-team/capacitor-swift-pm.git", exact: "8.4.2")',
   '.package(name: "CapacitorGeolocation", path: "../../../node_modules/@capacitor/geolocation")',
   '.package(name: "CapacitorLocalNotifications", path: "../../../node_modules/@capacitor/local-notifications")',
   '.package(name: "CapacitorPreferences", path: "../../../node_modules/@capacitor/preferences")',
-]) {
-  if (!iosPackage.includes(contract)) {
-    throw new Error(`Reviewed iOS native dependency contract changed: ${contract}`);
-  }
-}
+]);
+
+assertExactLines('iOS Swift products', swiftManifestLines('.product('), [
+  '.product(name: "Capacitor", package: "capacitor-swift-pm")',
+  '.product(name: "Cordova", package: "capacitor-swift-pm")',
+  '.product(name: "CapacitorGeolocation", package: "CapacitorGeolocation")',
+  '.product(name: "CapacitorLocalNotifications", package: "CapacitorLocalNotifications")',
+  '.product(name: "CapacitorPreferences", package: "CapacitorPreferences")',
+]);
 
 const localBinaryRoots = [
   resolve(root, 'android/app/libs'),
@@ -82,5 +135,5 @@ if (unreviewedBinaries.length > 0) {
 }
 
 console.log(
-  'Native dependency surface passed: reviewed Capacitor/AndroidX/Cordova versions are pinned and no unreviewed local Android binaries are present.',
+  'Native dependency surface passed: reviewed Capacitor/AndroidX/Cordova versions and direct native dependency declarations are pinned, with no unreviewed local Android binaries.',
 );
