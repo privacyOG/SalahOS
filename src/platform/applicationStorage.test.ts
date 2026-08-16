@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import {
   createNativePreferencesStorage,
+  getApplicationStorage,
+  initializeApplicationStorage,
   PERSISTED_APPLICATION_KEYS,
   type PreferencesStore,
 } from './applicationStorage';
+import type { KeyValueStorage } from './settingsStorage';
 
 class MemoryPreferences implements PreferencesStore {
   readonly values = new Map<string, string>();
@@ -24,6 +27,22 @@ class MemoryPreferences implements PreferencesStore {
     this.removals.push(key);
     this.values.delete(key);
     return Promise.resolve();
+  }
+}
+
+class MemoryWebStorage implements KeyValueStorage {
+  readonly values = new Map<string, string>();
+
+  getItem(key: string): string | null {
+    return this.values.get(key) ?? null;
+  }
+
+  setItem(key: string, value: string): void {
+    this.values.set(key, value);
+  }
+
+  removeItem(key: string): void {
+    this.values.delete(key);
   }
 }
 
@@ -78,5 +97,36 @@ describe('native application storage', () => {
     expect(storage.getItem('unrelated')).toBeNull();
     await storage.flush();
     expect(preferences.values.get('unrelated')).toBe('keep-me');
+  });
+
+  it('uses Capacitor Preferences for iOS and other native shells', async () => {
+    const preferences = new MemoryPreferences();
+    const webStorage = new MemoryWebStorage();
+    preferences.values.set(PERSISTED_APPLICATION_KEYS[0], 'native-value');
+    webStorage.setItem(PERSISTED_APPLICATION_KEYS[0], 'web-value');
+
+    await initializeApplicationStorage(webStorage, {
+      isNativePlatform: () => true,
+      preferences,
+    });
+
+    expect(getApplicationStorage().getItem(PERSISTED_APPLICATION_KEYS[0])).toBe('native-value');
+    getApplicationStorage().setItem(PERSISTED_APPLICATION_KEYS[0], 'updated-native');
+    expect(webStorage.getItem(PERSISTED_APPLICATION_KEYS[0])).toBe('web-value');
+  });
+
+  it('keeps browser and PWA storage on the provided Web Storage implementation', async () => {
+    const preferences = new MemoryPreferences();
+    const webStorage = new MemoryWebStorage();
+    webStorage.setItem(PERSISTED_APPLICATION_KEYS[0], 'web-value');
+
+    await initializeApplicationStorage(webStorage, {
+      isNativePlatform: () => false,
+      preferences,
+    });
+
+    expect(getApplicationStorage()).toBe(webStorage);
+    expect(getApplicationStorage().getItem(PERSISTED_APPLICATION_KEYS[0])).toBe('web-value');
+    expect(preferences.values.size).toBe(0);
   });
 });
