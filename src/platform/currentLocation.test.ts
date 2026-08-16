@@ -6,31 +6,33 @@ function dependencies(
 ): CurrentLocationDependencies {
   return {
     isNativePlatform: () => true,
-    checkNativePermissions: async () => ({ location: 'granted' }),
-    requestNativePermissions: async () => ({ location: 'granted' }),
-    getNativeCurrentPosition: async () => ({
-      coords: { latitude: -33.8688, longitude: 151.2093 },
-    }),
-    requestBrowser: async () => ({
-      ok: true,
-      location: {
-        coordinates: { latitude: 51.5072, longitude: -0.1276 },
-        source: 'browser',
-      },
-    }),
+    checkNativePermissions: () => Promise.resolve({ location: 'granted' }),
+    requestNativePermissions: () => Promise.resolve({ location: 'granted' }),
+    getNativeCurrentPosition: () =>
+      Promise.resolve({ coords: { latitude: -33.8688, longitude: 151.2093 } }),
+    requestBrowser: () =>
+      Promise.resolve({
+        ok: true,
+        location: {
+          coordinates: { latitude: 51.5072, longitude: -0.1276 },
+          source: 'browser',
+        },
+      }),
     ...overrides,
   };
 }
 
 describe('requestCurrentLocation', () => {
   it('keeps the existing browser adapter outside native shells', async () => {
-    const requestBrowser = vi.fn(async () => ({
-      ok: true as const,
-      location: {
-        coordinates: { latitude: 51.5072, longitude: -0.1276 },
-        source: 'browser' as const,
-      },
-    }));
+    const requestBrowser = vi.fn(() =>
+      Promise.resolve({
+        ok: true as const,
+        location: {
+          coordinates: { latitude: 51.5072, longitude: -0.1276 },
+          source: 'browser' as const,
+        },
+      }),
+    );
     const result = await requestCurrentLocation(
       dependencies({ isNativePlatform: () => false, requestBrowser }),
     );
@@ -46,18 +48,20 @@ describe('requestCurrentLocation', () => {
   });
 
   it('uses a granted native permission and retains only coordinates', async () => {
-    const requestNativePermissions = vi.fn(async () => ({ location: 'granted' }));
-    const getNativeCurrentPosition = vi.fn(async () => ({
-      coords: {
-        latitude: -33.8688,
-        longitude: 151.2093,
-        accuracy: 4,
-        altitude: 12,
-        heading: 90,
-        speed: 1,
-      },
-      timestamp: 123,
-    }));
+    const requestNativePermissions = vi.fn(() => Promise.resolve({ location: 'granted' }));
+    const getNativeCurrentPosition = vi.fn(() =>
+      Promise.resolve({
+        coords: {
+          latitude: -33.8688,
+          longitude: 151.2093,
+          accuracy: 4,
+          altitude: 12,
+          heading: 90,
+          speed: 1,
+        },
+        timestamp: 123,
+      }),
+    );
     const result = await requestCurrentLocation(
       dependencies({ requestNativePermissions, getNativeCurrentPosition }),
     );
@@ -78,13 +82,13 @@ describe('requestCurrentLocation', () => {
   });
 
   it('requests permission when needed and fails closed when denied', async () => {
-    const requestNativePermissions = vi.fn(async () => ({ location: 'denied' }));
-    const getNativeCurrentPosition = vi.fn(async () => ({
-      coords: { latitude: -33.8688, longitude: 151.2093 },
-    }));
+    const requestNativePermissions = vi.fn(() => Promise.resolve({ location: 'denied' }));
+    const getNativeCurrentPosition = vi.fn(() =>
+      Promise.resolve({ coords: { latitude: -33.8688, longitude: 151.2093 } }),
+    );
     const result = await requestCurrentLocation(
       dependencies({
-        checkNativePermissions: async () => ({ location: 'prompt' }),
+        checkNativePermissions: () => Promise.resolve({ location: 'prompt' }),
         requestNativePermissions,
         getNativeCurrentPosition,
       }),
@@ -98,9 +102,7 @@ describe('requestCurrentLocation', () => {
   it('normalizes native timeout failures', async () => {
     const result = await requestCurrentLocation(
       dependencies({
-        getNativeCurrentPosition: async () => {
-          throw new Error('Location request timeout');
-        },
+        getNativeCurrentPosition: () => Promise.reject(new Error('Location request timeout')),
       }),
     );
 
