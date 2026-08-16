@@ -1,0 +1,89 @@
+name: iOS Local Notifications Finalization
+
+on:
+  push:
+    branches:
+      - privacyog/ios-local-notifications
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: privacyog/ios-local-notifications
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Wire iOS scheduler and evidence
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          app = Path('src/App.tsx')
+          text = app.read_text()
+          android_import = "import { synchronizeAndroidPrayerNotifications } from './platform/androidNotificationScheduler';\n"
+          ios_import = "import { synchronizeIosPrayerNotifications } from './platform/iosNotificationScheduler';\n"
+          if ios_import not in text:
+              if android_import not in text:
+                  raise SystemExit('Android scheduler import anchor missing')
+              text = text.replace(android_import, android_import + ios_import, 1)
+          android_call = """    void synchronizeAndroidPrayerNotifications(resolutions, locale).catch(() => {\n      errorLogger.log('notification-scheduling-unavailable');\n    });\n"""
+          combined = android_call + """    void synchronizeIosPrayerNotifications(resolutions, locale).catch(() => {\n      errorLogger.log('notification-scheduling-unavailable');\n    });\n"""
+          if "synchronizeIosPrayerNotifications(resolutions, locale)" not in text:
+              if android_call not in text:
+                  raise SystemExit('Android scheduler call anchor missing')
+              text = text.replace(android_call, combined, 1)
+          app.write_text(text)
+
+          todo = Path('TODO.md')
+          t = todo.read_text()
+          before = '- [ ] Implement local prayer notifications within iOS scheduling limits'
+          after = '- [x] Implement local prayer notifications within iOS scheduling limits'
+          if before not in t:
+              raise SystemExit('iOS local notification TODO marker missing')
+          t = t.replace(before, after, 1)
+          note = '''\n\n**iOS local-notification verification note (2026-08-16):** SalahOS now consumes the shared today/tomorrow notification intents through the installed Capacitor Local Notifications iOS bridge. The adapter owns only namespaced SalahOS requests, uses deterministic positive identifiers, round-trips scheduling metadata through pending-request `extra`, cancels stale requests before replacement, requests display permission only when future configured alerts need delivery, and fails closed when permission remains denied. The bounded two-day horizon can produce at most 30 reminder/prayer-time/Adhan-alert requests (five prayers × three optional alerts × two dates), rather than accumulating an unbounded queue. Silent preferences use the iOS `silent` path with no notification sound; non-silent alerts request the platform-default sound fallback. Validation includes focused adapter tests, the complete repository quality gate and an Xcode iOS Simulator build. Custom/full Adhan audio, background-delivery policy, interactive simulator permission acceptance and iPhone/iPad layout evidence remain separate Stage 9/10 items.\n'''
+          t = t.replace(after, after + note, 1)
+          todo.write_text(t)
+
+          testing = Path('TESTING.md')
+          tt = testing.read_text()
+          tt += '''\n\n## iOS local notification adapter — 2026-08-16\n\nThe iOS adapter is tested with a fake native client for stable identifiers, permission prompt/grant, denied permission, silent delivery metadata, default audible fallback, cancellation of owned stale requests and unsupported-platform no-op behavior. The production App sends the same resolved today/tomorrow intents to Android and iOS adapters; each adapter self-selects its native platform. The macOS validation gate also synchronizes the iOS project and compiles the simulator target. Interactive notification delivery remains separately tracked.\n'''
+          testing.write_text(tt)
+
+          status = Path('docs/IOS_VALIDATION_STATUS.md')
+          s = status.read_text()
+          s += '''\n\n## Local notification scheduling\n\nThe iOS runtime uses the first-party Local Notifications bridge with the same deterministic shared prayer notification intents as Android. Scheduling is bounded to today and tomorrow, permission denial fails closed, and only SalahOS-namespaced pending requests are reconciled. This repository validation does not claim custom Adhan playback, unrestricted background execution, or exact wall-clock delivery under every Apple power/focus state.\n'''
+          status.write_text(s)
+          PY
+      - name: Format
+        run: npm run format
+      - name: Repository quality gate
+        run: npm run check
+      - name: Synchronize iOS application
+        run: npx cap sync ios
+      - name: Build iOS simulator application
+        run: |
+          xcodebuild \
+            -project ios/App/App.xcodeproj \
+            -scheme App \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+      - name: Commit verified notification adapter
+        run: |
+          rm .github/workflows/ios-local-notifications-finalize.yml
+          rm -f tsconfig.tsbuildinfo
+          git config user.name privacyOG
+          git config user.email privacyOG@users.noreply.github.com
+          git add -A
+          git commit -m "Verify iOS local prayer notifications [ios-notifications-verified]"
+          git push origin HEAD:privacyog/ios-local-notifications
