@@ -41,6 +41,7 @@ jobs:
         run: |
           sed -i 's/settings\.notificationPreferences/settings.notifications/g' scripts/apply_android_local_notifications.py
           sed -i 's/, iqamah: null//g' scripts/apply_android_local_notifications.py
+          sed -i '/      version: 1,/d' scripts/apply_android_local_notifications.py
           sed -i '/          jumuah: \[\],/d' scripts/apply_android_local_notifications.py
           python - <<'PY'
           from pathlib import Path
