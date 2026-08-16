@@ -26,7 +26,7 @@ function collectMarkdown(directory) {
 }
 collectMarkdown(root);
 
-const authorDeclaration = /^\s*(?:\*\*)?Author(?:\*\*)?:\s*(.+?)\s*$/i;
+const authorDeclaration = /^\s*(?:\*\*)?Author:(?:\*\*)?\s*(.+?)\s*$/i;
 for (const filePath of markdownFiles) {
   if (!statSync(filePath).isFile()) continue;
   const lines = readFileSync(filePath, 'utf8').split(/\r?\n/);
