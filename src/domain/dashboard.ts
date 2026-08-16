@@ -126,6 +126,7 @@ function scheduleFor(
 export function buildPrayerDashboard(input: {
   readonly instant: Date;
   readonly coordinates: Coordinates;
+  readonly timeZone?: string;
   readonly method?: CalculationMethod;
   readonly asrConvention?: AsrConvention;
   readonly highLatitudeRule?: HighLatitudeRule;
@@ -136,7 +137,7 @@ export function buildPrayerDashboard(input: {
   const asrConvention = input.asrConvention ?? 'standard';
   const highLatitudeRule = input.highLatitudeRule ?? 'angle-based';
   const adjustments = input.adjustments ?? {};
-  const context = createLocationPrayerContext(input.instant, input.coordinates);
+  const context = createLocationPrayerContext(input.instant, input.coordinates, input.timeZone);
   const clock = localClockParts(input.instant, context.timeZone);
   const today = scheduleFor(
     context.civilDate,

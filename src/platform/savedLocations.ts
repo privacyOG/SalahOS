@@ -1,5 +1,6 @@
 import { createCoordinates } from '../domain/coordinates';
 import type { Coordinates } from '../domain/coordinates';
+import { assertIanaTimeZone } from '../domain/timezone';
 import type { KeyValueStorage } from './settingsStorage';
 
 export const SAVED_LOCATIONS_STORAGE_KEY = 'salahos.savedLocations';
@@ -41,7 +42,7 @@ function parseSavedLocation(value: unknown): SavedLocation {
   );
   const timeZone =
     typeof value.timeZone === 'string' && value.timeZone.trim().length > 0
-      ? value.timeZone.trim()
+      ? assertIanaTimeZone(value.timeZone.trim())
       : undefined;
 
   return timeZone === undefined ? { id, label, coordinates } : { id, label, coordinates, timeZone };
