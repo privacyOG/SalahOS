@@ -491,7 +491,9 @@ export function App() {
       setLocale(imported.locale);
       setCoordinates(imported.location?.coordinates ?? null);
       setLatitude(imported.location === null ? '' : String(imported.location.coordinates.latitude));
-      setLongitude(imported.location === null ? '' : String(imported.location.coordinates.longitude));
+      setLongitude(
+        imported.location === null ? '' : String(imported.location.coordinates.longitude),
+      );
       setManualMosqueName(imported.mosqueTimetable?.mosqueName ?? '');
       setSettingsMessage('settingsImported');
     } catch {
@@ -1027,7 +1029,9 @@ export function App() {
                         });
                       }}
                     >
-                      <option value="default">{translate(locale, 'notificationSoundDefault')}</option>
+                      <option value="default">
+                        {translate(locale, 'notificationSoundDefault')}
+                      </option>
                       <option value="silent">{translate(locale, 'notificationSoundSilent')}</option>
                     </select>
                   </label>
@@ -1046,7 +1050,9 @@ export function App() {
                       type="checkbox"
                       checked={preference.adhanEnabled}
                       onChange={(event) => {
-                        updateNotificationPreference(prayer, { adhanEnabled: event.target.checked });
+                        updateNotificationPreference(prayer, {
+                          adhanEnabled: event.target.checked,
+                        });
                       }}
                     />
                     <span>{translate(locale, 'adhanEnabled')}</span>
