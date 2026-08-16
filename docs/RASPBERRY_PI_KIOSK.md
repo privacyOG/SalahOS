@@ -51,13 +51,13 @@ Because the served build and prayer engine are local, the kiosk does not require
 
 The launcher accepts these environment variables:
 
-| Variable | Default | Purpose |
-| --- | --- | --- |
-| `SALAHOS_DIST_DIR` | repository `dist/` | Built Web/PWA directory |
-| `SALAHOS_KIOSK_HOST` | `127.0.0.1` | Local HTTP bind address |
-| `SALAHOS_KIOSK_PORT` | `4173` | Local HTTP port |
-| `SALAHOS_KIOSK_URL` | local server root | URL Chromium opens |
-| `SALAHOS_BROWSER` | auto-detected | Explicit Chromium executable |
+| Variable             | Default            | Purpose                      |
+| -------------------- | ------------------ | ---------------------------- |
+| `SALAHOS_DIST_DIR`   | repository `dist/` | Built Web/PWA directory      |
+| `SALAHOS_KIOSK_HOST` | `127.0.0.1`        | Local HTTP bind address      |
+| `SALAHOS_KIOSK_PORT` | `4173`             | Local HTTP port              |
+| `SALAHOS_KIOSK_URL`  | local server root  | URL Chromium opens           |
+| `SALAHOS_BROWSER`    | auto-detected      | Explicit Chromium executable |
 
 Inspect the resolved commands without launching a browser:
 
