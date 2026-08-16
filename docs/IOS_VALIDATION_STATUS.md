@@ -42,3 +42,7 @@ Signing certificates, private keys, provisioning profiles, App Store Connect cre
 ## Completion rule
 
 An iOS/iPadOS tracker item may move to complete only when its implementation exists and the required validation evidence is recorded in `TESTING.md`. If macOS/Xcode or physical hardware is unavailable, the item stays open or partial and this limitation is stated explicitly rather than inferred away from shared web-domain test coverage.
+
+## Native implementation validated — 2026-08-16
+
+The iOS shell, foreground location metadata, Preferences persistence, local prayer notification adapter, and notification/audio/background lifecycle policy have passed macOS/Xcode simulator compilation. Interactive iPhone/iPad and offline cold-start acceptance remain separately tracked.

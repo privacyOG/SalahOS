@@ -791,3 +791,7 @@ Validation run `31941241775` passed the complete repository gate, debug build/re
 - Airplane mode was enabled before an explicit force-stop and cold launch of `com.privacyog.salahos/.MainActivity`; Activity Manager reported `Status: ok` and `LaunchState: COLD`, and the process remained alive.
 - `:app:connectedDebugAndroidTest` completed 1/1 tests with zero failures while asserting the real application id, airplane mode, landscape and portrait recreation, and activity survival.
 - The stale generated package-name test was removed. Physical-OEM-specific behavior remains outside this emulator acceptance result.
+
+## iOS native consolidation — 2026-08-16
+
+Runs `31941296351`, `31941790069`, `31941980679`, and `31942088604` validate the native iOS foundation, local notification adapter, lifecycle policy, and latest-main Xcode build. The source-only replay excludes runner-generated DerivedData; permanent macOS PR validation is added separately on the clean branch.
