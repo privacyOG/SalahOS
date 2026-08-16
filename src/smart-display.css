@@ -212,3 +212,42 @@
     font-size: clamp(2.8rem, 6vw, 5rem);
   }
 }
+
+.smart-display-header,
+.smart-display-status,
+.smart-display-prayers,
+.smart-display-jumuah,
+.smart-display-footer,
+.smart-display-empty {
+  animation: smart-display-pixel-shift 60min steps(1, end) infinite;
+}
+
+@keyframes smart-display-pixel-shift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+
+  25% {
+    transform: translate3d(4px, -3px, 0);
+  }
+
+  50% {
+    transform: translate3d(-3px, -4px, 0);
+  }
+
+  75% {
+    transform: translate3d(-4px, 3px, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .smart-display-header,
+  .smart-display-status,
+  .smart-display-prayers,
+  .smart-display-jumuah,
+  .smart-display-footer,
+  .smart-display-empty {
+    animation: none;
+  }
+}
