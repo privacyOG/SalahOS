@@ -51,6 +51,15 @@ export function LocalAdhanAudioSettings({
     if (record === null) return null;
     return URL.createObjectURL(record.blob);
   }, [record]);
+  const formattedRecordSize = useMemo(() => {
+    if (record === null) return null;
+    return new Intl.NumberFormat(locale === 'ar' ? 'ar' : 'en-AU', {
+      style: 'unit',
+      unit: 'megabyte',
+      unitDisplay: 'short',
+      maximumFractionDigits: 1,
+    }).format(record.size / (1024 * 1024));
+  }, [locale, record]);
 
   useEffect(
     () => () => {
@@ -141,7 +150,7 @@ export function LocalAdhanAudioSettings({
       ) : (
         <div className="local-adhan-audio-selection">
           <p>
-            <strong>{record.name}</strong> · {(record.size / (1024 * 1024)).toFixed(1)} MB
+            <strong>{record.name}</strong> · {formattedRecordSize}
           </p>
           <div className="button-row">
             <button type="button" onClick={preview}>
