@@ -51,9 +51,10 @@ for (const requiredManifestBoundary of [
   'android:allowBackup="false"',
   'android:fullBackupContent="@xml/backup_rules"',
   'android:dataExtractionRules="@xml/data_extraction_rules"',
+  'android:usesCleartextTraffic="false"',
 ]) {
   if (!androidManifest.includes(requiredManifestBoundary)) {
-    throw new Error(`Android local-data backup boundary is missing: ${requiredManifestBoundary}`);
+    throw new Error(`Android native privacy/security boundary is missing: ${requiredManifestBoundary}`);
   }
 }
 
@@ -94,9 +95,10 @@ for (const forbidden of [
   'NSContactsUsageDescription',
   'NSPhotoLibraryUsageDescription',
   'UIBackgroundModes',
+  'NSAppTransportSecurity',
 ]) {
   if (iosInfo.includes(`<key>${forbidden}</key>`)) {
-    throw new Error(`Unexpected iOS permission/background declaration: ${forbidden}`);
+    throw new Error(`Unexpected iOS permission/background/transport override: ${forbidden}`);
   }
 }
 if (/CODE_SIGN_ENTITLEMENTS\s*=/.test(iosProject)) {
@@ -120,5 +122,5 @@ if (/\bwatchPosition\s*\(/.test(currentLocation)) {
 }
 
 console.log(
-  `Native permission/privacy contract passed: ${declaredAndroidPermissions.length} reviewed app-owned Android permissions, Android backup/transfer exclusion policy, and one-shot native location with the two usage-description keys required by Capacitor Geolocation 8.2.0.`,
+  `Native permission/privacy contract passed: ${declaredAndroidPermissions.length} reviewed app-owned Android permissions, Android backup/transfer and cleartext exclusions, default iOS transport security, and one-shot native location with the two usage-description keys required by Capacitor Geolocation 8.2.0.`,
 );
