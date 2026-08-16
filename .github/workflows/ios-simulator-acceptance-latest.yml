@@ -1,0 +1,104 @@
+name: iOS Simulator Acceptance Latest
+
+on:
+  push:
+    branches:
+      - privacyog/ios-simulator-acceptance-latest
+
+permissions:
+  contents: read
+
+jobs:
+  acceptance:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Repository quality gate
+        run: npm run check
+      - name: Synchronize iOS application
+        run: npx cap sync ios
+      - name: Build simulator application
+        run: |
+          xcodebuild \
+            -project ios/App/App.xcodeproj \
+            -scheme App \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath "$RUNNER_TEMP/SalahOSDerivedData" \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+          APP_BUNDLE="$(find "$RUNNER_TEMP/SalahOSDerivedData/Build/Products" -path '*Debug-iphonesimulator/App.app' -print -quit)"
+          test -n "$APP_BUNDLE"
+          test -s "$APP_BUNDLE/public/index.html"
+          echo "APP_BUNDLE=$APP_BUNDLE" >> "$GITHUB_ENV"
+      - name: Select available iPhone and iPad simulators
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess
+          devices = json.loads(subprocess.check_output(['xcrun', 'simctl', 'list', 'devices', 'available', '-j']))['devices']
+          phone = tablet = None
+          for runtime, entries in reversed(list(devices.items())):
+              for device in entries:
+                  name = device.get('name', '')
+                  if phone is None and name.startswith('iPhone'):
+                      phone = (name, device['udid'], runtime)
+                  if tablet is None and name.startswith('iPad'):
+                      tablet = (name, device['udid'], runtime)
+              if phone and tablet:
+                  break
+          if not phone or not tablet:
+              raise SystemExit(f'Missing simulator class: phone={phone}, tablet={tablet}')
+          with open(os.environ['GITHUB_ENV'], 'a') as env:
+              env.write(f'IPHONE_NAME={phone[0]}\nIPHONE_UDID={phone[1]}\n')
+              env.write(f'IPAD_NAME={tablet[0]}\nIPAD_UDID={tablet[1]}\n')
+          print('Selected iPhone:', phone)
+          print('Selected iPad:', tablet)
+          PY
+      - name: Diagnose cold launch on iPhone Simulator
+        run: |
+          mkdir -p simulator-evidence
+          xcrun simctl shutdown "$IPHONE_UDID" 2>/dev/null || true
+          xcrun simctl boot "$IPHONE_UDID"
+          xcrun simctl bootstatus "$IPHONE_UDID" -b
+          xcrun simctl install "$IPHONE_UDID" "$APP_BUNDLE"
+          xcrun simctl terminate "$IPHONE_UDID" com.privacyog.salahos 2>/dev/null || true
+          launch_output="$(xcrun simctl launch --console-pty "$IPHONE_UDID" com.privacyog.salahos 2>&1 & echo $!)"
+          sleep 5
+          xcrun simctl io "$IPHONE_UDID" screenshot simulator-evidence/iphone-5s.png
+          sleep 15
+          xcrun simctl io "$IPHONE_UDID" screenshot simulator-evidence/iphone-20s.png
+          xcrun simctl get_app_container "$IPHONE_UDID" com.privacyog.salahos app
+          xcrun simctl spawn "$IPHONE_UDID" log show --last 2m --style compact --predicate 'process == "App" OR eventMessage CONTAINS[c] "com.privacyog.salahos" OR eventMessage CONTAINS[c] "WebKit"' > simulator-evidence/iphone-runtime.log 2>&1 || true
+          sips -g pixelWidth -g pixelHeight simulator-evidence/iphone-5s.png simulator-evidence/iphone-20s.png
+          xcrun simctl terminate "$IPHONE_UDID" com.privacyog.salahos
+          xcrun simctl shutdown "$IPHONE_UDID"
+      - name: Diagnose cold launch on iPad Simulator
+        run: |
+          xcrun simctl shutdown "$IPAD_UDID" 2>/dev/null || true
+          xcrun simctl boot "$IPAD_UDID"
+          xcrun simctl bootstatus "$IPAD_UDID" -b
+          xcrun simctl install "$IPAD_UDID" "$APP_BUNDLE"
+          xcrun simctl terminate "$IPAD_UDID" com.privacyog.salahos 2>/dev/null || true
+          xcrun simctl launch "$IPAD_UDID" com.privacyog.salahos
+          sleep 5
+          xcrun simctl io "$IPAD_UDID" screenshot simulator-evidence/ipad-5s.png
+          sleep 15
+          xcrun simctl io "$IPAD_UDID" screenshot simulator-evidence/ipad-20s.png
+          xcrun simctl get_app_container "$IPAD_UDID" com.privacyog.salahos app
+          xcrun simctl spawn "$IPAD_UDID" log show --last 2m --style compact --predicate 'process == "App" OR eventMessage CONTAINS[c] "com.privacyog.salahos" OR eventMessage CONTAINS[c] "WebKit"' > simulator-evidence/ipad-runtime.log 2>&1 || true
+          sips -g pixelWidth -g pixelHeight simulator-evidence/ipad-5s.png simulator-evidence/ipad-20s.png
+          xcrun simctl terminate "$IPAD_UDID" com.privacyog.salahos
+          xcrun simctl shutdown "$IPAD_UDID"
+      - name: Upload simulator evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-simulator-acceptance-latest
+          path: simulator-evidence/
+          if-no-files-found: error
