@@ -1,0 +1,60 @@
+name: Integrate local Adhan audio
+
+on:
+  push:
+    branches:
+      - privacyog/local-adhan-audio
+    paths:
+      - .github/workflows/integrate-local-adhan-audio.yml
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: privacyog/local-adhan-audio
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Wire local Adhan audio into Settings
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('src/App.tsx')
+          text = path.read_text()
+          import_marker = "import { PrayerCard } from './ui/PrayerCard';\n"
+          import_line = "import { LocalAdhanAudioSettings } from './ui/LocalAdhanAudioSettings';\n"
+          if import_line not in text:
+              if import_marker not in text:
+                  raise SystemExit('PrayerCard import marker not found')
+              text = text.replace(import_marker, import_marker + import_line, 1)
+
+          marker = '''          </div>\n          <p className="setting-help">{translate(locale, 'adhanDeliveryPolicy')}</p>'''
+          replacement = '''          </div>\n          <LocalAdhanAudioSettings\n            locale={locale}\n            date={sourcedDashboard?.base.today.date ?? null}\n            localMinutes={sourcedDashboard?.base.clock.localMinutes ?? null}\n            prayers={sourcedDashboard?.prayers ?? []}\n            notifications={settings.notifications}\n          />\n          <p className="setting-help">{translate(locale, 'adhanDeliveryPolicy')}</p>'''
+          if '<LocalAdhanAudioSettings' not in text:
+              if marker not in text:
+                  raise SystemExit('notification settings insertion marker not found')
+              text = text.replace(marker, replacement, 1)
+          path.write_text(text)
+          PY
+      - name: Canonical formatting
+        run: npx prettier --write src/App.tsx src/platform/localAdhanAudio.ts src/platform/localAdhanAudio.test.ts src/ui/LocalAdhanAudioSettings.tsx
+      - name: Full repository gate
+        run: npm run check
+      - name: Commit validated integration
+        run: |
+          git config user.name privacyOG
+          git config user.email privacyOG@users.noreply.github.com
+          git add src/App.tsx src/platform/localAdhanAudio.ts src/platform/localAdhanAudio.test.ts src/ui/LocalAdhanAudioSettings.tsx
+          if git diff --cached --quiet; then
+            echo 'No integration changes to commit.'
+            exit 0
+          fi
+          git commit -m 'Integrate private local Adhan audio playback'
+          git push origin HEAD:privacyog/local-adhan-audio
