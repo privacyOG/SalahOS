@@ -15,6 +15,10 @@ const requiredContracts = [
   'simctl io "$udid" screenshot',
   '${label}-5s.png',
   '${label}-20s.png',
+  'def png_size(path: Path)',
+  "data[12:16] != b'IHDR'",
+  "struct.unpack('>II', data[16:24])",
+  'if first != second:',
   'uses: actions/upload-artifact@v4',
   'name: ios-simulator-visual-${{ github.sha }}',
   'path: simulator-evidence/*.png',
@@ -35,5 +39,5 @@ if (!workflow.includes('CODE_SIGNING_ALLOWED=NO')) {
 }
 
 console.log(
-  'iOS visual wiring contract passed: exact built app, iPhone/iPad cold launches, dual screenshots, and retained artifacts are required.',
+  'iOS visual wiring contract passed: exact built app, iPhone/iPad cold launches, validated stable PNG dimensions, dual screenshots, and retained artifacts are required.',
 );
