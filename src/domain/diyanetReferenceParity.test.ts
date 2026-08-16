@@ -53,4 +53,35 @@ describe('Diyanet authoritative timetable parity', () => {
       2,
     );
   });
+
+  it('matches the published Istanbul timetable on the current 2026 summer profile', () => {
+    // Primary source checked 2026-08-16:
+    // https://namazvakitleri.diyanet.gov.tr/tr-TR/9541/istanbul-icin-namaz-vakti
+    // Published 2026-08-16 values: Imsak 04:31, Güneş 06:08, Öğle 13:14,
+    // İkindi 17:02, Akşam 20:10, Yatsı 21:40.
+    const schedule = applyInstitutionalAdjustments(
+      calculatePrayerSchedule({
+        date: new Date('2026-08-16T00:00:00.000Z'),
+        latitude: 41.0082,
+        longitude: 28.9784,
+        utcOffsetMinutes: 180,
+        method: getCalculationMethod('diyanet'),
+        asrConvention: 'standard',
+        highLatitudeRule: 'angle-based',
+      }),
+    );
+
+    expectParity(
+      schedule,
+      {
+        fajr: 4 * 60 + 31,
+        sunrise: 6 * 60 + 8,
+        dhuhr: 13 * 60 + 14,
+        asr: 17 * 60 + 2,
+        maghrib: 20 * 60 + 10,
+        isha: 21 * 60 + 40,
+      },
+      2,
+    );
+  });
 });
