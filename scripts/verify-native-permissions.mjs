@@ -17,6 +17,10 @@ const iosProject = readFileSync(
   new URL('../ios/App/App.xcodeproj/project.pbxproj', import.meta.url),
   'utf8',
 );
+const currentLocation = readFileSync(
+  new URL('../src/platform/currentLocation.ts', import.meta.url),
+  'utf8',
+);
 
 const expectedAndroidPermissions = new Set([
   'android.permission.ACCESS_COARSE_LOCATION',
@@ -73,12 +77,18 @@ if (
   throw new Error('Android data-extraction rules must cover cloud backup and device transfer');
 }
 
-if (!iosInfo.includes('<key>NSLocationWhenInUseUsageDescription</key>')) {
-  throw new Error('iOS when-in-use location description is missing');
+for (const requiredIosLocationKey of [
+  'NSLocationWhenInUseUsageDescription',
+  'NSLocationAlwaysAndWhenInUseUsageDescription',
+]) {
+  if (!iosInfo.includes(`<key>${requiredIosLocationKey}</key>`)) {
+    throw new Error(
+      `Pinned Capacitor Geolocation 8.2.0 requires iOS usage-description key: ${requiredIosLocationKey}`,
+    );
+  }
 }
 for (const forbidden of [
   'NSLocationAlwaysUsageDescription',
-  'NSLocationAlwaysAndWhenInUseUsageDescription',
   'NSCameraUsageDescription',
   'NSMicrophoneUsageDescription',
   'NSContactsUsageDescription',
@@ -93,6 +103,22 @@ if (/CODE_SIGN_ENTITLEMENTS\s*=/.test(iosProject)) {
   throw new Error('Unexpected iOS entitlements file is configured; review it before enabling');
 }
 
+for (const requiredForegroundLocationContract of [
+  'Geolocation.getCurrentPosition(options)',
+  'enableHighAccuracy: false',
+  'timeout: 10_000',
+  'maximumAge: 300_000',
+]) {
+  if (!currentLocation.includes(requiredForegroundLocationContract)) {
+    throw new Error(
+      `Native current-location foreground contract is missing: ${requiredForegroundLocationContract}`,
+    );
+  }
+}
+if (/\bwatchPosition\s*\(/.test(currentLocation)) {
+  throw new Error('Continuous native location watching requires a separate privacy/permission review');
+}
+
 console.log(
-  `Native permission/privacy contract passed: ${declaredAndroidPermissions.length} reviewed app-owned Android permissions, Android backup/transfer exclusion policy, and iOS when-in-use location only.`,
+  `Native permission/privacy contract passed: ${declaredAndroidPermissions.length} reviewed app-owned Android permissions, Android backup/transfer exclusion policy, and one-shot native location with the two usage-description keys required by Capacitor Geolocation 8.2.0.`,
 );
