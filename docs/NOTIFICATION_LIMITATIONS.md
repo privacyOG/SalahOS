@@ -60,3 +60,9 @@ A kiosk or desktop deployment can keep the shared application visible and theref
 ## Product wording rule
 
 Until a delivery path has been implemented and verified on a target platform, describe notification controls as **preferences** or **scheduled intent**, not as a guarantee of exact delivery. When a platform adapter is added, its tested capabilities and known restrictions must be documented separately.
+
+### Current Android implementation boundary
+
+The committed Android shell now has an on-device Local Notifications adapter. It requests display permission only when a configured prayer alert requires native delivery, reconciles today/tomorrow prayer jobs from the shared scheduler, ignores already-past jobs and removes stale SalahOS-owned pending jobs without touching unrelated notifications.
+
+Exact alarms are not enabled in the current Android manifest. Consequently, scheduled times are notification intent rather than a guarantee of exact wall-clock delivery, especially under Doze, battery optimisation, OEM background restrictions or user notification-channel settings. Reboot rescheduling and Adhan playback are also not yet implemented.

@@ -140,7 +140,7 @@ export const translations = {
     vibration: 'Vibration where supported',
     adhanEnabled: 'Enable Adhan playback',
     notificationDeliveryPending:
-      'Delivery and exact scheduling depend on platform permission and background restrictions; these settings are stored locally until a platform scheduler is enabled.',
+      'Android local notifications are scheduled on-device after notification permission is granted. Exact delivery still depends on Android alarm, battery and background restrictions; other targets remain platform-dependent.',
     exportSettings: 'Export settings',
     importSettings: 'Import settings',
     resetSettings: 'Reset to defaults',
