@@ -683,3 +683,12 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Verified a simulated multi-hour sleep/wake gap is detected and the resumed display is rebuilt from fresh wall time with a new countdown/render.
 - Read-only Quality Gate run `31932809636` passed 55 test files / 261 tests plus security, dependency, documentation, raster reproducibility, formatting, lint, strict typecheck, production build and deploy-artifact verification.
 - Physical Raspberry Pi/TV suspend, reboot and long-duration acceptance remain hardware-only checks; burn-in behaviour, remote/keyboard navigation and broader TV deployment documentation remain open.
+
+### 2026-08-16 — Smart-display TV usability and deployment
+
+- Added practical smart-display exit handling for Escape, Backspace, BrowserBack and GoBack while preserving unrelated URL parameters/hash state.
+- Added three unit tests for display-mode exit key mapping and non-display/unrelated-key no-op behaviour.
+- Added a bounded 60-minute stepped pixel-shift cycle for major long-lived smart-display regions plus a reduced-motion override, with two deterministic stylesheet contract tests.
+- Added `docs/TV_KIOSK_DEPLOYMENT.md` covering the validated Linux/Raspberry Pi Chromium kiosk path, HDMI browser-host deployment, TV-browser acceptance criteria, remote-key limitations, casting/mirroring boundaries and unsupported native-TV-package claims.
+- Read-only Quality Gate run `31933200746` passed 57 test files / 266 tests plus security, dependency, documentation, raster reproducibility, formatting, lint, strict typecheck, production build and deploy-artifact verification.
+- Physical TV remote mappings, HDMI-CEC, panel-specific burn-in behaviour and long-duration target-device acceptance remain hardware checks.

@@ -459,9 +459,11 @@
 
 **Smart-display runtime-continuity verification note (2026-08-16):** read-only Quality Gate run `31932809636` passed the sensitive-file policy, dependency vulnerability audit, dependency-license policy, documentation-link verification across 29 Markdown files, PWA raster-icon reproducibility, formatting, typed lint, strict typecheck, 55 test files / 261 tests, production build and deploy-artifact verification. Three display-specific integration tests render the production `SmartDisplay` from the shared sourced dashboard before and after runtime transitions: Sydney local midnight from 2026-08-16 to 2026-08-17, the 2026-10-04 daylight-saving jump from UTC+10 to UTC+11 with the local clock advancing from 01:59 to 03:00, and a simulated multi-hour sleep/wake gap detected by the existing sleep/wake detector followed by a fresh wall-time dashboard/render. This proves repository-side display continuity through those transitions without duplicating prayer logic. Physical Raspberry Pi/TV suspend, reboot and long-duration acceptance remain separate hardware evidence; burn-in-conscious behaviour, remote/keyboard navigation and broader TV deployment documentation remain open.
 
-- [ ] Burn-in-conscious layout behaviour where practical
-- [ ] Remote-control/keyboard navigation where practical
-- [ ] Document supported TV deployment paths rather than claiming unsupported native platforms
+- [x] Burn-in-conscious layout behaviour where practical
+- [x] Remote-control/keyboard navigation where practical
+- [x] Document supported TV deployment paths rather than claiming unsupported native platforms
+
+**Smart-display TV usability verification note (2026-08-16):** read-only Quality Gate run `31933200746` passed the sensitive-file policy, dependency vulnerability audit, dependency-license policy, documentation-link verification across 30 Markdown files, PWA raster-icon reproducibility, formatting, typed lint, strict typecheck, 57 test files / 266 tests, production build and deploy-artifact verification. The live smart-display now recognises Escape, Backspace, BrowserBack and GoBack as practical exit inputs and returns to the standard configuration route while preserving unrelated query/hash state; three unit tests lock that mapping. The long-running display applies a bounded four-pixel stepped position shift on a 60-minute cycle to major static display regions, with a reduced-motion override; two stylesheet contract tests lock both behaviours. `docs/TV_KIOSK_DEPLOYMENT.md` documents the validated Linux/Raspberry Pi Chromium kiosk path, HDMI-attached browser hosts, target-specific TV-browser acceptance checks, casting/mirroring boundaries, remote-key limitations and an explicit list of native TV packages this repository does not claim to ship. Physical TV remote mappings, HDMI-CEC, panel burn-in characteristics and long-duration device acceptance remain hardware-specific validation work.
 
 ---
 
@@ -669,7 +671,7 @@
 - [ ] Document Android build/install
 - [ ] Document iOS build/install
 - [x] Document Raspberry Pi Touch Display 2 setup
-- [ ] Document TV/kiosk deployment
+- [x] Document TV/kiosk deployment
 - [x] Document prayer calculation methods and references
 - [x] Document privacy behaviour
 - [x] Document mosque timetable import format
