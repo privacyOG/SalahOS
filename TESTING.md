@@ -780,3 +780,10 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - The permanent Android build verifies that the installed Local Notifications version matches the pinned dependency, its manifest declares the boot restore receiver/permission, its receiver reloads saved notification IDs and reschedules them, and Gradle's merged application manifest retains the receiver.
 - Generated TypeScript incremental metadata is ignored to prevent build artifacts entering feature branches.
 - Physical-device reboot timing remains a separate acceptance concern.
+
+### 2026-08-16 — Android emulator acceptance
+
+- Validation run `31941025342` ran on an Android 35 x86_64 Pixel-class emulator.
+- Airplane mode was enabled before an explicit force-stop and cold launch of `com.privacyog.salahos/.MainActivity`; Activity Manager reported `Status: ok` and `LaunchState: COLD`, and the process remained alive.
+- `:app:connectedDebugAndroidTest` completed 1/1 tests with zero failures while asserting the real application id, airplane mode, landscape and portrait recreation, and activity survival.
+- The stale generated package-name test was removed. Physical-OEM-specific behavior remains outside this emulator acceptance result.

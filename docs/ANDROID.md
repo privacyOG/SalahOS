@@ -118,3 +118,7 @@ The current Android Adhan preference schedules an Adhan-labelled local notificat
 The pinned Capacitor Local Notifications Android dependency stores pending local notifications and declares its restore receiver for locked boot, normal boot and supported quick-boot broadcasts. SalahOS does not add a duplicate receiver. Instead, every Android build runs `scripts/verify-android-notification-reboot.mjs`, which verifies the pinned dependency source contract and confirms that `LocalNotificationRestoreReceiver` plus `RECEIVE_BOOT_COMPLETED` are present in a Gradle merged application manifest.
 
 This is repository/build evidence that saved scheduled notifications are restored through the dependency's native reboot path. It is not physical-device evidence for manufacturer-specific boot timing, power-management behavior or notification presentation.
+
+## Emulator acceptance
+
+Validation run `31941025342` enabled airplane mode, performed a force-stop/cold launch of the real SalahOS activity, confirmed the process was alive, and passed app-only landscape/portrait instrumentation. The committed script and instrumentation test preserve this repeatable acceptance path; manufacturer-specific physical-device behavior remains device-dependent.
