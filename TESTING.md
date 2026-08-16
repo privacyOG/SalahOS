@@ -743,3 +743,10 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Cleaned exact-head Quality Gate run `31936818278` passed 61 test files / 280 tests plus security, dependency/license, documentation, icon, formatting, lint, strict typecheck and production Web/PWA artifact verification.
 - Matching Android Build run `31936818319` passed the committed lockfile install, Capacitor Android sync and Gradle `assembleDebug` with Node 22 and Java 21.
 - Exact-alarm permission/strategy, reboot rescheduling, battery/background acceptance, Adhan playback and emulator/physical-device delivery remain open.
+
+### 2026-08-16 — Android native persistent storage
+
+- Validation run `31938112622` passed the complete quality gate, 62 test files / 284 tests, production build verification and Android debug assembly.
+- Android startup hydrates versioned settings, saved locations and the mosque library from native preferences before the application renders.
+- The native adapter retains the shared synchronous storage interface through a hydrated cache and ordered write-through queue; tests cover hydration, ordered writes, removal and isolation from unrelated preference keys.
+- Browser/PWA storage behavior is unchanged. Android uninstall/app-data clearing, backup/restore and physical/emulator cold-start lifecycle validation remain open.

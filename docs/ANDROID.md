@@ -83,7 +83,9 @@ Manual coordinates and offline saved-location operation remain available without
 
 ## Persistent settings
 
-The current native shell reuses the shared local settings/storage path inside the app WebView. Device-level persistence across uninstall/reinstall, OS data clearing, storage migration and backup/restore is not implied by repository tests and should be validated separately before release claims are made.
+Android hydrates SalahOS settings, saved locations and the mosque library from the Capacitor Preferences bridge before the React application mounts. The bridge uses the existing validated/versioned storage schemas, exposes their synchronous key/value contract through an in-memory cache, and serializes native writes in order so application code does not need a second Android-specific settings model. Browser/PWA builds continue to use browser local storage.
+
+A hide/page-leave lifecycle event requests completion of queued native writes. Clearing application data or uninstalling the app can remove locally stored preferences; backup/restore behavior and physical/emulator cold-start persistence remain device-level acceptance items and are not implied by repository tests.
 
 ## Notifications and Adhan
 
