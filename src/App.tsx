@@ -275,9 +275,13 @@ export function App() {
 
     refreshNow();
     const timer = window.setInterval(tick, 1_000);
+    const refreshRuntimeAndNotifications = () => {
+      refreshNow();
+      setNotificationSyncRevision((current) => current + 1);
+    };
     const removeRuntimeListeners = installRuntimeRefreshListeners(
       { windowTarget: window, documentTarget: document },
-      refreshNow,
+      refreshRuntimeAndNotifications,
     );
     return () => {
       window.clearInterval(timer);
