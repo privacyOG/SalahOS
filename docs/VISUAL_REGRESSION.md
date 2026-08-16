@@ -49,11 +49,14 @@ The current browser matrix captures:
 
 The ordinary phone/tablet cases wait for the production `.app-shell`. The kiosk case waits for the production `.smart-display` root, preventing a false 1080p pass that only exercised the normal settings UI.
 
+After fixture settings are loaded and the page reloads, the harness does not capture immediately after DOM mount. It waits until the expected application root exists and React has settled the requested document-level locale, direction and effective theme (`data-theme`). This prevents an Arabic/dark case from accidentally capturing an earlier English/light render during effect application.
+
 For each case the harness requires:
 
 - the expected SalahOS application root to render meaningful content;
 - the document-root `lang` value to match the selected locale;
 - the document-root LTR/RTL direction to match the selected locale;
+- the document-root effective theme to match the requested light/dark fixture;
 - no document-level horizontal overflow at the requested viewport size.
 
 The 125% fixture is a regression guard for responsive behaviour under increased text sizing. It is not, by itself, a complete accessibility conformance audit.
