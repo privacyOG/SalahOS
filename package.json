@@ -14,6 +14,7 @@
     "verify:android-merged-permissions": "node scripts/verify-android-merged-permissions.mjs",
     "verify:remote-api-boundary": "node scripts/verify-remote-api-boundary.mjs",
     "verify:local-adhan-audio": "node scripts/verify-local-adhan-audio.mjs",
+    "verify:visual-regression": "node scripts/visual-regression.mjs",
     "typecheck": "tsc -b --pretty false",
     "test": "vitest run",
     "test:watch": "vitest",
