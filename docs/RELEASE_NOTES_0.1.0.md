@@ -28,7 +28,9 @@ Diyanet twilight-angle parity and Dubai authority-formula parity remain explicit
 - DST/date-rollover recalculation;
 - Gregorian and Umm al-Qura Hijri presentation;
 - user Hijri correction of ±2 days for display without changing named calculation-method policy;
-- saved locations and local persistence.
+- saved locations and local persistence;
+- strict persisted coordinate types so empty/null/boolean/string values cannot be coerced into locations;
+- canonical saved-location identifiers derived from normalized coordinate values.
 
 ### Mosque timetable and Iqamah
 
@@ -62,10 +64,12 @@ SalahOS does not bundle an unlicensed Adhan recording and does not upload a user
 - installable PWA manifest and first-party icons;
 - browser/PWA-only service-worker registration with contained registration failure;
 - versioned service-worker shell caching and offline navigation fallback;
-- install-time pre-cache of the successful HTML shell, all manifest icons and current first-party Vite `/assets/` references before the new worker activates;
+- install-time pre-cache of the verified SalahOS HTML shell, all manifest icons and current first-party Vite `/assets/` references before the new worker activates;
 - runtime cache allowlist restricted to first-party `/assets/`, `/icons/` and the manifest, so arbitrary same-origin API/data GET responses are not persisted automatically;
-- navigation shell replacement only from successful HTML responses;
-- versioned cache cleanup removes older broader cache namespaces after a successful worker upgrade;
+- root-shell identity checks requiring the SalahOS mount point, manifest reference and first-party application bundle before candidate HTML may replace the offline root;
+- atomic asset-first install and navigation shell upgrades, with the cached root replaced only after all candidate application assets cache successfully;
+- navigation-time cache failure preserves the prior complete offline shell while still allowing the online response to render;
+- versioned cache cleanup removes older broader, non-atomic or unverified-shell namespaces after a successful worker upgrade;
 - Raspberry Pi/Chromium kiosk launcher and deployment documentation;
 - smart-display mode for kiosk/TV browser use;
 - responsive phone/tablet/kiosk styling;
@@ -101,6 +105,8 @@ The new permanent emulator/screenshot and native hardening gates are candidate i
 - current-location and local-notification native adapters;
 - candidate Preferences-backed native storage shared with Android instead of the earlier iOS WebView-only storage path;
 - one-time migration of missing SalahOS settings, saved-location and mosque-library keys from legacy iOS Web Storage into Preferences, with existing native values authoritative and legacy removal occurring only after persistence flush;
+- retryable native persistence: failed mutations remain pending, later writes continue, and flush attempts every unresolved key before reporting a remaining failure;
+- privacy-safe fixed structured storage-failure logging without persisted values or raw exception details;
 - bundled-only Capacitor content configuration, rechecked after native synchronization;
 - safe-area viewport/CSS handling;
 - permanent candidate workflow that selects one available iPhone and one available iPad Simulator, installs the exact built `App.app`, cold-launches both and retains 5-second/20-second screenshots;
@@ -119,12 +125,14 @@ The new iOS Preferences migration, iPhone/iPad screenshot path and native harden
 - dependency-license policy;
 - reviewed native dependency-surface gate that pins the committed Capacitor/AndroidX/Cordova/Swift-package declarations and rejects unreviewed local Android `.jar/.aar` binaries;
 - native Capacitor configuration gate that requires bundled application content and rejects unreviewed remote server/navigation/cleartext/hostname/scheme overrides, including generated post-sync configuration;
-- cross-platform native storage gate that requires Capacitor Preferences on native shells and protects one-time legacy Web Storage migration ordering;
+- cross-platform native storage gate that requires Capacitor Preferences on native shells and protects retry and one-time legacy Web Storage migration ordering;
 - Web/PWA Content Security Policy baseline with same-origin networking and loopback-only development WebSocket exceptions;
-- bounded Web/PWA service-worker cache policy that excludes arbitrary same-origin API/data responses;
+- bounded Web/PWA service-worker cache policy with SalahOS shell-identity verification and atomic application-shell upgrades;
+- strict persisted-input validation for coordinate types, canonical saved-location identity and bounded integer-minute prayer adjustments;
 - optional remote API boundary using explicit HTTPS origins, no browser credentials, no redirect following, no referrer disclosure and no cache reuse;
 - direct unreviewed production networking primitives rejected by repository policy;
 - native permission/backup/transport review gates;
+- synchronized `0.1.0` package, lockfile, Android and packaged iOS version metadata;
 - documented privacy/threat model and secrets policy.
 
 No optional remote provider is enabled by default.
@@ -137,6 +145,7 @@ No optional remote provider is enabled by default.
 - 12/24-hour time formats;
 - versioned settings persistence and migration;
 - settings import/export/reset;
+- imported prayer adjustments restricted to bounded integer minutes;
 - offline startup from stored configuration.
 
 ## Validation boundary before tagging
