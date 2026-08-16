@@ -71,6 +71,7 @@ import { installThemePreference } from './platform/themePreference';
 import { BidiText } from './ui/BidiText';
 import { NextPrayerBlock } from './ui/NextPrayerBlock';
 import { PrayerCard } from './ui/PrayerCard';
+import { SmartDisplay, smartDisplayModeRequested } from './ui/SmartDisplay';
 
 const prayerTranslationKeys: Readonly<Record<PrayerName, TranslationKey>> = {
   fajr: 'prayerFajr',
@@ -612,6 +613,21 @@ export function App() {
             hourCycle: settings.timeFormat,
           }).format(now)
         : formatZonedInstantTime(now, dashboard.timeZone, locale, settings.timeFormat);
+
+  if (smartDisplayModeRequested(window.location.search)) {
+    return (
+      <SmartDisplay
+        locale={locale}
+        currentClock={currentClock}
+        dashboard={sourcedDashboard}
+        timeFormat={settings.timeFormat}
+        hijriCorrectionDays={settings.hijriCorrectionDays}
+        offline={!online}
+        systemTimeUnavailable={now === null}
+        calculationUnavailable={calculationUnavailable}
+      />
+    );
+  }
 
   return (
     <main className="app-shell" dir={direction}>
