@@ -674,3 +674,12 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Documented direct Chromium kiosk launch through the existing `SALAHOS_KIOSK_URL` override using the smart-display query.
 - Read-only Quality Gate run `31932489699` passed 54 test files / 258 tests plus security, dependency, documentation, raster reproducibility, formatting, lint, strict typecheck, production build and deploy-artifact verification.
 - Automatic rollover/DST display verification, sleep/wake display verification, burn-in behaviour, remote/keyboard navigation and broader TV deployment documentation remain open.
+
+### 2026-08-16 — Smart-display runtime continuity
+
+- Added three integration tests that render the production smart-display presentation from the shared sourced dashboard across local-date rollover, a real Sydney DST transition and a detected sleep/wake gap.
+- Verified Sydney local midnight advances the displayed civil date and prayer schedule from 2026-08-16 to 2026-08-17.
+- Verified the 2026-10-04 Sydney daylight-saving transition changes the dashboard offset from UTC+10 to UTC+11 and the rendered clock from 01:59 to 03:00 while preserving `Australia/Sydney`.
+- Verified a simulated multi-hour sleep/wake gap is detected and the resumed display is rebuilt from fresh wall time with a new countdown/render.
+- Read-only Quality Gate run `31932809636` passed 55 test files / 261 tests plus security, dependency, documentation, raster reproducibility, formatting, lint, strict typecheck, production build and deploy-artifact verification.
+- Physical Raspberry Pi/TV suspend, reboot and long-duration acceptance remain hardware-only checks; burn-in behaviour, remote/keyboard navigation and broader TV deployment documentation remain open.
