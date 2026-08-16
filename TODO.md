@@ -638,8 +638,11 @@
 ## 19. Documentation and deployment
 
 - [~] Expand `README.md` with screenshots, features and platform status
-- [ ] Create `BUILD.md`
-- [ ] Document web/PWA build and deployment
+- [x] Create `BUILD.md`
+- [x] Document web/PWA build and deployment
+
+**Web/PWA build-deployment verification note (2026-08-16):** read-only Quality Gate run `31927318102` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, all 238 tests, production build and deploy-artifact verification after adding `BUILD.md` and an executable Web/PWA deployment contract. `BUILD.md` documents the clean lockfile install, full quality gate, production Vite build, local preview, root static-host contract, service-worker/manifest caching requirements, offline smoke checks, upgrade procedure, secrets boundary and an explicit platform matrix that leaves Android, iOS, Raspberry Pi and TV/kiosk release paths unvalidated. CI now runs `npm run verify:web-build` after production build; that verifier requires the built HTML shell, manifest, service worker and first-party icons, validates manifest/start-up expectations and confirms the shipped `dist/sw.js` exactly matches the tested `public/sw.js` source. Native platform build/install documentation and final release-readiness checks remain separately open.
+
 - [ ] Document Android build/install
 - [ ] Document iOS build/install
 - [ ] Document Raspberry Pi Touch Display 2 setup

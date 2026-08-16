@@ -597,3 +597,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Added English/Arabic per-prayer controls that conditionally show the fixed-time or offset input and write directly into the existing mosque-timetable Iqamah rule schema.
 - Added domain coverage for fixed, offset and disabled modes plus invalid offsets/fixed times, and `src/integration/iqamahSettings.test.ts` to verify offset persistence and production local-mosque resolution.
 - Read-only Quality Gate run `31926961935` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, the complete test suite and production build.
+
+### 2026-08-16 — verified Web/PWA build and deployment contract
+
+- Added root `BUILD.md` with the currently verified Web/PWA clean-install, quality, build, preview, static-host deployment, cache/update, offline smoke-check and release-boundary procedures.
+- Added `npm run verify:web-build` and made it part of `npm run check` plus the read-only Quality Gate immediately after `npm run build`.
+- The verifier requires non-empty built HTML, manifest, service-worker and first-party icon artifacts; validates root/standalone manifest expectations and declared icons; and confirms the deployed `dist/sw.js` is byte-for-byte identical to the `public/sw.js` source exercised by the service-worker lifecycle tests.
+- The documented platform matrix deliberately leaves Android, iOS, Raspberry Pi and TV/kiosk build/deployment paths unverified until their real platform-specific gates exist.
+- Read-only Quality Gate run `31927318102` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, all 238 tests, production build and deploy-artifact verification.
