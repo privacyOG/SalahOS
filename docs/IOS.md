@@ -110,9 +110,11 @@ Physical-device installation has not yet been claimed as repository-validated ev
 
 ## Location permissions
 
-SalahOS requests location only when the user chooses the current-location action. The current implementation is foreground/when-in-use location; it does not require continuous GPS tracking or a background-location capability.
+SalahOS requests location only when the user chooses the current-location action. Its production adapter calls `Geolocation.getCurrentPosition()` for a single foreground fix, uses low-accuracy mode by default, and does not use continuous `watchPosition()` or declare `UIBackgroundModes` for location.
 
-If native permission declarations change, review them against `docs/PRIVACY_THREAT_MODEL.md` and the Stage 16 permission gate rather than adding capabilities pre-emptively.
+The pinned Capacitor Geolocation 8.2.0 dependency requires **both** `NSLocationWhenInUseUsageDescription` and `NSLocationAlwaysAndWhenInUseUsageDescription` in `Info.plist` because of its underlying iOS geolocation implementation. The second description is therefore a dependency compatibility declaration; it is not evidence that SalahOS requests always-on/background location. The repository permission verifier requires both dependency-mandated keys while separately rejecting background location modes and continuous location watching.
+
+If the geolocation dependency or native permission declarations change, re-review the upstream requirement and SalahOS runtime behaviour together against `docs/NATIVE_PERMISSION_REVIEW.md` and `docs/PRIVACY_THREAT_MODEL.md`. Do not add capabilities pre-emptively and do not remove a dependency-required declaration merely because SalahOS itself does not exercise that capability.
 
 ## Notifications and Adhan boundary
 
