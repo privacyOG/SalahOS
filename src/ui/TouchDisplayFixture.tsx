@@ -126,6 +126,7 @@ export function touchDisplayFixtureDimensions(
 export function TouchDisplayFixture({ size, orientation, locale }: TouchDisplayFixtureConfig) {
   const dimensions = touchDisplayFixtureDimensions(size, orientation);
   const direction = localeDirection(locale);
+  const viewport = `${String(dimensions.width)}x${String(dimensions.height)}`;
   const currentPrayerIndex = 3;
   const nextPrayerIndex = 4;
 
@@ -134,7 +135,7 @@ export function TouchDisplayFixture({ size, orientation, locale }: TouchDisplayF
       className={`touch-display-fixture touch-display-fixture-${size}`}
       data-display-size={size}
       data-orientation={orientation}
-      data-viewport={`${dimensions.width}x${dimensions.height}`}
+      data-viewport={viewport}
       dir={direction}
       lang={locale}
     >
