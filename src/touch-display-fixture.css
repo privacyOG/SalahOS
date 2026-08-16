@@ -1,0 +1,139 @@
+.touch-display-fixture {
+  min-height: 100vh;
+  padding: clamp(1rem, 2.5vw, 2rem);
+  color: var(--text);
+  background:
+    radial-gradient(circle at top right, var(--page-glow), transparent 34rem), var(--page);
+}
+
+.touch-display-fixture-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.85fr);
+  gap: clamp(1rem, 2.5vw, 2rem);
+  align-items: stretch;
+  margin-block-end: clamp(1rem, 2.5vw, 2rem);
+}
+
+.touch-display-fixture-clock {
+  margin: 0;
+  font-size: clamp(3rem, 8vw, 7rem);
+  font-weight: 850;
+  font-variant-numeric: tabular-nums;
+  line-height: 0.95;
+}
+
+.touch-display-fixture-date {
+  margin: 0.45rem 0 0;
+  color: var(--muted);
+  font-size: clamp(1rem, 2.3vw, 1.55rem);
+  line-height: 1.35;
+}
+
+.touch-display-fixture .next-prayer-block {
+  display: grid;
+  align-content: center;
+  min-height: 100%;
+  padding: clamp(1.1rem, 2.5vw, 2rem);
+  border: 1px solid var(--card-border);
+  background: var(--next-card);
+  box-shadow: 0 1.2rem 3rem var(--shadow);
+}
+
+.touch-display-fixture .next-prayer-block strong {
+  font-size: clamp(1.6rem, 4vw, 3rem);
+}
+
+.touch-display-fixture .countdown {
+  font-size: clamp(2.8rem, 7vw, 5.5rem);
+}
+
+.touch-display-fixture-location {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-block-end: clamp(1rem, 2.5vw, 2rem);
+  padding: clamp(1rem, 2.5vw, 1.5rem);
+  border: 1px solid var(--card-border);
+  border-radius: 1.25rem;
+  background: var(--card);
+  box-shadow: 0 1rem 2.5rem var(--shadow);
+}
+
+.touch-display-fixture-prayers {
+  padding: clamp(1rem, 2.5vw, 1.6rem);
+  border: 1px solid var(--card-border);
+  border-radius: 1.25rem;
+  background: var(--card);
+  box-shadow: 0 1.5rem 4rem var(--shadow);
+}
+
+.touch-display-fixture-prayers h1 {
+  font-size: clamp(2rem, 5vw, 4rem);
+}
+
+.touch-display-fixture .prayer-card {
+  min-height: clamp(9rem, 18vh, 13rem);
+  padding: clamp(0.9rem, 2vw, 1.4rem);
+}
+
+.touch-display-fixture .prayer-card strong {
+  font-size: clamp(1.45rem, 3.5vw, 2.7rem);
+}
+
+.touch-display-fixture[data-orientation='landscape'] .prayer-grid {
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+}
+
+.touch-display-fixture[data-orientation='portrait'] .prayer-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.touch-display-fixture-10[data-orientation='portrait'] .prayer-grid {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.touch-display-fixture-5 .prayer-card {
+  min-height: clamp(10rem, 20vh, 14rem);
+}
+
+@media (max-width: 760px) {
+  .touch-display-fixture-header,
+  .touch-display-fixture-location {
+    grid-template-columns: 1fr;
+  }
+
+  .touch-display-fixture .prayer-card {
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+@media (orientation: portrait) and (max-width: 760px) {
+  .touch-display-fixture {
+    padding: 1rem;
+  }
+
+  .touch-display-fixture .prayer-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (orientation: landscape) and (max-height: 760px) {
+  .touch-display-fixture {
+    padding: 0.85rem;
+  }
+
+  .touch-display-fixture-header {
+    grid-template-columns: minmax(0, 1fr) minmax(17rem, 0.75fr);
+    margin-block-end: 0.85rem;
+  }
+
+  .touch-display-fixture-location {
+    margin-block-end: 0.85rem;
+    padding-block: 0.75rem;
+  }
+
+  .touch-display-fixture .prayer-card {
+    min-height: 8.5rem;
+  }
+}
