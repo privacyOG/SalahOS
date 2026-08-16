@@ -8,7 +8,7 @@ on:
   pull_request:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   quality:
@@ -17,9 +17,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: ${{ github.head_ref || github.ref_name }}
-          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -30,36 +27,17 @@ jobs:
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
 
-      - name: Restore current main App and apply clock monitor delta
-        if: github.event_name == 'push'
-        run: |
-          git fetch origin main
-          git checkout origin/main -- src/App.tsx
-          python - <<'PY'
-          from pathlib import Path
-          path = Path('src/App.tsx')
-          text = path.read_text()
-          old_import = "import { installRuntimeRefreshListeners } from './platform/runtimeRefresh';\n"
-          new_import = old_import + "import { createSystemClockChangeDetector } from './platform/systemClockChange';\n"
-          if old_import not in text:
-              raise RuntimeError('runtime refresh import marker missing')
-          text = text.replace(old_import, new_import, 1)
-          old_effect = """  useEffect(() => {\n    const refreshNow = () => {\n      setNow(new Date());\n    };\n    const timer = window.setInterval(refreshNow, 1_000);\n    const removeRuntimeListeners = installRuntimeRefreshListeners(\n      { windowTarget: window, documentTarget: document },\n      refreshNow,\n    );\n    return () => {\n      window.clearInterval(timer);\n      removeRuntimeListeners();\n    };\n  }, []);\n"""
-          new_effect = """  useEffect(() => {\n    const initialSample = { wallTimeMs: Date.now(), monotonicTimeMs: performance.now() };\n    const clockChangeDetector = createSystemClockChangeDetector(initialSample);\n    const sampleNow = () => ({\n      wallTimeMs: Date.now(),\n      monotonicTimeMs: performance.now(),\n    });\n    const refreshNow = () => {\n      const sample = sampleNow();\n      clockChangeDetector.reset(sample);\n      setNow(new Date(sample.wallTimeMs));\n    };\n    const tick = () => {\n      const sample = sampleNow();\n      clockChangeDetector.sample(sample);\n      setNow(new Date(sample.wallTimeMs));\n    };\n    const timer = window.setInterval(tick, 1_000);\n    const removeRuntimeListeners = installRuntimeRefreshListeners(\n      { windowTarget: window, documentTarget: document },\n      refreshNow,\n    );\n    return () => {\n      window.clearInterval(timer);\n      removeRuntimeListeners();\n    };\n  }, []);\n"""
-          if old_effect not in text:
-              raise RuntimeError('runtime clock effect marker missing')
-          path.write_text(text.replace(old_effect, new_effect, 1))
-          PY
-          npx prettier --write src/App.tsx src/platform/systemClockChange.ts src/platform/systemClockChange.test.ts
+      - name: Format check
+        run: npm run format:check
 
-      - name: Commit repaired integration
-        if: github.event_name == 'push'
-        run: |
-          git config user.name "privacyOG"
-          git config user.email "102720550+privacyOG@users.noreply.github.com"
-          git add src/App.tsx src/platform/systemClockChange.ts src/platform/systemClockChange.test.ts
-          if git diff --cached --quiet; then
-            exit 0
-          fi
-          git commit -m "fix: constrain clock change integration"
-          git push origin HEAD:${{ github.ref_name }}
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm run test
+
+      - name: Production build
+        run: npm run build
