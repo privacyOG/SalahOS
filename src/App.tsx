@@ -62,6 +62,7 @@ import {
 } from './platform/settingsStorage';
 import type { PersistedSettings } from './platform/settingsStorage';
 import { installRuntimeRefreshListeners } from './platform/runtimeRefresh';
+import { createSystemClockChangeDetector } from './platform/systemClockChange';
 import { installThemePreference } from './platform/themePreference';
 import { BidiText } from './ui/BidiText';
 
@@ -182,10 +183,23 @@ export function App() {
   }, [settings.theme]);
 
   useEffect(() => {
+    const initialSample = { wallTimeMs: Date.now(), monotonicTimeMs: performance.now() };
+    const clockChangeDetector = createSystemClockChangeDetector(initialSample);
+    const sampleNow = () => ({
+      wallTimeMs: Date.now(),
+      monotonicTimeMs: performance.now(),
+    });
     const refreshNow = () => {
-      setNow(new Date());
+      const sample = sampleNow();
+      clockChangeDetector.reset(sample);
+      setNow(new Date(sample.wallTimeMs));
     };
-    const timer = window.setInterval(refreshNow, 1_000);
+    const tick = () => {
+      const sample = sampleNow();
+      clockChangeDetector.sample(sample);
+      setNow(new Date(sample.wallTimeMs));
+    };
+    const timer = window.setInterval(tick, 1_000);
     const removeRuntimeListeners = installRuntimeRefreshListeners(
       { windowTarget: window, documentTarget: document },
       refreshNow,

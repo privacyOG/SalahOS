@@ -497,7 +497,10 @@
 **Background-resume verification note (2026-08-16):** read-only Quality Gate run `31918624386` passed formatting, typed lint, strict typecheck, all tests and production build after tightening the runtime refresh contract. Focus and page-restore events refresh immediately, while `visibilitychange` refreshes only when the document becomes visible. The `App` refresh callback replaces its wall-clock `now` value, which recomputes the dashboard, current/next prayer and countdown from current time instead of replaying missed interval ticks. Unit coverage verifies hidden visibility changes do not refresh, visible resume does refresh, and listener cleanup still removes every runtime hook. System sleep/wake and significant system-clock change detection remain separate open items.
 
 - [ ] Recover correctly after system sleep/wake
-- [ ] Detect significant system-clock changes
+- [x] Detect significant system-clock changes
+
+**System-clock change verification note (2026-08-16):** read-only Quality Gate run `31919019029` passed formatting, typed lint, strict typecheck, all tests and production build after adding a wall-clock discontinuity detector and integrating it into the live runtime clock loop. The detector compares elapsed `Date.now()` time with monotonic `performance.now()` time using a 30-second threshold, detects significant forward/backward corrections and monotonic resets, and rejects invalid samples. Explicit focus/page-restore/visible-resume refreshes reset the detector baseline before updating `now`, so ordinary background resume is handled by the separate resume path rather than intentionally classified as a clock correction. System sleep/wake recovery remains a separate open item because monotonic-clock behavior across sleep varies by platform.
+
 - [x] Avoid countdown drift from long-running intervals
 - [ ] Handle invalid system time gracefully
 - [ ] Handle unavailable calculation results gracefully
