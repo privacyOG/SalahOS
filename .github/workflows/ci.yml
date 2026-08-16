@@ -39,6 +39,9 @@ jobs:
       - name: Documentation link verification
         run: npm run docs:links
 
+      - name: PWA raster icon reproducibility
+        run: python scripts/generate_pwa_icons.py --check
+
       - name: Format check
         run: npm run format:check
 

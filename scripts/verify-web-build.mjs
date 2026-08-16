@@ -2,10 +2,41 @@ import { access, readFile, stat } from 'node:fs/promises';
 import path from 'node:path';
 
 const dist = path.resolve('dist');
+const rasterIcons = [
+  {
+    path: 'icons/salahos-192.png',
+    width: 192,
+    height: 192,
+    sizes: '192x192',
+    purpose: 'any',
+  },
+  {
+    path: 'icons/salahos-512.png',
+    width: 512,
+    height: 512,
+    sizes: '512x512',
+    purpose: 'any',
+  },
+  {
+    path: 'icons/salahos-maskable-192.png',
+    width: 192,
+    height: 192,
+    sizes: '192x192',
+    purpose: 'maskable',
+  },
+  {
+    path: 'icons/salahos-maskable-512.png',
+    width: 512,
+    height: 512,
+    sizes: '512x512',
+    purpose: 'maskable',
+  },
+];
 const requiredFiles = [
   'index.html',
   'manifest.webmanifest',
   'sw.js',
+  ...rasterIcons.map((icon) => icon.path),
   'icons/salahos.svg',
   'icons/salahos-maskable.svg',
 ];
@@ -17,6 +48,20 @@ async function requireRegularFile(relativePath) {
   if (!info.isFile() || info.size === 0) {
     throw new Error(`Expected non-empty build artifact: ${relativePath}`);
   }
+}
+
+function pngDimensions(buffer) {
+  const signature = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
+  if (buffer.length < 24 || !buffer.subarray(0, 8).equals(signature)) {
+    throw new Error('Invalid PNG signature');
+  }
+  if (buffer.toString('ascii', 12, 16) !== 'IHDR') {
+    throw new Error('PNG is missing its leading IHDR chunk');
+  }
+  return {
+    width: buffer.readUInt32BE(16),
+    height: buffer.readUInt32BE(20),
+  };
 }
 
 for (const relativePath of requiredFiles) {
@@ -36,16 +81,37 @@ if (manifest.start_url !== '/' || manifest.display !== 'standalone') {
   throw new Error('Built manifest must retain root start_url and standalone display mode');
 }
 
-const iconSources = new Set(
-  Array.isArray(manifest.icons)
-    ? manifest.icons
-        .map((icon) => (icon && typeof icon.src === 'string' ? icon.src.replace(/^\//, '') : null))
-        .filter(Boolean)
-    : [],
-);
-for (const icon of ['icons/salahos.svg', 'icons/salahos-maskable.svg']) {
-  if (!iconSources.has(icon)) {
-    throw new Error(`Built manifest does not declare required icon: ${icon}`);
+const manifestIcons = Array.isArray(manifest.icons) ? manifest.icons : [];
+for (const expected of rasterIcons) {
+  const declared = manifestIcons.find((icon) => icon?.src?.replace(/^\//, '') === expected.path);
+  if (
+    declared?.sizes !== expected.sizes ||
+    declared?.type !== 'image/png' ||
+    declared?.purpose !== expected.purpose
+  ) {
+    throw new Error(`Built manifest has an invalid raster icon declaration: ${expected.path}`);
+  }
+
+  const buffer = await readFile(path.join(dist, expected.path));
+  const dimensions = pngDimensions(buffer);
+  if (dimensions.width !== expected.width || dimensions.height !== expected.height) {
+    throw new Error(
+      `Built raster icon ${expected.path} has ${dimensions.width}x${dimensions.height}; expected ${expected.width}x${expected.height}`,
+    );
+  }
+}
+
+for (const icon of [
+  { path: 'icons/salahos.svg', purpose: 'any' },
+  { path: 'icons/salahos-maskable.svg', purpose: 'maskable' },
+]) {
+  const declared = manifestIcons.find((entry) => entry?.src?.replace(/^\//, '') === icon.path);
+  if (
+    declared?.sizes !== 'any' ||
+    declared?.type !== 'image/svg+xml' ||
+    declared?.purpose !== icon.purpose
+  ) {
+    throw new Error(`Built manifest does not retain required SVG icon fallback: ${icon.path}`);
   }
 }
 
