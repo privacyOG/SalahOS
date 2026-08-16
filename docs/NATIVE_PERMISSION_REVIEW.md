@@ -2,6 +2,15 @@
 
 SalahOS uses the minimum native permissions and platform declarations required by the features currently implemented in the Android and iOS shells. New native permissions must be justified by a shipped feature and added to the executable permission verifiers before they can pass the repository quality gate.
 
+## Reviewed dependency versions
+
+The native permission and manifest assumptions in this review are tied to the exact dependency versions that were inspected:
+
+- `@capacitor/geolocation` `8.2.0`;
+- `@capacitor/local-notifications` `8.2.1`.
+
+`npm run verify:native-permissions` checks those exact declared versions. Updating either package must therefore include a fresh permission/manifest review and an intentional update to the verifier contract; changing `package.json` alone is not sufficient.
+
 ## Android app-owned permissions
 
 The application source manifest is allowed to declare only:
@@ -15,13 +24,13 @@ The source manifest must not add camera, microphone, contacts, storage/media, ba
 
 ## Android dependency-owned permissions
 
-The pinned `@capacitor/local-notifications` Android manifest contributes three permissions during manifest merge:
+The reviewed `@capacitor/local-notifications` `8.2.1` Android manifest contributes three permissions during manifest merge:
 
 - `android.permission.POST_NOTIFICATIONS`;
 - `android.permission.RECEIVE_BOOT_COMPLETED`;
 - `android.permission.WAKE_LOCK`.
 
-They support notification permission on current Android versions and the plugin's scheduled-notification/reboot restoration path. The pinned Geolocation Android plugin manifest contributes no permissions itself; coarse/fine location remain explicit app-owned declarations as required by its documentation.
+They support notification permission on current Android versions and the plugin's scheduled-notification/reboot restoration path. The reviewed Geolocation Android plugin manifest contributes no permissions itself; coarse/fine location remain explicit app-owned declarations as required by its documentation.
 
 `npm run verify:android-merged-permissions` runs after the Gradle Android build and inspects merged/packaged manifests containing both the SalahOS activity and Local Notifications restore receiver. The effective permission set is restricted to the four app-owned permissions plus the three reviewed Local Notifications permissions. Any new transitive permission fails the Android build until reviewed.
 
@@ -39,12 +48,12 @@ Both rule files explicitly exclude the root, files, databases, shared preference
 
 ## iOS / iPadOS
 
-SalahOS uses `@capacitor/geolocation` 8.2.0. That pinned release requires both of the following `Info.plist` usage-description keys because its `ion-ios-geolocation` dependency is capable of reporting background location:
+SalahOS uses `@capacitor/geolocation` 8.2.0. That reviewed release requires both of the following `Info.plist` usage-description keys because its `ion-ios-geolocation` dependency is capable of reporting background location:
 
 - `NSLocationWhenInUseUsageDescription`;
 - `NSLocationAlwaysAndWhenInUseUsageDescription`.
 
-The second key is a plugin compatibility declaration, **not** a SalahOS background-location feature. The pinned plugin documentation states that the plugin itself does not support background geolocation directly and that the Always-and-When-In-Use prompt is not presented to users for this requirement.
+The second key is a plugin compatibility declaration, **not** a SalahOS background-location feature. The reviewed plugin documentation states that the plugin itself does not support background geolocation directly and that the Always-and-When-In-Use prompt is not presented to users for this requirement.
 
 SalahOS production code remains foreground/one-shot only:
 
@@ -56,18 +65,19 @@ SalahOS production code remains foreground/one-shot only:
 - it does not declare camera, microphone, contacts or photo-library usage descriptions;
 - it does not configure an application entitlements file.
 
-If SalahOS later adds continuous or background location, that is a separate feature/privacy review and must not be inferred from the compatibility description key already required by the pinned plugin.
+If SalahOS later adds continuous or background location, that is a separate feature/privacy review and must not be inferred from the compatibility description key already required by the reviewed plugin.
 
 ## Automated enforcement
 
 `npm run verify:native-permissions` checks:
 
+- the exact reviewed Geolocation and Local Notifications dependency versions;
 - the explicit Android source-manifest permission allowlist;
 - Android backup/transfer exclusion attributes and rule files;
-- both iOS location description keys required by pinned Capacitor Geolocation 8.2.0;
+- both iOS location description keys required by reviewed Capacitor Geolocation 8.2.0;
 - absence of unrelated iOS privacy/background declarations and unreviewed entitlements;
 - the one-shot native-location source contract and absence of `watchPosition()`.
 
 `npm run verify:android-merged-permissions` additionally checks the effective Gradle-merged permission set after an Android build.
 
-The source verifier is part of `npm run check`, and the merged verifier is part of `npm run android:build`. Permission or backup-surface changes therefore require an intentional repository change and review rather than silently expanding native access.
+The source verifier is part of `npm run check`, and the merged verifier runs for both debug and unsigned release Android builds. Permission, backup-surface or reviewed native dependency-version changes therefore require an intentional repository change and review rather than silently expanding native access.
