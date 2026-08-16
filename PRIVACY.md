@@ -47,6 +47,14 @@ When the user selects a local Adhan recording, SalahOS stores the recording in i
 
 The selected recording is used only for visible-foreground playback. Background/terminated native notification scheduling does not transmit or package that recording.
 
+## Web/PWA offline-cache boundary
+
+The service worker caches only the application shell and explicit first-party static paths required for offline startup: generated `/assets/`, `/icons/`, and `manifest.webmanifest`. Arbitrary same-origin GET/API/data responses bypass service-worker runtime caching rather than being persisted automatically.
+
+Navigation updates replace the cached application shell only when the network response is successful HTML. The service-worker cache namespace is versioned; narrowing the cache policy increments that version so older broader cache entries are removed during activation.
+
+`npm run verify:service-worker-cache-boundary` enforces these rules. A future feature that needs offline caching of API or user-derived content therefore requires an explicit privacy/storage review rather than inheriting a broad same-origin cache policy.
+
 ## Optional network boundary
 
 No optional remote provider is enabled by default. A future optional remote request must pass through the reviewed request boundary and:
@@ -74,6 +82,7 @@ Network loss must not prevent locally calculable prayer schedules, access to pre
 ## Security baseline
 
 - HTTPS-only reviewed optional remote request boundary.
+- Bounded Web/PWA service-worker cache allowlist; arbitrary same-origin API/data responses are not cached by default.
 - Strict validation of CSV/JSON imports.
 - Content Security Policy on web/PWA targets where applicable.
 - Reviewed source and effective native permissions.
