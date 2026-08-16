@@ -21,7 +21,8 @@
     "security:licenses": "node scripts/check-dependency-licenses.mjs",
     "check": "npm run security:sensitive-files && npm run security:audit && npm run security:licenses && npm run docs:links && npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build && npm run verify:web-build",
     "android:sync": "npm run build && cap sync android",
-    "android:build": "npm run android:sync && cd android && ./gradlew assembleDebug"
+    "android:build": "npm run android:sync && cd android && ./gradlew assembleDebug",
+    "android:release-check": "npm run android:sync && cd android && ./gradlew assembleRelease"
   },
   "dependencies": {
     "@capacitor/android": "8.4.2",

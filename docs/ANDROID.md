@@ -108,3 +108,14 @@ The manifest declares `android.permission.SCHEDULE_EXACT_ALARM`. On supported An
 A capability change detected after returning to the app triggers scheduler reconciliation so current jobs are rebuilt under the new precision state. The same tested focus, restored-page and visibility recovery path also reconciles prayer notifications whenever the app returns to the foreground.
 
 SalahOS does not request an unrestricted battery-optimisation exemption. Doze, Battery Saver, manufacturer background controls, notification-channel settings and device power state can still delay or suppress presentation even when precise-alarm access is granted. The settings UI states this explicitly in English and Arabic rather than promising guaranteed background delivery. Reboot recovery, Adhan playback and physical/emulator timing evidence remain separately tracked.
+
+## Release signing configuration
+
+The release variant can be signed without storing any credential in the repository. Supply all four environment variables only in a secure local/release environment:
+
+- `SALAHOS_ANDROID_KEYSTORE_PATH`
+- `SALAHOS_ANDROID_KEYSTORE_PASSWORD`
+- `SALAHOS_ANDROID_KEY_ALIAS`
+- `SALAHOS_ANDROID_KEY_PASSWORD`
+
+All four values are required together. A partial configuration stops Gradle with an error. With none set, `npm run android:release-check` builds the unsigned release variant so CI can validate release compilation without possessing signing secrets. The existing secret-file policy excludes keystores and private credential material from version control. Distribution signing should inject these values from the release operator's secure environment or encrypted CI secret store.

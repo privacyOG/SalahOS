@@ -369,7 +369,10 @@
 
 - [ ] Test offline cold start
 - [ ] Test orientation changes
-- [ ] Build signed/release-ready configuration without committing secrets
+- [x] Build signed/release-ready configuration without committing secrets
+
+**Android release-configuration verification note (2026-08-16):** the Gradle release build now supports signing only through four external environment values: keystore path/password and key alias/password. A partial signing configuration fails immediately instead of silently producing an incorrectly configured release. With no credentials present, CI builds an unsigned release artifact to validate the release variant without storing signing material. Validation run `31939966345` passed the complete repository quality gate, debug Android assembly, unsigned `assembleRelease`, and an explicit negative check proving partial signing configuration is rejected. Keystores and credentials remain excluded by repository policy and are never committed.
+
 - [ ] Run on real Android device or emulator and record evidence
 
 ---

@@ -765,3 +765,10 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Android notification reconciliation is now forced through the existing tested focus, pageshow and visible-document runtime recovery path when the app returns to the foreground.
 - English and Arabic UI text explicitly names Doze, Battery Saver and manufacturer background restrictions and states that SalahOS does not request an unrestricted battery-optimisation exemption.
 - Exact-alarm access is not represented as bypassing Android power policy. Physical-device Doze/vendor delivery timing and reboot recovery remain separate acceptance work.
+
+### 2026-08-16 — Android release configuration
+
+- Validation run `31939966345` passed the repository quality gate, debug Android assembly and unsigned release assembly.
+- Gradle accepts release signing only when keystore path/password and key alias/password are all supplied externally.
+- A negative validation invokes Gradle with only one signing variable and requires the build configuration to fail.
+- No keystore, password or signing credential is committed; the repository secret-file policy remains authoritative.
