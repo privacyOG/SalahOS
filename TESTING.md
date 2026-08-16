@@ -471,3 +471,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Added regression coverage for hidden-to-visible resume behavior and listener cleanup.
 - Kept system sleep/wake recovery and significant system-clock change detection as separate open reliability items.
 - Read-only Quality Gate run `31918624386` passed formatting, typed lint, strict typecheck, all tests and production build.
+
+### 2026-08-16 — significant system-clock change detection
+
+- Added a platform-neutral detector that compares wall-clock elapsed time with monotonic elapsed time using a configurable threshold.
+- Added deterministic coverage for normal progression, forward corrections, backward corrections, sub-threshold corrections, monotonic resets, explicit baseline reset and invalid input.
+- Integrated detector sampling into the live one-second runtime clock loop while resetting its baseline on explicit focus/page-restore/visible-resume refreshes.
+- Kept system sleep/wake recovery open because browser monotonic-clock behavior across operating-system sleep is platform-dependent and has not been physically verified.
+- Read-only Quality Gate run `31919019029` passed formatting, typed lint, strict typecheck, all tests and production build.
