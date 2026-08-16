@@ -4,9 +4,9 @@
 
 ## Status
 
-The SalahOS `diyanet` calculation profile remains `pending-authoritative-source`. The existing 18° Fajr / 17° Isha parameters are useful interoperability values used by open reference implementations, but an angle-only profile does not reproduce the full Diyanet timetable policy.
+The SalahOS `diyanet` calculation profile remains `pending-authoritative-source`. The existing 18° Fajr / 17° Isha parameters are useful interoperability values used by open reference implementations, but an angle-only profile does not establish full Diyanet timetable parity.
 
-This document records primary-source requirements that must be modelled before SalahOS can describe the Diyanet profile as verified.
+SalahOS now records and applies Diyanet's published institutional timetable corrections as a distinct method-policy layer. The remaining blocker is authoritative twilight-criteria/output parity for Imsak/Fajr and Isha.
 
 ## Primary source
 
@@ -36,31 +36,32 @@ Diyanet explains that the sunrise/sunset, Dhuhr and Asr offsets account for sett
 
 These values also explain why open-library Turkey presets commonly contain non-angle adjustments. They must not be hidden inside an undocumented generic user adjustment.
 
-## Current SalahOS gap
+## SalahOS implementation
 
-The current built-in method registry models:
+The built-in method registry now records Diyanet's authority-published correction set separately from user adjustments:
 
-- Fajr twilight angle;
-- Isha angle or interval;
-- Maghrib as sunset;
-- Asr convention independently;
-- user-controlled manual prayer adjustments separately.
+- Sunrise: `-7` minutes;
+- Dhuhr: `+5` minutes;
+- Asr: `+4` minutes;
+- Maghrib: `+7` minutes;
+- Fajr/Imsak: no institutional temkin correction;
+- Isha: no institutional temkin correction.
 
-It does **not** currently provide a first-class, method-owned institutional offset policy for Sunrise, Dhuhr, Asr and Maghrib. Copying Diyanet's offsets into user manual adjustments would destroy provenance and make reset/customization semantics ambiguous.
+`src/domain/institutionalAdjustments.ts` applies these corrections after the raw astronomical event is calculated and before product presentation. The implementation preserves the raw astronomical value, moves the institutional correction into the method-default/base time, and leaves `manualAdjustmentMinutes` reserved for user-controlled offsets. The provenance formula identifies when an institutional correction was applied.
 
-The current `diyanet` profile therefore stays pending even though its interoperability angles are available.
+The production dashboard path applies this layer before next-prayer selection, countdown and downstream notification inputs are built. Methods with no institutional correction remain unchanged.
 
-## Required implementation before verification
+## Remaining verification gap
 
-A verified Diyanet profile should:
+The current `diyanet` profile still uses 18° Fajr / 17° Isha interoperability angles. The reviewed Diyanet primary material establishes the temkin policy above, but SalahOS has not yet demonstrated that those twilight angles reproduce official Diyanet Imsak and Isha output across the required location/season matrix.
 
-1. add method-owned default offsets as a distinct layer from astronomical results and user adjustments;
-2. encode the official 7 / 5 / 4 / 7 minute Sunrise, Dhuhr, Asr and Maghrib policy with explicit provenance;
-3. retain zero method-level temkin for Imsak/Fajr and Isha unless a primary Diyanet source establishes a separate twilight calculation correction;
-4. identify the authoritative Fajr/Imsak and Isha astronomical criteria rather than assuming that an interoperability library's 18°/17° values are institutional certification;
-5. compare output against frozen Diyanet published timetable fixtures for multiple Turkish locations and seasons;
-6. keep any residual local/timetable differences visible rather than widening tolerances until they disappear.
+A fully verified Diyanet profile still requires:
+
+1. authoritative identification or defensible derivation of the Diyanet Fajr/Imsak and Isha astronomical criteria;
+2. frozen published Diyanet timetable fixtures for multiple Turkish locations and seasons;
+3. direct parity testing of the complete method policy against those fixtures;
+4. explicit documentation of any remaining methodology or rounding differences rather than widening tolerances until they disappear.
 
 ## Verification boundary
 
-This research is sufficient to reject an angle-only profile as a complete Diyanet implementation. It is not sufficient to mark the method verified. SalahOS should continue exposing the current profile as approximate/pending until the method-owned offsets and authoritative twilight criteria are implemented and output parity is demonstrated.
+The official institutional corrections are now modelled with separate provenance and must not be represented as user adjustments. This materially improves the Diyanet implementation, but it is **not** sufficient to mark the method verified. SalahOS should continue exposing Diyanet as approximate/pending until authoritative twilight criteria and published-output parity are demonstrated.
