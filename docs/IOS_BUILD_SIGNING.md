@@ -1,42 +1,79 @@
-# iOS and iPadOS build and signing guide
+# iOS and iPadOS build, install and signing guide
 
-This document defines the repository-safe build and signing workflow for the future SalahOS native iOS/iPadOS shell. It intentionally contains no signing credentials, private keys, provisioning profiles or App Store Connect secrets.
+This document defines the repository-safe build, simulator/device installation and signing workflow for the SalahOS iOS/iPadOS shell. It contains no signing credentials, private keys, provisioning profiles or distribution secrets.
 
 ## Preconditions
 
 Native iOS packaging requires:
 
 - a supported macOS host;
-- a supported Xcode release;
-- an Apple Developer account appropriate for the intended distribution path;
-- a unique application bundle identifier owned by the project maintainer;
-- a native shell that embeds or hosts the shared SalahOS application logic;
+- a supported Xcode release and command-line tools;
+- Node.js 22 or later;
+- an Apple Developer account for signed physical-device or distribution builds;
+- a unique application bundle identifier owned by the project maintainer for distribution;
 - any required capabilities declared explicitly in the Xcode target.
 
-The shared TypeScript/web build passing CI is not evidence that the native Xcode target compiles, signs, archives or runs on-device.
+The committed native project is `ios/App/App.xcodeproj`. The application reuses the shared SalahOS TypeScript/React application and domain logic through Capacitor.
 
-## Local development build
+## Prepare the native project
 
-1. Open the native workspace/project in Xcode.
-2. Select the intended application target and a development Team.
-3. Set a unique Bundle Identifier for the target.
-4. Prefer automatic signing for ordinary local development unless a specific deployment environment requires managed profiles.
-5. Confirm the minimum deployment target and supported device families before building.
-6. Build first for an available Simulator, then for a connected test device.
-7. Record Xcode version, target OS version, device/simulator model and result in `TESTING.md`.
+From the repository root:
 
-Do not change shared application behaviour merely to make signing succeed. Signing configuration and application functionality are separate concerns.
+```bash
+npm ci --ignore-scripts
+npm run check
+npm run build
+npx cap sync ios
+```
+
+`cap sync ios` copies the current web bundle and synchronises the pinned Capacitor native dependencies. Re-run it whenever web assets, Capacitor configuration or native plugin dependencies change.
+
+## Build for iOS Simulator
+
+The same unsigned simulator build used by repository CI can be run locally:
+
+```bash
+xcodebuild \
+  -project ios/App/App.xcodeproj \
+  -scheme App \
+  -configuration Debug \
+  -sdk iphonesimulator \
+  -destination 'generic/platform=iOS Simulator' \
+  -derivedDataPath "$PWD/.derived-data/ios" \
+  CODE_SIGNING_ALLOWED=NO \
+  build
+```
+
+For interactive testing, open `ios/App/App.xcodeproj` in Xcode, select an installed iPhone or iPad Simulator, and run the `App` scheme. This is the preferred path for responsive-layout, offline cold-start and local-notification acceptance because it launches the actual native shell rather than only compiling it.
+
+### Command-line simulator install
+
+After building for a booted simulator, locate the generated `App.app` under the selected DerivedData build products and install it with:
+
+```bash
+xcrun simctl install booted /path/to/App.app
+xcrun simctl launch booted com.privacyog.salahos
+```
+
+If the bundle identifier is changed for a local target, use that target's actual identifier in the launch command.
+
+## Install on a physical iPhone or iPad
+
+1. Open `ios/App/App.xcodeproj` in Xcode.
+2. Select the `App` target and choose the intended development Team under Signing & Capabilities.
+3. Confirm the Bundle Identifier is valid for that Team.
+4. Connect and trust the test device, then select it as the run destination.
+5. Build and run the `App` scheme.
+6. Grant only the permissions required by the feature being exercised.
+7. Record the Xcode version, iOS/iPadOS version, device model and acceptance result in `TESTING.md`.
+
+A physical-device run requires local signing state. Certificates, private keys and account credentials remain outside the repository.
 
 ## Capabilities and entitlements
 
-Enable only capabilities the final native implementation actually needs. Potential examples include local notifications or background/audio capabilities, but no capability should be added pre-emptively.
+Enable only capabilities the implementation actually needs. Every enabled capability must be justified, documented and tested on its target environment.
 
-For every enabled capability:
-
-- document why it is required;
-- keep the entitlement file reviewable in the repository when it contains no secret material;
-- verify the capability exists on the selected App ID/profile;
-- test the associated runtime behaviour on the required target environment.
+Current permission boundaries are documented in `NATIVE_PERMISSIONS.md`. In particular, current location acquisition is user-initiated and foreground-only; always/background location capability must not be added without a new reviewed requirement.
 
 Entitlements are configuration, not credentials. Certificates, private keys and authenticated service tokens remain outside the repository.
 
@@ -47,13 +84,13 @@ Before creating a release archive:
 1. Use the intended Release configuration.
 2. Confirm the production bundle identifier, version and build number.
 3. Confirm the selected Team and distribution method.
-4. Build the native target cleanly.
-5. Run the project quality gate for the shared application revision being packaged.
-6. Create an Xcode Archive from the exact tested revision.
+4. Run `npm ci --ignore-scripts`, `npm run check`, `npm run build` and `npx cap sync ios` from the exact release revision.
+5. Build the native target cleanly.
+6. Create an Xcode Archive from that exact tested revision.
 7. Run Xcode validation before export or upload.
-8. Record the archive revision and validation result in `TESTING.md` or release evidence.
+8. Record the archive revision and validation result in `TESTING.md` or the release evidence.
 
-A successful web production build must not be described as a successful iOS archive.
+A successful web production build or unsigned simulator build must not be described as a successful signed release archive.
 
 ## Credential handling
 
@@ -61,7 +98,7 @@ The following must never be committed:
 
 - signing certificate private keys;
 - exported `.p12` certificate bundles;
-- provisioning profiles containing account-specific distribution material unless a future reviewed policy explicitly permits a non-secret managed profile;
+- account-specific distribution provisioning material;
 - App Store Connect API private keys;
 - Apple account passwords or app-specific passwords;
 - CI secret values;
@@ -73,17 +110,9 @@ Repository examples may use placeholder identifiers only. They must not contain 
 
 ## Continuous integration
 
-If native iOS CI is added later, use a macOS runner and inject credentials at runtime from encrypted secrets. The workflow should:
+The committed `.github/workflows/ios.yml` uses a macOS runner, installs the exact npm lockfile, runs the repository quality gate, synchronises the native project and compiles an unsigned generic iOS Simulator application with Xcode. This verifies that the native project compiles without requiring distribution credentials.
 
-- check out an exact revision;
-- install deterministic project dependencies;
-- build/test the native target;
-- import temporary signing material only for jobs that require signing;
-- remove temporary keychains/files during cleanup;
-- avoid printing secret values in logs;
-- publish only intended build/test artifacts.
-
-Unsigned simulator/test builds should be preferred where signing is unnecessary.
+Signed device/archive jobs, if added later, must inject signing material at runtime, remove temporary keychains/files during cleanup, avoid printing secret values, and publish only intended artifacts.
 
 ## Distribution paths
 
@@ -98,4 +127,4 @@ Do not document a distribution method as supported merely because Xcode exposes 
 
 ## Completion evidence
 
-The tracker item for signing/build documentation can be completed when this repository-safe procedure is reviewed and CI remains green. Native build, simulator/device, archive, TestFlight and App Store items remain open until executed in the required Apple environment and their evidence is recorded.
+Build/install documentation is complete when these commands and device steps remain synchronized with the committed native project. Simulator compilation, interactive simulator execution, physical-device execution, signed archives, TestFlight and App Store distribution are separate validation layers and must only be claimed when their corresponding evidence exists.
