@@ -15,7 +15,7 @@ describe('manual location search integration', () => {
 
     expect(sydney.timeZone).toBe('Australia/Sydney');
     expect(dashboard.timeZone).toBe('Australia/Sydney');
-    expect(dashboard.today.date).toEqual({ year: 2026, month: 8, day: 16 });
+    expect(dashboard.today.date).toBe('2026-08-16');
     expect(dashboard.prayers).toHaveLength(6);
   });
 });
