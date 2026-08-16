@@ -692,3 +692,13 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Added `docs/TV_KIOSK_DEPLOYMENT.md` covering the validated Linux/Raspberry Pi Chromium kiosk path, HDMI browser-host deployment, TV-browser acceptance criteria, remote-key limitations, casting/mirroring boundaries and unsupported native-TV-package claims.
 - Read-only Quality Gate run `31933200746` passed 57 test files / 266 tests plus security, dependency, documentation, raster reproducibility, formatting, lint, strict typecheck, production build and deploy-artifact verification.
 - Physical TV remote mappings, HDMI-CEC, panel-specific burn-in behaviour and long-duration target-device acceptance remain hardware checks.
+
+### 2026-08-16 — Raspberry Pi/kiosk continuity lifecycle
+
+- Added a dedicated integration suite for the shared Raspberry Pi/kiosk lifecycle using production persisted-settings, prayer-dashboard and sleep/wake code.
+- Verified configured location/timezone, method, locale, Hijri correction and prayer adjustments survive a cold settings reload.
+- Forced network access unavailable and verified the restored dashboard remains fully calculable without any fetch call.
+- Verified a detected multi-hour suspend-style gap rebuilds from fresh wall time with a refreshed countdown.
+- Verified a simulated cold restart just after Sydney local midnight generates 2026-08-17 rather than retaining the previous day's schedule.
+- Read-only Quality Gate run `31933758199` passed 58 test files / 269 tests plus security, dependency, documentation, raster reproducibility, formatting, lint, strict typecheck, production build and deploy-artifact verification.
+- Physical Raspberry Pi boot/login policy, power-loss/reboot behaviour, Touch Display 2 rendering/touch and long-duration hardware acceptance remain device-only checks.

@@ -431,11 +431,14 @@
 
 **Raspberry Pi kiosk deployment verification note (2026-08-16):** read-only Quality Gate run `31929984829` passed the sensitive-file policy, dependency vulnerability audit, dependency-license policy, documentation-link verification across 28 Markdown files, PWA raster-icon reproducibility, formatting, typed lint, strict typecheck, 52 test files / 247 tests, production build and deploy-artifact verification. The repository now provides a simple local launcher that serves the built Web/PWA bundle on loopback, validates configuration, waits for local readiness and starts Chromium in kiosk mode, plus an idempotent labwc desktop-session autostart installer that preserves unrelated entries and can remove only its managed block. Five deterministic deployment tests verify shell syntax, kiosk command construction, invalid-port rejection, autostart idempotence/preservation and managed-block removal. Optional automatic launch remains partial because repository CI cannot prove Raspberry Pi graphical boot/login policy or physical power-on behavior. Touch Display 2 resolution/orientation, physical boot/autostart, device rendering, power-loss/reboot and long-duration hardware acceptance remain open.
 
-- [ ] Persist settings across restart
-- [ ] Operate without internet after initial configuration
-- [ ] Recover gracefully when network disappears
-- [ ] Recover after system suspend/reboot
-- [ ] Prevent display from getting stuck on yesterday's prayer schedule
+- [x] Persist settings across restart
+- [x] Operate without internet after initial configuration
+- [x] Recover gracefully when network disappears
+- [x] Recover after system suspend/reboot
+- [x] Prevent display from getting stuck on yesterday's prayer schedule
+
+**Raspberry Pi/kiosk continuity verification note (2026-08-16):** read-only Quality Gate run `31933758199` passed the sensitive-file policy, dependency vulnerability audit, dependency-license policy, documentation-link verification across 30 Markdown files, PWA raster-icon reproducibility, formatting, typed lint, strict typecheck, 58 test files / 269 tests, production build and deploy-artifact verification. The dedicated kiosk lifecycle integration persists a configured Sydney location/timezone, calculation method, locale, Hijri correction and prayer adjustments, cold-loads the stored settings, forces network access unavailable and still builds the complete local prayer dashboard without any fetch. A detected multi-hour suspend-style gap rebuilds from fresh wall time with a changed countdown, and a simulated cold restart immediately after Sydney local midnight loads the same persisted configuration while generating the 2026-08-17 schedule instead of retaining 2026-08-16. This closes repository-side restart/offline/network-loss/suspend/date-rollover continuity for the shared Raspberry Pi kiosk runtime. Actual Raspberry Pi graphical boot/login, power-loss behaviour, physical Touch Display 2 rendering/touch and long-duration hardware acceptance remain separate physical-device evidence.
+
 - [ ] Test on physical Raspberry Pi / Touch Display 2 when available
 
 ---
