@@ -100,22 +100,16 @@ describe('Android local notification scheduler', () => {
 
   it('reports exact capability only when Android exact-alarm access is granted', async () => {
     const client = new FakeClient();
-    expect(
-      await readAndroidExactAlarmCapability({ client, supported: true }),
-    ).toBe('exact');
+    expect(await readAndroidExactAlarmCapability({ client, supported: true })).toBe('exact');
 
     client.exactPermission = { exact_alarm: 'denied' };
-    expect(
-      await readAndroidExactAlarmCapability({ client, supported: true }),
-    ).toBe('inexact');
+    expect(await readAndroidExactAlarmCapability({ client, supported: true })).toBe('inexact');
     expect(client.exactChecks).toBe(2);
   });
 
   it('does not query native exact-alarm settings on unsupported targets', async () => {
     const client = new FakeClient();
-    expect(
-      await readAndroidExactAlarmCapability({ client, supported: false }),
-    ).toBe('unsupported');
+    expect(await readAndroidExactAlarmCapability({ client, supported: false })).toBe('unsupported');
     expect(client.exactChecks).toBe(0);
   });
 

@@ -750,3 +750,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Android startup hydrates versioned settings, saved locations and the mosque library from native preferences before the application renders.
 - The native adapter retains the shared synchronous storage interface through a hydrated cache and ordered write-through queue; tests cover hydration, ordered writes, removal and isolation from unrelated preference keys.
 - Browser/PWA storage behavior is unchanged. Android uninstall/app-data clearing, backup/restore and physical/emulator cold-start lifecycle validation remain open.
+
+### 2026-08-16 — Android exact-alarm strategy
+
+- Validation run `31938706626` passed the complete repository quality gate and Android debug assembly.
+- The Android manifest declares user-managed `SCHEDULE_EXACT_ALARM` access; the application checks exact-alarm capability without automatically opening special-access settings.
+- Unit coverage verifies granted exact capability, denied inexact fallback, unsupported targets, explicit settings navigation and display-permission ordering.
+- The settings UI warns when precise access is off and capability changes trigger notification reconciliation.
+- Doze/idle behavior, battery optimisation/vendor restrictions, reboot recovery and physical/emulator timing evidence remain open.

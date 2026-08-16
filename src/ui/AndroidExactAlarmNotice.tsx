@@ -6,8 +6,7 @@ import {
   type AndroidExactAlarmCapability,
 } from '../platform/androidNotificationScheduler';
 
-export const ANDROID_EXACT_ALARM_CAPABILITY_CHANGE_EVENT =
-  'salahos-exact-alarm-capability-change';
+export const ANDROID_EXACT_ALARM_CAPABILITY_CHANGE_EVENT = 'salahos-exact-alarm-capability-change';
 
 const copy: Readonly<
   Record<

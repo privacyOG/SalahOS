@@ -77,6 +77,10 @@ import { installThemePreference } from './platform/themePreference';
 import { BidiText } from './ui/BidiText';
 import { NextPrayerBlock } from './ui/NextPrayerBlock';
 import { PrayerCard } from './ui/PrayerCard';
+import {
+  AndroidExactAlarmNotice,
+  ANDROID_EXACT_ALARM_CAPABILITY_CHANGE_EVENT,
+} from './ui/AndroidExactAlarmNotice';
 import { SmartDisplay, smartDisplayModeRequested } from './ui/SmartDisplay';
 
 const prayerTranslationKeys: Readonly<Record<PrayerName, TranslationKey>> = {
@@ -192,6 +196,7 @@ export function App() {
   const [manualMosqueDrafts, setManualMosqueDrafts] =
     useState<ManualMosquePrayerDrafts>(emptyManualMosqueDrafts);
   const [mosqueMessage, setMosqueMessage] = useState<TranslationKey | null>(null);
+  const [notificationSyncRevision, setNotificationSyncRevision] = useState(0);
 
   useEffect(() => {
     applyDocumentLocale(document.documentElement, locale);
@@ -295,6 +300,16 @@ export function App() {
     };
   }, []);
 
+  useEffect(() => {
+    const resynchronize = () => {
+      setNotificationSyncRevision((current) => current + 1);
+    };
+    window.addEventListener(ANDROID_EXACT_ALARM_CAPABILITY_CHANGE_EVENT, resynchronize);
+    return () => {
+      window.removeEventListener(ANDROID_EXACT_ALARM_CAPABILITY_CHANGE_EVENT, resynchronize);
+    };
+  }, []);
+
   const dashboardResult = useMemo(
     () =>
       coordinates === null || now === null
@@ -363,6 +378,7 @@ export function App() {
     settings.prayerAdjustments,
     settings.prayerSourceMode,
     errorLogger,
+    notificationSyncRevision,
   ]);
 
   const effectiveSettings = useMemo<PersistedSettings>(
@@ -1337,6 +1353,7 @@ export function App() {
               );
             })}
           </div>
+          <AndroidExactAlarmNotice locale={locale} />
           <p className="setting-help">{translate(locale, 'notificationDeliveryPending')}</p>
         </fieldset>
 
