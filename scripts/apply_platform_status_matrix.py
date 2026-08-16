@@ -1,6 +1,7 @@
 from pathlib import Path
 
 # Branch-only integration helper; removed before pull request review.
+# This comment ensures the already-present integration workflow receives a push event.
 
 readme_path = Path('README.md')
 readme = readme_path.read_text()
