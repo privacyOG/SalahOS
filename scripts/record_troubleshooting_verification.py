@@ -1,5 +1,7 @@
 from pathlib import Path
 
+# Branch-only tracker helper; removed before pull request review.
+
 
 def replace_once(text: str, old: str, new: str) -> str:
     if old not in text:
