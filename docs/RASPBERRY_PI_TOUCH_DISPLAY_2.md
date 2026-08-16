@@ -6,11 +6,11 @@ This guide documents the supported SalahOS setup path for Raspberry Pi Touch Dis
 
 Touch Display 2 is currently available in 5-inch, 7-inch and 10-inch versions.
 
-| Variant | Native resolution | Default format | Touch capability |
-| --- | --- | --- | --- |
-| 5-inch | 720 × 1280 | Portrait | Five-finger multitouch |
-| 7-inch | 720 × 1280 | Portrait | Five-finger multitouch |
-| 10-inch | 1200 × 1920 | Portrait | Ten-finger multitouch |
+| Variant | Native resolution | Default format | Touch capability       |
+| ------- | ----------------- | -------------- | ---------------------- |
+| 5-inch  | 720 × 1280        | Portrait       | Five-finger multitouch |
+| 7-inch  | 720 × 1280        | Portrait       | Five-finger multitouch |
+| 10-inch | 1200 × 1920       | Portrait       | Ten-finger multitouch  |
 
 The 5-inch and 7-inch displays therefore need a portrait layout that remains usable at a 720-pixel logical horizontal resolution. Landscape rotation swaps the practical width/height constraints, so SalahOS visual acceptance must cover both portrait and landscape separately rather than assuming a desktop-sized viewport.
 
