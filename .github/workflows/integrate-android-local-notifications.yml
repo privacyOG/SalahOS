@@ -1,0 +1,66 @@
+name: Integrate Android Local Notifications
+
+on:
+  push:
+    branches:
+      - agent/android-local-notifications
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    if: github.ref == 'refs/heads/agent/android-local-notifications'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: agent/android-local-notifications
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Install dependencies from lockfile
+        run: npm ci --ignore-scripts
+
+      - name: Install pinned local notifications plugin
+        run: npm install --save-exact @capacitor/local-notifications@8.2.1
+
+      - name: Apply Android notification integration
+        run: python scripts/apply_android_local_notifications.py
+
+      - name: Synchronize Android project
+        run: npx cap sync android
+
+      - name: Canonicalize source and documentation
+        run: npx prettier --write package.json capacitor.config.ts src/App.tsx src/domain/notificationPrayerInputs.ts src/domain/notificationPrayerInputs.test.ts src/platform/androidNotificationScheduler.ts src/platform/androidNotificationScheduler.test.ts src/platform/errorLog.ts src/i18n/translations.ts docs/ANDROID.md docs/NOTIFICATION_LIMITATIONS.md
+
+      - name: Repository quality gate
+        run: npm run check
+
+      - name: Build Android debug APK
+        working-directory: android
+        run: ./gradlew assembleDebug
+
+      - name: Commit Android local notifications
+        run: |
+          git config user.name privacyOG
+          git config user.email 102720550+privacyOG@users.noreply.github.com
+          git add package.json package-lock.json android src docs capacitor.config.ts
+          if git diff --cached --quiet; then
+            echo "No Android notification changes required"
+            exit 0
+          fi
+          git commit -m "feat: add Android local prayer notifications"
+          git push origin HEAD:agent/android-local-notifications
