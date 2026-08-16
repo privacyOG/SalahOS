@@ -99,11 +99,11 @@ describe('native application storage', () => {
     expect(preferences.values.get('unrelated')).toBe('keep-me');
   });
 
-  it('uses Capacitor Preferences for iOS and other native shells', async () => {
+  it('uses existing Capacitor Preferences values as authoritative on native shells', async () => {
     const preferences = new MemoryPreferences();
     const webStorage = new MemoryWebStorage();
     preferences.values.set(PERSISTED_APPLICATION_KEYS[0], 'native-value');
-    webStorage.setItem(PERSISTED_APPLICATION_KEYS[0], 'web-value');
+    webStorage.setItem(PERSISTED_APPLICATION_KEYS[0], 'stale-web-value');
 
     await initializeApplicationStorage(webStorage, {
       isNativePlatform: () => true,
@@ -111,8 +111,27 @@ describe('native application storage', () => {
     });
 
     expect(getApplicationStorage().getItem(PERSISTED_APPLICATION_KEYS[0])).toBe('native-value');
-    getApplicationStorage().setItem(PERSISTED_APPLICATION_KEYS[0], 'updated-native');
-    expect(webStorage.getItem(PERSISTED_APPLICATION_KEYS[0])).toBe('web-value');
+    expect(webStorage.getItem(PERSISTED_APPLICATION_KEYS[0])).toBeNull();
+    expect(preferences.writes).toEqual([]);
+  });
+
+  it('migrates legacy iOS Web Storage values into Preferences before removing them', async () => {
+    const preferences = new MemoryPreferences();
+    const webStorage = new MemoryWebStorage();
+    webStorage.setItem(PERSISTED_APPLICATION_KEYS[0], 'legacy-settings');
+    webStorage.setItem(PERSISTED_APPLICATION_KEYS[1], 'legacy-locations');
+
+    await initializeApplicationStorage(webStorage, {
+      isNativePlatform: () => true,
+      preferences,
+    });
+
+    expect(getApplicationStorage().getItem(PERSISTED_APPLICATION_KEYS[0])).toBe('legacy-settings');
+    expect(getApplicationStorage().getItem(PERSISTED_APPLICATION_KEYS[1])).toBe('legacy-locations');
+    expect(preferences.values.get(PERSISTED_APPLICATION_KEYS[0])).toBe('legacy-settings');
+    expect(preferences.values.get(PERSISTED_APPLICATION_KEYS[1])).toBe('legacy-locations');
+    expect(webStorage.getItem(PERSISTED_APPLICATION_KEYS[0])).toBeNull();
+    expect(webStorage.getItem(PERSISTED_APPLICATION_KEYS[1])).toBeNull();
   });
 
   it('keeps browser and PWA storage on the provided Web Storage implementation', async () => {
