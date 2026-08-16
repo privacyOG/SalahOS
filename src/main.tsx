@@ -1,3 +1,4 @@
+import { Capacitor } from '@capacitor/core';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { App } from './App';
@@ -9,6 +10,7 @@ import { readTouchDisplayFixtureConfig, TouchDisplayFixture } from './ui/TouchDi
 import './styles.css';
 import './touch-display-fixture.css';
 import './smart-display.css';
+import './safe-area.css';
 
 async function bootstrap(): Promise<void> {
   const rootElement = document.getElementById('root');
@@ -19,8 +21,8 @@ async function bootstrap(): Promise<void> {
 
   await initializeApplicationStorage(window.localStorage);
 
-  if ('serviceWorker' in navigator && import.meta.env.PROD) {
-    void navigator.serviceWorker.register('/sw.js');
+  if (!Capacitor.isNativePlatform() && 'serviceWorker' in navigator && import.meta.env.PROD) {
+    void navigator.serviceWorker.register('/sw.js').catch(() => undefined);
   }
 
   const flushStorage = () => {

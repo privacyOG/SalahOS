@@ -18,14 +18,56 @@ export type IshaRule =
 export type MethodVerification =
   'cross-checked-reference' | 'pending-authoritative-source' | 'custom';
 
+export interface MethodAdjustments {
+  readonly fajr?: number;
+  readonly sunrise?: number;
+  readonly dhuhr?: number;
+  readonly asr?: number;
+  readonly maghrib?: number;
+  readonly isha?: number;
+}
+
+export interface SeasonalIshaPolicy {
+  readonly ramadanMinutesAfterMaghrib: number;
+}
+
 export interface CalculationMethod {
   readonly id: CalculationMethodId;
   readonly name: string;
   readonly fajrAngleDegrees: number;
   readonly ishaRule: IshaRule;
   readonly maghribRule: { readonly kind: 'sunset' };
+  readonly institutionalAdjustments: Readonly<MethodAdjustments>;
+  readonly seasonalIshaPolicy?: SeasonalIshaPolicy;
   readonly provenance: string;
   readonly verification: MethodVerification;
+}
+
+function validateInstitutionalAdjustments(adjustments: Readonly<MethodAdjustments>): void {
+  for (const [prayer, minutes] of Object.entries(adjustments)) {
+    if (!Number.isInteger(minutes) || minutes < -60 || minutes > 60) {
+      throw new RangeError(
+        `${prayer} institutional adjustment must be an integer between -60 and 60 minutes`,
+      );
+    }
+  }
+}
+
+function validateSeasonalIshaPolicy(
+  ishaRule: IshaRule,
+  seasonalIshaPolicy: SeasonalIshaPolicy | undefined,
+): void {
+  if (seasonalIshaPolicy === undefined) return;
+  if (ishaRule.kind !== 'interval') {
+    throw new RangeError('A seasonal Isha interval requires an interval-based base Isha rule');
+  }
+  if (
+    !Number.isInteger(seasonalIshaPolicy.ramadanMinutesAfterMaghrib) ||
+    seasonalIshaPolicy.ramadanMinutesAfterMaghrib < 0 ||
+    seasonalIshaPolicy.ramadanMinutesAfterMaghrib > 240
+  ) {
+    throw new RangeError('Ramadan Isha interval must be an integer between 0 and 240 minutes');
+  }
 }
 
 const method = (
@@ -35,15 +77,25 @@ const method = (
   ishaRule: IshaRule,
   provenance: string,
   verification: Exclude<MethodVerification, 'custom'>,
-): CalculationMethod => ({
-  id,
-  name,
-  fajrAngleDegrees,
-  ishaRule,
-  maghribRule: { kind: 'sunset' },
-  provenance,
-  verification,
-});
+  institutionalAdjustments: Readonly<MethodAdjustments> = {},
+  seasonalIshaPolicy?: SeasonalIshaPolicy,
+): CalculationMethod => {
+  validateInstitutionalAdjustments(institutionalAdjustments);
+  validateSeasonalIshaPolicy(ishaRule, seasonalIshaPolicy);
+  return {
+    id,
+    name,
+    fajrAngleDegrees,
+    ishaRule,
+    maghribRule: { kind: 'sunset' },
+    institutionalAdjustments: Object.freeze({ ...institutionalAdjustments }),
+    ...(seasonalIshaPolicy === undefined
+      ? {}
+      : { seasonalIshaPolicy: Object.freeze({ ...seasonalIshaPolicy }) }),
+    provenance,
+    verification,
+  };
+};
 
 /**
  * Built-in method registry. Numerical parameters are explicit and centralized so
@@ -51,6 +103,11 @@ const method = (
  * `cross-checked-reference` means the parameters agree with the reference set
  * documented in docs/PRAYER_METHOD_REFERENCES.md; it is not institutional
  * certification and does not replace geographic timetable parity testing.
+ *
+ * `institutionalAdjustments` records published authority-specific corrections
+ * separately from user/manual prayer offsets. `seasonalIshaPolicy` records a
+ * named method's calendar-dependent fixed Isha interval without changing the
+ * base interval stored in `ishaRule`.
  */
 export const calculationMethods: Readonly<
   Record<Exclude<CalculationMethodId, 'custom'>, CalculationMethod>
@@ -68,8 +125,10 @@ export const calculationMethods: Readonly<
     'Umm al-Qura / Makkah',
     18.5,
     { kind: 'interval', minutesAfterMaghrib: 90 },
-    '18.5° Fajr / 90-minute Isha cross-checked against PrayTimes, Adhan JS 4.4.4 and AlAdhan; Ramadan interval remains separate Hijri-aware work.',
+    '18.5° Fajr / 90-minute Isha, extended to 120 minutes during Ramadan, cross-checked against PrayTimes, Adhan JS 4.4.4 and AlAdhan.',
     'cross-checked-reference',
+    {},
+    { ramadanMinutesAfterMaghrib: 120 },
   ),
   egyptian: method(
     'egyptian',
@@ -100,8 +159,9 @@ export const calculationMethods: Readonly<
     'Diyanet / Turkey',
     18,
     { kind: 'angle', angleDegrees: 17 },
-    '18°/17° interoperability approximation; Adhan JS describes Turkey as an approximation and AlAdhan marks it experimental. Official timetable parity pending.',
+    '18°/17° interoperability approximation. Diyanet officially publishes -7 min Sunrise, +5 min Dhuhr, +4 min Asr and +7 min Maghrib corrections; Imsak/Fajr and Isha receive no temkin adjustment. Twilight-angle parity with official Diyanet output remains pending.',
     'pending-authoritative-source',
+    { sunrise: -7, dhuhr: 5, asr: 4, maghrib: 7 },
   ),
   muis: method(
     'muis',
@@ -116,7 +176,7 @@ export const calculationMethods: Readonly<
     'Dubai',
     18.2,
     { kind: 'angle', angleDegrees: 18.2 },
-    '18.2° angles follow Batoul Apps research; AlAdhan explicitly labels Dubai experimental and additional per-prayer offsets remain unmodelled.',
+    '18.2° angles follow Batoul Apps research. Dubai IACAD describes its official prayer-time service as using government astronomical/Sharia criteria supervised with the International Astronomical Center, but the official material reviewed does not establish 18.2°/18.2° as the authority formula. Official service parity remains pending.',
     'pending-authoritative-source',
   ),
   kuwait: method(
@@ -168,6 +228,7 @@ export function createCustomCalculationMethod(input: {
     fajrAngleDegrees: input.fajrAngleDegrees,
     ishaRule: input.ishaRule,
     maghribRule: { kind: 'sunset' },
+    institutionalAdjustments: Object.freeze({}),
     provenance: 'User-defined custom calculation parameters.',
     verification: 'custom',
   };
