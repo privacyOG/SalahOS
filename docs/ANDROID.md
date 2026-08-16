@@ -92,3 +92,13 @@ The Android shell in this stage does **not** complete native local prayer notifi
 ## Signing and release builds
 
 The repository currently proves a debug APK build only. A release-ready Android configuration still requires deliberate signing and distribution work. Keep signing keys and credentials outside the repository and inject them through local secure configuration or encrypted CI/release secrets when that stage is implemented.
+
+## Local prayer notifications
+
+The Android shell uses the first-party Capacitor Local Notifications plugin for on-device prayer alerts. When at least one notification or reminder preference is enabled, SalahOS checks Android notification permission and requests it when needed. A denial is respected and no remote push service is used.
+
+The app reconciles its pending native notifications against the shared prayer scheduler whenever the local civil date, timezone, calculation/source settings, mosque timetable or notification preferences change. It schedules both today and tomorrow where the selected source provides prayer starts, ignores already-past deliveries, and removes stale SalahOS-owned pending jobs. Native identifiers are deterministic 32-bit values and the full scheduler record is retained in notification metadata so unrelated app notifications are never adopted or cancelled.
+
+Silent notifications use dedicated Android channels, including a silent-with-vibration channel. Default-sound behavior uses the platform default channel. Android 8+ channel behavior means sound/vibration combinations are partly channel-controlled and remain subject to user notification settings.
+
+This implementation deliberately does **not** request `SCHEDULE_EXACT_ALARM`. Android can therefore defer delivery under alarm, Doze, battery-optimisation or vendor background policies. Exact-alarm policy, reboot recovery, Adhan audio playback and physical/emulator delivery testing remain separate tracker items and must not be represented as complete.

@@ -732,3 +732,14 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Cleaned Quality Gate run `31935517985` passed 59 test files / 273 tests plus all repository security, dependency, documentation, formatting, lint, strict typecheck and Web/PWA build gates.
 - Permanent Android Build run `31935517977` passed the committed lockfile install, shared-app build/sync and Gradle `assembleDebug` with Node 22 and Java 21.
 - Emulator/physical-device execution, persistent-storage device lifecycle, orientation, notifications/Adhan, background/battery restrictions, release signing/distribution and iOS native work remain open.
+
+### 2026-08-16 — Android local prayer notifications
+
+- Added the first-party Capacitor Local Notifications 8.2.1 bridge to the committed Android shell while retaining the existing shared notification intent/reconciliation domain.
+- Added today/tomorrow obligatory-prayer input derivation for calculated and local-mosque sources without introducing a parallel Android prayer engine.
+- Added deterministic positive 32-bit native notification IDs and namespaced scheduler metadata so only SalahOS-owned pending jobs are reconciled or cancelled.
+- Added Android display-permission check/request handling with fail-closed denial and no permission prompt when the desired schedule is empty and stale owned jobs only need cancellation.
+- Added silent and silent-with-vibration Android channels, localized English/Arabic notification copy, past-delivery filtering and structured notification-scheduling error classification.
+- Cleaned exact-head Quality Gate run `31936818278` passed 61 test files / 280 tests plus security, dependency/license, documentation, icon, formatting, lint, strict typecheck and production Web/PWA artifact verification.
+- Matching Android Build run `31936818319` passed the committed lockfile install, Capacitor Android sync and Gradle `assembleDebug` with Node 22 and Java 21.
+- Exact-alarm permission/strategy, reboot rescheduling, battery/background acceptance, Adhan playback and emulator/physical-device delivery remain open.

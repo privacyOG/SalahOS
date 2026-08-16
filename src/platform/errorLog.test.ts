@@ -29,6 +29,21 @@ describe('createStructuredErrorLogger', () => {
     ]);
   });
 
+  it('classifies notification scheduling failure separately from prayer calculation', () => {
+    const events: StructuredErrorEvent[] = [];
+    const sink: StructuredErrorSink = { write: (event) => events.push(event) };
+
+    createStructuredErrorLogger(sink).log('notification-scheduling-unavailable');
+
+    expect(events).toEqual([
+      {
+        component: 'notification-scheduling',
+        code: 'notification-scheduling-unavailable',
+        severity: 'error',
+      },
+    ]);
+  });
+
   it('exposes no field for coordinates, location labels, mosque names or raw exception data', () => {
     const events: StructuredErrorEvent[] = [];
     const sink: StructuredErrorSink = { write: (event) => events.push(event) };

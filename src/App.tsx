@@ -24,6 +24,9 @@ import {
   NOTIFICATION_PRAYERS,
   updatePrayerNotificationPreference,
 } from './domain/notificationPreferences';
+import { buildNotificationIntents } from './domain/notificationSchedule';
+import { resolveNotificationScheduleInstants } from './domain/notificationInstant';
+import { buildNotificationPrayerInputs } from './domain/notificationPrayerInputs';
 import {
   applyDocumentLocale,
   formatCountdown,
@@ -36,6 +39,7 @@ import {
 } from './i18n/i18n';
 import type { Locale, TranslationKey } from './i18n/translations';
 import { requestCurrentLocation } from './platform/currentLocation';
+import { synchronizeAndroidPrayerNotifications } from './platform/androidNotificationScheduler';
 import type { LocationFailureReason } from './platform/currentLocation';
 import { createStructuredErrorLogger } from './platform/errorLog';
 import {
@@ -328,6 +332,37 @@ export function App() {
   );
   const direction = localeDirection(locale);
   const resolvedTimeZone = dashboard?.timeZone;
+
+  useEffect(() => {
+    if (dashboard === null) return;
+
+    const inputs = buildNotificationPrayerInputs({
+      dashboard,
+      sourceMode: settings.prayerSourceMode,
+      mosqueTimetable: settings.mosqueTimetable,
+    });
+    const intents = buildNotificationIntents(inputs, settings.notifications);
+    const resolutions = resolveNotificationScheduleInstants(intents, dashboard.timeZone);
+
+    void synchronizeAndroidPrayerNotifications(resolutions, locale).catch(() => {
+      errorLogger.log('notification-scheduling-unavailable');
+    });
+  }, [
+    dashboard?.today.date,
+    dashboard?.tomorrow.date,
+    dashboard?.timeZone,
+    coordinates?.latitude,
+    coordinates?.longitude,
+    locale,
+    settings.asrConvention,
+    settings.calculationMethodId,
+    settings.highLatitudeRule,
+    settings.mosqueTimetable,
+    settings.notifications,
+    settings.prayerAdjustments,
+    settings.prayerSourceMode,
+    errorLogger,
+  ]);
 
   const effectiveSettings = useMemo<PersistedSettings>(
     () => ({
