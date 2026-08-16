@@ -1,23 +1,27 @@
 import { describe, expect, it } from 'vitest';
 import { requestBrowserLocation } from './browserGeolocation';
 
+function position(): GeolocationPosition {
+  return {
+    coords: {
+      latitude: -33.8688,
+      longitude: 151.2093,
+      accuracy: 25,
+      altitude: 123,
+      altitudeAccuracy: 5,
+      heading: 180,
+      speed: 8,
+      toJSON: () => ({}),
+    },
+    timestamp: Date.parse('2026-08-16T00:00:00.000Z'),
+    toJSON: () => ({}),
+  };
+}
+
 function successfulGeolocation(): Geolocation {
   return {
     getCurrentPosition(success) {
-      success({
-        coords: {
-          latitude: -33.8688,
-          longitude: 151.2093,
-          accuracy: 25,
-          altitude: null,
-          altitudeAccuracy: null,
-          heading: null,
-          speed: null,
-          toJSON: () => ({}),
-        },
-        timestamp: Date.parse('2026-08-16T00:00:00.000Z'),
-        toJSON: () => ({}),
-      });
+      success(position());
     },
     watchPosition: () => 0,
     clearWatch: () => undefined,
@@ -41,16 +45,62 @@ function failingGeolocation(code: 1 | 2 | 3): Geolocation {
 }
 
 describe('requestBrowserLocation', () => {
-  it('returns an explicit browser location fix from a one-shot request', async () => {
+  it('returns only the coordinates required for prayer calculations', async () => {
     const result = await requestBrowserLocation(successfulGeolocation());
     expect(result.ok).toBe(true);
     if (!result.ok) {
       throw new Error('Expected successful location result');
     }
 
-    expect(result.location.coordinates).toEqual({ latitude: -33.8688, longitude: 151.2093 });
-    expect(result.location.accuracyMetres).toBe(25);
-    expect(result.location.source).toBe('browser');
+    expect(result.location).toEqual({
+      coordinates: { latitude: -33.8688, longitude: 151.2093 },
+      source: 'browser',
+    });
+    expect(Object.keys(result.location).sort()).toEqual(['coordinates', 'source']);
+  });
+
+  it('uses one low-accuracy request by default and never starts a location watch', async () => {
+    let currentRequests = 0;
+    let watchRequests = 0;
+    let receivedOptions: PositionOptions | undefined;
+    const geolocation: Geolocation = {
+      getCurrentPosition(success, _error, options) {
+        currentRequests += 1;
+        receivedOptions = options;
+        success(position());
+      },
+      watchPosition() {
+        watchRequests += 1;
+        return 1;
+      },
+      clearWatch: () => undefined,
+    };
+
+    await requestBrowserLocation(geolocation);
+
+    expect(currentRequests).toBe(1);
+    expect(watchRequests).toBe(0);
+    expect(receivedOptions).toEqual({
+      enableHighAccuracy: false,
+      timeout: 10_000,
+      maximumAge: 300_000,
+    });
+  });
+
+  it('allows high accuracy only when a caller explicitly opts in', async () => {
+    let receivedOptions: PositionOptions | undefined;
+    const geolocation: Geolocation = {
+      getCurrentPosition(success, _error, options) {
+        receivedOptions = options;
+        success(position());
+      },
+      watchPosition: () => 0,
+      clearWatch: () => undefined,
+    };
+
+    await requestBrowserLocation(geolocation, { enableHighAccuracy: true });
+
+    expect(receivedOptions?.enableHighAccuracy).toBe(true);
   });
 
   it('handles unsupported geolocation without throwing', async () => {

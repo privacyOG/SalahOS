@@ -6,8 +6,6 @@ export type BrowserLocationFailureReason =
 
 export interface BrowserLocationFix {
   readonly coordinates: Coordinates;
-  readonly accuracyMetres: number;
-  readonly capturedAt: Date;
   readonly source: 'browser';
 }
 
@@ -41,9 +39,10 @@ function failureReason(error: GeolocationPositionError): BrowserLocationFailureR
 }
 
 /**
- * Request one current browser location fix. SalahOS never starts a continuous
- * location watch here; callers explicitly invoke this function when a refresh
- * is required.
+ * Request one current browser location fix. The adapter deliberately retains
+ * only latitude and longitude required for timezone/prayer calculations. It
+ * never starts a continuous watch and does not retain accuracy, altitude,
+ * heading, speed or browser timestamp metadata.
  */
 export function requestBrowserLocation(
   geolocation: Geolocation | undefined = typeof navigator === 'undefined'
@@ -64,8 +63,6 @@ export function requestBrowserLocation(
           ok: true,
           location: {
             coordinates: createCoordinates(position.coords.latitude, position.coords.longitude),
-            accuracyMetres: position.coords.accuracy,
-            capturedAt: new Date(position.timestamp),
             source: 'browser',
           },
         });
