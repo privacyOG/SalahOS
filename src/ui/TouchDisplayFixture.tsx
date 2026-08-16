@@ -37,12 +37,42 @@ const prayerFixtures: readonly {
   readonly iqamahMinutes: number | null;
   readonly supplementary: boolean;
 }[] = [
-  { translationKey: 'prayerFajr', startMinutes: 5 * 60 + 21, iqamahMinutes: 5 * 60 + 45, supplementary: false },
-  { translationKey: 'prayerSunrise', startMinutes: 6 * 60 + 38, iqamahMinutes: null, supplementary: true },
-  { translationKey: 'prayerDhuhr', startMinutes: 12 * 60 + 4, iqamahMinutes: 12 * 60 + 30, supplementary: false },
-  { translationKey: 'prayerAsr', startMinutes: 15 * 60 + 17, iqamahMinutes: 15 * 60 + 35, supplementary: false },
-  { translationKey: 'prayerMaghrib', startMinutes: 17 * 60 + 31, iqamahMinutes: 17 * 60 + 41, supplementary: false },
-  { translationKey: 'prayerIsha', startMinutes: 18 * 60 + 51, iqamahMinutes: 19 * 60 + 15, supplementary: false },
+  {
+    translationKey: 'prayerFajr',
+    startMinutes: 5 * 60 + 21,
+    iqamahMinutes: 5 * 60 + 45,
+    supplementary: false,
+  },
+  {
+    translationKey: 'prayerSunrise',
+    startMinutes: 6 * 60 + 38,
+    iqamahMinutes: null,
+    supplementary: true,
+  },
+  {
+    translationKey: 'prayerDhuhr',
+    startMinutes: 12 * 60 + 4,
+    iqamahMinutes: 12 * 60 + 30,
+    supplementary: false,
+  },
+  {
+    translationKey: 'prayerAsr',
+    startMinutes: 15 * 60 + 17,
+    iqamahMinutes: 15 * 60 + 35,
+    supplementary: false,
+  },
+  {
+    translationKey: 'prayerMaghrib',
+    startMinutes: 17 * 60 + 31,
+    iqamahMinutes: 17 * 60 + 41,
+    supplementary: false,
+  },
+  {
+    translationKey: 'prayerIsha',
+    startMinutes: 18 * 60 + 51,
+    iqamahMinutes: 19 * 60 + 15,
+    supplementary: false,
+  },
 ];
 
 const fixtureDate = new Date(Date.UTC(2026, 7, 16));
@@ -117,9 +147,7 @@ export function TouchDisplayFixture({ size, orientation, locale }: TouchDisplayF
           <p className="touch-display-fixture-date">
             {formatGregorianCivilDate(fixtureDate, locale)}
           </p>
-          <p className="touch-display-fixture-date">
-            {formatHijriCivilDate(fixtureDate, locale)}
-          </p>
+          <p className="touch-display-fixture-date">{formatHijriCivilDate(fixtureDate, locale)}</p>
         </div>
         <NextPrayerBlock
           nextPrayerLabel={translate(locale, 'prayerMaghrib')}
@@ -131,7 +159,10 @@ export function TouchDisplayFixture({ size, orientation, locale }: TouchDisplayF
         />
       </header>
 
-      <section className="touch-display-fixture-location" aria-label={translate(locale, 'currentLocation')}>
+      <section
+        className="touch-display-fixture-location"
+        aria-label={translate(locale, 'currentLocation')}
+      >
         <div>
           <p className="label">{translate(locale, 'currentLocation')}</p>
           <p className="value">Sydney, Australia</p>
@@ -146,7 +177,10 @@ export function TouchDisplayFixture({ size, orientation, locale }: TouchDisplayF
         </div>
       </section>
 
-      <section className="touch-display-fixture-prayers" aria-labelledby="touch-display-prayers-heading">
+      <section
+        className="touch-display-fixture-prayers"
+        aria-labelledby="touch-display-prayers-heading"
+      >
         <div className="section-heading">
           <div>
             <p className="eyebrow">{translate(locale, 'today')}</p>
