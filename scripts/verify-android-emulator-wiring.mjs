@@ -8,6 +8,9 @@ const acceptanceScript = readFileSync(
 
 for (const workflowContract of [
   'runs-on: ubuntu-24.04',
+  'timeout-minutes: 45',
+  'run: npm run android:build',
+  'run: npm run android:release-check',
   'reactivecircus/android-emulator-runner@a421e43855164a8197daf9d8d40fe71c6996bb0d',
   'api-level: 35',
   'target: google_apis',
@@ -48,5 +51,5 @@ for (const scriptContract of [
 }
 
 console.log(
-  'Android emulator wiring contract passed: pinned Android 35 emulator, offline cold launch, verified screenshot orientation, instrumentation, and retained artifacts are required.',
+  'Android emulator wiring contract passed: debug and unsigned release builds, effective permissions, pinned Android 35 emulator, offline cold launch, verified screenshot orientation, instrumentation, and retained artifacts are required.',
 );
