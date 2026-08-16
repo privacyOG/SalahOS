@@ -25,6 +25,7 @@ SalahOS is designed around accurate local prayer calculations, selectable calcul
 ## Documentation
 
 - [Build and Web/PWA deployment](BUILD.md)
+- [Tested platform/build status](docs/PLATFORM_STATUS.md)
 - [Troubleshooting](docs/TROUBLESHOOTING.md)
 - [Notification and Adhan platform limitations](docs/NOTIFICATION_LIMITATIONS.md)
 - [Dependency license review](docs/DEPENDENCY_LICENSE_REVIEW.md)
@@ -33,6 +34,16 @@ SalahOS is designed around accurate local prayer calculations, selectable calcul
 - [Research and calculation references](RESEARCH.md)
 - [Verification evidence](TESTING.md)
 - [Implementation tracker](TODO.md)
+
+## Platform status
+
+- **Web / PWA:** automated build and repository verification path.
+- **Raspberry Pi / Touch Display 2:** repository-validated browser/kiosk deployment path; physical Touch Display 2 acceptance remains open.
+- **TV / generic kiosk:** repository-validated browser-hosted smart-display path; target TV/remote acceptance remains open.
+- **Android:** native shell/build and native adapters remain planned, not validated.
+- **iOS / iPadOS:** native shell/build and native adapters remain planned, not validated.
+
+See [Tested platform/build status](docs/PLATFORM_STATUS.md) for the exact evidence and capability boundaries.
 
 ## Development
 

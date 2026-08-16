@@ -712,3 +712,12 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - DST/high-latitude regression coverage passed through timezone/zoned-civil-time/high-latitude tests plus prayer-engine and smart-display runtime coverage.
 - Deterministic offline verification passed through offline startup, service-worker lifecycle and Raspberry Pi/kiosk continuity suites.
 - English/Arabic visual regression, physical layout/device acceptance, Android/iOS notification validation, final review, blocker reconciliation, release notes and release tagging remain open.
+
+### 2026-08-16 — Tested platform/build matrix
+
+- Added `docs/PLATFORM_STATUS.md` as the canonical capability matrix, with explicit Automated, Repository-validated path and Planned status definitions.
+- Synchronized README platform status and the BUILD target table with currently verified Web/PWA, Raspberry Pi/browser-kiosk and TV/browser-host paths.
+- Kept physical Raspberry Pi/Touch Display 2 and TV acceptance distinct from repository-side deployment verification.
+- Kept Android and iOS/iPadOS native shells, native adapters, builds and device validation explicitly planned/unvalidated.
+- Read-only Quality Gate run `31934421125` passed the complete 58-file / 269-test suite plus security, dependency, documentation, raster reproducibility, formatting, lint, strict typecheck, production build and deploy-artifact verification.
+- README screenshots, visual regression, native mobile work and physical target-device acceptance remain separately open.

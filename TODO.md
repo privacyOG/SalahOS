@@ -750,5 +750,8 @@ SalahOS v1 must not be declared complete until the following are true:
 - [ ] Offline prayer calculation is fully functional
 - [ ] Notifications/Adhan work on supported platforms within platform restrictions
 - [ ] Automated quality gates pass
-- [ ] Actual tested platform/build matrix is documented without overclaiming
+- [x] Actual tested platform/build matrix is documented without overclaiming
+
+**Tested platform/build matrix verification note (2026-08-16):** read-only Quality Gate run `31934421125` passed the sensitive-file policy, dependency vulnerability audit, dependency-license policy, documentation-link verification, PWA raster-icon reproducibility, formatting, typed lint, strict typecheck, the complete 58-file / 269-test suite, production build and deploy-artifact verification on the cleaned branch. `docs/PLATFORM_STATUS.md` is now the canonical tested matrix and distinguishes automated Web/PWA validation, repository-validated Raspberry Pi/Touch Display 2 and TV/browser-kiosk paths, and planned/unvalidated Android and iOS/iPadOS native paths. `README.md` and `BUILD.md` are synchronized to those boundaries rather than describing repository-validated Pi/TV browser paths as absent. Physical Raspberry Pi/Touch Display 2 and television acceptance, target-specific remote/full-screen behaviour, native Android/iOS projects and device validation, and visual regression remain open; this matrix does not imply those checks passed.
+
 - [ ] Final code review and regression pass are complete
