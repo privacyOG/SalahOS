@@ -1,7 +1,5 @@
 export type StructuredErrorCode =
-  | 'invalid-system-time'
-  | 'prayer-calculation-unavailable'
-  | 'notification-scheduling-unavailable';
+  'invalid-system-time' | 'prayer-calculation-unavailable' | 'notification-scheduling-unavailable';
 
 export interface StructuredErrorEvent {
   readonly component: 'runtime-clock' | 'prayer-calculation' | 'notification-scheduling';
