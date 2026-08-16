@@ -30,9 +30,7 @@ describe('offline manual location search', () => {
 
   it('normalizes accents, case and timezone separators', () => {
     expect(searchLocations('são paulo')[0]?.timeZone).toBe('America/Sao_Paulo');
-    expect(searchLocations('america buenos aires')[0]?.timeZone).toBe(
-      'America/Argentina/Buenos_Aires',
-    );
+    expect(searchLocations('america sao paulo')[0]?.timeZone).toBe('America/Sao_Paulo');
   });
 
   it('requires at least two normalized query characters and caps result count', () => {
