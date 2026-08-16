@@ -138,7 +138,9 @@ export const translations = {
     soundDefault: 'Default sound',
     soundSilent: 'Silent',
     vibration: 'Vibration where supported',
-    adhanEnabled: 'Enable Adhan playback',
+    adhanEnabled: 'Enable Adhan alert',
+    adhanDeliveryPolicy:
+      'The current Android Adhan option schedules an Adhan-labelled notification alert. It does not auto-play a full Adhan recording in the background or after the app is terminated. User-selected local Adhan audio remains a separate feature.',
     notificationDeliveryPending:
       'Android may delay prayer alerts under Doze, Battery Saver, or manufacturer background restrictions even when precise alarms are allowed. SalahOS does not request an unrestricted battery-optimisation exemption. Returning to the app reconciles the current prayer schedule; other targets remain platform-dependent.',
     exportSettings: 'Export settings',
@@ -285,7 +287,9 @@ export const translations = {
     soundDefault: 'الصوت الافتراضي',
     soundSilent: 'صامت',
     vibration: 'الاهتزاز حيثما كان مدعوماً',
-    adhanEnabled: 'تفعيل تشغيل الأذان',
+    adhanEnabled: 'تفعيل تنبيه الأذان',
+    adhanDeliveryPolicy:
+      'خيار الأذان الحالي في أندرويد يجدول تنبيهاً يحمل اسم الأذان. لا يشغّل تسجيلاً كاملاً للأذان تلقائياً في الخلفية أو بعد إغلاق التطبيق. اختيار ملف أذان محلي يبقى ميزة منفصلة.',
     notificationDeliveryPending:
       'قد يؤخر أندرويد تنبيهات الصلاة بسبب وضع السكون أو توفير البطارية أو قيود الشركة المصنّعة حتى عند السماح بالمنبّهات الدقيقة. لا يطلب صلاح أو إس استثناءً غير مقيّد من تحسين البطارية، وعند العودة إلى التطبيق تتم مطابقة جدول الصلاة الحالي من جديد.',
     exportSettings: 'تصدير الإعدادات',
