@@ -22,6 +22,9 @@ describe('optional remote API security boundary', () => {
     expect(() => validateRemoteApiUrl('https://user:secret@api.example.test/v1', policy)).toThrow(
       TypeError,
     );
+    expect(() => validateRemoteApiUrl('https://api.example.test/v1#secret', policy)).toThrow(
+      TypeError,
+    );
   });
 
   it('requires allowlist entries to be credential-free HTTPS origins', () => {
@@ -37,16 +40,41 @@ describe('optional remote API security boundary', () => {
     ).toThrow(TypeError);
   });
 
-  it('hardens credential, redirect and referrer behavior', () => {
+  it('hardens credential, redirect, referrer, cache and request-mode behavior', () => {
     expect(hardenedRemoteRequestInit({ method: 'GET' })).toMatchObject({
       method: 'GET',
       credentials: 'omit',
       redirect: 'error',
       referrerPolicy: 'no-referrer',
+      referrer: '',
+      mode: 'cors',
+      cache: 'no-store',
     });
     expect(() => hardenedRemoteRequestInit({ credentials: 'include' })).toThrow(TypeError);
     expect(() => hardenedRemoteRequestInit({ redirect: 'follow' })).toThrow(TypeError);
     expect(() => hardenedRemoteRequestInit({ referrerPolicy: 'origin' })).toThrow(TypeError);
+    expect(() => hardenedRemoteRequestInit({ referrer: 'https://salahos.test/' })).toThrow(
+      TypeError,
+    );
+    expect(() => hardenedRemoteRequestInit({ mode: 'no-cors' })).toThrow(TypeError);
+    expect(() => hardenedRemoteRequestInit({ cache: 'default' })).toThrow(TypeError);
+  });
+
+  it('rejects manually supplied credential-bearing headers', () => {
+    for (const [name, value] of [
+      ['Authorization', 'Bearer secret'],
+      ['Cookie', 'session=secret'],
+      ['Proxy-Authorization', 'Basic secret'],
+      ['X-Api-Key', 'secret'],
+    ] as const) {
+      expect(() => hardenedRemoteRequestInit({ headers: { [name]: value } }), name).toThrow(
+        TypeError,
+      );
+    }
+
+    expect(
+      hardenedRemoteRequestInit({ headers: { Accept: 'application/json' } }).headers,
+    ).toEqual({ Accept: 'application/json' });
   });
 
   it('passes the validated URL and hardened request options to the injected fetcher', async () => {
@@ -69,6 +97,9 @@ describe('optional remote API security boundary', () => {
       credentials: 'omit',
       redirect: 'error',
       referrerPolicy: 'no-referrer',
+      referrer: '',
+      mode: 'cors',
+      cache: 'no-store',
     });
   });
 });
