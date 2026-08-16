@@ -29,6 +29,7 @@ SalahOS is designed around accurate local prayer calculations, selectable calcul
 - [iOS / iPadOS build and install](docs/IOS.md)
 - [Tested platform/build status](docs/PLATFORM_STATUS.md)
 - [Visual regression](docs/VISUAL_REGRESSION.md)
+- [Accessibility validation](docs/ACCESSIBILITY_VALIDATION.md)
 - [Raspberry Pi Touch Display 2](docs/RASPBERRY_PI_TOUCH_DISPLAY_2.md)
 - [TV / kiosk deployment](docs/TV_KIOSK_DEPLOYMENT.md)
 - [Troubleshooting](docs/TROUBLESHOOTING.md)
