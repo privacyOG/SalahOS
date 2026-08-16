@@ -648,3 +648,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Added five deterministic tests covering shell syntax, localhost/Chromium command construction, invalid-port rejection, autostart idempotence/preservation, and managed-block removal.
 - Read-only Quality Gate run `31929984829` passed all 52 test files / 247 tests plus security, dependency, documentation, PWA raster reproducibility, formatting, lint, strict typecheck, production build and deploy-artifact verification.
 - Physical Raspberry Pi/Touch Display 2 boot, orientation, touch/rendering, power-loss/reboot and long-duration acceptance remain open; desktop-session autostart is therefore not treated as complete proof of unattended power-on launch.
+
+### 2026-08-16 — Raspberry Pi Touch Display 2 setup documentation
+
+- Added `docs/RASPBERRY_PI_TOUCH_DISPLAY_2.md` covering current Touch Display 2 5-inch, 7-inch and 10-inch panel resolutions, portrait-native orientation and Raspberry Pi OS Desktop rotation controls.
+- Documented supported Raspberry Pi generation/cabling boundaries, Raspberry Pi Imager installation, touch/on-screen-keyboard behavior, brightness controls and the existing local Chromium/labwc SalahOS kiosk deployment path.
+- Added an explicit physical acceptance matrix for orientation, touch ergonomics, boot/autostart behavior, offline operation and long-duration use instead of treating documentation as hardware validation.
+- Read-only Quality Gate run `31931305063` passed repository security/dependency/documentation policies, raster reproducibility, formatting, lint, strict typecheck, the complete test suite, production build and deploy-artifact verification.
+- Touch-first layout fixture work and all physical Raspberry Pi/Touch Display 2 validation remain open.
