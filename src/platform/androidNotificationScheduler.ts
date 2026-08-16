@@ -10,6 +10,7 @@ import type {
 import type { Locale } from '../i18n/translations';
 import type { NotificationPrayerName } from '../domain/notificationPreferences';
 import type { NotificationInstantResolution } from '../domain/notificationInstant';
+import { androidAdhanPlaybackPolicy, type AndroidAdhanPlaybackPolicy } from './androidAdhanPolicy';
 import {
   applyNotificationSchedulerPlan,
   type NotificationSchedulerAdapter,
@@ -35,6 +36,7 @@ interface LocalNotificationsClient {
 interface StoredNotificationExtra {
   readonly namespace: typeof extraNamespace;
   readonly record: ScheduledNotificationRecord;
+  readonly adhanPolicy?: AndroidAdhanPlaybackPolicy;
 }
 
 const prayerNames: Readonly<Record<Locale, Readonly<Record<NotificationPrayerName, string>>>> = {
@@ -152,7 +154,11 @@ class AndroidNotificationScheduler implements NotificationSchedulerAdapter {
 
   async schedule(record: ScheduledNotificationRecord): Promise<void> {
     const copy = notificationCopy(this.locale, record);
-    const extra: StoredNotificationExtra = { namespace: extraNamespace, record };
+    const extra: StoredNotificationExtra = {
+      namespace: extraNamespace,
+      record,
+      ...(record.kind === 'adhan' ? { adhanPolicy: androidAdhanPlaybackPolicy('background') } : {}),
+    };
     await this.client.schedule({
       notifications: [
         {

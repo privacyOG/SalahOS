@@ -107,4 +107,8 @@ The manifest declares `android.permission.SCHEDULE_EXACT_ALARM`. On supported An
 
 A capability change detected after returning to the app triggers scheduler reconciliation so current jobs are rebuilt under the new precision state. The same tested focus, restored-page and visibility recovery path also reconciles prayer notifications whenever the app returns to the foreground.
 
-SalahOS does not request an unrestricted battery-optimisation exemption. Doze, Battery Saver, manufacturer background controls, notification-channel settings and device power state can still delay or suppress presentation even when precise-alarm access is granted. The settings UI states this explicitly in English and Arabic rather than promising guaranteed background delivery. Reboot recovery, Adhan playback and physical/emulator timing evidence remain separately tracked.
+SalahOS does not request an unrestricted battery-optimisation exemption. Doze, Battery Saver, manufacturer background controls, notification-channel settings and device power state can still delay or suppress presentation even when precise-alarm access is granted. The settings UI states this explicitly in English and Arabic rather than promising guaranteed background delivery. Reboot recovery and physical/emulator timing evidence remain separately tracked.
+
+## Adhan lifecycle policy
+
+The current Android Adhan preference schedules an Adhan-labelled local notification at prayer time. The executable platform policy records that scheduled delivery as a notification alert and disables full-recording auto-play for foreground, background and terminated lifecycle states. This avoids treating a local-notification sound as equivalent to reliable full Adhan playback. User-selected/local Adhan audio, audio focus, interruption policy and any future foreground playback implementation remain separate Stage 10 work.

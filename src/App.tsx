@@ -1357,6 +1357,7 @@ export function App() {
               );
             })}
           </div>
+          <p className="setting-help">{translate(locale, 'adhanDeliveryPolicy')}</p>
           <AndroidExactAlarmNotice locale={locale} />
           <p className="setting-help">{translate(locale, 'notificationDeliveryPending')}</p>
         </fieldset>
