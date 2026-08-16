@@ -57,9 +57,7 @@ for (const file of markdownFiles) {
     try {
       await access(resolved);
     } catch {
-      findings.push(
-        `${path.relative(root, file).split(path.sep).join('/')} -> ${rawTarget}`,
-      );
+      findings.push(`${path.relative(root, file).split(path.sep).join('/')} -> ${rawTarget}`);
     }
   }
 }
