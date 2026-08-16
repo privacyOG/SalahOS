@@ -60,8 +60,12 @@ SalahOS does not bundle an unlicensed Adhan recording and does not upload a user
 
 - production Vite build and deploy-artifact verification;
 - installable PWA manifest and first-party icons;
-- service-worker shell caching and offline navigation fallback;
-- versioned cache cleanup;
+- browser/PWA-only service-worker registration with contained registration failure;
+- versioned service-worker shell caching and offline navigation fallback;
+- install-time pre-cache of the successful HTML shell, all manifest icons and current first-party Vite `/assets/` references before the new worker activates;
+- runtime cache allowlist restricted to first-party `/assets/`, `/icons/` and the manifest, so arbitrary same-origin API/data GET responses are not persisted automatically;
+- navigation shell replacement only from successful HTML responses;
+- versioned cache cleanup removes older broader cache namespaces after a successful worker upgrade;
 - Raspberry Pi/Chromium kiosk launcher and deployment documentation;
 - smart-display mode for kiosk/TV browser use;
 - responsive phone/tablet/kiosk styling;
@@ -111,6 +115,7 @@ The new iPhone/iPad screenshot path is candidate infrastructure until it passes 
 - dependency-license policy;
 - reviewed native dependency-surface gate that pins the committed Capacitor/AndroidX/Cordova/Swift-package declarations and rejects unreviewed local Android `.jar/.aar` binaries;
 - Web/PWA Content Security Policy baseline with same-origin networking and loopback-only development WebSocket exceptions;
+- bounded Web/PWA service-worker cache policy that excludes arbitrary same-origin API/data responses;
 - optional remote API boundary using explicit HTTPS origins, no browser credentials, no redirect following, no referrer disclosure and no cache reuse;
 - direct unreviewed production networking primitives rejected by repository policy;
 - native permission/backup/transport review gates;
