@@ -411,3 +411,13 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Retained unresolved polar events as the default and specified that future estimated values must be explicit opt-in choices with reference latitude/date provenance.
 - Defined deterministic acceptance criteria for bounded nearest-latitude and nearest-valid-day searches without implementing either strategy prematurely.
 - Read-only Quality Gate run `31915439365` passed formatting, typed lint, strict typecheck, all tests and production build.
+
+### 2026-08-16 — manual mosque timetable entry
+
+- Added strict manual `HH:MM` parsing for all five obligatory prayer starts with optional fixed Iqamah times.
+- Added deterministic manual-day creation and same-date replacement within the existing validated `MosqueTimetable` model.
+- Added English/Arabic settings UI for mosque name, Gregorian date, five prayer starts and optional Iqamah values.
+- Reused the existing offline mosque library so manually entered days persist, remain selectable, and activate local-mosque mode without a second storage format.
+- Added tests for clock parsing, complete day creation, invalid/missing values, deterministic replacement and mosque-name mismatch protection.
+- Repaired the sourced-dashboard presentation contract exposed by strict typechecking, keeping calculation metadata under the base dashboard and computing source-aware aggregate high-latitude fallback state.
+- Read-only Quality Gate run `31916508659` passed formatting, typed lint, strict typecheck, all tests and production build on exact cleaned head `3d50f0204b7a2162ab92af891467852364ff1f48`.

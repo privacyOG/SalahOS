@@ -2,6 +2,12 @@ import { useEffect, useMemo, useState } from 'react';
 import { createCoordinates } from './domain/coordinates';
 import type { Coordinates } from './domain/coordinates';
 import { buildPrayerDashboard } from './domain/dashboard';
+import {
+  buildManualMosqueDay,
+  MANUAL_MOSQUE_PRAYERS,
+  upsertManualMosqueDay,
+} from './domain/manualMosqueEntry';
+import type { ManualMosquePrayerDrafts } from './domain/manualMosqueEntry';
 import { applyPrayerSourceToDashboard } from './domain/sourcedDashboard';
 import { parseMosqueTimetableCsv, parseMosqueTimetableJson } from './domain/timetableImport';
 import { calculationMethods } from './domain/methods';
@@ -100,6 +106,16 @@ const locationFailureKeys: Readonly<Record<BrowserLocationFailureReason, Transla
   unknown: 'locationUnknownError',
 };
 
+function emptyManualMosqueDrafts(): ManualMosquePrayerDrafts {
+  return {
+    fajr: { start: '', iqamah: '' },
+    dhuhr: { start: '', iqamah: '' },
+    asr: { start: '', iqamah: '' },
+    maghrib: { start: '', iqamah: '' },
+    isha: { start: '', iqamah: '' },
+  };
+}
+
 function initialSettings(): PersistedSettings {
   try {
     return loadPersistedSettings(window.localStorage);
@@ -145,6 +161,12 @@ export function App() {
   const [mosqueImportFormat, setMosqueImportFormat] = useState<'json' | 'csv'>('json');
   const [mosqueImportName, setMosqueImportName] = useState('');
   const [mosqueImportPayload, setMosqueImportPayload] = useState('');
+  const [manualMosqueName, setManualMosqueName] = useState(
+    settings.mosqueTimetable?.mosqueName ?? '',
+  );
+  const [manualMosqueDate, setManualMosqueDate] = useState('');
+  const [manualMosqueDrafts, setManualMosqueDrafts] =
+    useState<ManualMosquePrayerDrafts>(emptyManualMosqueDrafts);
   const [mosqueMessage, setMosqueMessage] = useState<TranslationKey | null>(null);
 
   useEffect(() => {
@@ -316,6 +338,45 @@ export function App() {
     setLocationMessage('savedLocationRemoved');
   }
 
+  function updateManualMosqueDraft(
+    prayer: (typeof MANUAL_MOSQUE_PRAYERS)[number],
+    field: 'start' | 'iqamah',
+    value: string,
+  ): void {
+    setManualMosqueDrafts((current) => ({
+      ...current,
+      [prayer]: { ...current[prayer], [field]: value },
+    }));
+    setMosqueMessage(null);
+  }
+
+  function saveManualMosqueDay(): void {
+    try {
+      const name = manualMosqueName.trim();
+      const id = mosqueLibraryId(name);
+      const libraryTimetable = mosqueLibrary.find((entry) => entry.id === id)?.timetable ?? null;
+      const selectedTimetable =
+        settings.mosqueTimetable !== null &&
+        mosqueLibraryId(settings.mosqueTimetable.mosqueName) === id
+          ? settings.mosqueTimetable
+          : null;
+      const day = buildManualMosqueDay(manualMosqueDate, manualMosqueDrafts);
+      const timetable = upsertManualMosqueDay(libraryTimetable ?? selectedTimetable, name, day);
+      setMosqueLibrary((current) => upsertMosqueTimetable(current, timetable));
+      setSettings((current) => ({
+        ...current,
+        mosqueTimetable: timetable,
+        prayerSourceMode: 'local-mosque',
+      }));
+      setManualMosqueName(timetable.mosqueName);
+      setManualMosqueDate('');
+      setManualMosqueDrafts(emptyManualMosqueDrafts());
+      setMosqueMessage('manualMosqueDaySaved');
+    } catch {
+      setMosqueMessage('manualMosqueDayError');
+    }
+  }
+
   function importMosqueTimetable(): void {
     try {
       const timetable =
@@ -328,6 +389,7 @@ export function App() {
         mosqueTimetable: timetable,
         prayerSourceMode: 'local-mosque',
       }));
+      setManualMosqueName(timetable.mosqueName);
       setMosqueImportName('');
       setMosqueImportPayload('');
       setMosqueMessage('mosqueTimetableImported');
@@ -344,6 +406,7 @@ export function App() {
       mosqueTimetable: selected.timetable,
       prayerSourceMode: 'local-mosque',
     }));
+    setManualMosqueName(selected.timetable.mosqueName);
     setMosqueMessage(null);
   }
 
@@ -735,6 +798,68 @@ export function App() {
             </button>
           </div>
 
+          <fieldset className="manual-mosque-fieldset">
+            <legend>{translate(locale, 'manualMosqueEntry')}</legend>
+            <p className="setting-help">{translate(locale, 'manualMosqueEntryHelp')}</p>
+            <div className="manual-mosque-header">
+              <label>
+                <span>{translate(locale, 'mosqueName')}</span>
+                <input
+                  value={manualMosqueName}
+                  maxLength={160}
+                  onChange={(event) => {
+                    setManualMosqueName(event.target.value);
+                    setMosqueMessage(null);
+                  }}
+                />
+              </label>
+              <label>
+                <span>{translate(locale, 'timetableDate')}</span>
+                <input
+                  type="date"
+                  value={manualMosqueDate}
+                  onChange={(event) => {
+                    setManualMosqueDate(event.target.value);
+                    setMosqueMessage(null);
+                  }}
+                />
+              </label>
+            </div>
+            <div className="manual-mosque-prayer-grid">
+              {MANUAL_MOSQUE_PRAYERS.map((prayer) => (
+                <article className="manual-mosque-prayer" key={prayer}>
+                  <h4>{translate(locale, prayerTranslationKeys[prayer])}</h4>
+                  <label>
+                    <span>{translate(locale, 'prayerStartTime')}</span>
+                    <input
+                      type="time"
+                      step="60"
+                      required
+                      value={manualMosqueDrafts[prayer].start}
+                      onChange={(event) => {
+                        updateManualMosqueDraft(prayer, 'start', event.target.value);
+                      }}
+                    />
+                  </label>
+                  <label>
+                    <span>{translate(locale, 'iqamahTimeOptional')}</span>
+                    <input
+                      type="time"
+                      step="60"
+                      value={manualMosqueDrafts[prayer].iqamah}
+                      onChange={(event) => {
+                        updateManualMosqueDraft(prayer, 'iqamah', event.target.value);
+                      }}
+                    />
+                  </label>
+                </article>
+              ))}
+            </div>
+            <button type="button" onClick={saveManualMosqueDay}>
+              {translate(locale, 'saveManualMosqueDay')}
+            </button>
+          </fieldset>
+
           <div className="mosque-import-grid">
             <label>
               <span>{translate(locale, 'timetableFormat')}</span>
@@ -947,17 +1072,18 @@ export function App() {
               );
             })}
           </div>
-          <p className="settings-note">{translate(locale, 'notificationDeliveryPending')}</p>
+          <p className="setting-help">{translate(locale, 'notificationDeliveryPending')}</p>
         </fieldset>
 
-        <div className="settings-transfer">
+        <section className="settings-transfer">
           <label>
             <span>{translate(locale, 'settingsPayload')}</span>
             <textarea
-              rows={5}
+              rows={6}
               value={settingsPayload}
               onChange={(event) => {
                 setSettingsPayload(event.target.value);
+                setSettingsMessage(null);
               }}
             />
           </label>
@@ -977,142 +1103,147 @@ export function App() {
               {translate(locale, settingsMessage)}
             </p>
           )}
-        </div>
+        </section>
       </details>
 
-      <section className="status-card" aria-labelledby="today-heading">
-        <div>
-          <p className="label">{translate(locale, 'currentLocation')}</p>
-          <p className="value">
-            {dashboard === null
-              ? translate(locale, 'notConfigured')
-              : `${dashboard.coordinates.latitude.toFixed(4)}, ${dashboard.coordinates.longitude.toFixed(4)}`}
-          </p>
-        </div>
-        <div>
-          <p className="label">{translate(locale, 'timezone')}</p>
-          <p className="value">{dashboard?.timeZone ?? translate(locale, 'notConfigured')}</p>
-        </div>
-        <div>
-          <p className="label">{translate(locale, 'calculationSource')}</p>
-          <p className="value">
-            {dashboard === null
-              ? translate(locale, 'notConfigured')
-              : translate(locale, sourceTranslationKeys[settings.prayerSourceMode])}
-          </p>
-        </div>
-        <div>
-          <p className="label">
-            {settings.prayerSourceMode === 'local-mosque'
-              ? translate(locale, 'selectedMosque')
-              : translate(locale, 'method')}
-          </p>
-          <p className="value">
-            {settings.prayerSourceMode === 'local-mosque'
-              ? (sourcedDashboard?.mosqueName ?? translate(locale, 'notConfigured'))
-              : (dashboard?.method.name ?? translate(locale, 'notConfigured'))}
-          </p>
-        </div>
-      </section>
-
-      {dashboard === null || sourcedDashboard === null ? (
-        <section className="prayer-panel" aria-labelledby="today-heading">
-          <p className="next-prayer">{translate(locale, 'configureLocation')}</p>
+      {sourcedDashboard === null ? (
+        <section className="status-card">
+          <div>
+            <p className="label">{translate(locale, 'currentLocation')}</p>
+            <p className="value">{translate(locale, 'notConfigured')}</p>
+          </div>
+          <div>
+            <p className="label">{translate(locale, 'timezone')}</p>
+            <p className="value">{translate(locale, 'notConfigured')}</p>
+          </div>
+          <div>
+            <p className="label">{translate(locale, 'calculationMethod')}</p>
+            <p className="value">{calculationMethods[settings.calculationMethodId].name}</p>
+          </div>
+          <div>
+            <p className="label">{translate(locale, 'sourceMode')}</p>
+            <p className="value">
+              {translate(locale, sourceTranslationKeys[settings.prayerSourceMode])}
+            </p>
+          </div>
         </section>
       ) : (
-        <section className="prayer-panel" aria-labelledby="today-heading">
+        <section className="prayer-panel">
           <div className="date-strip">
             <div>
               <p className="label">{translate(locale, 'gregorianDate')}</p>
-              <p className="value">{formatGregorianCivilDate(dashboard.civilDate, locale)}</p>
+              <p className="value">
+                {formatGregorianCivilDate(sourcedDashboard.base.civilDate, locale)}
+              </p>
             </div>
             <div>
               <p className="label">{translate(locale, 'hijriDate')}</p>
               <p className="value">
-                {formatHijriCivilDate(dashboard.civilDate, locale, settings.hijriCorrectionDays)}
+                {formatHijriCivilDate(
+                  sourcedDashboard.base.civilDate,
+                  locale,
+                  settings.hijriCorrectionDays,
+                )}
               </p>
             </div>
           </div>
 
           <div className="section-heading">
             <div>
-              <p className="eyebrow">{translate(locale, 'today')}</p>
-              <h2 id="today-heading">{translate(locale, 'dailyPrayers')}</h2>
+              <p className="eyebrow">{translate(locale, 'dailyPrayers')}</p>
+              <h2>
+                {translate(locale, prayerTranslationKeys[sourcedDashboard.nextPrayer ?? 'fajr'])}
+              </h2>
             </div>
-            <div className="next-prayer-block" aria-live="polite">
-              <p className="label">{translate(locale, 'nextPrayer')}</p>
-              <strong>
-                {sourcedDashboard.nextPrayer === null
-                  ? translate(locale, 'notConfigured')
-                  : translate(locale, prayerTranslationKeys[sourcedDashboard.nextPrayer])}
-              </strong>
-              {sourcedDashboard.nextPrayerDayOffset === 1 && (
-                <span>{translate(locale, 'tomorrow')}</span>
+            <div className="next-prayer-block">
+              <p>{translate(locale, 'nextPrayer')}</p>
+              {sourcedDashboard.nextPrayer === null ? (
+                <strong>{translate(locale, 'notConfigured')}</strong>
+              ) : (
+                <strong>
+                  {translate(locale, prayerTranslationKeys[sourcedDashboard.nextPrayer])}
+                </strong>
               )}
               <p className="countdown">
                 {sourcedDashboard.secondsUntilNextPrayer === null
                   ? '—'
                   : formatCountdown(sourcedDashboard.secondsUntilNextPrayer, locale)}
               </p>
+              {sourcedDashboard.nextPrayerDayOffset === 1 && <p>{translate(locale, 'tomorrow')}</p>}
             </div>
           </div>
 
           <div className="prayer-grid">
             {sourcedDashboard.prayers.map((prayer) => {
-              const displayedAdjustment = displayedManualPrayerAdjustmentMinutes(
+              const isSupplementary = isSupplementaryPrayer(prayer.name);
+              const manualPrayerAdjustmentMinutes = displayedManualPrayerAdjustmentMinutes(
                 prayer.name,
                 prayer.manualAdjustmentMinutes,
-                prayer.source,
+                sourcedDashboard.sourceMode,
               );
-              const displayedHighLatitude = displayedHighLatitudeRuleApplied(
+              const highLatitudeRuleApplied = displayedHighLatitudeRuleApplied(
                 prayer.name,
                 prayer.highLatitudeRuleApplied,
-                prayer.source,
+                sourcedDashboard.sourceMode,
               );
+              const classes = [
+                'prayer-card',
+                prayer.isCurrent ? 'prayer-card-current' : '',
+                prayer.isNext ? 'prayer-card-next' : '',
+                isSupplementary ? 'prayer-card-supplementary' : '',
+              ]
+                .filter(Boolean)
+                .join(' ');
               return (
-                <article
-                  className={`prayer-card${prayer.isCurrent ? ' prayer-card-current' : ''}${prayer.isNext ? ' prayer-card-next' : ''}${isSupplementaryPrayer(prayer.name) ? ' prayer-card-supplementary' : ''}`}
-                  key={prayer.name}
-                >
-                  <div className="prayer-card-heading">
+                <article className={classes} key={prayer.name}>
+                  <div>
                     <span>{translate(locale, prayerTranslationKeys[prayer.name])}</span>
-                    <div className="prayer-indicators">
-                      {prayer.isCurrent && (
-                        <span className="current-prayer-badge">
-                          {translate(locale, 'currentPrayer')}
-                        </span>
-                      )}
-                      {displayedHighLatitude && (
-                        <span className="adjustment-badge high-latitude-badge">
-                          {translate(locale, 'highLatitudeAdjustment')} ·{' '}
-                          {translate(
-                            locale,
-                            highLatitudeRuleTranslationKeys[settings.highLatitudeRule],
-                          )}
-                        </span>
-                      )}
-                      {displayedAdjustment !== null && (
-                        <span className="adjustment-badge">
-                          {translate(locale, 'manualOffset')} {displayedAdjustment > 0 ? '+' : ''}
-                          {String(displayedAdjustment)} {translate(locale, 'minutesShort')}
-                        </span>
-                      )}
-                    </div>
+                    {prayer.isCurrent && (
+                      <span className="current-prayer-badge">
+                        {translate(locale, 'currentPrayer')}
+                      </span>
+                    )}
                   </div>
                   <div className="prayer-times">
-                    <span className="prayer-time-label">{translate(locale, 'prayerStart')}</span>
-                    <strong>
-                      {prayer.localMinutes === null
-                        ? '—'
-                        : formatLocalTime(prayer.localMinutes, locale, settings.timeFormat)}
-                    </strong>
-                    {prayer.name !== 'sunrise' && prayer.iqamahLocalMinutes !== null && (
-                      <>
+                    <div>
+                      <span className="prayer-time-label">{translate(locale, 'prayerStart')}</span>
+                      <strong>
+                        {prayer.localMinutes === null
+                          ? '—'
+                          : formatLocalTime(prayer.localMinutes, locale, settings.timeFormat)}
+                      </strong>
+                    </div>
+                    {!isSupplementary && (
+                      <div>
                         <span className="prayer-time-label">{translate(locale, 'iqamah')}</span>
                         <strong className="iqamah-time">
-                          {formatLocalTime(prayer.iqamahLocalMinutes, locale, settings.timeFormat)}
+                          {prayer.iqamahLocalMinutes === null
+                            ? translate(locale, 'noIqamah')
+                            : formatLocalTime(
+                                prayer.iqamahLocalMinutes,
+                                locale,
+                                settings.timeFormat,
+                              )}
                         </strong>
-                      </>
+                      </div>
+                    )}
+                  </div>
+                  <div className="prayer-card-badges">
+                    {highLatitudeRuleApplied && (
+                      <span className="prayer-indicator high-latitude-indicator">
+                        {translate(locale, 'highLatitudeAdjustment')} ·{' '}
+                        {translate(
+                          locale,
+                          highLatitudeRuleTranslationKeys[sourcedDashboard.base.highLatitudeRule],
+                        )}
+                      </span>
+                    )}
+                    {manualPrayerAdjustmentMinutes !== null && (
+                      <span className="prayer-indicator manual-adjustment-indicator">
+                        {translate(locale, 'manualOffset')}{' '}
+                        {manualPrayerAdjustmentMinutes > 0 ? '+' : ''}
+                        {String(manualPrayerAdjustmentMinutes)} {translate(locale, 'minutesShort')}
+                      </span>
                     )}
                   </div>
                 </article>
@@ -1121,64 +1252,50 @@ export function App() {
           </div>
 
           {sourcedDashboard.jumuahSessions.length > 0 && (
-            <section className="jumuah-panel" aria-label={translate(locale, 'jumuah')}>
-              <h3>{translate(locale, 'jumuah')}</h3>
-              <div className="jumuah-grid">
-                {sourcedDashboard.jumuahSessions.map((session) => (
-                  <article key={`${session.label}-${String(session.salahLocalMinutes)}`}>
-                    <strong>{session.label}</strong>
-                    <span>
-                      {translate(locale, 'khutbah')}:{' '}
-                      {formatLocalTime(session.khutbahLocalMinutes, locale, settings.timeFormat)}
-                    </span>
-                    <span>
-                      {translate(locale, 'salah')}:{' '}
-                      {formatLocalTime(session.salahLocalMinutes, locale, settings.timeFormat)}
-                    </span>
-                  </article>
-                ))}
-              </div>
-            </section>
-          )}
-
-          {(sourcedDashboard.prayers.some((prayer) =>
-            displayedHighLatitudeRuleApplied(
-              prayer.name,
-              prayer.highLatitudeRuleApplied,
-              prayer.source,
-            ),
-          ) ||
-            sourcedDashboard.prayers.some(
-              (prayer) =>
-                displayedManualPrayerAdjustmentMinutes(
-                  prayer.name,
-                  prayer.manualAdjustmentMinutes,
-                  prayer.source,
-                ) !== null,
-            )) && (
-            <div className="provenance-note" role="status">
-              {sourcedDashboard.prayers.some((prayer) =>
-                displayedHighLatitudeRuleApplied(
-                  prayer.name,
-                  prayer.highLatitudeRuleApplied,
-                  prayer.source,
-                ),
-              ) && (
-                <span>
-                  {translate(locale, 'highLatitudeAdjustment')}:{' '}
-                  {translate(locale, highLatitudeRuleTranslationKeys[settings.highLatitudeRule])}
-                </span>
-              )}
-              {sourcedDashboard.prayers.some(
-                (prayer) =>
-                  displayedManualPrayerAdjustmentMinutes(
-                    prayer.name,
-                    prayer.manualAdjustmentMinutes,
-                    prayer.source,
-                  ) !== null,
-              ) && <span>{translate(locale, 'manualAdjustment')}</span>}
+            <div className="jumuah-panel">
+              <p className="label">{translate(locale, 'jumuah')}</p>
+              {sourcedDashboard.jumuahSessions.map((session) => (
+                <div className="jumuah-session" key={session.label}>
+                  <strong>{session.label}</strong>
+                  <span>
+                    {translate(locale, 'khutbah')}:{' '}
+                    {formatLocalTime(session.khutbahLocalMinutes, locale, settings.timeFormat)}
+                  </span>
+                  <span>
+                    {translate(locale, 'salah')}:{' '}
+                    {formatLocalTime(session.salahLocalMinutes, locale, settings.timeFormat)}
+                  </span>
+                </div>
+              ))}
             </div>
           )}
+
+          <div className="provenance-note">
+            <span>
+              {translate(locale, 'calculationSource')}:{' '}
+              {translate(locale, sourceTranslationKeys[sourcedDashboard.sourceMode])}
+            </span>
+            <span>
+              {translate(locale, 'method')}: {sourcedDashboard.base.method.name}
+            </span>
+            <span>
+              {translate(locale, 'timezone')}: {sourcedDashboard.base.timeZone}
+            </span>
+            {sourcedDashboard.mosqueName !== null && (
+              <span>
+                {translate(locale, 'selectedMosque')}: {sourcedDashboard.mosqueName}
+              </span>
+            )}
+            {sourcedDashboard.hasHighLatitudeFallback && (
+              <span>
+                {translate(locale, 'highLatitudeAdjustment')} ·{' '}
+                {translate(
+                  locale,
+                  highLatitudeRuleTranslationKeys[sourcedDashboard.base.highLatitudeRule],
+                )}
+              </span>
+            )}
+          </div>
         </section>
       )}
     </main>

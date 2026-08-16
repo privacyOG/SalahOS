@@ -223,7 +223,10 @@
 
 ### 5.2 Timetable management
 
-- [~] Support manual mosque timetable entry
+- [x] Support manual mosque timetable entry
+
+**Manual mosque-entry verification note (2026-08-16):** read-only Quality Gate run `31916508659` passed formatting, typed lint, strict typecheck, all tests and production build on exact cleaned head `3d50f0204b7a2162ab92af891467852364ff1f48`. The settings UI now supports bilingual manual entry of one Gregorian timetable day with all five obligatory prayer start times and optional fixed Iqamah times. Inputs use strict 24-hour `HH:MM` validation, saved days are upserted into the existing validated offline mosque library, replacing only the same mosque/date when edited, and the saved timetable is immediately selected as the local-mosque source. The implementation reuses the existing persisted timetable format rather than introducing a parallel manual-only storage model.
+
 - [x] Support CSV timetable import
 - [x] Define and document CSV schema
 - [x] Ship sample timetable file
@@ -233,7 +236,7 @@
 - [ ] Research optional reputable mosque APIs/integrations
 - [x] Do not rely on fragile arbitrary website scraping as an authoritative source
 
-**Mosque-library verification note (2026-08-16):** implementation Quality Gate run `31905789616` passed formatting, typed lint, strict typecheck, all tests and production build for the local mosque manager. Read-only Quality Gate run `31907837879` then passed after duplicate-state cleanup, duplicate-translation cleanup and restoration of the stricter persisted-timetable parser. The settings panel now stores multiple validated mosque timetables locally, imports documented CSV or JSON data through the existing strict parser, lets the user select or remove a mosque, and automatically activates the selected timetable as the local-mosque prayer source. Persisted library entries are revalidated through the strict timetable parser before use. Manual per-day timetable editing and optional vetted remote integrations remain open.
+**Mosque-library verification note (2026-08-16):** implementation Quality Gate run `31905789616` passed formatting, typed lint, strict typecheck, all tests and production build for the local mosque manager. Read-only Quality Gate run `31907837879` then passed after duplicate-state cleanup, duplicate-translation cleanup and restoration of the stricter persisted-timetable parser. The settings panel now stores multiple validated mosque timetables locally, imports documented CSV or JSON data through the existing strict parser, lets the user select or remove a mosque, and automatically activates the selected timetable as the local-mosque prayer source. Persisted library entries are revalidated through the strict timetable parser before use. Manual per-day timetable editing was still open at this verification point; optional vetted remote integrations remain open.
 
 ### 5.3 Salah start vs Iqamah/Jama'ah
 
