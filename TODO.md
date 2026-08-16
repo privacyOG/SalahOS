@@ -384,12 +384,15 @@
 
 ## 9. iOS / iPadOS application
 
-- [ ] Configure iOS project/shell
-- [ ] Implement location permission descriptions and flow
-- [ ] Implement persistent settings/storage
-- [ ] Implement local prayer notifications within iOS scheduling limits
-- [ ] Implement Adhan/notification audio within Apple platform restrictions
-- [ ] Handle background execution limitations explicitly
+- [x] Configure iOS project/shell
+- [x] Implement location permission descriptions and flow
+- [x] Implement persistent settings/storage
+- [x] Implement local prayer notifications within iOS scheduling limits
+- [x] Implement Adhan/notification audio within Apple platform restrictions
+- [x] Handle background execution limitations explicitly
+
+**iOS native implementation verification note (2026-08-16):** foundation run `31941296351`, local-notification run `31941790069`, lifecycle-policy run `31941980679`, and latest-main consolidation run `31942088604` passed their repository gates and Xcode iOS Simulator builds. The committed shell uses foreground location privacy metadata, native Preferences persistence, bounded today/tomorrow local prayer scheduling with owned-request reconciliation, silent/default notification audio, and an explicit foreground/background/terminated system-notification policy that does not claim full Adhan-recording auto-play or require application background execution at delivery time. Interactive iPhone/iPad layout, offline cold-start, and simulator/device acceptance remain separately tracked.
+
 - [ ] Test iPhone responsive layout
 - [ ] Test iPad responsive layout
 - [ ] Test offline cold start

@@ -40,6 +40,7 @@ import {
 import type { Locale, TranslationKey } from './i18n/translations';
 import { requestCurrentLocation } from './platform/currentLocation';
 import { synchronizeAndroidPrayerNotifications } from './platform/androidNotificationScheduler';
+import { synchronizeIosPrayerNotifications } from './platform/iosNotificationScheduler';
 import { getApplicationStorage } from './platform/applicationStorage';
 import type { LocationFailureReason } from './platform/currentLocation';
 import { createStructuredErrorLogger } from './platform/errorLog';
@@ -365,6 +366,9 @@ export function App() {
     const resolutions = resolveNotificationScheduleInstants(intents, dashboard.timeZone);
 
     void synchronizeAndroidPrayerNotifications(resolutions, locale).catch(() => {
+      errorLogger.log('notification-scheduling-unavailable');
+    });
+    void synchronizeIosPrayerNotifications(resolutions, locale).catch(() => {
       errorLogger.log('notification-scheduling-unavailable');
     });
   }, [

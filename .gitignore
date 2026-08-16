@@ -30,3 +30,4 @@ Thumbs.db
 
 # Generated TypeScript incremental build metadata
 *.tsbuildinfo
+ios/DerivedData/
