@@ -30,6 +30,7 @@ SalahOS is designed around accurate local prayer calculations, selectable calcul
 - [Tested platform/build status](docs/PLATFORM_STATUS.md)
 - [Visual regression](docs/VISUAL_REGRESSION.md)
 - [Accessibility validation](docs/ACCESSIBILITY_VALIDATION.md)
+- [Native simulator/emulator visual validation](docs/NATIVE_VISUAL_VALIDATION.md)
 - [Raspberry Pi Touch Display 2](docs/RASPBERRY_PI_TOUCH_DISPLAY_2.md)
 - [TV / kiosk deployment](docs/TV_KIOSK_DEPLOYMENT.md)
 - [Troubleshooting](docs/TROUBLESHOOTING.md)
@@ -47,9 +48,9 @@ SalahOS is designed around accurate local prayer calculations, selectable calcul
 
 ## Platform status
 
-- **Web / PWA:** automated build, offline and repository verification path; the release candidate adds deterministic browser visual regression and screenshot artifacts pending exact-head execution/inspection.
-- **Android:** committed Capacitor native shell with native location/storage/notification integration, permanent build gates, release-signing infrastructure and Android emulator acceptance; the release candidate adds stricter permission/backup/transport checks while broader physical-device/notification timing and distribution acceptance remain open.
-- **iOS / iPadOS:** committed Capacitor/Xcode native shell with native location/storage/notification integration and permanent unsigned Simulator build validation; release-candidate safe-area/security changes, final visual/offline acceptance, physical-device signing/validation and real notification-delivery acceptance remain open until their applicable evidence exists.
+- **Web / PWA:** automated build, offline and repository verification path; the release candidate adds deterministic browser visual/accessibility regression and screenshot artifacts pending exact-head execution/inspection.
+- **Android:** committed Capacitor native shell with native location/storage/notification integration, permanent build gates, release-signing infrastructure and prior Android emulator acceptance; the release candidate adds stricter permission/backup/transport checks plus permanent Android 35 offline cold-start/orientation screenshot evidence pending exact-head execution/inspection. Broader physical-device/notification timing and distribution acceptance remain open.
+- **iOS / iPadOS:** committed Capacitor/Xcode native shell with native location/storage/notification integration and permanent unsigned Simulator build validation; the release candidate adds safe-area/security changes plus permanent iPhone/iPad cold-launch screenshot evidence pending exact-head execution/inspection. Physical-device signing/validation and real notification-delivery acceptance remain open until their applicable evidence exists.
 - **Raspberry Pi / Touch Display 2:** repository-validated browser/kiosk deployment path; physical Touch Display 2 acceptance remains open.
 - **TV / generic kiosk:** repository-validated browser-hosted smart-display path; the candidate exercises that real route in its 1080p browser visual fixture, while target TV/remote/readability acceptance remains open.
 
