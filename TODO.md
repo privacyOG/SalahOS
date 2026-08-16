@@ -504,7 +504,10 @@
 
 ## 16. Privacy and security
 
-- [ ] Document threat/privacy model
+- [x] Document threat/privacy model
+
+**Privacy/threat-model verification note (2026-08-16):** read-only Quality Gate run `31917509097` passed formatting, typed lint, strict typecheck, all tests and production build after adding `docs/PRIVACY_THREAT_MODEL.md`. The model identifies precise location, saved places, mosque choices, notification schedules and imported timetable/settings data as privacy-relevant; defines local-first trust boundaries; requires explicit location permission and data minimisation; constrains optional remote integrations, logging, service-worker caching and screen exposure; and records security review gates for future networked/native functionality. This closes documentation only: remote-call security, secrets policy enforcement, dependency review, CSP and native permission review remain separate open items.
+
 - [ ] Minimise collection of precise location data
 - [x] Keep prayer calculations local by default
 - [x] No mandatory account for core prayer-time functionality

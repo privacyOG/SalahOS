@@ -447,3 +447,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Added `prefers-contrast: more` handling that strengthens secondary text and structural borders and removes supplementary-card opacity reduction.
 - Added `forced-colors: active` system-color mappings so operating-system high-contrast modes can control canvas, text, borders, highlights and focus treatment.
 - Read-only Quality Gate run `31917294038` passed formatting, typed lint, strict typecheck, all tests and production build on exact cleaned head `c23c76db4ac07b5da9b3c3406b4d63c2cebb0c91`.
+
+### 2026-08-16 — privacy and threat model
+
+- Added `docs/PRIVACY_THREAT_MODEL.md` covering privacy-relevant data, trust boundaries, local-first defaults, permission/data-minimisation expectations and abuse/failure scenarios.
+- Defined safeguards for precise location, saved locations, mosque selections, timetable/settings imports, notification schedules, optional remote integrations, logs, caches and information visible on shared displays.
+- Added explicit review gates for future networked and native functionality without claiming those controls are implemented yet.
+- Kept separate security tracker items open for remote-call security, committed-secret prevention, dependency review, CSP and native-permission review.
+- Read-only Quality Gate run `31917509097` passed formatting, typed lint, strict typecheck, all tests and production build.
