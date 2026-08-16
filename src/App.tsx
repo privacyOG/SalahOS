@@ -63,6 +63,7 @@ import {
 import type { PersistedSettings } from './platform/settingsStorage';
 import { installRuntimeRefreshListeners } from './platform/runtimeRefresh';
 import { installThemePreference } from './platform/themePreference';
+import { BidiText } from './ui/BidiText';
 
 const prayerTranslationKeys: Readonly<Record<PrayerName, TranslationKey>> = {
   fajr: 'prayerFajr',
@@ -582,7 +583,7 @@ export function App() {
             >
               <option value="">{translate(locale, 'noSavedLocationSelected')}</option>
               {savedLocations.map((location) => (
-                <option key={location.id} value={location.id}>
+                <option dir="auto" key={location.id} value={location.id}>
                   {location.label}
                 </option>
               ))}
@@ -593,6 +594,7 @@ export function App() {
             <input
               value={savedLocationLabel}
               maxLength={100}
+              dir="auto"
               onChange={(event) => {
                 setSavedLocationLabel(event.target.value);
                 setLocationMessage(null);
@@ -667,7 +669,7 @@ export function App() {
               }}
             >
               {Object.values(calculationMethods).map((method) => (
-                <option key={method.id} value={method.id}>
+                <option dir="auto" key={method.id} value={method.id}>
                   {method.name}
                 </option>
               ))}
@@ -783,7 +785,7 @@ export function App() {
               >
                 <option value="">{translate(locale, 'selectMosque')}</option>
                 {mosqueLibrary.map((entry) => (
-                  <option key={entry.id} value={entry.id}>
+                  <option dir="auto" key={entry.id} value={entry.id}>
                     {entry.timetable.mosqueName}
                   </option>
                 ))}
@@ -807,6 +809,7 @@ export function App() {
                 <input
                   value={manualMosqueName}
                   maxLength={160}
+                  dir="auto"
                   onChange={(event) => {
                     setManualMosqueName(event.target.value);
                     setMosqueMessage(null);
@@ -880,6 +883,7 @@ export function App() {
                 <input
                   value={mosqueImportName}
                   maxLength={160}
+                  dir="auto"
                   onChange={(event) => {
                     setMosqueImportName(event.target.value);
                     setMosqueMessage(null);
@@ -1118,7 +1122,9 @@ export function App() {
           </div>
           <div>
             <p className="label">{translate(locale, 'calculationMethod')}</p>
-            <p className="value">{calculationMethods[settings.calculationMethodId].name}</p>
+            <p className="value">
+              <BidiText>{calculationMethods[settings.calculationMethodId].name}</BidiText>
+            </p>
           </div>
           <div>
             <p className="label">{translate(locale, 'sourceMode')}</p>
@@ -1256,7 +1262,9 @@ export function App() {
               <p className="label">{translate(locale, 'jumuah')}</p>
               {sourcedDashboard.jumuahSessions.map((session) => (
                 <div className="jumuah-session" key={session.label}>
-                  <strong>{session.label}</strong>
+                  <strong>
+                    <BidiText>{session.label}</BidiText>
+                  </strong>
                   <span>
                     {translate(locale, 'khutbah')}:{' '}
                     {formatLocalTime(session.khutbahLocalMinutes, locale, settings.timeFormat)}
@@ -1276,14 +1284,16 @@ export function App() {
               {translate(locale, sourceTranslationKeys[sourcedDashboard.sourceMode])}
             </span>
             <span>
-              {translate(locale, 'method')}: {sourcedDashboard.base.method.name}
+              {translate(locale, 'method')}:{' '}
+              <BidiText>{sourcedDashboard.base.method.name}</BidiText>
             </span>
             <span>
-              {translate(locale, 'timezone')}: {sourcedDashboard.base.timeZone}
+              {translate(locale, 'timezone')}: <BidiText>{sourcedDashboard.base.timeZone}</BidiText>
             </span>
             {sourcedDashboard.mosqueName !== null && (
               <span>
-                {translate(locale, 'selectedMosque')}: {sourcedDashboard.mosqueName}
+                {translate(locale, 'selectedMosque')}:{' '}
+                <BidiText>{sourcedDashboard.mosqueName}</BidiText>
               </span>
             )}
             {sourcedDashboard.hasHighLatitudeFallback && (
