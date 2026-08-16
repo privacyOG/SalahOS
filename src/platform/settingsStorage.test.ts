@@ -163,6 +163,20 @@ describe('versioned settings persistence', () => {
     expect(imported.prayerAdjustments).toEqual({ fajr: 2, dhuhr: -180, isha: -4 });
   });
 
+  it('does not coerce non-number coordinate values into a persisted location', () => {
+    for (const coordinates of [
+      { latitude: '', longitude: 151.2093 },
+      { latitude: null, longitude: 151.2093 },
+      { latitude: false, longitude: 151.2093 },
+      { latitude: -33.8688, longitude: '151.2093' },
+    ]) {
+      const imported = importPersistedSettings(
+        JSON.stringify({ version: 2, location: { coordinates } }),
+      );
+      expect(imported.location).toBeNull();
+    }
+  });
+
   it('rejects unsupported future schema versions', () => {
     expect(() => importPersistedSettings('{"version":99}')).toThrow(RangeError);
   });
