@@ -145,6 +145,24 @@ describe('versioned settings persistence', () => {
     expect(migrated.notifications).toEqual(defaultPersistedSettings.notifications);
   });
 
+  it('keeps only bounded integer-minute prayer adjustments on import', () => {
+    const imported = importPersistedSettings(
+      JSON.stringify({
+        version: 2,
+        prayerAdjustments: {
+          fajr: 2,
+          sunrise: 1.5,
+          dhuhr: -180,
+          asr: 181,
+          maghrib: '3',
+          isha: -4,
+        },
+      }),
+    );
+
+    expect(imported.prayerAdjustments).toEqual({ fajr: 2, dhuhr: -180, isha: -4 });
+  });
+
   it('rejects unsupported future schema versions', () => {
     expect(() => importPersistedSettings('{"version":99}')).toThrow(RangeError);
   });
