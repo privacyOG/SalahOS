@@ -30,6 +30,25 @@ class MemoryPreferences implements PreferencesStore {
   }
 }
 
+class FlakyPreferences extends MemoryPreferences {
+  readonly failedSetAttempts = new Map<string, number>();
+
+  failNextSets(key: string, count: number): void {
+    this.failedSetAttempts.set(key, count);
+  }
+
+  override set({ key, value }: { key: string; value: string }): Promise<void> {
+    this.writes.push({ key, value });
+    const failuresRemaining = this.failedSetAttempts.get(key) ?? 0;
+    if (failuresRemaining > 0) {
+      this.failedSetAttempts.set(key, failuresRemaining - 1);
+      return Promise.reject(new Error('simulated Preferences write failure'));
+    }
+    this.values.set(key, value);
+    return Promise.resolve();
+  }
+}
+
 class MemoryWebStorage implements KeyValueStorage {
   readonly values = new Map<string, string>();
 
@@ -73,6 +92,24 @@ describe('native application storage', () => {
       { key: 'alpha', value: 'two' },
     ]);
     expect(preferences.values.get('alpha')).toBe('two');
+  });
+
+  it('retries a failed mutation on flush without blocking later keys', async () => {
+    const preferences = new FlakyPreferences();
+    preferences.failNextSets('alpha', 1);
+    const storage = await createNativePreferencesStorage(preferences, ['alpha', 'beta']);
+
+    storage.setItem('alpha', 'one');
+    storage.setItem('beta', 'two');
+    await storage.flush();
+
+    expect(preferences.writes).toEqual([
+      { key: 'alpha', value: 'one' },
+      { key: 'beta', value: 'two' },
+      { key: 'alpha', value: 'one' },
+    ]);
+    expect(preferences.values.get('alpha')).toBe('one');
+    expect(preferences.values.get('beta')).toBe('two');
   });
 
   it('removes cached and native values through the same storage contract', async () => {
@@ -132,6 +169,24 @@ describe('native application storage', () => {
     expect(preferences.values.get(PERSISTED_APPLICATION_KEYS[1])).toBe('legacy-locations');
     expect(webStorage.getItem(PERSISTED_APPLICATION_KEYS[0])).toBeNull();
     expect(webStorage.getItem(PERSISTED_APPLICATION_KEYS[1])).toBeNull();
+  });
+
+  it('preserves legacy Web Storage when migration cannot be persisted', async () => {
+    const preferences = new FlakyPreferences();
+    const webStorage = new MemoryWebStorage();
+    const key = PERSISTED_APPLICATION_KEYS[0];
+    preferences.failNextSets(key, 2);
+    webStorage.setItem(key, 'legacy-settings');
+
+    await expect(
+      initializeApplicationStorage(webStorage, {
+        isNativePlatform: () => true,
+        preferences,
+      }),
+    ).rejects.toThrow('simulated Preferences write failure');
+
+    expect(webStorage.getItem(key)).toBe('legacy-settings');
+    expect(preferences.values.has(key)).toBe(false);
   });
 
   it('keeps browser and PWA storage on the provided Web Storage implementation', async () => {
