@@ -511,3 +511,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Invalid-system-time logging is deduplicated until the runtime clock recovers; calculation-unavailable logging follows availability-state transitions.
 - Unit tests lock the exact serialized schema and verify location/error-detail fields are absent.
 - Read-only Quality Gate run `31920530983` passed formatting, typed lint, strict typecheck, all tests and production build on the cleaned implementation head.
+
+### 2026-08-16 — precise location data minimisation
+
+- Browser location acquisition remains explicit and one-shot; no continuous location watch is started.
+- Default browser geolocation uses low-accuracy mode and permits reuse of a recent fix for five minutes rather than forcing a fresh precise sensor fix.
+- The adapter retains only latitude/longitude needed for local timezone and prayer calculations plus the source marker; accuracy, altitude, heading, speed and browser capture timestamp are discarded immediately.
+- High-accuracy acquisition requires an explicit caller opt-in.
+- Read-only Quality Gate run `31920709447` passed formatting, typed lint, strict typecheck, all tests and production build.

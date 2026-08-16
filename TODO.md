@@ -525,7 +525,10 @@
 
 **Privacy/threat-model verification note (2026-08-16):** read-only Quality Gate run `31917509097` passed formatting, typed lint, strict typecheck, all tests and production build after adding `docs/PRIVACY_THREAT_MODEL.md`. The model identifies precise location, saved places, mosque choices, notification schedules and imported timetable/settings data as privacy-relevant; defines local-first trust boundaries; requires explicit location permission and data minimisation; constrains optional remote integrations, logging, service-worker caching and screen exposure; and records security review gates for future networked/native functionality. This closes documentation only: remote-call security, secrets policy enforcement, dependency review, CSP and native permission review remain separate open items.
 
-- [ ] Minimise collection of precise location data
+- [x] Minimise collection of precise location data
+
+**Location-data minimisation verification note (2026-08-16):** read-only Quality Gate run `31920709447` passed formatting, typed lint, strict typecheck, all tests and production build after tightening the browser geolocation adapter. Location acquisition remains explicit and one-shot, defaults to low-accuracy mode with a five-minute reusable fix window, and never starts a continuous watch. The adapter now discards browser accuracy, altitude, altitude accuracy, heading, speed and capture timestamp immediately, retaining only latitude/longitude required for local timezone and prayer calculations plus the source marker. High-accuracy acquisition remains available only through explicit caller opt-in. Tests lock the retained data shape, default request options, one-shot behaviour and explicit opt-in path.
+
 - [x] Keep prayer calculations local by default
 - [x] No mandatory account for core prayer-time functionality
 - [x] No unnecessary analytics/telemetry
