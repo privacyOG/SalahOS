@@ -5,6 +5,7 @@ import {
   formatGregorianCivilDate,
   formatHijriCivilDate,
   formatLocalTime,
+  localeDirection,
   translate,
 } from '../i18n/i18n';
 import type { Locale, TranslationKey } from '../i18n/translations';
@@ -58,7 +59,12 @@ export function SmartDisplay({
   const obligatoryPrayers = dashboard?.prayers.filter((prayer) => prayer.name !== 'sunrise') ?? [];
 
   return (
-    <main className="smart-display" data-mode="smart-display">
+    <main
+      className="smart-display"
+      data-mode="smart-display"
+      dir={localeDirection(locale)}
+      lang={locale}
+    >
       <header className="smart-display-header">
         <div className="smart-display-clock-block">
           <p className="eyebrow">{translate(locale, 'appName')}</p>
