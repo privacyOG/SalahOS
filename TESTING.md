@@ -605,3 +605,12 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - The verifier requires non-empty built HTML, manifest, service-worker and first-party icon artifacts; validates root/standalone manifest expectations and declared icons; and confirms the deployed `dist/sw.js` is byte-for-byte identical to the `public/sw.js` source exercised by the service-worker lifecycle tests.
 - The documented platform matrix deliberately leaves Android, iOS, Raspberry Pi and TV/kiosk build/deployment paths unverified until their real platform-specific gates exist.
 - Read-only Quality Gate run `31927318102` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, all 238 tests, production build and deploy-artifact verification.
+
+### 2026-08-16 — dependency license policy gate
+
+- Added `npm run security:licenses`, backed by `scripts/check-dependency-licenses.mjs`, and made it part of both `npm run check` and the read-only Quality Gate.
+- The policy validates every non-root npm lockfile package, fails on missing/unreviewed license expressions, and keeps the production dependency allowlist permissive-only.
+- Verified 4 production packages: 3 MIT and 1 CC0-1.0.
+- Verified 157 development-only packages; 12 MPL-2.0 entries belong to `lightningcss` build tooling and are admitted only by the development-only policy after explicit review/documentation.
+- Added `docs/DEPENDENCY_LICENSE_REVIEW.md` covering the policy, the development-only MPL-2.0 exception, dependency-change workflow, legal-review boundary and future native/non-npm review boundary.
+- Read-only Quality Gate run `31928221970` passed the sensitive-file policy, dependency vulnerability audit, dependency-license policy, formatting, typed lint, strict typecheck, the complete test suite, production build and deploy-artifact verification.

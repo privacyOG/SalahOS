@@ -631,7 +631,9 @@
 - [x] No unexplained widened test tolerances
 - [x] No disabled failing tests without documented blocker
 - [x] No placeholder implementation marked complete
-- [ ] Final dependency/license review
+- [x] Final dependency/license review
+
+**Dependency-license verification note (2026-08-16):** read-only Quality Gate run `31928221970` passed the sensitive-file policy, dependency vulnerability audit, the new dependency-license policy, formatting, typed lint, strict typecheck, the complete test suite, production build and deploy-artifact verification. The lockfile policy checks every non-root npm package entry and fails closed on missing or unreviewed license expressions. The verified graph contains 4 production packages using only MIT/CC0-1.0 and 157 development-only packages; 12 MPL-2.0 entries are confined to `lightningcss` build tooling and are explicitly documented as a development-only exception. A future MPL-2.0 production dependency, unknown license, restrictive/source-available license or unreviewed copyleft expression will fail CI until separately reviewed. `docs/DEPENDENCY_LICENSE_REVIEW.md` documents the scope and review boundary; native-platform and non-npm dependencies remain subject to review when introduced.
 
 ---
 
