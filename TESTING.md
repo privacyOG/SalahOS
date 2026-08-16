@@ -542,3 +542,10 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - The integration saves and reloads a Sydney configuration, recalculates, persists changed method/Asr/high-latitude/Hijri/adjustment settings, reloads again and verifies the production dashboard reflects the new configuration.
 - The test verifies both provenance/configuration fields and changed Asr/Fajr local prayer times, proving a real recalculation rather than serialization alone.
 - Read-only Quality Gate run `31921801532` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, all tests and production build.
+
+### 2026-08-16 — date rollover integration
+
+- Added `src/integration/dateRollover.test.ts` around the exact Sydney local-midnight boundary.
+- At 23:59:59 the production dashboard keeps August 16 as today and identifies tomorrow Fajr; at 00:00:01 it advances today/tomorrow to August 17/18 and re-bases Fajr to the current civil day.
+- The fixture verifies local clock, Gregorian date, today/tomorrow schedules, next-prayer day offset and the six-row dashboard prayer presentation move together.
+- Read-only Quality Gate run `31921977275` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, all tests and production build.

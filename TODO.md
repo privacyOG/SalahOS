@@ -578,7 +578,10 @@
 
 **Settings-to-recalculation integration verification note (2026-08-16):** read-only Quality Gate run `31921801532` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, all tests and production build after adding an integration test that crosses the persisted-settings boundary. The test saves and reloads a Sydney configuration, builds the production dashboard from the loaded settings, then persists changed calculation method, Asr convention, high-latitude rule, Hijri correction and Fajr adjustment and proves the recalculated dashboard reflects those selections and changes the affected prayer times. This verifies persistence → reload → calculation rather than testing the storage and calculation modules only in isolation.
 
-- [ ] Date rollover flow
+- [x] Date rollover flow
+
+**Date-rollover integration verification note (2026-08-16):** read-only Quality Gate run `31921977275` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, all tests and production build after adding a production-dashboard integration fixture across Sydney local midnight. At 23:59:59 on 2026-08-16 the dashboard reports today/tomorrow as August 16/17 and next Fajr as day offset 1; at 00:00:01 it reports August 17/18 and re-bases that next Fajr to day offset 0. Gregorian presentation and the six-row prayer schedule advance with the same civil-date boundary, proving the runtime model does not remain stuck on yesterday's schedule.
+
 - [ ] Notification scheduling flow
 - [ ] Offline startup flow
 
