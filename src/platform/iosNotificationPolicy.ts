@@ -11,6 +11,12 @@ export interface IosNotificationDeliveryPolicy {
   readonly fullAdhanAutoPlayback: false;
 }
 
+export const IOS_NOTIFICATION_LIFECYCLES: readonly IosNotificationLifecycle[] = [
+  'foreground',
+  'background',
+  'terminated',
+];
+
 export function iosNotificationDeliveryPolicy(
   record: Pick<ScheduledNotificationRecord, 'sound'>,
   lifecycle: IosNotificationLifecycle,
@@ -24,8 +30,10 @@ export function iosNotificationDeliveryPolicy(
   };
 }
 
-export const IOS_NOTIFICATION_LIFECYCLES: readonly IosNotificationLifecycle[] = [
-  'foreground',
-  'background',
-  'terminated',
-];
+export function iosNotificationPoliciesForRecord(
+  record: Pick<ScheduledNotificationRecord, 'sound'>,
+): readonly IosNotificationDeliveryPolicy[] {
+  return IOS_NOTIFICATION_LIFECYCLES.map((lifecycle) =>
+    iosNotificationDeliveryPolicy(record, lifecycle),
+  );
+}
