@@ -6,11 +6,11 @@ import {
 } from './manualMosqueEntry';
 
 const completeDrafts = {
-  fajr: { start: '05:10', iqamah: '05:30' },
-  dhuhr: { start: '12:15', iqamah: '12:45' },
-  asr: { start: '15:40', iqamah: '16:00' },
-  maghrib: { start: '18:05', iqamah: '' },
-  isha: { start: '19:25', iqamah: '19:45' },
+  fajr: { start: '05:10', iqamahMode: 'fixed', iqamah: '05:30' },
+  dhuhr: { start: '12:15', iqamahMode: 'offset', iqamah: '20' },
+  asr: { start: '15:40', iqamahMode: 'fixed', iqamah: '16:00' },
+  maghrib: { start: '18:05', iqamahMode: 'none', iqamah: '' },
+  isha: { start: '19:25', iqamahMode: 'offset', iqamah: '15' },
 } as const;
 
 describe('manual mosque timetable entry', () => {
@@ -23,7 +23,7 @@ describe('manual mosque timetable entry', () => {
     expect(() => parseLocalClockTime('12:60')).toThrow(RangeError);
   });
 
-  it('builds a validated day with all five starts and optional fixed iqamah times', () => {
+  it('builds a validated day with fixed, offset and disabled Iqamah rules', () => {
     const day = buildManualMosqueDay('2026-08-16', completeDrafts);
 
     expect(day.date).toBe('2026-08-16');
@@ -31,17 +31,42 @@ describe('manual mosque timetable entry', () => {
       startLocalMinutes: 310,
       iqamah: { kind: 'fixed', localMinutes: 330 },
     });
+    expect(day.prayers.dhuhr).toEqual({
+      startLocalMinutes: 735,
+      iqamah: { kind: 'offset', offsetMinutes: 20 },
+    });
     expect(day.prayers.maghrib).toEqual({ startLocalMinutes: 1_085 });
   });
 
-  it('rejects missing or invalid manual prayer starts', () => {
+  it('rejects missing starts and invalid Iqamah values', () => {
     expect(() =>
       buildManualMosqueDay('2026-08-16', {
         ...completeDrafts,
-        asr: { start: '', iqamah: '' },
+        asr: { start: '', iqamahMode: 'none', iqamah: '' },
+      }),
+    ).toThrow(RangeError);
+    expect(() =>
+      buildManualMosqueDay('2026-08-16', {
+        ...completeDrafts,
+        dhuhr: { start: '12:15', iqamahMode: 'offset', iqamah: '181' },
+      }),
+    ).toThrow(RangeError);
+    expect(() =>
+      buildManualMosqueDay('2026-08-16', {
+        ...completeDrafts,
+        fajr: { start: '05:10', iqamahMode: 'fixed', iqamah: '5:30' },
       }),
     ).toThrow(RangeError);
     expect(() => buildManualMosqueDay('2026-02-30', completeDrafts)).toThrow(RangeError);
+  });
+
+  it('rejects an offset that rolls Iqamah into the next civil day', () => {
+    expect(() =>
+      buildManualMosqueDay('2026-08-16', {
+        ...completeDrafts,
+        isha: { start: '23:50', iqamahMode: 'offset', iqamah: '15' },
+      }),
+    ).toThrow(RangeError);
   });
 
   it('creates a new timetable and replaces an existing day deterministically', () => {
@@ -52,7 +77,7 @@ describe('manual mosque timetable entry', () => {
 
     const replacement = buildManualMosqueDay('2026-08-16', {
       ...completeDrafts,
-      fajr: { start: '05:15', iqamah: '05:35' },
+      fajr: { start: '05:15', iqamahMode: 'fixed', iqamah: '05:35' },
     });
     const secondDay = buildManualMosqueDay('2026-08-17', completeDrafts);
     const withSecondDay = upsertManualMosqueDay(created, 'Example Mosque', secondDay);
