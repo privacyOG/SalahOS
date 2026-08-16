@@ -4,7 +4,10 @@ import {
   defaultNotificationPreferences,
   updatePrayerNotificationPreference,
 } from '../domain/notificationPreferences';
-import { buildNotificationIntents, type PrayerScheduleInput } from '../domain/notificationSchedule';
+import {
+  buildNotificationIntents,
+  type PrayerScheduleInput,
+} from '../domain/notificationSchedule';
 import {
   applyNotificationSchedulerPlan,
   type NotificationSchedulerAdapter,
@@ -32,7 +35,10 @@ class MemoryScheduler implements NotificationSchedulerAdapter {
   }
 }
 
-function resolve(inputs: readonly PrayerScheduleInput[], preferences = defaultNotificationPreferences) {
+function resolve(
+  inputs: readonly PrayerScheduleInput[],
+  preferences = defaultNotificationPreferences,
+) {
   return resolveNotificationScheduleInstants(
     buildNotificationIntents(inputs, preferences),
     'Australia/Sydney',
