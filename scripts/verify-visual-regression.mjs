@@ -43,6 +43,8 @@ for (const requiredHarnessContract of [
   'document.documentElement.scrollWidth',
   'document.documentElement.dir',
   'document.documentElement.lang',
+  'document.documentElement.dataset.theme',
+  'waitForVisualState(session, visualCase)',
   "format: 'png'",
   'captureBeyondViewport: false',
 ]) {
@@ -63,5 +65,5 @@ for (const evidenceBoundary of [
 }
 
 console.log(
-  `Visual regression wiring contract passed: ${String(requiredCases.length)} deterministic browser cases plus CI screenshot artifacts.`,
+  `Visual regression wiring contract passed: ${String(requiredCases.length)} deterministic browser cases plus settled locale/theme checks and CI screenshot artifacts.`,
 );
