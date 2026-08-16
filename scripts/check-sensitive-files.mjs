@@ -4,8 +4,22 @@ import path from 'node:path';
 const root = process.cwd();
 const skippedDirectories = new Set(['.git', 'node_modules', 'dist', 'coverage']);
 const allowedNames = new Set(['.env.example']);
-const blockedExtensions = new Set(['.key', '.pem', '.p12', '.pfx', '.jks', '.keystore', '.mobileprovision']);
-const blockedNames = new Set(['local.properties', 'credentials.json', 'secrets.json', 'credentials.yaml', 'secrets.yaml']);
+const blockedExtensions = new Set([
+  '.key',
+  '.pem',
+  '.p12',
+  '.pfx',
+  '.jks',
+  '.keystore',
+  '.mobileprovision',
+]);
+const blockedNames = new Set([
+  'local.properties',
+  'credentials.json',
+  'secrets.json',
+  'credentials.yaml',
+  'secrets.yaml',
+]);
 
 function normalize(relativePath) {
   return relativePath.split(path.sep).join('/');
