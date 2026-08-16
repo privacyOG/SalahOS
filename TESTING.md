@@ -455,3 +455,10 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Added explicit review gates for future networked and native functionality without claiming those controls are implemented yet.
 - Kept separate security tracker items open for remote-call security, committed-secret prevention, dependency review, CSP and native-permission review.
 - Read-only Quality Gate run `31917509097` passed formatting, typed lint, strict typecheck, all tests and production build.
+
+### 2026-08-16 — web Content Security Policy baseline
+
+- Added an in-document Content Security Policy baseline to `index.html` that defaults resources to the same origin and denies plugins/frames.
+- Kept only narrowly required exceptions for inline styles, development websocket connections, local/data images and local/blob media.
+- Added `docs/WEB_SECURITY_HEADERS.md` documenting production response-header hardening and the boundary between repository controls and host/CDN configuration.
+- Read-only Quality Gate run `31918434190` passed formatting, typed lint, strict typecheck, all tests and production build.

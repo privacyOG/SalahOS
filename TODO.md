@@ -516,7 +516,10 @@
 - [ ] Secure any optional remote API calls
 - [ ] Do not commit secrets/API keys
 - [ ] Dependency vulnerability review
-- [ ] Content Security Policy for web/PWA where applicable
+- [x] Content Security Policy for web/PWA where applicable
+
+**Web CSP verification note (2026-08-16):** read-only Quality Gate run `31918434190` passed formatting, typed lint, strict typecheck, all tests and production build after adding a same-origin Content Security Policy baseline to `index.html` and `docs/WEB_SECURITY_HEADERS.md`. The policy restricts scripts, fonts, workers and the manifest to the application origin; limits images/media to local/data/blob use where required; denies objects and frames; constrains base URLs and form submission; and leaves no wildcard remote HTTP origins. Development websocket schemes remain allowed for local tooling. The deployment guide records stronger response-header requirements such as `frame-ancestors`, nosniff, referrer, permissions and carefully enabled HSTS; those remain deployment-specific rather than falsely claimed as configured here.
+
 - [x] Validate imported CSV/JSON data safely
 - [ ] Review native permissions and remove unnecessary ones
 
