@@ -20,12 +20,31 @@ describe('calculation method registry', () => {
     }
   });
 
+  it('records Diyanet institutional corrections without claiming full method verification', () => {
+    const diyanet = getCalculationMethod('diyanet');
+
+    expect(diyanet.institutionalAdjustments).toEqual({
+      sunrise: -7,
+      dhuhr: 5,
+      asr: 4,
+      maghrib: 7,
+    });
+    expect(diyanet.verification).toBe('pending-authoritative-source');
+  });
+
+  it('does not invent official Dubai corrections when the reviewed authority source does not publish them', () => {
+    const dubai = getCalculationMethod('dubai');
+
+    expect(dubai.institutionalAdjustments).toEqual({});
+    expect(dubai.verification).toBe('pending-authoritative-source');
+  });
+
   it('keeps methods with known approximation or experimental caveats pending', () => {
     expect(getCalculationMethod('diyanet').verification).toBe('pending-authoritative-source');
     expect(getCalculationMethod('dubai').verification).toBe('pending-authoritative-source');
   });
 
-  it('creates validated custom parameters', () => {
+  it('creates validated custom parameters without institutional corrections', () => {
     const custom = createCustomCalculationMethod({
       name: 'Local custom',
       fajrAngleDegrees: 18,
@@ -34,6 +53,7 @@ describe('calculation method registry', () => {
 
     expect(custom.id).toBe('custom');
     expect(custom.verification).toBe('custom');
+    expect(custom.institutionalAdjustments).toEqual({});
   });
 
   it('rejects unsafe custom ranges', () => {
