@@ -1,0 +1,53 @@
+name: Timezone Cache Integration
+
+on:
+  push:
+    branches:
+      - agent/timezone-cache
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.ref == 'refs/heads/agent/timezone-cache'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: agent/timezone-cache
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies from lockfile
+        run: npm ci --ignore-scripts
+
+      - name: Sensitive-file policy
+        run: npm run security:sensitive-files
+
+      - name: Dependency vulnerability audit
+        run: npm run security:audit
+
+      - name: Apply timezone cache integration
+        run: python scripts/apply_timezone_cache.py
+
+      - name: Canonicalize changed files
+        run: npx prettier --write src/App.tsx src/domain/dashboard.ts src/domain/locationPrayerContext.ts src/platform/settingsStorage.ts src/platform/savedLocations.ts src/integration/timezoneCache.test.ts
+
+      - name: Commit timezone cache integration
+        run: |
+          if git diff --quiet -- src/App.tsx src/domain/dashboard.ts src/domain/locationPrayerContext.ts src/platform/settingsStorage.ts src/platform/savedLocations.ts src/integration/timezoneCache.test.ts; then
+            echo "No integration changes required"
+            exit 0
+          fi
+          git config user.name privacyOG
+          git config user.email 102720550+privacyOG@users.noreply.github.com
+          git add src/App.tsx src/domain/dashboard.ts src/domain/locationPrayerContext.ts src/platform/settingsStorage.ts src/platform/savedLocations.ts src/integration/timezoneCache.test.ts
+          git commit -m "feat: consume persisted timezone cache"
+          git push origin HEAD:agent/timezone-cache
