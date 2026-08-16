@@ -29,6 +29,12 @@ Android uses only the reviewed app-owned location permissions required by the cu
 
 iOS/iPadOS runtime behaviour is likewise one-shot and foreground-only. The pinned native geolocation dependency requires both `NSLocationWhenInUseUsageDescription` and `NSLocationAlwaysAndWhenInUseUsageDescription` in the application configuration. The second key is a dependency compatibility declaration rather than a SalahOS request for background tracking: continuous location watching and location background modes remain prohibited by the candidate permission contract.
 
+### Native bundled-content boundary
+
+The Capacitor native shells load the application bundled from the local `dist` build. The reviewed source configuration does not define a remote `server.url`, navigation allowlist, cleartext override, custom hostname, or custom Android/iOS scheme.
+
+`npm run verify:capacitor-config` checks that source contract and re-runs after `cap sync` on both Android and iOS so generated native configuration is also rejected if it acquires a `server` block or unexpected application identity/web-directory value. A future remote-hosted native WebView mode therefore requires an explicit privacy/security review rather than a configuration-only change.
+
 ## Local data backup and transfer
 
 The Android application disables application backup and supplies explicit exclusion rules for both legacy backup handling and Android 12+ cloud-backup/device-transfer paths. This is intended to keep SalahOS-owned local location, mosque, settings and media state from being copied through Android application-backup mechanisms by default.
@@ -82,6 +88,7 @@ Network loss must not prevent locally calculable prayer schedules, access to pre
 ## Security baseline
 
 - HTTPS-only reviewed optional remote request boundary.
+- Native Capacitor shells load bundled application content and reject unreviewed remote-server/origin overrides.
 - Bounded Web/PWA service-worker cache allowlist; arbitrary same-origin API/data responses are not cached by default.
 - Strict validation of CSV/JSON imports.
 - Content Security Policy on web/PWA targets where applicable.
