@@ -63,6 +63,9 @@ jobs:
       - name: Headless visual regression
         run: npm run verify:visual-regression
 
+      - name: Browser accessibility regression
+        run: npm run verify:accessibility-browser
+
       - name: Upload visual regression screenshots
         if: always()
         uses: actions/upload-artifact@v4
