@@ -12,7 +12,7 @@ The repository contains:
 - a native-aware location adapter using the Capacitor Geolocation plugin;
 - local-notification scheduling through the Capacitor Local Notifications plugin;
 - native Preferences-backed application storage;
-- `.github/workflows/ios.yml` — the permanent macOS Simulator build gate.
+- `.github/workflows/ios.yml` — the permanent macOS Simulator build and candidate visual-evidence gate.
 
 The native shell does not duplicate prayer calculations. Web/PWA, Android and iOS consume the same shared prayer, timezone, settings and notification-intent logic.
 
@@ -68,7 +68,26 @@ xcodebuild \
 
 The CI workflow places DerivedData in the runner temporary directory so generated Xcode output is never treated as repository source.
 
+Historical iOS workflow run `31942653233` executed the repository quality gate, Capacitor synchronisation and the Xcode Simulator build successfully. That evidence validates the previously merged native iOS build path; it does not pre-validate later release-candidate changes.
+
 A successful command proves the project compiles for the iOS Simulator. It does not prove physical-device signing, App Store submission, native notification delivery under every lifecycle state, or visual acceptance on every iPhone/iPad size.
+
+## Permanent iPhone/iPad visual evidence
+
+The release candidate extends `.github/workflows/ios.yml` after the successful generic Simulator build. The workflow locates the exact built `App.app`, dynamically selects one available iPhone Simulator and one available iPad Simulator, then for each target:
+
+1. shuts down any previous instance;
+2. boots the selected Simulator and waits for boot completion;
+3. installs the exact application bundle produced by the build step;
+4. terminates any existing SalahOS process;
+5. cold-launches `com.privacyog.salahos` and requires a successful launch result;
+6. captures screenshots at approximately 5 seconds and 20 seconds after launch;
+7. records the screenshot pixel dimensions and confirms the application container exists;
+8. shuts the Simulator down before moving to the next target.
+
+The resulting candidate artifact is named `ios-simulator-visual-<commit>` and contains `iphone-5s.png`, `iphone-20s.png`, `ipad-5s.png` and `ipad-20s.png` when the step completes. These files are evidence only after the exact candidate workflow actually executes successfully and the images are inspected for safe-area overlap, clipping, startup state and other visible defects.
+
+A Simulator screenshot is not physical-device acceptance. It does not establish real-device touch ergonomics, hardware-specific rendering, notification delivery, signing, App Store distribution or every supported iPhone/iPad size.
 
 ## Open in Xcode
 
