@@ -10,13 +10,14 @@ SalahOS is local-first. The web/PWA shell should therefore deny network and embe
 - styles are same-origin, with inline styles allowed because development/runtime tooling and browser rendering can require them;
 - images are same-origin or `data:`;
 - fonts are same-origin only;
-- network connections are same-origin, with `ws:` and `wss:` retained for development-server hot reload and compatible local deployments;
-- media is same-origin or `blob:` so future user-selected local Adhan media can remain local;
+- network connections are same-origin by default;
+- development WebSocket access is limited to `ws://localhost:*` and `ws://127.0.0.1:*` for local hot reload rather than enabling scheme-wide `ws:` or `wss:` access;
+- media is same-origin or `blob:` so user-selected local Adhan media remains device-local;
 - workers and the web manifest are same-origin only;
 - plugins/objects and frames are disabled;
 - document base URLs and form submission are restricted to the same origin.
 
-The policy intentionally does not grant arbitrary remote HTTP origins. Any future mosque-provider or other remote integration must receive an explicit, narrowly scoped CSP review before its origin is added.
+The policy intentionally does not grant arbitrary remote HTTP or WebSocket origins. Any future mosque-provider or other remote integration must receive an explicit, narrowly scoped CSP review before its exact origin is added. A development session reached through a non-loopback LAN hostname may require an intentional local CSP adjustment for that development environment; production policy must not be broadened merely to preserve generic hot reload.
 
 ## Deployment headers
 
@@ -31,8 +32,8 @@ Recommended deployment-level controls include:
 - `Permissions-Policy` denying unused sensors/capabilities and allowing geolocation only where the deployed application requires it;
 - HTTPS plus HSTS only after the operator confirms the hostname is permanently HTTPS-capable.
 
-Do not add `unsafe-eval`, wildcard network sources, wildcard framing, or broad third-party script origins merely to silence a browser error. A required exception must be tied to a documented feature and reviewed against the privacy/threat model.
+Do not add `unsafe-eval`, wildcard network sources, scheme-wide WebSocket sources, wildcard framing, or broad third-party script origins merely to silence a browser error. A required exception must be tied to a documented feature and reviewed against the privacy/threat model.
 
 ## Verification boundary
 
-Repository CI can verify that the production bundle builds with the in-document baseline present. Final response-header behavior depends on the actual hosting layer and must be checked on each production deployment; this document does not claim that a particular external web server or CDN is already configured.
+Repository CI verifies that the in-document CSP retains the reviewed `connect-src` boundary in addition to the production bundle checks. Final response-header behavior depends on the actual hosting layer and must be checked on each production deployment; this document does not claim that a particular external web server or CDN is already configured.
