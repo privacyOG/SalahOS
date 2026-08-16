@@ -1,6 +1,7 @@
 from pathlib import Path
 
 # Branch-only integration helper; removed before pull request review.
+# This comment ensures the already-present integration workflow receives a push event.
 
 path = Path('src/App.tsx')
 text = path.read_text()
