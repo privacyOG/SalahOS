@@ -35,6 +35,15 @@ From the repository root on the Raspberry Pi:
 bash scripts/kiosk/run-salahos-kiosk.sh
 ```
 
+For the dedicated smart-display presentation, point Chromium at the same local application with the `mode=smart-display` query while retaining the validated loopback server and kiosk flags:
+
+```bash
+SALAHOS_KIOSK_URL='http://127.0.0.1:4173/?mode=smart-display' \
+  bash scripts/kiosk/run-salahos-kiosk.sh
+```
+
+The smart-display mode uses the application's normal persisted settings, selected prayer source, timezone, runtime clock and prayer dashboard. Configure the location and other preferences in the standard interface first, then start the kiosk with the smart-display URL.
+
 The launcher:
 
 1. requires a built `dist/index.html`;

@@ -665,3 +665,12 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Documented fixture URLs and the requirement that future visual automation set the browser viewport to the corresponding native dimensions.
 - Read-only Quality Gate run `31931801626` passed all 53 test files / 253 tests plus security, dependency, documentation, raster reproducibility, formatting, lint, strict typecheck, production build and deploy-artifact verification.
 - Physical Touch Display 2 rendering/touch validation and Stage 17 screenshot, clipping, alignment and scalable-text checks remain open.
+
+### 2026-08-16 — Smart-display mode
+
+- Added a live `?mode=smart-display` presentation that remains inside the normal application runtime and consumes the shared sourced prayer dashboard.
+- Added a large live clock, large next-prayer countdown, five obligatory prayer cards, configured Iqamah, current/next highlighting, configured Jumu'ah sessions and English/Arabic offline/error states.
+- Added five component tests covering explicit mode activation, five-prayer/Iqamah/current-next rendering, Jumu'ah rendering, unconfigured location handling and Arabic/offline presentation.
+- Documented direct Chromium kiosk launch through the existing `SALAHOS_KIOSK_URL` override using the smart-display query.
+- Read-only Quality Gate run `31932489699` passed 54 test files / 258 tests plus security, dependency, documentation, raster reproducibility, formatting, lint, strict typecheck, production build and deploy-artifact verification.
+- Automatic rollover/DST display verification, sleep/wake display verification, burn-in behaviour, remote/keyboard navigation and broader TV deployment documentation remain open.

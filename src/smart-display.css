@@ -1,0 +1,214 @@
+.smart-display {
+  min-height: 100vh;
+  padding: clamp(1rem, 2.5vw, 2.25rem);
+  color: var(--text);
+  background:
+    radial-gradient(circle at top right, var(--page-glow), transparent 38rem), var(--page);
+}
+
+.smart-display-header {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(20rem, 0.9fr);
+  gap: clamp(1rem, 2.5vw, 2rem);
+  align-items: stretch;
+  margin-block-end: clamp(1rem, 2.5vw, 2rem);
+}
+
+.smart-display-clock-block,
+.smart-display .next-prayer-block,
+.smart-display-prayers,
+.smart-display-jumuah,
+.smart-display-empty {
+  border: 1px solid var(--card-border);
+  border-radius: 1.4rem;
+  background: var(--card);
+  box-shadow: 0 1.4rem 4rem var(--shadow);
+}
+
+.smart-display-clock-block {
+  display: grid;
+  align-content: center;
+  padding: clamp(1.2rem, 3vw, 2.4rem);
+}
+
+.smart-display-clock {
+  margin: 0;
+  font-size: clamp(4.5rem, 11vw, 10rem);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.055em;
+  line-height: 0.9;
+}
+
+.smart-display-dates {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.5rem;
+  margin-block-start: 1rem;
+  color: var(--muted);
+  font-size: clamp(1rem, 2vw, 1.5rem);
+}
+
+.smart-display .next-prayer-block {
+  display: grid;
+  align-content: center;
+  padding: clamp(1.2rem, 3vw, 2.4rem);
+  background: var(--next-card);
+}
+
+.smart-display .next-prayer-block strong {
+  font-size: clamp(2rem, 5vw, 4.8rem);
+}
+
+.smart-display .countdown {
+  font-size: clamp(3.5rem, 8vw, 7.5rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.smart-display-status {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 1rem;
+  background: var(--warning-bg);
+  color: var(--warning-text);
+  font-weight: 700;
+  text-align: center;
+}
+
+.smart-display-prayers {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(0.7rem, 1.5vw, 1.15rem);
+  padding: clamp(0.9rem, 2vw, 1.4rem);
+}
+
+.smart-display .prayer-card {
+  min-height: clamp(12rem, 26vh, 18rem);
+  padding: clamp(1rem, 1.7vw, 1.5rem);
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: space-between;
+}
+
+.smart-display .prayer-card strong {
+  font-size: clamp(1.6rem, 3vw, 3rem);
+}
+
+.smart-display .prayer-time {
+  font-size: clamp(2rem, 4vw, 3.8rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.smart-display-jumuah {
+  margin-block-start: clamp(1rem, 2vw, 1.5rem);
+  padding: clamp(1rem, 2vw, 1.5rem);
+}
+
+.smart-display-jumuah-sessions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: 0.8rem;
+}
+
+.smart-display-jumuah-sessions article {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--card-border);
+  border-radius: 1rem;
+  background: var(--next-card);
+}
+
+.smart-display-jumuah-sessions strong {
+  font-size: clamp(1.2rem, 2vw, 1.8rem);
+}
+
+.smart-display-empty {
+  display: grid;
+  place-items: center;
+  gap: 0.5rem;
+  min-height: 45vh;
+  padding: 2rem;
+  text-align: center;
+}
+
+.smart-display-empty strong {
+  font-size: clamp(1.8rem, 4vw, 3.4rem);
+}
+
+.smart-display-empty span {
+  color: var(--muted);
+  font-size: clamp(1.1rem, 2vw, 1.6rem);
+}
+
+.smart-display-footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.55rem 1.5rem;
+  margin-block-start: 1rem;
+  color: var(--muted);
+  font-size: clamp(0.85rem, 1.4vw, 1.05rem);
+  text-align: center;
+}
+
+@media (max-width: 1100px) {
+  .smart-display-prayers {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .smart-display-prayers .prayer-card:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 760px) {
+  .smart-display-header {
+    grid-template-columns: 1fr;
+  }
+
+  .smart-display-prayers {
+    grid-template-columns: 1fr;
+  }
+
+  .smart-display-prayers .prayer-card:last-child {
+    grid-column: auto;
+  }
+
+  .smart-display .prayer-card {
+    min-height: 8.5rem;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 760px) {
+  .smart-display {
+    padding: 0.75rem;
+  }
+
+  .smart-display-header {
+    grid-template-columns: minmax(0, 1fr) minmax(18rem, 0.65fr);
+    margin-block-end: 0.75rem;
+  }
+
+  .smart-display-prayers {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    padding: 0.65rem;
+  }
+
+  .smart-display-prayers .prayer-card:last-child {
+    grid-column: auto;
+  }
+
+  .smart-display .prayer-card {
+    min-height: 9rem;
+    padding: 0.75rem;
+  }
+
+  .smart-display-clock {
+    font-size: clamp(3.8rem, 9vw, 6.5rem);
+  }
+
+  .smart-display .countdown {
+    font-size: clamp(2.8rem, 6vw, 5rem);
+  }
+}
