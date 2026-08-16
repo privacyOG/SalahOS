@@ -36,6 +36,7 @@ import {
 import type { Locale, TranslationKey } from './i18n/translations';
 import { requestBrowserLocation } from './platform/browserGeolocation';
 import type { BrowserLocationFailureReason } from './platform/browserGeolocation';
+import { createStructuredErrorLogger } from './platform/errorLog';
 import {
   loadMosqueLibrary,
   mosqueLibraryId,
@@ -130,6 +131,7 @@ function initialSettings(): PersistedSettings {
 
 export function App() {
   const [settings, setSettings] = useState(initialSettings);
+  const errorLogger = useMemo(() => createStructuredErrorLogger(), []);
   const [locale, setLocale] = useState<Locale>(settings.locale);
   const [coordinates, setCoordinates] = useState<Coordinates | null>(
     settings.location?.coordinates ?? null,
@@ -187,6 +189,7 @@ export function App() {
   useEffect(() => {
     let clockChangeDetector: ReturnType<typeof createSystemClockChangeDetector> | null = null;
     let sleepWakeDetector: ReturnType<typeof createSystemSleepWakeDetector> | null = null;
+    let invalidSystemTimeActive = false;
 
     const sampleNow = () => {
       const wallTimeMs = Date.now();
@@ -198,11 +201,16 @@ export function App() {
       return { wallTimeMs, monotonicTimeMs, instant };
     };
     const invalidateRuntimeClock = () => {
+      if (!invalidSystemTimeActive) {
+        errorLogger.log('invalid-system-time');
+        invalidSystemTimeActive = true;
+      }
       clockChangeDetector = null;
       sleepWakeDetector = null;
       setNow(null);
     };
     const resetFromSample = (sample: NonNullable<ReturnType<typeof sampleNow>>) => {
+      invalidSystemTimeActive = false;
       if (clockChangeDetector === null) {
         clockChangeDetector = createSystemClockChangeDetector(sample);
       } else {
@@ -252,7 +260,7 @@ export function App() {
       window.clearInterval(timer);
       removeRuntimeListeners();
     };
-  }, []);
+  }, [errorLogger]);
 
   useEffect(() => {
     const markOnline = () => {
@@ -287,6 +295,12 @@ export function App() {
   const dashboard = dashboardResult?.ok === true ? dashboardResult.dashboard : null;
   const calculationUnavailable = dashboardResult?.ok === false;
   const unavailablePrayers = dashboardResult?.ok === true ? dashboardResult.unavailablePrayers : [];
+
+  useEffect(() => {
+    if (calculationUnavailable) {
+      errorLogger.log('prayer-calculation-unavailable');
+    }
+  }, [calculationUnavailable, errorLogger]);
   const sourcedDashboard = useMemo(
     () =>
       dashboard === null
