@@ -439,3 +439,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Added static-render tests proving mixed Arabic/Latin content and an IANA timezone identifier produce bidirectionally isolated markup without changing the parent page direction.
 - Kept the separate RTL-at-every-breakpoint tracker item partial because deterministic markup tests do not replace visual browser validation.
 - Read-only Quality Gate run `31917001417` passed formatting, typed lint, strict typecheck, all tests and production build on exact cleaned head `11a0459595e36c7981ccbe72c133b92ec5d3ce67`.
+
+### 2026-08-16 — high-contrast readable typography
+
+- Increased small supporting labels and prayer-time captions to readable minimum sizes with explicit line heights and stronger weight where appropriate.
+- Replaced late stylesheet dark-theme hard-codes with semantic theme variables so secondary text, borders and subtle backgrounds remain valid in light/dark/system themes.
+- Added `prefers-contrast: more` handling that strengthens secondary text and structural borders and removes supplementary-card opacity reduction.
+- Added `forced-colors: active` system-color mappings so operating-system high-contrast modes can control canvas, text, borders, highlights and focus treatment.
+- Read-only Quality Gate run `31917294038` passed formatting, typed lint, strict typecheck, all tests and production build on exact cleaned head `c23c76db4ac07b5da9b3c3406b4d63c2cebb0c91`.
