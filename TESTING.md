@@ -623,3 +623,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - The documentation-link verifier successfully resolved local Markdown links across all 27 root/docs Markdown files on the verified branch.
 - Synchronized the duplicate Stage 19 notification-platform-limitations marker to complete because `docs/NOTIFICATION_LIMITATIONS.md` was already implemented and verified under Stage 10 by Quality Gate run `31913144213`; no new native delivery capability is claimed by this tracker correction.
 - Read-only Quality Gate run `31928551210` passed the sensitive-file policy, dependency vulnerability audit, dependency-license policy, documentation-link verification, formatting, typed lint, strict typecheck, the complete test suite, production build and deploy-artifact verification.
+
+### 2026-08-16 — PWA raster install icons
+
+- Added first-party 192×192 and 512×512 PNG install icons for both normal and maskable PWA purposes while retaining the existing SVG source assets.
+- Added `scripts/generate_pwa_icons.py`, a deterministic Python-standard-library renderer with a `--check` mode that byte-compares all four committed PNGs against regenerated output.
+- Added the reproducibility check to the read-only Quality Gate so raster asset drift fails CI.
+- Extended the Web/PWA artifact verifier to require the raster icons in `dist/`, validate PNG signatures/dimensions and require matching manifest `sizes`, `type` and `purpose` metadata.
+- Read-only Quality Gate run `31929295284` passed the sensitive-file policy, dependency vulnerability audit, dependency-license policy, documentation-link verification, raster-icon reproducibility, formatting, typed lint, strict typecheck, the complete test suite, production build and deploy-artifact verification.

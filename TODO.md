@@ -453,7 +453,10 @@
 ## 13. Offline-first / PWA capability
 
 - [x] Create web app manifest
-- [~] Add installable PWA icons/assets
+- [x] Add installable PWA icons/assets
+
+**PWA raster-icon verification note (2026-08-16):** read-only Quality Gate run `31929295284` passed the sensitive-file policy, dependency vulnerability audit, dependency-license policy, documentation-link verification, deterministic raster-icon reproducibility, formatting, typed lint, strict typecheck, the complete test suite, production build and deploy-artifact verification. The manifest now declares first-party 192×192 and 512×512 PNG install icons for both normal and maskable purposes while retaining the vector sources. `scripts/generate_pwa_icons.py` reproduces all four committed PNGs using only the Python standard library and `--check` fails CI if any committed raster bytes drift. The production artifact verifier requires the raster files in `dist/`, validates PNG signatures/dimensions and checks manifest size/type/purpose metadata. Physical browser/device install UX remains a separate release/platform validation concern.
+
 - [x] Implement service worker/static application shell caching
 - [x] Keep prayer calculation engine fully local/offline
 - [x] Persist selected location/timezone/calculation settings locally
