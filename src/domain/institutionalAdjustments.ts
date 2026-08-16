@@ -2,6 +2,7 @@ import type { PrayerName, PrayerSchedule, PrayerTimeResult } from './prayerEngin
 import { roundMinutes } from './rounding';
 
 const DAY_MINUTES = 1_440;
+const INSTITUTIONAL_CORRECTION_MARKER = 'institutional method correction';
 const PRAYERS: readonly PrayerName[] = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'];
 
 function normalizeDayMinutes(minutes: number): number {
@@ -12,7 +13,11 @@ function applyPrayerAdjustment(
   prayer: PrayerTimeResult,
   adjustmentMinutes: number,
 ): PrayerTimeResult {
-  if (adjustmentMinutes === 0 || prayer.baseLocalMinutes === null) {
+  if (
+    adjustmentMinutes === 0 ||
+    prayer.baseLocalMinutes === null ||
+    prayer.provenance.formula.includes(INSTITUTIONAL_CORRECTION_MARKER)
+  ) {
     return prayer;
   }
 
@@ -32,7 +37,7 @@ function applyPrayerAdjustment(
     roundedLocalMinutes,
     provenance: {
       ...prayer.provenance,
-      formula: `${prayer.provenance.formula}; institutional method correction ${sign}${String(adjustmentMinutes)} min`,
+      formula: `${prayer.provenance.formula}; ${INSTITUTIONAL_CORRECTION_MARKER} ${sign}${String(adjustmentMinutes)} min`,
     },
   };
 }
@@ -42,6 +47,8 @@ function applyPrayerAdjustment(
  * calculation but before product presentation. Raw astronomical times remain
  * untouched and user/manual offsets remain separately identifiable in
  * provenance. Methods without an institutional correction are returned as-is.
+ * Re-applying the layer is a no-op for prayers already carrying its provenance
+ * marker, preventing accidental double application.
  */
 export function applyInstitutionalAdjustments(schedule: PrayerSchedule): PrayerSchedule {
   const adjustments = schedule.method.institutionalAdjustments;
@@ -50,8 +57,17 @@ export function applyInstitutionalAdjustments(schedule: PrayerSchedule): PrayerS
   }
 
   const prayers = { ...schedule.prayers };
+  let changed = false;
   for (const name of PRAYERS) {
-    prayers[name] = applyPrayerAdjustment(prayers[name], adjustments[name] ?? 0);
+    const prayer = applyPrayerAdjustment(prayers[name], adjustments[name] ?? 0);
+    if (prayer !== prayers[name]) {
+      changed = true;
+      prayers[name] = prayer;
+    }
+  }
+
+  if (!changed) {
+    return schedule;
   }
 
   return {
