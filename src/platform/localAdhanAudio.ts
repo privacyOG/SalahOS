@@ -74,18 +74,39 @@ function transactionRequest<T>(
       new Promise<T>((resolve, reject) => {
         const transaction = database.transaction(STORE_NAME, mode);
         const request = action(transaction.objectStore(STORE_NAME));
+        let requestResult: T;
+        let requestSucceeded = false;
+        let settled = false;
+
+        const closeAndReject = (error: unknown) => {
+          if (settled) return;
+          settled = true;
+          database.close();
+          reject(error instanceof Error ? error : new Error('Local media storage failed'));
+        };
+
         request.onerror = () => {
-          reject(request.error ?? new Error('Local media storage request failed'));
+          closeAndReject(request.error ?? new Error('Local media storage request failed'));
         };
         request.onsuccess = () => {
-          resolve(request.result);
+          requestResult = request.result;
+          requestSucceeded = true;
         };
         transaction.oncomplete = () => {
+          if (settled) return;
+          if (!requestSucceeded) {
+            closeAndReject(new Error('Local media storage transaction completed without a result'));
+            return;
+          }
+          settled = true;
           database.close();
+          resolve(requestResult);
         };
         transaction.onerror = () => {
-          database.close();
-          reject(transaction.error ?? new Error('Local media storage transaction failed'));
+          closeAndReject(transaction.error ?? new Error('Local media storage transaction failed'));
+        };
+        transaction.onabort = () => {
+          closeAndReject(transaction.error ?? new Error('Local media storage transaction aborted'));
         };
       }),
   );
@@ -101,7 +122,11 @@ export async function loadLocalAdhanAudio(): Promise<LocalAdhanAudioRecord | nul
   }
 
   validateLocalAdhanAudio(result);
-  if (!(result.blob instanceof Blob) || result.blob.size !== result.size) {
+  if (
+    !(result.blob instanceof Blob) ||
+    result.blob.size !== result.size ||
+    result.blob.type !== result.type
+  ) {
     throw new TypeError('Stored local Adhan audio is invalid');
   }
   return result;
