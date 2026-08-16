@@ -535,3 +535,10 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Added `docs/DEPENDENCY_SECURITY.md` documenting the minimal direct runtime dependency surface, exact-version/lockfile review policy and release-time re-audit requirement.
 - The audit result is treated as point-in-time advisory evidence rather than a permanent guarantee; the threshold must not be weakened merely to make CI pass.
 - Read-only Quality Gate run `31921578803` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, all tests and production build.
+
+### 2026-08-16 — settings to recalculation integration
+
+- Added `src/integration/settingsRecalculation.test.ts` to exercise persisted settings through the production dashboard calculation path.
+- The integration saves and reloads a Sydney configuration, recalculates, persists changed method/Asr/high-latitude/Hijri/adjustment settings, reloads again and verifies the production dashboard reflects the new configuration.
+- The test verifies both provenance/configuration fields and changed Asr/Fajr local prayer times, proving a real recalculation rather than serialization alone.
+- Read-only Quality Gate run `31921801532` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, all tests and production build.

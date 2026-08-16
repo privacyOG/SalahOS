@@ -574,7 +574,10 @@
 
 - [x] Location → timezone → prayer calculation flow
 - [x] Mosque source-selection isolation
-- [ ] Settings → recalculation flow
+- [x] Settings → recalculation flow
+
+**Settings-to-recalculation integration verification note (2026-08-16):** read-only Quality Gate run `31921801532` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, all tests and production build after adding an integration test that crosses the persisted-settings boundary. The test saves and reloads a Sydney configuration, builds the production dashboard from the loaded settings, then persists changed calculation method, Asr convention, high-latitude rule, Hijri correction and Fajr adjustment and proves the recalculated dashboard reflects those selections and changes the affected prayer times. This verifies persistence → reload → calculation rather than testing the storage and calculation modules only in isolation.
+
 - [ ] Date rollover flow
 - [ ] Notification scheduling flow
 - [ ] Offline startup flow
