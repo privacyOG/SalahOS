@@ -42,6 +42,8 @@ The current release candidate additionally enforces:
 - effective merged-manifest permission verification for debug and release builds;
 - application backup disabled with explicit legacy cloud-backup and Android 12+ cloud/device-transfer exclusions;
 - `usesCleartextTraffic=false` for the packaged application;
+- reviewed native dependency versions and exact direct Gradle/Capacitor dependency declarations, with unreviewed local `.jar/.aar` binaries rejected;
+- removal of the dormant Google Services Gradle auto-activation path, with `google-services.json` rejected by the sensitive-file policy;
 - a permanent Android 35 / Google APIs / x86_64 / Pixel 7 Pro emulator step using the previously validated offline-cold-start and orientation instrumentation path;
 - retained cold-start portrait, landscape and restored-portrait PNG evidence whose dimensions are checked before upload.
 
@@ -49,7 +51,7 @@ Those candidate additions require fresh exact-head Android validation and screen
 
 Still open: broad physical-device matrix, real battery/OEM background behavior, physical notification timing/Adhan acceptance and store distribution/release publication.
 
-See `docs/ANDROID.md` and `docs/NATIVE_VISUAL_VALIDATION.md` for the build/install and native visual evidence boundaries.
+See `docs/ANDROID.md`, `docs/NATIVE_PERMISSION_REVIEW.md`, `docs/NATIVE_DEPENDENCY_REVIEW.md` and `docs/NATIVE_VISUAL_VALIDATION.md` for the build/install, dependency/privacy and native visual evidence boundaries.
 
 ### iOS / iPadOS — Automated native Simulator build; physical acceptance open
 
@@ -68,6 +70,7 @@ The current release candidate retains one-shot foreground location behaviour and
 The candidate also adds:
 
 - safe-area verification and stricter native permission/transport checks;
+- reviewed exact Swift package/product dependency declarations tied to the pinned first-party native packages;
 - permanent dynamic selection of one available iPhone Simulator and one available iPad Simulator from the same macOS build job;
 - cold installation/launch of the exact unsigned `App.app` build product on each selected Simulator;
 - retained 5-second and 20-second screenshots for both device classes.
@@ -76,7 +79,7 @@ Those candidate changes require fresh exact-head iOS execution and screenshot in
 
 Still open: final iPhone safe-area/phone-layout acceptance on the candidate, iPad visual acceptance, enforced offline cold-start acceptance, physical iPhone/iPad testing, signing/distribution and real native notification-delivery acceptance.
 
-See `docs/IOS.md` and `docs/NATIVE_VISUAL_VALIDATION.md` for build/install instructions and the exact validation boundary.
+See `docs/IOS.md`, `docs/NATIVE_DEPENDENCY_REVIEW.md` and `docs/NATIVE_VISUAL_VALIDATION.md` for build/install instructions and the exact validation boundary.
 
 ### Raspberry Pi / Touch Display 2 — Repository-validated path
 
@@ -107,13 +110,13 @@ Still open: physical TV/browser full-screen behavior, actual remote mappings, HD
 
 ## Automated repository baseline
 
-The Quality Gate uses a clean GitHub-hosted workspace with Node.js 22, installs the committed lockfile and executes repository policies, documentation checks, formatting, lint, strict typecheck, automated tests, the production Web/PWA build and deploy-artifact verification.
+The Quality Gate uses a clean GitHub-hosted workspace with Node.js 22, installs the committed lockfile and executes repository policies, documentation checks, authorship/native dependency/native permission contracts, formatting, lint, strict typecheck, automated tests, the production Web/PWA build and deploy-artifact verification.
 
 The release candidate extends that workflow with deterministic headless browser visual regression, a browser accessibility regression covering 200% text reflow, keyboard-visible focus and reduced-motion behavior, plus screenshot artifact upload. A screenshot is evidence only after the exact candidate workflow executes and passes and the retained file is inspected; workflow configuration alone is not evidence.
 
 Permanent native workflows add target-specific integration:
 
-- Android builds the native application, verifies the packaged permission/reboot contracts, then provisions the pinned Android 35 emulator acceptance environment and retains layout screenshots;
+- Android builds debug and unsigned release variants, verifies the packaged permission/reboot contracts, then provisions the pinned Android 35 emulator acceptance environment and retains layout screenshots;
 - iOS runs repository validation, Capacitor synchronisation, an unsigned Xcode Simulator build, and exact-built-app cold-launch screenshot capture on one available iPhone and one available iPad Simulator on `macos-15`.
 
 A platform-specific workflow proves only the capabilities it actually executes.
@@ -126,7 +129,7 @@ The native location path asks for a single foreground fix. The application does 
 
 The notification path reconciles a bounded desired schedule into native local notifications and includes repository verification for reboot restoration. Exact timing remains subject to Android permissions, Doze/Battery Saver and manufacturer policy; repository build/emulator evidence does not remove those platform constraints.
 
-The candidate reviews both app-owned and dependency-contributed effective permissions. Backup/data-transfer and cleartext-network restrictions are explicit native policy rather than platform-default assumptions.
+The candidate reviews both app-owned and dependency-contributed effective permissions. Backup/data-transfer and cleartext-network restrictions are explicit native policy rather than platform-default assumptions. The direct native dependency surface is also fail-closed: generated/app Gradle dependency declarations are allowlisted, local native binary injection is rejected, and an unused external-service plugin cannot be activated merely by adding a configuration file.
 
 The permanent emulator path is repeatable native-shell evidence, not a substitute for physical-OEM acceptance. Its screenshot orientation is verified from PNG dimensions before artifact upload, while application orientation survival is independently exercised by the native instrumentation test.
 
@@ -137,6 +140,8 @@ Release signing support is configuration infrastructure, not evidence that a pub
 iOS/iPadOS has a real native project and automated Simulator build path. It uses the same shared prayer application and native bridges rather than a parallel implementation.
 
 SalahOS itself requests a one-shot foreground location fix and does not enable continuous/background location. Pinned Capacitor Geolocation 8.2.0 nevertheless requires both `NSLocationWhenInUseUsageDescription` and `NSLocationAlwaysAndWhenInUseUsageDescription` because of its underlying iOS dependency. The second description is therefore treated as a dependency compatibility declaration while background modes and continuous location APIs remain forbidden by the candidate permission verifier.
+
+The candidate native dependency contract also pins the exact Swift package and product declaration set used by the generated SPM bridge. Additional package/product declarations require an explicit native dependency review.
 
 Local notifications are scheduled for a bounded future horizon and are expected to be delivered by the operating system according to user permission and platform scheduling behavior. Background or terminated delivery must not be described as unrestricted application execution. Full user-selected Adhan recording playback is a separate capability from a system notification sound.
 
