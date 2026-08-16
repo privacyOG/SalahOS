@@ -59,3 +59,15 @@ jobs:
 
       - name: Verify deployable web artifact
         run: npm run verify:web-build
+
+      - name: Headless visual regression
+        run: npm run verify:visual-regression
+
+      - name: Upload visual regression screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-regression-${{ github.sha }}
+          path: artifacts/visual-regression/*.png
+          if-no-files-found: ignore
+          retention-days: 14
