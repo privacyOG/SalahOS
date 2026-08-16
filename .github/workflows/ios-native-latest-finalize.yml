@@ -1,4 +1,4 @@
-name: iOS Native Latest Finalization
+name: iOS Native Latest Source Finalization
 
 on:
   push:
@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   finalize:
-    runs-on: macos-15
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - name: Transplant validated iOS implementation
+      - name: Replay validated iOS implementation
         run: |
           git fetch origin privacyog/ios-notification-policy
           git checkout origin/privacyog/ios-notification-policy -- \
@@ -31,13 +31,21 @@ jobs:
             src/platform/iosNotificationPolicy.ts \
             src/platform/iosNotificationPolicy.test.ts
           npm install --save-exact @capacitor/ios@8.4.2
-      - name: Preserve repository generated-file boundaries
+      - name: Preserve generated-file boundaries
         run: |
           python3 - <<'PY'
           from pathlib import Path
+
+          p = Path('.gitignore')
+          lines = p.read_text().splitlines()
+          for line in ['ios/DerivedData/']:
+              if line not in lines:
+                  lines.append(line)
+          p.write_text('\n'.join(lines) + '\n')
+
           p = Path('.prettierignore')
           lines = p.read_text().splitlines()
-          for line in ['ios/App/App/public/', 'ios/App/App/Assets.xcassets/', 'ios/App/App/capacitor.config.json']:
+          for line in ['ios/App/App/public/', 'ios/App/App/Assets.xcassets/', 'ios/App/App/capacitor.config.json', 'ios/DerivedData/']:
               if line not in lines:
                   lines.append(line)
           p.write_text('\n'.join(lines) + '\n')
@@ -91,6 +99,7 @@ jobs:
                       -configuration Debug \
                       -sdk iphonesimulator \
                       -destination 'generic/platform=iOS Simulator' \
+                      -derivedDataPath "$RUNNER_TEMP/SalahOSDerivedData" \
                       CODE_SIGNING_ALLOWED=NO \
                       build
           YAML
@@ -99,6 +108,7 @@ jobs:
           FOUNDATION_RUN: '31941296351'
           NOTIFICATION_RUN: '31941790069'
           POLICY_RUN: '31941980679'
+          CONSOLIDATION_RUN: '31942088604'
         run: |
           node <<'NODE'
           const fs = require('node:fs');
@@ -116,7 +126,7 @@ jobs:
             todo = todo.replace(before, after);
           }
           const anchor = '- [x] Handle background execution limitations explicitly';
-          const note = `\n\n**iOS native implementation verification note (2026-08-16):** macOS foundation run \`${process.env.FOUNDATION_RUN}\` generated and synchronised the committed Capacitor iOS shell with \`@capacitor/ios\` 8.4.2, verified the foreground location privacy descriptions without enabling background-location mode, passed the complete repository gate and compiled the App scheme for an iOS Simulator with signing disabled. The shared native Preferences adapter supplies the existing versioned settings, saved-location and mosque-library storage contract before React mounts. Local-notification run \`${process.env.NOTIFICATION_RUN}\` added the iOS adapter over the shared today/tomorrow prayer intents, with deterministic owned request IDs, permission fail-closed behavior, stale-request reconciliation, silent alerts and platform-default notification sound fallback; the bounded two-day horizon produces at most 30 configured requests. Lifecycle-policy run \`${process.env.POLICY_RUN}\` verified foreground/background/terminated system-notification policy, no dependency on SalahOS executing in the background at delivery time, and no claim of full Adhan-recording auto-play. All three runs passed Xcode simulator compilation. Interactive iPhone/iPad layout, offline cold-start and simulator/device acceptance remain separate items.`;
+          const note = `\n\n**iOS native implementation verification note (2026-08-16):** macOS foundation run \`${process.env.FOUNDATION_RUN}\` generated and synchronised the committed Capacitor iOS shell with \`@capacitor/ios\` 8.4.2, verified the foreground location privacy descriptions without enabling background-location mode, passed the complete repository gate and compiled the App scheme for an iOS Simulator with signing disabled. The shared native Preferences adapter supplies the existing versioned settings, saved-location and mosque-library storage contract before React mounts. Local-notification run \`${process.env.NOTIFICATION_RUN}\` added the iOS adapter over the shared today/tomorrow prayer intents, with deterministic owned request IDs, permission fail-closed behavior, stale-request reconciliation, silent alerts and platform-default notification sound fallback; the bounded two-day horizon produces at most 30 configured requests. Lifecycle-policy run \`${process.env.POLICY_RUN}\` verified foreground/background/terminated system-notification policy, no dependency on SalahOS executing in the background at delivery time, and no claim of full Adhan-recording auto-play. All three runs passed Xcode simulator compilation. Latest-main consolidation run \`${process.env.CONSOLIDATION_RUN}\` then passed the complete repository gate, native synchronisation and Xcode simulator compilation before its original commit step was rejected solely because runner-generated DerivedData exceeded the hosting file-size limit; generated DerivedData is now excluded from repository commits. Interactive iPhone/iPad layout, offline cold-start and simulator/device acceptance remain separate items.`;
           todo = todo.replace(anchor, anchor + note);
           fs.writeFileSync('TODO.md', todo);
 
@@ -125,7 +135,7 @@ jobs:
           fs.writeFileSync('docs/IOS_VALIDATION_STATUS.md', status);
 
           let testing = fs.readFileSync('TESTING.md', 'utf8');
-          testing += `\n\n## iOS consolidated native implementation — 2026-08-16\n\nFoundation run \`${process.env.FOUNDATION_RUN}\`, local-notification run \`${process.env.NOTIFICATION_RUN}\`, and lifecycle-policy run \`${process.env.POLICY_RUN}\` each passed the complete repository quality gate and Xcode simulator compilation. The latest-main consolidation replays only the validated iOS native project and authored scheduler/policy files, regenerates the locked \`@capacitor/ios\` dependency on top of current Android-complete main, and introduces a permanent macOS \`iOS Build\` pull-request/main gate.\n`;
+          testing += `\n\n## iOS consolidated native implementation — 2026-08-16\n\nFoundation run \`${process.env.FOUNDATION_RUN}\`, local-notification run \`${process.env.NOTIFICATION_RUN}\`, and lifecycle-policy run \`${process.env.POLICY_RUN}\` each passed the complete repository quality gate and Xcode simulator compilation. Latest-main consolidation run \`${process.env.CONSOLIDATION_RUN}\` also passed the repository gate, native sync and Xcode simulator build; its only post-validation failure was an attempted commit of runner-generated DerivedData, which is now permanently excluded. The consolidation replays only the validated iOS native project and authored scheduler/policy files, regenerates the locked \`@capacitor/ios\` dependency on current Android-complete main, and introduces a permanent macOS \`iOS Build\` pull-request/main gate.\n`;
           fs.writeFileSync('TESTING.md', testing);
           NODE
       - name: Install dependencies
@@ -134,24 +144,17 @@ jobs:
         run: npm run format
       - name: Repository quality gate
         run: npm run check
-      - name: Synchronize iOS application
-        run: npx cap sync ios
-      - name: Build iOS simulator application
-        run: |
-          xcodebuild \
-            -project ios/App/App.xcodeproj \
-            -scheme App \
-            -configuration Debug \
-            -sdk iphonesimulator \
-            -destination 'generic/platform=iOS Simulator' \
-            CODE_SIGNING_ALLOWED=NO \
-            build
-      - name: Commit verified latest iOS batch
+      - name: Commit validated source only
         run: |
           rm .github/workflows/ios-native-latest-finalize.yml
+          rm -rf ios/DerivedData ios/App/App/public
           rm -f tsconfig.tsbuildinfo
           git config user.name privacyOG
           git config user.email privacyOG@users.noreply.github.com
           git add -A
+          if git ls-files --stage | grep -E 'ios/DerivedData|ios/App/App/public|tsconfig\.tsbuildinfo'; then
+            echo 'Generated iOS/build files entered the index' >&2
+            exit 1
+          fi
           git commit -m "Verify iOS native implementation [ios-latest-verified]"
           git push origin HEAD:privacyog/ios-native-latest
