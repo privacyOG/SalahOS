@@ -784,3 +784,10 @@ When a milestone is verified, add a dated entry under `Validation log` including
 ## Android release configuration — 2026-08-16
 
 Validation run `31941241775` passed the complete repository gate, debug build/reboot verifier, unsigned release assembly, and a negative partial-signing test. The release Gradle configuration remains unsigned when no external secrets are supplied and switches to the external signing config only when every required value is present.
+
+### 2026-08-16 — Android emulator acceptance
+
+- Validation run `31941025342` ran on an Android 35 x86_64 Pixel-class emulator.
+- Airplane mode was enabled before an explicit force-stop and cold launch of `com.privacyog.salahos/.MainActivity`; Activity Manager reported `Status: ok` and `LaunchState: COLD`, and the process remained alive.
+- `:app:connectedDebugAndroidTest` completed 1/1 tests with zero failures while asserting the real application id, airplane mode, landscape and portrait recreation, and activity survival.
+- The stale generated package-name test was removed. Physical-OEM-specific behavior remains outside this emulator acceptance result.
