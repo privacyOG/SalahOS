@@ -18,13 +18,14 @@ SalahOS is designed around accurate local prayer calculations, selectable calcul
 - TypeScript + React shared application.
 - Vite production/development tooling.
 - Pure TypeScript astronomical/prayer calculation modules under `src/domain/`.
-- Capacitor planned as the Android/iOS native shell.
+- Capacitor native shell for Android, with iOS/iPadOS native work still tracked separately.
 - PWA/browser deployment for web, Raspberry Pi Chromium kiosk, TV browser, and generic kiosk targets.
 - Vitest, ESLint, Prettier, strict TypeScript, and GitHub Actions quality gates.
 
 ## Documentation
 
 - [Build and Web/PWA deployment](BUILD.md)
+- [Android build and install](docs/ANDROID.md)
 - [Tested platform/build status](docs/PLATFORM_STATUS.md)
 - [Troubleshooting](docs/TROUBLESHOOTING.md)
 - [Notification and Adhan platform limitations](docs/NOTIFICATION_LIMITATIONS.md)
@@ -38,9 +39,9 @@ SalahOS is designed around accurate local prayer calculations, selectable calcul
 ## Platform status
 
 - **Web / PWA:** automated build and repository verification path.
+- **Android:** Capacitor native shell, foreground native location adapter and automated debug-APK build path; emulator/physical-device acceptance, native notifications/Adhan and release signing remain open.
 - **Raspberry Pi / Touch Display 2:** repository-validated browser/kiosk deployment path; physical Touch Display 2 acceptance remains open.
 - **TV / generic kiosk:** repository-validated browser-hosted smart-display path; target TV/remote acceptance remains open.
-- **Android:** native shell/build and native adapters remain planned, not validated.
 - **iOS / iPadOS:** native shell/build and native adapters remain planned, not validated.
 
 See [Tested platform/build status](docs/PLATFORM_STATUS.md) for the exact evidence and capability boundaries.

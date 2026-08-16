@@ -19,14 +19,20 @@
     "security:sensitive-files": "node scripts/check-sensitive-files.mjs",
     "security:audit": "npm audit --audit-level=moderate",
     "security:licenses": "node scripts/check-dependency-licenses.mjs",
-    "check": "npm run security:sensitive-files && npm run security:audit && npm run security:licenses && npm run docs:links && npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build && npm run verify:web-build"
+    "check": "npm run security:sensitive-files && npm run security:audit && npm run security:licenses && npm run docs:links && npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build && npm run verify:web-build",
+    "android:sync": "npm run build && cap sync android",
+    "android:build": "npm run android:sync && cd android && ./gradlew assembleDebug"
   },
   "dependencies": {
+    "@capacitor/android": "8.4.2",
+    "@capacitor/core": "8.4.2",
+    "@capacitor/geolocation": "8.2.0",
     "@photostructure/tz-lookup": "11.6.0",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   },
   "devDependencies": {
+    "@capacitor/cli": "8.4.2",
     "@eslint/js": "10.0.1",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.3",

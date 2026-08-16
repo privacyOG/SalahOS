@@ -175,7 +175,7 @@
 ## 3. Location and timezone subsystem
 
 - [x] Implement browser geolocation adapter
-- [ ] Implement native Android/iOS location adapter
+- [~] Implement native Android/iOS location adapter
 - [x] Support manual latitude/longitude entry
 - [x] Support manual city/location search
 
@@ -345,8 +345,11 @@
 
 ## 8. Android application
 
-- [ ] Configure Android project/shell
-- [ ] Implement native location permissions
+- [x] Configure Android project/shell
+- [x] Implement native location permissions
+
+**Android native-foundation verification note (2026-08-16):** the committed Capacitor Android project reuses the shared SalahOS application and prayer engine rather than duplicating prayer logic. The application location action now crosses a native-aware platform boundary: browser builds retain the existing one-shot browser adapter, while Android uses the first-party Capacitor geolocation bridge, explicitly checks/requests foreground permission, defaults to non-high-accuracy acquisition with a five-minute reusable-fix window, and discards native accuracy/altitude/heading/speed/timestamp metadata before retaining latitude/longitude. The Android manifest declares foreground `ACCESS_COARSE_LOCATION` and `ACCESS_FINE_LOCATION` plus the generated Internet permission and does not request background location. Cleaned read-only Quality Gate run `31935517985` passed security, dependency/license, documentation, formatting, lint, strict typecheck, 59 test files / 273 tests, production Web/PWA build and artifact verification. Independent permanent Android Build run `31935517977` installed the committed lockfile on Ubuntu with Node 22 and Java 21, ran `npm run android:build`, synchronised the shared app into the native project and passed Gradle `assembleDebug`. `docs/ANDROID.md` records the local build/install path and explicit boundaries. Emulator/physical-device acceptance, persistent-storage device lifecycle, orientation acceptance, native notifications/Adhan, battery/background restrictions, release signing/distribution and all iOS native work remain open.
+
 - [ ] Implement persistent settings/storage
 - [ ] Implement local prayer notifications
 - [ ] Implement Android exact-alarm strategy where permitted and required
@@ -651,7 +654,7 @@
 **UI/component-test verification note (2026-08-16):** read-only Quality Gate run `31929598905` passed the sensitive-file policy, dependency vulnerability audit, dependency-license policy, documentation-link verification, PWA raster-icon reproducibility, formatting, typed lint, strict typecheck, 51 test files / 242 tests, production build and deploy-artifact verification. The production next-prayer block and prayer-card presentation were extracted from `App` into `NextPrayerBlock` and `PrayerCard` without moving prayer-domain logic. Server-rendered component tests cover configured/unconfigured next-prayer states, tomorrow/countdown presentation, current/next prayer badges, Iqamah display, high-latitude/manual-adjustment indicators and supplementary-prayer Iqamah suppression; existing bidirectional-text component tests remain green. No new test dependency was added. Stage 17 viewport, screenshot, RTL visual-alignment and scalable-text/accessibility regression work remains separately open.
 
 - [x] Production web build succeeds
-- [ ] Android build succeeds where SDK is available
+- [x] Android build succeeds where SDK is available
 - [ ] iOS build succeeds where Xcode is available
 - [x] Raspberry Pi/kiosk deployment script validated
 - [x] No unexplained widened test tolerances
@@ -671,7 +674,7 @@
 
 **Web/PWA build-deployment verification note (2026-08-16):** read-only Quality Gate run `31927318102` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, all 238 tests, production build and deploy-artifact verification after adding `BUILD.md` and an executable Web/PWA deployment contract. `BUILD.md` documents the clean lockfile install, full quality gate, production Vite build, local preview, root static-host contract, service-worker/manifest caching requirements, offline smoke checks, upgrade procedure, secrets boundary and an explicit platform matrix that leaves Android, iOS, Raspberry Pi and TV/kiosk release paths unvalidated. CI now runs `npm run verify:web-build` after production build; that verifier requires the built HTML shell, manifest, service worker and first-party icons, validates manifest/start-up expectations and confirms the shipped `dist/sw.js` exactly matches the tested `public/sw.js` source. Native platform build/install documentation and final release-readiness checks remain separately open.
 
-- [ ] Document Android build/install
+- [x] Document Android build/install
 - [ ] Document iOS build/install
 - [x] Document Raspberry Pi Touch Display 2 setup
 - [x] Document TV/kiosk deployment
