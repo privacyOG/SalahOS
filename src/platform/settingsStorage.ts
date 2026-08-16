@@ -128,11 +128,19 @@ function parseLocation(value: unknown): PersistedLocation | null {
     return null;
   }
 
+  const latitude = value.coordinates.latitude;
+  const longitude = value.coordinates.longitude;
+  if (
+    typeof latitude !== 'number' ||
+    !Number.isFinite(latitude) ||
+    typeof longitude !== 'number' ||
+    !Number.isFinite(longitude)
+  ) {
+    return null;
+  }
+
   try {
-    const coordinates = createCoordinates(
-      Number(value.coordinates.latitude),
-      Number(value.coordinates.longitude),
-    );
+    const coordinates = createCoordinates(latitude, longitude);
     const timeZone =
       typeof value.timeZone === 'string' && value.timeZone.trim()
         ? assertIanaTimeZone(value.timeZone.trim())
