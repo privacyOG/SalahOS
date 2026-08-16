@@ -19,14 +19,23 @@ for (const required of [
 }
 
 if (/getPlatform\(\)\s*!==\s*['"]android['"]/.test(storageSource)) {
-  throw new Error('Native application storage must not special-case Android and leave iOS on Web Storage');
+  throw new Error(
+    'Native application storage must not special-case Android and leave iOS on Web Storage',
+  );
 }
 
 const migrationStart = storageSource.indexOf('async function migrateLegacyWebStorage(');
 const flushIndex = storageSource.indexOf('await storage.flush();', migrationStart);
 const removalIndex = storageSource.indexOf('webStorage.removeItem(key);', migrationStart);
-if (migrationStart < 0 || flushIndex < 0 || removalIndex < 0 || removalIndex < flushIndex) {
-  throw new Error('Legacy Web Storage must be removed only after migrated native Preferences writes flush');
+if (
+  migrationStart < 0 ||
+  flushIndex < 0 ||
+  removalIndex < 0 ||
+  removalIndex < flushIndex
+) {
+  throw new Error(
+    'Legacy Web Storage must be removed only after migrated native Preferences writes flush',
+  );
 }
 
 const authoritativeCheck = 'if (storage.getItem(key) !== null) continue;';
