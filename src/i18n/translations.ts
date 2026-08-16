@@ -139,8 +139,19 @@ export const translations = {
     soundSilent: 'Silent',
     vibration: 'Vibration where supported',
     adhanEnabled: 'Enable Adhan alert',
+    localAdhanTitle: 'Local Adhan audio',
+    localAdhanChoose: 'Choose local audio',
+    localAdhanPreview: 'Preview',
+    localAdhanRemove: 'Remove',
+    localAdhanNone: 'No local recording selected.',
+    localAdhanHelp:
+      'The selected recording stays on this device. SalahOS does not upload or bundle it. Full local audio can play automatically only while the app is open and visible; background and terminated delivery continues to use the platform notification alert.',
+    localAdhanInvalid: 'Choose a non-empty audio file up to 25 MB.',
+    localAdhanUnavailable: 'Local audio storage is unavailable on this device.',
+    localAdhanBlocked:
+      'Automatic playback was blocked by the device. Use Preview once while the app is open, then keep the app visible for foreground Adhan playback.',
     adhanDeliveryPolicy:
-      'The current Android Adhan option schedules an Adhan-labelled notification alert. It does not auto-play a full Adhan recording in the background or after the app is terminated. User-selected local Adhan audio remains a separate feature.',
+      'When a local Adhan recording is selected, SalahOS can play the full recording at prayer time while the app is open and visible. Background or terminated delivery remains an Adhan-labelled platform notification alert and does not claim unrestricted full-recording playback.',
     notificationDeliveryPending:
       'Android may delay prayer alerts under Doze, Battery Saver, or manufacturer background restrictions even when precise alarms are allowed. SalahOS does not request an unrestricted battery-optimisation exemption. Returning to the app reconciles the current prayer schedule; other targets remain platform-dependent.',
     exportSettings: 'Export settings',
@@ -288,8 +299,19 @@ export const translations = {
     soundSilent: 'صامت',
     vibration: 'الاهتزاز حيثما كان مدعوماً',
     adhanEnabled: 'تفعيل تنبيه الأذان',
+    localAdhanTitle: 'صوت أذان محلي',
+    localAdhanChoose: 'اختر ملفاً صوتياً محلياً',
+    localAdhanPreview: 'استماع تجريبي',
+    localAdhanRemove: 'إزالة',
+    localAdhanNone: 'لم يتم اختيار تسجيل محلي.',
+    localAdhanHelp:
+      'يبقى التسجيل المختار على هذا الجهاز ولا يرفعه صلاح أو إس ولا يضمّنه في التطبيق. يمكن تشغيل الصوت المحلي الكامل تلقائياً فقط عندما يكون التطبيق مفتوحاً وظاهراً؛ أما في الخلفية أو بعد إغلاق التطبيق فيستمر التنبيه وفق نظام الإشعارات في الجهاز.',
+    localAdhanInvalid: 'اختر ملفاً صوتياً غير فارغ بحجم لا يتجاوز 25 ميغابايت.',
+    localAdhanUnavailable: 'تخزين الصوت المحلي غير متاح على هذا الجهاز.',
+    localAdhanBlocked:
+      'منع الجهاز التشغيل التلقائي. استخدم الاستماع التجريبي مرة أثناء فتح التطبيق ثم اترك التطبيق ظاهراً لتشغيل الأذان في الواجهة.',
     adhanDeliveryPolicy:
-      'خيار الأذان الحالي في أندرويد يجدول تنبيهاً يحمل اسم الأذان. لا يشغّل تسجيلاً كاملاً للأذان تلقائياً في الخلفية أو بعد إغلاق التطبيق. اختيار ملف أذان محلي يبقى ميزة منفصلة.',
+      'عند اختيار تسجيل أذان محلي يمكن لصلاح أو إس تشغيل التسجيل الكامل عند دخول وقت الصلاة ما دام التطبيق مفتوحاً وظاهراً. في الخلفية أو بعد إغلاق التطبيق يبقى التسليم تنبيه أذان من نظام الجهاز ولا يدّعي تشغيل التسجيل الكامل من دون قيود.',
     notificationDeliveryPending:
       'قد يؤخر أندرويد تنبيهات الصلاة بسبب وضع السكون أو توفير البطارية أو قيود الشركة المصنّعة حتى عند السماح بالمنبّهات الدقيقة. لا يطلب صلاح أو إس استثناءً غير مقيّد من تحسين البطارية، وعند العودة إلى التطبيق تتم مطابقة جدول الصلاة الحالي من جديد.',
     exportSettings: 'تصدير الإعدادات',
