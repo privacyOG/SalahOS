@@ -503,3 +503,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Calculation exceptions degrade to a localized non-crashing state that directs the user to verify location and calculation settings.
 - Added deterministic coverage for a normal Sydney schedule, polar-day partial unavailability and conversion of a rejected calculation input into the safe unavailable result.
 - Read-only Quality Gate run `31920344383` passed formatting, typed lint, strict typecheck, all tests and production build on the cleaned implementation head.
+
+### 2026-08-16 — privacy-safe structured error logging
+
+- Added a fixed structured error schema for runtime-clock and prayer-calculation failure events.
+- The logger accepts only fixed error codes and emits only component, code and severity; it exposes no arbitrary metadata path that could capture coordinates, location labels, mosque names, exception messages, stacks or URLs.
+- Invalid-system-time logging is deduplicated until the runtime clock recovers; calculation-unavailable logging follows availability-state transitions.
+- Unit tests lock the exact serialized schema and verify location/error-detail fields are absent.
+- Read-only Quality Gate run `31920530983` passed formatting, typed lint, strict typecheck, all tests and production build on the cleaned implementation head.
