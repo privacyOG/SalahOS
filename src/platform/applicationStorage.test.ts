@@ -94,7 +94,7 @@ describe('native application storage', () => {
     expect(preferences.values.get('alpha')).toBe('two');
   });
 
-  it('retries a failed mutation on flush without blocking later keys', async () => {
+  it('retries a failed mutation on flush without blocking later queued writes', async () => {
     const preferences = new FlakyPreferences();
     preferences.failNextSets('alpha', 1);
     const storage = await createNativePreferencesStorage(preferences, ['alpha', 'beta']);
@@ -110,6 +110,26 @@ describe('native application storage', () => {
     ]);
     expect(preferences.values.get('alpha')).toBe('one');
     expect(preferences.values.get('beta')).toBe('two');
+  });
+
+  it('attempts every pending retry before reporting a flush failure', async () => {
+    const preferences = new FlakyPreferences();
+    preferences.failNextSets('alpha', 2);
+    preferences.failNextSets('beta', 1);
+    const storage = await createNativePreferencesStorage(preferences, ['alpha', 'beta']);
+
+    storage.setItem('alpha', 'one');
+    storage.setItem('beta', 'two');
+
+    await expect(storage.flush()).rejects.toThrow('simulated Preferences write failure');
+    expect(preferences.values.has('alpha')).toBe(false);
+    expect(preferences.values.get('beta')).toBe('two');
+    expect(preferences.writes).toEqual([
+      { key: 'alpha', value: 'one' },
+      { key: 'beta', value: 'two' },
+      { key: 'alpha', value: 'one' },
+      { key: 'beta', value: 'two' },
+    ]);
   });
 
   it('removes cached and native values through the same storage contract', async () => {
