@@ -1,0 +1,47 @@
+name: Format Raspberry Pi Kiosk Files
+
+on:
+  push:
+    branches:
+      - agent/rpi-kiosk-deployment
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    if: github.ref == 'refs/heads/agent/rpi-kiosk-deployment'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: agent/rpi-kiosk-deployment
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies from lockfile
+        run: npm ci --ignore-scripts
+
+      - name: Repository policies
+        run: npm run security:sensitive-files && npm run security:audit && npm run security:licenses && npm run docs:links && python scripts/generate_pwa_icons.py --check
+
+      - name: Canonicalize kiosk files
+        run: npx prettier --write docs/RASPBERRY_PI_KIOSK.md scripts/kiosk-deployment.test.mjs
+
+      - name: Commit formatted files
+        run: |
+          if git diff --quiet -- docs/RASPBERRY_PI_KIOSK.md scripts/kiosk-deployment.test.mjs; then
+            echo "No formatting changes required"
+            exit 0
+          fi
+          git config user.name privacyOG
+          git config user.email 102720550+privacyOG@users.noreply.github.com
+          git add docs/RASPBERRY_PI_KIOSK.md scripts/kiosk-deployment.test.mjs
+          git commit -m "style: format Raspberry Pi kiosk files"
+          git push origin HEAD:agent/rpi-kiosk-deployment
