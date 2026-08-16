@@ -20,7 +20,7 @@ for (const required of [
   'await cache.addAll(requiredUrls);',
   "await cache.put('/', shellResponse);",
   'cacheApplicationShell(cache, shellResponse.clone(), true)',
-  'cacheApplicationShell(cache, candidateShell, false)',
+  'await cacheApplicationShell(cache, candidateShell, false);',
   'if (!isCacheableStaticPath(url.pathname)) return;',
   "response.headers.get('content-type')",
   "includes('text/html')",
@@ -73,6 +73,19 @@ if (
   );
 }
 
+const navigationStart = serviceWorker.indexOf("if (request.mode === 'navigate')");
+const navigationEnd = serviceWorker.indexOf("if (!isCacheableStaticPath(url.pathname)) return;", navigationStart);
+const navigationBlock =
+  navigationStart >= 0 && navigationEnd > navigationStart
+    ? serviceWorker.slice(navigationStart, navigationEnd)
+    : '';
+if (!navigationBlock.includes('.then(async (response) =>')) {
+  throw new Error('Navigation response must await the atomic shell-cache upgrade');
+}
+if (navigationBlock.includes('event.waitUntil(')) {
+  throw new Error('Navigation cache upgrades must not depend on a late FetchEvent.waitUntil call');
+}
+
 if (/CACHEABLE_STATIC_PREFIXES[\s\S]*?['"]\/api\//.test(serviceWorker)) {
   throw new Error('Service-worker static cache allowlist must not include API paths');
 }
@@ -82,5 +95,5 @@ if (/url\.origin\s*!==\s*self\.location\.origin/.test(serviceWorker) === false) 
 }
 
 console.log(
-  'Service-worker cache boundary passed: install and navigation upgrades atomically protect the complete first-party application shell, runtime caching is limited to explicit static asset paths, and registration is browser/PWA-only.',
+  'Service-worker cache boundary passed: install and navigation upgrades atomically protect the complete first-party application shell, navigation awaits the cache transaction, runtime caching is limited to explicit static asset paths, and registration is browser/PWA-only.',
 );
