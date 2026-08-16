@@ -108,3 +108,7 @@ The manifest declares `android.permission.SCHEDULE_EXACT_ALARM`. On supported An
 A capability change detected after returning to the app triggers scheduler reconciliation so current jobs are rebuilt under the new precision state. The same tested focus, restored-page and visibility recovery path also reconciles prayer notifications whenever the app returns to the foreground.
 
 SalahOS does not request an unrestricted battery-optimisation exemption. Doze, Battery Saver, manufacturer background controls, notification-channel settings and device power state can still delay or suppress presentation even when precise-alarm access is granted. The settings UI states this explicitly in English and Arabic rather than promising guaranteed background delivery. Reboot recovery, Adhan playback and physical/emulator timing evidence remain separately tracked.
+
+## Emulator acceptance
+
+The repository includes an Android emulator acceptance script and instrumentation test. Validation run `31941025342` enabled airplane mode, performed a force-stop/cold launch of the real SalahOS activity, confirmed the process was alive, and passed app-only landscape/portrait instrumentation. This establishes repeatable emulator evidence for offline cold start and orientation handling; manufacturer-specific physical-device behavior remains device-dependent.

@@ -765,3 +765,10 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Android notification reconciliation is now forced through the existing tested focus, pageshow and visible-document runtime recovery path when the app returns to the foreground.
 - English and Arabic UI text explicitly names Doze, Battery Saver and manufacturer background restrictions and states that SalahOS does not request an unrestricted battery-optimisation exemption.
 - Exact-alarm access is not represented as bypassing Android power policy. Physical-device Doze/vendor delivery timing and reboot recovery remain separate acceptance work.
+
+### 2026-08-16 — Android emulator acceptance
+
+- Validation run `31941025342` ran on an Android 35 x86_64 Pixel-class emulator.
+- Airplane mode was enabled before an explicit force-stop and cold launch of `com.privacyog.salahos/.MainActivity`; Activity Manager reported `Status: ok` and `LaunchState: COLD`, and the process remained alive.
+- `:app:connectedDebugAndroidTest` completed 1/1 tests with zero failures while asserting the real application id, airplane mode, landscape and portrait recreation, and activity survival.
+- The stale generated package-name test was removed. Physical-OEM-specific behavior remains outside this emulator acceptance result.

@@ -367,10 +367,12 @@
 
 **Android persistent-storage verification note (2026-08-16):** Android now hydrates the existing versioned settings, saved-location and mosque-library stores from native preferences before the React application mounts, then preserves the existing synchronous validated storage contracts through an ordered write-through cache. Browser/PWA targets continue to use browser local storage. Native writes are requested to flush when the document is hidden or the page is being left, while the cached value is updated immediately for same-session reads. Validation run `31938112622` passed the complete repository quality gate, 62 test files / 284 tests, production Web/PWA build verification and a Capacitor Android sync plus Gradle `assembleDebug` with the native preferences plugin present. The repository tests cover hydration, ordered writes, removal and isolation from unrelated preference keys. Uninstall/app-data clearing, backup/restore and physical/emulator cold-start lifecycle evidence remain open and are not claimed by this item.
 
-- [ ] Test offline cold start
-- [ ] Test orientation changes
+- [x] Test offline cold start
+- [x] Test orientation changes
 - [ ] Build signed/release-ready configuration without committing secrets
-- [ ] Run on real Android device or emulator and record evidence
+- [x] Run on real Android device or emulator and record evidence
+
+**Android emulator acceptance note (2026-08-16):** validation run `31941025342` executed SalahOS on an Android 35 x86_64 Pixel-class emulator. Airplane mode was enabled before installing, force-stopping and cold-launching `com.privacyog.salahos/.MainActivity`; Android Activity Manager reported `Status: ok`, `LaunchState: COLD`, and a live SalahOS process. The app-only instrumentation task completed 1/1 tests with zero failures after verifying the real application id, airplane mode, landscape recreation, portrait recreation and activity survival. The stale generated `com.getcapacitor.app` test was removed. This is emulator evidence, not a claim about every physical OEM device.
 
 ---
 
