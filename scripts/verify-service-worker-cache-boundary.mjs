@@ -1,6 +1,7 @@
 import { readFileSync } from 'node:fs';
 
 const serviceWorker = readFileSync(new URL('../public/sw.js', import.meta.url), 'utf8');
+const main = readFileSync(new URL('../src/main.tsx', import.meta.url), 'utf8');
 
 for (const required of [
   "const CACHE_NAME = `${CACHE_PREFIX}v3`;",
@@ -29,6 +30,19 @@ for (const required of [
   }
 }
 
+for (const requiredRegistrationContract of [
+  '!Capacitor.isNativePlatform()',
+  "'serviceWorker' in navigator",
+  'import.meta.env.PROD',
+  "navigator.serviceWorker.register('/sw.js').catch(() => undefined)",
+]) {
+  if (!main.includes(requiredRegistrationContract)) {
+    throw new Error(
+      `Browser-only service-worker registration contract is missing: ${requiredRegistrationContract}`,
+    );
+  }
+}
+
 if (
   !/function\s+isSuccessfulHtml\s*\([^)]*\)\s*{[\s\S]*?response\.ok[\s\S]*?text\/html/.test(
     serviceWorker,
@@ -50,5 +64,5 @@ if (/url\.origin\s*!==\s*self\.location\.origin/.test(serviceWorker) === false) 
 }
 
 console.log(
-  'Service-worker cache boundary passed: installation atomically precaches the first-party application shell, navigation shell updates require successful HTML, and runtime caching is limited to explicit static asset paths.',
+  'Service-worker cache boundary passed: install completion protects the complete first-party application shell, navigation shell updates require successful HTML, runtime caching is limited to explicit static asset paths, and registration is browser/PWA-only.',
 );
