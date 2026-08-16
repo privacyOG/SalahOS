@@ -5,6 +5,7 @@ import type {
   LocalNotificationSchema,
   PendingLocalNotificationSchema,
   PermissionStatus,
+  SettingsPermissionStatus,
 } from '@capacitor/local-notifications';
 import type { Locale } from '../i18n/translations';
 import type { NotificationPrayerName } from '../domain/notificationPreferences';
@@ -23,6 +24,8 @@ const silentVibrationChannelId = 'salahos-prayer-silent-vibration';
 interface LocalNotificationsClient {
   checkPermissions(): Promise<PermissionStatus>;
   requestPermissions(): Promise<PermissionStatus>;
+  checkExactNotificationSetting(): Promise<SettingsPermissionStatus>;
+  changeExactNotificationSetting(): Promise<SettingsPermissionStatus>;
   getPending(): Promise<{ notifications: PendingLocalNotificationSchema[] }>;
   schedule(options: { notifications: LocalNotificationSchema[] }): Promise<unknown>;
   cancel(options: { notifications: { id: number }[] }): Promise<void>;
@@ -90,11 +93,40 @@ export function androidNotificationId(id: string): number {
     hash ^= id.charCodeAt(index);
     hash = Math.imul(hash, 0x01000193);
   }
-  return hash & 0x7fffffff || 1;
+  return (hash & 0x7fffffff) || 1;
 }
 
 export function androidLocalNotificationsSupported(): boolean {
   return Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'android';
+}
+
+export type AndroidAlarmPrecision = 'exact' | 'inexact';
+export type AndroidExactAlarmCapability = 'unsupported' | AndroidAlarmPrecision;
+
+export async function readAndroidExactAlarmCapability(
+  options: {
+    readonly client?: Pick<LocalNotificationsClient, 'checkExactNotificationSetting'>;
+    readonly supported?: boolean;
+  } = {},
+): Promise<AndroidExactAlarmCapability> {
+  const supported = options.supported ?? androidLocalNotificationsSupported();
+  if (!supported) return 'unsupported';
+  const client = options.client ?? LocalNotifications;
+  const status = await client.checkExactNotificationSetting();
+  return status.exact_alarm === 'granted' ? 'exact' : 'inexact';
+}
+
+export async function openAndroidExactAlarmSettings(
+  options: {
+    readonly client?: Pick<LocalNotificationsClient, 'changeExactNotificationSetting'>;
+    readonly supported?: boolean;
+  } = {},
+): Promise<AndroidExactAlarmCapability> {
+  const supported = options.supported ?? androidLocalNotificationsSupported();
+  if (!supported) return 'unsupported';
+  const client = options.client ?? LocalNotifications;
+  const status = await client.changeExactNotificationSetting();
+  return status.exact_alarm === 'granted' ? 'exact' : 'inexact';
 }
 
 class AndroidNotificationScheduler implements NotificationSchedulerAdapter {
@@ -166,7 +198,11 @@ async function ensureSilentChannels(
 export type AndroidNotificationSyncResult =
   | { readonly status: 'unsupported' }
   | { readonly status: 'permission-denied' }
-  | { readonly status: 'synchronized'; readonly plan: NotificationSchedulerPlan };
+  | {
+      readonly status: 'synchronized';
+      readonly plan: NotificationSchedulerPlan;
+      readonly alarmPrecision: AndroidAlarmPrecision;
+    };
 
 export async function synchronizeAndroidPrayerNotifications(
   desired: readonly NotificationInstantResolution[],
@@ -189,14 +225,17 @@ export async function synchronizeAndroidPrayerNotifications(
   const adapter = new AndroidNotificationScheduler(client, locale);
 
   if (futureDesired.length === 0) {
-    return { status: 'synchronized', plan: await applyNotificationSchedulerPlan(adapter, []) };
+    const plan = await applyNotificationSchedulerPlan(adapter, []);
+    const alarmPrecision = await readAndroidExactAlarmCapability({ client, supported: true });
+    return { status: 'synchronized', plan, alarmPrecision };
   }
 
   let permission = await client.checkPermissions();
   if (permission.display !== 'granted') permission = await client.requestPermissions();
   if (permission.display !== 'granted') return { status: 'permission-denied' };
 
+  const alarmPrecision = await readAndroidExactAlarmCapability({ client, supported: true });
   await ensureSilentChannels(client, locale);
   const plan = await applyNotificationSchedulerPlan(adapter, futureDesired);
-  return { status: 'synchronized', plan };
+  return { status: 'synchronized', plan, alarmPrecision };
 }
