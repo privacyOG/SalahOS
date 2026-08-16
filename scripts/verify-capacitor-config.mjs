@@ -40,7 +40,9 @@ if (
   !androidSync.includes('npm run verify:capacitor-config') ||
   androidSync.indexOf('npm run verify:capacitor-config') < androidSync.indexOf('cap sync android')
 ) {
-  throw new Error('Android sync must verify generated Capacitor configuration after cap sync android');
+  throw new Error(
+    'Android sync must verify generated Capacitor configuration after cap sync android',
+  );
 }
 
 const iosSyncMarker = 'run: npx cap sync ios';
@@ -48,7 +50,9 @@ const iosVerifyMarker = 'run: npm run verify:capacitor-config';
 const iosSyncIndex = iosWorkflow.indexOf(iosSyncMarker);
 const iosVerifyIndex = iosWorkflow.indexOf(iosVerifyMarker);
 if (iosSyncIndex < 0 || iosVerifyIndex < 0 || iosVerifyIndex < iosSyncIndex) {
-  throw new Error('iOS workflow must verify generated Capacitor configuration after cap sync ios');
+  throw new Error(
+    'iOS workflow must verify generated Capacitor configuration after cap sync ios',
+  );
 }
 
 const generatedPaths = [
@@ -69,7 +73,9 @@ for (const generatedPath of generatedPaths) {
     throw new Error(`Generated Capacitor webDir is unexpected in ${generatedPath}`);
   }
   if (Object.prototype.hasOwnProperty.call(generated, 'server')) {
-    throw new Error(`Generated Capacitor configuration must not contain a server block: ${generatedPath}`);
+    throw new Error(
+      `Generated Capacitor configuration must not contain a server block: ${generatedPath}`,
+    );
   }
 }
 
