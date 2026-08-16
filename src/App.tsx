@@ -67,6 +67,7 @@ import { installRuntimeRefreshListeners } from './platform/runtimeRefresh';
 import { createSystemClockChangeDetector } from './platform/systemClockChange';
 import { createSystemSleepWakeDetector } from './platform/systemSleepWake';
 import { readSystemTime, systemTimeFromMilliseconds } from './platform/systemTime';
+import { smartDisplayExitPath } from './platform/smartDisplayNavigation';
 import { installThemePreference } from './platform/themePreference';
 import { BidiText } from './ui/BidiText';
 import { NextPrayerBlock } from './ui/NextPrayerBlock';
@@ -601,6 +602,26 @@ export function App() {
     setSettingsPayload('');
     setSettingsMessage('settingsReset');
   }
+
+  useEffect(() => {
+    if (!smartDisplayModeRequested(window.location.search)) {
+      return;
+    }
+
+    const handleDisplayExitKey = (event: KeyboardEvent) => {
+      const target = smartDisplayExitPath(window.location.href, event.key);
+      if (target === null) {
+        return;
+      }
+      event.preventDefault();
+      window.location.assign(target);
+    };
+
+    window.addEventListener('keydown', handleDisplayExitKey);
+    return () => {
+      window.removeEventListener('keydown', handleDisplayExitKey);
+    };
+  }, []);
 
   const currentClock =
     now === null
