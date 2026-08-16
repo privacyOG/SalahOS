@@ -254,6 +254,14 @@ async function verifyTwoHundredPercentReflow(session) {
 }
 
 async function verifyKeyboardFocus(session) {
+  await session.send('Page.bringToFront');
+  await evaluate(
+    session,
+    `(() => {
+      const active = document.activeElement;
+      if (active instanceof HTMLElement) active.blur();
+    })()`,
+  );
   await session.send('Input.dispatchKeyEvent', {
     type: 'keyDown',
     key: 'Tab',
