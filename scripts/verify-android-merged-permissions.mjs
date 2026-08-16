@@ -33,17 +33,24 @@ function declaredPermissions(manifest) {
   ].map((match) => match[1]);
 }
 
+function containsSalahOsMainActivity(manifest) {
+  return (
+    manifest.includes('android:name="com.privacyog.salahos.MainActivity"') ||
+    manifest.includes('android:name=".MainActivity"')
+  );
+}
+
 const effectiveCandidates = collectManifestCandidates(androidBuildIntermediates).filter((path) => {
   const manifest = readFileSync(path, 'utf8');
   return (
-    manifest.includes('com.privacyog.salahos.MainActivity') &&
+    containsSalahOsMainActivity(manifest) &&
     manifest.includes('com.capacitorjs.plugins.localnotifications.LocalNotificationRestoreReceiver')
   );
 });
 
 if (effectiveCandidates.length === 0) {
   throw new Error(
-    'No merged/packaged Android debug manifest containing the application and Local Notifications plugin was found. Run the Android debug build first.',
+    'No merged/packaged Android manifest containing the SalahOS activity and Local Notifications restore receiver was found. Run an Android build first.',
   );
 }
 
