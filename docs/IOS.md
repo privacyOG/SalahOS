@@ -11,7 +11,7 @@ The repository contains:
 - `ios/App/App/Info.plist` — native application configuration and location privacy text;
 - a native-aware location adapter using the Capacitor Geolocation plugin;
 - local-notification scheduling through the Capacitor Local Notifications plugin;
-- native Preferences-backed application storage;
+- candidate Preferences-backed native application storage with migration from the earlier WebView Web Storage path;
 - `.github/workflows/ios.yml` — the permanent macOS Simulator build and candidate visual-evidence gate.
 
 The native shell does not duplicate prayer calculations. Web/PWA, Android and iOS consume the same shared prayer, timezone, settings and notification-intent logic.
@@ -46,9 +46,29 @@ Build the shared application and synchronise Capacitor plugins/assets into iOS:
 ```bash
 npm run build
 npx cap sync ios
+npm run verify:capacitor-config
+npm run verify:native-dependencies
 ```
 
-Run `npx cap sync ios` again after changing native Capacitor dependencies or after changing the web application that must be copied into the native shell.
+The permanent iOS workflow performs the two verification commands after synchronization so generated configuration/dependency drift is checked in the native-build workspace. Run `npx cap sync ios` again after changing native Capacitor dependencies or after changing the web application that must be copied into the native shell.
+
+## Application storage and migration
+
+Earlier iOS builds used the Capacitor WebView's Web Storage path for persisted SalahOS settings. The current candidate uses `@capacitor/preferences` for all Capacitor native platforms, including iOS/iPadOS.
+
+On native startup:
+
+1. Preferences values are hydrated first;
+2. an existing Preferences value is authoritative;
+3. if one of the SalahOS persisted keys is missing in Preferences but exists in the legacy Web Storage copy, that value is copied to Preferences;
+4. required native writes are flushed successfully;
+5. only then is the corresponding legacy Web Storage copy removed.
+
+The migrated keys are limited to SalahOS settings, saved locations and mosque-library state. Browser/PWA targets continue to use the provided Web Storage implementation. The user-selected local Adhan recording is stored separately in IndexedDB and is not part of this migration.
+
+`npm run verify:native-storage` protects the cross-platform storage-selection and migration ordering contract, and unit tests cover native-authoritative values, one-time legacy migration and browser/PWA storage behavior.
+
+The Preferences-backed iOS path and its migration remain candidate-only until the exact release-candidate Quality/iOS gates execute successfully.
 
 ## Reproduce the automated Simulator build
 
@@ -68,7 +88,7 @@ xcodebuild \
 
 The CI workflow places DerivedData in the runner temporary directory so generated Xcode output is never treated as repository source.
 
-Historical iOS workflow run `31942653233` executed the repository quality gate, Capacitor synchronisation and the Xcode Simulator build successfully. That evidence validates the previously merged native iOS build path; it does not pre-validate later release-candidate changes.
+Historical iOS workflow run `31942653233` executed the repository quality gate, Capacitor synchronisation and the Xcode Simulator build successfully. That evidence validates the previously merged native iOS build path; it does not pre-validate later release-candidate changes such as Preferences-backed iOS storage, current safe-area handling, synchronized config checks or the new screenshot gate.
 
 A successful command proves the project compiles for the iOS Simulator. It does not prove physical-device signing, App Store submission, native notification delivery under every lifecycle state, or visual acceptance on every iPhone/iPad size.
 
@@ -82,8 +102,9 @@ The release candidate extends `.github/workflows/ios.yml` after the successful g
 4. terminates any existing SalahOS process;
 5. cold-launches `com.privacyog.salahos` and requires a successful launch result;
 6. captures screenshots at approximately 5 seconds and 20 seconds after launch;
-7. records the screenshot pixel dimensions and confirms the application container exists;
-8. shuts the Simulator down before moving to the next target.
+7. validates PNG signature/IHDR/non-zero dimensions and stable dimensions across both captures;
+8. confirms the application container exists;
+9. shuts the Simulator down before moving to the next target.
 
 The resulting candidate artifact is named `ios-simulator-visual-<commit>` and contains `iphone-5s.png`, `iphone-20s.png`, `ipad-5s.png` and `ipad-20s.png` when the step completes. These files are evidence only after the exact candidate workflow actually executes successfully and the images are inspected for safe-area overlap, clipping, startup state and other visible defects.
 
@@ -143,7 +164,7 @@ Platform delivery remains subject to user permission and iOS scheduling behavior
 
 ## Offline operation
 
-Core prayer calculation, saved settings and bundled timezone/location data are local. After native assets are synchronised, ordinary prayer calculation does not require a remote API. Physical offline cold-start acceptance remains a separate iOS device/Simulator test item in `TODO.md`.
+Core prayer calculation, saved settings and bundled timezone/location data are local. The native shell loads the synchronized bundled `dist` application; unreviewed remote Capacitor server/navigation/cleartext/origin overrides are rejected by `npm run verify:capacitor-config`. After native assets are synchronised, ordinary prayer calculation does not require a remote API. Physical offline cold-start acceptance remains a separate iOS device/Simulator test item in `TODO.md`.
 
 ## Release signing and distribution
 
