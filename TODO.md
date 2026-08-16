@@ -187,7 +187,10 @@
 - [x] Handle unavailable GPS/location services gracefully
 - [x] Fall back to saved/manual location without breaking prayer calculations
 - [x] Resolve coordinates to an IANA timezone
-- [~] Cache timezone data for offline use
+- [x] Cache timezone data for offline use
+
+**Timezone-cache verification note (2026-08-16):** read-only Quality Gate run `31925162040` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, all tests and production build after completing the persisted timezone path. Resolved IANA timezone identifiers are already stored with the local persisted location and saved favourites; the production dashboard now consumes that validated cached timezone on startup, imported settings, saved-location selection and offline city/location selection instead of discarding it and re-resolving coordinates. Fresh browser GPS and raw manual-coordinate changes deliberately clear the cache so the bundled offline coordinate resolver recalculates the timezone. Persisted and saved timezone strings are validated through the IANA timezone assertion before runtime use, and integration coverage proves the restored cached zone controls production dashboard civil time/offset.
+
 - [x] Use IANA timezone rules rather than deriving timezone from longitude
 - [x] Correctly handle UTC offsets and daylight-saving changes
 - [x] Avoid continuous GPS polling when not required

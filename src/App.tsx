@@ -137,6 +137,9 @@ export function App() {
   const [coordinates, setCoordinates] = useState<Coordinates | null>(
     settings.location?.coordinates ?? null,
   );
+  const [timeZoneOverride, setTimeZoneOverride] = useState<string | null>(
+    settings.location?.timeZone ?? null,
+  );
   const [latitude, setLatitude] = useState(
     settings.location === null ? '' : String(settings.location.coordinates.latitude),
   );
@@ -290,13 +293,14 @@ export function App() {
         : buildPrayerDashboardResult({
             instant: now,
             coordinates,
+            ...(timeZoneOverride === null ? {} : { timeZone: timeZoneOverride }),
             method: calculationMethods[settings.calculationMethodId],
             asrConvention: settings.asrConvention,
             highLatitudeRule: settings.highLatitudeRule,
             adjustments: settings.prayerAdjustments,
             hijriCorrectionDays: settings.hijriCorrectionDays,
           }),
-    [coordinates, now, settings],
+    [coordinates, now, settings, timeZoneOverride],
   );
   const dashboard = dashboardResult?.ok === true ? dashboardResult.dashboard : null;
   const calculationUnavailable = dashboardResult?.ok === false;
@@ -364,6 +368,7 @@ export function App() {
     const result = await requestBrowserLocation();
     if (result.ok) {
       setCoordinates(result.location.coordinates);
+      setTimeZoneOverride(null);
       setLatitude(String(result.location.coordinates.latitude));
       setLongitude(String(result.location.coordinates.longitude));
       setLocationFailure(null);
@@ -377,6 +382,7 @@ export function App() {
     try {
       const next = createCoordinates(Number(latitude), Number(longitude));
       setCoordinates(next);
+      setTimeZoneOverride(null);
       setLocationFailure(null);
       setManualError(false);
     } catch {
@@ -386,6 +392,7 @@ export function App() {
 
   function selectSearchedLocation(result: LocationSearchResult): void {
     setCoordinates(result.coordinates);
+    setTimeZoneOverride(result.timeZone);
     setLatitude(String(result.coordinates.latitude));
     setLongitude(String(result.coordinates.longitude));
     setLocationQuery('');
@@ -416,6 +423,7 @@ export function App() {
     const selected = savedLocations.find((location) => location.id === id);
     if (selected === undefined) return;
     setCoordinates(selected.coordinates);
+    setTimeZoneOverride(selected.timeZone ?? null);
     setLatitude(String(selected.coordinates.latitude));
     setLongitude(String(selected.coordinates.longitude));
     setLocationFailure(null);
@@ -549,6 +557,7 @@ export function App() {
       setSettings(imported);
       setLocale(imported.locale);
       setCoordinates(imported.location?.coordinates ?? null);
+      setTimeZoneOverride(imported.location?.timeZone ?? null);
       setLatitude(imported.location === null ? '' : String(imported.location.coordinates.latitude));
       setLongitude(
         imported.location === null ? '' : String(imported.location.coordinates.longitude),
@@ -570,6 +579,7 @@ export function App() {
     setSettings(defaultPersistedSettings);
     setLocale(defaultPersistedSettings.locale);
     setCoordinates(null);
+    setTimeZoneOverride(null);
     setLatitude('');
     setLongitude('');
     setLocationFailure(null);

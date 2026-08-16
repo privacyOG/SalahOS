@@ -1,29 +1,43 @@
 import type { Coordinates } from './coordinates';
-import { civilDateInTimeZone, resolveIanaTimeZone, utcOffsetMinutesAt } from './timezone';
+import {
+  assertIanaTimeZone,
+  civilDateInTimeZone,
+  resolveIanaTimeZone,
+  utcOffsetMinutesAt,
+} from './timezone';
+
+export type LocationTimezoneSource = 'offline-coordinate-lookup' | 'persisted-timezone';
 
 export interface LocationPrayerContext {
   readonly coordinates: Coordinates;
   readonly timeZone: string;
   readonly civilDate: Date;
   readonly utcOffsetMinutes: number;
-  readonly timezoneSource: 'offline-coordinate-lookup';
+  readonly timezoneSource: LocationTimezoneSource;
 }
 
 /**
  * Resolve the civil-date/timezone inputs required by the pure prayer engine
- * without transmitting coordinates to a remote service.
+ * without transmitting coordinates to a remote service. A validated persisted
+ * IANA timezone can be reused when one was already resolved for this location.
  */
 export function createLocationPrayerContext(
   instant: Date,
   coordinates: Coordinates,
+  persistedTimeZone?: string,
 ): LocationPrayerContext {
-  const timezone = resolveIanaTimeZone(coordinates);
+  const timeZone =
+    persistedTimeZone === undefined
+      ? resolveIanaTimeZone(coordinates).timeZone
+      : assertIanaTimeZone(persistedTimeZone);
+  const timezoneSource: LocationTimezoneSource =
+    persistedTimeZone === undefined ? 'offline-coordinate-lookup' : 'persisted-timezone';
 
   return {
     coordinates,
-    timeZone: timezone.timeZone,
-    civilDate: civilDateInTimeZone(instant, timezone.timeZone),
-    utcOffsetMinutes: utcOffsetMinutesAt(instant, timezone.timeZone),
-    timezoneSource: timezone.source,
+    timeZone,
+    civilDate: civilDateInTimeZone(instant, timeZone),
+    utcOffsetMinutes: utcOffsetMinutesAt(instant, timeZone),
+    timezoneSource,
   };
 }

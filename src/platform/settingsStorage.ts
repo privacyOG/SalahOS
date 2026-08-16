@@ -9,6 +9,7 @@ import {
 } from '../domain/notificationPreferences';
 import type { NotificationPreferences } from '../domain/notificationPreferences';
 import type { AsrConvention, HighLatitudeRule, PrayerName } from '../domain/prayerEngine';
+import { assertIanaTimeZone } from '../domain/timezone';
 import type { Locale } from '../i18n/translations';
 
 export const SETTINGS_STORAGE_KEY = 'salahos.settings';
@@ -133,7 +134,9 @@ function parseLocation(value: unknown): PersistedLocation | null {
       Number(value.coordinates.longitude),
     );
     const timeZone =
-      typeof value.timeZone === 'string' && value.timeZone.trim() ? value.timeZone : undefined;
+      typeof value.timeZone === 'string' && value.timeZone.trim()
+        ? assertIanaTimeZone(value.timeZone.trim())
+        : undefined;
     return timeZone === undefined ? { coordinates } : { coordinates, timeZone };
   } catch {
     return null;
