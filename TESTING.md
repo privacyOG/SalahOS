@@ -639,3 +639,12 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Retained the existing bidirectional-text component coverage and added no DOM/test-framework dependency.
 - Read-only Quality Gate run `31929598905` passed all 51 test files / 242 tests plus security, dependency, documentation, raster reproducibility, formatting, lint, strict typecheck, production build and deploy-artifact verification.
 - Stage 17 viewport, screenshot, RTL visual-alignment and scalable-text/accessibility regression items remain open and are not implied by this component-level gate.
+
+### 2026-08-16 — Raspberry Pi kiosk deployment scripts
+
+- Added `scripts/kiosk/run-salahos-kiosk.sh` to serve the built Web/PWA bundle on loopback and launch Chromium with kiosk/full-screen-oriented flags after the local page becomes reachable.
+- Added `scripts/kiosk/install-labwc-autostart.sh` for idempotent user-session autostart management that preserves unrelated labwc entries and supports dry-run/removal.
+- Added `docs/RASPBERRY_PI_KIOSK.md` covering the validated Raspberry Pi OS Desktop / Chromium / labwc deployment path and explicitly separating repository validation from physical Touch Display 2/device acceptance.
+- Added five deterministic tests covering shell syntax, localhost/Chromium command construction, invalid-port rejection, autostart idempotence/preservation, and managed-block removal.
+- Read-only Quality Gate run `31929984829` passed all 52 test files / 247 tests plus security, dependency, documentation, PWA raster reproducibility, formatting, lint, strict typecheck, production build and deploy-artifact verification.
+- Physical Raspberry Pi/Touch Display 2 boot, orientation, touch/rendering, power-loss/reboot and long-duration acceptance remain open; desktop-session autostart is therefore not treated as complete proof of unattended power-on launch.
