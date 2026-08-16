@@ -17,12 +17,34 @@ function expectCanonicalParity(
     }
     // The upstream fixture is minute-formatted while SalahOS rounds only at its
     // presentation boundary. Two minutes covers independent second-level solar
-    // math/rounding without hiding a materially different calculation result.
+    // math/rounding and documented preset-policy differences without hiding a
+    // materially different calculation result.
     expect(Math.abs(value - expected[prayer]), prayer).toBeLessThanOrEqual(2);
   }
 }
 
 describe('pinned Adhan JS canonical-output parity', () => {
+  it('matches the upstream Muslim World League / standard Raleigh fixture', () => {
+    const schedule = calculatePrayerSchedule({
+      date: new Date('2015-12-01T00:00:00.000Z'),
+      latitude: 35.775,
+      longitude: -78.6336,
+      utcOffsetMinutes: -300,
+      method: getCalculationMethod('muslim-world-league'),
+      asrConvention: 'standard',
+      highLatitudeRule: 'middle-of-the-night',
+    });
+
+    expectCanonicalParity(schedule, {
+      fajr: 5 * 60 + 35,
+      sunrise: 7 * 60 + 6,
+      dhuhr: 12 * 60 + 5,
+      asr: 14 * 60 + 42,
+      maghrib: 17 * 60 + 1,
+      isha: 18 * 60 + 26,
+    });
+  });
+
   it('matches the upstream North America / Hanafi Raleigh fixture', () => {
     const schedule = calculatePrayerSchedule({
       date: new Date('2015-07-12T00:00:00.000Z'),
