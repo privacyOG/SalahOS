@@ -2,7 +2,6 @@ import { calendarDate } from './calendar';
 import type { Coordinates } from './coordinates';
 import { applyInstitutionalAdjustments } from './institutionalAdjustments';
 import { createLocationPrayerContext } from './locationPrayerContext';
-import { resolveCalculationMethodForCivilDate } from './methodCalendarPolicy';
 import { calculationMethods } from './methods';
 import type { CalculationMethod } from './methods';
 import { findNextPrayer } from './nextPrayer';
@@ -113,14 +112,13 @@ function scheduleFor(
   highLatitudeRule: HighLatitudeRule,
   adjustments: Readonly<Partial<Record<PrayerName, number>>>,
 ): PrayerSchedule {
-  const resolvedMethod = resolveCalculationMethodForCivilDate(method, civilDate);
   return applyInstitutionalAdjustments(
     calculatePrayerSchedule({
       date: civilDate,
       latitude: coordinates.latitude,
       longitude: coordinates.longitude,
       utcOffsetMinutes,
-      method: resolvedMethod,
+      method,
       asrConvention,
       highLatitudeRule,
       adjustments,
