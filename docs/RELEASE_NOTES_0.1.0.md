@@ -88,6 +88,7 @@ Physical Raspberry Pi Touch Display 2, television/CEC/remote and final real-devi
 - reviewed source and merged-manifest permission contracts;
 - cleartext network traffic disabled;
 - application backup disabled with explicit cloud/device-transfer exclusion rules;
+- bundled-only Capacitor content configuration, rechecked after native synchronization;
 - local notification and reboot scheduling paths;
 - unused Google Services build/plugin auto-activation removed, with `google-services.json` rejected by the sensitive-file gate.
 
@@ -98,12 +99,15 @@ The new permanent emulator/screenshot and native hardening gates are candidate i
 - committed Capacitor/Xcode project;
 - automated unsigned iOS Simulator build path;
 - current-location and local-notification native adapters;
+- candidate Preferences-backed native storage shared with Android instead of the earlier iOS WebView-only storage path;
+- one-time migration of missing SalahOS settings, saved-location and mosque-library keys from legacy iOS Web Storage into Preferences, with existing native values authoritative and legacy removal occurring only after persistence flush;
+- bundled-only Capacitor content configuration, rechecked after native synchronization;
 - safe-area viewport/CSS handling;
 - permanent candidate workflow that selects one available iPhone and one available iPad Simulator, installs the exact built `App.app`, cold-launches both and retains 5-second/20-second screenshots;
 - documented Xcode and physical-development-device workflow;
 - foreground-only SalahOS location behaviour while retaining the usage-description keys required by the pinned geolocation dependency.
 
-The new iPhone/iPad screenshot path is candidate infrastructure until it passes on the exact candidate head and the retained screenshots are inspected. Physical-device acceptance, distribution signing and native notification validation in supported environments remain release gates.
+The new iOS Preferences migration, iPhone/iPad screenshot path and native hardening remain candidate infrastructure until they pass on the exact candidate head and the retained screenshots are inspected where applicable. Physical-device acceptance, distribution signing and native notification validation in supported environments remain release gates.
 
 ### Privacy and security
 
@@ -114,6 +118,8 @@ The new iPhone/iPad screenshot path is candidate infrastructure until it passes 
 - sensitive-file and dependency-vulnerability gates;
 - dependency-license policy;
 - reviewed native dependency-surface gate that pins the committed Capacitor/AndroidX/Cordova/Swift-package declarations and rejects unreviewed local Android `.jar/.aar` binaries;
+- native Capacitor configuration gate that requires bundled application content and rejects unreviewed remote server/navigation/cleartext/hostname/scheme overrides, including generated post-sync configuration;
+- cross-platform native storage gate that requires Capacitor Preferences on native shells and protects one-time legacy Web Storage migration ordering;
 - Web/PWA Content Security Policy baseline with same-origin networking and loopback-only development WebSocket exceptions;
 - bounded Web/PWA service-worker cache policy that excludes arbitrary same-origin API/data responses;
 - optional remote API boundary using explicit HTTPS origins, no browser credentials, no redirect following, no referrer disclosure and no cache reuse;
