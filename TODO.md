@@ -419,9 +419,12 @@
 - [ ] Research and document Raspberry Pi Touch Display 2 resolution/orientation constraints
 - [ ] Build touch-first layout fixture for the display
 - [ ] Provide Raspberry Pi OS installation instructions
-- [ ] Provide one-command or simple launcher script
-- [ ] Provide optional automatic launch on boot
-- [ ] Implement Chromium/full-screen kiosk mode where applicable
+- [x] Provide one-command or simple launcher script
+- [~] Provide optional automatic launch on boot
+- [x] Implement Chromium/full-screen kiosk mode where applicable
+
+**Raspberry Pi kiosk deployment verification note (2026-08-16):** read-only Quality Gate run `31929984829` passed the sensitive-file policy, dependency vulnerability audit, dependency-license policy, documentation-link verification across 28 Markdown files, PWA raster-icon reproducibility, formatting, typed lint, strict typecheck, 52 test files / 247 tests, production build and deploy-artifact verification. The repository now provides a simple local launcher that serves the built Web/PWA bundle on loopback, validates configuration, waits for local readiness and starts Chromium in kiosk mode, plus an idempotent labwc desktop-session autostart installer that preserves unrelated entries and can remove only its managed block. Five deterministic deployment tests verify shell syntax, kiosk command construction, invalid-port rejection, autostart idempotence/preservation and managed-block removal. Optional automatic launch remains partial because repository CI cannot prove Raspberry Pi graphical boot/login policy or physical power-on behavior. Touch Display 2 resolution/orientation, physical boot/autostart, device rendering, power-loss/reboot and long-duration hardware acceptance remain open.
+
 - [ ] Persist settings across restart
 - [ ] Operate without internet after initial configuration
 - [ ] Recover gracefully when network disappears
@@ -633,7 +636,7 @@
 - [x] Production web build succeeds
 - [ ] Android build succeeds where SDK is available
 - [ ] iOS build succeeds where Xcode is available
-- [ ] Raspberry Pi/kiosk deployment script validated
+- [x] Raspberry Pi/kiosk deployment script validated
 - [x] No unexplained widened test tolerances
 - [x] No disabled failing tests without documented blocker
 - [x] No placeholder implementation marked complete
