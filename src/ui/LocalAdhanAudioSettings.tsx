@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import type { NotificationPreferences } from '../domain/notificationPreferences';
-import type { Locale } from '../i18n/translations';
+import { translate } from '../i18n/i18n';
+import type { Locale, TranslationKey } from '../i18n/translations';
 import {
   foregroundAdhanPlaybackKey,
   loadLocalAdhanAudio,
@@ -11,31 +12,6 @@ import {
   type LocalAdhanPrayerRow,
 } from '../platform/localAdhanAudio';
 import './LocalAdhanAudioSettings.css';
-
-const copy = {
-  en: {
-    title: 'Local Adhan audio',
-    choose: 'Choose local audio',
-    preview: 'Preview',
-    remove: 'Remove',
-    none: 'No local recording selected.',
-    help: 'The selected recording stays on this device. SalahOS does not upload or bundle it. Full local audio can play automatically only while the app is open and visible; background and terminated delivery continues to use the platform notification alert.',
-    invalid: 'Choose a non-empty audio file up to 25 MB.',
-    unavailable: 'Local audio storage is unavailable on this device.',
-    blocked: 'Automatic playback was blocked by the device. Use Preview once while the app is open, then keep the app visible for foreground Adhan playback.',
-  },
-  ar: {
-    title: 'صوت أذان محلي',
-    choose: 'اختر ملفاً صوتياً محلياً',
-    preview: 'استماع تجريبي',
-    remove: 'إزالة',
-    none: 'لم يتم اختيار تسجيل محلي.',
-    help: 'يبقى التسجيل المختار على هذا الجهاز ولا يرفعه صلاح أو إس ولا يضمّنه في التطبيق. يمكن تشغيل الصوت المحلي الكامل تلقائياً فقط عندما يكون التطبيق مفتوحاً وظاهراً؛ أما في الخلفية أو بعد إغلاق التطبيق فيستمر التنبيه وفق نظام الإشعارات في الجهاز.',
-    invalid: 'اختر ملفاً صوتياً غير فارغ بحجم لا يتجاوز 25 ميغابايت.',
-    unavailable: 'تخزين الصوت المحلي غير متاح على هذا الجهاز.',
-    blocked: 'منع الجهاز التشغيل التلقائي. استخدم الاستماع التجريبي مرة أثناء فتح التطبيق ثم اترك التطبيق ظاهراً لتشغيل الأذان في الواجهة.',
-  },
-} as const;
 
 export interface LocalAdhanAudioSettingsProps {
   readonly locale: Locale;
@@ -52,11 +28,10 @@ export function LocalAdhanAudioSettings({
   prayers,
   notifications,
 }: LocalAdhanAudioSettingsProps) {
-  const labels = copy[locale];
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const lastAutomaticPlaybackKey = useRef<string | null>(null);
   const [record, setRecord] = useState<LocalAdhanAudioRecord | null>(null);
-  const [message, setMessage] = useState<string | null>(null);
+  const [messageKey, setMessageKey] = useState<TranslationKey | null>(null);
 
   useEffect(() => {
     let active = true;
@@ -65,12 +40,12 @@ export function LocalAdhanAudioSettings({
         if (active) setRecord(loaded);
       })
       .catch(() => {
-        if (active) setMessage(labels.unavailable);
+        if (active) setMessageKey('localAdhanUnavailable');
       });
     return () => {
       active = false;
     };
-  }, [labels.unavailable]);
+  }, []);
 
   const audioUrl = useMemo(() => {
     if (record === null) return null;
@@ -109,49 +84,49 @@ export function LocalAdhanAudioSettings({
     if (player === null) return;
     player.currentTime = 0;
     void player.play().catch(() => {
-      setMessage(labels.blocked);
+      setMessageKey('localAdhanBlocked');
     });
-  }, [audioUrl, date, labels.blocked, localMinutes, notifications, prayers]);
+  }, [audioUrl, date, localMinutes, notifications, prayers]);
 
   const selectAudio = async (file: File | undefined) => {
     if (file === undefined) return;
-    setMessage(null);
+    setMessageKey(null);
     try {
       if (file.size > MAX_LOCAL_ADHAN_AUDIO_BYTES) throw new RangeError('oversized');
       const saved = await saveLocalAdhanAudio(file);
       setRecord(saved);
     } catch {
-      setMessage(labels.invalid);
+      setMessageKey('localAdhanInvalid');
     }
   };
 
   const preview = () => {
-    setMessage(null);
+    setMessageKey(null);
     const player = audioRef.current;
     if (player === null) return;
     player.currentTime = 0;
     void player.play().catch(() => {
-      setMessage(labels.blocked);
+      setMessageKey('localAdhanBlocked');
     });
   };
 
   const remove = async () => {
-    setMessage(null);
+    setMessageKey(null);
     try {
       await removeLocalAdhanAudio();
       audioRef.current?.pause();
       setRecord(null);
       lastAutomaticPlaybackKey.current = null;
     } catch {
-      setMessage(labels.unavailable);
+      setMessageKey('localAdhanUnavailable');
     }
   };
 
   return (
     <section className="local-adhan-audio" aria-labelledby="local-adhan-audio-title">
-      <h3 id="local-adhan-audio-title">{labels.title}</h3>
+      <h3 id="local-adhan-audio-title">{translate(locale, 'localAdhanTitle')}</h3>
       <label>
-        <span>{labels.choose}</span>
+        <span>{translate(locale, 'localAdhanChoose')}</span>
         <input
           type="file"
           accept="audio/*"
@@ -162,7 +137,7 @@ export function LocalAdhanAudioSettings({
         />
       </label>
       {record === null ? (
-        <p className="setting-help">{labels.none}</p>
+        <p className="setting-help">{translate(locale, 'localAdhanNone')}</p>
       ) : (
         <div className="local-adhan-audio-selection">
           <p>
@@ -170,7 +145,7 @@ export function LocalAdhanAudioSettings({
           </p>
           <div className="button-row">
             <button type="button" onClick={preview}>
-              {labels.preview}
+              {translate(locale, 'localAdhanPreview')}
             </button>
             <button
               type="button"
@@ -178,15 +153,15 @@ export function LocalAdhanAudioSettings({
                 void remove();
               }}
             >
-              {labels.remove}
+              {translate(locale, 'localAdhanRemove')}
             </button>
           </div>
         </div>
       )}
-      <p className="setting-help">{labels.help}</p>
-      {message === null ? null : (
+      <p className="setting-help">{translate(locale, 'localAdhanHelp')}</p>
+      {messageKey === null ? null : (
         <p className="setting-help" role="status">
-          {message}
+          {translate(locale, messageKey)}
         </p>
       )}
       <audio ref={audioRef} src={audioUrl ?? undefined} preload="metadata" />
