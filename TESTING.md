@@ -572,3 +572,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Added English/Arabic location-search UI, privacy guidance, responsive result controls and immediate selection into the existing coordinate/prayer-calculation path.
 - Added domain coverage for catalogue size, Sydney coordinates/timezone, country-name/code queries, accent/separator normalization and limits, plus `src/integration/manualLocationSearch.test.ts` to verify search result → production dashboard resolution.
 - Read-only Quality Gate run `31924790649` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, all 231 tests and production build.
+
+### 2026-08-16 — persisted timezone cache
+
+- Extended the location prayer context/dashboard input to consume an already-resolved persisted IANA timezone while retaining the bundled coordinate lookup as the fallback.
+- The app restores cached timezone data on startup, settings import, saved-location selection and offline city/location selection; fresh GPS or raw coordinate changes clear the cache and trigger local resolution.
+- Persisted settings and saved favourites now validate timezone identifiers before they are accepted for runtime use.
+- Added `src/integration/timezoneCache.test.ts` to prove a restored cached timezone is consumed by the production dashboard and an invalid cached timezone is rejected.
+- Read-only Quality Gate run `31925162040` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, all tests and production build.
