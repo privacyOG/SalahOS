@@ -6,12 +6,21 @@ if (typeof version !== 'string' || !/^\d+\.\d+\.\d+$/.test(version)) {
   throw new Error(`package.json must declare a stable x.y.z release version; received ${String(version)}`);
 }
 
+const packageLock = JSON.parse(
+  readFileSync(new URL('../package-lock.json', import.meta.url), 'utf8'),
+);
 const androidBuild = readFileSync(new URL('../android/app/build.gradle', import.meta.url), 'utf8');
 const iosInfo = readFileSync(new URL('../ios/App/App/Info.plist', import.meta.url), 'utf8');
 const releaseNotes = readFileSync(
   new URL(`../docs/RELEASE_NOTES_${version}.md`, import.meta.url),
   'utf8',
 );
+
+if (packageLock.version !== version || packageLock.packages?.['']?.version !== version) {
+  throw new Error(
+    `package-lock.json root version metadata must match package version ${version}`,
+  );
+}
 
 const androidVersionName = androidBuild.match(/\bversionName\s+["']([^"']+)["']/)?.[1];
 const androidVersionCode = androidBuild.match(/\bversionCode\s+(\d+)/)?.[1];
@@ -47,5 +56,5 @@ if (!releaseNotes.startsWith(`# SalahOS ${version} release notes\n`)) {
 }
 
 console.log(
-  `Release version contract passed: package, Android and packaged iOS metadata all advertise ${version} with first-release build number 1.`,
+  `Release version contract passed: package.json, package-lock.json, Android and packaged iOS metadata all advertise ${version} with first-release build number 1.`,
 );
