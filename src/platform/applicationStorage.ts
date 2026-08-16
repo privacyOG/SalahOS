@@ -21,8 +21,14 @@ export interface FlushableKeyValueStorage extends KeyValueStorage {
   flush(): Promise<void>;
 }
 
+export interface ApplicationStorageDependencies {
+  readonly isNativePlatform: () => boolean;
+  readonly preferences: PreferencesStore;
+}
+
 class NativePreferencesStorage implements FlushableKeyValueStorage {
   private readonly cache = new Map<string, string>();
+  private readonly pendingMutations = new Map<string, string | null>();
   private pendingWrite: Promise<void> = Promise.resolve();
 
   constructor(private readonly preferences: PreferencesStore) {}
@@ -42,20 +48,51 @@ class NativePreferencesStorage implements FlushableKeyValueStorage {
     return this.cache.get(key) ?? null;
   }
 
+  private async applyMutation(key: string, value: string | null): Promise<void> {
+    if (value === null) {
+      await this.preferences.remove({ key });
+    } else {
+      await this.preferences.set({ key, value });
+    }
+
+    if (this.pendingMutations.get(key) === value) {
+      this.pendingMutations.delete(key);
+    }
+  }
+
+  private queueMutation(key: string, value: string | null): void {
+    this.pendingMutations.set(key, value);
+    this.pendingWrite = this.pendingWrite.then(async () => {
+      try {
+        await this.applyMutation(key, value);
+      } catch {
+        // Keep the latest mutation pending so flush() can retry it.
+      }
+    });
+  }
+
   setItem(key: string, value: string): void {
     this.cache.set(key, value);
-    this.pendingWrite = this.pendingWrite.then(() => this.preferences.set({ key, value }));
+    this.queueMutation(key, value);
   }
 
   removeItem(key: string): void {
     this.cache.delete(key);
-    this.pendingWrite = this.pendingWrite.then(() => this.preferences.remove({ key }));
+    this.queueMutation(key, null);
   }
 
   async flush(): Promise<void> {
     await this.pendingWrite;
+    for (const [key, value] of [...this.pendingMutations]) {
+      await this.applyMutation(key, value);
+    }
   }
 }
+
+const defaultDependencies: ApplicationStorageDependencies = {
+  isNativePlatform: () => Capacitor.isNativePlatform(),
+  preferences: Preferences,
+};
 
 let activeStorage: KeyValueStorage | null = null;
 let nativeStorage: FlushableKeyValueStorage | null = null;
@@ -69,14 +106,43 @@ export async function createNativePreferencesStorage(
   return storage;
 }
 
-export async function initializeApplicationStorage(webStorage: KeyValueStorage): Promise<void> {
-  if (Capacitor.getPlatform() !== 'android') {
+async function migrateLegacyWebStorage(
+  webStorage: KeyValueStorage,
+  storage: FlushableKeyValueStorage,
+  keys: readonly string[] = PERSISTED_APPLICATION_KEYS,
+): Promise<void> {
+  let migrated = false;
+  for (const key of keys) {
+    if (storage.getItem(key) !== null) continue;
+    const legacyValue = webStorage.getItem(key);
+    if (legacyValue === null) continue;
+    storage.setItem(key, legacyValue);
+    migrated = true;
+  }
+
+  if (migrated) {
+    await storage.flush();
+  }
+
+  for (const key of keys) {
+    if (storage.getItem(key) !== null) {
+      webStorage.removeItem(key);
+    }
+  }
+}
+
+export async function initializeApplicationStorage(
+  webStorage: KeyValueStorage,
+  dependencies: ApplicationStorageDependencies = defaultDependencies,
+): Promise<void> {
+  if (!dependencies.isNativePlatform()) {
     activeStorage = webStorage;
     nativeStorage = null;
     return;
   }
 
-  const storage = await createNativePreferencesStorage(Preferences);
+  const storage = await createNativePreferencesStorage(dependencies.preferences);
+  await migrateLegacyWebStorage(webStorage, storage);
   activeStorage = storage;
   nativeStorage = storage;
 }

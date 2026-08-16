@@ -1,9 +1,12 @@
 import { describe, expect, it } from 'vitest';
 import {
   createNativePreferencesStorage,
+  getApplicationStorage,
+  initializeApplicationStorage,
   PERSISTED_APPLICATION_KEYS,
   type PreferencesStore,
 } from './applicationStorage';
+import type { KeyValueStorage } from './settingsStorage';
 
 class MemoryPreferences implements PreferencesStore {
   readonly values = new Map<string, string>();
@@ -24,6 +27,41 @@ class MemoryPreferences implements PreferencesStore {
     this.removals.push(key);
     this.values.delete(key);
     return Promise.resolve();
+  }
+}
+
+class FlakyPreferences extends MemoryPreferences {
+  readonly failedSetAttempts = new Map<string, number>();
+
+  failNextSets(key: string, count: number): void {
+    this.failedSetAttempts.set(key, count);
+  }
+
+  override set({ key, value }: { key: string; value: string }): Promise<void> {
+    this.writes.push({ key, value });
+    const failuresRemaining = this.failedSetAttempts.get(key) ?? 0;
+    if (failuresRemaining > 0) {
+      this.failedSetAttempts.set(key, failuresRemaining - 1);
+      return Promise.reject(new Error('simulated Preferences write failure'));
+    }
+    this.values.set(key, value);
+    return Promise.resolve();
+  }
+}
+
+class MemoryWebStorage implements KeyValueStorage {
+  readonly values = new Map<string, string>();
+
+  getItem(key: string): string | null {
+    return this.values.get(key) ?? null;
+  }
+
+  setItem(key: string, value: string): void {
+    this.values.set(key, value);
+  }
+
+  removeItem(key: string): void {
+    this.values.delete(key);
   }
 }
 
@@ -56,6 +94,24 @@ describe('native application storage', () => {
     expect(preferences.values.get('alpha')).toBe('two');
   });
 
+  it('retries a failed mutation on flush without blocking later keys', async () => {
+    const preferences = new FlakyPreferences();
+    preferences.failNextSets('alpha', 1);
+    const storage = await createNativePreferencesStorage(preferences, ['alpha', 'beta']);
+
+    storage.setItem('alpha', 'one');
+    storage.setItem('beta', 'two');
+    await storage.flush();
+
+    expect(preferences.writes).toEqual([
+      { key: 'alpha', value: 'one' },
+      { key: 'beta', value: 'two' },
+      { key: 'alpha', value: 'one' },
+    ]);
+    expect(preferences.values.get('alpha')).toBe('one');
+    expect(preferences.values.get('beta')).toBe('two');
+  });
+
   it('removes cached and native values through the same storage contract', async () => {
     const preferences = new MemoryPreferences();
     preferences.values.set('alpha', 'one');
@@ -78,5 +134,73 @@ describe('native application storage', () => {
     expect(storage.getItem('unrelated')).toBeNull();
     await storage.flush();
     expect(preferences.values.get('unrelated')).toBe('keep-me');
+  });
+
+  it('uses existing Capacitor Preferences values as authoritative on native shells', async () => {
+    const preferences = new MemoryPreferences();
+    const webStorage = new MemoryWebStorage();
+    preferences.values.set(PERSISTED_APPLICATION_KEYS[0], 'native-value');
+    webStorage.setItem(PERSISTED_APPLICATION_KEYS[0], 'stale-web-value');
+
+    await initializeApplicationStorage(webStorage, {
+      isNativePlatform: () => true,
+      preferences,
+    });
+
+    expect(getApplicationStorage().getItem(PERSISTED_APPLICATION_KEYS[0])).toBe('native-value');
+    expect(webStorage.getItem(PERSISTED_APPLICATION_KEYS[0])).toBeNull();
+    expect(preferences.writes).toEqual([]);
+  });
+
+  it('migrates legacy iOS Web Storage values into Preferences before removing them', async () => {
+    const preferences = new MemoryPreferences();
+    const webStorage = new MemoryWebStorage();
+    webStorage.setItem(PERSISTED_APPLICATION_KEYS[0], 'legacy-settings');
+    webStorage.setItem(PERSISTED_APPLICATION_KEYS[1], 'legacy-locations');
+
+    await initializeApplicationStorage(webStorage, {
+      isNativePlatform: () => true,
+      preferences,
+    });
+
+    expect(getApplicationStorage().getItem(PERSISTED_APPLICATION_KEYS[0])).toBe('legacy-settings');
+    expect(getApplicationStorage().getItem(PERSISTED_APPLICATION_KEYS[1])).toBe('legacy-locations');
+    expect(preferences.values.get(PERSISTED_APPLICATION_KEYS[0])).toBe('legacy-settings');
+    expect(preferences.values.get(PERSISTED_APPLICATION_KEYS[1])).toBe('legacy-locations');
+    expect(webStorage.getItem(PERSISTED_APPLICATION_KEYS[0])).toBeNull();
+    expect(webStorage.getItem(PERSISTED_APPLICATION_KEYS[1])).toBeNull();
+  });
+
+  it('preserves legacy Web Storage when migration cannot be persisted', async () => {
+    const preferences = new FlakyPreferences();
+    const webStorage = new MemoryWebStorage();
+    const key = PERSISTED_APPLICATION_KEYS[0];
+    preferences.failNextSets(key, 2);
+    webStorage.setItem(key, 'legacy-settings');
+
+    await expect(
+      initializeApplicationStorage(webStorage, {
+        isNativePlatform: () => true,
+        preferences,
+      }),
+    ).rejects.toThrow('simulated Preferences write failure');
+
+    expect(webStorage.getItem(key)).toBe('legacy-settings');
+    expect(preferences.values.has(key)).toBe(false);
+  });
+
+  it('keeps browser and PWA storage on the provided Web Storage implementation', async () => {
+    const preferences = new MemoryPreferences();
+    const webStorage = new MemoryWebStorage();
+    webStorage.setItem(PERSISTED_APPLICATION_KEYS[0], 'web-value');
+
+    await initializeApplicationStorage(webStorage, {
+      isNativePlatform: () => false,
+      preferences,
+    });
+
+    expect(getApplicationStorage()).toBe(webStorage);
+    expect(getApplicationStorage().getItem(PERSISTED_APPLICATION_KEYS[0])).toBe('web-value');
+    expect(preferences.values.size).toBe(0);
   });
 });

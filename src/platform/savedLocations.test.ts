@@ -82,6 +82,24 @@ describe('saved locations', () => {
     ).toThrow();
   });
 
+  it('rejects coordinate values that would otherwise coerce into numbers', () => {
+    for (const coordinates of [
+      { latitude: '', longitude: 151.2093 },
+      { latitude: null, longitude: 151.2093 },
+      { latitude: false, longitude: 151.2093 },
+      { latitude: -33.8688, longitude: '151.2093' },
+    ]) {
+      expect(() =>
+        parseSavedLocations(
+          JSON.stringify({
+            version: 1,
+            locations: [{ id: 'bad', label: 'Bad', coordinates }],
+          }),
+        ),
+      ).toThrow(/finite JSON numbers/);
+    }
+  });
+
   it('falls back to an empty list when persisted data is corrupt', () => {
     const storage = new MemoryStorage();
     storage.setItem('salahos.savedLocations', '{broken');

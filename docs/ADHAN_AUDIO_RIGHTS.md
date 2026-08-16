@@ -34,7 +34,16 @@ Every packaged Adhan recording must have a rights record containing:
 
 ## Local user audio
 
-Future local-audio support should keep the selected file on the user's device where the target platform permits it. The application should store only the minimum locator/permission data needed to use that file. Local user selection must not silently upload, redistribute or transform the recording into a project asset.
+The implemented local-audio path is intentionally separate from bundled project audio:
+
+- the user explicitly selects an audio file on their own device;
+- the selected recording is stored in the device/browser's local IndexedDB media store (`salahos-local-media` / `adhan-audio`);
+- SalahOS accepts only a non-empty audio MIME type and limits the stored recording to 25 MiB;
+- the recording is not uploaded, included in settings export, copied into repository/release assets or redistributed by SalahOS;
+- removing the selected recording deletes the SalahOS-owned local media entry;
+- full recording playback is a visible-foreground capability only; native background/terminated notification delivery does not package or redistribute the selected recording.
+
+The user's ability to select a file does not imply that SalahOS grants, verifies or acquires rights in that recording. Users remain responsible for the files they choose locally, while the project remains responsible for not redistributing those files.
 
 ## Review rule
 

@@ -1,8 +1,15 @@
 export type StructuredErrorCode =
-  'invalid-system-time' | 'prayer-calculation-unavailable' | 'notification-scheduling-unavailable';
+  | 'invalid-system-time'
+  | 'prayer-calculation-unavailable'
+  | 'notification-scheduling-unavailable'
+  | 'storage-persistence-unavailable';
 
 export interface StructuredErrorEvent {
-  readonly component: 'runtime-clock' | 'prayer-calculation' | 'notification-scheduling';
+  readonly component:
+    | 'runtime-clock'
+    | 'prayer-calculation'
+    | 'notification-scheduling'
+    | 'application-storage';
   readonly code: StructuredErrorCode;
   readonly severity: 'error';
 }
@@ -24,6 +31,7 @@ export interface StructuredErrorLogger {
 function componentForCode(code: StructuredErrorCode): StructuredErrorEvent['component'] {
   if (code === 'invalid-system-time') return 'runtime-clock';
   if (code === 'notification-scheduling-unavailable') return 'notification-scheduling';
+  if (code === 'storage-persistence-unavailable') return 'application-storage';
   return 'prayer-calculation';
 }
 
