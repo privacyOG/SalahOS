@@ -4,6 +4,8 @@ import { resolve } from 'node:path';
 const root = process.cwd();
 const sourcePath = resolve(root, 'capacitor.config.ts');
 const source = readFileSync(sourcePath, 'utf8');
+const packageJson = JSON.parse(readFileSync(resolve(root, 'package.json'), 'utf8'));
+const iosWorkflow = readFileSync(resolve(root, '.github/workflows/ios.yml'), 'utf8');
 
 const requiredSourceContracts = [
   "appId: 'com.privacyog.salahos'",
@@ -31,6 +33,24 @@ for (const forbidden of [
   }
 }
 
+const androidSync = packageJson.scripts?.['android:sync'];
+if (
+  typeof androidSync !== 'string' ||
+  !androidSync.includes('cap sync android') ||
+  !androidSync.includes('npm run verify:capacitor-config') ||
+  androidSync.indexOf('npm run verify:capacitor-config') < androidSync.indexOf('cap sync android')
+) {
+  throw new Error('Android sync must verify generated Capacitor configuration after cap sync android');
+}
+
+const iosSyncMarker = 'run: npx cap sync ios';
+const iosVerifyMarker = 'run: npm run verify:capacitor-config';
+const iosSyncIndex = iosWorkflow.indexOf(iosSyncMarker);
+const iosVerifyIndex = iosWorkflow.indexOf(iosVerifyMarker);
+if (iosSyncIndex < 0 || iosVerifyIndex < 0 || iosVerifyIndex < iosSyncIndex) {
+  throw new Error('iOS workflow must verify generated Capacitor configuration after cap sync ios');
+}
+
 const generatedPaths = [
   resolve(root, 'android/app/src/main/assets/capacitor.config.json'),
   resolve(root, 'ios/App/App/capacitor.config.json'),
@@ -54,5 +74,5 @@ for (const generatedPath of generatedPaths) {
 }
 
 console.log(
-  'Capacitor configuration passed: native shells use the bundled dist application with no remote server, navigation allowlist, cleartext, hostname, or scheme override.',
+  'Capacitor configuration passed: native shells use the bundled dist application with no remote server, navigation allowlist, cleartext, hostname, or scheme override, and synchronized native copies are rechecked after cap sync.',
 );
