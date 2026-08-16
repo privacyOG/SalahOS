@@ -9,6 +9,9 @@ describe('calculation method registry', () => {
       kind: 'interval',
       minutesAfterMaghrib: 90,
     });
+    expect(getCalculationMethod('umm-al-qura').seasonalIshaPolicy).toEqual({
+      ramadanMinutesAfterMaghrib: 120,
+    });
   });
 
   it('records a non-empty provenance and an explicit verification state for every built-in', () => {
@@ -44,7 +47,7 @@ describe('calculation method registry', () => {
     expect(getCalculationMethod('dubai').verification).toBe('pending-authoritative-source');
   });
 
-  it('creates validated custom parameters without institutional corrections', () => {
+  it('creates validated custom parameters without institutional or seasonal corrections', () => {
     const custom = createCustomCalculationMethod({
       name: 'Local custom',
       fajrAngleDegrees: 18,
@@ -54,6 +57,7 @@ describe('calculation method registry', () => {
     expect(custom.id).toBe('custom');
     expect(custom.verification).toBe('custom');
     expect(custom.institutionalAdjustments).toEqual({});
+    expect(custom.seasonalIshaPolicy).toBeUndefined();
   });
 
   it('rejects unsafe custom ranges', () => {
