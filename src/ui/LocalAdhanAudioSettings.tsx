@@ -10,6 +10,7 @@ import {
   type LocalAdhanAudioRecord,
   type LocalAdhanPrayerRow,
 } from '../platform/localAdhanAudio';
+import './LocalAdhanAudioSettings.css';
 
 const copy = {
   en: {
