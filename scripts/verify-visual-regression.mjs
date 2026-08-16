@@ -36,6 +36,10 @@ for (const visualCase of requiredCases) {
 
 for (const requiredHarnessContract of [
   "timeZone: 'Australia/Sydney'",
+  "path: '/?mode=smart-display'",
+  "readySelector: '.smart-display'",
+  "Date.parse('2026-08-16T12:00:00.000Z')",
+  'Page.addScriptToEvaluateOnNewDocument',
   'document.documentElement.scrollWidth',
   'document.documentElement.dir',
   'document.documentElement.lang',
