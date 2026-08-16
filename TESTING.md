@@ -773,3 +773,10 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Android Adhan notification metadata records the notification-alert policy for Adhan jobs.
 - English and Arabic settings text describes the current control as an Adhan alert, not full background playback.
 - User-selectable/local audio and audio-focus/interruption behavior remain separate open work.
+
+### 2026-08-16 — Android notification reboot restoration
+
+- Clean validation run `31940265725` passed the complete repository quality gate and Android debug assembly on the current mainline.
+- The permanent Android build verifies that the installed Local Notifications version matches the pinned dependency, its manifest declares the boot restore receiver/permission, its receiver reloads saved notification IDs and reschedules them, and Gradle's merged application manifest retains the receiver.
+- Generated TypeScript incremental metadata is ignored to prevent build artifacts entering feature branches.
+- Physical-device reboot timing remains a separate acceptance concern.

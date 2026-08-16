@@ -27,3 +27,6 @@ xcuserdata/
 Thumbs.db
 .vscode/
 .idea/
+
+# Generated TypeScript incremental build metadata
+*.tsbuildinfo
