@@ -631,3 +631,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Added the reproducibility check to the read-only Quality Gate so raster asset drift fails CI.
 - Extended the Web/PWA artifact verifier to require the raster icons in `dist/`, validate PNG signatures/dimensions and require matching manifest `sizes`, `type` and `purpose` metadata.
 - Read-only Quality Gate run `31929295284` passed the sensitive-file policy, dependency vulnerability audit, dependency-license policy, documentation-link verification, raster-icon reproducibility, formatting, typed lint, strict typecheck, the complete test suite, production build and deploy-artifact verification.
+
+### 2026-08-16 — prayer presentation component coverage
+
+- Extracted production `NextPrayerBlock` and `PrayerCard` presentation components from `App` while retaining prayer calculation, source selection, localization and formatting decisions in the application layer.
+- Added server-rendered component tests for configured/unconfigured next-prayer state, countdown/tomorrow presentation, current/next prayer state, prayer start and Iqamah, high-latitude/manual-adjustment indicators, and supplementary-prayer Iqamah suppression.
+- Retained the existing bidirectional-text component coverage and added no DOM/test-framework dependency.
+- Read-only Quality Gate run `31929598905` passed all 51 test files / 242 tests plus security, dependency, documentation, raster reproducibility, formatting, lint, strict typecheck, production build and deploy-artifact verification.
+- Stage 17 viewport, screenshot, RTL visual-alignment and scalable-text/accessibility regression items remain open and are not implied by this component-level gate.

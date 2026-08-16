@@ -626,7 +626,10 @@
 - [x] Strict typecheck clean
 - [x] Unit tests green
 - [x] Integration tests green
-- [ ] UI/component tests green
+- [x] UI/component tests green
+
+**UI/component-test verification note (2026-08-16):** read-only Quality Gate run `31929598905` passed the sensitive-file policy, dependency vulnerability audit, dependency-license policy, documentation-link verification, PWA raster-icon reproducibility, formatting, typed lint, strict typecheck, 51 test files / 242 tests, production build and deploy-artifact verification. The production next-prayer block and prayer-card presentation were extracted from `App` into `NextPrayerBlock` and `PrayerCard` without moving prayer-domain logic. Server-rendered component tests cover configured/unconfigured next-prayer states, tomorrow/countdown presentation, current/next prayer badges, Iqamah display, high-latitude/manual-adjustment indicators and supplementary-prayer Iqamah suppression; existing bidirectional-text component tests remain green. No new test dependency was added. Stage 17 viewport, screenshot, RTL visual-alignment and scalable-text/accessibility regression work remains separately open.
+
 - [x] Production web build succeeds
 - [ ] Android build succeeds where SDK is available
 - [ ] iOS build succeeds where Xcode is available
