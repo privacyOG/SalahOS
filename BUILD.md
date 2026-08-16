@@ -4,15 +4,15 @@ This document records the build paths that are actually implemented and verified
 
 ## Current build status
 
-| Target                       | Current status                                  | Verified path                                |
-| ---------------------------- | ----------------------------------------------- | -------------------------------------------- |
-| Web / PWA                    | Implemented and automated                       | `npm run build` + `npm run verify:web-build` |
-| Android                      | Native build path not yet implemented/validated | Tracked in `TODO.md`                         |
-| iOS                          | Native build path not yet implemented/validated | Tracked in `TODO.md`                         |
-| Raspberry Pi Touch Display 2 | Deployment path not yet validated               | Tracked in `TODO.md`                         |
-| TV / kiosk                   | Deployment path not yet validated               | Tracked in `TODO.md`                         |
+| Target                       | Current status                    | Verified path / boundary                                                |
+| ---------------------------- | --------------------------------- | ----------------------------------------------------------------------- |
+| Web / PWA                    | Implemented and automated         | `npm run build` + `npm run verify:web-build`; automated offline tests   |
+| Raspberry Pi Touch Display 2 | Repository-validated kiosk path   | Launcher, deployment docs, viewport fixture and continuity tests        |
+| TV / kiosk                   | Repository-validated browser path | Smart-display mode, kiosk URL path, usability tests and deployment docs |
+| Android                      | Native path planned               | Shared application only; native project/build/device validation open    |
+| iOS / iPadOS                 | Native path planned               | Shared application only; native project/build/device validation open    |
 
-The shared web application can be exercised on browser-capable devices, but that does not replace platform-specific validation still marked open in `TODO.md`.
+The Raspberry Pi and TV rows describe browser-hosted deployment paths verified in the repository, not completed physical-device acceptance. Android and iOS/iPadOS do not yet have validated native shells. See `docs/PLATFORM_STATUS.md` for the exact tested matrix and remaining boundaries.
 
 ## Prerequisites
 
@@ -51,12 +51,14 @@ This runs, in order:
 
 1. sensitive-file policy
 2. dependency vulnerability audit
-3. formatting check
-4. lint
-5. strict TypeScript typecheck
-6. automated tests
-7. production web build
-8. deployable web-artifact verification
+3. dependency-license policy
+4. documentation-link verification
+5. formatting check
+6. lint
+7. strict TypeScript typecheck
+8. automated tests
+9. production web build
+10. deployable web-artifact verification
 
 A failed step means the build should not be treated as a release candidate.
 
@@ -148,4 +150,4 @@ Core SalahOS prayer calculations do not require a remote service credential. If 
 
 ## Release boundary
 
-A successful Web/PWA build does not imply that Android, iOS, Raspberry Pi or TV/kiosk packages have been built or tested. Those targets remain governed by their separate TODO and release-readiness gates. Only mark a platform complete when its actual build/install/deployment path has been exercised in the applicable environment.
+A successful Web/PWA build does not imply that Android or iOS/iPadOS native packages exist, nor does repository validation of the Raspberry Pi/TV browser paths imply physical target-device acceptance. Those targets remain governed by their separate TODO and release-readiness gates. Only claim the level of validation recorded in `docs/PLATFORM_STATUS.md`, and only mark a native or physical platform complete when its applicable build/install/deployment and target-device checks have been exercised.
