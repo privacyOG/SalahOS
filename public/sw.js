@@ -1,5 +1,5 @@
 const CACHE_PREFIX = 'salahos-shell-';
-const CACHE_NAME = `${CACHE_PREFIX}v4`;
+const CACHE_NAME = `${CACHE_PREFIX}v5`;
 const STATIC_SHELL_URLS = [
   '/manifest.webmanifest',
   '/icons/salahos-192.png',
@@ -35,9 +35,22 @@ function assetUrlsFromHtml(html) {
   return [...urls];
 }
 
+function assertSalahOsShellHtml(html, assetUrls) {
+  if (!html.includes('id="root"')) {
+    throw new Error('Candidate offline shell is missing the SalahOS root mount');
+  }
+  if (!html.includes('manifest.webmanifest')) {
+    throw new Error('Candidate offline shell is missing the SalahOS web manifest reference');
+  }
+  if (assetUrls.length === 0) {
+    throw new Error('Candidate offline shell does not reference a first-party application bundle');
+  }
+}
+
 async function cacheApplicationShell(cache, shellResponse, includeStaticShell) {
   const html = await shellResponse.clone().text();
   const assetUrls = assetUrlsFromHtml(html);
+  assertSalahOsShellHtml(html, assetUrls);
   const requiredUrls = includeStaticShell ? [...STATIC_SHELL_URLS, ...assetUrls] : assetUrls;
 
   await cache.addAll(requiredUrls);
@@ -92,7 +105,7 @@ self.addEventListener('fetch', (event) => {
               const cache = await caches.open(CACHE_NAME);
               await cacheApplicationShell(cache, candidateShell, false);
             } catch {
-              // Preserve the previously cached complete shell if the candidate cannot be cached atomically.
+              // Preserve the previously cached complete SalahOS shell if this HTML is unrelated or incomplete.
             }
           }
           return response;
