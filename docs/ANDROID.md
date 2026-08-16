@@ -122,3 +122,7 @@ This is repository/build evidence that saved scheduled notifications are restore
 ## Release signing
 
 Repository validation can assemble the release variant without a signing key. A distributable signed build requires all four values through the local environment or an encrypted CI secret store: `SALAHOS_ANDROID_KEYSTORE_PATH`, `SALAHOS_ANDROID_KEYSTORE_PASSWORD`, `SALAHOS_ANDROID_KEY_ALIAS`, and `SALAHOS_ANDROID_KEY_PASSWORD`. Partial signing configuration fails closed. Keystores and credentials must remain outside the repository. Run `npm run android:release-check` to synchronize the shared application and assemble the release variant.
+
+## Emulator acceptance
+
+Validation run `31941025342` enabled airplane mode, performed a force-stop/cold launch of the real SalahOS activity, confirmed the process was alive, and passed app-only landscape/portrait instrumentation. The committed script and instrumentation test preserve this repeatable acceptance path; manufacturer-specific physical-device behavior remains device-dependent.
