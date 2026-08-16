@@ -36,10 +36,18 @@ function parseSavedLocation(value: unknown): SavedLocation {
     throw new RangeError('Saved location label must contain 1 through 100 characters');
   }
 
-  const coordinates = createCoordinates(
-    Number(value.coordinates.latitude),
-    Number(value.coordinates.longitude),
-  );
+  const latitude = value.coordinates.latitude;
+  const longitude = value.coordinates.longitude;
+  if (
+    typeof latitude !== 'number' ||
+    !Number.isFinite(latitude) ||
+    typeof longitude !== 'number' ||
+    !Number.isFinite(longitude)
+  ) {
+    throw new TypeError('Saved location coordinates must be finite JSON numbers');
+  }
+
+  const coordinates = createCoordinates(latitude, longitude);
   const timeZone =
     typeof value.timeZone === 'string' && value.timeZone.trim().length > 0
       ? assertIanaTimeZone(value.timeZone.trim())
