@@ -107,7 +107,9 @@ export function LocalAdhanAudioSettings({
     const player = audioRef.current;
     if (player === null) return;
     player.currentTime = 0;
-    void player.play().catch(() => setMessage(labels.blocked));
+    void player.play().catch(() => {
+      setMessage(labels.blocked);
+    });
   }, [audioUrl, date, labels.blocked, localMinutes, notifications, prayers]);
 
   const selectAudio = async (file: File | undefined) => {
@@ -127,7 +129,9 @@ export function LocalAdhanAudioSettings({
     const player = audioRef.current;
     if (player === null) return;
     player.currentTime = 0;
-    void player.play().catch(() => setMessage(labels.blocked));
+    void player.play().catch(() => {
+      setMessage(labels.blocked);
+    });
   };
 
   const remove = async () => {
@@ -167,7 +171,12 @@ export function LocalAdhanAudioSettings({
             <button type="button" onClick={preview}>
               {labels.preview}
             </button>
-            <button type="button" onClick={() => void remove()}>
+            <button
+              type="button"
+              onClick={() => {
+                void remove();
+              }}
+            >
               {labels.remove}
             </button>
           </div>
