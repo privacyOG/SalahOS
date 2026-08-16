@@ -1,0 +1,100 @@
+name: iOS Simulator Acceptance
+
+on:
+  push:
+    branches:
+      - privacyog/ios-simulator-acceptance
+
+permissions:
+  contents: read
+
+jobs:
+  acceptance:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Repository quality gate
+        run: npm run check
+      - name: Synchronize iOS application
+        run: npx cap sync ios
+      - name: Build simulator application
+        run: |
+          xcodebuild \
+            -project ios/App/App.xcodeproj \
+            -scheme App \
+            -configuration Debug \
+            -sdk iphonesimulator \
+            -destination 'generic/platform=iOS Simulator' \
+            -derivedDataPath "$RUNNER_TEMP/SalahOSDerivedData" \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+          APP_BUNDLE="$(find "$RUNNER_TEMP/SalahOSDerivedData/Build/Products" -path '*Debug-iphonesimulator/App.app' -print -quit)"
+          test -n "$APP_BUNDLE"
+          echo "APP_BUNDLE=$APP_BUNDLE" >> "$GITHUB_ENV"
+      - name: Select available iPhone and iPad simulators
+        run: |
+          python3 - <<'PY'
+          import json, os, subprocess
+          devices = json.loads(subprocess.check_output(['xcrun', 'simctl', 'list', 'devices', 'available', '-j']))['devices']
+          phone = None
+          tablet = None
+          for runtime, entries in reversed(list(devices.items())):
+              for device in entries:
+                  name = device.get('name', '')
+                  if phone is None and name.startswith('iPhone'):
+                      phone = (name, device['udid'], runtime)
+                  if tablet is None and name.startswith('iPad'):
+                      tablet = (name, device['udid'], runtime)
+              if phone and tablet:
+                  break
+          if not phone or not tablet:
+              raise SystemExit(f'Could not find both iPhone and iPad simulators: phone={phone}, tablet={tablet}')
+          with open(os.environ['GITHUB_ENV'], 'a') as env:
+              env.write(f'IPHONE_NAME={phone[0]}\nIPHONE_UDID={phone[1]}\n')
+              env.write(f'IPAD_NAME={tablet[0]}\nIPAD_UDID={tablet[1]}\n')
+          print('Selected iPhone:', phone)
+          print('Selected iPad:', tablet)
+          PY
+      - name: Cold-launch SalahOS on iPhone Simulator
+        run: |
+          mkdir -p simulator-evidence
+          xcrun simctl shutdown "$IPHONE_UDID" 2>/dev/null || true
+          xcrun simctl boot "$IPHONE_UDID"
+          xcrun simctl bootstatus "$IPHONE_UDID" -b
+          xcrun simctl install "$IPHONE_UDID" "$APP_BUNDLE"
+          xcrun simctl terminate "$IPHONE_UDID" com.privacyog.salahos 2>/dev/null || true
+          output="$(xcrun simctl launch "$IPHONE_UDID" com.privacyog.salahos)"
+          echo "$output"
+          grep -F 'com.privacyog.salahos:' <<<"$output"
+          xcrun simctl get_app_container "$IPHONE_UDID" com.privacyog.salahos app
+          sleep 5
+          xcrun simctl io "$IPHONE_UDID" screenshot simulator-evidence/iphone.png
+          sips -g pixelWidth -g pixelHeight simulator-evidence/iphone.png
+          xcrun simctl shutdown "$IPHONE_UDID"
+      - name: Cold-launch SalahOS on iPad Simulator
+        run: |
+          xcrun simctl shutdown "$IPAD_UDID" 2>/dev/null || true
+          xcrun simctl boot "$IPAD_UDID"
+          xcrun simctl bootstatus "$IPAD_UDID" -b
+          xcrun simctl install "$IPAD_UDID" "$APP_BUNDLE"
+          xcrun simctl terminate "$IPAD_UDID" com.privacyog.salahos 2>/dev/null || true
+          output="$(xcrun simctl launch "$IPAD_UDID" com.privacyog.salahos)"
+          echo "$output"
+          grep -F 'com.privacyog.salahos:' <<<"$output"
+          xcrun simctl get_app_container "$IPAD_UDID" com.privacyog.salahos app
+          sleep 5
+          xcrun simctl io "$IPAD_UDID" screenshot simulator-evidence/ipad.png
+          sips -g pixelWidth -g pixelHeight simulator-evidence/ipad.png
+          xcrun simctl shutdown "$IPAD_UDID"
+      - name: Upload simulator evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: ios-simulator-evidence
+          path: simulator-evidence/
+          if-no-files-found: error
