@@ -1,6 +1,7 @@
 from pathlib import Path
 
 # Branch-only tracker helper; removed before pull request review.
+# This comment ensures the already-present tracker workflow receives a push event.
 
 TODO_ITEMS = [
     'Burn-in-conscious layout behaviour where practical',
