@@ -513,7 +513,9 @@
 
 **Unavailable-calculation verification note (2026-08-16):** read-only Quality Gate run `31920344383` passed formatting, typed lint, strict typecheck, all tests and production build after introducing an explicit dashboard calculation result boundary. Successful schedules report any prayer rows that remain astronomically unavailable; those rows continue to display a neutral dash and now carry localized English/Arabic guidance rather than silent ambiguity. Calculation exceptions are converted into an explicit unavailable state, so the interface remains running and asks the user to verify location/calculation settings without displaying guessed prayer times. Deterministic coverage verifies an ordinary Sydney schedule, polar-day partial unavailability and conversion of a rejected calculation input into the safe unavailable result.
 
-- [ ] Add structured error logging without exposing private location unnecessarily
+- [x] Add structured error logging without exposing private location unnecessarily
+
+**Privacy-safe error-logging verification note (2026-08-16):** read-only Quality Gate run `31920530983` passed formatting, typed lint, strict typecheck, all tests and production build after adding a deliberately constrained structured error schema and wiring it to invalid-system-time and prayer-calculation failure transitions. Events contain only a fixed component, fixed code and severity; the API accepts no coordinates, location labels, mosque names, arbitrary context, raw exception messages, stacks or URLs. Invalid-clock logging is transition-deduplicated until valid time returns, while calculation failure logs only on availability-state changes. Unit coverage locks the emitted schema and asserts the absence of private-location/error-detail fields.
 
 ---
 
