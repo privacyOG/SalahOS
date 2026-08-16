@@ -187,7 +187,7 @@ export function buildPrayerDashboard(input: {
     clock,
     gregorian: calendar.gregorian,
     hijri: calendar.hijri,
-    method,
+    method: today.method,
     asrConvention,
     highLatitudeRule,
     today,
