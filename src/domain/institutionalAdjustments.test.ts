@@ -57,6 +57,25 @@ describe('institutional prayer-method adjustments', () => {
     );
   });
 
+  it('is idempotent when the institutional layer is applied more than once', () => {
+    const raw = calculatePrayerSchedule({
+      date: new Date('2026-01-01T00:00:00.000Z'),
+      latitude: 41.0082,
+      longitude: 28.9784,
+      utcOffsetMinutes: 180,
+      method: getCalculationMethod('diyanet'),
+      asrConvention: 'standard',
+      highLatitudeRule: 'angle-based',
+    });
+
+    const once = applyInstitutionalAdjustments(raw);
+    const twice = applyInstitutionalAdjustments(once);
+
+    expect(twice).toBe(once);
+    expect(twice.prayers.maghrib.baseLocalMinutes).toBe(once.prayers.maghrib.baseLocalMinutes);
+    expect(twice.prayers.maghrib.provenance.formula).toBe(once.prayers.maghrib.provenance.formula);
+  });
+
   it('returns the original schedule for a method without institutional corrections', () => {
     const schedule = calculatePrayerSchedule({
       date: new Date('2026-08-16T00:00:00.000Z'),
