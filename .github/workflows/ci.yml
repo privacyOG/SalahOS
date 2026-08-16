@@ -29,15 +29,15 @@ jobs:
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
 
-      - name: Apply readability improvements
+      - name: Normalize readability theme tokens
         if: github.event_name == 'push'
-        run: python scripts/apply_readability.py
+        run: python scripts/fix_readability_theme_tokens.py
 
       - name: Canonicalize styles
         if: github.event_name == 'push'
         run: npx prettier --write src/styles.css
 
-      - name: Commit readability improvements
+      - name: Commit theme-safe readability
         if: github.event_name == 'push'
         run: |
           git config user.name "privacyOG"
@@ -46,5 +46,5 @@ jobs:
           if git diff --cached --quiet; then
             exit 0
           fi
-          git commit -m "feat: improve high-contrast readability"
+          git commit -m "fix: use theme-safe readability tokens"
           git push origin HEAD:${{ github.ref_name }}
