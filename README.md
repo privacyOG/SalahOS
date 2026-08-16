@@ -35,6 +35,7 @@ SalahOS is designed around accurate local prayer calculations, selectable calcul
 - [TV / kiosk deployment](docs/TV_KIOSK_DEPLOYMENT.md)
 - [Troubleshooting](docs/TROUBLESHOOTING.md)
 - [Notification and Adhan platform limitations](docs/NOTIFICATION_LIMITATIONS.md)
+- [Notification capability matrix](docs/NOTIFICATION_CAPABILITY_MATRIX.md)
 - [Native permission review](docs/NATIVE_PERMISSION_REVIEW.md)
 - [Optional remote API security boundary](docs/REMOTE_API_SECURITY.md)
 - [Dependency license review](docs/DEPENDENCY_LICENSE_REVIEW.md)
