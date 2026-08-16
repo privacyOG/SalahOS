@@ -228,7 +228,7 @@ async function evaluate(session, expression) {
   return result.result?.value;
 }
 
-async function waitForReady(session, selector) {
+async function waitForRoot(session, selector) {
   const started = Date.now();
   while (Date.now() - started < 15_000) {
     const ready = await evaluate(
@@ -238,7 +238,27 @@ async function waitForReady(session, selector) {
     if (ready === true) return;
     await new Promise((resolveDelay) => setTimeout(resolveDelay, 100));
   }
-  throw new Error(`Application did not become ready for visual regression: ${selector}`);
+  throw new Error(`Application root did not become ready for visual regression: ${selector}`);
+}
+
+async function waitForVisualState(session, visualCase) {
+  const started = Date.now();
+  while (Date.now() - started < 15_000) {
+    const ready = await evaluate(
+      session,
+      `(() => {
+        const root = document.querySelector(${JSON.stringify(visualCase.readySelector)});
+        return document.readyState === 'complete' &&
+          root !== null &&
+          document.documentElement.lang === ${JSON.stringify(visualCase.locale)} &&
+          document.documentElement.dir === ${JSON.stringify(visualCase.direction)} &&
+          document.documentElement.dataset.theme === ${JSON.stringify(visualCase.theme)};
+      })()`,
+    );
+    if (ready === true) return;
+    await new Promise((resolveDelay) => setTimeout(resolveDelay, 100));
+  }
+  throw new Error(`Visual state did not settle for ${visualCase.name}`);
 }
 
 async function renderCase(session, visualCase) {
@@ -249,14 +269,14 @@ async function renderCase(session, visualCase) {
     mobile: visualCase.width < 900,
   });
   await session.send('Page.navigate', { url: `${PREVIEW_ORIGIN}${visualCase.path}` });
-  await waitForReady(session, visualCase.readySelector);
+  await waitForRoot(session, visualCase.readySelector);
 
   const settings = JSON.stringify(fixtureSettings(visualCase.locale, visualCase.theme));
   await evaluate(
     session,
     `localStorage.setItem(${JSON.stringify(SETTINGS_STORAGE_KEY)}, ${JSON.stringify(settings)}); location.reload();`,
   );
-  await waitForReady(session, visualCase.readySelector);
+  await waitForVisualState(session, visualCase);
 
   if (visualCase.textScalePercent !== 100) {
     await evaluate(
@@ -276,6 +296,7 @@ async function renderCase(session, visualCase) {
     `(() => ({
       direction: document.documentElement.dir,
       language: document.documentElement.lang,
+      theme: document.documentElement.dataset.theme,
       viewportWidth: window.innerWidth,
       documentWidth: document.documentElement.scrollWidth,
       bodyWidth: document.body.scrollWidth,
@@ -292,6 +313,11 @@ async function renderCase(session, visualCase) {
   if (assertions.language !== visualCase.locale) {
     throw new Error(
       `${visualCase.name}: expected language ${visualCase.locale}, received ${String(assertions.language)}`,
+    );
+  }
+  if (assertions.theme !== visualCase.theme) {
+    throw new Error(
+      `${visualCase.name}: expected theme ${visualCase.theme}, received ${String(assertions.theme)}`,
     );
   }
   if (assertions.expectedRootPresent !== true || assertions.visibleTextLength < 40) {
