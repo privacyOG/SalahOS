@@ -656,3 +656,12 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Added an explicit physical acceptance matrix for orientation, touch ergonomics, boot/autostart behavior, offline operation and long-duration use instead of treating documentation as hardware validation.
 - Read-only Quality Gate run `31931305063` passed repository security/dependency/documentation policies, raster reproducibility, formatting, lint, strict typecheck, the complete test suite, production build and deploy-artifact verification.
 - Touch-first layout fixture work and all physical Raspberry Pi/Touch Display 2 validation remain open.
+
+### 2026-08-16 — Touch Display 2 layout fixture
+
+- Added an explicit `touch-display-2` browser fixture that reuses the production next-prayer and prayer-card presentation components instead of maintaining a parallel mock UI.
+- Added deterministic 5-inch/7-inch 720×1280 and 10-inch 1200×1920 portrait profiles with landscape dimension swapping, enlarged touch-oriented presentation and English/Arabic RTL fixture modes.
+- Added six tests covering fixture activation/defaults, invalid-option fallback, exact native viewport contracts, current/next prayer rendering and Arabic RTL output.
+- Documented fixture URLs and the requirement that future visual automation set the browser viewport to the corresponding native dimensions.
+- Read-only Quality Gate run `31931801626` passed all 53 test files / 253 tests plus security, dependency, documentation, raster reproducibility, formatting, lint, strict typecheck, production build and deploy-artifact verification.
+- Physical Touch Display 2 rendering/touch validation and Stage 17 screenshot, clipping, alignment and scalable-text checks remain open.
