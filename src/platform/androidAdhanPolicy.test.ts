@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { androidAdhanPlaybackPolicy } from './androidAdhanPolicy';
 
 describe('Android Adhan lifecycle policy', () => {
-  it('keeps background delivery notification-only even when local audio may exist later', () => {
+  it('keeps background delivery notification-only even when local audio is configured', () => {
     expect(androidAdhanPlaybackPolicy('background', { localAudioConfigured: true })).toEqual({
       delivery: 'notification-alert',
       fullAudioAutoPlay: false,
@@ -26,11 +26,11 @@ describe('Android Adhan lifecycle policy', () => {
     });
   });
 
-  it('requires a future explicit playback implementation even with configured foreground audio', () => {
+  it('keeps full foreground audio owned by the separate visible-app player', () => {
     expect(androidAdhanPlaybackPolicy('foreground', { localAudioConfigured: true })).toEqual({
       delivery: 'notification-alert',
       fullAudioAutoPlay: false,
-      reason: 'foreground-auto-play-disabled',
+      reason: 'foreground-audio-owned-by-visible-app-player',
     });
   });
 });
