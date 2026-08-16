@@ -462,3 +462,12 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Kept only narrowly required exceptions for inline styles, development websocket connections, local/data images and local/blob media.
 - Added `docs/WEB_SECURITY_HEADERS.md` documenting production response-header hardening and the boundary between repository controls and host/CDN configuration.
 - Read-only Quality Gate run `31918434190` passed formatting, typed lint, strict typecheck, all tests and production build.
+
+### 2026-08-16 — background resume refresh
+
+- Tightened runtime refresh listeners so hidden document transitions do not trigger work and becoming visible refreshes immediately.
+- Focus and page-restore events continue to refresh the application clock immediately.
+- The application refresh callback replaces wall-clock `now`, forcing prayer state and countdown recomputation from current time after a background pause.
+- Added regression coverage for hidden-to-visible resume behavior and listener cleanup.
+- Kept system sleep/wake recovery and significant system-clock change detection as separate open reliability items.
+- Read-only Quality Gate run `31918624386` passed formatting, typed lint, strict typecheck, all tests and production build.
