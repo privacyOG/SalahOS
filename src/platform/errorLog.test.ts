@@ -44,12 +44,27 @@ describe('createStructuredErrorLogger', () => {
     ]);
   });
 
+  it('classifies storage persistence failure without serializing storage contents', () => {
+    const events: StructuredErrorEvent[] = [];
+    const sink: StructuredErrorSink = { write: (event) => events.push(event) };
+
+    createStructuredErrorLogger(sink).log('storage-persistence-unavailable');
+
+    expect(events).toEqual([
+      {
+        component: 'application-storage',
+        code: 'storage-persistence-unavailable',
+        severity: 'error',
+      },
+    ]);
+  });
+
   it('exposes no field for coordinates, location labels, mosque names or raw exception data', () => {
     const events: StructuredErrorEvent[] = [];
     const sink: StructuredErrorSink = { write: (event) => events.push(event) };
     const logger = createStructuredErrorLogger(sink);
 
-    logger.log('prayer-calculation-unavailable');
+    logger.log('storage-persistence-unavailable');
 
     const serialized = JSON.stringify(events[0]);
     expect(serialized).not.toContain('latitude');
