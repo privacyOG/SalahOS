@@ -372,7 +372,10 @@
 
 - [ ] Test offline cold start
 - [ ] Test orientation changes
-- [ ] Build signed/release-ready configuration without committing secrets
+- [x] Build signed/release-ready configuration without committing secrets
+
+**Android release-configuration verification note (2026-08-16):** validation run `31941241775` passed the complete repository quality gate, Android debug assembly with reboot-restoration verification, unsigned `assembleRelease`, and the negative test proving partial signing configuration is rejected. Release signing activates only when all four external `SALAHOS_ANDROID_KEYSTORE_PATH`, `SALAHOS_ANDROID_KEYSTORE_PASSWORD`, `SALAHOS_ANDROID_KEY_ALIAS` and `SALAHOS_ANDROID_KEY_PASSWORD` values are supplied; no keystore or signing credential is committed. This validates the release-ready signing path without claiming a production distribution key was present in CI.
+
 - [ ] Run on real Android device or emulator and record evidence
 
 ---

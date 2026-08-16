@@ -1,5 +1,22 @@
 apply plugin: 'com.android.application'
 
+def releaseKeystorePath = System.getenv('SALAHOS_ANDROID_KEYSTORE_PATH')
+def releaseKeystorePassword = System.getenv('SALAHOS_ANDROID_KEYSTORE_PASSWORD')
+def releaseKeyAlias = System.getenv('SALAHOS_ANDROID_KEY_ALIAS')
+def releaseKeyPassword = System.getenv('SALAHOS_ANDROID_KEY_PASSWORD')
+def releaseSigningValues = [
+    releaseKeystorePath,
+    releaseKeystorePassword,
+    releaseKeyAlias,
+    releaseKeyPassword,
+]
+def releaseSigningConfigured = releaseSigningValues.every { value -> value != null && !value.trim().isEmpty() }
+def releaseSigningPartiallyConfigured = releaseSigningValues.any { value -> value != null && !value.trim().isEmpty() } && !releaseSigningConfigured
+
+if (releaseSigningPartiallyConfigured) {
+    throw new GradleException('Android release signing requires all SALAHOS_ANDROID_KEYSTORE_* / SALAHOS_ANDROID_KEY_* environment variables')
+}
+
 android {
     namespace = "com.privacyog.salahos"
     compileSdk = rootProject.ext.compileSdkVersion
@@ -16,8 +33,21 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    signingConfigs {
+        if (releaseSigningConfigured) {
+            release {
+                storeFile file(releaseKeystorePath)
+                storePassword releaseKeystorePassword
+                keyAlias releaseKeyAlias
+                keyPassword releaseKeyPassword
+            }
+        }
+    }
     buildTypes {
         release {
+            if (releaseSigningConfigured) {
+                signingConfig signingConfigs.release
+            }
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

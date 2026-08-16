@@ -22,6 +22,7 @@
     "check": "npm run security:sensitive-files && npm run security:audit && npm run security:licenses && npm run docs:links && npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build && npm run verify:web-build",
     "android:sync": "npm run build && cap sync android",
     "android:build": "npm run android:sync && cd android && ./gradlew assembleDebug && cd .. && npm run verify:android-reboot",
+    "android:release-check": "npm run android:sync && cd android && ./gradlew assembleRelease",
     "verify:android-reboot": "node scripts/verify-android-notification-reboot.mjs"
   },
   "dependencies": {

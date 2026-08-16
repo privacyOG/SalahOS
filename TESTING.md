@@ -780,3 +780,7 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - The permanent Android build verifies that the installed Local Notifications version matches the pinned dependency, its manifest declares the boot restore receiver/permission, its receiver reloads saved notification IDs and reschedules them, and Gradle's merged application manifest retains the receiver.
 - Generated TypeScript incremental metadata is ignored to prevent build artifacts entering feature branches.
 - Physical-device reboot timing remains a separate acceptance concern.
+
+## Android release configuration — 2026-08-16
+
+Validation run `31941241775` passed the complete repository gate, debug build/reboot verifier, unsigned release assembly, and a negative partial-signing test. The release Gradle configuration remains unsigned when no external secrets are supplied and switches to the external signing config only when every required value is present.
