@@ -80,7 +80,7 @@ jobs:
 
       - name: Commit vendored data
         run: |
-          if git diff --quiet -- src/data/ianaPrincipalLocations.json; then
+          if [ -z "$(git status --porcelain -- src/data/ianaPrincipalLocations.json)" ]; then
             echo "Vendored location data already current"
             exit 0
           fi
