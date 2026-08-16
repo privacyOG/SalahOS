@@ -30,7 +30,10 @@ afterEach(async () => {
 describe('Raspberry Pi/kiosk deployment scripts', () => {
   it('validates shell syntax for both deployment scripts', () => {
     for (const script of [launcher, autostartInstaller]) {
-      const result = run('/usr/bin/bash', ['-n', script]);
+      const result = spawnSync('bash', ['-n', script], {
+        cwd: repoRoot,
+        encoding: 'utf8',
+      });
       expect(result.status, result.stderr).toBe(0);
     }
   });
