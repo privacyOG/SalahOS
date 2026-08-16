@@ -28,6 +28,8 @@ jobs:
         run: npm run check
       - name: Synchronize iOS application
         run: npx cap sync ios
+      - name: Verify synchronized native dependency surface
+        run: npm run verify:native-dependencies
       - name: Build iOS simulator application
         run: |
           xcodebuild \
