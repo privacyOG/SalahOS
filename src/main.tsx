@@ -9,6 +9,7 @@ import { readTouchDisplayFixtureConfig, TouchDisplayFixture } from './ui/TouchDi
 import './styles.css';
 import './touch-display-fixture.css';
 import './smart-display.css';
+import './safe-area.css';
 
 async function bootstrap(): Promise<void> {
   const rootElement = document.getElementById('root');
