@@ -1,6 +1,7 @@
 from pathlib import Path
 
 # Branch-only tracker helper; removed before pull request review.
+# This comment also ensures the already-present tracker workflow receives a push event.
 
 
 def replace_once(text: str, old: str, new: str) -> str:
