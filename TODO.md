@@ -459,9 +459,11 @@
 - [x] Persist selected location/timezone/calculation settings locally
 - [x] Persist mosque timetable locally
 - [x] Provide clear online/offline state only where relevant
-- [~] Verify app remains useful with internet disabled
-- [~] Test offline page reload
-- [~] Test cache/version migration after app upgrade
+- [x] Verify app remains useful with internet disabled
+- [x] Test offline page reload
+- [x] Test cache/version migration after app upgrade
+
+**PWA offline-lifecycle verification note (2026-08-16):** read-only Quality Gate run `31926514357` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, the complete test suite and production build after exercising the committed `public/sw.js` in a controlled worker/cache environment. The production service worker now uses `salahos-shell-v2`, pre-caches the application shell, serves cached root HTML when a same-origin navigation reload fails because the network is unavailable, and during activation deletes only stale `salahos-shell-*` versions while preserving unrelated origin caches. This combines with the existing offline-startup integration, which proves persisted settings and prayer calculations operate without network access. These deterministic lifecycle tests close offline usefulness, offline reload and cache-version migration behavior; physical browser/device install UX remains a separate release/platform validation concern.
 
 **Offline/persistence verification note (2026-08-16):** read-only Quality Gate run `31904178200` passed formatting, typed lint, strict typecheck, the complete unit/integration suite and production build. The web build now has a manifest, first-party SVG icon assets, a production-only same-origin service worker, a localised offline indicator and a versioned local settings envelope. The current UI restores/persists locale and selected coordinates; the same validated envelope stores timezone, calculation method, Asr convention, high-latitude rule, Hijri correction, time format, prayer adjustments, source mode and mosque timetable. Tests cover full settings round-trip, legacy migration, future-version rejection, corrupt-storage fallback, invalid nested location/timetable rejection and propagation of stored calculation choices into the dashboard. A real-browser install/disconnect/reload test and two-version cache-upgrade test remain open; SVG icons also remain partial until platform-specific raster install assets are added and validated.
 

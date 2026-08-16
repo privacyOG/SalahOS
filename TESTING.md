@@ -580,3 +580,12 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Persisted settings and saved favourites now validate timezone identifiers before they are accepted for runtime use.
 - Added `src/integration/timezoneCache.test.ts` to prove a restored cached timezone is consumed by the production dashboard and an invalid cached timezone is rejected.
 - Read-only Quality Gate run `31925162040` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, all tests and production build.
+
+### 2026-08-16 — PWA offline reload and cache migration
+
+- Added deterministic lifecycle coverage that evaluates the committed `public/sw.js` directly in a controlled worker-like runtime rather than duplicating its caching logic in a test helper.
+- Verified install pre-caches the root shell, manifest and first-party icon assets and requests immediate activation.
+- Verified a same-origin navigation reload falls back to cached root HTML when the network request rejects.
+- Bumped the application shell cache to `salahos-shell-v2` and verified activation removes stale SalahOS shell versions while leaving unrelated origin caches untouched before claiming clients.
+- Together with the existing offline-startup integration, this verifies the configured application remains useful with network access unavailable after its shell and settings have been established.
+- Read-only Quality Gate run `31926514357` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, the complete test suite and production build.
