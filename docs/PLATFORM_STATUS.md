@@ -10,13 +10,35 @@ This document is the tested platform/build matrix for the current repository sta
 
 ## Current matrix
 
-| Target                         | Status                        | What is actually verified                                                                                                                                                                                                                                              | Still open                                                                                                                                                             |
-| ------------------------------ | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Web / PWA                      | **Automated**                 | Clean lockfile install; security/license/documentation gates; strict typecheck; complete Vitest suite; Vite production build; deploy-artifact verification; service-worker offline reload/cache lifecycle; persisted local configuration and local prayer calculation. | Real-browser visual regression, phone/tablet viewport acceptance and final release review remain open.                                                                 |
-| Android                        | **Automated build path**      | Committed Capacitor native project; shared-app sync; first-party native geolocation bridge with explicit foreground permission flow; coarse/fine foreground manifest permissions only; clean Gradle `assembleDebug` build in hosted CI.                                 | Emulator/physical-device acceptance, native notifications/Adhan, battery/background behavior, orientation acceptance, release signing and distribution remain open.    |
-| Raspberry Pi / Touch Display 2 | **Repository-validated path** | Raspberry Pi OS/Touch Display 2 setup documentation; Chromium kiosk launcher and installer contract; smart-display route; deterministic Touch Display 2 viewport fixture; persisted-settings/offline/suspend/date-rollover kiosk lifecycle tests.                      | Physical Raspberry Pi boot/login/power-loss validation, actual Touch Display 2 rendering/touch acceptance and long-duration hardware testing remain open.              |
-| TV / generic kiosk             | **Repository-validated path** | Browser smart-display mode; Chromium kiosk URL path; 1080p-capable responsive presentation rules; practical keyboard/back exit mapping; bounded burn-in-conscious pixel shifting; TV/kiosk deployment documentation and browser-host acceptance criteria.              | Physical TV/browser full-screen behavior, remote key mapping, HDMI-CEC, viewing-distance/layout acceptance and long-duration panel testing remain open.                |
-| iOS / iPadOS                   | **Planned**                   | Shared TypeScript/React prayer logic and browser/PWA behavior only.                                                                                                                                                                                                    | iOS native shell/project, native location/permission adapter, notification/Adhan delivery, build/install path and device validation are not implemented/validated.     |
+### Web / PWA — Automated
+
+Verified: clean lockfile install; security/license/documentation gates; strict typecheck; complete Vitest suite; Vite production build; deploy-artifact verification; service-worker offline reload/cache lifecycle; persisted local configuration; and local prayer calculation.
+
+Still open: real-browser visual regression, phone/tablet viewport acceptance and final release review.
+
+### Android — Automated build path
+
+Verified: committed Capacitor native project; shared-app sync; first-party native geolocation bridge with explicit foreground permission flow; coarse/fine foreground manifest permissions only; and clean Gradle `assembleDebug` build in hosted CI.
+
+Still open: emulator/physical-device acceptance, native notifications/Adhan, battery/background behavior, orientation acceptance, release signing and distribution.
+
+### Raspberry Pi / Touch Display 2 — Repository-validated path
+
+Verified: Raspberry Pi OS/Touch Display 2 setup documentation; Chromium kiosk launcher and installer contract; smart-display route; deterministic Touch Display 2 viewport fixture; and persisted-settings/offline/suspend/date-rollover kiosk lifecycle tests.
+
+Still open: physical Raspberry Pi boot/login/power-loss validation, actual Touch Display 2 rendering/touch acceptance and long-duration hardware testing.
+
+### TV / generic kiosk — Repository-validated path
+
+Verified: browser smart-display mode; Chromium kiosk URL path; 1080p-capable responsive presentation rules; practical keyboard/back exit mapping; bounded burn-in-conscious pixel shifting; TV/kiosk deployment documentation; and browser-host acceptance criteria.
+
+Still open: physical TV/browser full-screen behavior, remote key mapping, HDMI-CEC, viewing-distance/layout acceptance and long-duration panel testing.
+
+### iOS / iPadOS — Planned
+
+Verified: shared TypeScript/React prayer logic and browser/PWA behavior only.
+
+Still open: iOS native shell/project, native location/permission adapter, notification/Adhan delivery, build/install path and device validation.
 
 ## Automated Web/PWA baseline
 
@@ -48,4 +70,4 @@ Android now has a repository-validated native shell and automated debug-build pa
 
 ## Release rule
 
-Only the capability stated in the **What is actually verified** column should be treated as validated. Open physical, visual or native-platform work remains open even when a native or shared application build succeeds.
+Only the capability stated as verified above should be treated as validated. Open physical, visual or native-platform work remains open even when a native or shared application build succeeds.
