@@ -21,6 +21,9 @@ export const translations = {
     prayerMaghrib: 'Maghrib',
     prayerIsha: 'Isha',
     currentTime: 'Current local time',
+    systemTimeInvalid: 'Device time is unavailable or invalid.',
+    systemTimeInvalidHelp:
+      'Correct the device date and time. Prayer calculations will resume automatically when a valid system time is available.',
     gregorianDate: 'Gregorian date',
     hijriDate: 'Hijri date',
     currentPrayer: 'Current prayer',
@@ -150,6 +153,9 @@ export const translations = {
     prayerMaghrib: 'المغرب',
     prayerIsha: 'العشاء',
     currentTime: 'الوقت المحلي الحالي',
+    systemTimeInvalid: 'وقت الجهاز غير متاح أو غير صالح.',
+    systemTimeInvalidHelp:
+      'صحّح تاريخ ووقت الجهاز. ستُستأنف حسابات الصلاة تلقائياً عند توفر وقت نظام صالح.',
     gregorianDate: 'التاريخ الميلادي',
     hijriDate: 'التاريخ الهجري',
     currentPrayer: 'الصلاة الحالية',

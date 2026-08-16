@@ -487,3 +487,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Explicit focus, page-restore and visible-resume refreshes reset both runtime baselines, keeping those recovery paths deterministic and separate from clock-correction classification.
 - Added deterministic coverage for ordinary progression, configurable threshold behavior, long gaps, backward wall-clock corrections, explicit reset and invalid input.
 - Read-only Quality Gate run `31919909102` passed formatting, typed lint, strict typecheck, all tests and production build on the cleaned implementation head.
+
+### 2026-08-16 — invalid system time recovery
+
+- Added validated wall-clock conversion that returns `null` rather than constructing an invalid `Date` for non-finite or out-of-range values.
+- Runtime clock state is nullable; invalid reads suspend prayer/date/time computation, clear clock-discontinuity baselines and show a localized corrective alert instead of throwing downstream.
+- The first subsequent valid sample re-establishes sleep/wake and clock-change detector baselines and resumes live calculation automatically.
+- Added deterministic coverage for valid current/pre-epoch values, non-finite values, JavaScript Date-range overflow and injected wall-clock readers.
+- Read-only Quality Gate run `31920144935` passed formatting, typed lint, strict typecheck, all tests and production build on the cleaned implementation head.

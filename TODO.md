@@ -505,7 +505,10 @@
 **System-clock change verification note (2026-08-16):** read-only Quality Gate run `31919019029` passed formatting, typed lint, strict typecheck, all tests and production build after adding a wall-clock discontinuity detector and integrating it into the live runtime clock loop. The detector compares elapsed `Date.now()` time with monotonic `performance.now()` time using a 30-second threshold, detects significant forward/backward corrections and monotonic resets, and rejects invalid samples. Explicit focus/page-restore/visible-resume refreshes reset the detector baseline before updating `now`, so ordinary background resume is handled by the separate resume path rather than intentionally classified as a clock correction. System sleep/wake recovery remains a separate open item because monotonic-clock behavior across sleep varies by platform.
 
 - [x] Avoid countdown drift from long-running intervals
-- [ ] Handle invalid system time gracefully
+- [x] Handle invalid system time gracefully
+
+**Invalid-system-time verification note (2026-08-16):** read-only Quality Gate run `31920144935` passed formatting, typed lint, strict typecheck, all tests and production build after making runtime wall-clock state explicitly nullable. Non-finite or out-of-range wall-clock reads no longer enter dashboard/date/time formatters or prayer calculations; both runtime discontinuity detectors are cleared, the live clock renders a neutral placeholder, and a localized English/Arabic alert asks the user to correct the device date/time. The next valid wall-clock sample automatically re-establishes both runtime baselines and resumes normal calculation. Unit coverage verifies valid current and pre-epoch times, non-finite values, JavaScript Date-range overflow and injected wall-clock readers.
+
 - [ ] Handle unavailable calculation results gracefully
 - [ ] Add structured error logging without exposing private location unnecessarily
 
