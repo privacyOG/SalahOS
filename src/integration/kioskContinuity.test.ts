@@ -101,7 +101,9 @@ describe('Raspberry Pi and kiosk continuity lifecycle', () => {
     const resumedDashboard = dashboardFromRestoredSettings(restored, resumed);
 
     expect(resumedDashboard.generatedAt.getTime()).toBe(resumed.getTime());
-    expect(resumedDashboard.nextPrayer).not.toEqual(beforeDashboard.nextPrayer);
+    expect(resumedDashboard.secondsUntilNextPrayer).not.toBe(
+      beforeDashboard.secondsUntilNextPrayer,
+    );
   });
 
   it('cold-restarts onto the new local day instead of retaining yesterday schedule', () => {
