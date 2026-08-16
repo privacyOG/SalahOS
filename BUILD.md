@@ -4,13 +4,13 @@ This document records the build paths that are actually implemented and verified
 
 ## Current build status
 
-| Target | Current status | Verified path |
-| --- | --- | --- |
-| Web / PWA | Implemented and automated | `npm run build` + `npm run verify:web-build` |
-| Android | Native build path not yet implemented/validated | Tracked in `TODO.md` |
-| iOS | Native build path not yet implemented/validated | Tracked in `TODO.md` |
-| Raspberry Pi Touch Display 2 | Deployment path not yet validated | Tracked in `TODO.md` |
-| TV / kiosk | Deployment path not yet validated | Tracked in `TODO.md` |
+| Target                       | Current status                                  | Verified path                                |
+| ---------------------------- | ----------------------------------------------- | -------------------------------------------- |
+| Web / PWA                    | Implemented and automated                       | `npm run build` + `npm run verify:web-build` |
+| Android                      | Native build path not yet implemented/validated | Tracked in `TODO.md`                         |
+| iOS                          | Native build path not yet implemented/validated | Tracked in `TODO.md`                         |
+| Raspberry Pi Touch Display 2 | Deployment path not yet validated               | Tracked in `TODO.md`                         |
+| TV / kiosk                   | Deployment path not yet validated               | Tracked in `TODO.md`                         |
 
 The shared web application can be exercised on browser-capable devices, but that does not replace platform-specific validation still marked open in `TODO.md`.
 
