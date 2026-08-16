@@ -44,6 +44,9 @@ function dashboardFromRestoredSettings(settings: PersistedSettings, instant: Dat
   if (settings.location === null) {
     throw new Error('Expected persisted kiosk location');
   }
+  if (settings.location.timeZone === undefined) {
+    throw new Error('Expected persisted kiosk timezone');
+  }
 
   return buildPrayerDashboard({
     instant,
