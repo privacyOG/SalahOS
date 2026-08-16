@@ -30,6 +30,9 @@ jobs:
       - name: Sensitive-file policy
         run: npm run security:sensitive-files
 
+      - name: Dependency vulnerability audit
+        run: npm run security:audit
+
       - name: Format check
         run: npm run format:check
 
