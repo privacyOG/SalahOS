@@ -492,7 +492,10 @@
 - [x] Recompute after calculation-method change
 - [x] Recompute after Asr-method change
 - [x] Recompute after timezone/DST change
-- [ ] Re-sync clock/countdown after app resumes from background
+- [x] Re-sync clock/countdown after app resumes from background
+
+**Background-resume verification note (2026-08-16):** read-only Quality Gate run `31918624386` passed formatting, typed lint, strict typecheck, all tests and production build after tightening the runtime refresh contract. Focus and page-restore events refresh immediately, while `visibilitychange` refreshes only when the document becomes visible. The `App` refresh callback replaces its wall-clock `now` value, which recomputes the dashboard, current/next prayer and countdown from current time instead of replaying missed interval ticks. Unit coverage verifies hidden visibility changes do not refresh, visible resume does refresh, and listener cleanup still removes every runtime hook. System sleep/wake and significant system-clock change detection remain separate open items.
+
 - [ ] Recover correctly after system sleep/wake
 - [ ] Detect significant system-clock changes
 - [x] Avoid countdown drift from long-running intervals
