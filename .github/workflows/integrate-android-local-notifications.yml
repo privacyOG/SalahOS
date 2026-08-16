@@ -40,6 +40,9 @@ jobs:
       - name: Apply Android notification integration
         run: python scripts/apply_android_local_notifications.py
 
+      - name: Build web application
+        run: npm run build
+
       - name: Synchronize Android project
         run: npx cap sync android
 
