@@ -509,7 +509,10 @@
 
 **Invalid-system-time verification note (2026-08-16):** read-only Quality Gate run `31920144935` passed formatting, typed lint, strict typecheck, all tests and production build after making runtime wall-clock state explicitly nullable. Non-finite or out-of-range wall-clock reads no longer enter dashboard/date/time formatters or prayer calculations; both runtime discontinuity detectors are cleared, the live clock renders a neutral placeholder, and a localized English/Arabic alert asks the user to correct the device date/time. The next valid wall-clock sample automatically re-establishes both runtime baselines and resumes normal calculation. Unit coverage verifies valid current and pre-epoch times, non-finite values, JavaScript Date-range overflow and injected wall-clock readers.
 
-- [ ] Handle unavailable calculation results gracefully
+- [x] Handle unavailable calculation results gracefully
+
+**Unavailable-calculation verification note (2026-08-16):** read-only Quality Gate run `31920344383` passed formatting, typed lint, strict typecheck, all tests and production build after introducing an explicit dashboard calculation result boundary. Successful schedules report any prayer rows that remain astronomically unavailable; those rows continue to display a neutral dash and now carry localized English/Arabic guidance rather than silent ambiguity. Calculation exceptions are converted into an explicit unavailable state, so the interface remains running and asks the user to verify location/calculation settings without displaying guessed prayer times. Deterministic coverage verifies an ordinary Sydney schedule, polar-day partial unavailability and conversion of a rejected calculation input into the safe unavailable result.
+
 - [ ] Add structured error logging without exposing private location unnecessarily
 
 ---

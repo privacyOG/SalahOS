@@ -24,6 +24,11 @@ export const translations = {
     systemTimeInvalid: 'Device time is unavailable or invalid.',
     systemTimeInvalidHelp:
       'Correct the device date and time. Prayer calculations will resume automatically when a valid system time is available.',
+    calculationUnavailable: 'Prayer times could not be calculated for the current settings.',
+    calculationUnavailableHelp:
+      'Verify the location and calculation settings, then try again. The app will keep running without showing guessed prayer times.',
+    somePrayerTimesUnavailable:
+      'One or more prayer times are astronomically unavailable for this date and location. Unavailable times are shown as —.',
     gregorianDate: 'Gregorian date',
     hijriDate: 'Hijri date',
     currentPrayer: 'Current prayer',
@@ -156,6 +161,11 @@ export const translations = {
     systemTimeInvalid: 'وقت الجهاز غير متاح أو غير صالح.',
     systemTimeInvalidHelp:
       'صحّح تاريخ ووقت الجهاز. ستُستأنف حسابات الصلاة تلقائياً عند توفر وقت نظام صالح.',
+    calculationUnavailable: 'تعذّر حساب مواقيت الصلاة بالإعدادات الحالية.',
+    calculationUnavailableHelp:
+      'تحقّق من الموقع وإعدادات الحساب ثم أعد المحاولة. سيستمر التطبيق بالعمل من دون عرض مواقيت تخمينية.',
+    somePrayerTimesUnavailable:
+      'يتعذّر فلكياً حساب موعد صلاة واحد أو أكثر لهذا التاريخ والموقع. تظهر المواقيت غير المتاحة بالرمز —.',
     gregorianDate: 'التاريخ الميلادي',
     hijriDate: 'التاريخ الهجري',
     currentPrayer: 'الصلاة الحالية',
