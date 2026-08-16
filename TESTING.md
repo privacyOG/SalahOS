@@ -758,3 +758,10 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - Unit coverage verifies granted exact capability, denied inexact fallback, unsupported targets, explicit settings navigation and display-permission ordering.
 - The settings UI warns when precise access is off and capability changes trigger notification reconciliation.
 - Doze/idle behavior, battery optimisation/vendor restrictions, reboot recovery and physical/emulator timing evidence remain open.
+
+### 2026-08-16 — Android notification reboot restoration
+
+- Validation run `31939900915` passed the complete repository quality gate and Android debug assembly.
+- The permanent Android build now verifies that the installed Local Notifications version matches the pinned dependency, its manifest declares the boot restore receiver/permission, its receiver reloads saved notification IDs and reschedules them, and Gradle's merged application manifest retains the receiver.
+- Generated TypeScript incremental metadata is now ignored to prevent build artifacts entering feature branches.
+- Physical-device reboot timing remains a separate acceptance item.

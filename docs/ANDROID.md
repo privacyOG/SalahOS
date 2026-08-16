@@ -106,3 +106,9 @@ Silent notifications use dedicated Android channels, including a silent-with-vib
 The manifest declares `android.permission.SCHEDULE_EXACT_ALARM`. On supported Android versions this is user-managed special access: SalahOS checks the current exact-alarm setting, never opens the system settings screen automatically, and exposes a user-initiated settings action when precise access is off. With access granted, the Local Notifications plugin can use exact alarms for scheduled `at` notifications. Without access, SalahOS continues scheduling the same prayer alerts as an inexact fallback and explicitly tells the user that Android may delay delivery.
 
 A capability change detected after returning to the app triggers scheduler reconciliation so current jobs are rebuilt under the new precision state. Exact scheduling is not described as a guarantee against Doze, battery optimisation, OEM restrictions, reboot/power-off or user notification settings. Those lifecycle and device-level items remain open.
+
+## Notification restoration after reboot
+
+The pinned Capacitor Local Notifications Android dependency stores pending local notifications and declares its restore receiver for locked boot, normal boot and supported quick-boot broadcasts. SalahOS does not add a duplicate receiver. Instead, every Android build runs `scripts/verify-android-notification-reboot.mjs`, which verifies the pinned dependency source contract and confirms that `LocalNotificationRestoreReceiver` plus `RECEIVE_BOOT_COMPLETED` are present in a Gradle merged application manifest.
+
+This is repository/build evidence that saved scheduled notifications are restored through the dependency's native reboot path. It is not physical-device evidence for manufacturer-specific boot timing, power-management behavior or notification presentation.

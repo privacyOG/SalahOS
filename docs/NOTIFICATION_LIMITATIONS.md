@@ -68,3 +68,7 @@ The committed Android shell has an on-device Local Notifications adapter. It req
 The manifest declares `SCHEDULE_EXACT_ALARM`, which is user-managed special access on supported Android versions. SalahOS checks that setting and never opens the system settings screen without an explicit user action. When access is granted, scheduled `at` notifications can use exact-alarm delivery; when it is unavailable, the same prayer notifications remain scheduled with an explicitly reported inexact fallback and the UI warns that Android may delay them. Returning from a changed exact-alarm setting triggers reconciliation of current jobs.
 
 Exact-alarm access still does not bypass Doze, battery optimisation, OEM background restrictions, notification-channel settings, device power-off or reboot behavior. Reboot recovery, idle/battery handling, Adhan playback and physical/emulator timing verification remain separately tracked.
+
+### Android reboot restoration
+
+The pinned Android Local Notifications dependency provides a native boot restore receiver for saved scheduled notifications. SalahOS verifies the installed source contract and Gradle merged manifest on every Android build rather than duplicating the receiver. Manufacturer boot timing, Doze and notification presentation can still differ on physical devices, so build-time restoration support is not represented as device-level delivery timing evidence.

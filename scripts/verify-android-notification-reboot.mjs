@@ -55,7 +55,8 @@ function collectManifests(directory) {
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
     const fullPath = path.join(directory, entry.name);
     if (entry.isDirectory()) collectManifests(fullPath);
-    else if (entry.isFile() && entry.name === 'AndroidManifest.xml') mergedManifestCandidates.push(fullPath);
+    else if (entry.isFile() && entry.name === 'AndroidManifest.xml')
+      mergedManifestCandidates.push(fullPath);
   }
 }
 collectManifests(intermediatesRoot);
@@ -70,7 +71,9 @@ const mergedManifest = mergedManifestCandidates.find((candidate) => {
 });
 
 if (mergedManifest === undefined) {
-  throw new Error('No merged Android manifest contains the Local Notifications boot restore receiver contract');
+  throw new Error(
+    'No merged Android manifest contains the Local Notifications boot restore receiver contract',
+  );
 }
 
 console.log(
