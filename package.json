@@ -17,6 +17,7 @@
     "verify:visual-regression-wiring": "node scripts/verify-visual-regression.mjs",
     "verify:visual-regression": "node scripts/visual-regression.mjs",
     "verify:accessibility-contract": "node scripts/verify-accessibility-contract.mjs",
+    "verify:accessibility-browser": "node scripts/accessibility-browser-regression.mjs",
     "typecheck": "tsc -b --pretty false",
     "test": "vitest run",
     "test:watch": "vitest",
