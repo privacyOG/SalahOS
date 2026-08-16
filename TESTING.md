@@ -556,3 +556,11 @@ When a milestone is verified, add a dated entry under `Validation log` including
 - The fixture schedules Fajr reminder/prayer-time jobs, changes the calculated Fajr time by +5 minutes, and verifies stale jobs are cancelled before replacement at the new exact instants.
 - A third application of the same resolved schedule performs no operations, proving scheduler reconciliation is idempotent and does not duplicate jobs.
 - Read-only Quality Gate run `31923105355` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, all tests and production build.
+
+### 2026-08-16 — offline startup integration
+
+- Added `src/integration/offlineStartup.test.ts` for a previously configured device starting without network access.
+- The fixture persists Sydney location/calculation settings, makes `fetch` fail, reloads the stored state, and builds the production prayer dashboard locally without issuing a network request.
+- It verifies the restored method, Hijri correction, manual prayer adjustment, Sydney timezone, civil date and six prayer rows.
+- This fixture covers the application startup/data path; browser service-worker cache/offline reload validation remains a separate PWA verification item.
+- Read-only Quality Gate run `31923333276` passed the sensitive-file policy, dependency vulnerability audit, formatting, typed lint, strict typecheck, all tests and production build.
