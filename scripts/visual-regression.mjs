@@ -7,11 +7,14 @@ const PREVIEW_ORIGIN = 'http://127.0.0.1:4173';
 const DEBUG_ORIGIN = 'http://127.0.0.1:9222';
 const OUTPUT_DIRECTORY = resolve('artifacts/visual-regression');
 const SETTINGS_STORAGE_KEY = 'salahos.settings';
+const FIXED_NOW_MILLISECONDS = Date.parse('2026-08-16T12:00:00.000Z');
 const BROWSER_PROFILE_DIRECTORY = resolve(tmpdir(), `salahos-visual-${String(process.pid)}`);
 
 const visualCases = [
   {
     name: 'phone-portrait-en-light',
+    path: '/',
+    readySelector: '.app-shell',
     width: 390,
     height: 844,
     locale: 'en',
@@ -21,6 +24,8 @@ const visualCases = [
   },
   {
     name: 'phone-portrait-ar-dark',
+    path: '/',
+    readySelector: '.app-shell',
     width: 390,
     height: 844,
     locale: 'ar',
@@ -30,6 +35,8 @@ const visualCases = [
   },
   {
     name: 'phone-landscape-en-light',
+    path: '/',
+    readySelector: '.app-shell',
     width: 844,
     height: 390,
     locale: 'en',
@@ -39,6 +46,8 @@ const visualCases = [
   },
   {
     name: 'tablet-en-light',
+    path: '/',
+    readySelector: '.app-shell',
     width: 1024,
     height: 1366,
     locale: 'en',
@@ -48,6 +57,8 @@ const visualCases = [
   },
   {
     name: 'kiosk-1080p-ar-dark',
+    path: '/?mode=smart-display',
+    readySelector: '.smart-display',
     width: 1920,
     height: 1080,
     locale: 'ar',
@@ -57,6 +68,8 @@ const visualCases = [
   },
   {
     name: 'phone-portrait-en-light-text-125',
+    path: '/',
+    readySelector: '.app-shell',
     width: 390,
     height: 844,
     locale: 'en',
@@ -215,17 +228,17 @@ async function evaluate(session, expression) {
   return result.result?.value;
 }
 
-async function waitForReady(session) {
+async function waitForReady(session, selector) {
   const started = Date.now();
   while (Date.now() - started < 15_000) {
     const ready = await evaluate(
       session,
-      `document.readyState === 'complete' && document.querySelector('.app-shell') !== null`,
+      `document.readyState === 'complete' && document.querySelector(${JSON.stringify(selector)}) !== null`,
     );
     if (ready === true) return;
     await new Promise((resolveDelay) => setTimeout(resolveDelay, 100));
   }
-  throw new Error('Application did not become ready for visual regression');
+  throw new Error(`Application did not become ready for visual regression: ${selector}`);
 }
 
 async function renderCase(session, visualCase) {
@@ -235,15 +248,15 @@ async function renderCase(session, visualCase) {
     deviceScaleFactor: 1,
     mobile: visualCase.width < 900,
   });
-  await session.send('Page.navigate', { url: PREVIEW_ORIGIN });
-  await waitForReady(session);
+  await session.send('Page.navigate', { url: `${PREVIEW_ORIGIN}${visualCase.path}` });
+  await waitForReady(session, visualCase.readySelector);
 
   const settings = JSON.stringify(fixtureSettings(visualCase.locale, visualCase.theme));
   await evaluate(
     session,
     `localStorage.setItem(${JSON.stringify(SETTINGS_STORAGE_KEY)}, ${JSON.stringify(settings)}); location.reload();`,
   );
-  await waitForReady(session);
+  await waitForReady(session, visualCase.readySelector);
 
   if (visualCase.textScalePercent !== 100) {
     await evaluate(
@@ -266,7 +279,7 @@ async function renderCase(session, visualCase) {
       viewportWidth: window.innerWidth,
       documentWidth: document.documentElement.scrollWidth,
       bodyWidth: document.body.scrollWidth,
-      appShellPresent: document.querySelector('.app-shell') !== null,
+      expectedRootPresent: document.querySelector(${JSON.stringify(visualCase.readySelector)}) !== null,
       visibleTextLength: document.body.innerText.trim().length,
     }))()`,
   );
@@ -281,8 +294,8 @@ async function renderCase(session, visualCase) {
       `${visualCase.name}: expected language ${visualCase.locale}, received ${String(assertions.language)}`,
     );
   }
-  if (assertions.appShellPresent !== true || assertions.visibleTextLength < 40) {
-    throw new Error(`${visualCase.name}: application shell did not render meaningful content`);
+  if (assertions.expectedRootPresent !== true || assertions.visibleTextLength < 40) {
+    throw new Error(`${visualCase.name}: application did not render meaningful content`);
   }
   const maximumWidth = Math.max(assertions.documentWidth, assertions.bodyWidth);
   if (maximumWidth > assertions.viewportWidth + 1) {
@@ -320,6 +333,9 @@ try {
   session = await connectDevTools();
   await session.send('Page.enable');
   await session.send('Runtime.enable');
+  await session.send('Page.addScriptToEvaluateOnNewDocument', {
+    source: `Date.now = () => ${String(FIXED_NOW_MILLISECONDS)};`,
+  });
 
   for (const visualCase of visualCases) {
     await renderCase(session, visualCase);
