@@ -21,6 +21,11 @@ export interface FlushableKeyValueStorage extends KeyValueStorage {
   flush(): Promise<void>;
 }
 
+export interface ApplicationStorageDependencies {
+  readonly isNativePlatform: () => boolean;
+  readonly preferences: PreferencesStore;
+}
+
 class NativePreferencesStorage implements FlushableKeyValueStorage {
   private readonly cache = new Map<string, string>();
   private pendingWrite: Promise<void> = Promise.resolve();
@@ -57,6 +62,11 @@ class NativePreferencesStorage implements FlushableKeyValueStorage {
   }
 }
 
+const defaultDependencies: ApplicationStorageDependencies = {
+  isNativePlatform: () => Capacitor.isNativePlatform(),
+  preferences: Preferences,
+};
+
 let activeStorage: KeyValueStorage | null = null;
 let nativeStorage: FlushableKeyValueStorage | null = null;
 
@@ -69,14 +79,17 @@ export async function createNativePreferencesStorage(
   return storage;
 }
 
-export async function initializeApplicationStorage(webStorage: KeyValueStorage): Promise<void> {
-  if (Capacitor.getPlatform() !== 'android') {
+export async function initializeApplicationStorage(
+  webStorage: KeyValueStorage,
+  dependencies: ApplicationStorageDependencies = defaultDependencies,
+): Promise<void> {
+  if (!dependencies.isNativePlatform()) {
     activeStorage = webStorage;
     nativeStorage = null;
     return;
   }
 
-  const storage = await createNativePreferencesStorage(Preferences);
+  const storage = await createNativePreferencesStorage(dependencies.preferences);
   activeStorage = storage;
   nativeStorage = storage;
 }
