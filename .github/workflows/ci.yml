@@ -36,6 +36,9 @@ jobs:
       - name: Dependency license policy
         run: npm run security:licenses
 
+      - name: Documentation link verification
+        run: npm run docs:links
+
       - name: Format check
         run: npm run format:check
 
