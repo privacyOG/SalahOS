@@ -63,6 +63,8 @@ Until a delivery path has been implemented and verified on a target platform, de
 
 ### Current Android implementation boundary
 
-The committed Android shell now has an on-device Local Notifications adapter. It requests display permission only when a configured prayer alert requires native delivery, reconciles today/tomorrow prayer jobs from the shared scheduler, ignores already-past jobs and removes stale SalahOS-owned pending jobs without touching unrelated notifications.
+The committed Android shell has an on-device Local Notifications adapter. It requests display permission only when a configured prayer alert requires native delivery, reconciles today/tomorrow prayer jobs from the shared scheduler, ignores already-past jobs and removes stale SalahOS-owned pending jobs without touching unrelated notifications.
 
-Exact alarms are not enabled in the current Android manifest. Consequently, scheduled times are notification intent rather than a guarantee of exact wall-clock delivery, especially under Doze, battery optimisation, OEM background restrictions or user notification-channel settings. Reboot rescheduling and Adhan playback are also not yet implemented.
+The manifest declares `SCHEDULE_EXACT_ALARM`, which is user-managed special access on supported Android versions. SalahOS checks that setting and never opens the system settings screen without an explicit user action. When access is granted, scheduled `at` notifications can use exact-alarm delivery; when it is unavailable, the same prayer notifications remain scheduled with an explicitly reported inexact fallback and the UI warns that Android may delay them. Returning from a changed exact-alarm setting triggers reconciliation of current jobs.
+
+Exact-alarm access still does not bypass Doze, battery optimisation, OEM background restrictions, notification-channel settings, device power-off or reboot behavior. Reboot recovery, idle/battery handling, Adhan playback and physical/emulator timing verification remain separately tracked.
