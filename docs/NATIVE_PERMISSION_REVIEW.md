@@ -34,6 +34,12 @@ They support notification permission on current Android versions and the plugin'
 
 `npm run verify:android-merged-permissions` runs after the Gradle Android build and inspects merged/packaged manifests containing both the SalahOS activity and Local Notifications restore receiver. The effective permission set is restricted to the four app-owned permissions plus the three reviewed Local Notifications permissions. Any new transitive permission fails the Android build until reviewed.
 
+## Dormant external-service integrations
+
+SalahOS does not currently enable a Google/Firebase services integration in the Android shell. The default generated Gradle hook and buildscript dependency that would automatically activate such a service when a configuration file appears have been removed.
+
+The repository sensitive-file policy rejects `google-services.json`, and `verify:native-permissions` rejects reintroduction of the associated Gradle plugin, plugin id or configuration-file hook. Adding a future native service provider therefore requires an intentional privacy/security review rather than dropping a configuration file into the generated Android project.
+
 ## Android local-data backup boundary
 
 SalahOS stores sensitive local-first state such as saved locations, mosque timetables/settings and user-selected local Adhan media. The Android app therefore does not opt that state into platform backup or transfer.
@@ -72,6 +78,7 @@ If SalahOS later adds continuous or background location, that is a separate feat
 `npm run verify:native-permissions` checks:
 
 - the exact reviewed Geolocation and Local Notifications dependency versions;
+- absence of dormant external-service Gradle/configuration hooks;
 - the explicit Android source-manifest permission allowlist;
 - Android backup/transfer exclusion attributes and rule files;
 - both iOS location description keys required by reviewed Capacitor Geolocation 8.2.0;
@@ -80,4 +87,4 @@ If SalahOS later adds continuous or background location, that is a separate feat
 
 `npm run verify:android-merged-permissions` additionally checks the effective Gradle-merged permission set after an Android build.
 
-The source verifier is part of `npm run check`, and the merged verifier runs for both debug and unsigned release Android builds. Permission, backup-surface or reviewed native dependency-version changes therefore require an intentional repository change and review rather than silently expanding native access.
+The source verifier is part of `npm run check`, and the merged verifier runs for both debug and unsigned release Android builds. Permission, backup-surface, native service-provider or reviewed native dependency-version changes therefore require an intentional repository change and review rather than silently expanding native access.
