@@ -82,6 +82,17 @@ describe('saved locations', () => {
     ).toThrow();
   });
 
+  it('requires a saved id to match the canonical coordinate-derived identifier', () => {
+    expect(() =>
+      parseSavedLocations(
+        JSON.stringify({
+          version: 1,
+          locations: [{ id: 'arbitrary-id', label: 'Sydney', coordinates: sydney }],
+        }),
+      ),
+    ).toThrow(/must match its coordinates/);
+  });
+
   it('rejects coordinate values that would otherwise coerce into numbers', () => {
     for (const coordinates of [
       { latitude: '', longitude: 151.2093 },
