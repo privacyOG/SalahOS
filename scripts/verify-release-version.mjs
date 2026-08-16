@@ -1,17 +1,17 @@
 import { readFileSync } from 'node:fs';
 
 const packageJson = JSON.parse(readFileSync(new URL('../package.json', import.meta.url), 'utf8'));
-const androidBuild = readFileSync(new URL('../android/app/build.gradle', import.meta.url), 'utf8');
-const iosInfo = readFileSync(new URL('../ios/App/App/Info.plist', import.meta.url), 'utf8');
-const releaseNotes = readFileSync(
-  new URL(`../docs/RELEASE_NOTES_${packageJson.version}.md`, import.meta.url),
-  'utf8',
-);
-
 const version = packageJson.version;
 if (typeof version !== 'string' || !/^\d+\.\d+\.\d+$/.test(version)) {
   throw new Error(`package.json must declare a stable x.y.z release version; received ${String(version)}`);
 }
+
+const androidBuild = readFileSync(new URL('../android/app/build.gradle', import.meta.url), 'utf8');
+const iosInfo = readFileSync(new URL('../ios/App/App/Info.plist', import.meta.url), 'utf8');
+const releaseNotes = readFileSync(
+  new URL(`../docs/RELEASE_NOTES_${version}.md`, import.meta.url),
+  'utf8',
+);
 
 const androidVersionName = androidBuild.match(/\bversionName\s+["']([^"']+)["']/)?.[1];
 const androidVersionCode = androidBuild.match(/\bversionCode\s+(\d+)/)?.[1];
