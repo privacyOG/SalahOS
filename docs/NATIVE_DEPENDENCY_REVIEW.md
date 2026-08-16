@@ -32,6 +32,14 @@ The iOS package contract likewise allowlists the complete `.package(...)` and `.
 
 This declaration-level check is important because pinning only version variables would not detect a newly added dependency that introduced its own literal version or project module.
 
+## Post-sync verification
+
+Capacitor synchronization can regenerate native dependency files. A pre-sync repository check alone is therefore insufficient for release evidence.
+
+The Android `android:sync` path runs `npm run verify:native-dependencies` immediately after `cap sync android`. The permanent iOS workflow runs the same verifier immediately after `npx cap sync ios` and before the Xcode build. The verifier also checks that these post-sync calls remain wired in place.
+
+This means a generated dependency change caused by the installed plugin graph is checked in the exact native build workspace rather than relying only on the committed pre-sync files.
+
 ## Local native binary boundary
 
 The generated Android template contains local library search paths for compatibility with native/Cordova plugins. SalahOS currently relies on no reviewed local `.jar` or `.aar` binary in those paths.
@@ -51,6 +59,7 @@ The generated Android template contains local library search paths for compatibi
 - Android Gradle plugin `8.13.0`;
 - the exact reviewed Android application and generated Capacitor dependency declaration sets;
 - iOS `capacitor-swift-pm` exact `8.4.2`, the local first-party plugin package paths, and the exact reviewed Swift package/product declaration sets;
+- required post-sync re-verification on Android and iOS;
 - absence of unreviewed local Android `.jar/.aar` binaries.
 
 A dependency upgrade or addition is not forbidden. It must be intentional and accompanied by an updated dependency/license/security review instead of silently changing the generated native graph.
