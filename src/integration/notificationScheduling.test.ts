@@ -38,9 +38,7 @@ class MemoryScheduler implements NotificationSchedulerAdapter {
 const sydney = createCoordinates(-33.8688, 151.2093);
 const instant = new Date('2026-08-16T02:00:00.000Z');
 
-function prayerInputs(
-  adjustments: Readonly<Partial<Record<NotificationPrayerName, number>>> = {},
-) {
+function prayerInputs(adjustments: Readonly<Partial<Record<NotificationPrayerName, number>>> = {}) {
   const dashboard = buildPrayerDashboard({
     instant,
     coordinates: sydney,
@@ -61,17 +59,13 @@ function prayerInputs(
 
 describe('notification scheduling integration flow', () => {
   it('reconciles recalculated prayer times through exact-instant scheduler delivery', async () => {
-    const preferences = updatePrayerNotificationPreference(
-      defaultNotificationPreferences,
-      'fajr',
-      {
-        enabled: true,
-        reminderMinutes: 15,
-        prayerTimeNotification: true,
-        sound: 'silent',
-        vibration: false,
-      },
-    );
+    const preferences = updatePrayerNotificationPreference(defaultNotificationPreferences, 'fajr', {
+      enabled: true,
+      reminderMinutes: 15,
+      prayerTimeNotification: true,
+      sound: 'silent',
+      vibration: false,
+    });
     const adapter = new MemoryScheduler();
 
     const initialIntents = buildNotificationIntents(prayerInputs(), preferences);
@@ -93,18 +87,12 @@ describe('notification scheduling integration flow', () => {
     expect(initialPrayerInstant).toBeTypeOf('number');
 
     adapter.operations.length = 0;
-    const recalculatedIntents = buildNotificationIntents(
-      prayerInputs({ fajr: 5 }),
-      preferences,
-    );
+    const recalculatedIntents = buildNotificationIntents(prayerInputs({ fajr: 5 }), preferences);
     const recalculatedResolutions = resolveNotificationScheduleInstants(
       recalculatedIntents,
       'Australia/Sydney',
     );
-    const recalculatedPlan = await applyNotificationSchedulerPlan(
-      adapter,
-      recalculatedResolutions,
-    );
+    const recalculatedPlan = await applyNotificationSchedulerPlan(adapter, recalculatedResolutions);
 
     expect(recalculatedPlan.cancelIds).toEqual([
       '2026-08-16:fajr:prayer-time',
@@ -133,10 +121,7 @@ describe('notification scheduling integration flow', () => {
     });
 
     adapter.operations.length = 0;
-    const idempotentPlan = await applyNotificationSchedulerPlan(
-      adapter,
-      recalculatedResolutions,
-    );
+    const idempotentPlan = await applyNotificationSchedulerPlan(adapter, recalculatedResolutions);
     expect(idempotentPlan).toEqual({ schedule: [], cancelIds: [], skippedIds: [] });
     expect(adapter.operations).toEqual([]);
   });
