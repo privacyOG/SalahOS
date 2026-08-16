@@ -7,21 +7,23 @@ import {
 
 class MemoryPreferences implements PreferencesStore {
   readonly values = new Map<string, string>();
-  readonly writes: Array<{ key: string; value: string }> = [];
+  readonly writes: { key: string; value: string }[] = [];
   readonly removals: string[] = [];
 
-  async get({ key }: { key: string }): Promise<{ value: string | null }> {
-    return { value: this.values.get(key) ?? null };
+  get({ key }: { key: string }): Promise<{ value: string | null }> {
+    return Promise.resolve({ value: this.values.get(key) ?? null });
   }
 
-  async set({ key, value }: { key: string; value: string }): Promise<void> {
+  set({ key, value }: { key: string; value: string }): Promise<void> {
     this.writes.push({ key, value });
     this.values.set(key, value);
+    return Promise.resolve();
   }
 
-  async remove({ key }: { key: string }): Promise<void> {
+  remove({ key }: { key: string }): Promise<void> {
     this.removals.push(key);
     this.values.delete(key);
+    return Promise.resolve();
   }
 }
 
