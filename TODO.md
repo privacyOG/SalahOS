@@ -413,7 +413,10 @@
 **Adhan audio-rights verification note (2026-08-16):** read-only Quality Gate run `31913475048` passed formatting, typed lint, strict typecheck, all tests and production build after adding an executable bundled-audio rights policy and `docs/ADHAN_AUDIO_RIGHTS.md`. Bundled recordings require a stable id, title, rights basis, rights holder/source authority, evidence reference and attribution where required. Public availability is not treated as redistribution permission. Future user-selected local audio remains a separate open feature and must not silently become a bundled project asset.
 
 - [~] Reschedule notifications after timezone/location/method changes
-- [ ] Reschedule notifications after device reboot where platform requires it
+- [x] Reschedule notifications after device reboot where platform requires it
+
+**Android notification reboot-restoration verification note (2026-08-16):** SalahOS pins `@capacitor/local-notifications` and verifies its Android reboot-restoration contract during every `npm run android:build`. The verifier requires the installed version to equal the repository dependency, requires the plugin manifest to register `LocalNotificationRestoreReceiver` for locked/normal boot with `RECEIVE_BOOT_COMPLETED`, requires the receiver source to reload saved notification IDs and reschedule them, and scans Gradle build intermediates to prove the receiver and permission survive manifest merging into the application. Clean validation run `31940265725` passed the full repository quality gate, Android debug assembly and the permanent reboot verifier on the post-Adhan mainline. Physical-device reboot timing remains part of separate device acceptance and is not claimed here.
+
 - [~] Reschedule future prayer notifications at date rollover
 - [~] Prevent duplicate notifications
 - [~] Test notification behaviour across DST transition

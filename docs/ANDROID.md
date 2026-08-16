@@ -112,3 +112,9 @@ SalahOS does not request an unrestricted battery-optimisation exemption. Doze, B
 ## Adhan lifecycle policy
 
 The current Android Adhan preference schedules an Adhan-labelled local notification at prayer time. The executable platform policy records that scheduled delivery as a notification alert and disables full-recording auto-play for foreground, background and terminated lifecycle states. This avoids treating a local-notification sound as equivalent to reliable full Adhan playback. User-selected/local Adhan audio, audio focus, interruption policy and any future foreground playback implementation remain separate Stage 10 work.
+
+## Notification restoration after reboot
+
+The pinned Capacitor Local Notifications Android dependency stores pending local notifications and declares its restore receiver for locked boot, normal boot and supported quick-boot broadcasts. SalahOS does not add a duplicate receiver. Instead, every Android build runs `scripts/verify-android-notification-reboot.mjs`, which verifies the pinned dependency source contract and confirms that `LocalNotificationRestoreReceiver` plus `RECEIVE_BOOT_COMPLETED` are present in a Gradle merged application manifest.
+
+This is repository/build evidence that saved scheduled notifications are restored through the dependency's native reboot path. It is not physical-device evidence for manufacturer-specific boot timing, power-management behavior or notification presentation.
