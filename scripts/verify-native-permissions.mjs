@@ -4,6 +4,14 @@ const androidManifest = readFileSync(
   new URL('../android/app/src/main/AndroidManifest.xml', import.meta.url),
   'utf8',
 );
+const androidLegacyBackupRules = readFileSync(
+  new URL('../android/app/src/main/res/xml/backup_rules.xml', import.meta.url),
+  'utf8',
+);
+const androidDataExtractionRules = readFileSync(
+  new URL('../android/app/src/main/res/xml/data_extraction_rules.xml', import.meta.url),
+  'utf8',
+);
 const iosInfo = readFileSync(new URL('../ios/App/App/Info.plist', import.meta.url), 'utf8');
 const iosProject = readFileSync(
   new URL('../ios/App/App.xcodeproj/project.pbxproj', import.meta.url),
@@ -35,6 +43,36 @@ if (new Set(declaredAndroidPermissions).size !== declaredAndroidPermissions.leng
   throw new Error('Android manifest contains duplicate explicit permissions');
 }
 
+for (const requiredManifestBoundary of [
+  'android:allowBackup="false"',
+  'android:fullBackupContent="@xml/backup_rules"',
+  'android:dataExtractionRules="@xml/data_extraction_rules"',
+]) {
+  if (!androidManifest.includes(requiredManifestBoundary)) {
+    throw new Error(`Android local-data backup boundary is missing: ${requiredManifestBoundary}`);
+  }
+}
+
+const backupDomains = ['root', 'file', 'database', 'sharedpref', 'external'];
+for (const domain of backupDomains) {
+  const exclusion = `<exclude domain="${domain}" path="." />`;
+  if (!androidLegacyBackupRules.includes(exclusion)) {
+    throw new Error(`Legacy Android backup rules do not exclude the ${domain} domain`);
+  }
+  const extractionOccurrences = androidDataExtractionRules.split(exclusion).length - 1;
+  if (extractionOccurrences !== 2) {
+    throw new Error(
+      `Android data-extraction rules must exclude ${domain} from both cloud backup and device transfer`,
+    );
+  }
+}
+if (
+  !androidDataExtractionRules.includes('<cloud-backup>') ||
+  !androidDataExtractionRules.includes('<device-transfer>')
+) {
+  throw new Error('Android data-extraction rules must cover cloud backup and device transfer');
+}
+
 if (!iosInfo.includes('<key>NSLocationWhenInUseUsageDescription</key>')) {
   throw new Error('iOS when-in-use location description is missing');
 }
@@ -56,5 +94,5 @@ if (/CODE_SIGN_ENTITLEMENTS\s*=/.test(iosProject)) {
 }
 
 console.log(
-  `Native permission contract passed: ${declaredAndroidPermissions.length} reviewed Android permissions and iOS when-in-use location only.`,
+  `Native permission/privacy contract passed: ${declaredAndroidPermissions.length} reviewed app-owned Android permissions, Android backup/transfer exclusion policy, and iOS when-in-use location only.`,
 );
