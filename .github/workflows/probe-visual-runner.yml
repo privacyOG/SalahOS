@@ -10,7 +10,7 @@ jobs:
     runs-on: [self-hosted, Linux, X64]
     timeout-minutes: 15
     env:
-      PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/pw-browsers
+      PLAYWRIGHT_BROWSERS_PATH: /tmp/salahos-pw-browsers
     steps:
       - name: Setup Node.js
         uses: actions/setup-node@v4
