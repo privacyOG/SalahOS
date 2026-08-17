@@ -34,7 +34,9 @@ for (const requiredPermission of [
   'android.permission.ACCESS_FINE_LOCATION',
 ]) {
   if (!declaredAndroidPermissions.includes(requiredPermission)) {
-    throw new Error(`Required foreground Android location permission is missing: ${requiredPermission}`);
+    throw new Error(
+      `Required foreground Android location permission is missing: ${requiredPermission}`,
+    );
   }
 }
 
@@ -59,12 +61,16 @@ for (const forbiddenIosKey of [
   'NSContactsUsageDescription',
 ]) {
   if (iosInfo.includes(`<key>${forbiddenIosKey}</key>`)) {
-    throw new Error(`Unexpected iOS privacy capability requires explicit review: ${forbiddenIosKey}`);
+    throw new Error(
+      `Unexpected iOS privacy capability requires explicit review: ${forbiddenIosKey}`,
+    );
   }
 }
 
 if (/\<key\>UIBackgroundModes\<\/key\>[\s\S]*?\<string\>location\<\/string\>/.test(iosInfo)) {
-  throw new Error('iOS background location mode is not permitted for the current SalahOS location flow');
+  throw new Error(
+    'iOS background location mode is not permitted for the current SalahOS location flow',
+  );
 }
 
 console.log('Native permission policy passed.');
