@@ -34,7 +34,11 @@ Every packaged Adhan recording must have a rights record containing:
 
 ## Local user audio
 
-Future local-audio support should keep the selected file on the user's device where the target platform permits it. The application should store only the minimum locator/permission data needed to use that file. Local user selection must not silently upload, redistribute or transform the recording into a project asset.
+Implemented local-audio support keeps the selected recording in the application origin's local IndexedDB media store. SalahOS validates that the selection is a non-empty audio MIME type and limits the stored file to 25 MB. The recording is not uploaded, bundled into release assets, or converted into a redistributable project resource.
+
+The local recording can be previewed by the user and can be attempted automatically at an enabled Adhan prayer minute only while the application is open and visible. Browser/WebView autoplay policy can still block that attempt until the user has interacted with playback. Background and terminated mobile delivery continues to use the platform notification path rather than claiming unrestricted full-recording playback.
+
+Removing the selected recording deletes SalahOS's local media-store entry. The normal settings export does not embed the audio bytes, so exporting application settings does not redistribute the recording.
 
 ## Review rule
 
