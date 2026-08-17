@@ -1,0 +1,45 @@
+name: Format v1.1.0 release documentation
+
+on:
+  push:
+    branches:
+      - privacyog/v1.1.0-release-distribution
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout distribution branch
+        uses: actions/checkout@v4
+        with:
+          ref: privacyog/v1.1.0-release-distribution
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Format and validate release documentation
+        run: |
+          npx prettier --write README.md RELEASE_NOTES.md
+          npm run check
+          git diff --check
+
+      - name: Commit formatted documentation and remove helper
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'privacyOG'
+          git config user.email 'kriptiik@proton.me'
+          rm -f .github/workflows/format-v1.1-release-docs.yml
+          git add -A
+          git diff --cached --check
+          git commit -m 'Finalize v1.1.0 release documentation'
+          git push origin HEAD:privacyog/v1.1.0-release-distribution
