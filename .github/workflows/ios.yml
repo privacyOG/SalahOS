@@ -29,6 +29,9 @@ jobs:
       - name: Repository quality gate
         run: npm run check
 
+      - name: Build production web assets
+        run: npm run build
+
       - name: Synchronize iOS application
         run: npx cap sync ios
 
@@ -86,7 +89,7 @@ jobs:
           RUNTIME: ${{ steps.profiles.outputs.runtime }}
           IPHONE_TYPE: ${{ steps.profiles.outputs.iphone }}
           IPAD_TYPE: ${{ steps.profiles.outputs.ipad }}
-          BUNDLE_ID: io.github.privacyog.salahos
+          BUNDLE_ID: com.privacyog.salahos
           EVIDENCE_DIR: ${{ runner.temp }}/ios-simulator-evidence
         run: |
           set -euo pipefail
