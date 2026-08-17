@@ -1,0 +1,42 @@
+name: Canonical parity formatting
+
+on:
+  push:
+    branches:
+      - privacyog/canonical-prayer-parity
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    if: ${{ !contains(github.event.head_commit.message, '[canonical-parity-format]') }}
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies from lockfile
+        run: npm ci --ignore-scripts
+
+      - name: Apply canonical formatting
+        run: npx prettier --write src/domain/canonicalParity.test.ts
+
+      - name: Commit canonical formatting
+        run: |
+          git config user.name privacyOG
+          git config user.email kriptiik@proton.me
+          git add src/domain/canonicalParity.test.ts
+          if ! git diff --cached --quiet; then
+            git commit -m "Canonicalize prayer parity fixture [canonical-parity-format]"
+            git push origin HEAD:${GITHUB_REF_NAME}
+          fi
