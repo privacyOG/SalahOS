@@ -4,6 +4,7 @@ def releaseKeystorePath = System.getenv('SALAHOS_ANDROID_KEYSTORE_PATH')
 def releaseKeystorePassword = System.getenv('SALAHOS_ANDROID_KEYSTORE_PASSWORD')
 def releaseKeyAlias = System.getenv('SALAHOS_ANDROID_KEY_ALIAS')
 def releaseKeyPassword = System.getenv('SALAHOS_ANDROID_KEY_PASSWORD')
+def releaseSigningRequired = System.getenv('SALAHOS_ANDROID_REQUIRE_SIGNING')?.trim()?.equalsIgnoreCase('true')
 def releaseSigningValues = [
     releaseKeystorePath,
     releaseKeystorePassword,
@@ -15,6 +16,14 @@ def releaseSigningPartiallyConfigured = releaseSigningValues.any { value -> valu
 
 if (releaseSigningPartiallyConfigured) {
     throw new GradleException('Android release signing requires all SALAHOS_ANDROID_KEYSTORE_* / SALAHOS_ANDROID_KEY_* environment variables')
+}
+
+if (releaseSigningRequired && !releaseSigningConfigured) {
+    throw new GradleException('Android production release signing is required but the complete SALAHOS_ANDROID signing environment is not configured')
+}
+
+if (releaseSigningConfigured && !file(releaseKeystorePath).isFile()) {
+    throw new GradleException("Android release keystore does not exist: ${releaseKeystorePath}")
 }
 
 android {
