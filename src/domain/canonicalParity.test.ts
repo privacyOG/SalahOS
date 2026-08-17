@@ -13,14 +13,7 @@ interface CanonicalFixture {
   readonly expected: Readonly<Record<PrayerName, number>>;
 }
 
-const prayers: readonly PrayerName[] = [
-  'fajr',
-  'sunrise',
-  'dhuhr',
-  'asr',
-  'maghrib',
-  'isha',
-];
+const prayers: readonly PrayerName[] = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'];
 
 const fixtures: readonly CanonicalFixture[] = [
   {
