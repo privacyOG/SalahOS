@@ -1,0 +1,102 @@
+name: Reconcile SalahOS v1.0.0 release state
+
+on:
+  push:
+    branches:
+      - privacyog/post-v1-release-reconcile
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout reconciliation branch
+        uses: actions/checkout@v4
+        with:
+          ref: privacyog/post-v1-release-reconcile
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Reconcile release records
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          release_sha = 'b03482d06d989bfa42dd1dfd55bcc2e2994d97b8'
+          quality = '32061495596'
+          android = '32061495556'
+          visual = '32061495626'
+          ios = '32061495534'
+
+          readme = Path('README.md')
+          text = readme.read_text()
+          old = ('SalahOS v1.0.0 is prepared as the first production repository/source release. '
+                 'The exact release revision must pass Quality Gate, Android Build, Visual Regression and iOS Build/Simulator acceptance together before the tag is created. '
+                 'This release boundary intentionally does not convert unperformed physical iPhone/iPad, Android OEM, Raspberry Pi Touch Display 2 or TV/panel checks into completed evidence, and it does not imply App Store/Play Store publication or signed store binaries.')
+          new = (f'SalahOS v1.0.0 is the first production repository/source release and is tagged at exact release commit `{release_sha}`. '
+                 f'That revision passed Quality Gate `{quality}`, Android Build `{android}`, Visual Regression `{visual}` and iOS Build `{ios}` before the tag was created. '
+                 'The release boundary intentionally does not convert unperformed physical iPhone/iPad, Android OEM, Raspberry Pi Touch Display 2 or TV/panel checks into completed evidence, and it does not imply App Store/Play Store publication or signed store binaries.')
+          if old not in text:
+              raise SystemExit('README release-status anchor not found')
+          readme.write_text(text.replace(old, new, 1))
+
+          todo = Path('TODO.md')
+          text = todo.read_text()
+          marker = '- [ ] Tag first release only after applicable quality gates are satisfied'
+          if marker not in text:
+              raise SystemExit('TODO tag marker not found')
+          text = text.replace(marker, '- [x] Tag first release only after applicable quality gates are satisfied', 1)
+          anchor = ('**Release-boundary reconciliation note (2026-08-18):** PR #101 merged the permanent iOS runtime gate, the reviewed iPhone safe-area correction and the final code/documentation review. The first production repository/source release is permitted to ship once the exact versioned release revision passes Quality Gate, Android Build, Visual Regression and iOS Build together. Current `[!]` items remain genuine unperformed physical/target-environment acceptance and are deliberately non-blocking for the source release only because they are explicitly disclosed; they must not be relabelled as tested. This release does not imply App Store/Play Store publication or signed store binaries.')
+          release_note = (f'\n\n**v1.0.0 release verification note (2026-08-18):** annotated tag `v1.0.0` was created by `privacyOG` and points exactly to `{release_sha}` after that commit passed Quality Gate `{quality}`, Android Build `{android}`, Visual Regression `{visual}` and iOS Build `{ios}`. The GitHub release is published as a non-draft, non-prerelease source release. Existing `[!]` and partial markers for physical mobile hardware, Raspberry Pi, TV/panel, native notification/audio timing, network-isolated iOS cold start and store-distribution acceptance remain intentionally open and are not changed by the source release.')
+          if anchor not in text:
+              raise SystemExit('TODO release-boundary anchor not found')
+          text = text.replace(anchor, anchor + release_note, 1)
+          todo.write_text(text)
+
+          platform = Path('docs/PLATFORM_STATUS.md')
+          text = platform.read_text()
+          anchor = ('Before a release tag is created, the exact release revision must retain passing Quality Gate, Android Build, Visual Regression and iOS Build/Simulator acceptance results. Physical-only acceptance items remain explicit test prerequisites rather than being inferred from automated execution.')
+          replacement = (f'SalahOS v1.0.0 is tagged at exact commit `{release_sha}`. Before tagging, that revision passed Quality Gate `{quality}`, Android Build `{android}`, Visual Regression `{visual}` and iOS Build `{ios}`; the iOS run completed fresh iPhone/iPad Simulator install, launch, terminate/relaunch and evidence upload. Physical-only acceptance items remain explicit follow-up validation and are not inferred from automated execution.')
+          if anchor not in text:
+              raise SystemExit('PLATFORM_STATUS release anchor not found')
+          platform.write_text(text.replace(anchor, replacement, 1))
+
+          testing = Path('TESTING.md')
+          text = testing.read_text()
+          heading = '## v1.0.0 production release verification — 2026-08-18'
+          if heading not in text:
+              text = text.rstrip() + f'''\n\n---\n\n{heading}\n\n- Release tag: `v1.0.0` (annotated by `privacyOG`).\n- Exact tagged commit: `{release_sha}`.\n- Quality Gate `{quality}`: **PASS**.\n- Android Build `{android}`: **PASS**.\n- Visual Regression `{visual}`: **PASS**, including the permanent 14-scenario browser matrix and retained evidence.\n- iOS Build `{ios}`: **PASS**, including repository quality, production build/Capacitor sync, Xcode Simulator compilation, fresh iPhone/iPad install, launch, explicit terminate/relaunch and retained evidence.\n- Published GitHub release: non-draft and non-prerelease, targeting the exact tagged commit.\n- Release evidence does **not** claim physical iPhone/iPad, Android OEM, Raspberry Pi Touch Display 2, TV/panel, real notification/audio timing, network-isolated iOS cold start or store-distribution acceptance; those remain explicit follow-up items in `TODO.md` and `docs/PLATFORM_STATUS.md`.\n'''
+          testing.write_text(text)
+          PY
+
+      - name: Format reconciled documentation
+        run: npx prettier --write README.md TODO.md TESTING.md docs/PLATFORM_STATUS.md
+
+      - name: Validate reconciliation
+        run: |
+          set -euo pipefail
+          git diff --check
+          grep -F -- '- [x] Tag first release only after applicable quality gates are satisfied' TODO.md
+          grep -F 'SalahOS v1.0.0 is the first production repository/source release and is tagged' README.md
+          grep -F 'v1.0.0 production release verification' TESTING.md
+          grep -F 'SalahOS v1.0.0 is tagged at exact commit' docs/PLATFORM_STATUS.md
+
+      - name: Commit reconciliation and remove helper
+        run: |
+          set -euo pipefail
+          git config user.name 'privacyOG'
+          git config user.email 'kriptiik@proton.me'
+          rm -f .github/workflows/reconcile-v1-release.yml
+          git add -A
+          git diff --cached --check
+          git commit -m 'Record SalahOS v1.0.0 release verification'
+          git push origin HEAD:privacyog/post-v1-release-reconcile
