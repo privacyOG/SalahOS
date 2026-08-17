@@ -251,3 +251,18 @@
     animation: none;
   }
 }
+
+.smart-display-brand {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.5rem, 1vw, 1rem);
+  margin-block-end: 0.45rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.smart-display-brand img {
+  width: clamp(2.8rem, 5vw, 5.5rem);
+  height: clamp(2.8rem, 5vw, 5.5rem);
+  border-radius: 22%;
+}

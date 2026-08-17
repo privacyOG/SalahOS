@@ -67,7 +67,10 @@ export function SmartDisplay({
     >
       <header className="smart-display-header">
         <div className="smart-display-clock-block">
-          <p className="eyebrow">{translate(locale, 'appName')}</p>
+          <div className="smart-display-brand">
+            <img src="/icons/salahos-192.png" alt="" aria-hidden="true" />
+            <span>SalahOS</span>
+          </div>
           <p className="smart-display-clock" aria-label={translate(locale, 'currentTime')}>
             {currentClock}
           </p>

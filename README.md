@@ -1,5 +1,7 @@
 # SalahOS
 
+<p align="center"><img src="public/icons/salahos-512.png" width="180" alt="SalahOS logo" /></p>
+
 A privacy-focused, cross-platform Islamic prayer-time application and smart-display ecosystem for Android, iOS/iPadOS, Raspberry Pi, TV, browser/PWA, and kiosk displays.
 
 SalahOS is designed around accurate local prayer calculations, selectable calculation methods and madhhab/Asr conventions, local mosque timetables, Adhan alerts and notifications, Hijri dates, Arabic/RTL support, and useful offline operation.

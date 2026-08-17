@@ -5,22 +5,12 @@
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
-  "background_color": "#0d120e",
-  "theme_color": "#101510",
+  "background_color": "#074e5c",
+  "theme_color": "#074e5c",
   "orientation": "any",
   "icons": [
-    {
-      "src": "/icons/salahos-192.png",
-      "sizes": "192x192",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/salahos-512.png",
-      "sizes": "512x512",
-      "type": "image/png",
-      "purpose": "any"
-    },
+    { "src": "/icons/salahos-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/salahos-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
     {
       "src": "/icons/salahos-maskable-192.png",
       "sizes": "192x192",
@@ -31,18 +21,6 @@
       "src": "/icons/salahos-maskable-512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "maskable"
-    },
-    {
-      "src": "/icons/salahos.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any"
-    },
-    {
-      "src": "/icons/salahos-maskable.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
       "purpose": "maskable"
     }
   ]
