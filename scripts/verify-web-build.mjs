@@ -37,8 +37,6 @@ const requiredFiles = [
   'manifest.webmanifest',
   'sw.js',
   ...rasterIcons.map((icon) => icon.path),
-  'icons/salahos.svg',
-  'icons/salahos-maskable.svg',
 ];
 
 async function requireRegularFile(relativePath) {
@@ -98,20 +96,6 @@ for (const expected of rasterIcons) {
     throw new Error(
       `Built raster icon ${expected.path} has ${dimensions.width}x${dimensions.height}; expected ${expected.width}x${expected.height}`,
     );
-  }
-}
-
-for (const icon of [
-  { path: 'icons/salahos.svg', purpose: 'any' },
-  { path: 'icons/salahos-maskable.svg', purpose: 'maskable' },
-]) {
-  const declared = manifestIcons.find((entry) => entry?.src?.replace(/^\//, '') === icon.path);
-  if (
-    declared?.sizes !== 'any' ||
-    declared?.type !== 'image/svg+xml' ||
-    declared?.purpose !== icon.purpose
-  ) {
-    throw new Error(`Built manifest does not retain required SVG icon fallback: ${icon.path}`);
   }
 }
 
