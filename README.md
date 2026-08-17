@@ -85,7 +85,9 @@ The dependency lockfile is committed and pinned for reproducible installation. N
 
 ## Release status
 
-SalahOS v1 is not tagged yet. Release-candidate code head `b0699274ef41980d03f0321346eabe5ae758758f` passed Quality Gate `32032477140`, Android Build `32032477112`, Visual Regression `32032477113` and iOS Build `32032477111` together. The iOS run created fresh iPhone 17 Pro and iPad Pro 13-inch Simulators, installed and launched the application, explicitly terminated/relaunched it and retained screenshot/runtime evidence; the screenshots were manually inspected after a safe-area defect was found and corrected. The final review head must retain all four passing automated gates before merge/tagging. Physical notification/audio/display behavior and network-isolated iOS cold start remain explicitly outside the automated evidence and are not inferred from emulator, Simulator or browser execution.
+SalahOS v1.0.0 is prepared as the first production repository/source release. The exact release revision must pass Quality Gate, Android Build, Visual Regression and iOS Build/Simulator acceptance together before the tag is created. This release boundary intentionally does not convert unperformed physical iPhone/iPad, Android OEM, Raspberry Pi Touch Display 2 or TV/panel checks into completed evidence, and it does not imply App Store/Play Store publication or signed store binaries.
+
+The tested platform matrix and remaining physical/target-environment validation are documented in [docs/PLATFORM_STATUS.md](docs/PLATFORM_STATUS.md), [TESTING.md](TESTING.md) and [TODO.md](TODO.md).
 
 ## Author
 
