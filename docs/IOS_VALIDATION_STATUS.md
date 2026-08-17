@@ -6,7 +6,7 @@ SalahOS shares its prayer, calendar, localisation, persistence and notification-
 
 The repository has an active standard `macos-15` workflow that installs the exact lockfile, runs the complete repository quality gate, builds the production web assets, synchronises the committed Capacitor iOS project and builds the application for iOS Simulator with Xcode. The runtime acceptance stage dynamically selects the newest available iOS Simulator runtime, creates fresh iPhone and iPad Simulators, installs the newly built `App.app`, verifies the application container, launches the SalahOS bundle, captures a valid PNG screenshot, explicitly terminates the application, relaunches it and captures a second valid screenshot. The workflow uploads the runtime evidence as an artifact.
 
-This establishes automated packaging/install/launch/relaunch evidence on fresh iPhone and iPad Simulator instances once the exact workflow revision passes. It is not a signed physical-device deployment, does not imply App Store acceptance and does not convert Simulator-only behavior into a physical-device claim.
+PR #101 code-bearing head `b0699274ef41980d03f0321346eabe5ae758758f` passed iOS Build run `32032477111`. The run used iOS 26.2 with a fresh iPhone 17 Pro Simulator and fresh iPad Pro 13-inch (M5) Simulator, installed the newly built application, resolved its container, launched it, explicitly terminated/relaunched it and uploaded artifact `9289927972`. Both launch and relaunch screenshots were manually inspected. An earlier artifact exposed an iPhone status-bar/Dynamic-Island overlap; `viewport-fit=cover` plus safe-area inset padding and a source-contract regression test corrected that defect before this passing run. It is not a signed physical-device deployment, does not imply App Store acceptance and does not convert Simulator-only behavior into a physical-device claim.
 
 ## What Simulator acceptance validates
 
@@ -20,7 +20,7 @@ This establishes automated packaging/install/launch/relaunch evidence on fresh i
 - non-empty, decodable launch/relaunch screenshots with valid pixel dimensions;
 - cleanup of created Simulator devices after the run.
 
-Screenshot capture proves that a renderable application surface exists after launch/relaunch. Human aesthetic review and physical touch/safe-area behavior remain separate acceptance activities.
+The recorded launch/relaunch screenshots were manually inspected for gross layout failure and the iPhone safe-area regression. Automated Simulator responsive-layout acceptance is therefore recorded for the tested iPhone/iPad profiles. Physical touch ergonomics, device-specific safe-area variation, Dynamic Type and broader aesthetic acceptance remain separate physical-device activities.
 
 ## Items that still require a physical iPhone or iPad
 
@@ -52,4 +52,4 @@ An iOS/iPadOS tracker item may move to complete only when its implementation exi
 
 ## Evidence chronology
 
-Earlier 2026-08-16 native-foundation, notification and lifecycle runs proved Xcode Simulator compilation but did not exercise interactive runtime launch. A later private-repository period also produced hosted macOS jobs rejected before checkout because of account billing/spending state. After the repository became public, standard GitHub-hosted macOS execution became available again. The permanent workflow now uses that environment for current Simulator build/install/launch/relaunch acceptance while preserving the physical-device boundary above.
+Earlier 2026-08-16 native-foundation, notification and lifecycle runs proved Xcode Simulator compilation but did not exercise interactive runtime launch. A later private-repository period also produced hosted macOS jobs rejected before checkout because of account billing/spending state. After the repository became public, standard GitHub-hosted macOS execution became available again. PR #101 code-bearing head `b0699274ef41980d03f0321346eabe5ae758758f` then passed the permanent fresh-device Simulator acceptance in iOS Build `32032477111` with artifact `9289927972`. The permanent workflow retains that build/install/launch/relaunch boundary while physical-device, notification-delivery, audio-policy, network-isolated offline-start and distribution acceptance remain open.

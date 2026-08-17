@@ -85,7 +85,7 @@ The dependency lockfile is committed and pinned for reproducible installation. N
 
 ## Release status
 
-SalahOS v1 is not tagged yet. The release-candidate branch now contains the permanent fresh iPhone/iPad Simulator build/install/launch/relaunch gate in addition to the shared quality gate, Android build/emulator path and 14-scenario browser visual matrix. Final release readiness requires those automated gates to pass together on the exact release-candidate revision and the final review/documentation state to be reconciled. Physical notification/audio/display behavior and network-isolated iOS cold start remain explicitly outside the automated evidence and are not inferred from emulator, Simulator or browser execution.
+SalahOS v1 is not tagged yet. Release-candidate code head `b0699274ef41980d03f0321346eabe5ae758758f` passed Quality Gate `32032477140`, Android Build `32032477112`, Visual Regression `32032477113` and iOS Build `32032477111` together. The iOS run created fresh iPhone 17 Pro and iPad Pro 13-inch Simulators, installed and launched the application, explicitly terminated/relaunched it and retained screenshot/runtime evidence; the screenshots were manually inspected after a safe-area defect was found and corrected. The final documentation-only review head must retain all four passing automated gates before merge/tagging. Physical notification/audio/display behavior and network-isolated iOS cold start remain explicitly outside the automated evidence and are not inferred from emulator, Simulator or browser execution.
 
 ## Author
 

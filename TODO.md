@@ -396,17 +396,19 @@
 
 **iOS native implementation verification note (2026-08-16):** foundation run `31941296351`, local-notification run `31941790069`, lifecycle-policy run `31941980679`, and latest-main consolidation run `31942088604` passed their repository gates and Xcode iOS Simulator builds. The committed shell uses foreground location privacy metadata, native Preferences persistence, bounded today/tomorrow local prayer scheduling with owned-request reconciliation, silent/default notification audio, and an explicit foreground/background/terminated system-notification policy that does not claim full Adhan-recording auto-play or require application background execution at delivery time. Interactive iPhone/iPad layout, offline cold-start, and simulator/device acceptance remain separately tracked.
 
-- [!] Test iPhone responsive layout — requires interactive iOS Simulator/device acceptance
-- [!] Test iPad responsive layout — requires interactive iPad Simulator/device acceptance
-- [!] Test offline cold start — requires interactive iOS Simulator/device acceptance
+- [x] Test iPhone responsive layout in a fresh iOS Simulator
+- [x] Test iPad responsive layout in a fresh iPadOS Simulator
+- [!] Test offline cold start — the current Simulator gate does not isolate networking; network-isolated iOS acceptance remains required
 - [x] Prepare signing/build documentation without committing credentials
 
 **iOS build/signing documentation note (2026-08-16):** read-only Quality Gate run `31914265959` passed formatting, typed lint, strict typecheck, all tests and production build after adding `docs/IOS_BUILD_SIGNING.md`. The guide covers local development signing, capability/entitlement review, Release archives, CI secret injection, credential cleanup and distribution-path separation while explicitly prohibiting committed signing keys, certificates, account passwords and distribution secrets. Native Xcode build/archive/device execution remains open until performed on the required Apple environment.
 
-- [!] Run on simulator/device when macOS/Xcode environment is available — no interactive Xcode target environment is available in the current work session
+- [x] Run on fresh iPhone and iPad Simulators in hosted macOS/Xcode and record evidence
 - [x] Document untested iOS items honestly when unavailable on development host
 
 **iOS validation-status note (2026-08-16):** read-only Quality Gate run `31914072847` passed formatting, typed lint, strict typecheck, all tests and production build after adding `docs/IOS_VALIDATION_STATUS.md`. The document separates shared CI evidence from macOS/Xcode simulator checks and physical iPhone/iPad checks, and requires native-specific tracker items to remain open until the corresponding evidence is recorded. Signing credentials and private keys are explicitly excluded from the repository.
+
+**iOS Simulator release-candidate acceptance note (2026-08-17):** PR #101 code-bearing head `b0699274ef41980d03f0321346eabe5ae758758f` passed Quality Gate `32032477140`, Android Build `32032477112`, Visual Regression `32032477113` and permanent iOS Build `32032477111`. The iOS job used iOS 26.2 with fresh iPhone 17 Pro and iPad Pro 13-inch (M5) Simulators, installed `com.privacyog.salahos`, resolved the application container, launched, captured screenshots, terminated, relaunched and captured second screenshots. Artifact `9289927972` records both profiles. Manual artifact review exposed an earlier iPhone status-bar/Dynamic-Island overlap; `viewport-fit=cover`, four-edge safe-area inset padding and a source-contract regression test were added before the final passing run, whose launch/relaunch screenshots were visually clear of the status bar. These items complete automated Simulator responsive-layout/runtime acceptance only. Physical-device GPS, notifications, audio-session/focus, touch/Dynamic Type, signed distribution and network-isolated iOS cold start remain explicitly open.
 
 ---
 
@@ -757,13 +759,13 @@
 - [!] Validate TV/kiosk layout — viewing-distance, remote and panel acceptance require a physical display target
 - [!] Validate Android notifications on supported test environment — physical/emulator delivery timing environment is not available in the current session
 - [!] Validate iOS notifications on supported test environment — interactive iOS Simulator/device notification environment is not available in the current session
-- [ ] Perform fresh final code review
+- [x] Perform fresh final code review
 - [x] Review all `[!]` blocked items and document reasons
-- [ ] Ensure `TODO.md`, `DESIGN.md`, `RESEARCH.md` and `TESTING.md` reflect actual state
+- [x] Ensure `TODO.md`, `DESIGN.md`, `RESEARCH.md` and `TESTING.md` reflect actual state
 - [x] Create release notes
 - [ ] Tag first release only after applicable quality gates are satisfied
 
-**Release-blocker reconciliation note (2026-08-17):** all current `[!]` items above and in Stages 7, 9 and 11 identify the missing target environment explicitly. PR #91 moved the Linux Quality Gate and Android Build to the self-hosted EVO-X2 runner. Exact merged-main commit `3980a67ed13243d15438d5303ac2fdfd76db6d5f` passed Quality Gate `31986937094` and Android Build `31986937065`. The iOS workflow remains macOS/Xcode-only, and current run `31986937067` was rejected before any step executed because the account billing/spending state still blocks hosted macOS execution. This remaining macOS infrastructure limitation is not an application test failure, and the repository must not be tagged while applicable iOS/device/visual/release blockers remain.
+**Release-blocker reconciliation note (2026-08-17):** all current `[!]` items identify physical or target-environment evidence that is still genuinely unavailable. PR #101 code-bearing head `b0699274ef41980d03f0321346eabe5ae758758f` passed the complete automated release-candidate gate set: Quality Gate `32032477140`, Android Build `32032477112`, Visual Regression `32032477113` and iOS Build `32032477111`. The latest iOS artifact was manually reviewed after fixing the discovered iPhone safe-area defect. Physical iPhone/iPad behavior, real mobile notification/audio timing, network-isolated iOS cold start, physical Raspberry Pi Touch Display 2 and physical TV/kiosk acceptance remain explicit post-release validation items and are not represented as completed by emulator/Simulator/browser evidence. The exact final documentation head must still retain all four automated gates before merge and tagging.
 
 ---
 
@@ -804,11 +806,11 @@ SalahOS v1 must not be declared complete until the following are true:
 - [ ] Mobile, Raspberry Pi and TV/kiosk layouts are validated
 - [x] Offline prayer calculation is fully functional
 - [ ] Notifications/Adhan work on supported platforms within platform restrictions
-- [~] Automated quality gates pass — exact-main Linux Quality Gate and Android Build pass on the self-hosted EVO-X2; current exact-main iOS/macOS build remains infrastructure-blocked before job execution
+- [x] Automated release-candidate gates pass — code-bearing PR #101 head `b0699274ef41980d03f0321346eabe5ae758758f` passed Quality Gate `32032477140`, Android Build `32032477112`, Visual Regression `32032477113` and iOS Build `32032477111`; the exact final documentation head must retain the same gate set before merge/tagging
 - [x] Actual tested platform/build matrix is documented without overclaiming
 
 **Tested platform/build matrix verification note (2026-08-16):** read-only Quality Gate run `31934421125` passed the sensitive-file policy, dependency vulnerability audit, dependency-license policy, documentation-link verification, PWA raster-icon reproducibility, formatting, typed lint, strict typecheck, the complete 58-file / 269-test suite, production build and deploy-artifact verification on the cleaned branch. `docs/PLATFORM_STATUS.md` is now the canonical tested matrix and distinguishes automated Web/PWA validation, repository-validated Raspberry Pi/Touch Display 2 and TV/browser-kiosk paths, and planned/unvalidated Android and iOS/iPadOS native paths. `README.md` and `BUILD.md` are synchronized to those boundaries rather than describing repository-validated Pi/TV browser paths as absent. Physical Raspberry Pi/Touch Display 2 and television acceptance, target-specific remote/full-screen behaviour, native Android/iOS projects and device validation, and visual regression remain open; this matrix does not imply those checks passed.
 
 **v1 tracker reconciliation note (2026-08-17):** later Android/iOS native implementation, notification integration, offline/Pi continuity and documentation work supersede several partial markers that were left behind by historical verification notes. Those tracker markers are corrected above while the original dated notes are retained as a record of what was open at each earlier run. Current authoritative platform boundaries are in `docs/PLATFORM_STATUS.md`.
 
-- [ ] Final code review and regression pass are complete
+- [x] Final code review and regression pass are complete

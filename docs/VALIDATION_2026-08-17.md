@@ -106,3 +106,13 @@ The current local-Adhan implementation was transplanted from the earlier diverge
 The Android Adhan lifecycle policy was updated to match this implementation: a configured foreground session may use the dedicated local-audio path; background and terminated states remain notification alerts. This does not claim unrestricted full-length background audio, physical-device audio-focus behaviour, or native delivery timing acceptance.
 
 During validation, aggregate `npm run check` exposed a pre-existing `https://` literal in `smartDisplayNavigation.ts` that violated the repository remote-network policy. The parser now uses a local `file:///` base for relative URL parsing. The permanent Quality Gate was also missing the already-defined native-permission and remote-network policy commands, so both are now explicit CI steps.
+
+## Superseding hosted iOS Simulator release-candidate evidence
+
+PR #101 code-bearing head `b0699274ef41980d03f0321346eabe5ae758758f` supersedes the earlier macOS-runner blocker for current Simulator acceptance. It passed Quality Gate `32032477140`, Android Build `32032477112`, Visual Regression `32032477113` and iOS Build `32032477111` together.
+
+The permanent iOS workflow used hosted `macos-15`, completed the repository quality gate and Xcode Simulator build, then created fresh iPhone 17 Pro and iPad Pro 13-inch (M5) Simulators on iOS 26.2. It installed the freshly built application, resolved `com.privacyog.salahos` containers, launched each application process, captured valid screenshots, explicitly terminated each app, relaunched it and captured second screenshots. Artifact `9289927972` retains the evidence.
+
+Manual inspection of an earlier probe artifact exposed a genuine iPhone status-bar/Dynamic-Island overlap that was not detectable from PNG existence/dimension checks alone. The branch corrected the WebView safe-area contract with `viewport-fit=cover`, four-edge `env(safe-area-inset-*)` padding and a direct source-contract regression test. The final passing launch/relaunch screenshots were then manually inspected and show the SalahOS content below the iPhone status area; the iPad surface is also clean.
+
+This closes the hosted iPhone/iPad Simulator runtime and responsive-layout acceptance boundary. It does **not** close network-isolated iOS cold start, physical iPhone/iPad GPS/permission behavior, real local-notification delivery/timing including DST, real audio-session/focus behavior, haptics, physical touch/Dynamic Type, reboot lifecycle, signing/provisioning/TestFlight/App Store distribution, physical Raspberry Pi Touch Display 2, physical TV/kiosk or Android OEM notification timing. Those remain explicit target-environment evidence rather than inferred automated claims.
