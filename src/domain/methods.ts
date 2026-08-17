@@ -123,7 +123,7 @@ export const calculationMethods: Readonly<
     18.2,
     { kind: 'angle', angleDegrees: 18.2 },
     '18.2° Fajr/Isha with Adhan JS 4.4.4 Dubai per-event adjustments; its frozen Dubai fixture cites the UAE Awqaf published timetable as source.',
-    'cross-checked-reference',
+    'pending-authoritative-source',
     { sunrise: -3, dhuhr: 3, asr: 3, maghrib: 3 },
   ),
   kuwait: method(
