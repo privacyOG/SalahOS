@@ -28,7 +28,7 @@ jobs:
         run: npm ci --ignore-scripts
 
       - name: Sync iOS project
-        run: npm run ios:sync
+        run: npx cap sync ios
 
       - name: Build Simulator app
         env:
