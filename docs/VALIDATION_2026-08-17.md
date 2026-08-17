@@ -32,13 +32,15 @@ The native-permission policy was independently executed against representative c
 
 These checks validate the policy scripts themselves. They do not substitute for the repository's full quality gate.
 
-## Hosted workflow infrastructure blocker
+## Self-hosted Linux validation and remaining macOS blocker
 
-Hosted Quality Gate, Android Build and iOS Build checks created for PR #88 terminated before normal job execution. GitHub's check annotation states that the jobs were not started because the account's recent payments/spending limit requires attention.
+PR #91 moved the Linux Quality Gate and Android Build to the self-hosted Linux/x64 runner named `evo-x2`. The Android workflow also gained reproducible Android SDK API 36/build-tools setup after the first self-hosted run correctly exposed a missing SDK environment.
 
-No checkout, dependency install, build or test step executed in those affected runs. The condition is therefore recorded as a hosted-runner infrastructure blocker, not as an application test failure and not as passing evidence.
+Exact PR head `0eb779d995913da37a8381611152c119358bbf2e` passed Quality Gate `31986806263` and Android Build `31986806252`. After squash merge, exact main commit `3980a67ed13243d15438d5303ac2fdfd76db6d5f` passed Quality Gate `31986937094` and Android Build `31986937065` on the EVO-X2.
 
-A fresh exact-head hosted quality/build result remains required before a v1 release tag can be created.
+The exact-main Quality Gate passed the clean lockfile install, sensitive-file/native/network policies, dependency vulnerability and licence checks, documentation links, PWA icon reproducibility, formatting, lint, strict typecheck, complete tests, production build and deploy-artifact verification. The exact-main Android run passed Node/Java setup, Android SDK bootstrap, lockfile installation, Capacitor synchronization and debug APK assembly.
+
+The iOS workflow remains correctly macOS/Xcode-only. Exact-main iOS run `31986937067` was rejected before checkout or any build/test step because the account billing/spending state still blocks the hosted macOS runner. That is an isolated macOS infrastructure blocker, not an application test failure and not a limitation of the EVO-X2 Linux runner.
 
 ## Tracker and documentation reconciliation
 
@@ -67,6 +69,6 @@ The following remain applicable before SalahOS v1 can be tagged:
 - physical Raspberry Pi Touch Display 2 and television/display acceptance where required;
 - interactive iPhone/iPad acceptance;
 - a fresh final code review/regression pass;
-- a fresh exact-head complete quality/build gate after hosted runner access is restored.
+- a current exact-release iOS/macOS build when an eligible macOS runner is available; Linux Quality Gate and Android Build already have exact-main self-hosted evidence.
 
 Phase 2 roadmap items remain future scope and are not prerequisites merely by being listed after the v1 tracker.

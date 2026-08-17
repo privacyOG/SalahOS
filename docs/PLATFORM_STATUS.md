@@ -44,11 +44,13 @@ Still open: physical TV/browser full-screen behavior, remote key mapping, HDMI-C
 
 ## Current quality-gate infrastructure status
 
-The repository quality workflows are configured to use clean hosted runners and the committed lockfile. Previous recorded runs establish the implemented Web/PWA, Android and iOS build evidence described above.
+The Linux Quality Gate and Android Build now target the repository's self-hosted Linux/x64 runner. The Android workflow bootstraps Android SDK API 36 and build-tools 36.0.0 so it does not depend on a user-specific SDK installation.
 
-The exact current main revision cannot presently obtain a fresh hosted-runner result because GitHub Actions is refusing to start jobs while the account billing/spending state requires attention. This is an infrastructure blocker: affected jobs terminate before checkout or test steps begin. It must not be represented as either an application test pass or an application test failure.
+Exact main commit `3980a67ed13243d15438d5303ac2fdfd76db6d5f` passed Quality Gate run `31986937094` and Android Build run `31986937065` on the self-hosted EVO-X2. The complete Quality Gate passed lockfile installation, security policies, dependency audit/licensing, documentation links, raster-icon reproducibility, formatting, lint, strict typecheck, tests, production build and deploy-artifact verification.
 
-Once runner access is restored, the exact release revision must pass the complete repository quality gate and applicable Android/iOS build workflows before a release tag is created.
+The iOS workflow intentionally remains on macOS because Xcode/iOS Simulator builds cannot run on the Linux EVO-X2. The current exact-main macOS job was rejected before any step executed because the account billing/spending state requires attention. Historical successful Xcode Simulator evidence remains valid for the implementation it exercised, but a current exact-release iOS build still requires an available macOS runner.
+
+Before a release tag is created, the exact release revision must retain a passing Quality Gate and applicable Android build, and the iOS build requirement must either pass on an available macOS runner or remain an explicit unresolved release blocker.
 
 ## Native permission boundary
 
