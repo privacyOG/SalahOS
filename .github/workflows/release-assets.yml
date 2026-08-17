@@ -16,8 +16,60 @@ permissions:
   contents: read
 
 jobs:
+  preflight:
+    name: Exact-main release preflight
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - name: Checkout candidate
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Require exact current main commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main --no-tags
+          HEAD_SHA="$(git rev-parse HEAD)"
+          MAIN_SHA="$(git rev-parse origin/main)"
+          [[ "$HEAD_SHA" == "$MAIN_SHA" ]] || {
+            echo "Release candidate ${HEAD_SHA} is not exact current main ${MAIN_SHA}" >&2
+            exit 1
+          }
+          if [[ "${GITHUB_REF_TYPE:-}" == "tag" ]]; then
+            TAG_SHA="$(git rev-list -n 1 "$GITHUB_REF_NAME")"
+            [[ "$TAG_SHA" == "$HEAD_SHA" ]] || {
+              echo "Tag ${GITHUB_REF_NAME} does not resolve to checked-out commit ${HEAD_SHA}" >&2
+              exit 1
+            }
+          fi
+
+      - name: Resolve and verify release version
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+          PACKAGE_VERSION="$(node -p "require('./package.json').version")"
+          ANDROID_VERSION="$(sed -n 's/^[[:space:]]*versionName[[:space:]]*"\([^"]*\)".*/\1/p' android/app/build.gradle | head -1)"
+          [[ -n "$PACKAGE_VERSION" && "$ANDROID_VERSION" == "$PACKAGE_VERSION" ]] || {
+            echo "Package version ${PACKAGE_VERSION} and Android version ${ANDROID_VERSION} do not match" >&2
+            exit 1
+          }
+          if [[ "${GITHUB_REF_TYPE:-}" == "tag" ]]; then
+            [[ "$GITHUB_REF_NAME" == "v${PACKAGE_VERSION}" ]] || {
+              echo "Tag ${GITHUB_REF_NAME} does not match package version v${PACKAGE_VERSION}" >&2
+              exit 1
+            }
+          fi
+          echo "version=${PACKAGE_VERSION}" >> "$GITHUB_OUTPUT"
+
   web-kiosk:
     name: Web and Raspberry Pi bundles
+    needs: preflight
     runs-on: ubuntu-24.04
     permissions:
       contents: read
@@ -37,25 +89,11 @@ jobs:
       - name: Repository quality gate
         run: npm run check
 
-      - name: Resolve release version
-        id: version
-        shell: bash
-        run: |
-          set -euo pipefail
-          PACKAGE_VERSION="$(node -p "require('./package.json').version")"
-          if [[ "${GITHUB_REF_TYPE:-}" == "tag" ]]; then
-            [[ "$GITHUB_REF_NAME" == "v${PACKAGE_VERSION}" ]] || {
-              echo "Tag ${GITHUB_REF_NAME} does not match package version v${PACKAGE_VERSION}" >&2
-              exit 1
-            }
-          fi
-          echo "version=${PACKAGE_VERSION}" >> "$GITHUB_OUTPUT"
-
       - name: Package Web/PWA and Raspberry Pi kiosk bundles
         shell: bash
         run: |
           set -euo pipefail
-          VERSION='${{ steps.version.outputs.version }}'
+          VERSION='${{ needs.preflight.outputs.version }}'
           mkdir -p release/web release/pi/SalahOS
           cp -a dist/. release/web/
           cp -a dist release/pi/SalahOS/dist
@@ -90,6 +128,7 @@ jobs:
   android:
     name: Signed Android APK
     if: github.event_name == 'push' || inputs.build_android == true
+    needs: preflight
     runs-on: ubuntu-24.04
     permissions:
       contents: read
@@ -98,6 +137,7 @@ jobs:
       SALAHOS_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.SALAHOS_ANDROID_KEYSTORE_PASSWORD }}
       SALAHOS_ANDROID_KEY_ALIAS: ${{ secrets.SALAHOS_ANDROID_KEY_ALIAS }}
       SALAHOS_ANDROID_KEY_PASSWORD: ${{ secrets.SALAHOS_ANDROID_KEY_PASSWORD }}
+      SALAHOS_ANDROID_REQUIRE_SIGNING: 'true'
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -150,7 +190,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          VERSION="$(node -p "require('./package.json').version")"
+          VERSION='${{ needs.preflight.outputs.version }}'
           APK='android/app/build/outputs/apk/release/app-release.apk'
           test -s "$APK"
           APKSIGNER="$(find "${ANDROID_HOME:-$ANDROID_SDK_ROOT}/build-tools" -type f -name apksigner -perm -u+x | sort -V | tail -1)"
@@ -174,19 +214,17 @@ jobs:
           if-no-files-found: error
           retention-days: 14
 
-  publish:
-    name: Publish GitHub release assets
-    if: github.event_name == 'push'
+  final-package-preflight:
+    name: Final package preflight
+    if: github.event_name == 'push' || inputs.build_android == true
     needs:
+      - preflight
       - web-kiosk
       - android
     runs-on: ubuntu-24.04
     permissions:
-      contents: write
+      contents: read
     steps:
-      - name: Checkout release metadata
-        uses: actions/checkout@v4
-
       - name: Download Web/PWA and Raspberry Pi artifacts
         uses: actions/download-artifact@v4
         with:
@@ -199,16 +237,66 @@ jobs:
           name: release-android
           path: release
 
-      - name: Build checksum manifest
+      - name: Verify exact final release package
         shell: bash
         run: |
           set -euo pipefail
+          VERSION='${{ needs.preflight.outputs.version }}'
+          WEB="SalahOS-v${VERSION}-web-pwa.zip"
+          PI="SalahOS-v${VERSION}-raspberry-pi-kiosk.tar.gz"
+          ANDROID="SalahOS-v${VERSION}-android.apk"
+          for file in "$WEB" "$PI" "$ANDROID" SHA256SUMS-web-kiosk.txt SHA256SUMS-android.txt; do
+            test -s "release/$file"
+          done
+          unzip -t "release/$WEB"
+          tar -tzf "release/$PI" | grep -qx 'SalahOS/INSTALL.md'
+          tar -tzf "release/$PI" | grep -qx 'SalahOS/dist/index.html'
           cat release/SHA256SUMS-web-kiosk.txt release/SHA256SUMS-android.txt > release/SHA256SUMS.txt
           rm release/SHA256SUMS-web-kiosk.txt release/SHA256SUMS-android.txt
           (
             cd release
             sha256sum --check SHA256SUMS.txt
+            EXPECTED="$(printf '%s\n' "$WEB" "$PI" "$ANDROID" SHA256SUMS.txt | sort)"
+            ACTUAL="$(find . -maxdepth 1 -type f -printf '%f\n' | sort)"
+            [[ "$ACTUAL" == "$EXPECTED" ]] || {
+              echo 'Final release package contains missing or unexpected files' >&2
+              diff -u <(printf '%s\n' "$EXPECTED") <(printf '%s\n' "$ACTUAL") || true
+              exit 1
+            }
           )
+
+      - name: Upload final verified release package
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-final
+          path: release/*
+          if-no-files-found: error
+          retention-days: 14
+
+  publish:
+    name: Publish GitHub release assets
+    if: github.event_name == 'push'
+    needs:
+      - preflight
+      - final-package-preflight
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout release metadata
+        uses: actions/checkout@v4
+
+      - name: Download final verified release package
+        uses: actions/download-artifact@v4
+        with:
+          name: release-final
+          path: release
+
+      - name: Reverify checksums immediately before publication
+        shell: bash
+        run: |
+          set -euo pipefail
+          (cd release && sha256sum --check SHA256SUMS.txt)
 
       - name: Publish release and verified assets
         env:
