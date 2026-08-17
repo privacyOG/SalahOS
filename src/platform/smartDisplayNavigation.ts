@@ -5,7 +5,7 @@ export function smartDisplayExitPath(currentUrl: string, key: string): string | 
     return null;
   }
 
-  const url = new URL(currentUrl, 'https://salahos.local');
+  const url = new URL(currentUrl, 'file:///');
   if (url.searchParams.get('mode') !== 'smart-display') {
     return null;
   }

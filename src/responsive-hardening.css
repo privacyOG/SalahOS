@@ -9,6 +9,10 @@
 .manual-mosque-prayer > *,
 .location-search > *,
 .mosque-library-controls > *,
+.notification-grid > *,
+.notification-card > *,
+.local-adhan-audio > *,
+.local-adhan-audio-selection > *,
 .prayer-grid > *,
 .prayer-times > * {
   min-width: 0;
@@ -17,8 +21,14 @@
 .settings-panel,
 .manual-mosque-fieldset,
 .offsets-fieldset,
-.mosque-library-controls {
+.notification-fieldset,
+.mosque-library-controls,
+.notification-grid,
+.notification-card,
+.local-adhan-audio,
+.local-adhan-audio-selection {
   min-inline-size: 0;
+  max-inline-size: 100%;
 }
 
 .settings-grid input,
@@ -33,17 +43,34 @@
 .manual-mosque-prayer select,
 .settings-transfer input,
 .settings-transfer select,
-.settings-transfer textarea {
+.settings-transfer textarea,
+.notification-card input,
+.notification-card select,
+.notification-card textarea,
+.local-adhan-audio input,
+.local-adhan-audio select,
+.local-adhan-audio textarea {
   width: 100%;
   max-width: 100%;
   min-width: 0;
+}
+
+.local-adhan-audio input[type='file'] {
+  inline-size: 100%;
+  max-inline-size: 100%;
+  min-inline-size: 0;
 }
 
 .settings-grid label,
 .offset-grid label,
 .settings-transfer label,
 .manual-mosque-header label,
-.manual-mosque-prayer label {
+.manual-mosque-prayer label,
+.notification-card label,
+.local-adhan-audio label,
+.notification-card span,
+.local-adhan-audio p,
+.local-adhan-audio strong {
   min-width: 0;
   overflow-wrap: anywhere;
 }
@@ -52,7 +79,13 @@
   .settings-grid,
   .offset-grid,
   .manual-mosque-header,
-  .manual-mosque-prayer-grid {
+  .manual-mosque-prayer-grid,
+  .notification-grid {
     grid-template-columns: minmax(0, 1fr);
+  }
+
+  .notification-fieldset {
+    margin-inline: 0;
+    padding-inline: min(1rem, 3vw);
   }
 }

@@ -98,3 +98,11 @@ The following remain applicable before SalahOS v1 can be tagged:
 - a current exact-release iOS/macOS build when an eligible macOS runner is available; Linux Quality Gate and Android Build already have exact-main self-hosted evidence.
 
 Phase 2 roadmap items remain future scope and are not prerequisites merely by being listed after the v1 tracker.
+
+## Local Adhan audio and local-first CI coverage
+
+The current local-Adhan implementation was transplanted from the earlier divergent proof branch onto current mainline rather than merging stale history. The production settings surface stores one user-selected audio recording in the SalahOS IndexedDB media store, validates a non-empty `audio/*` MIME type with a 25 MB ceiling, supports local Preview/Remove, and keeps the bytes outside normal settings export and release assets. Foreground playback is keyed by civil date and prayer and is attempted only while the application is visible for an Adhan-enabled prayer. Platform autoplay policy can reject that attempt; the UI reports the failure instead of claiming playback succeeded.
+
+The Android Adhan lifecycle policy was updated to match this implementation: a configured foreground session may use the dedicated local-audio path; background and terminated states remain notification alerts. This does not claim unrestricted full-length background audio, physical-device audio-focus behaviour, or native delivery timing acceptance.
+
+During validation, aggregate `npm run check` exposed a pre-existing `https://` literal in `smartDisplayNavigation.ts` that violated the repository remote-network policy. The parser now uses a local `file:///` base for relative URL parsing. The permanent Quality Gate was also missing the already-defined native-permission and remote-network policy commands, so both are now explicit CI steps.

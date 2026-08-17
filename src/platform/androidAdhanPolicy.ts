@@ -3,13 +3,19 @@ export type AndroidAdhanLifecycle = 'foreground' | 'background' | 'terminated';
 export type AndroidAdhanPlaybackReason =
   | 'local-audio-not-configured'
   | 'background-playback-not-guaranteed'
-  | 'foreground-auto-play-disabled';
+  | 'foreground-local-audio-available';
 
-export interface AndroidAdhanPlaybackPolicy {
-  readonly delivery: 'notification-alert';
-  readonly fullAudioAutoPlay: false;
-  readonly reason: AndroidAdhanPlaybackReason;
-}
+export type AndroidAdhanPlaybackPolicy =
+  | {
+      readonly delivery: 'notification-alert';
+      readonly fullAudioAutoPlay: false;
+      readonly reason: 'local-audio-not-configured' | 'background-playback-not-guaranteed';
+    }
+  | {
+      readonly delivery: 'foreground-local-audio';
+      readonly fullAudioAutoPlay: true;
+      readonly reason: 'foreground-local-audio-available';
+    };
 
 export function androidAdhanPlaybackPolicy(
   lifecycle: AndroidAdhanLifecycle,
@@ -32,8 +38,8 @@ export function androidAdhanPlaybackPolicy(
   }
 
   return {
-    delivery: 'notification-alert',
-    fullAudioAutoPlay: false,
-    reason: 'foreground-auto-play-disabled',
+    delivery: 'foreground-local-audio',
+    fullAudioAutoPlay: true,
+    reason: 'foreground-local-audio-available',
   };
 }
