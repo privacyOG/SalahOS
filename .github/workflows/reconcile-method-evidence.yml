@@ -1,0 +1,121 @@
+name: Method evidence reconciliation
+
+on:
+  push:
+    branches:
+      - privacyog/method-evidence-reconciliation
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile:
+    if: ${{ !contains(github.event.head_commit.message, '[method-reconcile]') }}
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.ref_name }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies from lockfile
+        run: npm ci --ignore-scripts
+
+      - name: Reconcile method evidence
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          def replace_once(path, old, new):
+              p = Path(path)
+              text = p.read_text()
+              if old not in text:
+                  raise SystemExit(f'Missing replacement target in {path}: {old[:120]}')
+              p.write_text(text.replace(old, new, 1))
+
+          replace_once(
+              'TODO.md',
+              '- [~] Implement and verify University of Islamic Sciences, Karachi method',
+              '- [x] Implement and verify University of Islamic Sciences, Karachi method',
+          )
+          replace_once(
+              'TODO.md',
+              '**Method-registry reconciliation note (2026-08-17):** built-in numerical parameters remain centralized and cross-checked against pinned/reference sources. Exact canonical Adhan JS 4.4.4 output fixtures now verify MWL, Egyptian and ISNA within the fixed two-minute model/rounding tolerance. The Turkey interoperability profile also now models the pinned canonical per-event offsets (Sunrise -7, Dhuhr +5, Asr +4, Maghrib +7) and passes its Istanbul fixture, while remaining `pending-authoritative-source` because canonical-library parity is not official Diyanet institutional timetable certification. Dubai remains pending authoritative/offset validation; Karachi remains implemented and parameter-cross-checked but lacks a frozen direct canonical output fixture in this suite.',
+              '**Method-registry reconciliation note (2026-08-17):** built-in numerical parameters remain centralized and cross-checked against pinned/reference sources. Exact canonical Adhan JS 4.4.4 output fixtures now verify MWL, Egyptian, ISNA, MUIS, Dubai and Karachi within the fixed two-minute model/rounding tolerance. The Turkey interoperability profile models the pinned canonical per-event offsets (Sunrise -7, Dhuhr +5, Asr +4, Maghrib +7) and passes its Istanbul fixture. Dubai now models its pinned canonical offsets (Sunrise -3, Dhuhr +3, Asr +3, Maghrib +3) and passes the frozen Dubai fixture whose upstream source cites the UAE Awqaf published timetable. Karachi now has a fixed six-event output captured independently from exact `adhan@4.4.4` and frozen into the suite. Diyanet remains `pending-authoritative-source` because canonical-library parity is not official institutional timetable certification; Dubai output parity likewise does not establish that the authority internally uses the same simplified parameter model.',
+          )
+          replace_once(
+              'TODO.md',
+              '**Stage 2 reconciliation note (2026-08-17):** Adhan JS `4.4.4` remains pinned at commit `a6f1a5c4a00105103f310ef18200b95f7184d2e7`; PrayTimes and AlAdhan remain independent cross-checks in `docs/PRAYER_METHOD_REFERENCES.md`. PR #93 added frozen direct canonical output fixtures for ISNA/North America, Muslim World League, Egyptian, Turkey interoperability and MUIS/Singapore, comparing all six displayed daily events at an unchanged two-minute tolerance. Exact PR head `c41a845dc38d6c604045abdf2588be16081b95b5` passed Quality Gate `31992557611` and Android Build `31992557906` on EVO-X2. Earlier external timetable parity fixtures remain valid for Makkah/Umm al-Qura, Singapore/MUIS, Doha/Qatar and Kuwait City/Kuwait. Direct canonical implementation comparison is therefore complete for the defined frozen v1 reference set; institutional certification remains separately tracked where applicable.',
+              '**Stage 2 reconciliation note (2026-08-17):** Adhan JS `4.4.4` remains pinned at commit `a6f1a5c4a00105103f310ef18200b95f7184d2e7`; PrayTimes and AlAdhan remain independent cross-checks in `docs/PRAYER_METHOD_REFERENCES.md`. PR #93 added frozen direct canonical output fixtures for ISNA/North America, Muslim World League, Egyptian, Turkey interoperability and MUIS/Singapore. PR #95 added Dubai output parity using the pinned fixture whose upstream source cites UAE Awqaf, and PR #96 added a Karachi six-event fixture generated independently from exact `adhan@4.4.4`. All direct fixtures compare all six displayed daily events at the unchanged two-minute tolerance. Exact PR heads passed EVO-X2 Quality Gate and Android Build: #93 `c41a845dc38d6c604045abdf2588be16081b95b5` (`31992557611`, `31992557906`), #95 `d1468ea5448659cad1d68075db94b8eb5283741c` (`31993099243`, `31993099235`), and #96 `cc1d6e785f4607e718c5eb73ceee61e1f917b0a7` (`31993328375`, `31993328633`). Earlier external timetable parity fixtures remain valid for Makkah/Umm al-Qura, Singapore/MUIS, Doha/Qatar and Kuwait City/Kuwait. Direct canonical implementation comparison is complete for the defined frozen v1 reference set; institutional certification remains separately tracked where applicable.',
+          )
+
+          replace_once(
+              'docs/PRAYER_METHOD_REFERENCES.md',
+              '| Dubai                                   | 18.2° | 18.2°                              | Batoul Apps-derived approximation; AlAdhan explicitly labels Dubai experimental                                             |',
+              '| Dubai                                   | 18.2° | 18.2°                              | Adhan JS 4.4.4 parameters plus Sunrise -3 / Dhuhr +3 / Asr +3 / Maghrib +3; frozen Dubai fixture cites UAE Awqaf output      |',
+          )
+          replace_once(
+              'docs/PRAYER_METHOD_REFERENCES.md',
+              '- Adhan JS documents Dubai offsets in addition to the 18.2° angles. SalahOS currently models the angles but not all Dubai-specific per-prayer offsets, so Dubai remains pending.',
+              '- Adhan JS documents Dubai offsets in addition to the 18.2° angles. SalahOS now models Sunrise -3, Dhuhr +3, Asr +3 and Maghrib +3 minutes and passes the pinned Dubai/Gulf fixture at the unchanged two-minute tolerance. That fixture cites UAE Awqaf published timetable output, which is valid output-parity evidence but does not prove that the authority internally uses the same 18.2°/18.2° plus-offset parameterization; institutional parameter equivalence therefore remains pending.',
+          )
+          p = Path('docs/PRAYER_METHOD_REFERENCES.md')
+          text = p.read_text()
+          anchor = '\n## Verification policy\n'
+          addition = '''\n## Frozen direct-output evidence added on 2026-08-17\n\nThe canonical parity suite now includes direct six-event fixtures for ISNA/North America, Muslim World League, Egyptian, Turkey interoperability, MUIS/Singapore, Dubai and Karachi. Dubai uses the pinned `Shared/Times/Dubai-Gulf.json` fixture, whose upstream source cites UAE Awqaf published prayer times. Karachi did not have a six-event fixture in the pinned repository, so exact `adhan@4.4.4` was installed independently in a temporary EVO-X2 runner directory and evaluated for Karachi coordinates `24.8607, 67.0011` on 2020-01-01 using Shafi/Standard Asr. The captured Asia/Karachi output was Fajr 05:55, Sunrise 07:17, Dhuhr 12:36, Asr 15:34, Maghrib 17:54 and Isha 19:15; those values are now frozen in SalahOS.\n\nAll direct fixtures retain the same two-minute algorithm/rounding tolerance. A fixture passing against a canonical library is evidence of implementation parity, not institutional certification.\n'''
+          if addition.strip() not in text:
+              if anchor not in text:
+                  raise SystemExit('PRAYER_METHOD_REFERENCES verification anchor missing')
+              p.write_text(text.replace(anchor, addition + anchor, 1))
+
+          replace_once(
+              'RESEARCH.md',
+              'Current reference status is recorded in `docs/PRAYER_METHOD_REFERENCES.md`. MWL, Umm al-Qura, Egyptian, Karachi, ISNA, MUIS, Kuwait and Qatar parameters have cross-checked reference evidence. Diyanet/Turkey and Dubai still require stronger authoritative/primary parameter evidence or explicit modelling of provider-specific offsets before their registry profiles should be described as institutionally verified.\n\nUmm al-Qura/Makkah, MUIS/Singapore, Qatar/Doha and Kuwait City also have frozen published/reference timetable parity fixtures. Direct canonical-algorithm parity remains a separate open tracker item and must not be inferred from parameter or timetable agreement.',
+              'Current reference status is recorded in `docs/PRAYER_METHOD_REFERENCES.md`. MWL, Umm al-Qura, Egyptian, Karachi, ISNA, MUIS, Kuwait and Qatar parameters have cross-checked reference evidence. Diyanet/Turkey remains pending institutional equivalence because the official production system includes policy beyond a simple fixed-angle profile. Dubai now models the pinned Adhan JS 4.4.4 provider offsets and has frozen output parity against a fixture whose upstream source cites UAE Awqaf, while still avoiding the stronger claim that the authority internally uses the same simplified parameterization.\n\nUmm al-Qura/Makkah, MUIS/Singapore, Qatar/Doha, Kuwait City and Dubai have frozen published/reference timetable parity fixtures. The direct canonical suite additionally covers ISNA/North America, Muslim World League, Egyptian, Turkey interoperability and Karachi. Karachi expected output was generated independently from exact `adhan@4.4.4` on EVO-X2 before being frozen into SalahOS. Direct canonical comparison is complete for the defined v1 reference set and remains conceptually separate from institutional certification.',
+          )
+          replace_once(
+              'RESEARCH.md',
+              'Current open research/validation work is intentionally visible in `TODO.md`, especially Diyanet/Dubai authoritative parameter evidence and direct canonical-algorithm parity.',
+              'Current open research/validation work is intentionally visible in `TODO.md`, especially official Diyanet institutional parity and the distinction between Dubai output parity and authoritative internal-parameter equivalence. The defined v1 direct canonical-algorithm comparison set is complete.',
+          )
+
+          replace_once(
+              'docs/VALIDATION_2026-08-17.md',
+              'This closes the v1 tracker item for direct canonical implementation comparison and upgrades MWL, Egyptian and ISNA verification. It does not claim official Diyanet institutional timetable certification, and it does not close the remaining Dubai or Karachi evidence gaps.',
+              'This closes the v1 tracker item for direct canonical implementation comparison and upgrades MWL, Egyptian and ISNA verification. It does not claim official Diyanet institutional timetable certification. Subsequent PRs #95 and #96 extend this direct-output evidence to Dubai and Karachi.',
+          )
+          p = Path('docs/VALIDATION_2026-08-17.md')
+          text = p.read_text()
+          anchor = '\n## Remaining release blockers\n'
+          addition = '''\n## Dubai and Karachi method-evidence completion\n\nPR #95 modelled the pinned Adhan JS 4.4.4 Dubai per-event adjustments (Sunrise -3, Dhuhr +3, Asr +3 and Maghrib +3 minutes) and added the frozen Dubai/Gulf fixture for 2016-01-01. The pinned fixture cites UAE Awqaf published timetable output. Exact PR head `d1468ea5448659cad1d68075db94b8eb5283741c` passed Quality Gate `31993099243` and Android Build `31993099235` on EVO-X2. The fixture passed at the unchanged two-minute tolerance. This is direct/output parity evidence and is not represented as proof that UAE Awqaf internally uses the same simplified parameters.\n\nPR #96 closed the Karachi direct-fixture gap without deriving expected values from SalahOS. A temporary runner workflow installed exact `adhan@4.4.4` in an isolated directory and generated the six prayer events for Karachi coordinates `24.8607, 67.0011` on 2020-01-01 using Standard/Shafi Asr: Fajr 05:55, Sunrise 07:17, Dhuhr 12:36, Asr 15:34, Maghrib 17:54 and Isha 19:15 in Asia/Karachi. The temporary capture workflow was removed before review, and the values were frozen in the permanent parity suite. Exact PR head `cc1d6e785f4607e718c5eb73ceee61e1f917b0a7` passed Quality Gate `31993328375` and Android Build `31993328633`.\n\nThese additions close the Karachi method verification item and remove the previously unmodelled Dubai-offset gap. The broader regional-method/source item remains partial because official Diyanet institutional parity is still unresolved and Dubai institutional parameter equivalence is intentionally not inferred from output parity.\n'''
+          if addition.strip() not in text:
+              if anchor not in text:
+                  raise SystemExit('VALIDATION release blocker anchor missing')
+              text = text.replace(anchor, addition + anchor, 1)
+          text = text.replace(
+              '- remaining calculation-method authoritative/reference work where institutional or frozen direct-fixture evidence is still incomplete (notably Diyanet institutional parity, Dubai and Karachi);',
+              '- remaining calculation-method institutional/source-boundary work, principally official Diyanet parity and the intentionally conservative Dubai parameter-equivalence boundary;',
+              1,
+          )
+          p.write_text(text)
+          PY
+
+      - name: Canonical formatting
+        run: npx prettier --write TODO.md RESEARCH.md docs/PRAYER_METHOD_REFERENCES.md docs/VALIDATION_2026-08-17.md
+
+      - name: Commit reconciliation
+        run: |
+          git config user.name privacyOG
+          git config user.email kriptiik@proton.me
+          git add TODO.md RESEARCH.md docs/PRAYER_METHOD_REFERENCES.md docs/VALIDATION_2026-08-17.md
+          if ! git diff --cached --quiet; then
+            git commit -m "Reconcile method validation evidence [method-reconcile]"
+            git push origin HEAD:${GITHUB_REF_NAME}
+          fi
