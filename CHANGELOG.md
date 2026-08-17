@@ -1,5 +1,14 @@
 # Changelog
 
+## 1.1.0 — Downloadable release assets and canonical branding
+
+- Adopt the project owner's canonical SalahOS logo and icon across Web/PWA, Android, iOS and smart-display surfaces.
+- Add reproducible source/hash/dimension validation for the canonical platform icon set.
+- Add GitHub release packaging for Web/PWA and Raspberry Pi/kiosk bundles.
+- Add a signed Android release APK pipeline that refuses to publish unsigned or debug APKs.
+- Add SHA-256 checksum publication for downloadable release assets.
+- Document the current distribution boundary: iOS IPA awaits Apple distribution signing and macOS DMG awaits a real macOS application target.
+
 All notable SalahOS changes are recorded here.
 
 ## Unreleased

@@ -1,90 +1,54 @@
-# SalahOS v1.0.0 release notes
+# SalahOS v1.1.0 release notes
 
-**Release date:** 2026-08-18
+SalahOS v1.1.0 adds the canonical SalahOS visual identity and introduces verified downloadable release packages so users do not need to build supported distributions from source.
 
-SalahOS v1.0.0 is the first production repository/source release of the local-first Islamic prayer-time application and smart-display ecosystem. One shared prayer/time model is used across Web/PWA, Android, iOS/iPadOS, Raspberry Pi and browser-based TV/kiosk presentation paths.
+## Canonical SalahOS branding
 
-## Prayer and calendar functionality
+- Uses the project owner's supplied SalahOS mosque/clock/crescent artwork as the canonical source.
+- Applies the canonical identity to Web/PWA, Android launcher/adaptive/round icons, iOS AppIcon, the application header and smart-display presentation.
+- Retains the canonical source in the repository and verifies generated platform assets by source hash, output hash and image dimensions.
+- Removes the prior generic placeholder SVG icon fallbacks.
+- Updates the PWA application-shell cache so installed Web/PWA clients receive the new branding cleanly.
 
-- Five obligatory prayer calculations plus Sunrise.
-- Standard/Shafi'i-family and Hanafi Asr conventions.
-- Multiple recognised calculation-method profiles plus explicit manual prayer adjustments.
-- Middle-of-the-Night, One-Seventh and Angle-Based high-latitude strategies, with unavailable polar astronomical events left unavailable rather than silently fabricated.
-- Gregorian and Hijri/Umm al-Qura presentation with optional manual Hijri correction.
-- Current/next prayer state, live countdown and tomorrow-Fajr rollover.
-- Optional Imsak/Ishraq, Islamic midnight and last-third calculations in the shared domain model.
+## Downloadable release assets
 
-## Location and timezone
+A successful v1.1.0 release workflow publishes:
 
-- User-initiated one-shot current-location acquisition on browser and native shells.
-- Manual latitude/longitude entry and offline local city/location search.
-- Saved favourite locations.
-- Offline coordinate-to-IANA timezone resolution and persisted timezone reuse.
-- IANA daylight-saving and local-date handling rather than longitude-derived fixed offsets.
+- `SalahOS-v1.1.0-android.apk` — cryptographically signed Android release APK;
+- `SalahOS-v1.1.0-web-pwa.zip` — production Web/PWA package;
+- `SalahOS-v1.1.0-raspberry-pi-kiosk.tar.gz` — production Web/PWA files plus Raspberry Pi/Linux Chromium kiosk launch and autostart helpers;
+- `SHA256SUMS.txt` — integrity hashes for the downloadable packages.
 
-## Local mosque support
+The Android APK is a mandatory release job for a tagged v1.1.0 release. The workflow refuses to publish an unsigned or debug APK and verifies the signed result using Android `apksigner` before release publication.
 
-- Calculated, calculated-with-adjustments and local-mosque source modes.
-- Manual timetable entry and validated CSV/JSON import/export.
-- Multiple locally saved mosque timetables.
-- Fixed or prayer-start-plus-offset Iqamah rules.
-- One or multiple mosque-specific Jumu'ah sessions independent of astronomical Dhuhr.
-- Fully local/offline timetable operation after configuration.
+The persistent Android signing identity is supplied only through GitHub Actions secrets and is never committed to the repository.
 
-## Notifications and Adhan
+## Distribution boundaries
 
-- Per-prayer enable/disable, optional reminder, prayer-time alert and Adhan-alert controls.
-- Default or silent alert selection and vibration preference where the platform can represent it.
-- Deterministic notification ownership, cancellation, replacement, date-rollover reconciliation and DST wall-clock resolution.
-- Android exact-alarm fallback policy and reboot-restoration contract.
-- Native Android/iOS scheduling adapters with explicit lifecycle/platform limitations.
-- Private user-selected local Adhan recording stored locally, with foreground playback attempts only; background/terminated delivery remains notification-based.
-- No bundled copyrighted Adhan recording.
+- The iOS/iPadOS native application remains build- and Simulator-validated, but a consumer `.ipa` is not published until Apple distribution signing/provisioning is configured and the distribution archive can be validated.
+- SalahOS does not yet contain a native macOS desktop application target, so a `.dmg` is not published. A Web/PWA or iOS Simulator artifact will not be relabeled as a macOS installer.
+- Physical Raspberry Pi, TV/panel, iPhone/iPad and broad Android OEM acceptance remains separate from CI packaging evidence and is not marked as completed by this release.
 
-## Display, localisation and accessibility
+## Existing prayer, location and display functionality
 
-- English and Arabic localisation with RTL document direction and bidirectional isolation.
-- Light, dark and follow-system themes.
-- High-contrast, scalable, keyboard-accessible and touch-oriented shared UI.
-- Dedicated smart-display mode with large clock/countdown, prayer timetable, Iqamah, Jumu'ah and current/next highlighting.
-- Raspberry Pi Touch Display 2 fixtures and Chromium kiosk launcher/autostart tooling.
-- Burn-in-conscious smart-display position shifting and practical keyboard/remote exit handling.
-- Permanent 14-scenario browser visual regression across phone, tablet, Raspberry Pi fixtures, 1080p/4K display, English/Arabic and scalable-text cases.
+v1.1.0 retains the v1 prayer/time engine and application capabilities, including:
 
-## Offline, privacy and security
+- five obligatory prayer calculations plus Sunrise;
+- Standard/Shafi'i-family and Hanafi Asr conventions;
+- recognised calculation-method profiles, high-latitude handling and manual adjustments;
+- Gregorian and Hijri/Umm al-Qura presentation;
+- local/offline city search, saved locations and IANA timezone resolution;
+- local mosque timetable import/manual entry, Iqamah and multiple Jumu'ah sessions;
+- native Android/iOS prayer notification adapters with documented lifecycle constraints;
+- private user-selected local Adhan audio for foreground playback attempts;
+- English/Arabic RTL, light/dark/system themes and accessibility support;
+- Web/PWA offline shell and Raspberry Pi/TV/kiosk smart-display operation.
 
-- Local prayer calculation with no mandatory remote service or account.
-- Versioned local settings persistence and native Preferences-backed storage on mobile shells.
-- PWA application-shell cache and offline reload support.
-- Persisted mosque timetables and saved locations.
-- Runtime recovery for date rollover, clock correction, suspend/resume and network loss.
-- Local-first privacy/threat model, least-privilege native permissions and no background/always-location capability.
-- Repository gates for sensitive files, native permissions, unreviewed remote application networking, dependency vulnerabilities and dependency licences.
-- Web Content Security Policy baseline and strict validation of imported settings/timetable data.
-- No signing credentials or distribution secrets committed to the repository.
+## Release gates
 
-## Automated release evidence
+The exact v1.1.0 release revision must pass the permanent Quality, Android, Visual Regression and iOS workflows before tagging. In addition, the release-asset workflow must successfully produce the Web/PWA and Raspberry Pi packages and a persistently signed, `apksigner`-verified Android APK before the GitHub release is published.
 
-The production release revision must pass all four permanent gates before tagging:
-
-- Quality Gate — security/policy checks, dependency audit/licences, docs, formatting, lint, strict typecheck, complete tests, production build and deploy-artifact verification.
-- Android Build — clean dependency install, Android SDK setup, Capacitor sync and Gradle debug assembly.
-- Visual Regression — the permanent 14-scenario production-browser matrix with retained evidence.
-- iOS Build — macOS repository quality gate, production build/Capacitor sync, Xcode Simulator compilation, then fresh iPhone and iPad Simulator install/launch/terminate/relaunch with retained screenshots/evidence.
-
-## Explicitly unperformed physical/target acceptance
-
-The following are not claimed as tested by v1.0.0 and remain documented follow-up validation:
-
-- physical iPhone/iPad GPS, notification timing while locked/terminated, haptics, audio-session/focus/interruption, reboot lifecycle, signed archive, TestFlight and App Store acceptance;
-- network-isolated iOS Simulator/device cold-start acceptance;
-- physical Android OEM notification timing/Doze behaviour, real-device GPS lifecycle, vibration/channel behaviour, audio focus/interruption and production distribution signing;
-- physical Raspberry Pi Touch Display 2 boot/autostart, touch, rotation, power-loss and long-duration operation;
-- physical TV/panel viewing-distance readability, real remote/HDMI-CEC behaviour and long-duration panel testing;
-- human aesthetic sign-off beyond the automated English/Arabic/RTL geometry and visual-regression checks;
-- institutional certification of calculation profiles where the documentation explicitly distinguishes interoperability/reference parity from an authority's own unpublished internal model.
-
-These open items are limitations of validation evidence, not assertions that the corresponding hardware behaviour has passed. See TODO.md, TESTING.md and docs/PLATFORM_STATUS.md for the exact boundary.
+See `docs/RELEASE_ASSETS.md`, `TESTING.md`, `TODO.md` and `docs/PLATFORM_STATUS.md` for the exact distribution and validation boundaries.
 
 ## Author
 

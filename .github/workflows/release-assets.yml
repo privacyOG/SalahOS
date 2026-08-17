@@ -1,0 +1,209 @@
+name: Release Assets
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      build_android:
+        description: Build the signed Android release APK
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  web-kiosk:
+    name: Web and Raspberry Pi bundles
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies from lockfile
+        run: npm ci --ignore-scripts
+
+      - name: Repository quality gate
+        run: npm run check
+
+      - name: Resolve release version
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+          PACKAGE_VERSION="$(node -p "require('./package.json').version")"
+          if [[ "${GITHUB_REF_TYPE:-}" == "tag" ]]; then
+            [[ "$GITHUB_REF_NAME" == "v${PACKAGE_VERSION}" ]] || {
+              echo "Tag ${GITHUB_REF_NAME} does not match package version v${PACKAGE_VERSION}" >&2
+              exit 1
+            }
+          fi
+          echo "version=${PACKAGE_VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Package Web/PWA and Raspberry Pi kiosk bundles
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION='${{ steps.version.outputs.version }}'
+          mkdir -p release/web release/pi/SalahOS
+          cp -a dist/. release/web/
+          cp -a dist release/pi/SalahOS/dist
+          mkdir -p release/pi/SalahOS/scripts/kiosk
+          cp scripts/kiosk/run-salahos-kiosk.sh scripts/kiosk/install-labwc-autostart.sh release/pi/SalahOS/scripts/kiosk/
+          cp docs/RELEASE_ASSETS.md release/pi/SalahOS/INSTALL.md
+          chmod +x release/pi/SalahOS/scripts/kiosk/*.sh
+          (cd release/web && zip -qr "../SalahOS-v${VERSION}-web-pwa.zip" .)
+          tar -C release/pi -czf "release/SalahOS-v${VERSION}-raspberry-pi-kiosk.tar.gz" SalahOS
+          sha256sum \
+            "release/SalahOS-v${VERSION}-web-pwa.zip" \
+            "release/SalahOS-v${VERSION}-raspberry-pi-kiosk.tar.gz" \
+            > release/SHA256SUMS-web-kiosk.txt
+          test -s "release/SalahOS-v${VERSION}-web-pwa.zip"
+          test -s "release/SalahOS-v${VERSION}-raspberry-pi-kiosk.tar.gz"
+
+      - name: Upload Web/PWA and Raspberry Pi artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-web-kiosk
+          path: |
+            release/SalahOS-v*-web-pwa.zip
+            release/SalahOS-v*-raspberry-pi-kiosk.tar.gz
+            release/SHA256SUMS-web-kiosk.txt
+          if-no-files-found: error
+          retention-days: 14
+
+  android:
+    name: Signed Android APK
+    if: github.event_name == 'push' || inputs.build_android == true
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    env:
+      SALAHOS_ANDROID_KEYSTORE_BASE64: ${{ secrets.SALAHOS_ANDROID_KEYSTORE_BASE64 }}
+      SALAHOS_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.SALAHOS_ANDROID_KEYSTORE_PASSWORD }}
+      SALAHOS_ANDROID_KEY_ALIAS: ${{ secrets.SALAHOS_ANDROID_KEY_ALIAS }}
+      SALAHOS_ANDROID_KEY_PASSWORD: ${{ secrets.SALAHOS_ANDROID_KEY_PASSWORD }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Require persistent Android release signing
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in \
+            SALAHOS_ANDROID_KEYSTORE_BASE64 \
+            SALAHOS_ANDROID_KEYSTORE_PASSWORD \
+            SALAHOS_ANDROID_KEY_ALIAS \
+            SALAHOS_ANDROID_KEY_PASSWORD; do
+            [[ -n "${!name:-}" ]] || {
+              echo "Required Android release signing secret is not configured: ${name}" >&2
+              exit 1
+            }
+          done
+          KEYSTORE="$RUNNER_TEMP/salahos-release.jks"
+          printf '%s' "$SALAHOS_ANDROID_KEYSTORE_BASE64" | base64 --decode > "$KEYSTORE"
+          chmod 600 "$KEYSTORE"
+          test -s "$KEYSTORE"
+          echo "SALAHOS_ANDROID_KEYSTORE_PATH=$KEYSTORE" >> "$GITHUB_ENV"
+
+      - name: Install dependencies from lockfile
+        run: npm ci --ignore-scripts
+
+      - name: Build signed Android release APK
+        run: npm run android:release-check
+
+      - name: Verify and package signed APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="$(node -p "require('./package.json').version")"
+          APK='android/app/build/outputs/apk/release/app-release.apk'
+          test -s "$APK"
+          APKSIGNER="$(find "${ANDROID_HOME:-$ANDROID_SDK_ROOT}/build-tools" -type f -name apksigner -perm -u+x | sort -V | tail -1)"
+          test -x "$APKSIGNER"
+          "$APKSIGNER" verify --verbose --print-certs "$APK"
+          mkdir -p release
+          cp "$APK" "release/SalahOS-v${VERSION}-android.apk"
+          sha256sum "release/SalahOS-v${VERSION}-android.apk" > release/SHA256SUMS-android.txt
+
+      - name: Upload signed Android artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-android
+          path: |
+            release/SalahOS-v*-android.apk
+            release/SHA256SUMS-android.txt
+          if-no-files-found: error
+          retention-days: 14
+
+  publish:
+    name: Publish GitHub release assets
+    if: github.event_name == 'push'
+    needs:
+      - web-kiosk
+      - android
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout release metadata
+        uses: actions/checkout@v4
+
+      - name: Download Web/PWA and Raspberry Pi artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-web-kiosk
+          path: release
+
+      - name: Download signed Android artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: release-android
+          path: release
+
+      - name: Build checksum manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat release/SHA256SUMS-web-kiosk.txt release/SHA256SUMS-android.txt > release/SHA256SUMS.txt
+          rm release/SHA256SUMS-web-kiosk.txt release/SHA256SUMS-android.txt
+
+      - name: Publish release and verified assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          [[ "$GITHUB_REF_NAME" == v* ]]
+          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
+            gh release upload "$GITHUB_REF_NAME" release/* --clobber
+          else
+            gh release create "$GITHUB_REF_NAME" \
+              --title "SalahOS ${GITHUB_REF_NAME}" \
+              --notes-file RELEASE_NOTES.md \
+              release/*
+          fi
