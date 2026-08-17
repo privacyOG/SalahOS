@@ -14,10 +14,18 @@ describe('release asset workflow', () => {
   });
 
   it('writes portable checksum manifests and verifies them before publication', () => {
-    expect(workflow).toMatch(/cd release[\s\S]*sha256sum[\s\S]*SalahOS-v\$\{VERSION\}-web-pwa\.zip/);
-    expect(workflow).toMatch(/cd release[\s\S]*sha256sum[\s\S]*SalahOS-v\$\{VERSION\}-android\.apk/);
-    expect(workflow).toMatch(/cd release[\s\S]*sha256sum --check SHA256SUMS\.txt/);
-    expect(workflow).not.toMatch(/sha256sum\s+"release\/SalahOS-v\$\{VERSION\}/);
+    expect(workflow).toMatch(
+      /cd release[\s\S]*sha256sum[\s\S]*SalahOS-v\$\{VERSION\}-web-pwa\.zip/,
+    );
+    expect(workflow).toMatch(
+      /cd release[\s\S]*sha256sum[\s\S]*SalahOS-v\$\{VERSION\}-android\.apk/,
+    );
+    expect(workflow).toMatch(
+      /cd release[\s\S]*sha256sum --check SHA256SUMS\.txt/,
+    );
+    expect(workflow).not.toMatch(
+      /sha256sum\s+"release\/SalahOS-v\$\{VERSION\}/,
+    );
   });
 
   it('requires persistent Android signing before creating a release APK', () => {
@@ -26,7 +34,9 @@ describe('release asset workflow', () => {
     expect(workflow).toContain('SALAHOS_ANDROID_KEY_ALIAS');
     expect(workflow).toContain('SALAHOS_ANDROID_KEY_PASSWORD');
     expect(workflow).toContain('android-actions/setup-android@v3');
-    expect(workflow).toContain("sdkmanager 'platforms;android-36' 'build-tools;36.0.0'");
+    expect(workflow).toContain(
+      "sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+    );
     expect(workflow).toContain('apksigner');
     expect(workflow).toContain('app-release.apk');
     expect(workflow).not.toContain('app-debug.apk');
@@ -34,7 +44,9 @@ describe('release asset workflow', () => {
   });
 
   it('publishes only after the signed Android and Web/Pi jobs succeed', () => {
-    expect(workflow).toMatch(/publish:[\s\S]*needs:[\s\S]*- web-kiosk[\s\S]*- android/);
+    expect(workflow).toMatch(
+      /publish:[\s\S]*needs:[\s\S]*- web-kiosk[\s\S]*- android/,
+    );
     expect(workflow).toContain("if: github.event_name == 'push'");
   });
 
