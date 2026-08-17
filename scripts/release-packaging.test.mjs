@@ -1,7 +1,10 @@
 import { readFile } from 'node:fs/promises';
 import { describe, expect, it } from 'vitest';
 
-const workflow = await readFile(new URL('../.github/workflows/release-assets.yml', import.meta.url), 'utf8');
+const workflow = await readFile(
+  new URL('../.github/workflows/release-assets.yml', import.meta.url),
+  'utf8',
+);
 
 describe('release asset workflow', () => {
   it('publishes versioned Web/PWA and Raspberry Pi bundles', () => {
