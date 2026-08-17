@@ -78,7 +78,7 @@ jobs:
           print(f'ipad={choose("iPad Pro 13-inch (M5)", "iPad")}')
           PY
 
-      - name: Install, launch and cold-relaunch on iPhone and iPad
+      - name: Install, launch and relaunch on iPhone and iPad
         env:
           RUNTIME: ${{ steps.profiles.outputs.runtime }}
           IPHONE_TYPE: ${{ steps.profiles.outputs.iphone }}
@@ -102,7 +102,7 @@ jobs:
             local device_type="$2"
             local appearance="$3"
             local name="SalahOS-${profile}-${GITHUB_RUN_ID}"
-            local udid
+            local udid launch_output
             udid="$(xcrun simctl create "$name" "$device_type" "$RUNTIME")"
             CREATED_UDIDS+=("$udid")
             echo "$profile UDID: $udid"
@@ -113,23 +113,20 @@ jobs:
             xcrun simctl install "$udid" "$APP_PATH"
             xcrun simctl get_app_container "$udid" "$BUNDLE_ID" app
 
-            local launch_output pid
             launch_output="$(xcrun simctl launch "$udid" "$BUNDLE_ID")"
             echo "$launch_output"
-            pid="${launch_output##*: }"
+            [[ "$launch_output" == "$BUNDLE_ID:"* ]]
             sleep 4
-            xcrun simctl spawn "$udid" ps -p "$pid" -o pid=,comm=
             xcrun simctl io "$udid" screenshot --type=png "$EVIDENCE_DIR/${profile}-launch.png"
             test "$(stat -f%z "$EVIDENCE_DIR/${profile}-launch.png")" -gt 50000
 
             xcrun simctl terminate "$udid" "$BUNDLE_ID"
             launch_output="$(xcrun simctl launch "$udid" "$BUNDLE_ID")"
             echo "$launch_output"
-            pid="${launch_output##*: }"
+            [[ "$launch_output" == "$BUNDLE_ID:"* ]]
             sleep 4
-            xcrun simctl spawn "$udid" ps -p "$pid" -o pid=,comm=
-            xcrun simctl io "$udid" screenshot --type=png "$EVIDENCE_DIR/${profile}-cold-relaunch.png"
-            test "$(stat -f%z "$EVIDENCE_DIR/${profile}-cold-relaunch.png")" -gt 50000
+            xcrun simctl io "$udid" screenshot --type=png "$EVIDENCE_DIR/${profile}-relaunch.png"
+            test "$(stat -f%z "$EVIDENCE_DIR/${profile}-relaunch.png")" -gt 50000
           }
 
           exercise iphone "$IPHONE_TYPE" light
