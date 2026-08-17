@@ -765,7 +765,7 @@
 - [x] Create release notes
 - [ ] Tag first release only after applicable quality gates are satisfied
 
-**Release-blocker reconciliation note (2026-08-17):** all current `[!]` items identify physical or target-environment evidence that is still genuinely unavailable. PR #101 code-bearing head `b0699274ef41980d03f0321346eabe5ae758758f` passed the complete automated release-candidate gate set: Quality Gate `32032477140`, Android Build `32032477112`, Visual Regression `32032477113` and iOS Build `32032477111`. The latest iOS artifact was manually reviewed after fixing the discovered iPhone safe-area defect. Physical iPhone/iPad behavior, real mobile notification/audio timing, network-isolated iOS cold start, physical Raspberry Pi Touch Display 2 and physical TV/kiosk acceptance remain explicit post-release validation items and are not represented as completed by emulator/Simulator/browser evidence. The exact final documentation head must still retain all four automated gates before merge and tagging.
+**Release-boundary reconciliation note (2026-08-18):** PR #101 merged the permanent iOS runtime gate, the reviewed iPhone safe-area correction and the final code/documentation review. The first production repository/source release is permitted to ship once the exact versioned release revision passes Quality Gate, Android Build, Visual Regression and iOS Build together. Current `[!]` items remain genuine unperformed physical/target-environment acceptance and are deliberately non-blocking for the source release only because they are explicitly disclosed; they must not be relabelled as tested. This release does not imply App Store/Play Store publication or signed store binaries.
 
 ---
 
@@ -790,7 +790,7 @@
 
 ## Definition of Done for SalahOS v1
 
-SalahOS v1 must not be declared complete until the following are true:
+For the v1.0.0 repository/source release, completion means the implemented software and permanent automated acceptance gates are release-ready. Physical hardware and store-distribution acceptance may remain open only when the corresponding `[!]`/partial items stay explicitly documented and are not represented as tested:
 
 - [x] Accurate five-prayer calculation engine is independently testable
 - [~] Major recognised calculation methods are implemented and documented
@@ -803,10 +803,10 @@ SalahOS v1 must not be declared complete until the following are true:
 - [x] DST/date rollover behaviour is tested
 - [x] Gregorian and Hijri dates work
 - [~] English and Arabic/RTL are production-ready
-- [ ] Mobile, Raspberry Pi and TV/kiosk layouts are validated
+- [~] Mobile, Raspberry Pi and TV/kiosk layouts have automated/emulator/Simulator/browser validation; physical target acceptance remains open
 - [x] Offline prayer calculation is fully functional
-- [ ] Notifications/Adhan work on supported platforms within platform restrictions
-- [x] Automated release-candidate gates pass — code-bearing PR #101 head `b0699274ef41980d03f0321346eabe5ae758758f` passed Quality Gate `32032477140`, Android Build `32032477112`, Visual Regression `32032477113` and iOS Build `32032477111`; the exact final documentation head must retain the same gate set before merge/tagging
+- [~] Notifications/Adhan are implemented within documented platform restrictions; physical delivery/audio-policy timing acceptance remains open
+- [x] Permanent release-candidate gate set exists and has passed together on reviewed PR #101 revisions; the exact v1.0.0 release revision must pass the same four gates before tagging
 - [x] Actual tested platform/build matrix is documented without overclaiming
 
 **Tested platform/build matrix verification note (2026-08-16):** read-only Quality Gate run `31934421125` passed the sensitive-file policy, dependency vulnerability audit, dependency-license policy, documentation-link verification, PWA raster-icon reproducibility, formatting, typed lint, strict typecheck, the complete 58-file / 269-test suite, production build and deploy-artifact verification on the cleaned branch. `docs/PLATFORM_STATUS.md` is now the canonical tested matrix and distinguishes automated Web/PWA validation, repository-validated Raspberry Pi/Touch Display 2 and TV/browser-kiosk paths, and planned/unvalidated Android and iOS/iPadOS native paths. `README.md` and `BUILD.md` are synchronized to those boundaries rather than describing repository-validated Pi/TV browser paths as absent. Physical Raspberry Pi/Touch Display 2 and television acceptance, target-specific remote/full-screen behaviour, native Android/iOS projects and device validation, and visual regression remain open; this matrix does not imply those checks passed.
@@ -814,3 +814,4 @@ SalahOS v1 must not be declared complete until the following are true:
 **v1 tracker reconciliation note (2026-08-17):** later Android/iOS native implementation, notification integration, offline/Pi continuity and documentation work supersede several partial markers that were left behind by historical verification notes. Those tracker markers are corrected above while the original dated notes are retained as a record of what was open at each earlier run. Current authoritative platform boundaries are in `docs/PLATFORM_STATUS.md`.
 
 - [x] Final code review and regression pass are complete
+- [x] v1.0.0 release policy explicitly preserves unperformed physical-hardware/store-distribution acceptance as documented follow-up rather than claiming it passed

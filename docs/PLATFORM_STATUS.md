@@ -79,4 +79,6 @@ Remote-control behavior varies by browser and hardware. The application recognis
 
 ## Release rule
 
-Only capabilities explicitly identified as verified above should be treated as validated. Physical target-notification, target-audio and hardware-specific acceptance remains open until the corresponding evidence is recorded. A release tag must additionally use an exact revision with fresh complete automated quality-gate results.
+The v1.0.0 production repository/source release requires one exact revision with fresh passing Quality Gate, Android Build, Visual Regression and iOS Build/Simulator acceptance results. Physical target-notification, target-audio, target-display, signing and store-distribution acceptance remains open where identified above and is not inferred from automated, emulator, Simulator or browser execution.
+
+Shipping v1.0.0 does not change any **Physical acceptance open** entry to verified. Those items remain follow-up validation and must be recorded separately when target hardware becomes available.
