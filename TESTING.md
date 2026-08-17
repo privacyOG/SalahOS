@@ -795,3 +795,12 @@ Validation run `31941241775` passed the complete repository gate, debug build/re
 ## iOS native consolidation — 2026-08-16
 
 Runs `31941296351`, `31941790069`, `31941980679`, and `31942088604` validate the native iOS foundation, local notification adapter, lifecycle policy, and latest-main Xcode build. The source-only replay excludes runner-generated DerivedData; permanent macOS PR validation is added separately on the clean branch.
+
+## Local Adhan audio regression coverage (2026-08-17)
+
+- `src/platform/localAdhanAudio.test.ts` validates bounded audio-file acceptance/rejection and exact per-prayer foreground trigger keys.
+- Adhan trigger semantics deliberately follow `adhanEnabled` independently of the ordinary notification-enable toggle, matching the notification-intent model.
+- `src/platform/androidAdhanPolicy.test.ts` locks foreground local-audio availability versus background/terminated notification-only delivery.
+- `src/ui/LocalAdhanAudioSettings.test.tsx` verifies the English and Arabic local-file chooser, `audio/*` restriction and visible lifecycle wording.
+- Repository aggregate validation must include `security:native-permissions` and `security:remote-network`; the permanent Quality Gate now runs both.
+- Automated tests do not claim physical-device media-volume, audio-focus, silent-mode, browser/WebView autoplay or background delivery timing acceptance.
