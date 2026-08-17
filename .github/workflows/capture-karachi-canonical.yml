@@ -1,0 +1,56 @@
+name: Karachi canonical capture
+
+on:
+  push:
+    branches:
+      - privacyog/karachi-canonical-parity
+
+jobs:
+  capture:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install pinned canonical library in temporary directory
+        run: |
+          tmpdir="$(mktemp -d)"
+          echo "TMP_ADHAN=$tmpdir" >> "$GITHUB_ENV"
+          cd "$tmpdir"
+          npm init -y >/dev/null 2>&1
+          npm install --ignore-scripts --save-exact adhan@4.4.4
+
+      - name: Capture fixed Karachi output
+        run: |
+          cd "$TMP_ADHAN"
+          node --input-type=module <<'NODE'
+          import {
+            CalculationMethod,
+            Coordinates,
+            Madhab,
+            PrayerTimes,
+          } from 'adhan';
+
+          const params = CalculationMethod.Karachi();
+          params.madhab = Madhab.Shafi;
+          const prayers = new PrayerTimes(
+            new Coordinates(24.8607, 67.0011),
+            new Date(2020, 0, 1),
+            params,
+          );
+          const formatter = new Intl.DateTimeFormat('en-GB', {
+            timeZone: 'Asia/Karachi',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+          });
+          for (const prayer of ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha']) {
+            console.log(`${prayer}=${formatter.format(prayers[prayer])}`);
+          }
+          NODE
