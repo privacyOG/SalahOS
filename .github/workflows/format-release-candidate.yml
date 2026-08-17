@@ -1,0 +1,46 @@
+name: Format release candidate
+
+on:
+  push:
+    branches:
+      - privacyog/current-ios-release-evidence
+    paths:
+      - .github/workflows/format-release-candidate.yml
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: privacyog/current-ios-release-evidence
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Format repository
+        run: npm run format
+
+      - name: Remove temporary workflow and commit formatting
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm .github/workflows/format-release-candidate.yml
+          git config user.name privacyOG
+          git config user.email kriptiik@proton.me
+          git add -A
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Format release candidate safe-area changes"
+          git push origin HEAD:privacyog/current-ios-release-evidence
