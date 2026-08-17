@@ -118,6 +118,23 @@ const fixtures: readonly CanonicalFixture[] = [
       isha: 19 * 60 + 3,
     },
   },
+  {
+    label: 'Adhan JS Karachi / Karachi / Standard',
+    date: '2020-01-01',
+    latitude: 24.8607,
+    longitude: 67.0011,
+    utcOffsetMinutes: 300,
+    method: 'karachi',
+    asrConvention: 'standard',
+    expected: {
+      fajr: 5 * 60 + 55,
+      sunrise: 7 * 60 + 17,
+      dhuhr: 12 * 60 + 36,
+      asr: 15 * 60 + 34,
+      maghrib: 17 * 60 + 54,
+      isha: 19 * 60 + 15,
+    },
+  },
 ];
 
 function expectCanonicalParity(fixture: CanonicalFixture): void {
