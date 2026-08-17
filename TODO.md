@@ -759,7 +759,7 @@
 - [x] Create release notes
 - [ ] Tag first release only after applicable quality gates are satisfied
 
-**Release-blocker reconciliation note (2026-08-17):** all current `[!]` items above and in Stages 7, 9 and 11 identify the missing target environment explicitly. In addition, GitHub-hosted Quality Gate, Android Build and iOS Build jobs for PR #88 were created but did not start because the account's Actions billing/spending state blocked runner execution; the check annotation reports that billing/spending condition before any checkout/test step. This blocks a fresh exact-head automated release gate but is not an application test failure. The repository must not be tagged while these applicable blockers remain.
+**Release-blocker reconciliation note (2026-08-17):** all current `[!]` items above and in Stages 7, 9 and 11 identify the missing target environment explicitly. PR #91 moved the Linux Quality Gate and Android Build to the self-hosted EVO-X2 runner. Exact merged-main commit `3980a67ed13243d15438d5303ac2fdfd76db6d5f` passed Quality Gate `31986937094` and Android Build `31986937065`. The iOS workflow remains macOS/Xcode-only, and current run `31986937067` was rejected before any step executed because the account billing/spending state still blocks hosted macOS execution. This remaining macOS infrastructure limitation is not an application test failure, and the repository must not be tagged while applicable iOS/device/visual/release blockers remain.
 
 ---
 
@@ -800,7 +800,7 @@ SalahOS v1 must not be declared complete until the following are true:
 - [ ] Mobile, Raspberry Pi and TV/kiosk layouts are validated
 - [x] Offline prayer calculation is fully functional
 - [ ] Notifications/Adhan work on supported platforms within platform restrictions
-- [!] Automated quality gates pass — previous recorded gates pass, but a fresh exact-head run is blocked by the current Actions billing/spending runner condition
+- [~] Automated quality gates pass — exact-main Linux Quality Gate and Android Build pass on the self-hosted EVO-X2; current exact-main iOS/macOS build remains infrastructure-blocked before job execution
 - [x] Actual tested platform/build matrix is documented without overclaiming
 
 **Tested platform/build matrix verification note (2026-08-16):** read-only Quality Gate run `31934421125` passed the sensitive-file policy, dependency vulnerability audit, dependency-license policy, documentation-link verification, PWA raster-icon reproducibility, formatting, typed lint, strict typecheck, the complete 58-file / 269-test suite, production build and deploy-artifact verification on the cleaned branch. `docs/PLATFORM_STATUS.md` is now the canonical tested matrix and distinguishes automated Web/PWA validation, repository-validated Raspberry Pi/Touch Display 2 and TV/browser-kiosk paths, and planned/unvalidated Android and iOS/iPadOS native paths. `README.md` and `BUILD.md` are synchronized to those boundaries rather than describing repository-validated Pi/TV browser paths as absent. Physical Raspberry Pi/Touch Display 2 and television acceptance, target-specific remote/full-screen behaviour, native Android/iOS projects and device validation, and visual regression remain open; this matrix does not imply those checks passed.

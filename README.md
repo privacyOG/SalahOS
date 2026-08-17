@@ -84,7 +84,7 @@ The dependency lockfile is committed and pinned for reproducible installation. N
 
 ## Release status
 
-SalahOS v1 is not tagged yet. The implementation tracker remains authoritative and release tagging is blocked until the applicable visual/device validation, notification/Adhan, remaining method/reference work and a fresh exact-head quality-gate run are complete. Hosted workflow runners are currently unable to start because the repository account's Actions billing/spending state requires attention; this is recorded as an infrastructure blocker rather than a passing or failing application test.
+SalahOS v1 is not tagged yet. The implementation tracker remains authoritative and release tagging is blocked until the remaining visual/device validation, notification/Adhan, calculation-method/reference and final regression requirements are complete. The Linux Quality Gate and Android Build now run on the self-hosted EVO-X2 runner and passed on exact main commit `3980a67ed13243d15438d5303ac2fdfd76db6d5f` in runs `31986937094` and `31986937065`. The iOS build remains macOS/Xcode-only; its current hosted macOS job cannot start because the account billing/spending state requires attention, so that infrastructure limitation is kept separate from the passing Linux evidence.
 
 ## Author
 
