@@ -115,7 +115,9 @@ export async function saveLocalAdhanAudio(file: File): Promise<LocalAdhanAudioRe
     size: file.size,
     blob: file,
   };
-  await transactionRequest<IDBValidKey>('readwrite', (store) => store.put(record, SELECTED_AUDIO_KEY));
+  await transactionRequest<IDBValidKey>('readwrite', (store) =>
+    store.put(record, SELECTED_AUDIO_KEY),
+  );
   return record;
 }
 

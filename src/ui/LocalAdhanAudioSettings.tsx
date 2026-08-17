@@ -21,7 +21,8 @@ const copy = {
     help: 'The selected recording stays on this device. SalahOS does not upload or bundle it. Full local audio can play automatically only while the app is open and visible; background and terminated delivery continues to use the platform notification alert.',
     invalid: 'Choose a non-empty audio file up to 25 MB.',
     unavailable: 'Local audio storage is unavailable on this device.',
-    blocked: 'Automatic playback was blocked by the device. Use Preview once while the app is open, then keep the app visible for foreground Adhan playback.',
+    blocked:
+      'Automatic playback was blocked by the device. Use Preview once while the app is open, then keep the app visible for foreground Adhan playback.',
   },
   ar: {
     title: 'صوت أذان محلي',
@@ -32,7 +33,8 @@ const copy = {
     help: 'يبقى التسجيل المختار على هذا الجهاز ولا يرفعه صلاح أو إس ولا يضمّنه في التطبيق. يمكن تشغيل الصوت المحلي الكامل تلقائياً فقط عندما يكون التطبيق مفتوحاً وظاهراً؛ أما في الخلفية أو بعد إغلاق التطبيق فيستمر التنبيه وفق نظام الإشعارات في الجهاز.',
     invalid: 'اختر ملفاً صوتياً غير فارغ بحجم لا يتجاوز 25 ميغابايت.',
     unavailable: 'تخزين الصوت المحلي غير متاح على هذا الجهاز.',
-    blocked: 'منع الجهاز التشغيل التلقائي. استخدم الاستماع التجريبي مرة أثناء فتح التطبيق ثم اترك التطبيق ظاهراً لتشغيل الأذان في الواجهة.',
+    blocked:
+      'منع الجهاز التشغيل التلقائي. استخدم الاستماع التجريبي مرة أثناء فتح التطبيق ثم اترك التطبيق ظاهراً لتشغيل الأذان في الواجهة.',
   },
 } as const;
 

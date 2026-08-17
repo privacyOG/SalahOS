@@ -78,6 +78,7 @@ import { installThemePreference } from './platform/themePreference';
 import { BidiText } from './ui/BidiText';
 import { NextPrayerBlock } from './ui/NextPrayerBlock';
 import { PrayerCard } from './ui/PrayerCard';
+import { LocalAdhanAudioSettings } from './ui/LocalAdhanAudioSettings';
 import {
   AndroidExactAlarmNotice,
   ANDROID_EXACT_ALARM_CAPABILITY_CHANGE_EVENT,
@@ -1361,6 +1362,13 @@ export function App() {
               );
             })}
           </div>
+          <LocalAdhanAudioSettings
+            locale={locale}
+            date={sourcedDashboard?.base.today.date ?? null}
+            localMinutes={sourcedDashboard?.base.clock.localMinutes ?? null}
+            prayers={sourcedDashboard?.prayers ?? []}
+            notifications={settings.notifications}
+          />
           <p className="setting-help">{translate(locale, 'adhanDeliveryPolicy')}</p>
           <AndroidExactAlarmNotice locale={locale} />
           <p className="setting-help">{translate(locale, 'notificationDeliveryPending')}</p>
