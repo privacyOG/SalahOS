@@ -1,0 +1,24 @@
+name: Visual runner probe
+
+on:
+  push:
+    branches:
+      - privacyog/visual-regression-foundation
+
+jobs:
+  probe:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 5
+    steps:
+      - name: Probe browser tooling
+        run: |
+          set -eux
+          command -v chromium || true
+          command -v chromium-browser || true
+          command -v google-chrome || true
+          command -v google-chrome-stable || true
+          chromium --version 2>/dev/null || true
+          chromium-browser --version 2>/dev/null || true
+          google-chrome --version 2>/dev/null || true
+          node --version
+          python3 --version
