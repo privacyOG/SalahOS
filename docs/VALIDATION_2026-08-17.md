@@ -58,11 +58,21 @@ The 2026-08-17 reconciliation corrected stale tracker states that predated later
 
 Historical notes in `TESTING.md` and `TODO.md` are intentionally retained when they accurately describe what was still open at the time of an earlier run. Later reconciliation notes supersede those historical status statements without altering the original evidence.
 
+## Direct canonical prayer-calculation parity
+
+PR #93 merged after adding frozen direct-output parity against Adhan JS 4.4.4 commit `a6f1a5c4a00105103f310ef18200b95f7184d2e7`. The suite covers ISNA/North America, Muslim World League, Egyptian, Turkey interoperability and MUIS/Singapore across all six displayed daily events.
+
+The initial Turkey fixture exposed a real seven-minute Sunrise discrepancy because SalahOS modelled only the 18°/17° twilight angles. The engine now supports method-owned adjustments independently from user/manual offsets, and the Turkey interoperability profile records the pinned canonical adjustments of Sunrise -7, Dhuhr +5, Asr +4 and Maghrib +7 minutes. Prayer provenance records method and manual adjustment minutes separately.
+
+Exact PR head `c41a845dc38d6c604045abdf2588be16081b95b5` passed Quality Gate `31992557611` and Android Build `31992557906` on EVO-X2. The canonical comparison retained the existing two-minute tolerance; it was not widened to make the Turkey fixture pass.
+
+This closes the v1 tracker item for direct canonical implementation comparison and upgrades MWL, Egyptian and ISNA verification. It does not claim official Diyanet institutional timetable certification, and it does not close the remaining Dubai or Karachi evidence gaps.
+
 ## Remaining release blockers
 
 The following remain applicable before SalahOS v1 can be tagged:
 
-- remaining calculation-method authoritative/reference work and direct canonical comparison;
+- remaining calculation-method authoritative/reference work where institutional or frozen direct-fixture evidence is still incomplete (notably Diyanet institutional parity, Dubai and Karachi);
 - user-selectable/local Adhan audio and corresponding supported-platform behavior;
 - target notification delivery acceptance, including real platform DST behavior;
 - English/Arabic visual regression and responsive-layout acceptance;
