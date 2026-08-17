@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 import indexHtml from '../../index.html?raw';
-import responsiveCss from '../responsive-hardening.css?raw';
+import responsiveCss from '../responsive-hardening.css?inline';
 
 describe('mobile safe-area contract', () => {
   it('opts the viewport into display-cutout safe-area values', () => {
