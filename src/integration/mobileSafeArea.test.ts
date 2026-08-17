@@ -12,9 +12,7 @@ describe('mobile safe-area contract', () => {
     expect(responsiveCss).toContain('env(safe-area-inset-right)');
     expect(responsiveCss).toContain('env(safe-area-inset-bottom)');
     expect(responsiveCss).toContain('env(safe-area-inset-left)');
-    expect(responsiveCss).toMatch(
-      /padding-block-start:\s*calc\([^;]*env\(safe-area-inset-top\)\)/,
-    );
+    expect(responsiveCss).toMatch(/padding-block-start:\s*calc\([^;]*env\(safe-area-inset-top\)\)/);
     expect(responsiveCss).toMatch(
       /padding-block-end:\s*calc\([^;]*env\(safe-area-inset-bottom\)\)/,
     );
