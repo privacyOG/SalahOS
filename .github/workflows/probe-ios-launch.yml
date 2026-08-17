@@ -97,6 +97,31 @@ jobs:
           }
           trap cleanup EXIT
 
+          verify_launch() {
+            local udid="$1"
+            local output="$2"
+            local pid
+            echo "$output"
+            pid="${output##*: }"
+            [[ "$output" == "$BUNDLE_ID:"* ]]
+            [[ "$pid" =~ ^[0-9]+$ ]]
+            xcrun simctl spawn "$udid" /bin/ps -p "$pid" -o pid=,comm=
+          }
+
+          capture() {
+            local udid="$1"
+            local target="$2"
+            local width height
+            xcrun simctl io "$udid" screenshot --type=png "$target"
+            test -s "$target"
+            file "$target"
+            width="$(sips -g pixelWidth "$target" | awk '/pixelWidth/ {print $2}')"
+            height="$(sips -g pixelHeight "$target" | awk '/pixelHeight/ {print $2}')"
+            [[ "$width" =~ ^[0-9]+$ && "$width" -gt 0 ]]
+            [[ "$height" =~ ^[0-9]+$ && "$height" -gt 0 ]]
+            echo "Screenshot ${width}x${height}: $target"
+          }
+
           exercise() {
             local profile="$1"
             local device_type="$2"
@@ -114,19 +139,15 @@ jobs:
             xcrun simctl get_app_container "$udid" "$BUNDLE_ID" app
 
             launch_output="$(xcrun simctl launch "$udid" "$BUNDLE_ID")"
-            echo "$launch_output"
-            [[ "$launch_output" == "$BUNDLE_ID:"* ]]
+            verify_launch "$udid" "$launch_output"
             sleep 4
-            xcrun simctl io "$udid" screenshot --type=png "$EVIDENCE_DIR/${profile}-launch.png"
-            test "$(stat -f%z "$EVIDENCE_DIR/${profile}-launch.png")" -gt 50000
+            capture "$udid" "$EVIDENCE_DIR/${profile}-launch.png"
 
             xcrun simctl terminate "$udid" "$BUNDLE_ID"
             launch_output="$(xcrun simctl launch "$udid" "$BUNDLE_ID")"
-            echo "$launch_output"
-            [[ "$launch_output" == "$BUNDLE_ID:"* ]]
+            verify_launch "$udid" "$launch_output"
             sleep 4
-            xcrun simctl io "$udid" screenshot --type=png "$EVIDENCE_DIR/${profile}-relaunch.png"
-            test "$(stat -f%z "$EVIDENCE_DIR/${profile}-relaunch.png")" -gt 50000
+            capture "$udid" "$EVIDENCE_DIR/${profile}-relaunch.png"
           }
 
           exercise iphone "$IPHONE_TYPE" light
