@@ -1,0 +1,58 @@
+/* Responsive containment rules for narrow viewports and enlarged text. */
+.settings-grid > *,
+.offset-grid > *,
+.settings-transfer > *,
+.manual-location > *,
+.saved-location-controls > *,
+.manual-mosque-header > *,
+.manual-mosque-prayer-grid > *,
+.manual-mosque-prayer > *,
+.location-search > *,
+.mosque-library-controls > *,
+.prayer-grid > *,
+.prayer-times > * {
+  min-width: 0;
+}
+
+.settings-panel,
+.manual-mosque-fieldset,
+.offsets-fieldset,
+.mosque-library-controls {
+  min-inline-size: 0;
+}
+
+.settings-grid input,
+.settings-grid select,
+.settings-grid textarea,
+.offset-grid input,
+.offset-grid select,
+.offset-grid textarea,
+.manual-mosque-header input,
+.manual-mosque-header select,
+.manual-mosque-prayer input,
+.manual-mosque-prayer select,
+.settings-transfer input,
+.settings-transfer select,
+.settings-transfer textarea {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.settings-grid label,
+.offset-grid label,
+.settings-transfer label,
+.manual-mosque-header label,
+.manual-mosque-prayer label {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (max-width: 760px) {
+  .settings-grid,
+  .offset-grid,
+  .manual-mosque-header,
+  .manual-mosque-prayer-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
