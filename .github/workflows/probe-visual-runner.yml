@@ -8,17 +8,34 @@ on:
 jobs:
   probe:
     runs-on: [self-hosted, Linux, X64]
-    timeout-minutes: 5
+    timeout-minutes: 15
     steps:
-      - name: Probe browser tooling
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Install pinned browser harness in isolation
         run: |
-          set -eux
-          command -v chromium || true
-          command -v chromium-browser || true
-          command -v google-chrome || true
-          command -v google-chrome-stable || true
-          chromium --version 2>/dev/null || true
-          chromium-browser --version 2>/dev/null || true
-          google-chrome --version 2>/dev/null || true
-          node --version
-          python3 --version
+          tmpdir="$(mktemp -d)"
+          echo "VISUAL_PROBE_DIR=$tmpdir" >> "$GITHUB_ENV"
+          echo "PLAYWRIGHT_BROWSERS_PATH=$RUNNER_TEMP/pw-browsers" >> "$GITHUB_ENV"
+          cd "$tmpdir"
+          npm init -y >/dev/null 2>&1
+          npm install --ignore-scripts --save-exact playwright@1.55.0
+          npx playwright install chromium
+
+      - name: Launch headless Chromium
+        run: |
+          cd "$VISUAL_PROBE_DIR"
+          node --input-type=module <<'NODE'
+          import { chromium } from 'playwright';
+          const browser = await chromium.launch({ headless: true });
+          const page = await browser.newPage({ viewport: { width: 390, height: 844 } });
+          await page.setContent('<main><h1>SalahOS visual probe</h1></main>');
+          const text = await page.locator('h1').textContent();
+          const size = await page.evaluate(() => ({ width: innerWidth, height: innerHeight }));
+          console.log(JSON.stringify({ text, size }));
+          await page.screenshot({ path: process.env.RUNNER_TEMP + '/salahos-visual-probe.png' });
+          await browser.close();
+          NODE
