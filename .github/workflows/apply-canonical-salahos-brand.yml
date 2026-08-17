@@ -51,11 +51,21 @@ jobs:
       - name: Format text changes
         run: npx prettier --write README.md index.html public/manifest.webmanifest public/sw.js scripts/service-worker-validation.test.mjs src/App.tsx src/styles.css src/ui/SmartDisplay.tsx src/smart-display.css
 
-      - name: Validate exact-source branding
+      - name: Prepare clean branding candidate tree
         run: |
           set -euo pipefail
-          python3 scripts/generate_pwa_icons.py --check
-          npm run check
+          rm -f artwork/.salahos-source-part-* scripts/apply-canonical-salahos-brand.py scripts/write-canonical-brand-validator.py .github/workflows/apply-canonical-salahos-brand.yml
+          git diff --check
+
+      - name: Verify canonical brand assets
+        run: python3 scripts/generate_pwa_icons.py --check
+
+      - name: Run repository quality gate
+        run: npm run check
+
+      - name: Verify branding integration contracts
+        run: |
+          set -euo pipefail
           grep -F '/icons/salahos-192.png' src/App.tsx
           grep -F '/icons/salahos-192.png' src/ui/SmartDisplay.tsx
           grep -F '#074e5c' public/manifest.webmanifest
@@ -64,12 +74,11 @@ jobs:
           test ! -e public/icons/salahos-maskable.svg
           git diff --check
 
-      - name: Commit branding and remove temporary helpers
+      - name: Commit canonical branding
         run: |
           set -euo pipefail
           git config user.name 'privacyOG'
           git config user.email 'kriptiik@proton.me'
-          rm -f artwork/.salahos-source-part-* scripts/apply-canonical-salahos-brand.py scripts/write-canonical-brand-validator.py .github/workflows/apply-canonical-salahos-brand.yml
           git add -A
           git diff --cached --check
           git commit -m 'Use canonical SalahOS logo and app icons'
