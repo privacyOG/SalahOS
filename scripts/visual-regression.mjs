@@ -146,13 +146,18 @@ async function findHorizontalOverflow(page) {
       if (rect.width === 0 || rect.height === 0) continue;
 
       const outsideViewport = rect.left < -tolerance || rect.right > viewportWidth + tolerance;
-      const clipsContent =
+      const isFormControl =
+        element instanceof HTMLInputElement ||
+        element instanceof HTMLSelectElement ||
+        element instanceof HTMLTextAreaElement ||
+        element instanceof HTMLButtonElement;
+      const explicitlyClipsContent =
+        !isFormControl &&
         element.clientWidth > 0 &&
         element.scrollWidth > element.clientWidth + tolerance &&
-        style.overflowX !== 'auto' &&
-        style.overflowX !== 'scroll';
+        (style.overflowX === 'hidden' || style.overflowX === 'clip');
 
-      if (!outsideViewport && !clipsContent) continue;
+      if (!outsideViewport && !explicitlyClipsContent) continue;
 
       offenders.push({
         tag: element.tagName.toLowerCase(),
@@ -169,6 +174,7 @@ async function findHorizontalOverflow(page) {
 
     return {
       bodyScrollWidth: document.body.scrollWidth,
+      documentScrollWidth: document.documentElement.scrollWidth,
       viewportWidth,
       offenders,
     };
@@ -176,7 +182,11 @@ async function findHorizontalOverflow(page) {
 }
 
 function assertNoHorizontalOverflow(name, overflow) {
-  if (overflow.bodyScrollWidth > overflow.viewportWidth + 2 || overflow.offenders.length > 0) {
+  if (
+    overflow.bodyScrollWidth > overflow.viewportWidth + 2 ||
+    overflow.documentScrollWidth > overflow.viewportWidth + 2 ||
+    overflow.offenders.length > 0
+  ) {
     throw new Error(`${name} horizontal overflow: ${JSON.stringify(overflow)}`);
   }
 }
