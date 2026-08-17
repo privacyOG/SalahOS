@@ -46,7 +46,7 @@ jobs:
         run: python3 scripts/apply-canonical-salahos-brand.py
 
       - name: Format text changes
-        run: npx prettier --write README.md index.html public/manifest.webmanifest public/sw.js scripts/generate_pwa_icons.py scripts/service-worker-validation.test.mjs src/App.tsx src/styles.css src/ui/SmartDisplay.tsx src/smart-display.css
+        run: npx prettier --write README.md index.html public/manifest.webmanifest public/sw.js scripts/service-worker-validation.test.mjs src/App.tsx src/styles.css src/ui/SmartDisplay.tsx src/smart-display.css
 
       - name: Validate exact-source branding
         run: |
