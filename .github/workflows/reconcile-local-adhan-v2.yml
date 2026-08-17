@@ -1,0 +1,83 @@
+name: Reconcile local Adhan audio v2
+
+on:
+  push:
+    branches:
+      - privacyog/local-adhan-audio-v2
+    paths:
+      - .github/workflows/reconcile-local-adhan-v2.yml
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: privacyog/local-adhan-audio-v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Reconcile tracker and validation evidence
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          def replace_once(path, old, new):
+              p = Path(path)
+              text = p.read_text()
+              if old not in text:
+                  raise SystemExit(f'Missing replacement target in {path}: {old[:120]}')
+              p.write_text(text.replace(old, new, 1))
+
+          replace_once('TODO.md', '- [ ] User-selectable/local Adhan audio', '- [x] User-selectable/local Adhan audio')
+          replace_once('TODO.md', '- [~] Adhan settings', '- [x] Adhan settings')
+          replace_once(
+              'TODO.md',
+              'Adhan settings remain partial solely because user-selectable local Adhan audio is still open.',
+              'Adhan settings are complete at the repository/UI level: per-prayer Adhan enablement plus a private user-selected local recording are implemented. Native background/terminated full-recording delivery remains outside this settings marker and is tracked separately.',
+          )
+
+          marker = '- [x] User-selectable/local Adhan audio\n'
+          note = '''\n**Local Adhan audio verification note (2026-08-17):** the shared application now lets the user select one non-empty local audio file up to 25 MB, stores it only in the SalahOS IndexedDB media store, provides Preview and Remove controls in English and Arabic, and never uploads or embeds the recording in settings export or release assets. Foreground playback uses a stable per-date/per-prayer key and is attempted only for a prayer with `adhanEnabled` while the page/WebView is visible; browser/WebView autoplay policy can still block playback and the UI reports that limitation. The Android lifecycle policy now permits the dedicated local-audio path only in foreground with a configured recording, while background and terminated states remain notification-only. Unit coverage verifies file validation, per-prayer trigger semantics, ordinary-notification/Adhan independence and lifecycle policy; component coverage verifies the bilingual audio chooser and lifecycle wording. The implementation branch also exposed and fixed a pre-existing remote-URL literal in smart-display navigation so the aggregate local-first security gate passes. Physical mobile media-policy/audio-focus acceptance and background notification timing remain separate target-environment validation and are not claimed here.\n'''
+          p = Path('TODO.md')
+          text = p.read_text()
+          if note.strip() not in text:
+              if marker not in text:
+                  raise SystemExit('Local Adhan tracker marker missing')
+              p.write_text(text.replace(marker, marker + note, 1))
+
+          validation = Path('docs/VALIDATION_2026-08-17.md')
+          addition = '''\n## Local Adhan audio and local-first CI coverage\n\nThe current local-Adhan implementation was transplanted from the earlier divergent proof branch onto current mainline rather than merging stale history. The production settings surface stores one user-selected audio recording in the SalahOS IndexedDB media store, validates a non-empty `audio/*` MIME type with a 25 MB ceiling, supports local Preview/Remove, and keeps the bytes outside normal settings export and release assets. Foreground playback is keyed by civil date and prayer and is attempted only while the application is visible for an Adhan-enabled prayer. Platform autoplay policy can reject that attempt; the UI reports the failure instead of claiming playback succeeded.\n\nThe Android Adhan lifecycle policy was updated to match this implementation: a configured foreground session may use the dedicated local-audio path; background and terminated states remain notification alerts. This does not claim unrestricted full-length background audio, physical-device audio-focus behaviour, or native delivery timing acceptance.\n\nDuring validation, aggregate `npm run check` exposed a pre-existing `https://` literal in `smartDisplayNavigation.ts` that violated the repository remote-network policy. The parser now uses a local `file:///` base for relative URL parsing. The permanent Quality Gate was also missing the already-defined native-permission and remote-network policy commands, so both are now explicit CI steps.\n'''
+          text = validation.read_text()
+          if addition.strip() not in text:
+              validation.write_text(text.rstrip() + '\n' + addition)
+
+          testing = Path('TESTING.md')
+          testing_addition = '''\n## Local Adhan audio regression coverage (2026-08-17)\n\n- `src/platform/localAdhanAudio.test.ts` validates bounded audio-file acceptance/rejection and exact per-prayer foreground trigger keys.\n- Adhan trigger semantics deliberately follow `adhanEnabled` independently of the ordinary notification-enable toggle, matching the notification-intent model.\n- `src/platform/androidAdhanPolicy.test.ts` locks foreground local-audio availability versus background/terminated notification-only delivery.\n- `src/ui/LocalAdhanAudioSettings.test.tsx` verifies the English and Arabic local-file chooser, `audio/*` restriction and visible lifecycle wording.\n- Repository aggregate validation must include `security:native-permissions` and `security:remote-network`; the permanent Quality Gate now runs both.\n- Automated tests do not claim physical-device media-volume, audio-focus, silent-mode, browser/WebView autoplay or background delivery timing acceptance.\n'''
+          text = testing.read_text()
+          if testing_addition.strip() not in text:
+              testing.write_text(text.rstrip() + '\n' + testing_addition)
+          PY
+      - name: Canonical formatting
+        run: |
+          npx prettier --write TODO.md TESTING.md docs/VALIDATION_2026-08-17.md docs/ADHAN_AUDIO_RIGHTS.md docs/NOTIFICATION_LIMITATIONS.md src/platform/androidAdhanPolicy.ts src/platform/androidAdhanPolicy.test.ts src/platform/localAdhanAudio.ts src/platform/localAdhanAudio.test.ts src/platform/smartDisplayNavigation.ts src/ui/LocalAdhanAudioSettings.tsx src/ui/LocalAdhanAudioSettings.test.tsx .github/workflows/ci.yml
+      - name: Full repository gate
+        run: npm run check
+      - name: Commit reconciliation
+        run: |
+          git config user.name privacyOG
+          git config user.email kriptiik@proton.me
+          git add TODO.md TESTING.md docs/VALIDATION_2026-08-17.md docs/ADHAN_AUDIO_RIGHTS.md docs/NOTIFICATION_LIMITATIONS.md src/platform/androidAdhanPolicy.ts src/platform/androidAdhanPolicy.test.ts src/platform/localAdhanAudio.ts src/platform/localAdhanAudio.test.ts src/platform/smartDisplayNavigation.ts src/ui/LocalAdhanAudioSettings.tsx src/ui/LocalAdhanAudioSettings.test.tsx .github/workflows/ci.yml
+          if ! git diff --cached --quiet; then
+            git commit -m 'Reconcile local Adhan audio validation [local-adhan-v2]'
+            git push origin HEAD:privacyog/local-adhan-audio-v2
+          fi
