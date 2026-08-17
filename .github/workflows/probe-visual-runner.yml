@@ -9,6 +9,8 @@ jobs:
   probe:
     runs-on: [self-hosted, Linux, X64]
     timeout-minutes: 15
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: ${{ runner.temp }}/pw-browsers
     steps:
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -19,7 +21,6 @@ jobs:
         run: |
           tmpdir="$(mktemp -d)"
           echo "VISUAL_PROBE_DIR=$tmpdir" >> "$GITHUB_ENV"
-          echo "PLAYWRIGHT_BROWSERS_PATH=$RUNNER_TEMP/pw-browsers" >> "$GITHUB_ENV"
           cd "$tmpdir"
           npm init -y >/dev/null 2>&1
           npm install --ignore-scripts --save-exact playwright@1.55.0
