@@ -29,6 +29,19 @@ jobs:
       - name: Install image tooling
         run: python3 -m pip install --user Pillow==11.3.0
 
+      - name: Reconstruct canonical SalahOS source
+        run: |
+          set -euo pipefail
+          cat artwork/.salahos-source-part-* | base64 --decode > artwork/salahos-icon-source.jpg
+          python3 - <<'PY'
+          from PIL import Image
+          image = Image.open('artwork/salahos-icon-source.jpg')
+          image.load()
+          if image.size != (512, 512):
+              raise SystemExit(f'unexpected source size: {image.size}')
+          print('Canonical SalahOS source reconstructed:', image.size)
+          PY
+
       - name: Build source-backed SalahOS assets
         run: python3 scripts/apply-canonical-salahos-brand.py
 
@@ -53,7 +66,7 @@ jobs:
           set -euo pipefail
           git config user.name 'privacyOG'
           git config user.email 'kriptiik@proton.me'
-          rm -f scripts/apply-canonical-salahos-brand.py .github/workflows/apply-canonical-salahos-brand.yml
+          rm -f artwork/.salahos-source-part-* scripts/apply-canonical-salahos-brand.py .github/workflows/apply-canonical-salahos-brand.yml
           git add -A
           git diff --cached --check
           git commit -m 'Use canonical SalahOS logo and app icons'
