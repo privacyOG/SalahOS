@@ -118,7 +118,7 @@ function expectCanonicalParity(fixture: CanonicalFixture): void {
     const actual = schedule.prayers[prayer].roundedLocalMinutes;
     expect(actual, `${fixture.label}: ${prayer} should be available`).not.toBeNull();
     expect(
-      Math.abs((actual as number) - fixture.expected[prayer]),
+      Math.abs(actual! - fixture.expected[prayer]),
       `${fixture.label}: ${prayer}`,
     ).toBeLessThanOrEqual(2);
   }
