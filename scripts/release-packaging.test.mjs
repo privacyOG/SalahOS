@@ -22,8 +22,12 @@ describe('release asset workflow', () => {
     expect(workflow).toContain('Exact-main release preflight');
     expect(workflow).toContain('git fetch origin main --no-tags');
     expect(workflow).toContain('git rev-parse origin/main');
-    expect(workflow).toContain('Release candidate ${HEAD_SHA} is not exact current main ${MAIN_SHA}');
-    expect(workflow).toContain('does not match package version v${PACKAGE_VERSION}');
+    expect(workflow).toContain(
+      'Release candidate ${HEAD_SHA} is not exact current main ${MAIN_SHA}',
+    );
+    expect(workflow).toContain(
+      'does not match package version v${PACKAGE_VERSION}',
+    );
   });
 
   it('publishes versioned Web/PWA and Raspberry Pi bundles', () => {
@@ -50,7 +54,9 @@ describe('release asset workflow', () => {
     expect(workflow).toContain('SALAHOS_ANDROID_KEY_PASSWORD');
     expect(workflow).toContain("SALAHOS_ANDROID_REQUIRE_SIGNING: 'true'");
     expect(workflow).toContain('android-actions/setup-android@v3');
-    expect(workflow).toContain("sdkmanager 'platforms;android-36' 'build-tools;36.0.0'");
+    expect(workflow).toContain(
+      "sdkmanager 'platforms;android-36' 'build-tools;36.0.0'",
+    );
     expect(workflow).toContain('apksigner');
     expect(workflow).toContain('app-release.apk');
     expect(workflow).not.toContain('app-debug.apk');
@@ -61,21 +67,27 @@ describe('release asset workflow', () => {
     expect(packageJson.scripts['android:release-check']).toBe(
       'node scripts/build-android-release.mjs',
     );
-    expect(packageJson.scripts['android:release-unsigned-check']).toContain('assembleRelease');
+    expect(packageJson.scripts['android:release-unsigned-check']).toContain(
+      'assembleRelease',
+    );
     expect(androidBuild).toContain('SALAHOS_ANDROID_KEYSTORE_PATH');
     expect(androidBuild).toContain("SALAHOS_ANDROID_REQUIRE_SIGNING: 'true'");
-    expect(androidGradle).toContain('releaseSigningRequired && !releaseSigningConfigured');
+    expect(androidGradle).toContain(
+      'releaseSigningRequired && !releaseSigningConfigured',
+    );
     expect(androidGradle).toContain('release keystore does not exist');
   });
 
   it('runs a final exact-file package preflight before publication', () => {
     expect(workflow).toContain('final-package-preflight:');
     expect(workflow).toContain('Final package preflight');
-    expect(workflow).toContain("name: release-final");
-    expect(workflow).toContain("unzip -t \"release/$WEB\"");
-    expect(workflow).toContain("tar -tzf \"release/$PI\"");
+    expect(workflow).toContain('name: release-final');
+    expect(workflow).toContain('unzip -t "release/$WEB"');
+    expect(workflow).toContain('tar -tzf "release/$PI"');
     expect(workflow).toContain("find . -maxdepth 1 -type f -printf '%f\\n'");
-    expect(workflow).toContain('Reverify checksums immediately before publication');
+    expect(workflow).toContain(
+      'Reverify checksums immediately before publication',
+    );
   });
 
   it('publishes only the final preflighted package', () => {
