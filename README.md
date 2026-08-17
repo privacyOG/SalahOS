@@ -41,11 +41,26 @@ SalahOS is designed around accurate local prayer calculations, selectable calcul
 - Web/PWA offline shell and locally persisted settings/timetables.
 - Raspberry Pi Touch Display 2 fixture/deployment tooling and browser-based smart-display mode for TV/kiosk use.
 
+## Downloads
+
+Beginning with v1.1.0, GitHub releases are designed to include ready-to-use, checksum-verified packages rather than source archives alone:
+
+- **Android:** `SalahOS-vX.Y.Z-android.apk` — published only when it is signed with the project's persistent Android release key and verified with Android `apksigner`.
+- **Web/PWA:** `SalahOS-vX.Y.Z-web-pwa.zip` — production static Web/PWA files.
+- **Raspberry Pi / kiosk:** `SalahOS-vX.Y.Z-raspberry-pi-kiosk.tar.gz` — production application files plus Chromium kiosk/autostart helpers.
+- **Integrity:** `SHA256SUMS.txt` — SHA-256 checksums for every published release package.
+
+A consumer iOS `.ipa` will be added only after Apple distribution signing/provisioning is configured. A macOS `.dmg` will be added only after SalahOS has a real macOS native application target; simulator or Web artifacts will not be mislabeled as desktop installers.
+
+See [Downloadable release assets](docs/RELEASE_ASSETS.md) for installation choices and signing/distribution boundaries.
+
 ## Documentation
 
 - [Build and Web/PWA deployment](BUILD.md)
 - [Android build and install](docs/ANDROID.md)
 - [iOS/iPadOS build, install and signing](docs/IOS_BUILD_SIGNING.md)
+- [Downloadable release assets](docs/RELEASE_ASSETS.md)
+- [Canonical branding](docs/BRANDING.md)
 - [Native permission review](docs/NATIVE_PERMISSIONS.md)
 - [Tested platform/build status](docs/PLATFORM_STATUS.md)
 - [Troubleshooting](docs/TROUBLESHOOTING.md)
@@ -56,7 +71,7 @@ SalahOS is designed around accurate local prayer calculations, selectable calcul
 - [Research and calculation references](RESEARCH.md)
 - [Verification evidence](TESTING.md)
 - [Implementation tracker](TODO.md)
-- [Draft v1 release notes](RELEASE_NOTES.md)
+- [Release notes](RELEASE_NOTES.md)
 
 ## Platform status
 
@@ -88,6 +103,8 @@ The dependency lockfile is committed and pinned for reproducible installation. N
 ## Release status
 
 SalahOS v1.0.0 is the first production repository/source release and is tagged at exact release commit `b03482d06d989bfa42dd1dfd55bcc2e2994d97b8`. That revision passed Quality Gate `32061495596`, Android Build `32061495556`, Visual Regression `32061495626` and iOS Build `32061495534` before the tag was created. The release boundary intentionally does not convert unperformed physical iPhone/iPad, Android OEM, Raspberry Pi Touch Display 2 or TV/panel checks into completed evidence, and it does not imply App Store/Play Store publication or signed store binaries.
+
+The v1.1.0 candidate adds the canonical SalahOS branding and a release-asset pipeline for nontechnical distribution. The v1.1.0 tag must not be created until its exact release revision passes the permanent gates and the signed Android APK job succeeds with the persistent release signing identity.
 
 The tested platform matrix and remaining physical/target-environment validation are documented in [docs/PLATFORM_STATUS.md](docs/PLATFORM_STATUS.md), [TESTING.md](TESTING.md) and [TODO.md](TODO.md).
 
