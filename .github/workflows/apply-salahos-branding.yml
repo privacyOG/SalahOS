@@ -33,7 +33,7 @@ jobs:
         run: python3 scripts/generate_pwa_icons.py
 
       - name: Format text assets
-        run: npx prettier --write src/App.tsx src/ui/SmartDisplay.tsx src/styles.css src/smart-display.css public/manifest.webmanifest public/sw.js index.html README.md
+        run: npx prettier --write scripts/apply-salahos-branding.mjs src/App.tsx src/ui/SmartDisplay.tsx src/styles.css src/smart-display.css public/manifest.webmanifest public/sw.js index.html README.md
 
       - name: Validate generated branding
         run: |
