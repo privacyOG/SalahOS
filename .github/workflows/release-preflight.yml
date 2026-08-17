@@ -1,0 +1,167 @@
+name: v1.1.0 Release Preflight
+
+on:
+  push:
+    branches:
+      - privacyog/v1.1.0-release-preflight
+
+permissions:
+  contents: read
+
+jobs:
+  web-kiosk:
+    name: Package Web and Raspberry Pi assets
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies from lockfile
+        run: npm ci --ignore-scripts
+
+      - name: Repository quality gate
+        run: npm run check
+
+      - name: Package release assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="$(node -p "require('./package.json').version")"
+          mkdir -p release/web release/pi/SalahOS
+          cp -a dist/. release/web/
+          cp -a dist release/pi/SalahOS/dist
+          mkdir -p release/pi/SalahOS/scripts/kiosk
+          cp scripts/kiosk/run-salahos-kiosk.sh scripts/kiosk/install-labwc-autostart.sh release/pi/SalahOS/scripts/kiosk/
+          cp docs/RELEASE_ASSETS.md release/pi/SalahOS/INSTALL.md
+          chmod +x release/pi/SalahOS/scripts/kiosk/*.sh
+          (cd release/web && zip -qr "../SalahOS-v${VERSION}-web-pwa.zip" .)
+          tar -C release/pi -czf "release/SalahOS-v${VERSION}-raspberry-pi-kiosk.tar.gz" SalahOS
+          sha256sum \
+            "release/SalahOS-v${VERSION}-web-pwa.zip" \
+            "release/SalahOS-v${VERSION}-raspberry-pi-kiosk.tar.gz" \
+            > release/SHA256SUMS-web-kiosk.txt
+          test -s "release/SalahOS-v${VERSION}-web-pwa.zip"
+          test -s "release/SalahOS-v${VERSION}-raspberry-pi-kiosk.tar.gz"
+          sha256sum --check release/SHA256SUMS-web-kiosk.txt
+
+      - name: Upload Web/PWA and Raspberry Pi preflight assets
+        uses: actions/upload-artifact@v4
+        with:
+          name: v1.1.0-preflight-web-kiosk
+          path: |
+            release/SalahOS-v*-web-pwa.zip
+            release/SalahOS-v*-raspberry-pi-kiosk.tar.gz
+            release/SHA256SUMS-web-kiosk.txt
+          if-no-files-found: error
+          retention-days: 7
+
+  android-signing:
+    name: Probe and verify Android release signing
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      SALAHOS_ANDROID_KEYSTORE_BASE64: ${{ secrets.SALAHOS_ANDROID_KEYSTORE_BASE64 }}
+      SALAHOS_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.SALAHOS_ANDROID_KEYSTORE_PASSWORD }}
+      SALAHOS_ANDROID_KEY_ALIAS: ${{ secrets.SALAHOS_ANDROID_KEY_ALIAS }}
+      SALAHOS_ANDROID_KEY_PASSWORD: ${{ secrets.SALAHOS_ANDROID_KEY_PASSWORD }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Check signing configuration
+        id: signing
+        shell: bash
+        run: |
+          set -euo pipefail
+          missing=()
+          for name in \
+            SALAHOS_ANDROID_KEYSTORE_BASE64 \
+            SALAHOS_ANDROID_KEYSTORE_PASSWORD \
+            SALAHOS_ANDROID_KEY_ALIAS \
+            SALAHOS_ANDROID_KEY_PASSWORD; do
+            [[ -n "${!name:-}" ]] || missing+=("$name")
+          done
+          if (( ${#missing[@]} > 0 )); then
+            printf 'Android release signing is not configured. Missing secret names:'
+            printf ' %s' "${missing[@]}"
+            printf '\n'
+            echo 'configured=false' >> "$GITHUB_OUTPUT"
+          else
+            echo 'Android release signing secrets are configured.'
+            echo 'configured=true' >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Setup Node.js
+        if: steps.signing.outputs.configured == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Setup Java
+        if: steps.signing.outputs.configured == 'true'
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Setup Android SDK
+        if: steps.signing.outputs.configured == 'true'
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK packages
+        if: steps.signing.outputs.configured == 'true'
+        run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
+
+      - name: Install dependencies from lockfile
+        if: steps.signing.outputs.configured == 'true'
+        run: npm ci --ignore-scripts
+
+      - name: Prepare temporary keystore
+        if: steps.signing.outputs.configured == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          KEYSTORE="$RUNNER_TEMP/salahos-release.jks"
+          printf '%s' "$SALAHOS_ANDROID_KEYSTORE_BASE64" | base64 --decode > "$KEYSTORE"
+          chmod 600 "$KEYSTORE"
+          test -s "$KEYSTORE"
+          echo "SALAHOS_ANDROID_KEYSTORE_PATH=$KEYSTORE" >> "$GITHUB_ENV"
+
+      - name: Build signed Android release APK
+        if: steps.signing.outputs.configured == 'true'
+        run: npm run android:release-check
+
+      - name: Verify and package signed APK
+        if: steps.signing.outputs.configured == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="$(node -p "require('./package.json').version")"
+          APK='android/app/build/outputs/apk/release/app-release.apk'
+          test -s "$APK"
+          APKSIGNER="$(find "${ANDROID_HOME:-$ANDROID_SDK_ROOT}/build-tools" -type f -name apksigner -perm -u+x | sort -V | tail -1)"
+          test -x "$APKSIGNER"
+          "$APKSIGNER" verify --verbose --print-certs "$APK"
+          mkdir -p release
+          cp "$APK" "release/SalahOS-v${VERSION}-android.apk"
+          sha256sum "release/SalahOS-v${VERSION}-android.apk" > release/SHA256SUMS-android.txt
+          sha256sum --check release/SHA256SUMS-android.txt
+
+      - name: Upload signed Android preflight asset
+        if: steps.signing.outputs.configured == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: v1.1.0-preflight-android
+          path: |
+            release/SalahOS-v*-android.apk
+            release/SHA256SUMS-android.txt
+          if-no-files-found: error
+          retention-days: 7
