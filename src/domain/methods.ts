@@ -18,9 +18,7 @@ export type IshaRule =
   | { readonly kind: 'interval'; readonly minutesAfterMaghrib: number };
 
 export type MethodVerification =
-  | 'cross-checked-reference'
-  | 'pending-authoritative-source'
-  | 'custom';
+  'cross-checked-reference' | 'pending-authoritative-source' | 'custom';
 
 export interface CalculationMethod {
   readonly id: CalculationMethodId;
