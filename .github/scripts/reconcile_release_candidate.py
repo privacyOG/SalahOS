@@ -1,0 +1,128 @@
+from pathlib import Path
+
+CODE_HEAD = "b0699274ef41980d03f0321346eabe5ae758758f"
+QUALITY = "32032477140"
+ANDROID = "32032477112"
+VISUAL = "32032477113"
+IOS = "32032477111"
+ARTIFACT = "9289927972"
+
+
+def replace(path: str, old: str, new: str) -> None:
+    file_path = Path(path)
+    text = file_path.read_text()
+    if old not in text:
+        raise SystemExit(f"Expected text not found in {path}: {old[:120]!r}")
+    file_path.write_text(text.replace(old, new, 1))
+
+
+replace(
+    "README.md",
+    "SalahOS v1 is not tagged yet. The release-candidate branch now contains the permanent fresh iPhone/iPad Simulator build/install/launch/relaunch gate in addition to the shared quality gate, Android build/emulator path and 14-scenario browser visual matrix. Final release readiness requires those automated gates to pass together on the exact release-candidate revision and the final review/documentation state to be reconciled. Physical notification/audio/display behavior and network-isolated iOS cold start remain explicitly outside the automated evidence and are not inferred from emulator, Simulator or browser execution.",
+    f"SalahOS v1 is not tagged yet. Release-candidate code head `{CODE_HEAD}` passed Quality Gate `{QUALITY}`, Android Build `{ANDROID}`, Visual Regression `{VISUAL}` and iOS Build `{IOS}` together. The iOS run created fresh iPhone 17 Pro and iPad Pro 13-inch Simulators, installed and launched the application, explicitly terminated/relaunched it and retained screenshot/runtime evidence; the screenshots were manually inspected after a safe-area defect was found and corrected. The final documentation-only review head must retain all four passing automated gates before merge/tagging. Physical notification/audio/display behavior and network-isolated iOS cold start remain explicitly outside the automated evidence and are not inferred from emulator, Simulator or browser execution.",
+)
+
+replace(
+    "docs/IOS_VALIDATION_STATUS.md",
+    "This establishes automated packaging/install/launch/relaunch evidence on fresh iPhone and iPad Simulator instances once the exact workflow revision passes. It is not a signed physical-device deployment, does not imply App Store acceptance and does not convert Simulator-only behavior into a physical-device claim.",
+    f"PR #101 code-bearing head `{CODE_HEAD}` passed iOS Build run `{IOS}`. The run used iOS 26.2 with a fresh iPhone 17 Pro Simulator and fresh iPad Pro 13-inch (M5) Simulator, installed the newly built application, resolved its container, launched it, explicitly terminated/relaunched it and uploaded artifact `{ARTIFACT}`. Both launch and relaunch screenshots were manually inspected. An earlier artifact exposed an iPhone status-bar/Dynamic-Island overlap; `viewport-fit=cover` plus safe-area inset padding and a source-contract regression test corrected that defect before this passing run. It is not a signed physical-device deployment, does not imply App Store acceptance and does not convert Simulator-only behavior into a physical-device claim.",
+)
+replace(
+    "docs/IOS_VALIDATION_STATUS.md",
+    "Screenshot capture proves that a renderable application surface exists after launch/relaunch. Human aesthetic review and physical touch/safe-area behavior remain separate acceptance activities.",
+    "The recorded launch/relaunch screenshots were manually inspected for gross layout failure and the iPhone safe-area regression. Automated Simulator responsive-layout acceptance is therefore recorded for the tested iPhone/iPad profiles. Physical touch ergonomics, device-specific safe-area variation, Dynamic Type and broader aesthetic acceptance remain separate physical-device activities.",
+)
+replace(
+    "docs/IOS_VALIDATION_STATUS.md",
+    "Earlier 2026-08-16 native-foundation, notification and lifecycle runs proved Xcode Simulator compilation but did not exercise interactive runtime launch. A later private-repository period also produced hosted macOS jobs rejected before checkout because of account billing/spending state. After the repository became public, standard GitHub-hosted macOS execution became available again. The permanent workflow now uses that environment for current Simulator build/install/launch/relaunch acceptance while preserving the physical-device boundary above.",
+    f"Earlier 2026-08-16 native-foundation, notification and lifecycle runs proved Xcode Simulator compilation but did not exercise interactive runtime launch. A later private-repository period also produced hosted macOS jobs rejected before checkout because of account billing/spending state. After the repository became public, standard GitHub-hosted macOS execution became available again. PR #101 code-bearing head `{CODE_HEAD}` then passed the permanent fresh-device Simulator acceptance in iOS Build `{IOS}` with artifact `{ARTIFACT}`. The permanent workflow retains that build/install/launch/relaunch boundary while physical-device, notification-delivery, audio-policy, network-isolated offline-start and distribution acceptance remain open.",
+)
+
+replace(
+    "docs/PLATFORM_STATUS.md",
+    "The permanent `macos-15` workflow performs the complete repository quality gate and Xcode Simulator build, dynamically creates fresh iPhone and iPad Simulators, installs the newly built application, verifies its application container, launches it, captures a valid screenshot, explicitly terminates it, relaunches it and captures a second valid screenshot. Runtime artifacts are retained for inspection. This is Simulator acceptance, not physical-device acceptance.",
+    f"The permanent `macos-15` workflow performs the complete repository quality gate and Xcode Simulator build, dynamically creates fresh iPhone and iPad Simulators, installs the newly built application, verifies its application container, launches it, captures a valid screenshot, explicitly terminates it, relaunches it and captures a second valid screenshot. PR #101 code-bearing head `{CODE_HEAD}` passed this path in iOS Build `{IOS}` using fresh iPhone 17 Pro and iPad Pro 13-inch (M5) Simulators on iOS 26.2; artifact `{ARTIFACT}` retains the runtime evidence. Manual artifact inspection caught and drove correction of an iPhone status-bar/Dynamic-Island overlap before the passing run. This is Simulator acceptance, not physical-device acceptance.",
+)
+replace(
+    "docs/PLATFORM_STATUS.md",
+    "The iOS workflow correctly remains on standard GitHub-hosted macOS because Xcode/iOS Simulator builds cannot run on the Linux runner. Earlier private-repository jobs were rejected before checkout because of account billing/spending state. After the repository became public, standard hosted macOS runners executed successfully again, including the current-main iOS compile path. The permanent iOS workflow is now extended to build plus fresh iPhone/iPad Simulator install/launch/relaunch acceptance. Runner availability is infrastructure state and is not represented as a permanent guarantee.",
+    f"The iOS workflow correctly remains on standard GitHub-hosted macOS because Xcode/iOS Simulator builds cannot run on the Linux runner. Earlier private-repository jobs were rejected before checkout because of account billing/spending state. After the repository became public, standard hosted macOS runners executed successfully again. On PR #101 code-bearing head `{CODE_HEAD}`, the complete release-candidate gate set passed together: Quality Gate `{QUALITY}`, Android Build `{ANDROID}`, Visual Regression `{VISUAL}` and iOS Build `{IOS}`. Runner availability is infrastructure state and is not represented as a permanent guarantee.",
+)
+
+p = Path("TODO.md")
+todo = p.read_text()
+old = """- [!] Test iPhone responsive layout — requires interactive iOS Simulator/device acceptance
+- [!] Test iPad responsive layout — requires interactive iPad Simulator/device acceptance
+- [!] Test offline cold start — requires interactive iOS Simulator/device acceptance
+- [x] Prepare signing/build documentation without committing credentials"""
+new = """- [x] Test iPhone responsive layout in a fresh iOS Simulator
+- [x] Test iPad responsive layout in a fresh iPadOS Simulator
+- [!] Test offline cold start — the current Simulator gate does not isolate networking; network-isolated iOS acceptance remains required
+- [x] Prepare signing/build documentation without committing credentials"""
+if old not in todo:
+    raise SystemExit("Stage 9 layout block not found")
+todo = todo.replace(old, new, 1)
+old = "- [!] Run on simulator/device when macOS/Xcode environment is available — no interactive Xcode target environment is available in the current work session"
+new = "- [x] Run on fresh iPhone and iPad Simulators in hosted macOS/Xcode and record evidence"
+if old not in todo:
+    raise SystemExit("Stage 9 simulator marker not found")
+todo = todo.replace(old, new, 1)
+anchor = "**iOS validation-status note (2026-08-16):** read-only Quality Gate run `31914072847` passed formatting, typed lint, strict typecheck, all tests and production build after adding `docs/IOS_VALIDATION_STATUS.md`. The document separates shared CI evidence from macOS/Xcode simulator checks and physical iPhone/iPad checks, and requires native-specific tracker items to remain open until the corresponding evidence is recorded. Signing credentials and private keys are explicitly excluded from the repository."
+extra = anchor + f"\n\n**iOS Simulator release-candidate acceptance note (2026-08-17):** PR #101 code-bearing head `{CODE_HEAD}` passed Quality Gate `{QUALITY}`, Android Build `{ANDROID}`, Visual Regression `{VISUAL}` and permanent iOS Build `{IOS}`. The iOS job used iOS 26.2 with fresh iPhone 17 Pro and iPad Pro 13-inch (M5) Simulators, installed `com.privacyog.salahos`, resolved the application container, launched, captured screenshots, terminated, relaunched and captured second screenshots. Artifact `{ARTIFACT}` records both profiles. Manual artifact review exposed an earlier iPhone status-bar/Dynamic-Island overlap; `viewport-fit=cover`, four-edge safe-area inset padding and a source-contract regression test were added before the final passing run, whose launch/relaunch screenshots were visually clear of the status bar. These items complete automated Simulator responsive-layout/runtime acceptance only. Physical-device GPS, notifications, audio-session/focus, touch/Dynamic Type, signed distribution and network-isolated iOS cold start remain explicitly open."
+if anchor not in todo:
+    raise SystemExit("Stage 9 note anchor not found")
+todo = todo.replace(anchor, extra, 1)
+todo = todo.replace("- [ ] Perform fresh final code review", "- [x] Perform fresh final code review", 1)
+todo = todo.replace(
+    "- [ ] Ensure `TODO.md`, `DESIGN.md`, `RESEARCH.md` and `TESTING.md` reflect actual state",
+    "- [x] Ensure `TODO.md`, `DESIGN.md`, `RESEARCH.md` and `TESTING.md` reflect actual state",
+    1,
+)
+old = "**Release-blocker reconciliation note (2026-08-17):** all current `[!]` items above and in Stages 7, 9 and 11 identify the missing target environment explicitly. PR #91 moved the Linux Quality Gate and Android Build to the self-hosted EVO-X2 runner. Exact merged-main commit `3980a67ed13243d15438d5303ac2fdfd76db6d5f` passed Quality Gate `31986937094` and Android Build `31986937065`. The iOS workflow remains macOS/Xcode-only, and current run `31986937067` was rejected before any step executed because the account billing/spending state still blocks hosted macOS execution. This remaining macOS infrastructure limitation is not an application test failure, and the repository must not be tagged while applicable iOS/device/visual/release blockers remain."
+new = f"**Release-blocker reconciliation note (2026-08-17):** all current `[!]` items identify physical or target-environment evidence that is still genuinely unavailable. PR #101 code-bearing head `{CODE_HEAD}` passed the complete automated release-candidate gate set: Quality Gate `{QUALITY}`, Android Build `{ANDROID}`, Visual Regression `{VISUAL}` and iOS Build `{IOS}`. The latest iOS artifact was manually reviewed after fixing the discovered iPhone safe-area defect. Physical iPhone/iPad behavior, real mobile notification/audio timing, network-isolated iOS cold start, physical Raspberry Pi Touch Display 2 and physical TV/kiosk acceptance remain explicit post-release validation items and are not represented as completed by emulator/Simulator/browser evidence. The exact final documentation head must still retain all four automated gates before merge and tagging."
+if old not in todo:
+    raise SystemExit("Release blocker note not found")
+todo = todo.replace(old, new, 1)
+todo = todo.replace(
+    "- [~] Automated quality gates pass — exact-main Linux Quality Gate and Android Build pass on the self-hosted EVO-X2; current exact-main iOS/macOS build remains infrastructure-blocked before job execution",
+    f"- [x] Automated release-candidate gates pass — code-bearing PR #101 head `{CODE_HEAD}` passed Quality Gate `{QUALITY}`, Android Build `{ANDROID}`, Visual Regression `{VISUAL}` and iOS Build `{IOS}`; the exact final documentation head must retain the same gate set before merge/tagging",
+    1,
+)
+todo = todo.replace("- [ ] Final code review and regression pass are complete", "- [x] Final code review and regression pass are complete", 1)
+p.write_text(todo)
+
+p = Path("TESTING.md")
+testing = p.read_text()
+heading = "### 2026-08-17 — PR #101 iOS Simulator release-candidate acceptance"
+if heading not in testing:
+    testing += f"""
+
+{heading}
+
+- Code-bearing PR #101 head `{CODE_HEAD}` passed Quality Gate `{QUALITY}`, Android Build `{ANDROID}`, Visual Regression `{VISUAL}` and iOS Build `{IOS}` together.
+- The permanent iOS job ran the complete repository quality gate, production build and Capacitor sync, then compiled the Xcode Simulator application without signing.
+- The runtime stage used iOS 26.2 and created fresh iPhone 17 Pro and iPad Pro 13-inch (M5) Simulators. It installed `com.privacyog.salahos`, verified each application container, launched each profile with a numeric PID, captured a PNG, explicitly terminated the application, relaunched it with a new numeric PID and captured a second PNG.
+- Artifact `{ARTIFACT}` contains `iphone-launch.png`, `iphone-relaunch.png`, `ipad-launch.png`, `ipad-relaunch.png` and per-profile evidence text.
+- Manual artifact review found an earlier iPhone build rendering the SalahOS header underneath the status-bar/Dynamic-Island safe area. The release-candidate branch added `viewport-fit=cover`, four-edge safe-area inset padding and a direct source-contract test; the final passing iPhone launch and relaunch screenshots are clear of the status bar, and the iPad screenshots remain clean.
+- This records automated iPhone/iPad Simulator responsive-layout plus launch/relaunch acceptance. It does not claim physical-device GPS/permissions, notification delivery/timing, audio-session/focus behavior, touch/Dynamic Type, signed distribution or network-isolated iOS cold start.
+- Final review confirmed the PR contains only the intended permanent iOS CI, safe-area correction/regression test and documentation/reference updates; temporary probe/formatter/reconciliation workflows must not remain in the merge tree.
+"""
+p.write_text(testing)
+
+p = Path("docs/VALIDATION_2026-08-17.md")
+validation = p.read_text()
+heading = "## Superseding hosted iOS Simulator release-candidate evidence"
+if heading not in validation:
+    validation += f"""
+
+{heading}
+
+PR #101 code-bearing head `{CODE_HEAD}` supersedes the earlier macOS-runner blocker for current Simulator acceptance. It passed Quality Gate `{QUALITY}`, Android Build `{ANDROID}`, Visual Regression `{VISUAL}` and iOS Build `{IOS}` together.
+
+The permanent iOS workflow used hosted `macos-15`, completed the repository quality gate and Xcode Simulator build, then created fresh iPhone 17 Pro and iPad Pro 13-inch (M5) Simulators on iOS 26.2. It installed the freshly built application, resolved `com.privacyog.salahos` containers, launched each application process, captured valid screenshots, explicitly terminated each app, relaunched it and captured second screenshots. Artifact `{ARTIFACT}` retains the evidence.
+
+Manual inspection of an earlier probe artifact exposed a genuine iPhone status-bar/Dynamic-Island overlap that was not detectable from PNG existence/dimension checks alone. The branch corrected the WebView safe-area contract with `viewport-fit=cover`, four-edge `env(safe-area-inset-*)` padding and a direct source-contract regression test. The final passing launch/relaunch screenshots were then manually inspected and show the SalahOS content below the iPhone status area; the iPad surface is also clean.
+
+This closes the hosted iPhone/iPad Simulator runtime and responsive-layout acceptance boundary. It does **not** close network-isolated iOS cold start, physical iPhone/iPad GPS/permission behavior, real local-notification delivery/timing including DST, real audio-session/focus behavior, haptics, physical touch/Dynamic Type, reboot lifecycle, signing/provisioning/TestFlight/App Store distribution, physical Raspberry Pi Touch Display 2, physical TV/kiosk or Android OEM notification timing. Those remain explicit target-environment evidence rather than inferred automated claims.
+"""
+p.write_text(validation)
