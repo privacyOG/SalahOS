@@ -101,6 +101,23 @@ const fixtures: readonly CanonicalFixture[] = [
       isha: 20 * 60 + 41,
     },
   },
+  {
+    label: 'Adhan JS Dubai / UAE Awqaf fixture / Standard',
+    date: '2016-01-01',
+    latitude: 25.263056,
+    longitude: 55.297222,
+    utcOffsetMinutes: 240,
+    method: 'dubai',
+    asrConvention: 'standard',
+    expected: {
+      fajr: 5 * 60 + 42,
+      sunrise: 7 * 60 + 1,
+      dhuhr: 12 * 60 + 25,
+      asr: 15 * 60 + 24,
+      maghrib: 17 * 60 + 44,
+      isha: 19 * 60 + 3,
+    },
+  },
 ];
 
 function expectCanonicalParity(fixture: CanonicalFixture): void {
