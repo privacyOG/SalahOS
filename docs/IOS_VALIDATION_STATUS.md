@@ -4,18 +4,18 @@ SalahOS shares its prayer, calendar, localisation, persistence and notification-
 
 ## Current automated boundary
 
-The repository has an active standard `macos-15` workflow that installs the exact lockfile, runs the complete repository quality gate, synchronises the committed Capacitor iOS project and builds the application for iOS Simulator with Xcode. The runtime acceptance stage dynamically selects the newest available iOS Simulator runtime, creates fresh iPhone and iPad Simulators, installs the newly built `App.app`, verifies the application container, launches the SalahOS bundle, captures a valid PNG screenshot, explicitly terminates the application, relaunches it and captures a second valid screenshot. The workflow uploads the runtime evidence as an artifact.
+The repository has an active standard `macos-15` workflow that installs the exact lockfile, runs the complete repository quality gate, builds the production web assets, synchronises the committed Capacitor iOS project and builds the application for iOS Simulator with Xcode. The runtime acceptance stage dynamically selects the newest available iOS Simulator runtime, creates fresh iPhone and iPad Simulators, installs the newly built `App.app`, verifies the application container, launches the SalahOS bundle, captures a valid PNG screenshot, explicitly terminates the application, relaunches it and captures a second valid screenshot. The workflow uploads the runtime evidence as an artifact.
 
-This establishes automated packaging/install/launch/relaunch evidence on fresh iPhone and iPad Simulator instances. It is not a signed physical-device deployment, does not imply App Store acceptance and does not convert Simulator-only behavior into a physical-device claim.
+This establishes automated packaging/install/launch/relaunch evidence on fresh iPhone and iPad Simulator instances once the exact workflow revision passes. It is not a signed physical-device deployment, does not imply App Store acceptance and does not convert Simulator-only behavior into a physical-device claim.
 
 ## What Simulator acceptance validates
 
 - clean dependency installation and the complete repository quality gate on the macOS runner;
-- Capacitor synchronization into the committed native iOS project;
+- production web-asset generation and Capacitor synchronization into the committed native iOS project;
 - Xcode compilation for iOS Simulator without signing credentials;
 - availability of a current iOS Simulator runtime and compatible iPhone/iPad device profiles;
 - installation of the freshly built application on newly created Simulator devices;
-- application-container resolution for `io.github.privacyog.salahos`;
+- application-container resolution for `com.privacyog.salahos`;
 - successful process launch and explicit terminate/relaunch through `simctl`;
 - non-empty, decodable launch/relaunch screenshots with valid pixel dimensions;
 - cleanup of created Simulator devices after the run.
