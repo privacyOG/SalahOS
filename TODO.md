@@ -65,16 +65,16 @@
 
 - [x] Build an extensible calculation-method registry rather than hard-coding method logic throughout the engine
 - [~] Record each method's Fajr angle, Isha angle/interval, Maghrib rule where applicable and authoritative source
-- [~] Implement and verify Muslim World League method
+- [x] Implement and verify Muslim World League method
 - [x] Implement and verify Umm al-Qura / Makkah method
-- [~] Implement and verify Egyptian method
+- [x] Implement and verify Egyptian method
 - [~] Implement and verify University of Islamic Sciences, Karachi method
-- [~] Implement and verify ISNA method
+- [x] Implement and verify ISNA method
 - [~] Research and add other reputable regional methods where appropriate, including Diyanet/Turkey, MUIS/Singapore, Dubai, Kuwait and Qatar
 - [x] Provide custom calculation parameters for advanced users where safe and clearly labelled
 - [x] Never silently change an explicitly selected calculation method
 
-**Method-registry note (2026-08-16):** built-in numerical parameters are centralized and cross-checked against pinned/reference sources. MWL, Umm al-Qura, Egyptian, Karachi, ISNA, MUIS, Kuwait and Qatar are tagged `cross-checked-reference`; Diyanet/Turkey and Dubai remain `pending-authoritative-source` because the upstream references themselves describe those profiles as approximation/experimental or require unmodelled offsets. Institutional timetable parity remains a separate requirement from parameter agreement.
+**Method-registry reconciliation note (2026-08-17):** built-in numerical parameters remain centralized and cross-checked against pinned/reference sources. Exact canonical Adhan JS 4.4.4 output fixtures now verify MWL, Egyptian and ISNA within the fixed two-minute model/rounding tolerance. The Turkey interoperability profile also now models the pinned canonical per-event offsets (Sunrise -7, Dhuhr +5, Asr +4, Maghrib +7) and passes its Istanbul fixture, while remaining `pending-authoritative-source` because canonical-library parity is not official Diyanet institutional timetable certification. Dubai remains pending authoritative/offset validation; Karachi remains implemented and parameter-cross-checked but lacks a frozen direct canonical output fixture in this suite.
 
 ### 1.4 Madhhab / Asr calculation
 
@@ -119,12 +119,12 @@
 
 - [x] Archive or pin the canonical reference implementation used for algorithm comparison
 - [x] Create independent cross-check dataset instead of treating one online API as absolute ground truth
-- [~] Compare against canonical calculation implementation
+- [x] Compare against canonical calculation implementation
 - [x] Compare against AlAdhan or another reputable independent calculator as a secondary cross-check
 - [x] Compare against authoritative published timetables where practical
 - [x] Record rounding, offsets and methodology differences instead of forcing false parity
 
-**Stage 2 verification note (2026-08-16):** Adhan JS `4.4.4` is pinned at commit `a6f1a5c4a00105103f310ef18200b95f7184d2e7`; PrayTimes and AlAdhan method definitions are documented as additional cross-checks in `docs/PRAYER_METHOD_REFERENCES.md`. Read-only Quality Gate run `31900274451` passed frozen external timetable parity fixtures for Makkah/Umm al-Qura, Singapore/MUIS, Doha/Qatar and Kuwait City/Kuwait within the published/reference adjustment ranges. The broader geographic matrix and direct canonical-algorithm parity remain open.
+**Stage 2 reconciliation note (2026-08-17):** Adhan JS `4.4.4` remains pinned at commit `a6f1a5c4a00105103f310ef18200b95f7184d2e7`; PrayTimes and AlAdhan remain independent cross-checks in `docs/PRAYER_METHOD_REFERENCES.md`. PR #93 added frozen direct canonical output fixtures for ISNA/North America, Muslim World League, Egyptian, Turkey interoperability and MUIS/Singapore, comparing all six displayed daily events at an unchanged two-minute tolerance. Exact PR head `c41a845dc38d6c604045abdf2588be16081b95b5` passed Quality Gate `31992557611` and Android Build `31992557906` on EVO-X2. Earlier external timetable parity fixtures remain valid for Makkah/Umm al-Qura, Singapore/MUIS, Doha/Qatar and Kuwait City/Kuwait. Direct canonical implementation comparison is therefore complete for the defined frozen v1 reference set; institutional certification remains separately tracked where applicable.
 
 ### Geographic test matrix
 
