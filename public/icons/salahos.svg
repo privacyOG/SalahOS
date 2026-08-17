@@ -1,6 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="SalahOS">
-  <rect width="512" height="512" rx="112" fill="#101510"/>
-  <path d="M256 76c54 62 86 126 86 192 0 80-38 138-86 168-48-30-86-88-86-168 0-66 32-130 86-192Z" fill="#c5e0be"/>
-  <path d="M256 152c-30 42-46 82-46 120 0 51 18 90 46 116 28-26 46-65 46-116 0-38-16-78-46-120Z" fill="#101510"/>
-  <circle cx="256" cy="270" r="28" fill="#c5e0be"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="SalahOS icon">
+  <rect width="512" height="512" rx="96" fill="#00543e"/>
+  <g fill="#e0a634">
+    <path d="M320 82a88 88 0 1 0 80 126 72 72 0 1 1-80-126Z"/>
+    <rect x="250" y="94" width="12" height="61"/>
+    <path d="M216 172l40-44 40 44z"/>
+    <rect x="229" y="166" width="54" height="112"/>
+    <rect x="200" y="212" width="112" height="28"/>
+    <rect x="210" y="238" width="92" height="20"/>
+    <rect x="238" y="250" width="36" height="108"/>
+    <path d="M176 338h32v-20h24v24h48v-24h24v20h32v78H176z"/>
+  </g>
+  <g fill="#00543e">
+    <path d="M192 382a16 16 0 0 1 32 0v34h-32z"/>
+    <path d="M240 382a16 16 0 0 1 32 0v34h-32z"/>
+    <path d="M288 382a16 16 0 0 1 32 0v34h-32z"/>
+  </g>
 </svg>
