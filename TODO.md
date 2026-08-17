@@ -667,16 +667,18 @@
 
 ### UI / visual regression
 
-- [ ] Phone portrait — English/light
-- [~] Phone portrait — Arabic/RTL/dark
-- [ ] Phone landscape
-- [ ] Tablet
-- [ ] Raspberry Pi Touch Display 2
-- [ ] 1080p kiosk
-- [ ] Verify no clipping/overflow
+- [x] Phone portrait — English/light
+- [x] Phone portrait — Arabic/RTL/dark
+- [x] Phone landscape
+- [x] Tablet
+- [x] Raspberry Pi Touch Display 2
+- [x] 1080p kiosk
+- [x] Verify no clipping/overflow
 - [~] Verify Arabic/RTL alignment
-- [ ] Verify scalable text/accessibility
-- [ ] Save screenshots/artifacts in CI where practical
+- [x] Verify scalable text/accessibility
+- [x] Save screenshots/artifacts in CI where practical
+
+**Automated visual-regression verification note (2026-08-17):** PR #98 added a deterministic production-build browser matrix on the self-hosted EVO-X2 using an isolated, audited `playwright@1.62.0`/Chromium harness rather than adding browser tooling to the SalahOS dependency graph. Exact PR head `501e5ab64af9c2c1cd7e0137aa398bb8e20307dd` passed Visual Regression run `32004488336`, Android Build `32004488397` and Quality Gate `32004488438`. The visual gate renders 14 scenarios covering 390×844 English/light and Arabic/RTL/dark phone portrait, 844×390 phone landscape, English/Arabic 1024×1366 tablets, English/Arabic 1920×1080 kiosk, 3840×2160 large display, 125% Arabic/RTL phone text with settings expanded, and 5/7/10-inch Touch Display 2 portrait/landscape fixtures. It fails on page errors, locale/direction/theme or viewport mismatches, document/page horizontal overflow, actual viewport escape and explicit clipping, and saves full-page screenshots plus machine-readable results. The first matrix exposed a real 411px-wide Arabic settings overflow at 125% text; responsive containment was corrected before the exact final head passed all 14 scenarios. Exact visual artifact `9279673293` (`visual-regression-7d6e82d7f88309cf4ae197e1686988608c134a8b`) is retained for 30 days. This is automated browser-render evidence only: physical Raspberry Pi Touch Display, TV/panel viewing-distance/remote behaviour and interactive native iPhone/iPad acceptance remain separately blocked. Arabic/RTL alignment stays partial because direction and geometry are automated, while human aesthetic review of the screenshots is not represented as performed.
 
 ---
 
@@ -743,12 +745,12 @@
 - [x] Run lint + typecheck + production build
 - [x] Run prayer-time parity/reference suite
 - [x] Run DST/high-latitude regression suite
-- [ ] Run English + Arabic/RTL visual suite
+- [x] Run English + Arabic/RTL visual suite
 - [x] Validate offline operation
 
 **Core release-verification note (2026-08-16):** main-branch Quality Gate run `31934011315` checked out exact commit `49ac83379cdc357cd5ecb43d964291ec44793906` into a clean hosted workspace, installed the committed lockfile with `npm ci --ignore-scripts` (139 packages installed, 140 audited, zero vulnerabilities), passed repository security/license/documentation/icon-reproducibility policies, formatting, lint, strict typecheck, 58 test files / 269 tests, production build and deploy-artifact verification. The passing suite includes `referenceParity.test.ts` and `methods.reference.test.ts` for prayer-time/reference parity; `timezone.test.ts`, `zonedCivilTime.test.ts`, `highLatitudeIndicators.test.ts`, prayer-engine coverage and smart-display DST integration for DST/high-latitude regression; and `offlineStartup.test.ts`, `service-worker-validation.test.mjs` plus `kioskContinuity.test.ts` for deterministic offline startup/cache/kiosk operation. Visual suites, physical phone/Raspberry Pi/TV layouts, native notification environments, final code review, blocker reconciliation, release notes and release tagging remain open and are not implied by this evidence.
 
-- [ ] Validate phone layout
+- [x] Validate phone layout
 - [!] Validate Raspberry Pi layout — physical Touch Display 2 acceptance requires target hardware
 - [!] Validate TV/kiosk layout — viewing-distance, remote and panel acceptance require a physical display target
 - [!] Validate Android notifications on supported test environment — physical/emulator delivery timing environment is not available in the current session
