@@ -66,13 +66,21 @@ The initial Turkey fixture exposed a real seven-minute Sunrise discrepancy becau
 
 Exact PR head `c41a845dc38d6c604045abdf2588be16081b95b5` passed Quality Gate `31992557611` and Android Build `31992557906` on EVO-X2. The canonical comparison retained the existing two-minute tolerance; it was not widened to make the Turkey fixture pass.
 
-This closes the v1 tracker item for direct canonical implementation comparison and upgrades MWL, Egyptian and ISNA verification. It does not claim official Diyanet institutional timetable certification, and it does not close the remaining Dubai or Karachi evidence gaps.
+This closes the v1 tracker item for direct canonical implementation comparison and upgrades MWL, Egyptian and ISNA verification. It does not claim official Diyanet institutional timetable certification. Subsequent PRs #95 and #96 extend this direct-output evidence to Dubai and Karachi.
+
+## Dubai and Karachi method-evidence completion
+
+PR #95 modelled the pinned Adhan JS 4.4.4 Dubai per-event adjustments (Sunrise -3, Dhuhr +3, Asr +3 and Maghrib +3 minutes) and added the frozen Dubai/Gulf fixture for 2016-01-01. The pinned fixture cites UAE Awqaf published timetable output. Exact PR head `d1468ea5448659cad1d68075db94b8eb5283741c` passed Quality Gate `31993099243` and Android Build `31993099235` on EVO-X2. The fixture passed at the unchanged two-minute tolerance. This is direct/output parity evidence and is not represented as proof that UAE Awqaf internally uses the same simplified parameters.
+
+PR #96 closed the Karachi direct-fixture gap without deriving expected values from SalahOS. A temporary runner workflow installed exact `adhan@4.4.4` in an isolated directory and generated the six prayer events for Karachi coordinates `24.8607, 67.0011` on 2020-01-01 using Standard/Shafi Asr: Fajr 05:55, Sunrise 07:17, Dhuhr 12:36, Asr 15:34, Maghrib 17:54 and Isha 19:15 in Asia/Karachi. The temporary capture workflow was removed before review, and the values were frozen in the permanent parity suite. Exact PR head `cc1d6e785f4607e718c5eb73ceee61e1f917b0a7` passed Quality Gate `31993328375` and Android Build `31993328633`.
+
+These additions close the Karachi method verification item and remove the previously unmodelled Dubai-offset gap. The broader regional-method/source item remains partial because official Diyanet institutional parity is still unresolved and Dubai institutional parameter equivalence is intentionally not inferred from output parity.
 
 ## Remaining release blockers
 
 The following remain applicable before SalahOS v1 can be tagged:
 
-- remaining calculation-method authoritative/reference work where institutional or frozen direct-fixture evidence is still incomplete (notably Diyanet institutional parity, Dubai and Karachi);
+- remaining calculation-method institutional/source-boundary work, principally official Diyanet parity and the intentionally conservative Dubai parameter-equivalence boundary;
 - user-selectable/local Adhan audio and corresponding supported-platform behavior;
 - target notification delivery acceptance, including real platform DST behavior;
 - English/Arabic visual regression and responsive-layout acceptance;

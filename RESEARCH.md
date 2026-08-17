@@ -46,9 +46,9 @@ The registry currently contains profiles for:
 - Qatar;
 - explicit custom parameters.
 
-Current reference status is recorded in `docs/PRAYER_METHOD_REFERENCES.md`. MWL, Umm al-Qura, Egyptian, Karachi, ISNA, MUIS, Kuwait and Qatar parameters have cross-checked reference evidence. Diyanet/Turkey and Dubai still require stronger authoritative/primary parameter evidence or explicit modelling of provider-specific offsets before their registry profiles should be described as institutionally verified.
+Current reference status is recorded in `docs/PRAYER_METHOD_REFERENCES.md`. MWL, Umm al-Qura, Egyptian, Karachi, ISNA, MUIS, Kuwait and Qatar parameters have cross-checked reference evidence. Diyanet/Turkey remains pending institutional equivalence because the official production system includes policy beyond a simple fixed-angle profile. Dubai now models the pinned Adhan JS 4.4.4 provider offsets and has frozen output parity against a fixture whose upstream source cites UAE Awqaf, while still avoiding the stronger claim that the authority internally uses the same simplified parameterization.
 
-Umm al-Qura/Makkah, MUIS/Singapore, Qatar/Doha and Kuwait City also have frozen published/reference timetable parity fixtures. Direct canonical-algorithm parity remains a separate open tracker item and must not be inferred from parameter or timetable agreement.
+Umm al-Qura/Makkah, MUIS/Singapore, Qatar/Doha, Kuwait City and Dubai have frozen published/reference timetable parity fixtures. The direct canonical suite additionally covers ISNA/North America, Muslim World League, Egyptian, Turkey interoperability and Karachi. Karachi expected output was generated independently from exact `adhan@4.4.4` on EVO-X2 before being frozen into SalahOS. Direct canonical comparison is complete for the defined v1 reference set and remains conceptually separate from institutional certification.
 
 ## Madhhab and Asr
 
@@ -119,4 +119,4 @@ No single online calculator is treated as absolute ground truth. Verification us
 3. authoritative published timetables where practical;
 4. documented comparison tolerances that distinguish algorithm, method, timezone, adjustment, and rounding differences.
 
-Current open research/validation work is intentionally visible in `TODO.md`, especially Diyanet/Dubai authoritative parameter evidence and direct canonical-algorithm parity.
+Current open research/validation work is intentionally visible in `TODO.md`, especially official Diyanet institutional parity and the distinction between Dubai output parity and authoritative internal-parameter equivalence. The defined v1 direct canonical-algorithm comparison set is complete.
