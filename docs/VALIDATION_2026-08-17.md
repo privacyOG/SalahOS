@@ -76,6 +76,14 @@ PR #96 closed the Karachi direct-fixture gap without deriving expected values fr
 
 These additions close the Karachi method verification item and remove the previously unmodelled Dubai-offset gap. The broader regional-method/source item remains partial because official Diyanet institutional parity is still unresolved and Dubai institutional parameter equivalence is intentionally not inferred from output parity.
 
+## Automated browser visual regression
+
+PR #98 merged the first persistent production-build visual regression workflow after the EVO-X2 proved an isolated current browser harness could execute headlessly. The permanent workflow installs exact `playwright@1.62.0` only in `/tmp`, audits that isolated harness before use, builds SalahOS from the committed lockfile, serves the production artifact on loopback and renders a deterministic 14-scenario viewport/locale/theme matrix.
+
+The initial matrix distinguished harmless intrinsic element width from actual page overflow and exposed one genuine defect: the Arabic/RTL phone settings view at 125% root text expanded the page to 411px inside a 390px viewport. Production responsive containment was corrected by allowing grid/form children to shrink below intrinsic width, constraining fieldsets/form controls and using a true `minmax(0, 1fr)` narrow settings column.
+
+Exact final PR head `501e5ab64af9c2c1cd7e0137aa398bb8e20307dd` then passed Visual Regression `32004488336`, Android Build `32004488397` and Quality Gate `32004488438`. The visual run passed all 14 scenarios and uploaded artifact `9279673293`, containing full-page screenshots and `results.json`. Automated browser layout, overflow and large-text evidence is therefore current. This does not replace physical Touch Display 2, TV/panel, Android OEM or interactive iPhone/iPad acceptance.
+
 ## Remaining release blockers
 
 The following remain applicable before SalahOS v1 can be tagged:
@@ -83,7 +91,7 @@ The following remain applicable before SalahOS v1 can be tagged:
 - remaining calculation-method institutional/source-boundary work, principally official Diyanet parity and the intentionally conservative Dubai parameter-equivalence boundary;
 - user-selectable/local Adhan audio and corresponding supported-platform behavior;
 - target notification delivery acceptance, including real platform DST behavior;
-- English/Arabic visual regression and responsive-layout acceptance;
+- human screenshot/aesthetic review where desired and physical target responsive-layout acceptance; automated browser visual regression now passes the defined matrix;
 - physical Raspberry Pi Touch Display 2 and television/display acceptance where required;
 - interactive iPhone/iPad acceptance;
 - a fresh final code review/regression pass;
