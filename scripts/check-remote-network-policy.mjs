@@ -50,4 +50,6 @@ if (violations.length > 0) {
   );
 }
 
-console.log(`Remote network policy passed for ${applicationFiles.length} application source files.`);
+console.log(
+  `Remote network policy passed for ${applicationFiles.length} application source files.`,
+);
