@@ -10,7 +10,7 @@ jobs:
     runs-on: [self-hosted, Linux, X64]
     timeout-minutes: 15
     env:
-      PLAYWRIGHT_BROWSERS_PATH: /tmp/salahos-pw-browsers
+      PLAYWRIGHT_BROWSERS_PATH: /tmp/salahos-pw-browsers-1.62.0
     steps:
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -23,7 +23,8 @@ jobs:
           echo "VISUAL_PROBE_DIR=$tmpdir" >> "$GITHUB_ENV"
           cd "$tmpdir"
           npm init -y >/dev/null 2>&1
-          npm install --ignore-scripts --save-exact playwright@1.55.0
+          npm install --ignore-scripts --save-exact playwright@1.62.0
+          npm audit --audit-level=moderate
           npx playwright install chromium
 
       - name: Launch headless Chromium
