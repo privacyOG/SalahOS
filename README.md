@@ -85,7 +85,7 @@ The dependency lockfile is committed and pinned for reproducible installation. N
 
 ## Release status
 
-SalahOS v1.0.0 is prepared as the first production repository/source release. The exact release revision must pass Quality Gate, Android Build, Visual Regression and iOS Build/Simulator acceptance together before the tag is created. This release boundary intentionally does not convert unperformed physical iPhone/iPad, Android OEM, Raspberry Pi Touch Display 2 or TV/panel checks into completed evidence, and it does not imply App Store/Play Store publication or signed store binaries.
+SalahOS v1.0.0 is the first production repository/source release and is tagged at exact release commit `b03482d06d989bfa42dd1dfd55bcc2e2994d97b8`. That revision passed Quality Gate `32061495596`, Android Build `32061495556`, Visual Regression `32061495626` and iOS Build `32061495534` before the tag was created. The release boundary intentionally does not convert unperformed physical iPhone/iPad, Android OEM, Raspberry Pi Touch Display 2 or TV/panel checks into completed evidence, and it does not imply App Store/Play Store publication or signed store binaries.
 
 The tested platform matrix and remaining physical/target-environment validation are documented in [docs/PLATFORM_STATUS.md](docs/PLATFORM_STATUS.md), [TESTING.md](TESTING.md) and [TODO.md](TODO.md).
 

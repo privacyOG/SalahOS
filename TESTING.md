@@ -814,3 +814,16 @@ Runs `31941296351`, `31941790069`, `31941980679`, and `31942088604` validate the
 - Manual artifact review found an earlier iPhone build rendering the SalahOS header underneath the status-bar/Dynamic-Island safe area. The release-candidate branch added `viewport-fit=cover`, four-edge safe-area inset padding and a direct source-contract test; the final passing iPhone launch and relaunch screenshots are clear of the status bar, and the iPad screenshots remain clean.
 - This records automated iPhone/iPad Simulator responsive-layout plus launch/relaunch acceptance. It does not claim physical-device GPS/permissions, notification delivery/timing, audio-session/focus behavior, touch/Dynamic Type, signed distribution or network-isolated iOS cold start.
 - Final review confirmed the PR contains only the intended permanent iOS CI, safe-area correction/regression test and documentation/reference updates; temporary probe/formatter/reconciliation workflows must not remain in the merge tree.
+
+---
+
+## v1.0.0 production release verification — 2026-08-18
+
+- Release tag: `v1.0.0` (annotated by `privacyOG`).
+- Exact tagged commit: `b03482d06d989bfa42dd1dfd55bcc2e2994d97b8`.
+- Quality Gate `32061495596`: **PASS**.
+- Android Build `32061495556`: **PASS**.
+- Visual Regression `32061495626`: **PASS**, including the permanent 14-scenario browser matrix and retained evidence.
+- iOS Build `32061495534`: **PASS**, including repository quality, production build/Capacitor sync, Xcode Simulator compilation, fresh iPhone/iPad install, launch, explicit terminate/relaunch and retained evidence.
+- Published GitHub release: non-draft and non-prerelease, targeting the exact tagged commit.
+- Release evidence does **not** claim physical iPhone/iPad, Android OEM, Raspberry Pi Touch Display 2, TV/panel, real notification/audio timing, network-isolated iOS cold start or store-distribution acceptance; those remain explicit follow-up items in `TODO.md` and `docs/PLATFORM_STATUS.md`.

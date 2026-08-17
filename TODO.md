@@ -763,9 +763,11 @@
 - [x] Review all `[!]` blocked items and document reasons
 - [x] Ensure `TODO.md`, `DESIGN.md`, `RESEARCH.md` and `TESTING.md` reflect actual state
 - [x] Create release notes
-- [ ] Tag first release only after applicable quality gates are satisfied
+- [x] Tag first release only after applicable quality gates are satisfied
 
 **Release-boundary reconciliation note (2026-08-18):** PR #101 merged the permanent iOS runtime gate, the reviewed iPhone safe-area correction and the final code/documentation review. The first production repository/source release is permitted to ship once the exact versioned release revision passes Quality Gate, Android Build, Visual Regression and iOS Build together. Current `[!]` items remain genuine unperformed physical/target-environment acceptance and are deliberately non-blocking for the source release only because they are explicitly disclosed; they must not be relabelled as tested. This release does not imply App Store/Play Store publication or signed store binaries.
+
+**v1.0.0 release verification note (2026-08-18):** annotated tag `v1.0.0` was created by `privacyOG` and points exactly to `b03482d06d989bfa42dd1dfd55bcc2e2994d97b8` after that commit passed Quality Gate `32061495596`, Android Build `32061495556`, Visual Regression `32061495626` and iOS Build `32061495534`. The GitHub release is published as a non-draft, non-prerelease source release. Existing `[!]` and partial markers for physical mobile hardware, Raspberry Pi, TV/panel, native notification/audio timing, network-isolated iOS cold start and store-distribution acceptance remain intentionally open and are not changed by the source release.
 
 ---
 
