@@ -53,7 +53,7 @@ Exact merged main commit `0901306a42f62f42bbf67724a4c82bf8036fe8d5` passed the p
 
 The iOS workflow correctly remains on standard GitHub-hosted macOS because Xcode/iOS Simulator builds cannot run on the Linux runner. Earlier private-repository jobs were rejected before checkout because of account billing/spending state. After the repository became public, standard hosted macOS runners executed successfully again. On PR #101 code-bearing head `b0699274ef41980d03f0321346eabe5ae758758f`, the complete release-candidate gate set passed together: Quality Gate `32032477140`, Android Build `32032477112`, Visual Regression `32032477113` and iOS Build `32032477111`. Runner availability is infrastructure state and is not represented as a permanent guarantee.
 
-Before a release tag is created, the exact release revision must retain passing Quality Gate, Android Build, Visual Regression and iOS Build/Simulator acceptance results. Physical-only acceptance items remain explicit test prerequisites rather than being inferred from automated execution.
+SalahOS v1.0.0 is tagged at exact commit `b03482d06d989bfa42dd1dfd55bcc2e2994d97b8`. Before tagging, that revision passed Quality Gate `32061495596`, Android Build `32061495556`, Visual Regression `32061495626` and iOS Build `32061495534`; the iOS run completed fresh iPhone/iPad Simulator install, launch, terminate/relaunch and evidence upload. Physical-only acceptance items remain explicit follow-up validation and are not inferred from automated execution.
 
 ## Native permission boundary
 
