@@ -27,8 +27,9 @@ jobs:
         run: npm version 1.1.0 --no-git-tag-version
 
       - name: Align native versions
-        shell: python
+        shell: bash
         run: |
+          python3 - <<'PY'
           from pathlib import Path
           import re
 
@@ -49,11 +50,13 @@ jobs:
                   f'iOS version settings not found: MARKETING_VERSION={marketing_count}, CURRENT_PROJECT_VERSION={build_count}'
               )
           project.write_text(text)
-          print(f'Updated iOS version settings in {marketing_count} marketing/build={build_count} entries')
+          print(f'Updated iOS version settings: marketing={marketing_count}, build={build_count}')
+          PY
 
       - name: Add v1.1.0 changelog entry
-        shell: python
+        shell: bash
         run: |
+          python3 - <<'PY'
           from pathlib import Path
 
           path = Path('CHANGELOG.md')
@@ -61,25 +64,30 @@ jobs:
           heading = '## 1.1.0 — Downloadable release assets and canonical branding\n'
           if heading not in text:
               marker = '# Changelog\n'
-              entry = '''# Changelog
-
-## 1.1.0 — Downloadable release assets and canonical branding
-
-- Adopt the project owner's canonical SalahOS logo and icon across Web/PWA, Android, iOS and smart-display surfaces.
-- Add reproducible source/hash/dimension validation for the canonical platform icon set.
-- Add GitHub release packaging for Web/PWA and Raspberry Pi/kiosk bundles.
-- Add a signed Android release APK pipeline that refuses to publish unsigned or debug APKs.
-- Add SHA-256 checksum publication for downloadable release assets.
-- Document the current distribution boundary: iOS IPA awaits Apple distribution signing and macOS DMG awaits a real macOS application target.
-'''
+              lines = [
+                  '# Changelog',
+                  '',
+                  '## 1.1.0 — Downloadable release assets and canonical branding',
+                  '',
+                  "- Adopt the project owner's canonical SalahOS logo and icon across Web/PWA, Android, iOS and smart-display surfaces.",
+                  '- Add reproducible source/hash/dimension validation for the canonical platform icon set.',
+                  '- Add GitHub release packaging for Web/PWA and Raspberry Pi/kiosk bundles.',
+                  '- Add a signed Android release APK pipeline that refuses to publish unsigned or debug APKs.',
+                  '- Add SHA-256 checksum publication for downloadable release assets.',
+                  '- Document the current distribution boundary: iOS IPA awaits Apple distribution signing and macOS DMG awaits a real macOS application target.',
+                  '',
+              ]
               if marker not in text:
                   raise SystemExit('CHANGELOG heading not found')
-              text = text.replace(marker, entry, 1)
+              text = text.replace(marker, '\n'.join(lines), 1)
               path.write_text(text)
+          PY
 
       - name: Format and validate
+        shell: bash
         run: |
-          npx prettier --write package.json package-lock.json android/app/build.gradle ios/App/App.xcodeproj/project.pbxproj CHANGELOG.md docs/RELEASE_ASSETS.md scripts/release-packaging.test.mjs .github/workflows/release-assets.yml
+          set -euo pipefail
+          npx prettier --write package.json package-lock.json android/app/build.gradle CHANGELOG.md docs/RELEASE_ASSETS.md scripts/release-packaging.test.mjs .github/workflows/release-assets.yml
           npm ci --ignore-scripts
           npm run check
           node -e "const p=require('./package.json'); const l=require('./package-lock.json'); if(p.version!=='1.1.0'||l.version!=='1.1.0'||l.packages[''].version!=='1.1.0') process.exit(1)"
