@@ -1,0 +1,62 @@
+name: Final v1.1.0 package preflight
+
+on:
+  push:
+    branches:
+      - privacyog/v1.1.0-final-preflight
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies from lockfile
+        run: npm ci --ignore-scripts
+
+      - name: Repository quality gate
+        run: npm run check
+
+      - name: Build release-format Web/PWA and Raspberry Pi assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="$(node -p "require('./package.json').version")"
+          mkdir -p release/web release/pi/SalahOS
+          cp -a dist/. release/web/
+          cp -a dist release/pi/SalahOS/dist
+          mkdir -p release/pi/SalahOS/scripts/kiosk
+          cp scripts/kiosk/run-salahos-kiosk.sh scripts/kiosk/install-labwc-autostart.sh release/pi/SalahOS/scripts/kiosk/
+          cp docs/RELEASE_ASSETS.md release/pi/SalahOS/INSTALL.md
+          chmod +x release/pi/SalahOS/scripts/kiosk/*.sh
+          (cd release/web && zip -qr "../SalahOS-v${VERSION}-web-pwa.zip" .)
+          tar -C release/pi -czf "release/SalahOS-v${VERSION}-raspberry-pi-kiosk.tar.gz" SalahOS
+          (
+            cd release
+            sha256sum \
+              "SalahOS-v${VERSION}-web-pwa.zip" \
+              "SalahOS-v${VERSION}-raspberry-pi-kiosk.tar.gz" \
+              > SHA256SUMS.txt
+            sha256sum --check SHA256SUMS.txt
+          )
+
+      - name: Upload final package preflight
+        uses: actions/upload-artifact@v4
+        with:
+          name: v1.1.0-final-package-preflight
+          path: |
+            release/SalahOS-v*-web-pwa.zip
+            release/SalahOS-v*-raspberry-pi-kiosk.tar.gz
+            release/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 7
