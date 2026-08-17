@@ -8,44 +8,69 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 ICON_DIR = ROOT / "public" / "icons"
+ANDROID_RES = ROOT / "android" / "app" / "src" / "main" / "res"
+IOS_ICON = ROOT / "ios" / "App" / "App" / "Assets.xcassets" / "AppIcon.appiconset" / "AppIcon-512@2x.png"
 DESIGN_SIZE = 512
-SUPERSAMPLE = 2
+SUPERSAMPLE = 3
 
-DARK = (16, 21, 16, 255)
-RING = (29, 40, 31, 255)
-LIGHT = (197, 224, 190, 255)
+# Brand colours sampled/adapted from the maintainer-supplied SalahOS logo artwork.
+GREEN = (0, 84, 62, 255)
+GOLD = (224, 166, 52, 255)
 TRANSPARENT = (0, 0, 0, 0)
 
-
-def cubic_point(p0, p1, p2, p3, t):
-    u = 1.0 - t
-    return (
-        u**3 * p0[0] + 3 * u * u * t * p1[0] + 3 * u * t * t * p2[0] + t**3 * p3[0],
-        u**3 * p0[1] + 3 * u * u * t * p1[1] + 3 * u * t * t * p2[1] + t**3 * p3[1],
-    )
-
-
-def sample_path(start, segments, samples_per_segment=32):
-    points = [start]
-    current = start
-    for control1, control2, end in segments:
-        for index in range(1, samples_per_segment + 1):
-            points.append(cubic_point(current, control1, control2, end, index / samples_per_segment))
-        current = end
-    return points
-
-
-def scale_points(points, scale):
-    return [(x * scale, y * scale) for x, y in points]
+ANDROID_ICON_SIZES = {
+    "mdpi": 48,
+    "hdpi": 72,
+    "xhdpi": 96,
+    "xxhdpi": 144,
+    "xxxhdpi": 192,
+}
+ANDROID_FOREGROUND_SIZES = {
+    "mdpi": 108,
+    "hdpi": 162,
+    "xhdpi": 216,
+    "xxhdpi": 324,
+    "xxxhdpi": 432,
+}
 
 
 def set_pixel(canvas, width, x, y, color):
+    if x < 0 or y < 0 or x >= width or y >= width:
+        return
     offset = (y * width + x) * 4
     canvas[offset : offset + 4] = bytes(color)
 
 
-def fill_polygon(canvas, width, height, points, color):
-    for y in range(height):
+def fill_rect(canvas, width, left, top, right, bottom, color):
+    left = max(0, math.floor(left))
+    top = max(0, math.floor(top))
+    right = min(width, math.ceil(right))
+    bottom = min(width, math.ceil(bottom))
+    for y in range(top, bottom):
+        for x in range(left, right):
+            set_pixel(canvas, width, x, y, color)
+
+
+def fill_circle(canvas, width, cx, cy, radius, color):
+    radius_squared = radius * radius
+    min_y = max(0, math.floor(cy - radius))
+    max_y = min(width - 1, math.ceil(cy + radius))
+    for y in range(min_y, max_y + 1):
+        dy = y + 0.5 - cy
+        remaining = radius_squared - dy * dy
+        if remaining < 0:
+            continue
+        dx = math.sqrt(remaining)
+        start = max(0, math.ceil(cx - dx - 0.5))
+        end = min(width - 1, math.floor(cx + dx - 0.5))
+        for x in range(start, end + 1):
+            set_pixel(canvas, width, x, y, color)
+
+
+def fill_polygon(canvas, width, points, color):
+    min_y = max(0, math.floor(min(y for _, y in points)))
+    max_y = min(width - 1, math.ceil(max(y for _, y in points)))
+    for y in range(min_y, max_y + 1):
         scan_y = y + 0.5
         intersections = []
         for index, first in enumerate(points):
@@ -65,33 +90,17 @@ def fill_polygon(canvas, width, height, points, color):
                 set_pixel(canvas, width, x, y, color)
 
 
-def fill_circle(canvas, width, height, cx, cy, radius, color):
-    radius_squared = radius * radius
-    min_y = max(0, math.floor(cy - radius))
-    max_y = min(height - 1, math.ceil(cy + radius))
-    for y in range(min_y, max_y + 1):
-        dy = y + 0.5 - cy
-        remaining = radius_squared - dy * dy
-        if remaining < 0:
-            continue
-        dx = math.sqrt(remaining)
-        start = max(0, math.ceil(cx - dx - 0.5))
-        end = min(width - 1, math.floor(cx + dx - 0.5))
-        for x in range(start, end + 1):
-            set_pixel(canvas, width, x, y, color)
-
-
-def fill_rounded_rect(canvas, width, height, radius, color):
-    radius_squared = radius * radius
-    for y in range(height):
+def fill_rounded_rect(canvas, width, radius, color):
+    r2 = radius * radius
+    for y in range(width):
         py = y + 0.5
         for x in range(width):
             px = x + 0.5
-            inside = radius <= px <= width - radius or radius <= py <= height - radius
+            inside = radius <= px <= width - radius or radius <= py <= width - radius
             if not inside:
                 cx = radius if px < radius else width - radius
-                cy = radius if py < radius else height - radius
-                inside = (px - cx) ** 2 + (py - cy) ** 2 <= radius_squared
+                cy = radius if py < radius else width - radius
+                inside = (px - cx) ** 2 + (py - cy) ** 2 <= r2
             if inside:
                 set_pixel(canvas, width, x, y, color)
 
@@ -133,87 +142,121 @@ def encode_png(width, height, rgba):
     )
 
 
-def standard_geometry(scale):
-    outer = sample_path(
-        (256, 76),
-        [
-            ((310, 138), (342, 202), (342, 268)),
-            ((342, 348), (304, 406), (256, 436)),
-            ((208, 406), (170, 356), (170, 268)),
-            ((170, 202), (202, 138), (256, 76)),
-        ],
-    )
-    inner = sample_path(
-        (256, 152),
-        [
-            ((226, 194), (210, 234), (210, 272)),
-            ((210, 323), (228, 362), (256, 388)),
-            ((284, 362), (302, 323), (302, 272)),
-            ((302, 234), (286, 194), (256, 152)),
-        ],
-    )
-    return scale_points(outer, scale), scale_points(inner, scale)
+def transform(points, scale, offset_x=0.0, offset_y=0.0):
+    return [((x + offset_x) * scale, (y + offset_y) * scale) for x, y in points]
 
 
-def maskable_geometry(scale):
-    outer = sample_path(
-        (256, 112),
-        [
-            ((303, 166), (330, 221), (330, 278)),
-            ((330, 346), (298, 396), (256, 422)),
-            ((214, 396), (182, 346), (182, 278)),
-            ((182, 221), (209, 166), (256, 112)),
-        ],
+def draw_brand_mark(canvas, source_size, *, background_color, scale_factor=1.0):
+    """Draw the supplied SalahOS minaret/crescent mark centred in a 512-unit design box."""
+    unit = source_size / DESIGN_SIZE
+    centre = 256.0
+    local_scale = unit * scale_factor
+    offset = centre * unit - centre * local_scale
+
+    def sx(value):
+        return value * local_scale + offset
+
+    # Crescent behind the minaret.
+    fill_circle(canvas, source_size, sx(320), sx(170), 88 * local_scale, GOLD)
+    fill_circle(canvas, source_size, sx(350), sx(142), 72 * local_scale, background_color)
+
+    # Minaret spire and pointed cap.
+    fill_rect(canvas, source_size, sx(250), sx(94), sx(262), sx(155), GOLD)
+    fill_polygon(
+        canvas,
+        source_size,
+        [(sx(216), sx(172)), (sx(256), sx(128)), (sx(296), sx(172))],
+        GOLD,
     )
-    inner = sample_path(
-        (256, 178),
+
+    # Upper tower and gallery shoulders.
+    fill_rect(canvas, source_size, sx(229), sx(166), sx(283), sx(278), GOLD)
+    fill_rect(canvas, source_size, sx(200), sx(212), sx(312), sx(240), GOLD)
+    fill_rect(canvas, source_size, sx(210), sx(238), sx(302), sx(258), GOLD)
+
+    # Narrow tower below gallery.
+    fill_rect(canvas, source_size, sx(238), sx(250), sx(274), sx(358), GOLD)
+
+    # Mosque/base silhouette with stepped shoulders.
+    fill_polygon(
+        canvas,
+        source_size,
         [
-            ((231, 213), (217, 247), (217, 279)),
-            ((217, 322), (233, 355), (256, 377)),
-            ((279, 355), (295, 322), (295, 279)),
-            ((295, 247), (281, 213), (256, 178)),
+            (sx(176), sx(338)),
+            (sx(208), sx(338)),
+            (sx(208), sx(318)),
+            (sx(232), sx(318)),
+            (sx(232), sx(342)),
+            (sx(280), sx(342)),
+            (sx(280), sx(318)),
+            (sx(304), sx(318)),
+            (sx(304), sx(338)),
+            (sx(336), sx(338)),
+            (sx(336), sx(416)),
+            (sx(176), sx(416)),
         ],
+        GOLD,
     )
-    return scale_points(outer, scale), scale_points(inner, scale)
+
+    # Three arch voids in the base.
+    for cx in (208, 256, 304):
+        fill_circle(canvas, source_size, sx(cx), sx(382), 16 * local_scale, background_color)
+        fill_rect(canvas, source_size, sx(cx - 16), sx(382), sx(cx + 16), sx(418), background_color)
 
 
-def render_icon(size, maskable):
+def render_icon(size, *, rounded=True, circle=False, foreground=False, maskable=False):
     source_size = size * SUPERSAMPLE
-    scale = source_size / DESIGN_SIZE
     canvas = bytearray(bytes(TRANSPARENT) * (source_size * source_size))
 
-    if maskable:
-        for y in range(source_size):
-            for x in range(source_size):
-                set_pixel(canvas, source_size, x, y, DARK)
-        fill_circle(canvas, source_size, source_size, 256 * scale, 256 * scale, 176 * scale, RING)
-        outer, inner = maskable_geometry(scale)
-        fill_polygon(canvas, source_size, source_size, outer, LIGHT)
-        fill_polygon(canvas, source_size, source_size, inner, DARK)
-        fill_circle(canvas, source_size, source_size, 256 * scale, 278 * scale, 24 * scale, LIGHT)
+    if foreground:
+        draw_brand_mark(canvas, source_size, background_color=TRANSPARENT, scale_factor=0.66)
     else:
-        fill_rounded_rect(canvas, source_size, source_size, 112 * scale, DARK)
-        outer, inner = standard_geometry(scale)
-        fill_polygon(canvas, source_size, source_size, outer, LIGHT)
-        fill_polygon(canvas, source_size, source_size, inner, DARK)
-        fill_circle(canvas, source_size, source_size, 256 * scale, 270 * scale, 28 * scale, LIGHT)
+        if circle:
+            fill_circle(canvas, source_size, source_size / 2, source_size / 2, source_size / 2, GREEN)
+        elif rounded and not maskable:
+            fill_rounded_rect(canvas, source_size, source_size * 0.19, GREEN)
+        else:
+            fill_rect(canvas, source_size, 0, 0, source_size, source_size, GREEN)
+        draw_brand_mark(canvas, source_size, background_color=GREEN, scale_factor=0.78 if maskable else 0.84)
 
     rgba = downsample(canvas, source_size, SUPERSAMPLE)
     return encode_png(size, size, rgba)
 
 
 def expected_assets():
-    return {
-        ICON_DIR / "salahos-192.png": render_icon(192, False),
-        ICON_DIR / "salahos-512.png": render_icon(512, False),
-        ICON_DIR / "salahos-maskable-192.png": render_icon(192, True),
-        ICON_DIR / "salahos-maskable-512.png": render_icon(512, True),
+    assets = {
+        ICON_DIR / "salahos-192.png": render_icon(192, rounded=True),
+        ICON_DIR / "salahos-512.png": render_icon(512, rounded=True),
+        ICON_DIR / "salahos-maskable-192.png": render_icon(192, rounded=False, maskable=True),
+        ICON_DIR / "salahos-maskable-512.png": render_icon(512, rounded=False, maskable=True),
+        IOS_ICON: render_icon(1024, rounded=False),
     }
+
+    for density, size in ANDROID_ICON_SIZES.items():
+        directory = ANDROID_RES / f"mipmap-{density}"
+        assets[directory / "ic_launcher.png"] = render_icon(size, rounded=True)
+        assets[directory / "ic_launcher_round.png"] = render_icon(size, rounded=False, circle=True)
+
+    for density, size in ANDROID_FOREGROUND_SIZES.items():
+        directory = ANDROID_RES / f"mipmap-{density}"
+        assets[directory / "ic_launcher_foreground.png"] = render_icon(
+            size,
+            rounded=False,
+            foreground=True,
+        )
+
+    return assets
 
 
 def main():
-    parser = argparse.ArgumentParser(description="Generate deterministic SalahOS PWA raster icons.")
-    parser.add_argument("--check", action="store_true", help="Fail unless committed icons exactly match generated bytes.")
+    parser = argparse.ArgumentParser(
+        description="Generate deterministic SalahOS web, Android and iOS brand icons."
+    )
+    parser.add_argument(
+        "--check",
+        action="store_true",
+        help="Fail unless committed icons exactly match generated bytes.",
+    )
     args = parser.parse_args()
 
     assets = expected_assets()
@@ -228,9 +271,9 @@ def main():
             print(f"generated {path.relative_to(ROOT)} ({len(data)} bytes)")
 
     if failures:
-        raise SystemExit("PWA raster icons are missing or stale: " + ", ".join(failures))
+        raise SystemExit("SalahOS brand icons are missing or stale: " + ", ".join(failures))
     if args.check:
-        print(f"PWA raster icon reproducibility check passed for {len(assets)} assets.")
+        print(f"SalahOS brand icon reproducibility check passed for {len(assets)} assets.")
 
 
 if __name__ == "__main__":
