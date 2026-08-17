@@ -30,6 +30,12 @@ jobs:
       - name: Sensitive-file policy
         run: npm run security:sensitive-files
 
+      - name: Native permission policy
+        run: npm run security:native-permissions
+
+      - name: Remote network policy
+        run: npm run security:remote-network
+
       - name: Dependency vulnerability audit
         run: npm run security:audit
 
