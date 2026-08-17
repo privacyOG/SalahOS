@@ -118,12 +118,14 @@ describe('production service worker', () => {
 
     await runLifecycleListener(worker.listeners.get('install'));
 
-    expect([...caches.stores.keys()]).toEqual(['salahos-shell-v2']);
-    const shell = caches.stores.get('salahos-shell-v2');
+    expect([...caches.stores.keys()]).toEqual(['salahos-shell-v3']);
+    const shell = caches.stores.get('salahos-shell-v3');
     expect(await shell.match('/')).toBeInstanceOf(Response);
     expect(await shell.match('/manifest.webmanifest')).toBeInstanceOf(Response);
-    expect(await shell.match('/icons/salahos.svg')).toBeInstanceOf(Response);
-    expect(await shell.match('/icons/salahos-maskable.svg')).toBeInstanceOf(Response);
+    expect(await shell.match('/icons/salahos-192.png')).toBeInstanceOf(Response);
+    expect(await shell.match('/icons/salahos-512.png')).toBeInstanceOf(Response);
+    expect(await shell.match('/icons/salahos-maskable-192.png')).toBeInstanceOf(Response);
+    expect(await shell.match('/icons/salahos-maskable-512.png')).toBeInstanceOf(Response);
     expect(worker.skippedWaiting()).toBe(true);
   });
 
@@ -133,7 +135,7 @@ describe('production service worker', () => {
       headers: { 'content-type': 'text/html' },
     });
     const caches = createCacheStorage({
-      'salahos-shell-v2': [['/', cachedShell]],
+      'salahos-shell-v3': [['/', cachedShell]],
     });
     const worker = await loadServiceWorker({
       caches,
@@ -161,10 +163,11 @@ describe('production service worker', () => {
     expect(await response.text()).toBe('<html>offline shell</html>');
   });
 
-  it('removes only stale SalahOS shell caches during a v1 to v2 activation', async () => {
+  it('removes only stale SalahOS shell caches during activation', async () => {
     const caches = createCacheStorage({
       'salahos-shell-v1': [],
       'salahos-shell-v2': [],
+      'salahos-shell-v3': [],
       'unrelated-app-cache': [],
     });
     const worker = await loadServiceWorker({
@@ -174,9 +177,9 @@ describe('production service worker', () => {
 
     await runLifecycleListener(worker.listeners.get('activate'));
 
-    expect(caches.deleted).toEqual(['salahos-shell-v1']);
+    expect(caches.deleted).toEqual(['salahos-shell-v1', 'salahos-shell-v2']);
     expect([...caches.stores.keys()].sort()).toEqual(
-      ['salahos-shell-v2', 'unrelated-app-cache'].sort(),
+      ['salahos-shell-v3', 'unrelated-app-cache'].sort(),
     );
     expect(worker.wasClaimed()).toBe(true);
   });
