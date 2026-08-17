@@ -1,39 +1,46 @@
 # iOS and iPadOS validation status
 
-SalahOS shares its prayer, calendar, localisation, persistence and notification-scheduling domain logic across platforms. Native iOS and iPadOS behaviour must still be validated in Apple tooling before any native-specific tracker item is marked complete.
+SalahOS shares its prayer, calendar, localisation, persistence and notification-scheduling domain logic across platforms. Native iOS and iPadOS claims are separated into automated Simulator evidence and physical-device acceptance so a successful Simulator run is never represented as physical hardware validation.
 
-## Current evidence boundary
+## Current automated boundary
 
-The current development and continuous-integration environment validates the shared TypeScript application, tests and production web build. It does not provide a macOS/Xcode simulator or a signed physical-device deployment path. Therefore no repository claim should imply that native iOS packaging, entitlement behaviour, background notification delivery, audio playback, lifecycle recovery or App Store distribution has been physically verified.
+The repository has an active standard `macos-15` workflow that installs the exact lockfile, runs the complete repository quality gate, builds the production web assets, synchronises the committed Capacitor iOS project and builds the application for iOS Simulator with Xcode. The runtime acceptance stage dynamically selects the newest available iOS Simulator runtime, creates fresh iPhone and iPad Simulators, installs the newly built `App.app`, verifies the application container, launches the SalahOS bundle, captures a valid PNG screenshot, explicitly terminates the application, relaunches it and captures a second valid screenshot. The workflow uploads the runtime evidence as an artifact.
 
-## Items that require macOS and Xcode
+PR #101 code-bearing head `b0699274ef41980d03f0321346eabe5ae758758f` passed iOS Build run `32032477111`. The run used iOS 26.2 with a fresh iPhone 17 Pro Simulator and fresh iPad Pro 13-inch (M5) Simulator, installed the newly built application, resolved its container, launched it, explicitly terminated/relaunched it and uploaded artifact `9289927972`. Both launch and relaunch screenshots were manually inspected. An earlier artifact exposed an iPhone status-bar/Dynamic-Island overlap; `viewport-fit=cover` plus safe-area inset padding and a source-contract regression test corrected that defect before this passing run. It is not a signed physical-device deployment, does not imply App Store acceptance and does not convert Simulator-only behavior into a physical-device claim.
 
-The following require a macOS host with a supported Xcode release and must remain open until exercised there:
+## What Simulator acceptance validates
 
-- create and build the native iOS/iPadOS shell;
-- verify deployment target and supported device families;
-- compile the Release configuration without local-only changes;
-- verify Info.plist usage descriptions and capabilities used by the final shell;
-- verify notification permission flow and local-notification scheduling on Simulator where supported;
-- verify application foreground/background transitions and cold launch;
-- verify timezone and locale changes while the application is installed;
-- verify the app returns to the correct prayer date after suspend or calendar rollover;
-- verify any native audio session used for Adhan playback;
-- archive the application and validate signing/export configuration without committing credentials.
+- clean dependency installation and the complete repository quality gate on the macOS runner;
+- production web-asset generation and Capacitor synchronization into the committed native iOS project;
+- Xcode compilation for iOS Simulator without signing credentials;
+- availability of a current iOS Simulator runtime and compatible iPhone/iPad device profiles;
+- installation of the freshly built application on newly created Simulator devices;
+- application-container resolution for `com.privacyog.salahos`;
+- successful process launch and explicit terminate/relaunch through `simctl`;
+- non-empty, decodable launch/relaunch screenshots with valid pixel dimensions;
+- cleanup of created Simulator devices after the run.
 
-## Items that require a physical iPhone or iPad
+The recorded launch/relaunch screenshots were manually inspected for gross layout failure and the iPhone safe-area regression. Automated Simulator responsive-layout acceptance is therefore recorded for the tested iPhone/iPad profiles. Physical touch ergonomics, device-specific safe-area variation, Dynamic Type and broader aesthetic acceptance remain separate physical-device activities.
+
+## Items that still require a physical iPhone or iPad
 
 Simulator success is not sufficient for the following. A real device is required before these behaviours can be described as verified:
 
-- location permission and GPS-derived coordinates;
+- location permission and GPS-derived coordinates on device hardware;
 - local notification presentation while the device is locked;
-- notification behaviour after application termination;
+- notification behaviour after application termination and across real scheduling delays;
+- real DST/timezone notification delivery rather than deterministic scheduling logic alone;
 - battery/background restrictions that affect scheduling or playback;
 - vibration/haptic behaviour where supported;
-- Adhan or other audio playback under the chosen audio-session policy;
+- local Adhan playback under real iOS audio-session, interruption and focus policies;
 - daylight-saving and timezone transition behaviour across real device lifecycle events;
-- recovery after reboot;
-- orientation, safe-area, Dynamic Type and touch behaviour on target screen sizes.
+- recovery after device reboot;
+- physical orientation, safe-area, Dynamic Type and touch ergonomics on target hardware;
+- signed archive, provisioning, TestFlight and App Store distribution acceptance.
+
+## Offline-start boundary
+
+The shared application has deterministic offline-startup, service-worker and persisted-settings coverage, and Android emulator acceptance has separately exercised an offline cold launch. The current iOS Simulator runtime gate intentionally does not disable Simulator networking. It therefore records launch/relaunch acceptance, not an iOS offline cold-start claim. A future iOS offline acceptance run must explicitly isolate networking before that tracker item can be completed.
 
 ## Signing and credentials
 
@@ -41,8 +48,8 @@ Signing certificates, private keys, provisioning profiles, App Store Connect cre
 
 ## Completion rule
 
-An iOS/iPadOS tracker item may move to complete only when its implementation exists and the required validation evidence is recorded in `TESTING.md`. If macOS/Xcode or physical hardware is unavailable, the item stays open or partial and this limitation is stated explicitly rather than inferred away from shared web-domain test coverage.
+An iOS/iPadOS tracker item may move to complete only when its implementation exists and the required validation evidence is recorded in `TESTING.md`. Simulator-specific items may rely on the hosted runtime gate. Physical-device, real notification delivery, real audio-policy and distribution items remain open until their corresponding target evidence exists.
 
-## Native implementation validated — 2026-08-16
+## Evidence chronology
 
-The iOS shell, foreground location metadata, Preferences persistence, local prayer notification adapter, and notification/audio/background lifecycle policy have passed macOS/Xcode simulator compilation. Interactive iPhone/iPad and offline cold-start acceptance remain separately tracked.
+Earlier 2026-08-16 native-foundation, notification and lifecycle runs proved Xcode Simulator compilation but did not exercise interactive runtime launch. A later private-repository period also produced hosted macOS jobs rejected before checkout because of account billing/spending state. After the repository became public, standard GitHub-hosted macOS execution became available again. PR #101 code-bearing head `b0699274ef41980d03f0321346eabe5ae758758f` then passed the permanent fresh-device Simulator acceptance in iOS Build `32032477111` with artifact `9289927972`. The permanent workflow retains that build/install/launch/relaunch boundary while physical-device, notification-delivery, audio-policy, network-isolated offline-start and distribution acceptance remain open.

@@ -36,6 +36,7 @@ The pinned repository also contains frozen comparison fixtures for Ankara/Turkey
 
 - High Board prayer-time/timetable activity: `https://fetva.diyanet.gov.tr/tr/faaliyetler/2020-2025/ibadet-vakitleri-dini-gun-ve-gecelerin-tespiti/namaz-vakitleri-takvim-calismalari`
 - High-latitude work and official global platform/API: `https://kurul.diyanet.gov.tr/tr/faaliyetler/2020-2025/ibadet-vakitleri-dini-gun-ve-gecelerin-tespiti/ileri-enlemlerde-namaz-vakitleri`
+- Official timing/temkin explanation: `https://vakithesaplama.diyanet.gov.tr/temkin.php`
 - Official global prayer-time platform: `https://www.awqatsalah.com/`
 - Official API service entry point: `https://awqatsalah.diyanet.gov.tr/`
 - Official sample API project: `https://github.com/DinIsleriYuksekKurulu/AwqatSalah`
@@ -43,22 +44,24 @@ The pinned repository also contains frozen comparison fixtures for Ankara/Turkey
 
 Diyanet states that its prayer-time calculation unit derives times from the Sun's apparent motion, geographic coordinates and jurisprudential criteria. Its High Board also states that the program algorithm/database used for the global Awqat Salah platform is developed and maintained by Diyanet astronomers. The institution publishes explicit special handling for high latitudes rather than presenting its production timetable as a universal two-angle formula.
 
-This is stronger primary evidence than third-party `Turkey` profiles. However, the public institutional material reviewed here does not establish that SalahOS's current simple `18° Fajr / 17° Isha` profile, by itself, reproduces the complete Diyanet production algorithm. The profile therefore remains pending institutional parity instead of being promoted to verified.
+Diyanet's own temkin explanation also documents the institutional event adjustments represented by the SalahOS Turkey interoperability profile: Sunrise is taken seven minutes before the astronomical sunrise boundary, Maghrib seven minutes after astronomical sunset, Asr four minutes later, and Dhuhr five minutes after the solar-meridian boundary. The same source states that no additional temkin is applied to Imsak or Isha. This upgrades the provenance of those method-owned offsets from third-party-library evidence to primary Diyanet evidence.
+
+This still does not establish that SalahOS's current simple `18° Fajr / 17° Isha` twilight-angle pair reproduces the complete Diyanet production algorithm. The public institutional material reviewed here establishes the offsets above and Diyanet's maintained calculation service, but not full internal-parameter equivalence. The profile therefore remains pending complete institutional parity instead of being promoted to verified as a whole.
 
 ## Parameter consensus
 
-| SalahOS method                          |  Fajr | Isha                               | Cross-check status                                                                                                          |
-| --------------------------------------- | ----: | ---------------------------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| Muslim World League                     |   18° | 17°                                | PrayTimes + Adhan JS + AlAdhan agree                                                                                        |
-| ISNA / North America                    |   15° | 15°                                | PrayTimes + Adhan JS + AlAdhan agree                                                                                        |
-| Egyptian General Authority of Survey    | 19.5° | 17.5°                              | PrayTimes + Adhan JS + AlAdhan agree                                                                                        |
-| Umm al-Qura / Makkah                    | 18.5° | 90 min after Maghrib               | PrayTimes + current Adhan JS + AlAdhan agree; Ramadan interval requires separate Hijri-aware handling                       |
-| University of Islamic Sciences, Karachi |   18° | 18°                                | PrayTimes + Adhan JS + AlAdhan agree                                                                                        |
-| MUIS / Singapore                        |   20° | 18°                                | PrayTimes + Adhan JS + AlAdhan agree                                                                                        |
-| Kuwait                                  |   18° | 17.5°                              | Adhan JS + AlAdhan agree                                                                                                    |
-| Qatar                                   |   18° | 90 min after Maghrib               | Adhan JS + AlAdhan agree                                                                                                    |
-| Dubai                                   | 18.2° | 18.2°                              | Adhan JS 4.4.4 parameters plus Sunrise -3 / Dhuhr +3 / Asr +3 / Maghrib +3; frozen Dubai fixture cites UAE Awqaf output     |
-| Diyanet / Turkey                        |   18° | 17° in interoperability references | Third-party approximation only; primary Diyanet sources document a maintained institutional algorithm and timetable service |
+| SalahOS method                          |  Fajr | Isha                               | Cross-check status                                                                                                                               |
+| --------------------------------------- | ----: | ---------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Muslim World League                     |   18° | 17°                                | PrayTimes + Adhan JS + AlAdhan agree                                                                                                             |
+| ISNA / North America                    |   15° | 15°                                | PrayTimes + Adhan JS + AlAdhan agree                                                                                                             |
+| Egyptian General Authority of Survey    | 19.5° | 17.5°                              | PrayTimes + Adhan JS + AlAdhan agree                                                                                                             |
+| Umm al-Qura / Makkah                    | 18.5° | 90 min after Maghrib               | PrayTimes + current Adhan JS + AlAdhan agree; Ramadan interval requires separate Hijri-aware handling                                            |
+| University of Islamic Sciences, Karachi |   18° | 18°                                | PrayTimes + Adhan JS + AlAdhan agree                                                                                                             |
+| MUIS / Singapore                        |   20° | 18°                                | PrayTimes + Adhan JS + AlAdhan agree                                                                                                             |
+| Kuwait                                  |   18° | 17.5°                              | Adhan JS + AlAdhan agree                                                                                                                         |
+| Qatar                                   |   18° | 90 min after Maghrib               | Adhan JS + AlAdhan agree                                                                                                                         |
+| Dubai                                   | 18.2° | 18.2°                              | Adhan JS 4.4.4 parameters plus Sunrise -3 / Dhuhr +3 / Asr +3 / Maghrib +3; frozen Dubai fixture cites UAE Awqaf output                          |
+| Diyanet / Turkey                        |   18° | 17° in interoperability references | Official Diyanet source confirms Sunrise -7 / Dhuhr +5 / Asr +4 / Maghrib +7 offsets; twilight/internal algorithm equivalence remains unresolved |
 
 ## Frozen direct-output evidence added on 2026-08-17
 
@@ -80,6 +83,6 @@ Method verification is separate from prayer-time parity. Geographic/date fixture
 
 - Umm al-Qura Isha uses a longer Ramadan interval in widely used references; SalahOS must not silently apply that until the Hijri calendar subsystem can determine Ramadan reliably.
 - Adhan JS documents Dubai offsets in addition to the 18.2° angles. SalahOS now models Sunrise -3, Dhuhr +3, Asr +3 and Maghrib +3 minutes and passes the pinned Dubai/Gulf fixture at the unchanged two-minute tolerance. That fixture cites UAE Awqaf published timetable output, which is valid output-parity evidence but does not prove that the authority internally uses the same 18.2°/18.2° plus-offset parameterization; institutional parameter equivalence therefore remains pending.
-- Adhan JS calls its Turkey method an approximation of Diyanet and warns that it is less accurate outside Turkey. AlAdhan also labels Turkey experimental. Primary Diyanet material confirms that the institution operates and maintains its own calculation/timetable system, including special high-latitude rules. SalahOS therefore keeps Diyanet pending until output parity is demonstrated against Diyanet's own published service/timetables and any material systematic differences are modelled.
-- The pinned Adhan JS Ankara fixture uses a third-party published timetable as its upstream source. It is useful canonical-library test data but must not be relabelled as direct Diyanet institutional evidence.
+- Adhan JS calls its Turkey method an approximation of Diyanet and warns that it is less accurate outside Turkey. AlAdhan also labels Turkey experimental. Primary Diyanet material now directly confirms the four event offsets represented by SalahOS and confirms that Imsak/Isha receive no additional temkin, while Diyanet's maintained production algorithm and high-latitude handling remain broader than the simple interoperability profile. SalahOS therefore keeps complete institutional parity pending until output is demonstrated against Diyanet's own published service/timetables and the twilight/internal-model boundary is resolved.
+- The pinned Adhan JS Ankara fixture uses a third-party published timetable as its upstream source. It is useful canonical-library test data but must not be relabelled as direct Diyanet institutional output evidence.
 - Official timetables may incorporate safety margins, elevation/refraction conventions, local policy or non-angle rules that differ from generic library defaults.

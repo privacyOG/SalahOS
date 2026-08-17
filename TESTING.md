@@ -804,3 +804,13 @@ Runs `31941296351`, `31941790069`, `31941980679`, and `31942088604` validate the
 - `src/ui/LocalAdhanAudioSettings.test.tsx` verifies the English and Arabic local-file chooser, `audio/*` restriction and visible lifecycle wording.
 - Repository aggregate validation must include `security:native-permissions` and `security:remote-network`; the permanent Quality Gate now runs both.
 - Automated tests do not claim physical-device media-volume, audio-focus, silent-mode, browser/WebView autoplay or background delivery timing acceptance.
+
+### 2026-08-17 — PR #101 iOS Simulator release-candidate acceptance
+
+- Code-bearing PR #101 head `b0699274ef41980d03f0321346eabe5ae758758f` passed Quality Gate `32032477140`, Android Build `32032477112`, Visual Regression `32032477113` and iOS Build `32032477111` together.
+- The permanent iOS job ran the complete repository quality gate, production build and Capacitor sync, then compiled the Xcode Simulator application without signing.
+- The runtime stage used iOS 26.2 and created fresh iPhone 17 Pro and iPad Pro 13-inch (M5) Simulators. It installed `com.privacyog.salahos`, verified each application container, launched each profile with a numeric PID, captured a PNG, explicitly terminated the application, relaunched it with a new numeric PID and captured a second PNG.
+- Artifact `9289927972` contains `iphone-launch.png`, `iphone-relaunch.png`, `ipad-launch.png`, `ipad-relaunch.png` and per-profile evidence text.
+- Manual artifact review found an earlier iPhone build rendering the SalahOS header underneath the status-bar/Dynamic-Island safe area. The release-candidate branch added `viewport-fit=cover`, four-edge safe-area inset padding and a direct source-contract test; the final passing iPhone launch and relaunch screenshots are clear of the status bar, and the iPad screenshots remain clean.
+- This records automated iPhone/iPad Simulator responsive-layout plus launch/relaunch acceptance. It does not claim physical-device GPS/permissions, notification delivery/timing, audio-session/focus behavior, touch/Dynamic Type, signed distribution or network-isolated iOS cold start.
+- Final review confirmed the PR contains only the intended permanent iOS CI, safe-area correction/regression test and documentation/reference updates; temporary probe/formatter/reconciliation workflows must not remain in the merge tree.

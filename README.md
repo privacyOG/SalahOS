@@ -35,6 +35,7 @@ SalahOS is designed around accurate local prayer calculations, selectable calcul
 - English and Arabic localisation with RTL and bidirectional isolation.
 - Light, dark and follow-system themes plus keyboard/touch/accessibility support.
 - Android and iOS/iPadOS native local-prayer notification adapters with explicit lifecycle/platform constraints.
+- Private user-selected local Adhan audio for foreground playback attempts, with background/terminated delivery kept notification-based.
 - Web/PWA offline shell and locally persisted settings/timetables.
 - Raspberry Pi Touch Display 2 fixture/deployment tooling and browser-based smart-display mode for TV/kiosk use.
 
@@ -57,9 +58,9 @@ SalahOS is designed around accurate local prayer calculations, selectable calcul
 
 ## Platform status
 
-- **Web / PWA:** production build, install assets, service-worker offline lifecycle, local persistence and deploy-artifact verification are implemented and previously validated.
-- **Android:** Capacitor shell, foreground native location, native persistence, local prayer notifications, exact-alarm fallback policy, reboot restoration contract, release-signing configuration and Android 35 emulator acceptance have recorded evidence. Physical OEM notification timing remains a target-device validation item.
-- **iOS / iPadOS:** Capacitor shell, foreground native location, native persistence, bounded local prayer notifications and lifecycle policy are implemented. Xcode iOS Simulator compilation has recorded evidence; interactive iPhone/iPad layout, cold-start and physical-device notification acceptance remain open.
+- **Web / PWA:** production build, install assets, service-worker offline lifecycle, local persistence and deploy-artifact verification are implemented. The permanent production-browser visual matrix covers 14 phone, tablet, 1080p/4K and Raspberry Pi Touch Display 2 viewport scenarios across English/Arabic and light/dark combinations; human aesthetic and physical-display acceptance remain separate.
+- **Android:** Capacitor shell, foreground native location, native persistence, local prayer notifications, exact-alarm fallback policy, reboot restoration contract, release-signing configuration, private foreground local-Adhan playback and Android 35 emulator acceptance have recorded evidence. Physical OEM notification timing, audio-focus behavior and broad target-device acceptance remain open.
+- **iOS / iPadOS:** Capacitor shell, foreground native location, native persistence, bounded local prayer notifications, private foreground local-Adhan playback and hosted Xcode Simulator compilation are implemented. The permanent acceptance workflow exercises fresh iPhone/iPad Simulator installation, application-container resolution, launch and explicit terminate/relaunch with screenshot artifacts; physical-device notification/audio/distribution acceptance and network-isolated offline cold start remain separate gates.
 - **Raspberry Pi / Touch Display 2:** repository-validated browser/kiosk deployment, touch-display fixtures and offline continuity paths are implemented; physical Touch Display 2 acceptance remains open.
 - **TV / generic kiosk:** repository-validated browser-hosted smart-display mode, runtime rollover/recovery and practical keyboard/remote exit handling are implemented; physical TV readability/remote/panel acceptance remains open.
 
@@ -84,7 +85,7 @@ The dependency lockfile is committed and pinned for reproducible installation. N
 
 ## Release status
 
-SalahOS v1 is not tagged yet. The implementation tracker remains authoritative and release tagging is blocked until the remaining visual/device validation, notification/Adhan, calculation-method/reference and final regression requirements are complete. The Linux Quality Gate and Android Build now run on the self-hosted EVO-X2 runner and passed on exact main commit `3980a67ed13243d15438d5303ac2fdfd76db6d5f` in runs `31986937094` and `31986937065`. The iOS build remains macOS/Xcode-only; its current hosted macOS job cannot start because the account billing/spending state requires attention, so that infrastructure limitation is kept separate from the passing Linux evidence.
+SalahOS v1 is not tagged yet. Release-candidate code head `b0699274ef41980d03f0321346eabe5ae758758f` passed Quality Gate `32032477140`, Android Build `32032477112`, Visual Regression `32032477113` and iOS Build `32032477111` together. The iOS run created fresh iPhone 17 Pro and iPad Pro 13-inch Simulators, installed and launched the application, explicitly terminated/relaunched it and retained screenshot/runtime evidence; the screenshots were manually inspected after a safe-area defect was found and corrected. The final review head must retain all four passing automated gates before merge/tagging. Physical notification/audio/display behavior and network-isolated iOS cold start remain explicitly outside the automated evidence and are not inferred from emulator, Simulator or browser execution.
 
 ## Author
 
