@@ -20,6 +20,7 @@ export interface PrayerProvenance {
   readonly highLatitudeRuleApplied: boolean;
   readonly source: 'astronomical' | 'fixed-interval' | 'high-latitude-fallback' | 'unavailable';
   readonly formula: string;
+  readonly methodAdjustmentMinutes: number;
   readonly manualAdjustmentMinutes: number;
   readonly roundingPolicy: RoundingPolicy;
 }
@@ -243,7 +244,9 @@ function makePrayerResult(
   highLatitudeRule: HighLatitudeRule,
   roundingPolicy: RoundingPolicy,
 ): PrayerTimeResult {
-  const adjustment = input.adjustments?.[name] ?? 0;
+  const methodAdjustment = input.method.adjustments[name] ?? 0;
+  const manualAdjustment = input.adjustments?.[name] ?? 0;
+  const totalAdjustment = methodAdjustment + manualAdjustment;
   const rawLocalMinutes =
     event.rawUtcMinutes === null
       ? null
@@ -253,7 +256,7 @@ function makePrayerResult(
       ? null
       : normalizeDayMinutes(event.effectiveUtcMinutes + input.utcOffsetMinutes);
   const adjustedLocalMinutes =
-    baseLocalMinutes === null ? null : normalizeDayMinutes(baseLocalMinutes + adjustment);
+    baseLocalMinutes === null ? null : normalizeDayMinutes(baseLocalMinutes + totalAdjustment);
   const roundedLocalMinutes =
     adjustedLocalMinutes === null
       ? null
@@ -275,7 +278,8 @@ function makePrayerResult(
       highLatitudeRuleApplied: event.highLatitudeRuleApplied,
       source: event.source,
       formula: event.formula,
-      manualAdjustmentMinutes: adjustment,
+      methodAdjustmentMinutes: methodAdjustment,
+      manualAdjustmentMinutes: manualAdjustment,
       roundingPolicy,
     },
   };

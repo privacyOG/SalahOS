@@ -11,6 +11,8 @@ export type CalculationMethodId =
   | 'qatar'
   | 'custom';
 
+export type MethodPrayerName = 'fajr' | 'sunrise' | 'dhuhr' | 'asr' | 'maghrib' | 'isha';
+
 export type IshaRule =
   | { readonly kind: 'angle'; readonly angleDegrees: number }
   | { readonly kind: 'interval'; readonly minutesAfterMaghrib: number };
@@ -24,6 +26,7 @@ export interface CalculationMethod {
   readonly fajrAngleDegrees: number;
   readonly ishaRule: IshaRule;
   readonly maghribRule: { readonly kind: 'sunset' };
+  readonly adjustments: Readonly<Partial<Record<MethodPrayerName, number>>>;
   readonly provenance: string;
   readonly verification: MethodVerification;
 }
@@ -35,12 +38,14 @@ const method = (
   ishaRule: IshaRule,
   provenance: string,
   verification: Exclude<MethodVerification, 'custom'>,
+  adjustments: Readonly<Partial<Record<MethodPrayerName, number>>> = {},
 ): CalculationMethod => ({
   id,
   name,
   fajrAngleDegrees,
   ishaRule,
   maghribRule: { kind: 'sunset' },
+  adjustments: Object.freeze({ ...adjustments }),
   provenance,
   verification,
 });
@@ -100,8 +105,9 @@ export const calculationMethods: Readonly<
     'Diyanet / Turkey',
     18,
     { kind: 'angle', angleDegrees: 17 },
-    '18°/17° interoperability approximation; Adhan JS describes Turkey as an approximation and AlAdhan marks it experimental. Official timetable parity pending.',
+    '18°/17° interoperability approximation with Adhan JS 4.4.4 Turkey per-event adjustments; official Diyanet timetable parity remains pending.',
     'pending-authoritative-source',
+    { sunrise: -7, dhuhr: 5, asr: 4, maghrib: 7 },
   ),
   muis: method(
     'muis',
@@ -168,6 +174,7 @@ export function createCustomCalculationMethod(input: {
     fajrAngleDegrees: input.fajrAngleDegrees,
     ishaRule: input.ishaRule,
     maghribRule: { kind: 'sunset' },
+    adjustments: Object.freeze({}),
     provenance: 'User-defined custom calculation parameters.',
     verification: 'custom',
   };
