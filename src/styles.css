@@ -165,6 +165,14 @@ textarea {
   gap: 1rem;
 }
 
+.brand-wordmark {
+  display: block;
+  width: clamp(9rem, 21vw, 14rem);
+  height: auto;
+  margin: 0 0 0.45rem;
+  border-radius: 0.55rem;
+}
+
 .live-clock {
   margin: 0;
   font-size: clamp(1.6rem, 3vw, 2.7rem);

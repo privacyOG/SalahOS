@@ -1,10 +1,11 @@
 const CACHE_PREFIX = 'salahos-shell-';
-const CACHE_NAME = `${CACHE_PREFIX}v2`;
+const CACHE_NAME = `${CACHE_PREFIX}v3`;
 const SHELL_URLS = [
   '/',
   '/manifest.webmanifest',
   '/icons/salahos.svg',
   '/icons/salahos-maskable.svg',
+  '/icons/salahos-wordmark.svg',
 ];
 
 self.addEventListener('install', (event) => {

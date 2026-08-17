@@ -31,6 +31,14 @@
   padding: clamp(1.2rem, 3vw, 2.4rem);
 }
 
+.smart-display-brand {
+  display: block;
+  width: clamp(10rem, 18vw, 18rem);
+  height: auto;
+  margin-block-end: clamp(0.5rem, 1vw, 1rem);
+  border-radius: 0.65rem;
+}
+
 .smart-display-clock {
   margin: 0;
   font-size: clamp(4.5rem, 11vw, 10rem);

@@ -722,7 +722,11 @@ export function App() {
       <header className="hero">
         <div className="hero-toolbar">
           <div>
-            <p className="eyebrow">{translate(locale, 'appName')}</p>
+            <img
+              className="brand-wordmark"
+              src="/icons/salahos-wordmark.svg"
+              alt={translate(locale, 'appName')}
+            />
             <p className="live-clock" aria-label={translate(locale, 'currentTime')}>
               {currentClock}
             </p>
