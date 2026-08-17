@@ -68,13 +68,13 @@
 - [x] Implement and verify Muslim World League method
 - [x] Implement and verify Umm al-Qura / Makkah method
 - [x] Implement and verify Egyptian method
-- [~] Implement and verify University of Islamic Sciences, Karachi method
+- [x] Implement and verify University of Islamic Sciences, Karachi method
 - [x] Implement and verify ISNA method
 - [~] Research and add other reputable regional methods where appropriate, including Diyanet/Turkey, MUIS/Singapore, Dubai, Kuwait and Qatar
 - [x] Provide custom calculation parameters for advanced users where safe and clearly labelled
 - [x] Never silently change an explicitly selected calculation method
 
-**Method-registry reconciliation note (2026-08-17):** built-in numerical parameters remain centralized and cross-checked against pinned/reference sources. Exact canonical Adhan JS 4.4.4 output fixtures now verify MWL, Egyptian and ISNA within the fixed two-minute model/rounding tolerance. The Turkey interoperability profile also now models the pinned canonical per-event offsets (Sunrise -7, Dhuhr +5, Asr +4, Maghrib +7) and passes its Istanbul fixture, while remaining `pending-authoritative-source` because canonical-library parity is not official Diyanet institutional timetable certification. Dubai remains pending authoritative/offset validation; Karachi remains implemented and parameter-cross-checked but lacks a frozen direct canonical output fixture in this suite.
+**Method-registry reconciliation note (2026-08-17):** built-in numerical parameters remain centralized and cross-checked against pinned/reference sources. Exact canonical Adhan JS 4.4.4 output fixtures now verify MWL, Egyptian, ISNA, MUIS, Dubai and Karachi within the fixed two-minute model/rounding tolerance. The Turkey interoperability profile models the pinned canonical per-event offsets (Sunrise -7, Dhuhr +5, Asr +4, Maghrib +7) and passes its Istanbul fixture. Dubai now models its pinned canonical offsets (Sunrise -3, Dhuhr +3, Asr +3, Maghrib +3) and passes the frozen Dubai fixture whose upstream source cites the UAE Awqaf published timetable. Karachi now has a fixed six-event output captured independently from exact `adhan@4.4.4` and frozen into the suite. Diyanet remains `pending-authoritative-source` because canonical-library parity is not official institutional timetable certification; Dubai output parity likewise does not establish that the authority internally uses the same simplified parameter model.
 
 ### 1.4 Madhhab / Asr calculation
 
@@ -124,7 +124,7 @@
 - [x] Compare against authoritative published timetables where practical
 - [x] Record rounding, offsets and methodology differences instead of forcing false parity
 
-**Stage 2 reconciliation note (2026-08-17):** Adhan JS `4.4.4` remains pinned at commit `a6f1a5c4a00105103f310ef18200b95f7184d2e7`; PrayTimes and AlAdhan remain independent cross-checks in `docs/PRAYER_METHOD_REFERENCES.md`. PR #93 added frozen direct canonical output fixtures for ISNA/North America, Muslim World League, Egyptian, Turkey interoperability and MUIS/Singapore, comparing all six displayed daily events at an unchanged two-minute tolerance. Exact PR head `c41a845dc38d6c604045abdf2588be16081b95b5` passed Quality Gate `31992557611` and Android Build `31992557906` on EVO-X2. Earlier external timetable parity fixtures remain valid for Makkah/Umm al-Qura, Singapore/MUIS, Doha/Qatar and Kuwait City/Kuwait. Direct canonical implementation comparison is therefore complete for the defined frozen v1 reference set; institutional certification remains separately tracked where applicable.
+**Stage 2 reconciliation note (2026-08-17):** Adhan JS `4.4.4` remains pinned at commit `a6f1a5c4a00105103f310ef18200b95f7184d2e7`; PrayTimes and AlAdhan remain independent cross-checks in `docs/PRAYER_METHOD_REFERENCES.md`. PR #93 added frozen direct canonical output fixtures for ISNA/North America, Muslim World League, Egyptian, Turkey interoperability and MUIS/Singapore. PR #95 added Dubai output parity using the pinned fixture whose upstream source cites UAE Awqaf, and PR #96 added a Karachi six-event fixture generated independently from exact `adhan@4.4.4`. All direct fixtures compare all six displayed daily events at the unchanged two-minute tolerance. Exact PR heads passed EVO-X2 Quality Gate and Android Build: #93 `c41a845dc38d6c604045abdf2588be16081b95b5` (`31992557611`, `31992557906`), #95 `d1468ea5448659cad1d68075db94b8eb5283741c` (`31993099243`, `31993099235`), and #96 `cc1d6e785f4607e718c5eb73ceee61e1f917b0a7` (`31993328375`, `31993328633`). Earlier external timetable parity fixtures remain valid for Makkah/Umm al-Qura, Singapore/MUIS, Doha/Qatar and Kuwait City/Kuwait. Direct canonical implementation comparison is complete for the defined frozen v1 reference set; institutional certification remains separately tracked where applicable.
 
 ### Geographic test matrix
 
