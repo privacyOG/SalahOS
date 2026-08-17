@@ -4,7 +4,9 @@ import { pathToFileURL } from 'node:url';
 
 const baseUrl = process.env.SALAHOS_VISUAL_BASE_URL ?? 'http://127.0.0.1:4173';
 const playwrightModule = process.env.SALAHOS_VISUAL_PLAYWRIGHT_MODULE;
-const artifactDirectory = path.resolve(process.env.SALAHOS_VISUAL_ARTIFACT_DIR ?? 'visual-artifacts');
+const artifactDirectory = path.resolve(
+  process.env.SALAHOS_VISUAL_ARTIFACT_DIR ?? 'visual-artifacts',
+);
 
 if (!playwrightModule) {
   throw new Error('SALAHOS_VISUAL_PLAYWRIGHT_MODULE must point to the isolated Playwright module');
@@ -217,7 +219,9 @@ async function validateApplicationScenario(browser, scenario) {
     }));
 
     if (documentState.lang !== scenario.locale) {
-      throw new Error(`${scenario.name} expected lang=${scenario.locale}, got ${documentState.lang}`);
+      throw new Error(
+        `${scenario.name} expected lang=${scenario.locale}, got ${documentState.lang}`,
+      );
     }
     if (documentState.dir !== expectedDirection(scenario.locale)) {
       throw new Error(
@@ -225,7 +229,9 @@ async function validateApplicationScenario(browser, scenario) {
       );
     }
     if (documentState.theme !== scenario.theme) {
-      throw new Error(`${scenario.name} expected theme=${scenario.theme}, got ${documentState.theme}`);
+      throw new Error(
+        `${scenario.name} expected theme=${scenario.theme}, got ${documentState.theme}`,
+      );
     }
     if (documentState.width !== scenario.width || documentState.height !== scenario.height) {
       throw new Error(`${scenario.name} viewport mismatch: ${JSON.stringify(documentState)}`);
@@ -274,7 +280,9 @@ async function validateTouchDisplayScenario(browser, scenario) {
 
     const expectedViewport = `${String(scenario.width)}x${String(scenario.height)}`;
     if (fixtureState.lang !== scenario.locale) {
-      throw new Error(`${scenario.name} expected fixture lang=${scenario.locale}, got ${fixtureState.lang}`);
+      throw new Error(
+        `${scenario.name} expected fixture lang=${scenario.locale}, got ${fixtureState.lang}`,
+      );
     }
     if (fixtureState.dir !== expectedDirection(scenario.locale)) {
       throw new Error(
