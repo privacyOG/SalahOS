@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { createMosqueId } from './mosqueIdentity';
 import { previewMosquePrayerPublication } from './mosquePrayerPublication';
 import {
   cacheMosquePrayerData,
@@ -41,7 +42,10 @@ describe('mosque following', () => {
   });
 
   it('clears the preferred mosque and cached data when it is unfollowed', () => {
-    let state = createMosqueFollowingState(['masjid-al-noor:sydney'], 'masjid-al-noor:sydney');
+    let state = createMosqueFollowingState(
+      ['masjid-al-noor:sydney'],
+      'masjid-al-noor:sydney',
+    );
     state = cacheMosquePrayerData(state, cached);
     state = unfollowMosque(state, 'masjid-al-noor:sydney');
 
@@ -55,12 +59,12 @@ describe('mosque following', () => {
     state = cacheMosquePrayerData(state, cached);
 
     expect(cachedPrayerDataForMosque(state, 'masjid-al-noor:sydney')?.revisionId).toBe('rev-001');
-    expect(mosqueCacheFreshness(state, 'masjid-al-noor:sydney', '2026-08-19T05:59:59.000Z')).toBe(
-      'fresh',
-    );
-    expect(mosqueCacheFreshness(state, 'masjid-al-noor:sydney', '2026-08-19T06:00:00.000Z')).toBe(
-      'stale',
-    );
+    expect(
+      mosqueCacheFreshness(state, 'masjid-al-noor:sydney', '2026-08-19T05:59:59.000Z'),
+    ).toBe('fresh');
+    expect(
+      mosqueCacheFreshness(state, 'masjid-al-noor:sydney', '2026-08-19T06:00:00.000Z'),
+    ).toBe('stale');
     expect(mosqueCacheFreshness(state, 'lakemba-mosque', '2026-08-19T06:00:00.000Z')).toBe(
       'missing',
     );
@@ -69,13 +73,15 @@ describe('mosque following', () => {
 
   it('rejects cache entries for unfollowed or mismatched mosques', () => {
     const state = createMosqueFollowingState(['lakemba-mosque']);
-    expect(() => cacheMosquePrayerData(state, cached)).toThrow(/only be cached for a followed mosque/u);
+    expect(() => cacheMosquePrayerData(state, cached)).toThrow(
+      /only be cached for a followed mosque/u,
+    );
 
     expect(() =>
       createMosqueFollowingState(['masjid-al-noor:sydney'], null, [
         {
           ...cached,
-          mosqueId: 'lakemba-mosque' as typeof cached.mosqueId,
+          mosqueId: createMosqueId('lakemba-mosque'),
         },
       ]),
     ).toThrow(/must belong to the cached mosque/u);
