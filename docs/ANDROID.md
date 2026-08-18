@@ -4,9 +4,11 @@ SalahOS includes a Capacitor Android shell that embeds the same shared TypeScrip
 
 ## Current validation status
 
-The repository currently validates an unsigned/debug Android build on a GitHub-hosted Ubuntu runner with Node.js 22 and Java 21. The automated Android gate runs the committed lockfile install, builds the shared web application, synchronises it into the committed native project and runs Gradle `assembleDebug`.
+The permanent Android gate validates the debug Android build on a GitHub-hosted Ubuntu runner with Node.js 22 and Java 21. It installs from the committed lockfile, builds the shared web application, synchronises it into the committed native project and runs Gradle `assembleDebug`.
 
-This is build evidence, not physical-device acceptance. Release signing, Play distribution, notification/Adhan delivery, battery/background behaviour, orientation acceptance and real-device/emulator validation remain separately tracked in `TODO.md`.
+Production release packaging is separately fail-closed: the release workflow requires the complete external Android signing configuration, builds the signed release APK, verifies it with `apksigner`, and passes it through the exact-main/final-package release preflight before publication. Signing keys and credentials are never committed to the repository.
+
+This repository evidence does not replace physical-device acceptance. Play distribution, notification/Adhan delivery, battery/background behaviour and manufacturer-specific device behaviour remain separately tracked in `TODO.md` where applicable.
 
 ## Native application identity
 
@@ -93,7 +95,9 @@ Android local prayer notifications, display-permission handling and the exact-al
 
 ## Signing and release builds
 
-The repository currently proves a debug APK build only. A release-ready Android configuration still requires deliberate signing and distribution work. Keep signing keys and credentials outside the repository and inject them through local secure configuration or encrypted CI/release secrets when that stage is implemented.
+SalahOS has a production-signed Android release path without committing signing material. `npm run android:release-check` requires all four signing values and refuses to build a production release when any value is missing or when the configured keystore path is not a file. Gradle also enforces the same fail-closed production-signing requirement when `SALAHOS_ANDROID_REQUIRE_SIGNING=true`.
+
+For repository-only configuration validation where no production key should be present, `npm run android:release-unsigned-check` remains available explicitly as an unsigned release-variant build. It is not a distributable production artifact.
 
 ## Local prayer notifications
 
@@ -121,7 +125,9 @@ This is repository/build evidence that saved scheduled notifications are restore
 
 ## Release signing
 
-Repository validation can assemble the release variant without a signing key. A distributable signed build requires all four values through the local environment or an encrypted CI secret store: `SALAHOS_ANDROID_KEYSTORE_PATH`, `SALAHOS_ANDROID_KEYSTORE_PASSWORD`, `SALAHOS_ANDROID_KEY_ALIAS`, and `SALAHOS_ANDROID_KEY_PASSWORD`. Partial signing configuration fails closed. Keystores and credentials must remain outside the repository. Run `npm run android:release-check` to synchronize the shared application and assemble the release variant.
+A distributable signed build requires four values through the local environment: `SALAHOS_ANDROID_KEYSTORE_PATH`, `SALAHOS_ANDROID_KEYSTORE_PASSWORD`, `SALAHOS_ANDROID_KEY_ALIAS`, and `SALAHOS_ANDROID_KEY_PASSWORD`. `npm run android:release-check` validates that all four are present, validates the keystore path, synchronises the shared application and assembles the signed release variant with production signing required.
+
+The tagged GitHub release workflow maps encrypted repository secrets to those inputs. The keystore is supplied as `SALAHOS_ANDROID_KEYSTORE_BASE64` and decoded only into the runner's temporary directory; the three password/alias secrets remain in the secret store. The workflow fails before a release APK is produced if any signing secret is absent, verifies the resulting APK with `apksigner`, computes SHA-256 checksums, and includes it only in a final package that passed the exact-main release preflight. Keystores and credentials must remain outside the repository.
 
 ## Emulator acceptance
 
