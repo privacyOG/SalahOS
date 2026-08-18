@@ -217,7 +217,7 @@ function normalizeFacilities(
   const unique = new Set<MosqueFacility>();
   for (const value of values) {
     if (!FACILITIES.includes(value)) {
-      throw new TypeError(`Unsupported mosque facility: ${String(value)}`);
+      throw new TypeError(`Unsupported mosque facility: ${value}`);
     }
     unique.add(value);
   }
@@ -226,7 +226,7 @@ function normalizeFacilities(
 
 function normalizePublicLink(value: MosquePublicLink): MosquePublicLink {
   if (!PUBLIC_LINK_KINDS.includes(value.kind)) {
-    throw new TypeError(`Unsupported public link kind: ${String(value.kind)}`);
+    throw new TypeError(`Unsupported public link kind: ${value.kind}`);
   }
   return Object.freeze({
     kind: value.kind,
