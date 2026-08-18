@@ -145,7 +145,10 @@ function normalizeLocalizedText(
   if (en === undefined && ar === undefined) {
     throw new TypeError(`${label} requires at least one English or Arabic value`);
   }
-  return Object.freeze({ ...(en === undefined ? {} : { en }), ...(ar === undefined ? {} : { ar }) });
+  return Object.freeze({
+    ...(en === undefined ? {} : { en }),
+    ...(ar === undefined ? {} : { ar }),
+  });
 }
 
 function normalizeOptionalLocalizedText(
@@ -175,7 +178,11 @@ function validateHttpUrl(value: string): string {
   } catch {
     throw new TypeError('Public URL must be an absolute URL');
   }
-  if ((url.protocol !== 'https:' && url.protocol !== 'http:') || url.username !== '' || url.password !== '') {
+  if (
+    (url.protocol !== 'https:' && url.protocol !== 'http:') ||
+    url.username !== '' ||
+    url.password !== ''
+  ) {
     throw new TypeError('Public URL must use HTTP(S) and must not contain credentials');
   }
   return url.toString();
@@ -208,7 +215,9 @@ function normalizeAddress(value: MosqueAddress): MosqueAddress {
   return Object.freeze({ formatted, ...(countryCode === undefined ? {} : { countryCode }) });
 }
 
-function normalizeFacilities(values: readonly MosqueFacility[] | undefined): readonly MosqueFacility[] {
+function normalizeFacilities(
+  values: readonly MosqueFacility[] | undefined,
+): readonly MosqueFacility[] {
   if (values === undefined) return Object.freeze([]);
   const unique = new Set<MosqueFacility>();
   for (const value of values) {
@@ -233,7 +242,9 @@ function normalizePublicLink(value: MosquePublicLink): MosquePublicLink {
   });
 }
 
-function normalizePublicLinks(values: readonly MosquePublicLink[] | undefined): readonly MosquePublicLink[] {
+function normalizePublicLinks(
+  values: readonly MosquePublicLink[] | undefined,
+): readonly MosquePublicLink[] {
   if (values === undefined) return Object.freeze([]);
   if (values.length > 10) {
     throw new RangeError('A mosque profile may publish at most 10 public links');
@@ -300,14 +311,13 @@ export function createMosqueProfile(input: MosqueProfileInput): MosqueProfile {
   if (parentMosqueId === id) {
     throw new TypeError('A mosque profile cannot be its own parent');
   }
+
   const coordinates = createCoordinates(input.coordinates.latitude, input.coordinates.longitude);
-  const contact = Object.freeze({
-    ...(normalizeEmail(input.contact?.email) === undefined
-      ? {}
-      : { email: normalizeEmail(input.contact?.email) }),
-    ...(normalizePhone(input.contact?.phone) === undefined
-      ? {}
-      : { phone: normalizePhone(input.contact?.phone) }),
+  const email = normalizeEmail(input.contact?.email);
+  const phone = normalizePhone(input.contact?.phone);
+  const contact: MosquePublicContact = Object.freeze({
+    ...(email === undefined ? {} : { email }),
+    ...(phone === undefined ? {} : { phone }),
     links: normalizePublicLinks(input.contact?.links),
   });
 
