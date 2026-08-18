@@ -112,11 +112,7 @@ describe('managed mosque authorization', () => {
       revokedAt: null,
     });
 
-    const revoked = revokeAllSessions(
-      [first, second],
-      'member-001',
-      '2026-08-19T02:00:00.000Z',
-    );
+    const revoked = revokeAllSessions([first, second], 'member-001', '2026-08-19T02:00:00.000Z');
 
     expect(revoked[0]?.revokedAt).toBe('2026-08-19T02:00:00.000Z');
     expect(revoked[1]?.revokedAt).toBeNull();
