@@ -314,7 +314,7 @@ function normalizeRamadan(
 ): RamadanPresentation | null {
   if (value === null || value === undefined) return null;
 
-  const fields: Array<readonly [string, number | undefined]> = [
+  const fields: (readonly [string, number | undefined])[] = [
     ['Isha', value.ishaLocalMinutes],
     ['Taraweeh', value.taraweehLocalMinutes],
     ['Suhur end', value.suhurEndsLocalMinutes],
