@@ -54,47 +54,63 @@ jobs:
           test -d "$APP_PATH"
           echo "APP_PATH=$APP_PATH" >> "$GITHUB_ENV"
 
-      - name: Resolve iPhone and iPad Simulator profiles
+      - name: Resolve available iPhone and iPad Simulators
         id: profiles
         run: |
           python3 - <<'PY' >> "$GITHUB_OUTPUT"
           import json
           import subprocess
 
-          runtimes = json.loads(subprocess.check_output(['xcrun', 'simctl', 'list', 'runtimes', '-j']))['runtimes']
+          def checked_json(*arguments):
+              completed = subprocess.run(
+                  ['xcrun', 'simctl', *arguments, '-j'],
+                  check=True,
+                  capture_output=True,
+                  text=True,
+                  timeout=30,
+              )
+              return json.loads(completed.stdout)
+
+          runtimes = checked_json('list', 'runtimes')['runtimes']
           ios = [runtime for runtime in runtimes if runtime.get('isAvailable') and runtime.get('platform') == 'iOS']
           if not ios:
               raise SystemExit('No available iOS Simulator runtime')
           ios.sort(key=lambda runtime: tuple(int(part) for part in runtime['version'].split('.')), reverse=True)
-          runtime = ios[0]['identifier']
 
-          device_types = json.loads(subprocess.check_output(['xcrun', 'simctl', 'list', 'devicetypes', '-j']))['devicetypes']
+          devices_by_runtime = checked_json('list', 'devices', 'available')['devices']
 
-          def choose(preferred, prefix):
-              for device_type in device_types:
-                  if device_type['name'] == preferred:
-                      return device_type['identifier']
-              for device_type in device_types:
-                  if device_type['name'].startswith(prefix):
-                      return device_type['identifier']
-              raise SystemExit(f'No available {prefix} Simulator device type')
+          def choose(prefix):
+              for runtime in ios:
+                  for device in devices_by_runtime.get(runtime['identifier'], []):
+                      if device.get('isAvailable', True) and device.get('name', '').startswith(prefix):
+                          return runtime['identifier'], device['udid'], device['name']
+              raise SystemExit(f'No available {prefix} Simulator device')
 
-          print(f'runtime={runtime}')
-          print(f'iphone={choose("iPhone 17 Pro", "iPhone")}')
-          print(f'ipad={choose("iPad Pro 13-inch (M5)", "iPad")}')
+          iphone_runtime, iphone_udid, iphone_name = choose('iPhone')
+          ipad_runtime, ipad_udid, ipad_name = choose('iPad')
+
+          print(f'iphone_runtime={iphone_runtime}')
+          print(f'iphone_udid={iphone_udid}')
+          print(f'iphone_name={iphone_name}')
+          print(f'ipad_runtime={ipad_runtime}')
+          print(f'ipad_udid={ipad_udid}')
+          print(f'ipad_name={ipad_name}')
           PY
 
-      - name: Install, launch and relaunch on fresh iPhone and iPad Simulators
+      - name: Install, launch and relaunch on available iPhone and iPad Simulators
         env:
-          RUNTIME: ${{ steps.profiles.outputs.runtime }}
-          IPHONE_TYPE: ${{ steps.profiles.outputs.iphone }}
-          IPAD_TYPE: ${{ steps.profiles.outputs.ipad }}
+          IPHONE_RUNTIME: ${{ steps.profiles.outputs.iphone_runtime }}
+          IPHONE_UDID: ${{ steps.profiles.outputs.iphone_udid }}
+          IPHONE_NAME: ${{ steps.profiles.outputs.iphone_name }}
+          IPAD_RUNTIME: ${{ steps.profiles.outputs.ipad_runtime }}
+          IPAD_UDID: ${{ steps.profiles.outputs.ipad_udid }}
+          IPAD_NAME: ${{ steps.profiles.outputs.ipad_name }}
           BUNDLE_ID: com.privacyog.salahos
           EVIDENCE_DIR: ${{ runner.temp }}/ios-simulator-evidence
         run: |
           set -euo pipefail
           mkdir -p "$EVIDENCE_DIR"
-          CREATED_UDIDS=()
+          ACTIVE_UDIDS=()
 
           simctl() {
             local timeout_seconds="$1"
@@ -121,20 +137,74 @@ jobs:
           }
 
           cleanup() {
-            for udid in "${CREATED_UDIDS[@]}"; do
+            for udid in "${ACTIVE_UDIDS[@]}"; do
               simctl 30 shutdown "$udid" >/dev/null 2>&1 || true
-              simctl 30 delete "$udid" >/dev/null 2>&1 || true
             done
           }
           trap cleanup EXIT
 
-          wait_for_boot() {
+          simulator_diagnostics() {
             local udid="$1"
-            if simctl 180 bootstatus "$udid" -b; then
+            echo "Simulator diagnostics for $udid" >&2
+            ps -ax | grep -E 'CoreSimulator|Simulator' | grep -v grep >&2 || true
+            python3 - "$udid" <<'PY' >&2 || true
+          import json
+          import subprocess
+          import sys
+
+          udid = sys.argv[1]
+          try:
+              completed = subprocess.run(
+                  ['xcrun', 'simctl', 'list', 'devices', '-j'],
+                  capture_output=True,
+                  text=True,
+                  timeout=30,
+              )
+              if completed.returncode == 0:
+                  devices = json.loads(completed.stdout).get('devices', {})
+                  for runtime, entries in devices.items():
+                      for device in entries:
+                          if device.get('udid') == udid:
+                              print(runtime, device)
+          except Exception as error:
+              print(f'Unable to collect simctl diagnostics: {error}')
+          PY
+          }
+
+          recover_core_simulator() {
+            echo "Restarting CoreSimulator service before one bounded retry." >&2
+            python3 - <<'PY'
+          import subprocess
+
+          subprocess.run(
+              ['killall', '-9', 'com.apple.CoreSimulator.CoreSimulatorService'],
+              check=False,
+              timeout=15,
+          )
+          PY
+            sleep 5
+          }
+
+          boot_or_recover() {
+            local udid="$1"
+
+            simctl 30 shutdown "$udid" >/dev/null 2>&1 || true
+            if simctl 30 boot "$udid" && simctl 180 bootstatus "$udid" -b; then
               return 0
             fi
-            echo "Simulator $udid failed to complete boot within the acceptance deadline." >&2
-            ps -ax | grep -E 'CoreSimulator|Simulator' | grep -v grep >&2 || true
+
+            echo "Initial simulator boot failed for $udid." >&2
+            simulator_diagnostics "$udid"
+            simctl 30 shutdown "$udid" >/dev/null 2>&1 || true
+            recover_core_simulator
+
+            if simctl 30 boot "$udid" && simctl 180 bootstatus "$udid" -b; then
+              echo "Simulator $udid recovered on the second boot attempt."
+              return 0
+            fi
+
+            echo "Simulator $udid failed both bounded boot attempts." >&2
+            simulator_diagnostics "$udid"
             return 1
           }
 
@@ -164,17 +234,17 @@ jobs:
 
           exercise() {
             local profile="$1"
-            local device_type="$2"
-            local appearance="$3"
-            local name="SalahOS-${profile}-${GITHUB_RUN_ID}"
-            local udid launch_output launch_pid relaunch_pid container_path
+            local udid="$2"
+            local runtime="$3"
+            local device_name="$4"
+            local appearance="$5"
+            local launch_output launch_pid relaunch_pid container_path
 
-            udid="$(simctl 30 create "$name" "$device_type" "$RUNTIME")"
-            CREATED_UDIDS+=("$udid")
-            echo "$profile UDID: $udid"
+            ACTIVE_UDIDS+=("$udid")
+            echo "$profile Simulator: $device_name ($udid)"
+            echo "$profile Runtime: $runtime"
 
-            simctl 30 boot "$udid"
-            wait_for_boot "$udid"
+            boot_or_recover "$udid"
             simctl 30 ui "$udid" appearance "$appearance"
             simctl 60 install "$udid" "$APP_PATH"
             container_path="$(simctl 30 get_app_container "$udid" "$BUNDLE_ID" app)"
@@ -194,8 +264,8 @@ jobs:
             cat > "$EVIDENCE_DIR/${profile}.txt" <<EOF
           profile=$profile
           udid=$udid
-          runtime=$RUNTIME
-          device_type=$device_type
+          runtime=$runtime
+          device_name=$device_name
           app_path=$APP_PATH
           container_path=$container_path
           launch_pid=$launch_pid
@@ -205,8 +275,8 @@ jobs:
           EOF
           }
 
-          exercise iphone "$IPHONE_TYPE" light
-          exercise ipad "$IPAD_TYPE" dark
+          exercise iphone "$IPHONE_UDID" "$IPHONE_RUNTIME" "$IPHONE_NAME" light
+          exercise ipad "$IPAD_UDID" "$IPAD_RUNTIME" "$IPAD_NAME" dark
           ls -lh "$EVIDENCE_DIR"
 
       - name: Upload iOS Simulator evidence
