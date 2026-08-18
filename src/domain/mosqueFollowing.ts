@@ -28,7 +28,11 @@ function assertIsoTimestamp(value: string, label: string): string {
 
 function assertRevisionId(value: string): string {
   const normalized = value.trim().toLowerCase();
-  if (normalized.length < 2 || normalized.length > 160 || !/^[a-z0-9][a-z0-9._:-]*[a-z0-9]$/u.test(normalized)) {
+  if (
+    normalized.length < 2 ||
+    normalized.length > 160 ||
+    !/^[a-z0-9][a-z0-9._:-]*[a-z0-9]$/u.test(normalized)
+  ) {
     throw new RangeError('Revision ID must use lowercase-safe identifier characters');
   }
   return normalized;
@@ -46,7 +50,9 @@ function freezeMosqueIds(values: readonly string[]): readonly MosqueId[] {
   return Object.freeze(result);
 }
 
-function freezeCache(values: readonly CachedMosquePrayerData[]): readonly CachedMosquePrayerData[] {
+function freezeCache(
+  values: readonly CachedMosquePrayerData[],
+): readonly CachedMosquePrayerData[] {
   const byMosque = new Map<MosqueId, CachedMosquePrayerData>();
   for (const value of values) {
     const mosqueId = createMosqueId(value.mosqueId);
@@ -91,7 +97,10 @@ export function createMosqueFollowingState(
   });
 }
 
-export function followMosque(state: MosqueFollowingState, mosqueId: string): MosqueFollowingState {
+export function followMosque(
+  state: MosqueFollowingState,
+  mosqueId: string,
+): MosqueFollowingState {
   const normalized = createMosqueId(mosqueId);
   if (state.followedMosqueIds.includes(normalized)) return state;
   return createMosqueFollowingState(
@@ -101,7 +110,10 @@ export function followMosque(state: MosqueFollowingState, mosqueId: string): Mos
   );
 }
 
-export function unfollowMosque(state: MosqueFollowingState, mosqueId: string): MosqueFollowingState {
+export function unfollowMosque(
+  state: MosqueFollowingState,
+  mosqueId: string,
+): MosqueFollowingState {
   const normalized = createMosqueId(mosqueId);
   const followed = state.followedMosqueIds.filter((candidate) => candidate !== normalized);
   const preferred = state.preferredMosqueId === normalized ? null : state.preferredMosqueId;
@@ -134,7 +146,9 @@ export function cacheMosquePrayerData(
   if (!state.followedMosqueIds.includes(mosqueId)) {
     throw new RangeError('Prayer data may only be cached for a followed mosque');
   }
-  const nextCache = state.cachedPrayerData.filter((candidate) => candidate.mosqueId !== mosqueId);
+  const nextCache = state.cachedPrayerData.filter(
+    (candidate) => candidate.mosqueId !== mosqueId,
+  );
   nextCache.push(entry);
   return createMosqueFollowingState(state.followedMosqueIds, state.preferredMosqueId, nextCache);
 }
