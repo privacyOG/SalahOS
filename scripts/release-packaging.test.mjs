@@ -73,7 +73,10 @@ describe('release asset workflow', () => {
     expect(workflow).toContain('Final package preflight');
     expect(workflow).toContain('name: release-final');
     expect(workflow).toContain('unzip -t "release/$WEB"');
-    expect(workflow).toContain('tar -tzf "release/$PI"');
+    expect(workflow).toContain('PI_CONTENTS="$(tar -tzf "release/$PI")"');
+    expect(workflow).toContain("grep -Fxq 'SalahOS/INSTALL.md' <<< \"$PI_CONTENTS\"");
+    expect(workflow).toContain("grep -Fxq 'SalahOS/dist/index.html' <<< \"$PI_CONTENTS\"");
+    expect(workflow).not.toMatch(/tar -tzf[^\n]*\|\s*grep\s+-[^\n]*q/);
     expect(workflow).toContain("find . -maxdepth 1 -type f -printf '%f\\n'");
     expect(workflow).toContain('Reverify checksums immediately before publication');
   });
