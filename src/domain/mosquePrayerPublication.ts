@@ -4,6 +4,10 @@ import type { IqamahRule, JumuahSession } from './mosqueTimetable';
 
 const PRAYERS: readonly ObligatoryPrayerName[] = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
 
+type PrayerMinuteMap = Readonly<Partial<Record<ObligatoryPrayerName, number>>>;
+type IqamahMap = Readonly<Partial<Record<ObligatoryPrayerName, IqamahRule>>>;
+type NullableIqamahMap = Readonly<Partial<Record<ObligatoryPrayerName, IqamahRule | null>>>;
+
 export type PrayerPublicationSource = 'calculated' | 'adjusted' | 'supplied';
 
 export interface CalculatedPrayerPublication {
@@ -12,7 +16,7 @@ export interface CalculatedPrayerPublication {
 
 export interface AdjustedPrayerPublication {
   readonly kind: 'adjusted';
-  readonly adjustments: Readonly<Partial<Record<ObligatoryPrayerName, number>>>;
+  readonly adjustments: PrayerMinuteMap;
 }
 
 export interface SuppliedPrayerPublication {
@@ -27,8 +31,8 @@ export type PrayerStartPublication =
 
 export interface PrayerDateOverride {
   readonly date: string;
-  readonly startLocalMinutes?: Readonly<Partial<Record<ObligatoryPrayerName, number>>>;
-  readonly iqamah?: Readonly<Partial<Record<ObligatoryPrayerName, IqamahRule | null>>>;
+  readonly startLocalMinutes?: PrayerMinuteMap;
+  readonly iqamah?: NullableIqamahMap;
   readonly jumuahSessions?: readonly JumuahSession[];
 }
 
@@ -36,8 +40,8 @@ export interface PrayerSeasonalRule {
   readonly id: string;
   readonly startDate: string;
   readonly endDate: string;
-  readonly startLocalMinutes?: Readonly<Partial<Record<ObligatoryPrayerName, number>>>;
-  readonly iqamah?: Readonly<Partial<Record<ObligatoryPrayerName, IqamahRule | null>>>;
+  readonly startLocalMinutes?: PrayerMinuteMap;
+  readonly iqamah?: NullableIqamahMap;
 }
 
 export interface RamadanPresentation {
@@ -52,7 +56,7 @@ export interface RamadanPresentation {
 export interface MosquePrayerPublicationDraft {
   readonly mosqueId: string;
   readonly prayerStarts: PrayerStartPublication;
-  readonly iqamah?: Readonly<Partial<Record<ObligatoryPrayerName, IqamahRule>>>;
+  readonly iqamah?: IqamahMap;
   readonly defaultJumuahSessions?: readonly JumuahSession[];
   readonly dateOverrides?: readonly PrayerDateOverride[];
   readonly seasonalRules?: readonly PrayerSeasonalRule[];
@@ -62,7 +66,7 @@ export interface MosquePrayerPublicationDraft {
 export interface MosquePrayerPublication {
   readonly mosqueId: MosqueId;
   readonly prayerStarts: PrayerStartPublication;
-  readonly iqamah: Readonly<Partial<Record<ObligatoryPrayerName, IqamahRule>>>;
+  readonly iqamah: IqamahMap;
   readonly defaultJumuahSessions: readonly JumuahSession[];
   readonly dateOverrides: readonly PrayerDateOverride[];
   readonly seasonalRules: readonly PrayerSeasonalRule[];
@@ -97,6 +101,7 @@ function assertDateKey(date: string, label: string): void {
   if (!/^\d{4}-\d{2}-\d{2}$/u.test(date)) {
     throw new RangeError(`${label} must use YYYY-MM-DD`);
   }
+
   const parsed = new Date(`${date}T00:00:00.000Z`);
   if (!Number.isFinite(parsed.getTime()) || parsed.toISOString().slice(0, 10) !== date) {
     throw new RangeError(`${label} must be a valid Gregorian civil date`);
@@ -122,41 +127,45 @@ function validateIqamahRule(rule: IqamahRule, label: string): IqamahRule {
     assertLocalMinutes(rule.localMinutes, `${label} fixed time`);
     return Object.freeze({ kind: 'fixed', localMinutes: rule.localMinutes });
   }
-  if (!Number.isInteger(rule.offsetMinutes) || rule.offsetMinutes < 0 || rule.offsetMinutes > 180) {
+
+  const offset = rule.offsetMinutes;
+  if (!Number.isInteger(offset) || offset < 0 || offset > 180) {
     throw new RangeError(`${label} offset must be an integer from 0 through 180 minutes`);
   }
-  return Object.freeze({ kind: 'offset', offsetMinutes: rule.offsetMinutes });
+  return Object.freeze({ kind: 'offset', offsetMinutes: offset });
 }
 
-function normalizeIqamahMap(
-  value: Readonly<Partial<Record<ObligatoryPrayerName, IqamahRule>>> | undefined,
-): Readonly<Partial<Record<ObligatoryPrayerName, IqamahRule>>> {
+function normalizeIqamahMap(value: IqamahMap | undefined): IqamahMap {
   const result: Partial<Record<ObligatoryPrayerName, IqamahRule>> = {};
   for (const prayer of PRAYERS) {
     const rule = value?.[prayer];
-    if (rule !== undefined) result[prayer] = validateIqamahRule(rule, `${prayer} iqamah`);
+    if (rule !== undefined) {
+      result[prayer] = validateIqamahRule(rule, `${prayer} iqamah`);
+    }
   }
   return Object.freeze(result);
 }
 
 function normalizeNullableIqamahMap(
-  value: Readonly<Partial<Record<ObligatoryPrayerName, IqamahRule | null>>> | undefined,
-): Readonly<Partial<Record<ObligatoryPrayerName, IqamahRule | null>>> | undefined {
+  value: NullableIqamahMap | undefined,
+): NullableIqamahMap | undefined {
   if (value === undefined) return undefined;
+
   const result: Partial<Record<ObligatoryPrayerName, IqamahRule | null>> = {};
   for (const prayer of PRAYERS) {
     const rule = value[prayer];
-    if (rule === null) result[prayer] = null;
-    else if (rule !== undefined) result[prayer] = validateIqamahRule(rule, `${prayer} iqamah override`);
+    if (rule === null) {
+      result[prayer] = null;
+    } else if (rule !== undefined) {
+      result[prayer] = validateIqamahRule(rule, `${prayer} iqamah override`);
+    }
   }
   return Object.freeze(result);
 }
 
-function normalizeMinuteMap(
-  value: Readonly<Partial<Record<ObligatoryPrayerName, number>>> | undefined,
-  label: string,
-): Readonly<Partial<Record<ObligatoryPrayerName, number>>> | undefined {
+function normalizeMinuteMap(value: PrayerMinuteMap | undefined, label: string): PrayerMinuteMap | undefined {
   if (value === undefined) return undefined;
+
   const result: Partial<Record<ObligatoryPrayerName, number>> = {};
   for (const prayer of PRAYERS) {
     const minutes = value[prayer];
@@ -169,14 +178,19 @@ function normalizeMinuteMap(
 }
 
 function normalizePrayerStarts(value: PrayerStartPublication): PrayerStartPublication {
-  if (value.kind === 'calculated') return Object.freeze({ kind: 'calculated' });
+  if (value.kind === 'calculated') {
+    return Object.freeze({ kind: 'calculated' });
+  }
+
   if (value.kind === 'adjusted') {
     const adjustments: Partial<Record<ObligatoryPrayerName, number>> = {};
     for (const prayer of PRAYERS) {
       const minutes = value.adjustments[prayer];
       if (minutes === undefined) continue;
       if (!Number.isInteger(minutes) || minutes < -180 || minutes > 180) {
-        throw new RangeError(`${prayer} adjustment must be an integer from -180 through 180 minutes`);
+        throw new RangeError(
+          `${prayer} adjustment must be an integer from -180 through 180 minutes`,
+        );
       }
       adjustments[prayer] = minutes;
     }
@@ -192,9 +206,14 @@ function normalizePrayerStarts(value: PrayerStartPublication): PrayerStartPublic
   return Object.freeze({ kind: 'supplied', startLocalMinutes: Object.freeze(starts) });
 }
 
-function normalizeJumuahSessions(value: readonly JumuahSession[] | undefined): readonly JumuahSession[] {
+function normalizeJumuahSessions(
+  value: readonly JumuahSession[] | undefined,
+): readonly JumuahSession[] {
   if (value === undefined) return Object.freeze([]);
-  if (value.length > 10) throw new RangeError('A publication may contain at most 10 Jumuah sessions');
+  if (value.length > 10) {
+    throw new RangeError('A publication may contain at most 10 Jumuah sessions');
+  }
+
   const labels = new Set<string>();
   const sessions = value.map((session) => {
     const label = assertBoundedText(session.label, 'Jumuah session label', 120);
@@ -203,8 +222,11 @@ function normalizeJumuahSessions(value: readonly JumuahSession[] | undefined): r
     if (session.salahLocalMinutes < session.khutbahLocalMinutes) {
       throw new RangeError('Jumuah salah may not precede its khutbah');
     }
+
     const key = label.toLocaleLowerCase('en-AU');
-    if (labels.has(key)) throw new RangeError(`Duplicate Jumuah session label: ${label}`);
+    if (labels.has(key)) {
+      throw new RangeError(`Duplicate Jumuah session label: ${label}`);
+    }
     labels.add(key);
     return Object.freeze({
       label,
@@ -215,19 +237,27 @@ function normalizeJumuahSessions(value: readonly JumuahSession[] | undefined): r
   return Object.freeze(sessions);
 }
 
-function normalizeDateOverrides(value: readonly PrayerDateOverride[] | undefined): readonly PrayerDateOverride[] {
+function normalizeDateOverrides(
+  value: readonly PrayerDateOverride[] | undefined,
+): readonly PrayerDateOverride[] {
   if (value === undefined) return Object.freeze([]);
+
   const seen = new Set<string>();
   const overrides = value.map((override) => {
     assertDateKey(override.date, 'Prayer override date');
-    if (seen.has(override.date)) throw new RangeError(`Duplicate prayer override date: ${override.date}`);
+    if (seen.has(override.date)) {
+      throw new RangeError(`Duplicate prayer override date: ${override.date}`);
+    }
     seen.add(override.date);
+
     return Object.freeze({
       date: override.date,
       ...(override.startLocalMinutes === undefined
         ? {}
         : { startLocalMinutes: normalizeMinuteMap(override.startLocalMinutes, 'Prayer override') }),
-      ...(override.iqamah === undefined ? {} : { iqamah: normalizeNullableIqamahMap(override.iqamah) }),
+      ...(override.iqamah === undefined
+        ? {}
+        : { iqamah: normalizeNullableIqamahMap(override.iqamah) }),
       ...(override.jumuahSessions === undefined
         ? {}
         : { jumuahSessions: normalizeJumuahSessions(override.jumuahSessions) }),
@@ -236,16 +266,24 @@ function normalizeDateOverrides(value: readonly PrayerDateOverride[] | undefined
   return Object.freeze(overrides);
 }
 
-function normalizeSeasonalRules(value: readonly PrayerSeasonalRule[] | undefined): readonly PrayerSeasonalRule[] {
+function normalizeSeasonalRules(
+  value: readonly PrayerSeasonalRule[] | undefined,
+): readonly PrayerSeasonalRule[] {
   if (value === undefined) return Object.freeze([]);
+
   const seenIds = new Set<string>();
   const normalized = value.map((rule) => {
     const id = assertBoundedText(rule.id, 'Seasonal rule ID', 120).toLowerCase();
-    if (seenIds.has(id)) throw new RangeError(`Duplicate seasonal rule ID: ${id}`);
+    if (seenIds.has(id)) {
+      throw new RangeError(`Duplicate seasonal rule ID: ${id}`);
+    }
     seenIds.add(id);
     assertDateKey(rule.startDate, 'Seasonal rule start date');
     assertDateKey(rule.endDate, 'Seasonal rule end date');
-    if (rule.endDate < rule.startDate) throw new RangeError(`Seasonal rule ${id} ends before it starts`);
+    if (rule.endDate < rule.startDate) {
+      throw new RangeError(`Seasonal rule ${id} ends before it starts`);
+    }
+
     return Object.freeze({
       id,
       startDate: rule.startDate,
@@ -253,10 +291,15 @@ function normalizeSeasonalRules(value: readonly PrayerSeasonalRule[] | undefined
       ...(rule.startLocalMinutes === undefined
         ? {}
         : { startLocalMinutes: normalizeMinuteMap(rule.startLocalMinutes, 'Seasonal prayer') }),
-      ...(rule.iqamah === undefined ? {} : { iqamah: normalizeNullableIqamahMap(rule.iqamah) }),
+      ...(rule.iqamah === undefined
+        ? {}
+        : { iqamah: normalizeNullableIqamahMap(rule.iqamah) }),
     });
   });
-  const sorted = [...normalized].sort((left, right) => left.startDate.localeCompare(right.startDate));
+
+  const sorted = [...normalized].sort((left, right) =>
+    left.startDate.localeCompare(right.startDate),
+  );
   for (let index = 1; index < sorted.length; index += 1) {
     if (sorted[index].startDate <= sorted[index - 1].endDate) {
       throw new RangeError(
@@ -269,16 +312,20 @@ function normalizeSeasonalRules(value: readonly PrayerSeasonalRule[] | undefined
 
 function normalizeRamadan(value: RamadanPresentation | null | undefined): RamadanPresentation | null {
   if (value === null || value === undefined) return null;
-  const fields: Array<readonly [keyof RamadanPresentation, number | undefined]> = [
-    ['ishaLocalMinutes', value.ishaLocalMinutes],
-    ['taraweehLocalMinutes', value.taraweehLocalMinutes],
-    ['suhurEndsLocalMinutes', value.suhurEndsLocalMinutes],
-    ['imsakLocalMinutes', value.imsakLocalMinutes],
-    ['iftarLocalMinutes', value.iftarLocalMinutes],
+
+  const fields: Array<readonly [string, number | undefined]> = [
+    ['Isha', value.ishaLocalMinutes],
+    ['Taraweeh', value.taraweehLocalMinutes],
+    ['Suhur end', value.suhurEndsLocalMinutes],
+    ['Imsak', value.imsakLocalMinutes],
+    ['Iftar', value.iftarLocalMinutes],
   ];
   for (const [name, minutes] of fields) {
-    if (minutes !== undefined) assertLocalMinutes(minutes, `Ramadan ${name}`);
+    if (minutes !== undefined) {
+      assertLocalMinutes(minutes, `Ramadan ${name}`);
+    }
   }
+
   if (
     value.ishaLocalMinutes !== undefined &&
     value.taraweehLocalMinutes !== undefined &&
@@ -293,6 +340,7 @@ function normalizeRamadan(value: RamadanPresentation | null | undefined): Ramada
   ) {
     throw new RangeError('Imsak may not be after the configured Suhur end');
   }
+
   return Object.freeze({
     ...(value.ishaLocalMinutes === undefined ? {} : { ishaLocalMinutes: value.ishaLocalMinutes }),
     ...(value.taraweehLocalMinutes === undefined
@@ -309,7 +357,9 @@ function normalizeRamadan(value: RamadanPresentation | null | undefined): Ramada
   });
 }
 
-export function previewMosquePrayerPublication(draft: MosquePrayerPublicationDraft): PublicationPreview {
+export function previewMosquePrayerPublication(
+  draft: MosquePrayerPublicationDraft,
+): PublicationPreview {
   const publication: MosquePrayerPublication = Object.freeze({
     mosqueId: createMosqueId(draft.mosqueId),
     prayerStarts: normalizePrayerStarts(draft.prayerStarts),
@@ -322,7 +372,9 @@ export function previewMosquePrayerPublication(draft: MosquePrayerPublicationDra
 
   const warnings: string[] = [];
   if (publication.prayerStarts.kind === 'calculated' && publication.dateOverrides.length === 0) {
-    warnings.push('Prayer starts remain entirely calculated; only mosque Iqamah/Jumuah metadata is managed.');
+    warnings.push(
+      'Prayer starts remain entirely calculated; only mosque Iqamah/Jumuah metadata is managed.',
+    );
   }
   if (publication.defaultJumuahSessions.length === 0) {
     warnings.push('No default Jumuah sessions are configured.');
@@ -335,6 +387,7 @@ function normalizeRevisionMetadata(input: PublicationRevisionInput): Publication
   if (!/^[a-z0-9][a-z0-9._:-]*[a-z0-9]$/u.test(revisionId)) {
     throw new RangeError('Revision ID must use lowercase-safe identifier characters');
   }
+
   const changedBy = assertBoundedText(input.changedBy, 'Changed by', 200);
   const changeSummary = assertBoundedText(input.changeSummary, 'Change summary', 500);
   const publishedAt = input.publishedAt.trim();
@@ -342,6 +395,7 @@ function normalizeRevisionMetadata(input: PublicationRevisionInput): Publication
   if (!Number.isFinite(instant.getTime()) || instant.toISOString() !== publishedAt) {
     throw new RangeError('Published timestamp must be a canonical UTC ISO instant');
   }
+
   return Object.freeze({ revisionId, changedBy, changeSummary, publishedAt });
 }
 
@@ -355,6 +409,7 @@ export function createMosquePrayerPublicationRevision(
   if (previous !== null && previous.mosqueId !== publication.mosqueId) {
     throw new RangeError('A publication revision may only follow a revision for the same mosque');
   }
+
   return Object.freeze({
     revisionId: normalized.revisionId,
     mosqueId: publication.mosqueId,
@@ -375,6 +430,7 @@ export function rollbackMosquePrayerPublication(
   if (current.mosqueId !== target.mosqueId) {
     throw new RangeError('Cannot roll back a timetable using a revision from another mosque');
   }
+
   const normalized = normalizeRevisionMetadata(metadata);
   return Object.freeze({
     revisionId: normalized.revisionId,
