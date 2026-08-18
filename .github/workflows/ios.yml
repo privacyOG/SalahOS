@@ -58,6 +58,7 @@ jobs:
         id: profiles
         run: |
           python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import base64
           import json
           import subprocess
 
@@ -79,38 +80,46 @@ jobs:
 
           devices_by_runtime = checked_json('list', 'devices', 'available')['devices']
 
-          def choose(prefix):
+          def candidates(prefix):
+              selected = []
               for runtime in ios:
-                  for device in devices_by_runtime.get(runtime['identifier'], []):
-                      if device.get('isAvailable', True) and device.get('name', '').startswith(prefix):
-                          return runtime['identifier'], device['udid'], device['name']
-              raise SystemExit(f'No available {prefix} Simulator device')
+                  devices = [
+                      device for device in devices_by_runtime.get(runtime['identifier'], [])
+                      if device.get('isAvailable', True) and device.get('name', '').startswith(prefix)
+                  ]
+                  devices.sort(key=lambda device: device.get('state') != 'Booted')
+                  for device in devices:
+                      selected.append({
+                          'runtime': runtime['identifier'],
+                          'udid': device['udid'],
+                          'name': device['name'],
+                          'state': device.get('state', 'Unknown'),
+                      })
+                      if len(selected) == 3:
+                          return selected
+              if not selected:
+                  raise SystemExit(f'No available {prefix} Simulator device')
+              return selected
 
-          iphone_runtime, iphone_udid, iphone_name = choose('iPhone')
-          ipad_runtime, ipad_udid, ipad_name = choose('iPad')
+          def encode(value):
+              payload = json.dumps(value, separators=(',', ':')).encode()
+              return base64.b64encode(payload).decode()
 
-          print(f'iphone_runtime={iphone_runtime}')
-          print(f'iphone_udid={iphone_udid}')
-          print(f'iphone_name={iphone_name}')
-          print(f'ipad_runtime={ipad_runtime}')
-          print(f'ipad_udid={ipad_udid}')
-          print(f'ipad_name={ipad_name}')
+          print(f'iphone_candidates={encode(candidates("iPhone"))}')
+          print(f'ipad_candidates={encode(candidates("iPad"))}')
           PY
 
       - name: Install, launch and relaunch on available iPhone and iPad Simulators
         env:
-          IPHONE_RUNTIME: ${{ steps.profiles.outputs.iphone_runtime }}
-          IPHONE_UDID: ${{ steps.profiles.outputs.iphone_udid }}
-          IPHONE_NAME: ${{ steps.profiles.outputs.iphone_name }}
-          IPAD_RUNTIME: ${{ steps.profiles.outputs.ipad_runtime }}
-          IPAD_UDID: ${{ steps.profiles.outputs.ipad_udid }}
-          IPAD_NAME: ${{ steps.profiles.outputs.ipad_name }}
+          IPHONE_CANDIDATES: ${{ steps.profiles.outputs.iphone_candidates }}
+          IPAD_CANDIDATES: ${{ steps.profiles.outputs.ipad_candidates }}
           BUNDLE_ID: com.privacyog.salahos
           EVIDENCE_DIR: ${{ runner.temp }}/ios-simulator-evidence
         run: |
           set -euo pipefail
           mkdir -p "$EVIDENCE_DIR"
           ACTIVE_UDIDS=()
+          RECOVERY_USED=0
 
           simctl() {
             local timeout_seconds="$1"
@@ -133,6 +142,18 @@ jobs:
               )
               raise SystemExit(124)
           raise SystemExit(completed.returncode)
+          PY
+          }
+
+          candidate_lines() {
+            python3 - "$1" <<'PY'
+          import base64
+          import json
+          import sys
+
+          candidates = json.loads(base64.b64decode(sys.argv[1]))
+          for candidate in candidates:
+              print('\t'.join((candidate['runtime'], candidate['udid'], candidate['name'], candidate['state'])))
           PY
           }
 
@@ -171,8 +192,12 @@ jobs:
           PY
           }
 
-          recover_core_simulator() {
-            echo "Restarting CoreSimulator service before one bounded retry." >&2
+          recover_core_simulator_once() {
+            if [[ "$RECOVERY_USED" -eq 1 ]]; then
+              return 0
+            fi
+            RECOVERY_USED=1
+            echo "Restarting CoreSimulator service before trying another runner device." >&2
             python3 - <<'PY'
           import subprocess
 
@@ -185,26 +210,41 @@ jobs:
             sleep 5
           }
 
-          boot_or_recover() {
+          boot_candidate() {
             local udid="$1"
+            local state="$2"
 
-            simctl 30 shutdown "$udid" >/dev/null 2>&1 || true
-            if simctl 30 boot "$udid" && simctl 180 bootstatus "$udid" -b; then
+            if [[ "$state" == "Booted" ]] && simctl 60 bootstatus "$udid" -b; then
               return 0
             fi
 
-            echo "Initial simulator boot failed for $udid." >&2
-            simulator_diagnostics "$udid"
             simctl 30 shutdown "$udid" >/dev/null 2>&1 || true
-            recover_core_simulator
+            simctl 30 boot "$udid" || return 1
+            simctl 180 bootstatus "$udid" -b
+          }
 
-            if simctl 30 boot "$udid" && simctl 180 bootstatus "$udid" -b; then
-              echo "Simulator $udid recovered on the second boot attempt."
-              return 0
-            fi
+          select_bootable() {
+            local profile="$1"
+            local encoded_candidates="$2"
+            local runtime udid device_name state
 
-            echo "Simulator $udid failed both bounded boot attempts." >&2
-            simulator_diagnostics "$udid"
+            while IFS=$'\t' read -r runtime udid device_name state; do
+              echo "Trying $profile Simulator: $device_name ($udid), state=$state"
+              if boot_candidate "$udid" "$state"; then
+                SELECTED_RUNTIME="$runtime"
+                SELECTED_UDID="$udid"
+                SELECTED_NAME="$device_name"
+                ACTIVE_UDIDS+=("$udid")
+                return 0
+              fi
+
+              echo "$profile simulator boot infrastructure failed for $device_name ($udid)." >&2
+              simulator_diagnostics "$udid"
+              simctl 30 shutdown "$udid" >/dev/null 2>&1 || true
+              recover_core_simulator_once
+            done < <(candidate_lines "$encoded_candidates")
+
+            echo "No available $profile simulator completed a bounded boot." >&2
             return 1
           }
 
@@ -234,38 +274,38 @@ jobs:
 
           exercise() {
             local profile="$1"
-            local udid="$2"
-            local runtime="$3"
-            local device_name="$4"
-            local appearance="$5"
+            local encoded_candidates="$2"
+            local appearance="$3"
             local launch_output launch_pid relaunch_pid container_path
 
-            ACTIVE_UDIDS+=("$udid")
-            echo "$profile Simulator: $device_name ($udid)"
-            echo "$profile Runtime: $runtime"
+            select_bootable "$profile" "$encoded_candidates"
+            echo "$profile selected Simulator: $SELECTED_NAME ($SELECTED_UDID)"
+            echo "$profile selected Runtime: $SELECTED_RUNTIME"
 
-            boot_or_recover "$udid"
-            simctl 30 ui "$udid" appearance "$appearance"
-            simctl 60 install "$udid" "$APP_PATH"
-            container_path="$(simctl 30 get_app_container "$udid" "$BUNDLE_ID" app)"
+            if ! simctl 30 ui "$SELECTED_UDID" appearance "$appearance"; then
+              echo "Appearance preference unavailable; runtime acceptance continues." >&2
+            fi
+
+            simctl 60 install "$SELECTED_UDID" "$APP_PATH"
+            container_path="$(simctl 30 get_app_container "$SELECTED_UDID" "$BUNDLE_ID" app)"
             test -d "$container_path"
 
-            launch_output="$(simctl 60 launch "$udid" "$BUNDLE_ID")"
+            launch_output="$(simctl 60 launch "$SELECTED_UDID" "$BUNDLE_ID")"
             launch_pid="$(verify_launch "$launch_output" | tail -n 1)"
             sleep 4
-            capture "$udid" "$EVIDENCE_DIR/${profile}-launch.png"
+            capture "$SELECTED_UDID" "$EVIDENCE_DIR/${profile}-launch.png"
 
-            simctl 30 terminate "$udid" "$BUNDLE_ID"
-            launch_output="$(simctl 60 launch "$udid" "$BUNDLE_ID")"
+            simctl 30 terminate "$SELECTED_UDID" "$BUNDLE_ID"
+            launch_output="$(simctl 60 launch "$SELECTED_UDID" "$BUNDLE_ID")"
             relaunch_pid="$(verify_launch "$launch_output" | tail -n 1)"
             sleep 4
-            capture "$udid" "$EVIDENCE_DIR/${profile}-relaunch.png"
+            capture "$SELECTED_UDID" "$EVIDENCE_DIR/${profile}-relaunch.png"
 
             cat > "$EVIDENCE_DIR/${profile}.txt" <<EOF
           profile=$profile
-          udid=$udid
-          runtime=$runtime
-          device_name=$device_name
+          udid=$SELECTED_UDID
+          runtime=$SELECTED_RUNTIME
+          device_name=$SELECTED_NAME
           app_path=$APP_PATH
           container_path=$container_path
           launch_pid=$launch_pid
@@ -275,8 +315,8 @@ jobs:
           EOF
           }
 
-          exercise iphone "$IPHONE_UDID" "$IPHONE_RUNTIME" "$IPHONE_NAME" light
-          exercise ipad "$IPAD_UDID" "$IPAD_RUNTIME" "$IPAD_NAME" dark
+          exercise iphone "$IPHONE_CANDIDATES" light
+          exercise ipad "$IPAD_CANDIDATES" dark
           ls -lh "$EVIDENCE_DIR"
 
       - name: Upload iOS Simulator evidence
