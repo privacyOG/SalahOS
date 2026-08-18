@@ -368,7 +368,7 @@ jobs:
             fi
 
             simctl 60 install "$SELECTED_UDID" "$APP_PATH"
-            container_path="$(simctl 30 get_app_container "$SELECTED_UDID" "$BUNDLE_ID" app)"
+            container_path="$(simctl 60 get_app_container "$SELECTED_UDID" "$BUNDLE_ID" app)"
             test -d "$container_path"
 
             launch_output="$(simctl 60 launch "$SELECTED_UDID" "$BUNDLE_ID")"
