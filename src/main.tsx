@@ -8,6 +8,7 @@ import {
 import { readTouchDisplayFixtureConfig, TouchDisplayFixture } from './ui/TouchDisplayFixture';
 import './styles.css';
 import './design-system.css';
+import './prayer-first-home.css';
 import './responsive-hardening.css';
 import './touch-display-fixture.css';
 import './smart-display.css';
