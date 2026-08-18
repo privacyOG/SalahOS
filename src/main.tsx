@@ -5,10 +5,12 @@ import {
   flushApplicationStorage,
   initializeApplicationStorage,
 } from './platform/applicationStorage';
+import { CongregationShell } from './ui/CongregationShell';
 import { readTouchDisplayFixtureConfig, TouchDisplayFixture } from './ui/TouchDisplayFixture';
 import './styles.css';
 import './design-system.css';
 import './prayer-first-home.css';
+import './congregation-shell.css';
 import './responsive-hardening.css';
 import './touch-display-fixture.css';
 import './smart-display.css';
@@ -41,7 +43,9 @@ async function bootstrap(): Promise<void> {
   createRoot(rootElement).render(
     <StrictMode>
       {touchDisplayFixtureConfig === null ? (
-        <App />
+        <CongregationShell>
+          <App />
+        </CongregationShell>
       ) : (
         <TouchDisplayFixture {...touchDisplayFixtureConfig} />
       )}

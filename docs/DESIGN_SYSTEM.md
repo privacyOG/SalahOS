@@ -81,14 +81,14 @@ Existing production panels are progressively mapped onto the same tokens so the 
 
 ## Responsive navigation contract
 
-The managed-platform roadmap will use one information architecture with different navigation presentations:
+The managed-platform roadmap uses one information architecture with different navigation presentations:
 
-- Phone: bottom navigation for primary congregation destinations; secondary configuration in sheets/pages.
-- Tablet/desktop: persistent or collapsible side navigation when multiple destinations are implemented.
-- TV/kiosk: focusable display controls only when administration/escape is required; ordinary signage remains presentation-first.
-- Touch Display 2: touch-sized navigation appropriate to its viewport/orientation without duplicating application logic.
+- Phone: bottom navigation for implemented primary congregation destinations; secondary configuration remains in the existing settings surface until dedicated screens replace it.
+- Tablet/desktop: compact side navigation for implemented destinations.
+- TV/kiosk: the congregation navigation shell is bypassed so ordinary signage remains presentation-first.
+- Touch Display 2 deterministic fixture routes remain isolated from congregation navigation so target-layout acceptance does not inherit unrelated chrome.
 
-Navigation items must not be exposed as dead controls before their destination exists.
+The first implemented shell intentionally exposes only **Today** and **Settings**, because both destinations already function. Future **Mosques**, **Calendar** and **Community** entries must not appear until their corresponding screens are implemented and usable. `PrimaryNavigation` owns the reusable accessible navigation contract, while `CongregationShell` adapts the current single-page application during the incremental Stage 22 migration.
 
 ## Accessibility requirements
 
