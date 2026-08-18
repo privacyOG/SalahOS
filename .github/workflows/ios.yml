@@ -26,12 +26,6 @@ jobs:
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
 
-      - name: Print exact Prettier diff for authorization files
-        run: |
-          npx prettier --write src/domain/mosqueAuthorization.ts src/domain/mosqueAuthorization.test.ts
-          git diff -- src/domain/mosqueAuthorization.ts src/domain/mosqueAuthorization.test.ts
-          exit 1
-
       - name: Repository quality gate
         run: npm run check
 
