@@ -57,38 +57,39 @@ export interface ManagedSession {
   readonly revokedAt: string | null;
 }
 
-const ROLE_PERMISSIONS: Readonly<Record<MosqueAdminRole, readonly MosquePermission[]>> = Object.freeze({
-  'organization-owner': Object.freeze([
-    'organization.manage',
-    'members.manage',
-    'prayer.read',
-    'prayer.publish',
-    'content.read',
-    'content.publish',
-    'signage.read',
-    'signage.manage',
-    'audit.read',
-  ]),
-  'mosque-administrator': Object.freeze([
-    'members.manage',
-    'prayer.read',
-    'prayer.publish',
-    'content.read',
-    'content.publish',
-    'signage.read',
-    'signage.manage',
-    'audit.read',
-  ]),
-  'prayer-time-manager': Object.freeze(['prayer.read', 'prayer.publish', 'audit.read']),
-  'content-editor': Object.freeze(['content.read', 'content.publish']),
-  'signage-operator': Object.freeze(['signage.read', 'signage.manage']),
-  'read-only-auditor': Object.freeze([
-    'prayer.read',
-    'content.read',
-    'signage.read',
-    'audit.read',
-  ]),
-});
+const ROLE_PERMISSIONS: Readonly<Record<MosqueAdminRole, readonly MosquePermission[]>> =
+  Object.freeze({
+    'organization-owner': Object.freeze([
+      'organization.manage',
+      'members.manage',
+      'prayer.read',
+      'prayer.publish',
+      'content.read',
+      'content.publish',
+      'signage.read',
+      'signage.manage',
+      'audit.read',
+    ]),
+    'mosque-administrator': Object.freeze([
+      'members.manage',
+      'prayer.read',
+      'prayer.publish',
+      'content.read',
+      'content.publish',
+      'signage.read',
+      'signage.manage',
+      'audit.read',
+    ]),
+    'prayer-time-manager': Object.freeze(['prayer.read', 'prayer.publish', 'audit.read']),
+    'content-editor': Object.freeze(['content.read', 'content.publish']),
+    'signage-operator': Object.freeze(['signage.read', 'signage.manage']),
+    'read-only-auditor': Object.freeze([
+      'prayer.read',
+      'content.read',
+      'signage.read',
+      'audit.read',
+    ]),
+  });
 
 function assertBoundedIdentifier(value: string, label: string): string {
   const normalized = value.trim().toLowerCase();
