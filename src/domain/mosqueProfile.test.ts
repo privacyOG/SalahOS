@@ -61,10 +61,7 @@ describe('managed mosque profile', () => {
       branchIds: ['masjid-al-noor:sydney', 'masjid-al-noor:bankstown'],
     });
 
-    expect(organization.branchIds).toEqual([
-      'masjid-al-noor:sydney',
-      'masjid-al-noor:bankstown',
-    ]);
+    expect(organization.branchIds).toEqual(['masjid-al-noor:sydney', 'masjid-al-noor:bankstown']);
     expect(Object.isFrozen(organization.branchIds)).toBe(true);
   });
 
