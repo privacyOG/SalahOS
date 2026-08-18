@@ -30,6 +30,7 @@ jobs:
         run: |
           npx prettier --write src/domain/mosqueFollowing.ts src/domain/mosqueFollowing.test.ts
           git diff -- src/domain/mosqueFollowing.ts src/domain/mosqueFollowing.test.ts
+          exit 1
 
       - name: Repository quality gate
         run: npm run check
