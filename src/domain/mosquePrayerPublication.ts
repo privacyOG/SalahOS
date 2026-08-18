@@ -244,21 +244,24 @@ function normalizeDateOverrides(
   if (value === undefined) return Object.freeze([]);
 
   const seen = new Set<string>();
-  const overrides = value.map((override) => {
+  const overrides: PrayerDateOverride[] = value.map((override) => {
     assertDateKey(override.date, 'Prayer override date');
     if (seen.has(override.date)) {
       throw new RangeError(`Duplicate prayer override date: ${override.date}`);
     }
     seen.add(override.date);
 
+    const startLocalMinutes =
+      override.startLocalMinutes === undefined
+        ? undefined
+        : normalizeMinuteMap(override.startLocalMinutes, 'Prayer override');
+    const iqamah =
+      override.iqamah === undefined ? undefined : normalizeNullableIqamahMap(override.iqamah);
+
     return Object.freeze({
       date: override.date,
-      ...(override.startLocalMinutes === undefined
-        ? {}
-        : { startLocalMinutes: normalizeMinuteMap(override.startLocalMinutes, 'Prayer override') }),
-      ...(override.iqamah === undefined
-        ? {}
-        : { iqamah: normalizeNullableIqamahMap(override.iqamah) }),
+      ...(startLocalMinutes === undefined ? {} : { startLocalMinutes }),
+      ...(iqamah === undefined ? {} : { iqamah }),
       ...(override.jumuahSessions === undefined
         ? {}
         : { jumuahSessions: normalizeJumuahSessions(override.jumuahSessions) }),
@@ -273,7 +276,7 @@ function normalizeSeasonalRules(
   if (value === undefined) return Object.freeze([]);
 
   const seenIds = new Set<string>();
-  const normalized = value.map((rule) => {
+  const normalized: PrayerSeasonalRule[] = value.map((rule) => {
     const id = assertBoundedText(rule.id, 'Seasonal rule ID', 120).toLowerCase();
     if (seenIds.has(id)) {
       throw new RangeError(`Duplicate seasonal rule ID: ${id}`);
@@ -285,14 +288,18 @@ function normalizeSeasonalRules(
       throw new RangeError(`Seasonal rule ${id} ends before it starts`);
     }
 
+    const startLocalMinutes =
+      rule.startLocalMinutes === undefined
+        ? undefined
+        : normalizeMinuteMap(rule.startLocalMinutes, 'Seasonal prayer');
+    const iqamah = rule.iqamah === undefined ? undefined : normalizeNullableIqamahMap(rule.iqamah);
+
     return Object.freeze({
       id,
       startDate: rule.startDate,
       endDate: rule.endDate,
-      ...(rule.startLocalMinutes === undefined
-        ? {}
-        : { startLocalMinutes: normalizeMinuteMap(rule.startLocalMinutes, 'Seasonal prayer') }),
-      ...(rule.iqamah === undefined ? {} : { iqamah: normalizeNullableIqamahMap(rule.iqamah) }),
+      ...(startLocalMinutes === undefined ? {} : { startLocalMinutes }),
+      ...(iqamah === undefined ? {} : { iqamah }),
     });
   });
 
@@ -300,10 +307,10 @@ function normalizeSeasonalRules(
     left.startDate.localeCompare(right.startDate),
   );
   for (let index = 1; index < sorted.length; index += 1) {
-    if (sorted[index].startDate <= sorted[index - 1].endDate) {
-      throw new RangeError(
-        `Seasonal rules may not overlap: ${sorted[index - 1].id} and ${sorted[index].id}`,
-      );
+    const previous = sorted[index - 1]!;
+    const current = sorted[index]!;
+    if (current.startDate <= previous.endDate) {
+      throw new RangeError(`Seasonal rules may not overlap: ${previous.id} and ${current.id}`);
     }
   }
   return Object.freeze(normalized);
