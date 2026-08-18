@@ -307,8 +307,11 @@ function normalizeSeasonalRules(
     left.startDate.localeCompare(right.startDate),
   );
   for (let index = 1; index < sorted.length; index += 1) {
-    const previous = sorted[index - 1]!;
-    const current = sorted[index]!;
+    const previous = sorted[index - 1];
+    const current = sorted[index];
+    if (previous === undefined || current === undefined) {
+      throw new Error('Seasonal rule ordering invariant failed');
+    }
     if (current.startDate <= previous.endDate) {
       throw new RangeError(`Seasonal rules may not overlap: ${previous.id} and ${current.id}`);
     }
