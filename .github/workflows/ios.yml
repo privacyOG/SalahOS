@@ -104,6 +104,26 @@ jobs:
           }
           trap cleanup EXIT
 
+          wait_for_boot() {
+            local udid="$1"
+            python3 - "$udid" <<'PY'
+          import subprocess
+          import sys
+
+          udid = sys.argv[1]
+          try:
+              subprocess.run(
+                  ['xcrun', 'simctl', 'bootstatus', udid, '-b'],
+                  check=True,
+                  timeout=180,
+              )
+          except subprocess.TimeoutExpired:
+              print(f'Simulator {udid} did not finish booting within 180 seconds.', file=sys.stderr)
+              subprocess.run(['xcrun', 'simctl', 'list', 'devices'], check=False)
+              raise SystemExit(124)
+          PY
+          }
+
           verify_launch() {
             local output="$1"
             local pid
@@ -140,7 +160,7 @@ jobs:
             echo "$profile UDID: $udid"
 
             xcrun simctl boot "$udid"
-            xcrun simctl bootstatus "$udid" -b
+            wait_for_boot "$udid"
             xcrun simctl ui "$udid" appearance "$appearance"
             xcrun simctl install "$udid" "$APP_PATH"
             container_path="$(xcrun simctl get_app_container "$udid" "$BUNDLE_ID" app)"
