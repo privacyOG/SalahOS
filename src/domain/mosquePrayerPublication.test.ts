@@ -54,8 +54,8 @@ describe('managed mosque prayer publication', () => {
     expect(preview.publication.mosqueId).toBe('masjid-al-noor:sydney');
     expect(preview.publication.prayerStarts.kind).toBe('adjusted');
     expect(preview.publication.defaultJumuahSessions).toHaveLength(2);
-    expect(preview.publication.dateOverrides[0].date).toBe('2026-12-25');
-    expect(preview.publication.seasonalRules[0].id).toBe('summer');
+    expect(preview.publication.dateOverrides[0]!.date).toBe('2026-12-25');
+    expect(preview.publication.seasonalRules[0]!.id).toBe('summer');
     expect(preview.publication.ramadan?.taraweehLocalMinutes).toBe(1_290);
   });
 
@@ -113,7 +113,7 @@ describe('managed mosque prayer publication', () => {
       kind: 'adjusted',
       adjustments: { fajr: 2, dhuhr: 1, asr: 0, maghrib: 3, isha: 4 },
     });
-    expect(preview.publication.dateOverrides[0].startLocalMinutes?.dhuhr).toBe(795);
+    expect(preview.publication.dateOverrides[0]!.startLocalMinutes?.dhuhr).toBe(795);
   });
 
   it('creates immutable revision provenance and rollback as a new revision', () => {
