@@ -96,32 +96,46 @@ jobs:
           mkdir -p "$EVIDENCE_DIR"
           CREATED_UDIDS=()
 
+          simctl() {
+            local timeout_seconds="$1"
+            shift
+            python3 - "$timeout_seconds" "$@" <<'PY'
+          import subprocess
+          import sys
+
+          timeout_seconds = int(sys.argv[1])
+          arguments = sys.argv[2:]
+          try:
+              completed = subprocess.run(
+                  ['xcrun', 'simctl', *arguments],
+                  timeout=timeout_seconds,
+              )
+          except subprocess.TimeoutExpired:
+              print(
+                  f'simctl {" ".join(arguments)} exceeded {timeout_seconds} seconds.',
+                  file=sys.stderr,
+              )
+              raise SystemExit(124)
+          raise SystemExit(completed.returncode)
+          PY
+          }
+
           cleanup() {
             for udid in "${CREATED_UDIDS[@]}"; do
-              xcrun simctl shutdown "$udid" >/dev/null 2>&1 || true
-              xcrun simctl delete "$udid" >/dev/null 2>&1 || true
+              simctl 30 shutdown "$udid" >/dev/null 2>&1 || true
+              simctl 30 delete "$udid" >/dev/null 2>&1 || true
             done
           }
           trap cleanup EXIT
 
           wait_for_boot() {
             local udid="$1"
-            python3 - "$udid" <<'PY'
-          import subprocess
-          import sys
-
-          udid = sys.argv[1]
-          try:
-              subprocess.run(
-                  ['xcrun', 'simctl', 'bootstatus', udid, '-b'],
-                  check=True,
-                  timeout=180,
-              )
-          except subprocess.TimeoutExpired:
-              print(f'Simulator {udid} did not finish booting within 180 seconds.', file=sys.stderr)
-              subprocess.run(['xcrun', 'simctl', 'list', 'devices'], check=False)
-              raise SystemExit(124)
-          PY
+            if simctl 180 bootstatus "$udid" -b; then
+              return 0
+            fi
+            echo "Simulator $udid failed to complete boot within the acceptance deadline." >&2
+            ps -ax | grep -E 'CoreSimulator|Simulator' | grep -v grep >&2 || true
+            return 1
           }
 
           verify_launch() {
@@ -138,7 +152,7 @@ jobs:
             local udid="$1"
             local target="$2"
             local width height
-            xcrun simctl io "$udid" screenshot --type=png "$target"
+            simctl 60 io "$udid" screenshot --type=png "$target"
             test -s "$target"
             file "$target"
             width="$(sips -g pixelWidth "$target" | awk '/pixelWidth/ {print $2}')"
@@ -155,24 +169,24 @@ jobs:
             local name="SalahOS-${profile}-${GITHUB_RUN_ID}"
             local udid launch_output launch_pid relaunch_pid container_path
 
-            udid="$(xcrun simctl create "$name" "$device_type" "$RUNTIME")"
+            udid="$(simctl 30 create "$name" "$device_type" "$RUNTIME")"
             CREATED_UDIDS+=("$udid")
             echo "$profile UDID: $udid"
 
-            xcrun simctl boot "$udid"
+            simctl 30 boot "$udid"
             wait_for_boot "$udid"
-            xcrun simctl ui "$udid" appearance "$appearance"
-            xcrun simctl install "$udid" "$APP_PATH"
-            container_path="$(xcrun simctl get_app_container "$udid" "$BUNDLE_ID" app)"
+            simctl 30 ui "$udid" appearance "$appearance"
+            simctl 60 install "$udid" "$APP_PATH"
+            container_path="$(simctl 30 get_app_container "$udid" "$BUNDLE_ID" app)"
             test -d "$container_path"
 
-            launch_output="$(xcrun simctl launch "$udid" "$BUNDLE_ID")"
+            launch_output="$(simctl 60 launch "$udid" "$BUNDLE_ID")"
             launch_pid="$(verify_launch "$launch_output" | tail -n 1)"
             sleep 4
             capture "$udid" "$EVIDENCE_DIR/${profile}-launch.png"
 
-            xcrun simctl terminate "$udid" "$BUNDLE_ID"
-            launch_output="$(xcrun simctl launch "$udid" "$BUNDLE_ID")"
+            simctl 30 terminate "$udid" "$BUNDLE_ID"
+            launch_output="$(simctl 60 launch "$udid" "$BUNDLE_ID")"
             relaunch_pid="$(verify_launch "$launch_output" | tail -n 1)"
             sleep 4
             capture "$udid" "$EVIDENCE_DIR/${profile}-relaunch.png"
