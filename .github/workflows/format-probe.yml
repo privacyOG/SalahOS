@@ -1,9 +1,7 @@
 name: Format Probe
 
 on:
-  push:
-    branches:
-      - stage-23/prayer-publication
+  pull_request:
 
 permissions:
   contents: read
