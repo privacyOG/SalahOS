@@ -19,6 +19,12 @@ function scrollToElement(element: Element | null): void {
   element.scrollIntoView({ behavior: reducedMotion ? 'auto' : 'smooth', block: 'start' });
 }
 
+function scrollAfterViewChange(selector: string): void {
+  window.requestAnimationFrame(() => {
+    scrollToElement(document.querySelector(selector));
+  });
+}
+
 export function CongregationShell({ children }: CongregationShellProps) {
   const [locale, setLocale] = useState<Locale>(documentLocale);
   const [destination, setDestination] = useState<CongregationDestination>('today');
@@ -46,7 +52,7 @@ export function CongregationShell({ children }: CongregationShellProps) {
       : { navigation: 'Primary navigation', today: 'Today', settings: 'Settings' };
 
   return (
-    <div className="congregation-shell">
+    <div className="congregation-shell" data-destination={destination}>
       <div className="congregation-shell-content">{children}</div>
       <PrimaryNavigation
         ariaLabel={labels.navigation}
@@ -57,7 +63,7 @@ export function CongregationShell({ children }: CongregationShellProps) {
             current: destination === 'today',
             onSelect: () => {
               setDestination('today');
-              scrollToElement(document.querySelector('.prayer-panel, .status-card, .hero'));
+              scrollAfterViewChange('.prayer-panel, .status-card, .hero');
             },
           },
           {
@@ -65,10 +71,10 @@ export function CongregationShell({ children }: CongregationShellProps) {
             label: labels.settings,
             current: destination === 'settings',
             onSelect: () => {
-              setDestination('settings');
               const settings = document.querySelector<HTMLDetailsElement>('.settings-panel');
               if (settings !== null) settings.open = true;
-              scrollToElement(settings);
+              setDestination('settings');
+              scrollAfterViewChange('.location-panel, .settings-panel');
             },
           },
         ]}

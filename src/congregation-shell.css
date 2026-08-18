@@ -6,6 +6,22 @@
   min-width: 0;
 }
 
+.congregation-shell[data-destination='today'] .location-panel,
+.congregation-shell[data-destination='today'] .settings-panel {
+  display: none;
+}
+
+.congregation-shell[data-destination='settings'] .hero,
+.congregation-shell[data-destination='settings'] .prayer-panel,
+.congregation-shell[data-destination='settings'] .status-card {
+  display: none;
+}
+
+.congregation-shell[data-destination='settings'] .location-panel,
+.congregation-shell[data-destination='settings'] .settings-panel {
+  box-shadow: var(--salah-shadow-sm);
+}
+
 .congregation-nav {
   position: fixed;
   z-index: 20;
