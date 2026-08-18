@@ -249,8 +249,9 @@ jobs:
             test -s "release/$file"
           done
           unzip -t "release/$WEB"
-          tar -tzf "release/$PI" | grep -qx 'SalahOS/INSTALL.md'
-          tar -tzf "release/$PI" | grep -qx 'SalahOS/dist/index.html'
+          PI_CONTENTS="$(tar -tzf "release/$PI")"
+          grep -Fxq 'SalahOS/INSTALL.md' <<< "$PI_CONTENTS"
+          grep -Fxq 'SalahOS/dist/index.html' <<< "$PI_CONTENTS"
           cat release/SHA256SUMS-web-kiosk.txt release/SHA256SUMS-android.txt > release/SHA256SUMS.txt
           rm release/SHA256SUMS-web-kiosk.txt release/SHA256SUMS-android.txt
           (
