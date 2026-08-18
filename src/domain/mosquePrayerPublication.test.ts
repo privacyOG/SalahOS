@@ -49,13 +49,18 @@ const baseDraft: MosquePrayerPublicationDraft = {
 describe('managed mosque prayer publication', () => {
   it('normalizes a publishable configuration with overrides, Jumuah and Ramadan metadata', () => {
     const preview = previewMosquePrayerPublication(baseDraft);
+    const dateOverride = preview.publication.dateOverrides[0];
+    const seasonalRule = preview.publication.seasonalRules[0];
+    if (dateOverride === undefined || seasonalRule === undefined) {
+      throw new Error('Expected normalized date and seasonal overrides');
+    }
 
     expect(preview.valid).toBe(true);
     expect(preview.publication.mosqueId).toBe('masjid-al-noor:sydney');
     expect(preview.publication.prayerStarts.kind).toBe('adjusted');
     expect(preview.publication.defaultJumuahSessions).toHaveLength(2);
-    expect(preview.publication.dateOverrides[0]!.date).toBe('2026-12-25');
-    expect(preview.publication.seasonalRules[0]!.id).toBe('summer');
+    expect(dateOverride.date).toBe('2026-12-25');
+    expect(seasonalRule.id).toBe('summer');
     expect(preview.publication.ramadan?.taraweehLocalMinutes).toBe(1_290);
   });
 
@@ -109,11 +114,16 @@ describe('managed mosque prayer publication', () => {
 
   it('keeps date overrides separate from the base rule', () => {
     const preview = previewMosquePrayerPublication(baseDraft);
+    const dateOverride = preview.publication.dateOverrides[0];
+    if (dateOverride === undefined) {
+      throw new Error('Expected normalized date override');
+    }
+
     expect(preview.publication.prayerStarts).toEqual({
       kind: 'adjusted',
       adjustments: { fajr: 2, dhuhr: 1, asr: 0, maghrib: 3, isha: 4 },
     });
-    expect(preview.publication.dateOverrides[0]!.startLocalMinutes?.dhuhr).toBe(795);
+    expect(dateOverride.startLocalMinutes?.dhuhr).toBe(795);
   });
 
   it('creates immutable revision provenance and rollback as a new revision', () => {
