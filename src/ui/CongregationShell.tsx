@@ -27,7 +27,10 @@ export function CongregationShell({ children }: CongregationShellProps) {
     const observer = new MutationObserver(() => {
       setLocale(documentLocale());
     });
-    observer.observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['lang'],
+    });
     return () => {
       observer.disconnect();
     };
@@ -54,9 +57,7 @@ export function CongregationShell({ children }: CongregationShellProps) {
             current: destination === 'today',
             onSelect: () => {
               setDestination('today');
-              scrollToElement(
-                document.querySelector('.prayer-panel, .status-card, .hero'),
-              );
+              scrollToElement(document.querySelector('.prayer-panel, .status-card, .hero'));
             },
           },
           {
