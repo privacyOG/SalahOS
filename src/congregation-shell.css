@@ -1,0 +1,92 @@
+.congregation-shell {
+  min-height: 100vh;
+}
+
+.congregation-shell-content {
+  min-width: 0;
+}
+
+.congregation-nav {
+  position: fixed;
+  z-index: 20;
+  inset-inline: 0;
+  bottom: 0;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--salah-space-2);
+  padding: var(--salah-space-2) max(var(--salah-space-3), env(safe-area-inset-right))
+    max(var(--salah-space-2), env(safe-area-inset-bottom))
+    max(var(--salah-space-3), env(safe-area-inset-left));
+  border-block-start: 1px solid var(--salah-border-subtle);
+  background: color-mix(in srgb, var(--salah-bg-surface-raised) 92%, transparent);
+  box-shadow: 0 -0.75rem 2rem color-mix(in srgb, var(--shadow) 35%, transparent);
+  backdrop-filter: blur(18px);
+}
+
+.congregation-nav-item {
+  min-height: 3rem;
+  padding: var(--salah-space-2) var(--salah-space-3);
+  border-color: transparent;
+  border-radius: var(--salah-radius-md);
+  color: var(--salah-fg-secondary);
+  background: transparent;
+  font-size: var(--salah-text-sm);
+  font-weight: 750;
+}
+
+.congregation-nav-item[aria-current='page'] {
+  border-color: color-mix(in srgb, var(--accent) 22%, transparent);
+  color: var(--salah-fg-primary);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+}
+
+.congregation-nav-item:hover:not(:disabled) {
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+}
+
+@media (min-width: 1000px) {
+  .congregation-shell {
+    display: grid;
+    grid-template-columns: 7.25rem minmax(0, 1fr);
+  }
+
+  .congregation-shell-content {
+    grid-column: 2;
+  }
+
+  .congregation-nav {
+    position: sticky;
+    inset: auto;
+    top: 0;
+    grid-column: 1;
+    grid-row: 1;
+    align-self: start;
+    grid-template-columns: 1fr;
+    gap: var(--salah-space-2);
+    min-height: 100vh;
+    padding: clamp(1.25rem, 3vw, 2rem) var(--salah-space-3);
+    border-block-start: 0;
+    border-inline-end: 1px solid var(--salah-border-subtle);
+    background: color-mix(in srgb, var(--salah-bg-surface) 76%, transparent);
+    box-shadow: none;
+  }
+
+  .congregation-nav-item {
+    width: 100%;
+    min-height: 3.4rem;
+    padding-inline: var(--salah-space-2);
+  }
+}
+
+@media (forced-colors: active) {
+  .congregation-nav {
+    border-color: CanvasText;
+    background: Canvas;
+  }
+
+  .congregation-nav-item[aria-current='page'] {
+    border-color: Highlight;
+    color: HighlightText;
+    background: Highlight;
+  }
+}
