@@ -210,17 +210,98 @@ jobs:
             sleep 5
           }
 
+          show_simulator() {
+            local udid="$1"
+            python3 - "$udid" <<'PY' || true
+          import subprocess
+          import sys
+
+          try:
+              subprocess.run(
+                  ['open', '-a', 'Simulator', '--args', '-CurrentDeviceUDID', sys.argv[1]],
+                  check=False,
+                  timeout=15,
+              )
+          except (subprocess.SubprocessError, OSError) as error:
+              print(f'Unable to open Simulator.app: {error}', file=sys.stderr)
+          PY
+          }
+
+          wait_for_simulator() {
+            local udid="$1"
+            local total_seconds="${2:-120}"
+            python3 - "$udid" "$total_seconds" <<'PY'
+          import json
+          import subprocess
+          import sys
+          import time
+
+          udid = sys.argv[1]
+          deadline = time.monotonic() + int(sys.argv[2])
+          last_state = 'Unknown'
+          last_probe = 'not attempted'
+
+          while time.monotonic() < deadline:
+              try:
+                  listing = subprocess.run(
+                      ['xcrun', 'simctl', 'list', 'devices', '-j'],
+                      check=True,
+                      capture_output=True,
+                      text=True,
+                      timeout=15,
+                  )
+                  devices = json.loads(listing.stdout).get('devices', {})
+                  state = None
+                  for entries in devices.values():
+                      for device in entries:
+                          if device.get('udid') == udid:
+                              state = device.get('state', 'Unknown')
+                              break
+                      if state is not None:
+                          break
+                  last_state = state or 'Missing'
+
+                  if state == 'Booted':
+                      probe = subprocess.run(
+                          ['xcrun', 'simctl', 'getenv', udid, 'HOME'],
+                          capture_output=True,
+                          text=True,
+                          timeout=10,
+                      )
+                      last_probe = f'returncode={probe.returncode}'
+                      if probe.returncode == 0 and probe.stdout.strip():
+                          print(f'Simulator {udid} is ready ({probe.stdout.strip()}).')
+                          raise SystemExit(0)
+              except subprocess.TimeoutExpired as error:
+                  last_probe = f'timeout: {error.cmd}'
+              except (subprocess.CalledProcessError, json.JSONDecodeError) as error:
+                  last_probe = str(error)
+
+              time.sleep(4)
+
+          print(
+              f'Simulator {udid} did not become ready; last_state={last_state}, last_probe={last_probe}',
+              file=sys.stderr,
+          )
+          raise SystemExit(124)
+          PY
+          }
+
           boot_candidate() {
             local udid="$1"
             local state="$2"
 
-            if [[ "$state" == "Booted" ]] && simctl 60 bootstatus "$udid" -b; then
-              return 0
+            if [[ "$state" == "Booted" ]]; then
+              show_simulator "$udid"
+              if wait_for_simulator "$udid" 45; then
+                return 0
+              fi
             fi
 
             simctl 30 shutdown "$udid" >/dev/null 2>&1 || true
             simctl 30 boot "$udid" || return 1
-            simctl 180 bootstatus "$udid" -b
+            show_simulator "$udid"
+            wait_for_simulator "$udid" 120
           }
 
           select_bootable() {
@@ -244,7 +325,7 @@ jobs:
               recover_core_simulator_once
             done < <(candidate_lines "$encoded_candidates")
 
-            echo "No available $profile simulator completed a bounded boot." >&2
+            echo "No available $profile simulator completed a bounded readiness check." >&2
             return 1
           }
 
