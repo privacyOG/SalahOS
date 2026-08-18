@@ -50,9 +50,7 @@ function freezeMosqueIds(values: readonly string[]): readonly MosqueId[] {
   return Object.freeze(result);
 }
 
-function freezeCache(
-  values: readonly CachedMosquePrayerData[],
-): readonly CachedMosquePrayerData[] {
+function freezeCache(values: readonly CachedMosquePrayerData[]): readonly CachedMosquePrayerData[] {
   const byMosque = new Map<MosqueId, CachedMosquePrayerData>();
   for (const value of values) {
     const mosqueId = createMosqueId(value.mosqueId);
@@ -97,10 +95,7 @@ export function createMosqueFollowingState(
   });
 }
 
-export function followMosque(
-  state: MosqueFollowingState,
-  mosqueId: string,
-): MosqueFollowingState {
+export function followMosque(state: MosqueFollowingState, mosqueId: string): MosqueFollowingState {
   const normalized = createMosqueId(mosqueId);
   if (state.followedMosqueIds.includes(normalized)) return state;
   return createMosqueFollowingState(
@@ -131,11 +126,7 @@ export function setPreferredMosque(
   if (!state.followedMosqueIds.includes(normalized)) {
     throw new RangeError('Preferred mosque must also be followed');
   }
-  return createMosqueFollowingState(
-    state.followedMosqueIds,
-    normalized,
-    state.cachedPrayerData,
-  );
+  return createMosqueFollowingState(state.followedMosqueIds, normalized, state.cachedPrayerData);
 }
 
 export function cacheMosquePrayerData(
@@ -146,9 +137,7 @@ export function cacheMosquePrayerData(
   if (!state.followedMosqueIds.includes(mosqueId)) {
     throw new RangeError('Prayer data may only be cached for a followed mosque');
   }
-  const nextCache = state.cachedPrayerData.filter(
-    (candidate) => candidate.mosqueId !== mosqueId,
-  );
+  const nextCache = state.cachedPrayerData.filter((candidate) => candidate.mosqueId !== mosqueId);
   nextCache.push(entry);
   return createMosqueFollowingState(state.followedMosqueIds, state.preferredMosqueId, nextCache);
 }
