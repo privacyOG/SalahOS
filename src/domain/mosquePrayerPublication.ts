@@ -25,9 +25,7 @@ export interface SuppliedPrayerPublication {
 }
 
 export type PrayerStartPublication =
-  | CalculatedPrayerPublication
-  | AdjustedPrayerPublication
-  | SuppliedPrayerPublication;
+  CalculatedPrayerPublication | AdjustedPrayerPublication | SuppliedPrayerPublication;
 
 export interface PrayerDateOverride {
   readonly date: string;
@@ -163,7 +161,10 @@ function normalizeNullableIqamahMap(
   return Object.freeze(result);
 }
 
-function normalizeMinuteMap(value: PrayerMinuteMap | undefined, label: string): PrayerMinuteMap | undefined {
+function normalizeMinuteMap(
+  value: PrayerMinuteMap | undefined,
+  label: string,
+): PrayerMinuteMap | undefined {
   if (value === undefined) return undefined;
 
   const result: Partial<Record<ObligatoryPrayerName, number>> = {};
@@ -291,9 +292,7 @@ function normalizeSeasonalRules(
       ...(rule.startLocalMinutes === undefined
         ? {}
         : { startLocalMinutes: normalizeMinuteMap(rule.startLocalMinutes, 'Seasonal prayer') }),
-      ...(rule.iqamah === undefined
-        ? {}
-        : { iqamah: normalizeNullableIqamahMap(rule.iqamah) }),
+      ...(rule.iqamah === undefined ? {} : { iqamah: normalizeNullableIqamahMap(rule.iqamah) }),
     });
   });
 
@@ -310,7 +309,9 @@ function normalizeSeasonalRules(
   return Object.freeze(normalized);
 }
 
-function normalizeRamadan(value: RamadanPresentation | null | undefined): RamadanPresentation | null {
+function normalizeRamadan(
+  value: RamadanPresentation | null | undefined,
+): RamadanPresentation | null {
   if (value === null || value === undefined) return null;
 
   const fields: Array<readonly [string, number | undefined]> = [
@@ -349,8 +350,12 @@ function normalizeRamadan(value: RamadanPresentation | null | undefined): Ramada
     ...(value.suhurEndsLocalMinutes === undefined
       ? {}
       : { suhurEndsLocalMinutes: value.suhurEndsLocalMinutes }),
-    ...(value.imsakLocalMinutes === undefined ? {} : { imsakLocalMinutes: value.imsakLocalMinutes }),
-    ...(value.iftarLocalMinutes === undefined ? {} : { iftarLocalMinutes: value.iftarLocalMinutes }),
+    ...(value.imsakLocalMinutes === undefined
+      ? {}
+      : { imsakLocalMinutes: value.imsakLocalMinutes }),
+    ...(value.iftarLocalMinutes === undefined
+      ? {}
+      : { iftarLocalMinutes: value.iftarLocalMinutes }),
     ...(value.taraweehLabel === undefined
       ? {}
       : { taraweehLabel: assertBoundedText(value.taraweehLabel, 'Taraweeh label', 120) }),
