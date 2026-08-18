@@ -21,12 +21,7 @@ export type MosqueFacility =
   | 'hearing-loop';
 
 export type MosquePublicLinkKind =
-  | 'website'
-  | 'facebook'
-  | 'instagram'
-  | 'youtube'
-  | 'registration'
-  | 'other';
+  'website' | 'facebook' | 'instagram' | 'youtube' | 'registration' | 'other';
 
 export interface MosquePublicLink {
   readonly kind: MosquePublicLinkKind;
