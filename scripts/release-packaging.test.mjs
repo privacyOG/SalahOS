@@ -13,7 +13,9 @@ const androidGradle = await readFile(
   new URL('../android/app/build.gradle', import.meta.url),
   'utf8',
 );
-const packageJson = JSON.parse(await readFile(new URL('../package.json', import.meta.url), 'utf8'));
+const packageJson = JSON.parse(
+  await readFile(new URL('../package.json', import.meta.url), 'utf8'),
+);
 
 describe('release asset workflow', () => {
   it('requires an exact current-main release candidate before packaging', () => {
@@ -61,7 +63,9 @@ describe('release asset workflow', () => {
     expect(packageJson.scripts['android:release-check']).toBe(
       'node scripts/build-android-release.mjs',
     );
-    expect(packageJson.scripts['android:release-unsigned-check']).toContain('assembleRelease');
+    expect(packageJson.scripts['android:release-unsigned-check']).toContain(
+      'assembleRelease',
+    );
     expect(androidBuild).toContain('SALAHOS_ANDROID_KEYSTORE_PATH');
     expect(androidBuild).toContain("SALAHOS_ANDROID_REQUIRE_SIGNING: 'true'");
     expect(androidGradle).toContain('releaseSigningRequired && !releaseSigningConfigured');
@@ -74,8 +78,12 @@ describe('release asset workflow', () => {
     expect(workflow).toContain('name: release-final');
     expect(workflow).toContain('unzip -t "release/$WEB"');
     expect(workflow).toContain('PI_CONTENTS="$(tar -tzf "release/$PI")"');
-    expect(workflow).toContain("grep -Fxq 'SalahOS/INSTALL.md' <<< \"$PI_CONTENTS\"");
-    expect(workflow).toContain("grep -Fxq 'SalahOS/dist/index.html' <<< \"$PI_CONTENTS\"");
+    expect(workflow).toContain(
+      "grep -Fxq 'SalahOS/INSTALL.md' <<< \"$PI_CONTENTS\"",
+    );
+    expect(workflow).toContain(
+      "grep -Fxq 'SalahOS/dist/index.html' <<< \"$PI_CONTENTS\"",
+    );
     expect(workflow).not.toMatch(/tar -tzf[^\n]*\|\s*grep\s+-[^\n]*q/);
     expect(workflow).toContain("find . -maxdepth 1 -type f -printf '%f\\n'");
     expect(workflow).toContain('Reverify checksums immediately before publication');
