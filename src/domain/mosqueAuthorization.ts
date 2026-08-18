@@ -57,9 +57,13 @@ export interface ManagedSession {
   readonly revokedAt: string | null;
 }
 
+function freezePermissions(...permissions: MosquePermission[]): readonly MosquePermission[] {
+  return Object.freeze(permissions);
+}
+
 const ROLE_PERMISSIONS: Readonly<Record<MosqueAdminRole, readonly MosquePermission[]>> =
   Object.freeze({
-    'organization-owner': Object.freeze([
+    'organization-owner': freezePermissions(
       'organization.manage',
       'members.manage',
       'prayer.read',
@@ -69,8 +73,8 @@ const ROLE_PERMISSIONS: Readonly<Record<MosqueAdminRole, readonly MosquePermissi
       'signage.read',
       'signage.manage',
       'audit.read',
-    ]),
-    'mosque-administrator': Object.freeze([
+    ),
+    'mosque-administrator': freezePermissions(
       'members.manage',
       'prayer.read',
       'prayer.publish',
@@ -79,16 +83,16 @@ const ROLE_PERMISSIONS: Readonly<Record<MosqueAdminRole, readonly MosquePermissi
       'signage.read',
       'signage.manage',
       'audit.read',
-    ]),
-    'prayer-time-manager': Object.freeze(['prayer.read', 'prayer.publish', 'audit.read']),
-    'content-editor': Object.freeze(['content.read', 'content.publish']),
-    'signage-operator': Object.freeze(['signage.read', 'signage.manage']),
-    'read-only-auditor': Object.freeze([
+    ),
+    'prayer-time-manager': freezePermissions('prayer.read', 'prayer.publish', 'audit.read'),
+    'content-editor': freezePermissions('content.read', 'content.publish'),
+    'signage-operator': freezePermissions('signage.read', 'signage.manage'),
+    'read-only-auditor': freezePermissions(
       'prayer.read',
       'content.read',
       'signage.read',
       'audit.read',
-    ]),
+    ),
   });
 
 function assertBoundedIdentifier(value: string, label: string): string {
