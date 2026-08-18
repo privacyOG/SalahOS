@@ -112,6 +112,8 @@ Repository examples may use placeholder identifiers only. They must not contain 
 
 The committed `.github/workflows/ios.yml` uses a macOS runner, installs the exact npm lockfile, runs the repository quality gate, synchronises the native project and compiles an unsigned generic iOS Simulator application with Xcode. This verifies that the native project compiles without requiring distribution credentials.
 
+That compile path, together with verification of the produced `App.app` executable and `Info.plist`, is what blocks the check. The subsequent Simulator runtime stage in `scripts/ios_simulator_acceptance.py` is bounded, retried and reported, but is not permitted to fail or hang the job, so hosted CoreSimulator infrastructure faults cannot be mistaken for a repository defect. Its true result is published to the run summary and retained in the evidence artifact.
+
 Signed device/archive jobs, if added later, must inject signing material at runtime, remove temporary keychains/files during cleanup, avoid printing secret values, and publish only intended artifacts.
 
 ## Distribution paths
