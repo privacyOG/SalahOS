@@ -60,7 +60,7 @@
   --salah-motion-standard: 180ms;
   --salah-ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
 
-  /* Compatibility aliases for the existing application while Stage 22 is incremental. */
+  /* Compatibility aliases during the incremental Stage 22 migration. */
   --page: var(--salah-bg-canvas);
   --page-glow: rgba(114, 158, 105, 0.16);
   --text: var(--salah-fg-primary);
@@ -130,9 +130,7 @@
 }
 
 body {
-  background:
-    radial-gradient(circle at 88% -8%, var(--page-glow), transparent 32rem),
-    linear-gradient(180deg, color-mix(in srgb, var(--page) 96%, var(--accent) 4%), var(--page));
+  background-color: var(--page);
 }
 
 .app-shell {
@@ -146,8 +144,7 @@ body {
   padding: clamp(1.2rem, 2.5vw, 2rem);
   border: 1px solid var(--salah-border-subtle);
   border-radius: var(--salah-radius-xl);
-  background:
-    linear-gradient(135deg, color-mix(in srgb, var(--card) 96%, var(--accent) 4%), var(--card));
+  background: var(--salah-bg-surface);
   box-shadow: var(--salah-shadow-md);
 }
 
@@ -193,16 +190,12 @@ select,
 input,
 textarea {
   border-radius: var(--salah-radius-sm);
-  transition:
-    border-color var(--salah-motion-fast) var(--salah-ease-standard),
-    background-color var(--salah-motion-fast) var(--salah-ease-standard),
-    box-shadow var(--salah-motion-fast) var(--salah-ease-standard),
-    transform var(--salah-motion-fast) var(--salah-ease-standard);
+  transition-duration: var(--salah-motion-fast);
+  transition-timing-function: var(--salah-ease-standard);
 }
 
 button:hover:not(:disabled) {
   border-color: var(--salah-border-strong);
-  background: color-mix(in srgb, var(--control) 92%, var(--accent) 8%);
 }
 
 button:active:not(:disabled) {
@@ -233,8 +226,8 @@ summary:focus-visible {
 }
 
 .settings-panel summary {
-  min-height: 2.75rem;
   display: flex;
+  min-height: 2.75rem;
   align-items: center;
   color: var(--salah-fg-secondary);
 }
@@ -267,10 +260,9 @@ summary:focus-visible {
 .next-prayer-block {
   min-width: min(23rem, 100%);
   padding: clamp(1.15rem, 2vw, 1.6rem);
-  border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+  border: 1px solid var(--salah-border-default);
   border-radius: var(--salah-radius-md);
-  background:
-    linear-gradient(145deg, color-mix(in srgb, var(--accent) 12%, transparent), transparent 75%);
+  background: var(--salah-bg-accent-soft);
 }
 
 .next-prayer-block strong {
@@ -293,21 +285,18 @@ summary:focus-visible {
   padding: clamp(0.9rem, 1.5vw, 1.15rem);
   border-color: var(--salah-border-subtle);
   border-radius: var(--salah-radius-md);
-  background: color-mix(in srgb, var(--control) 94%, transparent);
-  transition:
-    border-color var(--salah-motion-standard) var(--salah-ease-standard),
-    background-color var(--salah-motion-standard) var(--salah-ease-standard),
-    transform var(--salah-motion-standard) var(--salah-ease-standard);
+  background: var(--salah-bg-control);
+  transition-duration: var(--salah-motion-standard);
+  transition-timing-function: var(--salah-ease-standard);
 }
 
 .prayer-card-next {
-  border-color: color-mix(in srgb, var(--accent) 56%, transparent);
-  background:
-    linear-gradient(150deg, color-mix(in srgb, var(--next-card) 92%, var(--accent) 8%), var(--next-card));
+  border-color: var(--salah-border-strong);
+  background: var(--salah-bg-accent-soft);
 }
 
 .prayer-card-current {
-  border-color: color-mix(in srgb, var(--warning) 62%, transparent);
+  border-color: var(--salah-fg-warning);
 }
 
 .prayer-card strong {
@@ -365,15 +354,15 @@ summary:focus-visible {
   border: 1px solid var(--salah-border-default);
   border-radius: var(--salah-radius-pill);
   color: var(--salah-fg-secondary);
-  background: color-mix(in srgb, var(--salah-bg-control) 88%, transparent);
+  background: var(--salah-bg-control);
   font-size: var(--salah-text-xs);
   font-weight: 750;
 }
 
 .ds-empty-state {
   display: grid;
-  place-items: center;
   min-height: 12rem;
+  place-items: center;
   padding: var(--salah-space-8);
   border: 1px dashed var(--salah-border-default);
   border-radius: var(--salah-radius-lg);
@@ -446,8 +435,8 @@ summary:focus-visible {
   .ds-surface,
   .ds-status-pill,
   .ds-empty-state {
-    background: Canvas;
     border-color: CanvasText;
+    background: Canvas;
     box-shadow: none;
     backdrop-filter: none;
   }
