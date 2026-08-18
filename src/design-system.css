@@ -1,0 +1,464 @@
+:root {
+  /* Semantic surfaces */
+  --salah-bg-canvas: #0a100c;
+  --salah-bg-subtle: #101813;
+  --salah-bg-surface: rgba(20, 30, 23, 0.88);
+  --salah-bg-surface-raised: rgba(27, 40, 30, 0.94);
+  --salah-bg-control: #17231a;
+  --salah-bg-accent-soft: #213628;
+
+  /* Semantic content */
+  --salah-fg-primary: #f5f8f3;
+  --salah-fg-secondary: #c8d3c6;
+  --salah-fg-tertiary: #9eb19e;
+  --salah-fg-accent: #d1e7cb;
+  --salah-fg-warning: #f2c99f;
+  --salah-fg-provenance: #dfd2ae;
+
+  /* Borders and focus */
+  --salah-border-subtle: rgba(255, 255, 255, 0.08);
+  --salah-border-default: rgba(255, 255, 255, 0.13);
+  --salah-border-strong: rgba(255, 255, 255, 0.2);
+  --salah-focus-ring: #cce8c5;
+
+  /* Shape */
+  --salah-radius-xs: 0.55rem;
+  --salah-radius-sm: 0.8rem;
+  --salah-radius-md: 1.1rem;
+  --salah-radius-lg: 1.45rem;
+  --salah-radius-xl: 1.9rem;
+  --salah-radius-pill: 999px;
+
+  /* Spacing */
+  --salah-space-1: 0.25rem;
+  --salah-space-2: 0.5rem;
+  --salah-space-3: 0.75rem;
+  --salah-space-4: 1rem;
+  --salah-space-5: 1.25rem;
+  --salah-space-6: 1.5rem;
+  --salah-space-8: 2rem;
+  --salah-space-10: 2.5rem;
+  --salah-space-12: 3rem;
+  --salah-space-16: 4rem;
+
+  /* Elevation */
+  --salah-shadow-sm: 0 0.45rem 1.2rem rgba(0, 0, 0, 0.14);
+  --salah-shadow-md: 0 1.4rem 3.8rem rgba(0, 0, 0, 0.22);
+  --salah-shadow-hero: 0 2rem 5rem rgba(0, 0, 0, 0.25);
+
+  /* Typography */
+  --salah-text-xs: clamp(0.78rem, 0.74rem + 0.12vw, 0.86rem);
+  --salah-text-sm: clamp(0.9rem, 0.86rem + 0.14vw, 0.98rem);
+  --salah-text-md: clamp(1rem, 0.96rem + 0.18vw, 1.12rem);
+  --salah-text-lg: clamp(1.18rem, 1.05rem + 0.45vw, 1.5rem);
+  --salah-text-xl: clamp(1.55rem, 1.25rem + 1vw, 2.3rem);
+  --salah-text-display: clamp(2.5rem, 1.8rem + 3vw, 5.4rem);
+  --salah-text-countdown: clamp(2.25rem, 1.7rem + 2.2vw, 4.4rem);
+
+  /* Motion */
+  --salah-motion-fast: 120ms;
+  --salah-motion-standard: 180ms;
+  --salah-ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
+
+  /* Compatibility aliases for the existing application while Stage 22 is incremental. */
+  --page: var(--salah-bg-canvas);
+  --page-glow: rgba(114, 158, 105, 0.16);
+  --text: var(--salah-fg-primary);
+  --muted: var(--salah-fg-secondary);
+  --label: var(--salah-fg-tertiary);
+  --card: var(--salah-bg-surface);
+  --control: var(--salah-bg-control);
+  --control-border: var(--salah-border-default);
+  --card-border: var(--salah-border-subtle);
+  --divider: var(--salah-border-subtle);
+  --accent: var(--salah-fg-accent);
+  --next-card: var(--salah-bg-accent-soft);
+  --warning: var(--salah-fg-warning);
+  --warning-bg: rgba(111, 72, 36, 0.28);
+  --provenance: var(--salah-fg-provenance);
+  --shadow: rgba(0, 0, 0, 0.2);
+}
+
+:root[data-theme='light'] {
+  --salah-bg-canvas: #f5f7f3;
+  --salah-bg-subtle: #edf2eb;
+  --salah-bg-surface: rgba(255, 255, 255, 0.92);
+  --salah-bg-surface-raised: #ffffff;
+  --salah-bg-control: #ffffff;
+  --salah-bg-accent-soft: #e3eee1;
+  --salah-fg-primary: #172019;
+  --salah-fg-secondary: #4a5d4d;
+  --salah-fg-tertiary: #557057;
+  --salah-fg-accent: #286237;
+  --salah-fg-warning: #75451c;
+  --salah-fg-provenance: #6d541f;
+  --salah-border-subtle: rgba(23, 32, 25, 0.1);
+  --salah-border-default: rgba(23, 32, 25, 0.17);
+  --salah-border-strong: rgba(23, 32, 25, 0.26);
+  --salah-focus-ring: #286237;
+  --salah-shadow-sm: 0 0.45rem 1.2rem rgba(35, 49, 38, 0.08);
+  --salah-shadow-md: 0 1.4rem 3.8rem rgba(35, 49, 38, 0.1);
+  --salah-shadow-hero: 0 2rem 5rem rgba(35, 49, 38, 0.12);
+  --page-glow: rgba(67, 112, 65, 0.1);
+  --warning-bg: rgba(196, 145, 93, 0.14);
+}
+
+@media (prefers-color-scheme: light) {
+  :root[data-theme='system'] {
+    --salah-bg-canvas: #f5f7f3;
+    --salah-bg-subtle: #edf2eb;
+    --salah-bg-surface: rgba(255, 255, 255, 0.92);
+    --salah-bg-surface-raised: #ffffff;
+    --salah-bg-control: #ffffff;
+    --salah-bg-accent-soft: #e3eee1;
+    --salah-fg-primary: #172019;
+    --salah-fg-secondary: #4a5d4d;
+    --salah-fg-tertiary: #557057;
+    --salah-fg-accent: #286237;
+    --salah-fg-warning: #75451c;
+    --salah-fg-provenance: #6d541f;
+    --salah-border-subtle: rgba(23, 32, 25, 0.1);
+    --salah-border-default: rgba(23, 32, 25, 0.17);
+    --salah-border-strong: rgba(23, 32, 25, 0.26);
+    --salah-focus-ring: #286237;
+    --salah-shadow-sm: 0 0.45rem 1.2rem rgba(35, 49, 38, 0.08);
+    --salah-shadow-md: 0 1.4rem 3.8rem rgba(35, 49, 38, 0.1);
+    --salah-shadow-hero: 0 2rem 5rem rgba(35, 49, 38, 0.12);
+    --page-glow: rgba(67, 112, 65, 0.1);
+    --warning-bg: rgba(196, 145, 93, 0.14);
+  }
+}
+
+body {
+  background:
+    radial-gradient(circle at 88% -8%, var(--page-glow), transparent 32rem),
+    linear-gradient(180deg, color-mix(in srgb, var(--page) 96%, var(--accent) 4%), var(--page));
+}
+
+.app-shell {
+  width: min(1240px, calc(100% - clamp(1rem, 4vw, 3rem)));
+  padding-block: clamp(1rem, 3vw, 2.75rem) clamp(5rem, 7vw, 7rem);
+}
+
+.hero {
+  max-width: none;
+  margin-block-end: var(--salah-space-8);
+  padding: clamp(1.2rem, 2.5vw, 2rem);
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-xl);
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--card) 96%, var(--accent) 4%), var(--card));
+  box-shadow: var(--salah-shadow-md);
+}
+
+.hero-toolbar {
+  align-items: center;
+}
+
+.brand-icon {
+  width: clamp(2.75rem, 5vw, 3.8rem);
+  height: clamp(2.75rem, 5vw, 3.8rem);
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-sm);
+  box-shadow: var(--salah-shadow-sm);
+}
+
+.brand-name {
+  color: var(--salah-fg-secondary);
+  font-size: var(--salah-text-md);
+  letter-spacing: 0.01em;
+}
+
+.live-clock {
+  color: var(--salah-fg-primary);
+  font-size: var(--salah-text-xl);
+  letter-spacing: -0.02em;
+}
+
+.hero h1 {
+  max-width: 12ch;
+  margin-block: var(--salah-space-10) var(--salah-space-4);
+  font-size: var(--salah-text-display);
+  line-height: 0.95;
+}
+
+.hero-copy {
+  max-width: 56ch;
+  margin-block-end: 0;
+  font-size: var(--salah-text-md);
+}
+
+button,
+select,
+input,
+textarea {
+  border-radius: var(--salah-radius-sm);
+  transition:
+    border-color var(--salah-motion-fast) var(--salah-ease-standard),
+    background-color var(--salah-motion-fast) var(--salah-ease-standard),
+    box-shadow var(--salah-motion-fast) var(--salah-ease-standard),
+    transform var(--salah-motion-fast) var(--salah-ease-standard);
+}
+
+button:hover:not(:disabled) {
+  border-color: var(--salah-border-strong);
+  background: color-mix(in srgb, var(--control) 92%, var(--accent) 8%);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+  outline: 3px solid var(--salah-focus-ring);
+  outline-offset: 3px;
+}
+
+.location-panel,
+.settings-panel,
+.status-card,
+.prayer-panel {
+  border-radius: var(--salah-radius-lg);
+  box-shadow: var(--salah-shadow-sm);
+  backdrop-filter: blur(18px);
+}
+
+.location-panel,
+.settings-panel {
+  padding: clamp(1rem, 2vw, 1.35rem);
+}
+
+.settings-panel summary {
+  min-height: 2.75rem;
+  display: flex;
+  align-items: center;
+  color: var(--salah-fg-secondary);
+}
+
+.status-card {
+  gap: clamp(0.85rem, 2vw, 1.35rem);
+  padding: clamp(1.1rem, 2.2vw, 1.55rem);
+}
+
+.status-card > div {
+  min-width: 0;
+  padding-inline-end: var(--salah-space-4);
+  border-inline-end: 1px solid var(--salah-border-subtle);
+}
+
+.status-card > div:last-child {
+  border-inline-end: 0;
+}
+
+.prayer-panel {
+  padding: clamp(1.2rem, 3vw, 2.2rem);
+  box-shadow: var(--salah-shadow-hero);
+}
+
+.section-heading {
+  align-items: center;
+  margin-block-end: clamp(1rem, 2.5vw, 1.75rem);
+}
+
+.next-prayer-block {
+  min-width: min(23rem, 100%);
+  padding: clamp(1.15rem, 2vw, 1.6rem);
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+  border-radius: var(--salah-radius-md);
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--accent) 12%, transparent), transparent 75%);
+}
+
+.next-prayer-block strong {
+  font-size: var(--salah-text-lg);
+}
+
+.countdown {
+  margin-block-start: var(--salah-space-2) !important;
+  font-size: var(--salah-text-countdown);
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+
+.prayer-grid {
+  gap: clamp(0.55rem, 1.2vw, 0.85rem);
+}
+
+.prayer-card {
+  min-height: 9rem;
+  padding: clamp(0.9rem, 1.5vw, 1.15rem);
+  border-color: var(--salah-border-subtle);
+  border-radius: var(--salah-radius-md);
+  background: color-mix(in srgb, var(--control) 94%, transparent);
+  transition:
+    border-color var(--salah-motion-standard) var(--salah-ease-standard),
+    background-color var(--salah-motion-standard) var(--salah-ease-standard),
+    transform var(--salah-motion-standard) var(--salah-ease-standard);
+}
+
+.prayer-card-next {
+  border-color: color-mix(in srgb, var(--accent) 56%, transparent);
+  background:
+    linear-gradient(150deg, color-mix(in srgb, var(--next-card) 92%, var(--accent) 8%), var(--next-card));
+}
+
+.prayer-card-current {
+  border-color: color-mix(in srgb, var(--warning) 62%, transparent);
+}
+
+.prayer-card strong {
+  font-size: clamp(1.35rem, 2.6vw, 2rem);
+  letter-spacing: -0.02em;
+}
+
+.eyebrow,
+.label,
+.prayer-time-label {
+  font-size: var(--salah-text-xs);
+  letter-spacing: 0.1em;
+}
+
+.offline-banner,
+.inline-message {
+  font-size: var(--salah-text-sm);
+}
+
+.offline-banner {
+  border-radius: var(--salah-radius-md);
+  box-shadow: var(--salah-shadow-sm);
+}
+
+/* Reusable Stage 22 primitives for new screens. */
+.ds-surface {
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-lg);
+  background: var(--salah-bg-surface);
+  box-shadow: var(--salah-shadow-sm);
+}
+
+.ds-surface-raised {
+  background: var(--salah-bg-surface-raised);
+  box-shadow: var(--salah-shadow-md);
+}
+
+.ds-stack {
+  display: grid;
+  gap: var(--salah-space-4);
+}
+
+.ds-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--salah-space-3);
+}
+
+.ds-status-pill {
+  display: inline-flex;
+  min-height: 1.8rem;
+  align-items: center;
+  padding-inline: 0.65rem;
+  border: 1px solid var(--salah-border-default);
+  border-radius: var(--salah-radius-pill);
+  color: var(--salah-fg-secondary);
+  background: color-mix(in srgb, var(--salah-bg-control) 88%, transparent);
+  font-size: var(--salah-text-xs);
+  font-weight: 750;
+}
+
+.ds-empty-state {
+  display: grid;
+  place-items: center;
+  min-height: 12rem;
+  padding: var(--salah-space-8);
+  border: 1px dashed var(--salah-border-default);
+  border-radius: var(--salah-radius-lg);
+  color: var(--salah-fg-secondary);
+  text-align: center;
+}
+
+@media (max-width: 760px) {
+  .app-shell {
+    width: min(100% - 1rem, 42rem);
+    padding-block-start: 0.5rem;
+  }
+
+  .hero {
+    padding: 1rem;
+    border-radius: var(--salah-radius-lg);
+  }
+
+  .hero h1 {
+    margin-block-start: var(--salah-space-8);
+  }
+
+  .status-card > div {
+    padding-inline-end: 0;
+    padding-block-end: var(--salah-space-3);
+    border-inline-end: 0;
+    border-block-end: 1px solid var(--salah-border-subtle);
+  }
+
+  .status-card > div:last-child {
+    padding-block-end: 0;
+    border-block-end: 0;
+  }
+
+  .prayer-card {
+    min-height: 4.65rem;
+    padding: 0.85rem 1rem;
+  }
+}
+
+@media (min-width: 1600px) {
+  :root {
+    --salah-text-display: clamp(3.2rem, 3vw, 6.2rem);
+    --salah-text-countdown: clamp(3rem, 2.4vw, 5rem);
+  }
+}
+
+@media (prefers-contrast: more) {
+  :root {
+    --salah-border-subtle: rgba(255, 255, 255, 0.46);
+    --salah-border-default: rgba(255, 255, 255, 0.62);
+    --salah-fg-secondary: #edf4ea;
+    --salah-fg-tertiary: #edf4ea;
+  }
+
+  :root[data-theme='light'] {
+    --salah-border-subtle: rgba(23, 32, 25, 0.44);
+    --salah-border-default: rgba(23, 32, 25, 0.62);
+    --salah-fg-secondary: #253428;
+    --salah-fg-tertiary: #253428;
+  }
+}
+
+@media (forced-colors: active) {
+  .hero,
+  .location-panel,
+  .settings-panel,
+  .status-card,
+  .prayer-panel,
+  .ds-surface,
+  .ds-status-pill,
+  .ds-empty-state {
+    background: Canvas;
+    border-color: CanvasText;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  button,
+  select,
+  input,
+  textarea,
+  .prayer-card {
+    transition: none;
+  }
+}
