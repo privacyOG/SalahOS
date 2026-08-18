@@ -7,7 +7,7 @@ type DesignSurfaceProps = Readonly<{
   ariaLabel?: string;
 }>;
 
-function classes(...values: Array<string | false | undefined>): string {
+function classes(...values: (string | false | undefined)[]): string {
   return values.filter(Boolean).join(' ');
 }
 
