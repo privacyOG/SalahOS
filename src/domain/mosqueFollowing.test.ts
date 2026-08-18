@@ -42,10 +42,7 @@ describe('mosque following', () => {
   });
 
   it('clears the preferred mosque and cached data when it is unfollowed', () => {
-    let state = createMosqueFollowingState(
-      ['masjid-al-noor:sydney'],
-      'masjid-al-noor:sydney',
-    );
+    let state = createMosqueFollowingState(['masjid-al-noor:sydney'], 'masjid-al-noor:sydney');
     state = cacheMosquePrayerData(state, cached);
     state = unfollowMosque(state, 'masjid-al-noor:sydney');
 
@@ -59,12 +56,12 @@ describe('mosque following', () => {
     state = cacheMosquePrayerData(state, cached);
 
     expect(cachedPrayerDataForMosque(state, 'masjid-al-noor:sydney')?.revisionId).toBe('rev-001');
-    expect(
-      mosqueCacheFreshness(state, 'masjid-al-noor:sydney', '2026-08-19T05:59:59.000Z'),
-    ).toBe('fresh');
-    expect(
-      mosqueCacheFreshness(state, 'masjid-al-noor:sydney', '2026-08-19T06:00:00.000Z'),
-    ).toBe('stale');
+    expect(mosqueCacheFreshness(state, 'masjid-al-noor:sydney', '2026-08-19T05:59:59.000Z')).toBe(
+      'fresh',
+    );
+    expect(mosqueCacheFreshness(state, 'masjid-al-noor:sydney', '2026-08-19T06:00:00.000Z')).toBe(
+      'stale',
+    );
     expect(mosqueCacheFreshness(state, 'lakemba-mosque', '2026-08-19T06:00:00.000Z')).toBe(
       'missing',
     );
