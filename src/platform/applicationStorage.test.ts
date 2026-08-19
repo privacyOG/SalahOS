@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest';
+import { RAMADAN_PRESENTATION_STORAGE_KEY } from './ramadanPresentationPreferences';
 import {
   createNativePreferencesStorage,
   PERSISTED_APPLICATION_KEYS,
@@ -28,16 +29,24 @@ class MemoryPreferences implements PreferencesStore {
 }
 
 describe('native application storage', () => {
-  it('hydrates the persisted application keys before synchronous reads', async () => {
+  it('hydrates every persisted application key before synchronous reads', async () => {
     const preferences = new MemoryPreferences();
     preferences.values.set(PERSISTED_APPLICATION_KEYS[0], '{"version":2}');
     preferences.values.set(PERSISTED_APPLICATION_KEYS[1], '{"version":1,"locations":[]}');
+    preferences.values.set(
+      RAMADAN_PRESENTATION_STORAGE_KEY,
+      '{"version":1,"imsakMinutesBeforeFajr":10}',
+    );
 
     const storage = await createNativePreferencesStorage(preferences);
 
     expect(storage.getItem(PERSISTED_APPLICATION_KEYS[0])).toBe('{"version":2}');
     expect(storage.getItem(PERSISTED_APPLICATION_KEYS[1])).toBe('{"version":1,"locations":[]}');
     expect(storage.getItem(PERSISTED_APPLICATION_KEYS[2])).toBeNull();
+    expect(storage.getItem(RAMADAN_PRESENTATION_STORAGE_KEY)).toBe(
+      '{"version":1,"imsakMinutesBeforeFajr":10}',
+    );
+    expect(PERSISTED_APPLICATION_KEYS).toContain(RAMADAN_PRESENTATION_STORAGE_KEY);
   });
 
   it('updates synchronous reads immediately and persists writes in order', async () => {

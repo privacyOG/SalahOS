@@ -1,6 +1,7 @@
 import { Capacitor } from '@capacitor/core';
 import { Preferences } from '@capacitor/preferences';
 import { MOSQUE_LIBRARY_STORAGE_KEY } from './mosqueLibrary';
+import { RAMADAN_PRESENTATION_STORAGE_KEY } from './ramadanPresentationPreferences';
 import { SAVED_LOCATIONS_STORAGE_KEY } from './savedLocations';
 import { SETTINGS_STORAGE_KEY } from './settingsStorage';
 import type { KeyValueStorage } from './settingsStorage';
@@ -9,6 +10,7 @@ export const PERSISTED_APPLICATION_KEYS = Object.freeze([
   SETTINGS_STORAGE_KEY,
   SAVED_LOCATIONS_STORAGE_KEY,
   MOSQUE_LIBRARY_STORAGE_KEY,
+  RAMADAN_PRESENTATION_STORAGE_KEY,
 ] as const);
 
 export interface PreferencesStore {
