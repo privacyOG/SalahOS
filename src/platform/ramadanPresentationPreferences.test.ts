@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import type { KeyValueStorage } from './settingsStorage';
 import {
+  RAMADAN_IMSAK_OFFSET_OPTIONS,
   RAMADAN_PRESENTATION_STORAGE_KEY,
   defaultRamadanPresentationPreferences,
   loadRamadanPresentationPreferences,
@@ -36,7 +37,7 @@ describe('Ramadan presentation preferences', () => {
     const storage = new MemoryStorage();
     const preferences = {
       version: 1 as const,
-      imsakMinutesBeforeFajr: 10,
+      imsakMinutesBeforeFajr: 10 as const,
     };
 
     saveRamadanPresentationPreferences(storage, preferences);
@@ -44,7 +45,7 @@ describe('Ramadan presentation preferences', () => {
     expect(storage.values.has(RAMADAN_PRESENTATION_STORAGE_KEY)).toBe(true);
   });
 
-  it.each([0, 5, 30, 240])('accepts %s minutes before Fajr', (offset) => {
+  it.each(RAMADAN_IMSAK_OFFSET_OPTIONS)('accepts %s minutes before Fajr', (offset) => {
     expect(
       parseRamadanPresentationPreferences(
         JSON.stringify({ version: 1, imsakMinutesBeforeFajr: offset }),
@@ -52,7 +53,7 @@ describe('Ramadan presentation preferences', () => {
     ).toBe(offset);
   });
 
-  it.each([-1, 241, 10.5])('rejects invalid Imsak offset %s', (offset) => {
+  it.each([-1, 0, 6, 31, 240, 10.5])('rejects unsupported Imsak offset %s', (offset) => {
     expect(() =>
       parseRamadanPresentationPreferences(
         JSON.stringify({ version: 1, imsakMinutesBeforeFajr: offset }),
