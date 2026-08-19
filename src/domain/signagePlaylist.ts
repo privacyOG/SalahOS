@@ -102,7 +102,14 @@ function assertClock(value: string, label: string): string {
 }
 
 function clockMinutes(value: string): number {
-  const [hours, minutes] = value.split(':').map(Number);
+  const parts = value.split(':');
+  const hoursText = parts.at(0);
+  const minutesText = parts.at(1);
+  if (hoursText === undefined || minutesText === undefined) {
+    throw new RangeError('Clock value must use HH:mm');
+  }
+  const hours = Number(hoursText);
+  const minutes = Number(minutesText);
   return hours * 60 + minutes;
 }
 
