@@ -11,7 +11,7 @@ import {
   type CompassPermissionState,
 } from '../platform/deviceCompass';
 import { loadPersistedSettings } from '../platform/settingsStorage';
-import { smartDisplayModeRequested } from '../platform/smartDisplayNavigation';
+import { smartDisplayModeRequested } from './SmartDisplay';
 
 const copy = {
   en: {
@@ -21,7 +21,8 @@ const copy = {
     refresh: 'Refresh from selected location',
     start: 'Use device compass',
     stop: 'Stop compass',
-    unsupported: 'A north-referenced device compass is not available here. Use the bearing shown above.',
+    unsupported:
+      'A north-referenced device compass is not available here. Use the bearing shown above.',
     denied: 'Compass permission was not granted. Use the bearing shown above.',
     waiting: 'Move the device gently while waiting for a reliable north-referenced heading.',
     heading: 'Device heading',
@@ -38,7 +39,8 @@ const copy = {
     refresh: 'تحديث من الموقع المحدد',
     start: 'استخدام بوصلة الجهاز',
     stop: 'إيقاف البوصلة',
-    unsupported: 'لا تتوفر هنا بوصلة جهاز مرتبطة بالشمال. استخدم زاوية الاتجاه الظاهرة أعلاه.',
+    unsupported:
+      'لا تتوفر هنا بوصلة جهاز مرتبطة بالشمال. استخدم زاوية الاتجاه الظاهرة أعلاه.',
     denied: 'لم يتم منح إذن البوصلة. استخدم زاوية الاتجاه الظاهرة أعلاه.',
     waiting: 'حرّك الجهاز برفق أثناء انتظار قراءة موثوقة مرتبطة بالشمال.',
     heading: 'اتجاه الجهاز',
@@ -119,7 +121,11 @@ export function QiblaCompassPanel() {
   };
 
   return (
-    <section className="qibla-panel" aria-labelledby="qibla-panel-title" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+    <section
+      className="qibla-panel"
+      aria-labelledby="qibla-panel-title"
+      dir={locale === 'ar' ? 'rtl' : 'ltr'}
+    >
       <div className="qibla-panel-heading">
         <h2 id="qibla-panel-title">{text.title}</h2>
         <p>{text.privacy}</p>
@@ -131,10 +137,15 @@ export function QiblaCompassPanel() {
         <>
           <div className="qibla-bearing" dir="ltr">
             <span>{text.bearing}</span>
-            <strong>{qibla.degreesFromTrueNorth.toFixed(1)}{text.degrees}</strong>
+            <strong>
+              {qibla.degreesFromTrueNorth.toFixed(1)}
+              {text.degrees}
+            </strong>
           </div>
           <div className="qibla-actions">
-            <button type="button" onClick={() => setPanelState(readPanelState())}>{text.refresh}</button>
+            <button type="button" onClick={() => setPanelState(readPanelState())}>
+              {text.refresh}
+            </button>
             <button
               type="button"
               onClick={() => {
@@ -149,13 +160,20 @@ export function QiblaCompassPanel() {
             </button>
           </div>
 
-          {permission === 'unsupported' && <p className="inline-message">{text.unsupported}</p>}
+          {permission === 'unsupported' && (
+            <p className="inline-message">{text.unsupported}</p>
+          )}
           {permission === 'denied' && <p className="inline-message">{text.denied}</p>}
-          {compassActive && heading === null && <p className="inline-message">{text.waiting}</p>}
+          {compassActive && heading === null && (
+            <p className="inline-message">{text.waiting}</p>
+          )}
 
           {heading !== null && turn !== null && (
             <div className="qibla-live-guidance" role="status">
-              <span dir="ltr">{text.heading}: {heading.headingDegrees.toFixed(1)}{text.degrees}</span>
+              <span dir="ltr">
+                {text.heading}: {heading.headingDegrees.toFixed(1)}
+                {text.degrees}
+              </span>
               <strong>
                 {Math.abs(turn) <= 5
                   ? text.aligned
