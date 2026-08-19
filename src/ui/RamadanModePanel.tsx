@@ -78,7 +78,7 @@ export function RamadanModePanel() {
     };
   }, []);
 
-  if (!active || ramadan === null || smartDisplayModeRequested(window.location.search)) {
+  if (ramadan?.active !== true || smartDisplayModeRequested(window.location.search)) {
     return null;
   }
 
