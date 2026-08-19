@@ -26,12 +26,6 @@ jobs:
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
 
-      - name: Print exact Prettier diff for monthly timetable
-        run: |
-          npx prettier --write src/domain/monthlyTimetable.ts src/ui/MonthlyTimetable.tsx
-          git diff -- src/domain/monthlyTimetable.ts src/ui/MonthlyTimetable.tsx
-          exit 1
-
       - name: Repository quality gate
         run: npm run check
 
