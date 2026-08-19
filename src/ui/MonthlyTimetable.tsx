@@ -41,23 +41,14 @@ export function MonthlyTimetable({ timetable, monthLabel }: MonthlyTimetableProp
               <tr key={day.date}>
                 <th scope="row">{day.date}</th>
                 <td>{day.hijriLabel ?? '—'}</td>
-                <PrayerTimes
-                  iqamah={day.prayers.fajr.iqamah}
-                  start={day.prayers.fajr.start}
-                />
-                <PrayerTimes
-                  iqamah={day.prayers.dhuhr.iqamah}
-                  start={day.prayers.dhuhr.start}
-                />
+                <PrayerTimes iqamah={day.prayers.fajr.iqamah} start={day.prayers.fajr.start} />
+                <PrayerTimes iqamah={day.prayers.dhuhr.iqamah} start={day.prayers.dhuhr.start} />
                 <PrayerTimes iqamah={day.prayers.asr.iqamah} start={day.prayers.asr.start} />
                 <PrayerTimes
                   iqamah={day.prayers.maghrib.iqamah}
                   start={day.prayers.maghrib.start}
                 />
-                <PrayerTimes
-                  iqamah={day.prayers.isha.iqamah}
-                  start={day.prayers.isha.start}
-                />
+                <PrayerTimes iqamah={day.prayers.isha.iqamah} start={day.prayers.isha.start} />
                 <td>
                   {day.jumuah.length === 0
                     ? '—'
@@ -76,7 +67,13 @@ export function MonthlyTimetable({ timetable, monthLabel }: MonthlyTimetableProp
   );
 }
 
-function PrayerTimes({ start, iqamah }: { readonly start: string; readonly iqamah: string | null }) {
+function PrayerTimes({
+  start,
+  iqamah,
+}: {
+  readonly start: string;
+  readonly iqamah: string | null;
+}) {
   return (
     <td>
       <strong>{start}</strong>
