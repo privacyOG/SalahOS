@@ -7,6 +7,7 @@ import {
 } from './platform/applicationStorage';
 import { CongregationShell } from './ui/CongregationShell';
 import { QiblaCompassPanel } from './ui/QiblaCompassPanel';
+import { RamadanModePanel } from './ui/RamadanModePanel';
 import { readTouchDisplayFixtureConfig, TouchDisplayFixture } from './ui/TouchDisplayFixture';
 import './styles.css';
 import './design-system.css';
@@ -15,6 +16,7 @@ import './congregation-shell.css';
 import './responsive-hardening.css';
 import './touch-display-fixture.css';
 import './smart-display.css';
+import './ramadan-mode.css';
 import './qibla-compass.css';
 
 async function bootstrap(): Promise<void> {
@@ -47,6 +49,7 @@ async function bootstrap(): Promise<void> {
       {touchDisplayFixtureConfig === null ? (
         <CongregationShell>
           <App />
+          <RamadanModePanel />
           <QiblaCompassPanel />
         </CongregationShell>
       ) : (
