@@ -1,11 +1,5 @@
 export type SignageSceneKind =
-  | 'prayer-board'
-  | 'announcement'
-  | 'event'
-  | 'image'
-  | 'web'
-  | 'qr'
-  | 'countdown';
+  'prayer-board' | 'announcement' | 'event' | 'image' | 'web' | 'qr' | 'countdown';
 
 export type SignageOfflineFallback = 'retain-last-good' | 'prayer-board' | 'hide-scene';
 
