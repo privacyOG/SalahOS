@@ -1,0 +1,82 @@
+.ramadan-mode-panel {
+  width: min(1120px, calc(100% - 2rem));
+  margin: 1rem auto 0;
+  padding: clamp(1rem, 2vw, 1.35rem);
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--salah-space-4, 1rem);
+  border: 1px solid var(--salah-border-default, rgba(127, 127, 127, 0.25));
+  border-radius: var(--salah-radius-lg, 1.45rem);
+  background: var(--salah-bg-accent-soft, rgba(127, 127, 127, 0.1));
+  box-shadow: var(--salah-shadow-sm, 0 0.45rem 1.2rem rgba(0, 0, 0, 0.14));
+}
+
+.ramadan-mode-symbol {
+  display: grid;
+  place-items: center;
+  width: clamp(3.25rem, 8vw, 4.25rem);
+  aspect-ratio: 1;
+  border: 1px solid var(--salah-border-strong, currentColor);
+  border-radius: 50%;
+  color: var(--salah-fg-accent, currentColor);
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  line-height: 1;
+}
+
+.ramadan-mode-copy {
+  min-width: 0;
+}
+
+.ramadan-mode-copy h2,
+.ramadan-mode-copy p {
+  margin: 0;
+}
+
+.ramadan-mode-eyebrow {
+  margin-bottom: var(--salah-space-1, 0.25rem) !important;
+  color: var(--salah-fg-accent, currentColor);
+  font-size: var(--salah-text-xs, 0.82rem);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.ramadan-mode-copy h2 {
+  color: var(--salah-fg-primary, inherit);
+  font-size: var(--salah-text-xl, 1.65rem);
+}
+
+.ramadan-mode-copy > p:not(.ramadan-mode-eyebrow) {
+  margin-top: var(--salah-space-2, 0.5rem);
+  color: var(--salah-fg-secondary, inherit);
+}
+
+.ramadan-mode-copy small {
+  display: block;
+  margin-top: var(--salah-space-2, 0.5rem);
+  color: var(--salah-fg-tertiary, inherit);
+  line-height: 1.45;
+}
+
+.ramadan-mode-year {
+  align-self: start;
+  padding: 0.45rem 0.7rem;
+  border-radius: var(--salah-radius-pill, 999px);
+  background: var(--salah-bg-surface, rgba(127, 127, 127, 0.08));
+  color: var(--salah-fg-secondary, inherit);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+@media (max-width: 640px) {
+  .ramadan-mode-panel {
+    width: min(100% - 1rem, 1120px);
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .ramadan-mode-year {
+    grid-column: 2;
+    justify-self: start;
+  }
+}
