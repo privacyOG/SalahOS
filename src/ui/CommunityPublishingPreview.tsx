@@ -33,12 +33,11 @@ function previewLabel(surface: PublishingPreviewSurface): string {
   return 'Web preview';
 }
 
-function renderAnnouncement({
-  announcement,
-  surface,
-  locale,
-}: AnnouncementPreviewProps) {
-  const content = locale === 'ar' ? announcement.arabic ?? announcement.english : announcement.english ?? announcement.arabic;
+function renderAnnouncement({ announcement, surface, locale }: AnnouncementPreviewProps) {
+  const content =
+    locale === 'ar'
+      ? (announcement.arabic ?? announcement.english)
+      : (announcement.english ?? announcement.arabic);
   if (content === null) return null;
 
   const targeted = announcement.surfaces.includes(targetForSurface(surface));
@@ -88,7 +87,8 @@ function renderAnnouncement({
 }
 
 function renderEvent({ event, surface, locale }: EventPreviewProps) {
-  const content = locale === 'ar' ? event.arabic ?? event.english : event.english ?? event.arabic;
+  const content =
+    locale === 'ar' ? (event.arabic ?? event.english) : (event.english ?? event.arabic);
   if (content === null) return null;
 
   const targeted = event.surfaces.includes(targetForSurface(surface));
