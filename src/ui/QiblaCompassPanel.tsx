@@ -79,6 +79,16 @@ export function QiblaCompassPanel() {
     qibla === null || heading === null
       ? null
       : signedTurnToQibla(qibla.degreesFromTrueNorth, heading.headingDegrees);
+  const bearingText =
+    qibla === null ? null : `${qibla.degreesFromTrueNorth.toFixed(1)}${text.degrees}`;
+  const headingText =
+    heading === null ? null : `${text.heading}: ${heading.headingDegrees.toFixed(1)}${text.degrees}`;
+  const turnText =
+    turn === null
+      ? null
+      : Math.abs(turn) <= 5
+        ? text.aligned
+        : `${turn > 0 ? text.clockwise : text.counterclockwise} ${Math.abs(turn).toFixed(1)}${text.degrees}`;
 
   useEffect(() => {
     const refresh = () => {
@@ -137,10 +147,7 @@ export function QiblaCompassPanel() {
         <>
           <div className="qibla-bearing" dir="ltr">
             <span>{text.bearing}</span>
-            <strong>
-              {qibla.degreesFromTrueNorth.toFixed(1)}
-              {text.degrees}
-            </strong>
+            <strong>{bearingText}</strong>
           </div>
           <div className="qibla-actions">
             <button type="button" onClick={() => setPanelState(readPanelState())}>
@@ -170,15 +177,8 @@ export function QiblaCompassPanel() {
 
           {heading !== null && turn !== null && (
             <div className="qibla-live-guidance" role="status">
-              <span dir="ltr">
-                {text.heading}: {heading.headingDegrees.toFixed(1)}
-                {text.degrees}
-              </span>
-              <strong>
-                {Math.abs(turn) <= 5
-                  ? text.aligned
-                  : `${turn > 0 ? text.clockwise : text.counterclockwise} ${Math.abs(turn).toFixed(1)}${text.degrees}`}
-              </strong>
+              <span dir="ltr">{headingText}</span>
+              <strong>{turnText}</strong>
             </div>
           )}
         </>
