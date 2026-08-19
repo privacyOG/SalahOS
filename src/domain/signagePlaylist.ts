@@ -113,7 +113,7 @@ function minutesInWindow(now: number, start: number, end: number): boolean {
 }
 
 function addMinutes(value: number, delta: number): number {
-  return ((value + delta) % 1440 + 1440) % 1440;
+  return (((value + delta) % 1440) + 1440) % 1440;
 }
 
 function normalizeWeekdays(values: readonly Weekday[]): readonly Weekday[] {
@@ -127,7 +127,11 @@ function normalizeWeekdays(values: readonly Weekday[]): readonly Weekday[] {
 
 export function createSignagePlaylist(input: SignagePlaylist): SignagePlaylist {
   const scenes = input.scenes.map((entry) => {
-    if (!Number.isInteger(entry.dwellSeconds) || entry.dwellSeconds < 5 || entry.dwellSeconds > 3600) {
+    if (
+      !Number.isInteger(entry.dwellSeconds) ||
+      entry.dwellSeconds < 5 ||
+      entry.dwellSeconds > 3600
+    ) {
       throw new RangeError('Scene dwell seconds must be an integer from 5 through 3600');
     }
     return Object.freeze({
@@ -181,10 +185,18 @@ export function createSignageScheduleRule(input: SignageScheduleRule): SignageSc
     });
   }
 
-  if (!Number.isInteger(input.offsetMinutes) || input.offsetMinutes < -360 || input.offsetMinutes > 360) {
+  if (
+    !Number.isInteger(input.offsetMinutes) ||
+    input.offsetMinutes < -360 ||
+    input.offsetMinutes > 360
+  ) {
     throw new RangeError('Prayer-relative offset must be an integer from -360 through 360 minutes');
   }
-  if (!Number.isInteger(input.durationMinutes) || input.durationMinutes < 1 || input.durationMinutes > 360) {
+  if (
+    !Number.isInteger(input.durationMinutes) ||
+    input.durationMinutes < 1 ||
+    input.durationMinutes > 360
+  ) {
     throw new RangeError('Prayer-relative duration must be an integer from 1 through 360 minutes');
   }
   return Object.freeze({
@@ -196,11 +208,17 @@ export function createSignageScheduleRule(input: SignageScheduleRule): SignageSc
   });
 }
 
-function contextMatches(rule: SignageScheduleRule, context: SignageScheduleEvaluationContext): boolean {
+function contextMatches(
+  rule: SignageScheduleRule,
+  context: SignageScheduleEvaluationContext,
+): boolean {
   return rule.context === 'all' || rule.context === context.context;
 }
 
-function ruleMatches(rule: SignageScheduleRule, context: SignageScheduleEvaluationContext): boolean {
+function ruleMatches(
+  rule: SignageScheduleRule,
+  context: SignageScheduleEvaluationContext,
+): boolean {
   if (!contextMatches(rule, context)) return false;
   const localDate = assertDate(context.localDate, 'Local date');
   const localClock = assertClock(context.localClock, 'Local clock');
@@ -241,9 +259,9 @@ export function resolveSignageSchedule(
   context: SignageScheduleEvaluationContext,
 ): SignageScheduleResolution {
   const normalizedRules = rules.map(createSignageScheduleRule);
-  const matches = normalizedRules.filter((rule) => ruleMatches(rule, context)).sort((left, right) =>
-    compareRules(left, right, context),
-  );
+  const matches = normalizedRules
+    .filter((rule) => ruleMatches(rule, context))
+    .sort((left, right) => compareRules(left, right, context));
   const winner = matches[0] ?? null;
   return Object.freeze({
     winner,
@@ -265,9 +283,13 @@ export function createDisplayPlaylistCache(input: DisplayPlaylistCache): Display
   }
   return Object.freeze({
     activePlaylistId:
-      input.activePlaylistId === null ? null : normalizeIdentifier(input.activePlaylistId, 'Active playlist ID'),
+      input.activePlaylistId === null
+        ? null
+        : normalizeIdentifier(input.activePlaylistId, 'Active playlist ID'),
     nextPlaylistId:
-      input.nextPlaylistId === null ? null : normalizeIdentifier(input.nextPlaylistId, 'Next playlist ID'),
+      input.nextPlaylistId === null
+        ? null
+        : normalizeIdentifier(input.nextPlaylistId, 'Next playlist ID'),
     cachedAt: input.cachedAt,
     revision: input.revision,
   });
