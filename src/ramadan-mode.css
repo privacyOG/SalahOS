@@ -33,8 +33,8 @@
   margin: 0;
 }
 
-.ramadan-mode-eyebrow {
-  margin-bottom: var(--salah-space-1, 0.25rem) !important;
+.ramadan-mode-copy .ramadan-mode-eyebrow {
+  margin-bottom: var(--salah-space-1, 0.25rem);
   color: var(--salah-fg-accent, currentColor);
   font-size: var(--salah-text-xs, 0.82rem);
   font-weight: 800;
@@ -69,6 +69,75 @@
   white-space: nowrap;
 }
 
+.ramadan-meal-grid {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--salah-space-3, 0.75rem);
+}
+
+.ramadan-meal-card {
+  min-width: 0;
+  padding: var(--salah-space-4, 1rem);
+  display: grid;
+  align-content: start;
+  gap: var(--salah-space-2, 0.5rem);
+  border: 1px solid var(--salah-border-default, rgba(127, 127, 127, 0.25));
+  border-radius: var(--salah-radius-md, 1rem);
+  background: var(--salah-bg-surface, rgba(127, 127, 127, 0.08));
+}
+
+.ramadan-meal-card-heading {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--salah-space-3, 0.75rem);
+}
+
+.ramadan-meal-card-heading span {
+  color: var(--salah-fg-secondary, inherit);
+  font-weight: 700;
+}
+
+.ramadan-meal-card-heading strong {
+  color: var(--salah-fg-primary, inherit);
+  font-size: var(--salah-text-xl, 1.65rem);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.ramadan-meal-card small {
+  color: var(--salah-fg-tertiary, inherit);
+  line-height: 1.45;
+}
+
+.ramadan-meal-source {
+  font-weight: 700;
+}
+
+.ramadan-imsak-control {
+  display: grid;
+  gap: var(--salah-space-1, 0.25rem);
+  color: var(--salah-fg-secondary, inherit);
+  font-size: var(--salah-text-sm, 0.94rem);
+  font-weight: 700;
+}
+
+.ramadan-imsak-control select {
+  width: 100%;
+  min-height: 2.75rem;
+}
+
+@media (max-width: 900px) {
+  .ramadan-meal-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .ramadan-imsak-card {
+    grid-column: 1 / -1;
+  }
+}
+
 @media (max-width: 640px) {
   .ramadan-mode-panel {
     width: min(100% - 1rem, 1120px);
@@ -78,5 +147,18 @@
   .ramadan-mode-year {
     grid-column: 2;
     justify-self: start;
+  }
+
+  .ramadan-meal-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .ramadan-imsak-card {
+    grid-column: auto;
+  }
+
+  .ramadan-meal-card-heading {
+    align-items: flex-start;
+    flex-direction: column;
   }
 }
