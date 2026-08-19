@@ -112,8 +112,13 @@ describe('managed signage scenes', () => {
 
     expect(() =>
       createSignageScene({
-        ...scene,
+        sceneId: 'ramadan-countdown-invalid',
+        mosqueId: 'masjid-main',
+        kind: 'countdown',
+        title: 'Iftar countdown',
+        offlineFallback: 'retain-last-good',
         targetAt: '2026-08-19 08:30',
+        label: 'Time until Iftar',
       }),
     ).toThrow('Countdown target must be an ISO-8601 UTC timestamp');
   });
