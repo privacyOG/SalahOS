@@ -61,7 +61,8 @@ function readPanelState() {
 export function QiblaCompassPanel() {
   const [panelState, setPanelState] = useState(readPanelState);
   const [heading, setHeading] = useState<CompassHeadingSample | null>(null);
-  const [permission, setPermission] = useState<CompassPermissionState | null>(null);
+  const [permission, setPermission] =
+    useState<CompassPermissionState | null>(null);
   const [compassActive, setCompassActive] = useState(false);
   const removeListenerRef = useRef<(() => void) | null>(null);
   const locale: Locale = panelState.locale;
@@ -188,10 +189,7 @@ function getTurn(
   return signedTurnToQibla(qiblaDegrees, headingDegrees);
 }
 
-function formatTurn(
-  turn: number,
-  text: (typeof copy)[Locale],
-): string {
+function formatTurn(turn: number, text: (typeof copy)[Locale]): string {
   if (Math.abs(turn) <= 5) {
     return text.aligned;
   }
