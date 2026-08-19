@@ -79,10 +79,7 @@ function assertClock(value: string, label: string): string {
   return normalized;
 }
 
-function normalizePrayer(
-  value: MonthlyTimetablePrayer,
-  label: string,
-): MonthlyTimetablePrayer {
+function normalizePrayer(value: MonthlyTimetablePrayer, label: string): MonthlyTimetablePrayer {
   return Object.freeze({
     start: assertClock(value.start, `${label} start`),
     iqamah: value.iqamah === null ? null : assertClock(value.iqamah, `${label} Iqamah`),
@@ -122,9 +119,7 @@ export function createMonthlyTimetable(input: MonthlyTimetableInput): MonthlyTim
     return Object.freeze({
       date: day.date,
       hijriLabel:
-        day.hijriLabel === null
-          ? null
-          : normalizeText(day.hijriLabel, 'Hijri date label', 80),
+        day.hijriLabel === null ? null : normalizeText(day.hijriLabel, 'Hijri date label', 80),
       prayers: Object.freeze(prayers),
       jumuah: Object.freeze(day.jumuah.map(normalizeJumuah)),
     });
@@ -164,9 +159,7 @@ export function monthlyTimetableToCsv(timetable: MonthlyTimetable): string {
     'Jumuah',
   ];
   const rows = timetable.days.map((day) => {
-    const jumuah = day.jumuah
-      .map((session) => `${session.label}: ${session.start}`)
-      .join(' | ');
+    const jumuah = day.jumuah.map((session) => `${session.label}: ${session.start}`).join(' | ');
     return [
       day.date,
       day.hijriLabel ?? '',
