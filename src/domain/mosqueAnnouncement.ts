@@ -1,9 +1,5 @@
 export type AnnouncementLifecycleState =
-  | 'draft'
-  | 'scheduled'
-  | 'published'
-  | 'expired'
-  | 'archived';
+  'draft' | 'scheduled' | 'published' | 'expired' | 'archived';
 
 export type AnnouncementSurface = 'mobile' | 'web' | 'display';
 export type AnnouncementPriority = 'normal' | 'priority';
@@ -95,13 +91,19 @@ function normalizeRemoteUrl(value: string | null, label: string): string | null 
   } catch {
     throw new RangeError(`${label} must be a valid HTTP(S) URL`);
   }
-  if ((parsed.protocol !== 'https:' && parsed.protocol !== 'http:') || parsed.username || parsed.password) {
+  if (
+    (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') ||
+    parsed.username ||
+    parsed.password
+  ) {
     throw new RangeError(`${label} must be a credential-free HTTP(S) URL`);
   }
   return parsed.toString();
 }
 
-function normalizeSurfaces(surfaces: readonly AnnouncementSurface[]): readonly AnnouncementSurface[] {
+function normalizeSurfaces(
+  surfaces: readonly AnnouncementSurface[],
+): readonly AnnouncementSurface[] {
   const allowed: readonly AnnouncementSurface[] = ['mobile', 'web', 'display'];
   const normalized = allowed.filter((surface) => surfaces.includes(surface));
   if (normalized.length === 0) {
