@@ -1,0 +1,119 @@
+.managed-display {
+  min-height: 100%;
+  background: #08130f;
+  color: #f7f4e8;
+  outline: none;
+  overflow: hidden;
+}
+
+.managed-display__frame {
+  box-sizing: border-box;
+  display: grid;
+  gap: clamp(1rem, 2vw, 2.5rem);
+  min-height: 100vh;
+  padding: clamp(1.25rem, 3vw, 4rem);
+  transform: translate(var(--display-shift), var(--display-shift));
+  transition: transform 800ms ease-in-out;
+}
+
+.managed-display__header,
+.managed-display__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+
+.managed-display__eyebrow,
+.managed-display__prayer span,
+.managed-display__recovery {
+  opacity: 0.72;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.managed-display h1,
+.managed-display h2,
+.managed-display p {
+  margin: 0;
+}
+
+.managed-display h1 {
+  font-size: clamp(2rem, 4vw, 5rem);
+}
+
+.managed-display__clock {
+  display: grid;
+  justify-items: end;
+}
+
+.managed-display__clock strong {
+  font-size: clamp(3rem, 7vw, 8rem);
+  line-height: 0.9;
+}
+
+.managed-display__headline {
+  font-size: clamp(1.25rem, 2.2vw, 2.8rem);
+  font-weight: 600;
+}
+
+.managed-display__prayers {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(0.75rem, 1.5vw, 1.5rem);
+}
+
+.managed-display__prayer {
+  display: grid;
+  gap: 1rem;
+  padding: clamp(1rem, 2vw, 2rem);
+  border: 1px solid rgb(255 255 255 / 18%);
+  border-radius: 1.25rem;
+  background: rgb(255 255 255 / 6%);
+}
+
+.managed-display__prayer[data-active='true'] {
+  background: rgb(255 255 255 / 15%);
+  border-width: 2px;
+}
+
+.managed-display__prayer h2 {
+  font-size: clamp(1.6rem, 2.8vw, 3.4rem);
+}
+
+.managed-display__prayer div {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.managed-display__prayer strong {
+  font-size: clamp(1.7rem, 3.1vw, 3.8rem);
+}
+
+.managed-display[data-profile='portrait-foyer'] .managed-display__prayers {
+  grid-template-columns: 1fr;
+}
+
+.managed-display[data-profile='portrait-foyer'] .managed-display__prayer {
+  grid-template-columns: 1fr 1fr 1fr;
+  align-items: center;
+}
+
+.managed-display[data-profile='touch-display-2'] .managed-display__frame {
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.managed-display[data-profile='touch-display-2'] .managed-display__prayers {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.managed-display[data-profile='touch-display-2'] .managed-display__prayer:last-child {
+  grid-column: 1 / -1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .managed-display__frame {
+    transition: none;
+  }
+}
