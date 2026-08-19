@@ -25,7 +25,9 @@ function preferences(
   };
 }
 
-function request(overrides: Partial<CommunityNotificationRequest> = {}): CommunityNotificationRequest {
+function request(
+  overrides: Partial<CommunityNotificationRequest> = {},
+): CommunityNotificationRequest {
   return {
     notificationId: 'announcement-2026-08-19',
     mosqueId: 'masjid-al-noor:sydney',
@@ -69,15 +71,15 @@ describe('community notification publishing', () => {
   });
 
   it('supports overnight and daytime quiet-hour windows', () => {
-    expect(
-      isWithinQuietHours({ enabled: true, startsAt: '22:00', endsAt: '07:00' }, '23:30'),
-    ).toBe(true);
-    expect(
-      isWithinQuietHours({ enabled: true, startsAt: '22:00', endsAt: '07:00' }, '12:00'),
-    ).toBe(false);
-    expect(
-      isWithinQuietHours({ enabled: true, startsAt: '13:00', endsAt: '15:00' }, '14:00'),
-    ).toBe(true);
+    expect(isWithinQuietHours({ enabled: true, startsAt: '22:00', endsAt: '07:00' }, '23:30')).toBe(
+      true,
+    );
+    expect(isWithinQuietHours({ enabled: true, startsAt: '22:00', endsAt: '07:00' }, '12:00')).toBe(
+      false,
+    );
+    expect(isWithinQuietHours({ enabled: true, startsAt: '13:00', endsAt: '15:00' }, '14:00')).toBe(
+      true,
+    );
   });
 
   it('honours category preferences before delivery', () => {
