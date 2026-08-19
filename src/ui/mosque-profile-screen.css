@@ -1,0 +1,105 @@
+.mosque-profile-screen {
+  display: grid;
+  gap: 1.5rem;
+  margin: 0 auto;
+  max-width: 72rem;
+  padding: 1.5rem;
+}
+
+.mosque-profile-screen__hero,
+.mosque-profile-screen__next,
+.mosque-profile-screen section {
+  border: 1px solid var(--color-border, #d6d6d6);
+  border-radius: 1rem;
+  padding: 1.25rem;
+}
+
+.mosque-profile-screen__hero h1,
+.mosque-profile-screen section h2 {
+  margin-block: 0.25rem 0.75rem;
+}
+
+.mosque-profile-screen__eyebrow {
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.mosque-profile-screen__provenance,
+.mosque-profile-screen__actions,
+.mosque-profile-screen__facilities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.mosque-profile-screen__provenance span,
+.mosque-profile-screen__facilities li {
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  padding: 0.35rem 0.7rem;
+}
+
+.mosque-profile-screen__next {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.mosque-profile-screen__next strong {
+  font-size: clamp(1.75rem, 5vw, 3.5rem);
+}
+
+.mosque-profile-screen__prayers {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(9rem, 1fr));
+}
+
+.mosque-profile-screen__prayer,
+.mosque-profile-screen__cards article {
+  border: 1px solid var(--color-border, #d6d6d6);
+  border-radius: 0.75rem;
+  padding: 1rem;
+}
+
+.mosque-profile-screen__prayer[data-active='true'] {
+  border-width: 3px;
+}
+
+.mosque-profile-screen__prayer div {
+  display: flex;
+  justify-content: space-between;
+}
+
+.mosque-profile-screen__cards {
+  display: grid;
+  gap: 0.75rem;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+}
+
+.mosque-profile-screen__facilities {
+  list-style: none;
+  padding: 0;
+}
+
+.mosque-profile-screen__actions a {
+  border: 1px solid currentColor;
+  border-radius: 0.75rem;
+  font-weight: 700;
+  padding: 0.65rem 0.9rem;
+  text-decoration: none;
+}
+
+@media (max-width: 40rem) {
+  .mosque-profile-screen {
+    padding: 1rem;
+  }
+
+  .mosque-profile-screen__next {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
