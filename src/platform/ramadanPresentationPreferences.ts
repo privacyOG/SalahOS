@@ -3,9 +3,12 @@ import type { KeyValueStorage } from './settingsStorage';
 export const RAMADAN_PRESENTATION_STORAGE_KEY = 'salahos.ramadan-presentation';
 const RAMADAN_PRESENTATION_SCHEMA_VERSION = 1;
 
+export const RAMADAN_IMSAK_OFFSET_OPTIONS = [5, 10, 15, 20, 30] as const;
+export type RamadanImsakOffset = (typeof RAMADAN_IMSAK_OFFSET_OPTIONS)[number];
+
 export interface RamadanPresentationPreferences {
   readonly version: 1;
-  readonly imsakMinutesBeforeFajr: number | null;
+  readonly imsakMinutesBeforeFajr: RamadanImsakOffset | null;
 }
 
 export const defaultRamadanPresentationPreferences: RamadanPresentationPreferences = Object.freeze({
@@ -13,14 +16,19 @@ export const defaultRamadanPresentationPreferences: RamadanPresentationPreferenc
   imsakMinutesBeforeFajr: null,
 });
 
-function parseImsakOffset(value: unknown): number | null {
+function parseImsakOffset(value: unknown): RamadanImsakOffset | null {
   if (value === null || value === undefined) {
     return null;
   }
-  if (!Number.isInteger(value) || Number(value) < 0 || Number(value) > 240) {
-    throw new RangeError('Imsak offset must be an integer between 0 and 240 minutes');
+
+  const offset = Number(value);
+  if (
+    !Number.isInteger(offset) ||
+    !RAMADAN_IMSAK_OFFSET_OPTIONS.includes(offset as RamadanImsakOffset)
+  ) {
+    throw new RangeError('Imsak offset must be one of the supported explicit display choices');
   }
-  return Number(value);
+  return offset as RamadanImsakOffset;
 }
 
 export function parseRamadanPresentationPreferences(
