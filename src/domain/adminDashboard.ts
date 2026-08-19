@@ -120,9 +120,9 @@ export function createAdminDashboardStatus(input: AdminDashboardInput): AdminDas
   };
   for (const display of displays) displayCounts[display.state] += 1;
 
-  const errors = input.errors.map(normalizeError).sort((left, right) =>
-    right.occurredAt.localeCompare(left.occurredAt),
-  );
+  const errors = input.errors
+    .map(normalizeError)
+    .sort((left, right) => right.occurredAt.localeCompare(left.occurredAt));
   const health: AdminDashboardHealth =
     errors.length > 0
       ? 'error'
