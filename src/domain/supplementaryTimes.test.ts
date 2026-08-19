@@ -3,6 +3,7 @@ import { getCalculationMethod } from './methods';
 import { calculatePrayerSchedule } from './prayerEngine';
 import {
   calculateImsak,
+  calculateImsakFromDisplayedFajr,
   calculateIshraqAfterSunrise,
   calculateIslamicMidnight,
   calculateLastThirdStart,
@@ -44,6 +45,15 @@ describe('supplementary prayer times', () => {
     expect(calculateIshraqAfterSunrise(today, 15).provenance).toContain('15 minutes');
   });
 
+  it('derives Imsak from the Fajr value actually displayed to the user', () => {
+    expect(calculateImsakFromDisplayedFajr(320, 10)).toEqual({
+      localMinutes: 310,
+      provenance: 'Configured 10 minutes before displayed Fajr',
+    });
+    expect(calculateImsakFromDisplayedFajr(5, 10).localMinutes).toBe(1_435);
+    expect(calculateImsakFromDisplayedFajr(null, 10).localMinutes).toBeNull();
+  });
+
   it('calculates Islamic midnight and final-third start across civil midnight', () => {
     const midnight = expectAvailable(calculateIslamicMidnight(today, tomorrow).localMinutes);
     const lastThird = expectAvailable(calculateLastThirdStart(today, tomorrow).localMinutes);
@@ -62,6 +72,7 @@ describe('supplementary prayer times', () => {
 
   it('rejects excessive configured offsets', () => {
     expect(() => calculateImsak(today, 241)).toThrow(RangeError);
+    expect(() => calculateImsakFromDisplayedFajr(320, -1)).toThrow(RangeError);
     expect(() => calculateIshraqAfterSunrise(today, -1)).toThrow(RangeError);
   });
 });

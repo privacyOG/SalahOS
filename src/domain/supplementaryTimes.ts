@@ -25,19 +25,38 @@ function available(minutes: number | null): number | null {
 
 /**
  * Optional Imsak/Suhur cutoff expressed explicitly as a caller-selected number
- * of minutes before that day's displayed Fajr. No hidden default is applied.
+ * of minutes before the Fajr time that is actually being presented to the user.
+ * This source-neutral boundary lets calculated and local-mosque Fajr times use
+ * the same transparent rule without applying a hidden default.
+ */
+export function calculateImsakFromDisplayedFajr(
+  displayedFajrLocalMinutes: number | null,
+  minutesBeforeFajr: number,
+): SupplementaryTime {
+  requireOffset(minutesBeforeFajr, 'Imsak offset');
+
+  return {
+    localMinutes:
+      displayedFajrLocalMinutes === null
+        ? null
+        : normalizeDayMinutes(displayedFajrLocalMinutes - minutesBeforeFajr),
+    provenance: `Configured ${String(minutesBeforeFajr)} minutes before displayed Fajr`,
+  };
+}
+
+/**
+ * Backward-compatible schedule helper for calculated prayer schedules. New
+ * source-aware presentation should call calculateImsakFromDisplayedFajr with
+ * the resolved Fajr value that is visible to the user.
  */
 export function calculateImsak(
   schedule: PrayerSchedule,
   minutesBeforeFajr: number,
 ): SupplementaryTime {
-  requireOffset(minutesBeforeFajr, 'Imsak offset');
-  const fajr = available(schedule.prayers.fajr.roundedLocalMinutes);
-
-  return {
-    localMinutes: fajr === null ? null : normalizeDayMinutes(fajr - minutesBeforeFajr),
-    provenance: `Configured ${String(minutesBeforeFajr)} minutes before displayed Fajr`,
-  };
+  return calculateImsakFromDisplayedFajr(
+    available(schedule.prayers.fajr.roundedLocalMinutes),
+    minutesBeforeFajr,
+  );
 }
 
 /**
