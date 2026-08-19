@@ -59,7 +59,9 @@ export function buildPublicEmbedSnippet(
   return `<iframe src="${src}" title="${escapeAttribute(normalizedTitle)}" loading="lazy" referrerpolicy="no-referrer" sandbox="allow-same-origin" style="width:100%;border:0;min-height:320px" />`;
 }
 
-export function publicEmbedSecurityPolicy(allowedOrigins: readonly string[]): PublicEmbedSecurityPolicy {
+export function publicEmbedSecurityPolicy(
+  allowedOrigins: readonly string[],
+): PublicEmbedSecurityPolicy {
   const normalized = allowedOrigins.map((origin) => {
     const parsed = new URL(origin);
     if (parsed.protocol !== 'https:' || parsed.username !== '' || parsed.password !== '') {
