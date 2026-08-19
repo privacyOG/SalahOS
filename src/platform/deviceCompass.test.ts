@@ -82,9 +82,7 @@ describe('device compass', () => {
     await expect(requestCompassPermission(() => Promise.resolve('granted'))).resolves.toBe(
       'granted',
     );
-    await expect(requestCompassPermission(() => Promise.resolve('denied'))).resolves.toBe(
-      'denied',
-    );
+    await expect(requestCompassPermission(() => Promise.resolve('denied'))).resolves.toBe('denied');
     await expect(
       requestCompassPermission(() => Promise.reject(new Error('blocked'))),
     ).resolves.toBe('denied');
