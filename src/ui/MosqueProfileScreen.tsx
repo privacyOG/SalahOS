@@ -87,8 +87,14 @@ export function MosqueProfileScreen({
               role="listitem"
             >
               <h3>{prayer.name}</h3>
-              <div><span>Start</span><strong>{prayer.start}</strong></div>
-              <div><span>Iqamah</span><strong>{prayer.iqamah ?? '—'}</strong></div>
+              <div>
+                <span>Start</span>
+                <strong>{prayer.start}</strong>
+              </div>
+              <div>
+                <span>Iqamah</span>
+                <strong>{prayer.iqamah ?? '—'}</strong>
+              </div>
             </article>
           ))}
         </div>
@@ -128,7 +134,9 @@ export function MosqueProfileScreen({
         <h2 id="details-title">Mosque details</h2>
         {facilities.length > 0 ? (
           <ul className="mosque-profile-screen__facilities">
-            {facilities.map((facility) => <li key={facility.id}>{facility.label}</li>)}
+            {facilities.map((facility) => (
+              <li key={facility.id}>{facility.label}</li>
+            ))}
           </ul>
         ) : null}
         {contactLabel ? <p>{contactLabel}</p> : null}
