@@ -31,9 +31,7 @@ function parseImsakOffset(value: unknown): RamadanImsakOffset | null {
   return offset as RamadanImsakOffset;
 }
 
-export function parseRamadanPresentationPreferences(
-  raw: string,
-): RamadanPresentationPreferences {
+export function parseRamadanPresentationPreferences(raw: string): RamadanPresentationPreferences {
   const parsed: unknown = JSON.parse(raw);
   if (typeof parsed !== 'object' || parsed === null || Array.isArray(parsed)) {
     throw new TypeError('Ramadan presentation preferences must be an object');
@@ -41,7 +39,9 @@ export function parseRamadanPresentationPreferences(
 
   const value = parsed as Record<string, unknown>;
   if (value.version !== RAMADAN_PRESENTATION_SCHEMA_VERSION) {
-    throw new RangeError(`Unsupported Ramadan presentation schema version: ${String(value.version)}`);
+    throw new RangeError(
+      `Unsupported Ramadan presentation schema version: ${String(value.version)}`,
+    );
   }
 
   return Object.freeze({

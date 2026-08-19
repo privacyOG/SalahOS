@@ -40,10 +40,7 @@ export function deriveRamadanMealTimes(input: {
   const imsak =
     input.imsakMinutesBeforeFajr === null
       ? null
-      : calculateImsakFromDisplayedFajr(
-          input.fajr.localMinutes,
-          input.imsakMinutesBeforeFajr,
-        );
+      : calculateImsakFromDisplayedFajr(input.fajr.localMinutes, input.imsakMinutesBeforeFajr);
 
   return Object.freeze({
     suhurEnd: Object.freeze({
@@ -56,7 +53,8 @@ export function deriveRamadanMealTimes(input: {
       source: input.fajr.source,
       configuredMinutesBeforeFajr: input.imsakMinutesBeforeFajr,
       provenance:
-        imsak?.provenance ?? 'No optional Imsak offset configured; displayed Fajr remains Suhur end',
+        imsak?.provenance ??
+        'No optional Imsak offset configured; displayed Fajr remains Suhur end',
     }),
     iftar: Object.freeze({
       localMinutes: input.maghrib.localMinutes,

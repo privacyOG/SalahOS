@@ -87,8 +87,7 @@ export function RamadanModePanel() {
 
   const handleImsakOffsetChange = (event: ChangeEvent<HTMLSelectElement>) => {
     const value = event.currentTarget.value;
-    const imsakMinutesBeforeFajr =
-      value === 'none' ? null : (Number(value) as RamadanImsakOffset);
+    const imsakMinutesBeforeFajr = value === 'none' ? null : (Number(value) as RamadanImsakOffset);
     const nextPreferences: RamadanPresentationPreferences = {
       version: 1,
       imsakMinutesBeforeFajr,
@@ -209,7 +208,9 @@ function formatMealTime(
   timeFormat: PersistedSettings['timeFormat'],
   text: RamadanTranslationCopy,
 ): string {
-  return localMinutes === null ? text.unavailable : formatLocalTime(localMinutes, locale, timeFormat);
+  return localMinutes === null
+    ? text.unavailable
+    : formatLocalTime(localMinutes, locale, timeFormat);
 }
 
 function sourceLabel(source: PrayerSourceMode, text: RamadanTranslationCopy): string {
@@ -249,16 +250,19 @@ function getCurrentRamadanMealTimes(
     return null;
   }
 
-  const dashboardResult = buildPrayerDashboardResult({
+  const dashboardInput = {
     instant,
     coordinates: panelState.location.coordinates,
-    timeZone: panelState.location.timeZone,
     method: calculationMethods[panelState.calculationMethodId],
     asrConvention: panelState.asrConvention,
     highLatitudeRule: panelState.highLatitudeRule,
     adjustments: panelState.prayerAdjustments,
     hijriCorrectionDays: panelState.hijriCorrectionDays,
-  });
+    ...(panelState.location.timeZone === undefined
+      ? {}
+      : { timeZone: panelState.location.timeZone }),
+  };
+  const dashboardResult = buildPrayerDashboardResult(dashboardInput);
 
   if (!dashboardResult.ok) {
     return null;
