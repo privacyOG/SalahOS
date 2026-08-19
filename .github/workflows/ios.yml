@@ -26,9 +26,10 @@ jobs:
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
 
-      - name: Repository quality gate
-        run: npm run check
-
+      # Repository-wide format/lint/security/test checks are owned by the
+      # permanent Quality Gate workflow. Keep this job platform-specific so a
+      # repository lint failure is reported once instead of masquerading as an
+      # iOS build failure as well.
       - name: Build production web assets
         run: npm run build
 
