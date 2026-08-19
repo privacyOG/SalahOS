@@ -8,7 +8,7 @@ describe('public API contract', () => {
 
     expect(policy.version).toBe('v1');
     expect(policy.endpoints).toHaveLength(3);
-    expect(policy.endpoints.every((endpoint) => endpoint.method === 'GET')).toBe(true);
+    expect(policy.endpoints.map((endpoint) => endpoint.method)).toEqual(['GET', 'GET', 'GET']);
     expect(policy.endpoints.every((endpoint) => endpoint.cacheControl.startsWith('public'))).toBe(
       true,
     );
@@ -36,12 +36,14 @@ describe('public API contract', () => {
   });
 
   it('forbids private administration and member fields in public payloads', () => {
-    expect(() => assertPublicApiPayload({ mosqueId: 'masjid.one', prayers: {} })).not.toThrow();
-    expect(() => assertPublicApiPayload({ mosqueId: 'masjid.one', members: [] })).toThrow(
-      /forbidden field: members/u,
-    );
-    expect(() => assertPublicApiPayload({ pairingCodes: [] })).toThrow(
-      /forbidden field: pairingCodes/u,
-    );
+    expect(() => {
+      assertPublicApiPayload({ mosqueId: 'masjid.one', prayers: {} });
+    }).not.toThrow();
+    expect(() => {
+      assertPublicApiPayload({ mosqueId: 'masjid.one', members: [] });
+    }).toThrow(/forbidden field: members/u);
+    expect(() => {
+      assertPublicApiPayload({ pairingCodes: [] });
+    }).toThrow(/forbidden field: pairingCodes/u);
   });
 });
