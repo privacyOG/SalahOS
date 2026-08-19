@@ -62,7 +62,9 @@ describe('public embeds', () => {
       'Masjid One next prayer',
     );
 
-    expect(snippet).toContain('https://salahos.example/embed/next-prayer/masjid.one?theme=dark&lang=en');
+    expect(snippet).toContain(
+      'https://salahos.example/embed/next-prayer/masjid.one?theme=dark&lang=en',
+    );
     expect(snippet).toContain('sandbox="allow-same-origin"');
     expect(snippet).toContain('referrerpolicy="no-referrer"');
   });
