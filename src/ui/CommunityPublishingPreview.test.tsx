@@ -89,9 +89,7 @@ describe('community publishing preview', () => {
       surfaces: ['web', 'display'],
     });
 
-    render(
-      <CommunityPublishingPreview kind="event" event={event} surface="web" locale="en" />,
-    );
+    render(<CommunityPublishingPreview kind="event" event={event} surface="web" locale="en" />);
 
     expect(screen.getByRole('heading', { name: 'Community Iftar' })).toBeTruthy();
     expect(screen.getByText('Main prayer hall')).toBeTruthy();
