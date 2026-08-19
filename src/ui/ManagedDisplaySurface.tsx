@@ -40,7 +40,7 @@ export function ManagedDisplaySurface({
     }
   };
 
-  const frameStyle = { '--display-shift': `${burnInShift}px` } as CSSProperties;
+  const frameStyle = { '--display-shift': `${String(burnInShift)}px` } as CSSProperties;
 
   return (
     <section
