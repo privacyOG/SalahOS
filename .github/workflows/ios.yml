@@ -26,6 +26,12 @@ jobs:
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
 
+      - name: Print exact Prettier diff for notification tests
+        run: |
+          npx prettier --write src/domain/communityNotification.test.ts
+          git diff -- src/domain/communityNotification.test.ts
+          exit 1
+
       - name: Repository quality gate
         run: npm run check
 
