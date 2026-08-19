@@ -20,7 +20,7 @@ export interface MonthlyTimetableDayInput {
   readonly jumuah: readonly MonthlyTimetableJumuah[];
 }
 
-export interface MonthlyTimetableDay extends MonthlyTimetableDayInput {}
+export type MonthlyTimetableDay = MonthlyTimetableDayInput;
 
 export interface MonthlyTimetable {
   readonly mosqueId: string;
