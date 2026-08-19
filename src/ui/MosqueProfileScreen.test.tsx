@@ -17,7 +17,12 @@ const baseProps = {
   ],
   jumuahSessions: [{ label: 'First Jumu’ah', khutbah: '12:20', start: '12:30' }],
   communityItems: [
-    { id: 'announcement-1', kind: 'announcement' as const, title: 'Community dinner', meta: 'Friday' },
+    {
+      id: 'announcement-1',
+      kind: 'announcement' as const,
+      title: 'Community dinner',
+      meta: 'Friday',
+    },
     { id: 'event-1', kind: 'event' as const, title: 'Weekend class', meta: 'Saturday 10:00' },
   ],
   facilities: [{ id: 'parking', label: 'Parking' }],
