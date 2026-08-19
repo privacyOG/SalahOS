@@ -85,9 +85,7 @@ describe('managed signage playlists and schedules', () => {
     });
 
     expect(resolveSignageSchedule([rule], context).winner?.playlistId).toBe('jumuah-reminder');
-    expect(
-      resolveSignageSchedule([rule], { ...context, localClock: '12:20' }).winner,
-    ).toBeNull();
+    expect(resolveSignageSchedule([rule], { ...context, localClock: '12:20' }).winner).toBeNull();
   });
 
   it('resolves conflicts deterministically for Jumuah and Ramadan overrides', () => {
