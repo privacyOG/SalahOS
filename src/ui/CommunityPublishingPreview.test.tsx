@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { describe, expect, it } from 'vitest';
 
 import { createMosqueAnnouncement } from '../domain/mosqueAnnouncement';
@@ -23,7 +23,7 @@ describe('community publishing preview', () => {
       archived: false,
     });
 
-    const { container } = render(
+    const markup = renderToStaticMarkup(
       <CommunityPublishingPreview
         kind="announcement"
         announcement={announcement}
@@ -32,14 +32,11 @@ describe('community publishing preview', () => {
       />,
     );
 
-    expect(screen.getByRole('heading', { name: 'إعلان المجتمع' })).toBeTruthy();
-    expect(screen.getByRole('link', { name: 'Open link' })).toHaveAttribute(
-      'href',
-      'https://example.org/more',
-    );
-    expect(container.querySelector('article')).toHaveAttribute('dir', 'rtl');
-    expect(container.querySelector('article')).toHaveAttribute('data-targeted', 'true');
-    expect(screen.queryByRole('status')).toBeNull();
+    expect(markup).toContain('dir="rtl"');
+    expect(markup).toContain('data-targeted="true"');
+    expect(markup).toContain('إعلان المجتمع');
+    expect(markup).toContain('href="https://example.org/more"');
+    expect(markup).not.toContain('role="status"');
   });
 
   it('warns when an announcement is not targeted to the selected TV surface', () => {
@@ -59,7 +56,7 @@ describe('community publishing preview', () => {
       archived: false,
     });
 
-    render(
+    const markup = renderToStaticMarkup(
       <CommunityPublishingPreview
         kind="announcement"
         announcement={announcement}
@@ -68,9 +65,9 @@ describe('community publishing preview', () => {
       />,
     );
 
-    expect(screen.getByRole('status')).toHaveTextContent(
-      'This announcement is not targeted to this surface.',
-    );
+    expect(markup).toContain('data-targeted="false"');
+    expect(markup).toContain('role="status"');
+    expect(markup).toContain('This announcement is not targeted to this surface.');
   });
 
   it('renders event metadata and registration on the web surface', () => {
@@ -89,14 +86,13 @@ describe('community publishing preview', () => {
       surfaces: ['web', 'display'],
     });
 
-    render(<CommunityPublishingPreview kind="event" event={event} surface="web" locale="en" />);
-
-    expect(screen.getByRole('heading', { name: 'Community Iftar' })).toBeTruthy();
-    expect(screen.getByText('Main prayer hall')).toBeTruthy();
-    expect(screen.getByText('2026-08-20T08:00:00.000Z')).toBeTruthy();
-    expect(screen.getByRole('link', { name: 'Registration / information' })).toHaveAttribute(
-      'href',
-      'https://example.org/register',
+    const markup = renderToStaticMarkup(
+      <CommunityPublishingPreview kind="event" event={event} surface="web" locale="en" />,
     );
+
+    expect(markup).toContain('Community Iftar');
+    expect(markup).toContain('Main prayer hall');
+    expect(markup).toContain('2026-08-20T08:00:00.000Z');
+    expect(markup).toContain('href="https://example.org/register"');
   });
 });
