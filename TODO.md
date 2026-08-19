@@ -773,9 +773,9 @@
 
 ## 21. Phase 2 / future roadmap
 
-- [ ] Qibla bearing from current coordinates
-- [ ] Device compass integration where supported
-- [ ] Ramadan mode
+- [x] Qibla bearing from current coordinates
+- [~] Device compass integration where supported
+- [x] Ramadan mode
 - [ ] Suhur/Imsak and Iftar presentation
 - [ ] Taraweeh timetable support
 - [ ] Mosque announcements/events
