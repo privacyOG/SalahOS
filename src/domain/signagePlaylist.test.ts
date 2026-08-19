@@ -161,9 +161,16 @@ describe('managed signage playlists and schedules', () => {
 
     expect(() =>
       createSignageScheduleRule({
-        ...ramadan,
+        ruleId: 'invalid-ramadan-range',
+        playlistId: 'ramadan-main',
+        kind: 'time-window',
+        priority: 100,
+        context: 'ramadan',
         startDate: '2026-03-20',
         endDate: '2026-03-19',
+        weekdays: [],
+        startsAt: '17:00',
+        endsAt: '23:59',
       }),
     ).toThrow('Schedule end date cannot precede start date');
   });
