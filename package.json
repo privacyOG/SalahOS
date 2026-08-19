@@ -15,7 +15,7 @@
     "test:watch": "vitest",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "format:check": "prettier --write src/ui/QiblaCompassPanel.tsx && git diff -- src/ui/QiblaCompassPanel.tsx",
+    "format:check": "prettier --check .",
     "docs:links": "node scripts/check-doc-links.mjs",
     "security:sensitive-files": "node scripts/check-sensitive-files.mjs",
     "security:native-permissions": "node scripts/check-native-permissions.mjs",
