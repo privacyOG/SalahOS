@@ -9,12 +9,15 @@ describe('Qibla bearing', () => {
     ['London', 51.5074, -0.1278, 118.99],
     ['New York', 40.7128, -74.006, 58.48],
     ['Jakarta', -6.2088, 106.8456, 295.15],
-  ])('calculates the initial great-circle bearing from %s', (_name, latitude, longitude, expected) => {
-    const result = calculateQiblaBearing(createCoordinates(latitude, longitude));
+  ])(
+    'calculates the initial great-circle bearing from %s',
+    (_name, latitude, longitude, expected) => {
+      const result = calculateQiblaBearing(createCoordinates(latitude, longitude));
 
-    expect(result.degreesFromTrueNorth).toBeCloseTo(expected, 2);
-    expect(result.destination).toEqual(KAABA_COORDINATES);
-  });
+      expect(result.degreesFromTrueNorth).toBeCloseTo(expected, 2);
+      expect(result.destination).toEqual(KAABA_COORDINATES);
+    },
+  );
 
   it('returns a stable zero bearing at the Kaaba coordinate itself', () => {
     expect(calculateQiblaBearing(KAABA_COORDINATES).degreesFromTrueNorth).toBe(0);
