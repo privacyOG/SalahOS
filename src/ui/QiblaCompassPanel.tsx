@@ -24,7 +24,8 @@ const copy = {
     unsupported:
       'A north-referenced device compass is not available here. Use the bearing shown above.',
     denied: 'Compass permission was not granted. Use the bearing shown above.',
-    waiting: 'Move the device gently while waiting for a reliable north-referenced heading.',
+    waiting:
+      'Move the device gently while waiting for a reliable north-referenced heading.',
     heading: 'Device heading',
     aligned: 'Aligned with Qibla',
     clockwise: 'Turn clockwise',
@@ -63,7 +64,8 @@ function readPanelState() {
 export function QiblaCompassPanel() {
   const [panelState, setPanelState] = useState(readPanelState);
   const [heading, setHeading] = useState<CompassHeadingSample | null>(null);
-  const [permission, setPermission] = useState<CompassPermissionState | null>(null);
+  const [permission, setPermission] =
+    useState<CompassPermissionState | null>(null);
   const [compassActive, setCompassActive] = useState(false);
   const removeListenerRef = useRef<(() => void) | null>(null);
   const locale: Locale = panelState.locale;
@@ -71,24 +73,38 @@ export function QiblaCompassPanel() {
 
   const qibla = useMemo(
     () =>
-      panelState.coordinates === null ? null : calculateQiblaBearing(panelState.coordinates),
+      panelState.coordinates === null
+        ? null
+        : calculateQiblaBearing(panelState.coordinates),
     [panelState.coordinates],
   );
 
   const turn =
     qibla === null || heading === null
       ? null
-      : signedTurnToQibla(qibla.degreesFromTrueNorth, heading.headingDegrees);
+      : signedTurnToQibla(
+          qibla.degreesFromTrueNorth,
+          heading.headingDegrees,
+        );
   const bearingText =
-    qibla === null ? null : `${qibla.degreesFromTrueNorth.toFixed(1)}${text.degrees}`;
-  const headingText =
-    heading === null ? null : `${text.heading}: ${heading.headingDegrees.toFixed(1)}${text.degrees}`;
-  const turnText =
-    turn === null
+    qibla === null
       ? null
-      : Math.abs(turn) <= 5
-        ? text.aligned
-        : `${turn > 0 ? text.clockwise : text.counterclockwise} ${Math.abs(turn).toFixed(1)}${text.degrees}`;
+      : `${qibla.degreesFromTrueNorth.toFixed(1)}${text.degrees}`;
+  const headingText =
+    heading === null
+      ? null
+      : `${text.heading}: ${heading.headingDegrees.toFixed(1)}${text.degrees}`;
+
+  let turnText: string | null = null;
+  if (turn !== null) {
+    if (Math.abs(turn) <= 5) {
+      turnText = text.aligned;
+    } else {
+      const turnDirection = turn > 0 ? text.clockwise : text.counterclockwise;
+      const turnDegrees = `${Math.abs(turn).toFixed(1)}${text.degrees}`;
+      turnText = `${turnDirection} ${turnDegrees}`;
+    }
+  }
 
   useEffect(() => {
     const refresh = () => {
@@ -150,7 +166,10 @@ export function QiblaCompassPanel() {
             <strong>{bearingText}</strong>
           </div>
           <div className="qibla-actions">
-            <button type="button" onClick={() => setPanelState(readPanelState())}>
+            <button
+              type="button"
+              onClick={() => setPanelState(readPanelState())}
+            >
               {text.refresh}
             </button>
             <button
@@ -170,7 +189,9 @@ export function QiblaCompassPanel() {
           {permission === 'unsupported' && (
             <p className="inline-message">{text.unsupported}</p>
           )}
-          {permission === 'denied' && <p className="inline-message">{text.denied}</p>}
+          {permission === 'denied' && (
+            <p className="inline-message">{text.denied}</p>
+          )}
           {compassActive && heading === null && (
             <p className="inline-message">{text.waiting}</p>
           )}
