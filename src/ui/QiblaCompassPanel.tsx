@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 import { calculateQiblaBearing } from '../domain/qibla';
 import { signedTurnToQibla } from '../domain/qiblaGuidance';
@@ -16,34 +16,31 @@ import { smartDisplayModeRequested } from './SmartDisplay';
 const copy = {
   en: {
     title: 'Qibla direction',
-    noLocation: 'Set a location above to calculate the Qibla direction.',
+    noLocation: 'Set a location to calculate the Qibla direction.',
     bearing: 'Bearing from true north',
-    refresh: 'Refresh from selected location',
+    refresh: 'Refresh location',
     start: 'Use device compass',
     stop: 'Stop compass',
-    unsupported:
-      'A north-referenced device compass is not available here. Use the bearing shown above.',
-    denied: 'Compass permission was not granted. Use the bearing shown above.',
-    waiting:
-      'Move the device gently while waiting for a reliable north-referenced heading.',
+    unsupported: 'North-referenced compass unavailable. Use the bearing above.',
+    denied: 'Compass permission denied. Use the bearing above.',
+    waiting: 'Move the device gently while waiting for a heading.',
     heading: 'Device heading',
     aligned: 'Aligned with Qibla',
     clockwise: 'Turn clockwise',
     counterclockwise: 'Turn counter-clockwise',
     degrees: '°',
-    privacy: 'Bearing and compass processing stay on this device.',
+    privacy: 'Qibla and compass processing stay on this device.',
   },
   ar: {
     title: 'اتجاه القبلة',
-    noLocation: 'حدّد موقعاً أعلاه لحساب اتجاه القبلة.',
+    noLocation: 'حدّد موقعاً لحساب اتجاه القبلة.',
     bearing: 'الاتجاه من الشمال الحقيقي',
-    refresh: 'تحديث من الموقع المحدد',
+    refresh: 'تحديث الموقع',
     start: 'استخدام بوصلة الجهاز',
     stop: 'إيقاف البوصلة',
-    unsupported:
-      'لا تتوفر هنا بوصلة جهاز مرتبطة بالشمال. استخدم زاوية الاتجاه الظاهرة أعلاه.',
-    denied: 'لم يتم منح إذن البوصلة. استخدم زاوية الاتجاه الظاهرة أعلاه.',
-    waiting: 'حرّك الجهاز برفق أثناء انتظار قراءة موثوقة مرتبطة بالشمال.',
+    unsupported: 'البوصلة المرتبطة بالشمال غير متاحة. استخدم الاتجاه أعلاه.',
+    denied: 'لم يُمنح إذن البوصلة. استخدم الاتجاه أعلاه.',
+    waiting: 'حرّك الجهاز برفق أثناء انتظار قراءة الاتجاه.',
     heading: 'اتجاه الجهاز',
     aligned: 'محاذٍ للقبلة',
     clockwise: 'استدر مع عقارب الساعة',
@@ -64,62 +61,29 @@ function readPanelState() {
 export function QiblaCompassPanel() {
   const [panelState, setPanelState] = useState(readPanelState);
   const [heading, setHeading] = useState<CompassHeadingSample | null>(null);
-  const [permission, setPermission] =
-    useState<CompassPermissionState | null>(null);
+  const [permission, setPermission] = useState<CompassPermissionState | null>(null);
   const [compassActive, setCompassActive] = useState(false);
   const removeListenerRef = useRef<(() => void) | null>(null);
   const locale: Locale = panelState.locale;
   const text = copy[locale];
-
-  const qibla = useMemo(
-    () =>
-      panelState.coordinates === null
-        ? null
-        : calculateQiblaBearing(panelState.coordinates),
-    [panelState.coordinates],
-  );
-
-  const turn =
-    qibla === null || heading === null
-      ? null
-      : signedTurnToQibla(
-          qibla.degreesFromTrueNorth,
-          heading.headingDegrees,
-        );
-  const bearingText =
-    qibla === null
-      ? null
-      : `${qibla.degreesFromTrueNorth.toFixed(1)}${text.degrees}`;
-  const headingText =
-    heading === null
-      ? null
-      : `${text.heading}: ${heading.headingDegrees.toFixed(1)}${text.degrees}`;
-
-  let turnText: string | null = null;
-  if (turn !== null) {
-    if (Math.abs(turn) <= 5) {
-      turnText = text.aligned;
-    } else {
-      const turnDirection = turn > 0 ? text.clockwise : text.counterclockwise;
-      const turnDegrees = `${Math.abs(turn).toFixed(1)}${text.degrees}`;
-      turnText = `${turnDirection} ${turnDegrees}`;
-    }
-  }
+  const coordinates = panelState.coordinates;
+  const qibla = coordinates === null ? null : calculateQiblaBearing(coordinates);
+  const turn = getTurn(qibla?.degreesFromTrueNorth, heading?.headingDegrees);
 
   useEffect(() => {
-    const refresh = () => {
-      setPanelState(readPanelState());
-    };
-    const visibleRefresh = () => {
+    const refresh = () => setPanelState(readPanelState());
+    const refreshWhenVisible = () => {
       if (document.visibilityState === 'visible') {
         refresh();
       }
     };
+
     window.addEventListener('focus', refresh);
-    document.addEventListener('visibilitychange', visibleRefresh);
+    document.addEventListener('visibilitychange', refreshWhenVisible);
+
     return () => {
       window.removeEventListener('focus', refresh);
-      document.removeEventListener('visibilitychange', visibleRefresh);
+      document.removeEventListener('visibilitychange', refreshWhenVisible);
       removeListenerRef.current?.();
     };
   }, []);
@@ -139,11 +103,22 @@ export function QiblaCompassPanel() {
     stopCompass();
     const state = await requestCompassPermission();
     setPermission(state);
+
     if (state === 'denied' || state === 'unsupported') {
       return;
     }
+
     removeListenerRef.current = installCompassHeadingListener(window, setHeading);
     setCompassActive(true);
+  };
+
+  const refreshPanel = () => setPanelState(readPanelState());
+  const toggleCompass = () => {
+    if (compassActive) {
+      stopCompass();
+      return;
+    }
+    void startCompass();
   };
 
   return (
@@ -163,25 +138,14 @@ export function QiblaCompassPanel() {
         <>
           <div className="qibla-bearing" dir="ltr">
             <span>{text.bearing}</span>
-            <strong>{bearingText}</strong>
+            <strong>{formatDegrees(qibla.degreesFromTrueNorth)}</strong>
           </div>
+
           <div className="qibla-actions">
-            <button
-              type="button"
-              onClick={() => setPanelState(readPanelState())}
-            >
+            <button type="button" onClick={refreshPanel}>
               {text.refresh}
             </button>
-            <button
-              type="button"
-              onClick={() => {
-                if (compassActive) {
-                  stopCompass();
-                } else {
-                  void startCompass();
-                }
-              }}
-            >
+            <button type="button" onClick={toggleCompass}>
               {compassActive ? text.stop : text.start}
             </button>
           </div>
@@ -198,12 +162,40 @@ export function QiblaCompassPanel() {
 
           {heading !== null && turn !== null && (
             <div className="qibla-live-guidance" role="status">
-              <span dir="ltr">{headingText}</span>
-              <strong>{turnText}</strong>
+              <span dir="ltr">
+                {text.heading}: {formatDegrees(heading.headingDegrees)}
+              </span>
+              <strong>{formatTurn(turn, text)}</strong>
             </div>
           )}
         </>
       )}
     </section>
   );
+}
+
+function formatDegrees(degrees: number): string {
+  return `${degrees.toFixed(1)}°`;
+}
+
+function getTurn(
+  qiblaDegrees: number | undefined,
+  headingDegrees: number | undefined,
+): number | null {
+  if (qiblaDegrees === undefined || headingDegrees === undefined) {
+    return null;
+  }
+  return signedTurnToQibla(qiblaDegrees, headingDegrees);
+}
+
+function formatTurn(
+  turn: number,
+  text: (typeof copy)[Locale],
+): string {
+  if (Math.abs(turn) <= 5) {
+    return text.aligned;
+  }
+
+  const direction = turn > 0 ? text.clockwise : text.counterclockwise;
+  return `${direction} ${formatDegrees(Math.abs(turn))}`;
 }
