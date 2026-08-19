@@ -1,6 +1,7 @@
 export type DisplayOrientation = 'landscape' | 'portrait';
 export type DisplaySyncState = 'current' | 'syncing' | 'offline' | 'stale' | 'revoked';
-export type DisplayReconciliationAction = 'keep-local' | 'apply-remote' | 'report-conflict' | 'revoke';
+export type DisplayReconciliationAction =
+  'keep-local' | 'apply-remote' | 'report-conflict' | 'revoke';
 
 export interface DisplayIdentity {
   readonly displayId: string;
@@ -64,7 +65,11 @@ function normalizeIdentifier(value: string, label: string): string {
 
 function assertUtcTimestamp(value: string, label: string): string {
   const parsed = new Date(value);
-  if (!value.endsWith('Z') || !Number.isFinite(parsed.getTime()) || parsed.toISOString() !== value) {
+  if (
+    !value.endsWith('Z') ||
+    !Number.isFinite(parsed.getTime()) ||
+    parsed.toISOString() !== value
+  ) {
     throw new RangeError(`${label} must be an ISO-8601 UTC timestamp`);
   }
   return value;
@@ -99,7 +104,8 @@ export function createDisplayPairingCode(input: DisplayPairingCode): DisplayPair
     throw new RangeError('Pairing code must contain exactly 6 uppercase letters or digits');
   }
   const expiresAt = assertUtcTimestamp(input.expiresAt, 'Pairing expiry');
-  const usedAt = input.usedAt === null ? null : assertUtcTimestamp(input.usedAt, 'Pairing use time');
+  const usedAt =
+    input.usedAt === null ? null : assertUtcTimestamp(input.usedAt, 'Pairing use time');
   const revokedAt =
     input.revokedAt === null ? null : assertUtcTimestamp(input.revokedAt, 'Pairing revoke time');
   if (usedAt !== null && usedAt > expiresAt) {
@@ -117,7 +123,9 @@ export function createDisplayPairingCode(input: DisplayPairingCode): DisplayPair
 export function pairingCodeIsUsable(pairing: DisplayPairingCode, now: string): boolean {
   const normalized = createDisplayPairingCode(pairing);
   const current = assertUtcTimestamp(now, 'Current time');
-  return normalized.usedAt === null && normalized.revokedAt === null && current < normalized.expiresAt;
+  return (
+    normalized.usedAt === null && normalized.revokedAt === null && current < normalized.expiresAt
+  );
 }
 
 export function createDisplayFleetStatus(input: DisplayFleetStatus): DisplayFleetStatus {
