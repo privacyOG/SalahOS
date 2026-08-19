@@ -26,6 +26,12 @@ jobs:
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
 
+      - name: Print exact Prettier diff for admin dashboard
+        run: |
+          npx prettier --write src/domain/adminDashboard.ts
+          git diff -- src/domain/adminDashboard.ts
+          exit 1
+
       - name: Repository quality gate
         run: npm run check
 
