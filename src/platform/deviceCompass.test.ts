@@ -78,13 +78,13 @@ describe('device compass', () => {
   });
 
   it('handles explicit permission APIs and denial without throwing', async () => {
-    vi.stubGlobal('DeviceOrientationEvent', class DeviceOrientationEvent {});
-    await expect(requestCompassPermission(async () => 'granted')).resolves.toBe('granted');
-    await expect(requestCompassPermission(async () => 'denied')).resolves.toBe('denied');
+    vi.stubGlobal('DeviceOrientationEvent', Object);
+    await expect(requestCompassPermission(() => Promise.resolve('granted'))).resolves.toBe(
+      'granted',
+    );
+    await expect(requestCompassPermission(() => Promise.resolve('denied'))).resolves.toBe('denied');
     await expect(
-      requestCompassPermission(async () => {
-        throw new Error('blocked');
-      }),
+      requestCompassPermission(() => Promise.reject(new Error('blocked'))),
     ).resolves.toBe('denied');
   });
 });
