@@ -61,19 +61,19 @@ function readPanelState() {
 export function QiblaCompassPanel() {
   const [panelState, setPanelState] = useState(readPanelState);
   const [heading, setHeading] = useState<CompassHeadingSample | null>(null);
-  const [permission, setPermission] =
-    useState<CompassPermissionState | null>(null);
+  const [permission, setPermission] = useState<CompassPermissionState | null>(null);
   const [compassActive, setCompassActive] = useState(false);
   const removeListenerRef = useRef<(() => void) | null>(null);
   const locale: Locale = panelState.locale;
   const text = copy[locale];
   const coordinates = panelState.coordinates;
-  const qibla =
-    coordinates === null ? null : calculateQiblaBearing(coordinates);
+  const qibla = coordinates === null ? null : calculateQiblaBearing(coordinates);
   const turn = getTurn(qibla?.degreesFromTrueNorth, heading?.headingDegrees);
 
   useEffect(() => {
-    const refresh = () => setPanelState(readPanelState());
+    const refresh = () => {
+      setPanelState(readPanelState());
+    };
     const refreshWhenVisible = () => {
       if (document.visibilityState === 'visible') {
         refresh();
@@ -110,14 +110,13 @@ export function QiblaCompassPanel() {
       return;
     }
 
-    removeListenerRef.current = installCompassHeadingListener(
-      window,
-      setHeading,
-    );
+    removeListenerRef.current = installCompassHeadingListener(window, setHeading);
     setCompassActive(true);
   };
 
-  const refreshPanel = () => setPanelState(readPanelState());
+  const refreshPanel = () => {
+    setPanelState(readPanelState());
+  };
   const toggleCompass = () => {
     if (compassActive) {
       stopCompass();
@@ -155,15 +154,9 @@ export function QiblaCompassPanel() {
             </button>
           </div>
 
-          {permission === 'unsupported' && (
-            <p className="inline-message">{text.unsupported}</p>
-          )}
-          {permission === 'denied' && (
-            <p className="inline-message">{text.denied}</p>
-          )}
-          {compassActive && heading === null && (
-            <p className="inline-message">{text.waiting}</p>
-          )}
+          {permission === 'unsupported' && <p className="inline-message">{text.unsupported}</p>}
+          {permission === 'denied' && <p className="inline-message">{text.denied}</p>}
+          {compassActive && heading === null && <p className="inline-message">{text.waiting}</p>}
 
           {heading !== null && turn !== null && (
             <div className="qibla-live-guidance" role="status">
