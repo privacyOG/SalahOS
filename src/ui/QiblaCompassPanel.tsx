@@ -68,7 +68,8 @@ export function QiblaCompassPanel() {
   const locale: Locale = panelState.locale;
   const text = copy[locale];
   const coordinates = panelState.coordinates;
-  const qibla = coordinates === null ? null : calculateQiblaBearing(coordinates);
+  const qibla =
+    coordinates === null ? null : calculateQiblaBearing(coordinates);
   const turn = getTurn(qibla?.degreesFromTrueNorth, heading?.headingDegrees);
 
   useEffect(() => {
@@ -109,7 +110,10 @@ export function QiblaCompassPanel() {
       return;
     }
 
-    removeListenerRef.current = installCompassHeadingListener(window, setHeading);
+    removeListenerRef.current = installCompassHeadingListener(
+      window,
+      setHeading,
+    );
     setCompassActive(true);
   };
 
