@@ -49,11 +49,9 @@ describe('mosque events', () => {
   });
 
   it('validates timed and all-day event boundaries', () => {
-    expect(() =>
-      createMosqueEvent(
-        draft({ endsAt: '2026-08-20T07:00:00.000Z' }),
-      ),
-    ).toThrow(/later than start/u);
+    expect(() => createMosqueEvent(draft({ endsAt: '2026-08-20T07:00:00.000Z' }))).toThrow(
+      /later than start/u,
+    );
 
     expect(() =>
       createMosqueEvent(
