@@ -26,12 +26,6 @@ jobs:
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
 
-      - name: Print exact Prettier diff for public embeds
-        run: |
-          npx prettier --write src/domain/publicEmbed.ts src/domain/publicEmbed.test.ts
-          git diff -- src/domain/publicEmbed.ts src/domain/publicEmbed.test.ts
-          exit 1
-
       - name: Repository quality gate
         run: npm run check
 
