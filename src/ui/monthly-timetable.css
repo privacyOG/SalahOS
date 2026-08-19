@@ -1,0 +1,106 @@
+.monthly-timetable {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.monthly-timetable__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-end;
+  margin-bottom: 1.5rem;
+}
+
+.monthly-timetable__header h1,
+.monthly-timetable__header p {
+  margin: 0;
+}
+
+.monthly-timetable__eyebrow {
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+}
+
+.monthly-timetable__source {
+  display: grid;
+  gap: 0.25rem;
+  text-align: end;
+  font-size: 0.9rem;
+}
+
+.monthly-timetable__scroll {
+  overflow-x: auto;
+}
+
+.monthly-timetable table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 900px;
+}
+
+.monthly-timetable th,
+.monthly-timetable td {
+  padding: 0.75rem;
+  border-bottom: 1px solid currentColor;
+  vertical-align: top;
+  text-align: start;
+}
+
+.monthly-timetable td strong,
+.monthly-timetable td span {
+  display: block;
+}
+
+.monthly-timetable td span {
+  margin-top: 0.2rem;
+  font-size: 0.8rem;
+  opacity: 0.72;
+}
+
+.monthly-timetable__jumuah + .monthly-timetable__jumuah {
+  margin-top: 0.35rem;
+}
+
+@media (max-width: 720px) {
+  .monthly-timetable {
+    padding: 1rem;
+  }
+
+  .monthly-timetable__header {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .monthly-timetable__source {
+    text-align: start;
+  }
+}
+
+@media print {
+  .monthly-timetable {
+    max-width: none;
+    padding: 0;
+    font-size: 9pt;
+  }
+
+  .monthly-timetable__scroll {
+    overflow: visible;
+  }
+
+  .monthly-timetable table {
+    min-width: 0;
+  }
+
+  .monthly-timetable th,
+  .monthly-timetable td {
+    padding: 4pt;
+    break-inside: avoid;
+  }
+
+  .monthly-timetable__header {
+    margin-bottom: 10pt;
+  }
+}
