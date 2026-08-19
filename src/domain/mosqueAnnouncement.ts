@@ -66,7 +66,7 @@ function normalizeOptionalTimestamp(value: string | null, label: string): string
 function normalizeText(value: string, label: string, maxLength: number): string {
   const normalized = value.replace(/\s+/gu, ' ').trim();
   if (normalized.length === 0 || normalized.length > maxLength) {
-    throw new RangeError(`${label} must contain 1-${maxLength} characters`);
+    throw new RangeError(`${label} must contain 1-${String(maxLength)} characters`);
   }
   return normalized;
 }
