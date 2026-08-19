@@ -1,0 +1,57 @@
+.qibla-panel {
+  width: min(1120px, calc(100% - 2rem));
+  margin: 1rem auto 2rem;
+  padding: 1.25rem;
+  border: 1px solid var(--border-subtle, rgba(127, 127, 127, 0.25));
+  border-radius: 1rem;
+  background: var(--surface-elevated, rgba(127, 127, 127, 0.08));
+}
+
+.qibla-panel-heading,
+.qibla-bearing,
+.qibla-live-guidance {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.qibla-panel-heading h2,
+.qibla-panel-heading p {
+  margin: 0;
+}
+
+.qibla-panel-heading p {
+  opacity: 0.78;
+}
+
+.qibla-bearing {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 0.8rem;
+  background: var(--surface, rgba(127, 127, 127, 0.08));
+}
+
+.qibla-bearing strong {
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.qibla-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  margin-top: 1rem;
+}
+
+.qibla-live-guidance {
+  margin-top: 1rem;
+  padding: 1rem;
+  border-radius: 0.8rem;
+  border: 1px solid currentColor;
+}
+
+.qibla-live-guidance strong {
+  font-size: 1.1rem;
+}
