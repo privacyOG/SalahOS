@@ -26,6 +26,12 @@ jobs:
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
 
+      - name: Print exact Prettier diff for signage scene
+        run: |
+          npx prettier --write src/domain/signageScene.ts
+          git diff -- src/domain/signageScene.ts
+          exit 1
+
       - name: Repository quality gate
         run: npm run check
 
@@ -56,13 +62,6 @@ jobs:
           test -f "$APP_PATH/Info.plist"
           echo "APP_PATH=$APP_PATH" >> "$GITHUB_ENV"
 
-      # The compile gate above is deterministic and is what blocks this check.
-      #
-      # The Simulator runtime acceptance below depends on CoreSimulator on a
-      # shared hosted macOS runner. That dependency is infrastructure, not
-      # repository state, so it is bounded and reported but never allowed to
-      # fail or hang the job. Its real outcome is published to the run summary
-      # and its evidence is retained as an artifact.
       - name: Install, launch and relaunch on fresh iPhone and iPad Simulators
         id: simulator_runtime
         continue-on-error: true
