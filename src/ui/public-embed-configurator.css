@@ -1,0 +1,60 @@
+.public-embed-configurator {
+  display: grid;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  border-radius: 1.25rem;
+  background: var(--surface, #ffffff);
+  color: var(--text, #111827);
+}
+
+.public-embed-configurator[data-theme='dark'] {
+  --surface: #111827;
+  --text: #f9fafb;
+}
+
+.public-embed-configurator__eyebrow {
+  margin: 0 0 0.35rem;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.public-embed-configurator h2,
+.public-embed-configurator p {
+  margin-top: 0;
+}
+
+.public-embed-configurator__grid {
+  display: grid;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+}
+
+.public-embed-configurator__preview,
+.public-embed-configurator__code {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+  border-radius: 1rem;
+  background: color-mix(in srgb, currentColor 6%, transparent);
+}
+
+.public-embed-configurator__preview code,
+.public-embed-configurator__code textarea {
+  overflow-wrap: anywhere;
+  font: inherit;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.public-embed-configurator__code textarea {
+  width: 100%;
+  box-sizing: border-box;
+  resize: vertical;
+  border: 1px solid color-mix(in srgb, currentColor 18%, transparent);
+  border-radius: 0.75rem;
+  padding: 0.75rem;
+  background: inherit;
+  color: inherit;
+}
