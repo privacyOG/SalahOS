@@ -1,4 +1,4 @@
-import type { KeyboardEvent, ReactNode } from 'react';
+import type { CSSProperties, KeyboardEvent, ReactNode } from 'react';
 
 import './managed-display-surface.css';
 
@@ -40,6 +40,8 @@ export function ManagedDisplaySurface({
     }
   };
 
+  const frameStyle = { '--display-shift': `${burnInShift}px` } as CSSProperties;
+
   return (
     <section
       className="managed-display"
@@ -49,7 +51,7 @@ export function ManagedDisplaySurface({
       tabIndex={0}
       aria-label={`${mosqueName} prayer display`}
     >
-      <div className="managed-display__frame" style={{ '--display-shift': `${burnInShift}px` } as React.CSSProperties}>
+      <div className="managed-display__frame" style={frameStyle}>
         <header className="managed-display__header">
           <div>
             <p className="managed-display__eyebrow">Prayer times</p>
