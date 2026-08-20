@@ -93,7 +93,10 @@ export function searchForCongregationDestination(
   return serialize(params);
 }
 
-export function searchForSettingsCategory(search: string, category: SettingsCategory | null): string {
+export function searchForSettingsCategory(
+  search: string,
+  category: SettingsCategory | null,
+): string {
   const params = paramsFromSearch(search);
   params.delete('surface');
   params.delete('adminView');

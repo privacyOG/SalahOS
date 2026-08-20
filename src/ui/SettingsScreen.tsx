@@ -54,24 +54,30 @@ type SettingsCopy = Readonly<{
 const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
   en: {
     heading: 'Settings',
-    intro: 'Choose a category. Everyday controls stay focused while uncommon tools remain out of the way.',
+    intro:
+      'Choose a category. Everyday controls stay focused while uncommon tools remain out of the way.',
     back: 'All settings',
     prayerTitle: 'Prayer settings',
-    prayerDescription: 'Prayer source, calculation method, Asr convention and high-latitude handling.',
+    prayerDescription:
+      'Prayer source, calculation method, Asr convention and high-latitude handling.',
     locationTitle: 'Location',
-    locationDescription: 'Current location, offline city search, saved places and manual coordinates.',
+    locationDescription:
+      'Current location, offline city search, saved places and manual coordinates.',
     mosqueTitle: 'Mosque & Iqamah',
     mosqueDescription: 'Local mosque timetables, Iqamah, Ramadan and Taraweeh configuration.',
     notificationsTitle: 'Notifications & Adhan',
-    notificationsDescription: 'Prayer reminders, prayer-time alerts, vibration, sound and local Adhan options.',
+    notificationsDescription:
+      'Prayer reminders, prayer-time alerts, vibration, sound and local Adhan options.',
     appearanceTitle: 'Appearance & language',
     appearanceDescription: 'Language, clock format and light or dark appearance.',
     dataTitle: 'Data & privacy',
     dataDescription: 'Export, import or reset locally stored SalahOS settings.',
     displayTitle: 'Display themes',
-    displayDescription: 'Open managed-display theme configuration without mixing it into daily settings.',
+    displayDescription:
+      'Open managed-display theme configuration without mixing it into daily settings.',
     advancedTitle: 'Advanced',
-    advancedDescription: 'Legacy import, adjustment and uncommon configuration tools during the v2 migration.',
+    advancedDescription:
+      'Legacy import, adjustment and uncommon configuration tools during the v2 migration.',
     displayAction: 'Open display themes',
     exportHelp: 'Settings data stays local unless you explicitly copy or export it.',
     imported: 'Settings imported successfully.',
@@ -80,16 +86,19 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
   },
   ar: {
     heading: 'الإعدادات',
-    intro: 'اختر فئة. تبقى الإعدادات اليومية واضحة بينما توضع الأدوات غير الشائعة بعيداً عن الواجهة الأساسية.',
+    intro:
+      'اختر فئة. تبقى الإعدادات اليومية واضحة بينما توضع الأدوات غير الشائعة بعيداً عن الواجهة الأساسية.',
     back: 'كل الإعدادات',
     prayerTitle: 'إعدادات الصلاة',
     prayerDescription: 'مصدر المواقيت وطريقة الحساب ومذهب العصر ومعالجة خطوط العرض العليا.',
     locationTitle: 'الموقع',
-    locationDescription: 'الموقع الحالي والبحث المحلي دون اتصال والمواقع المحفوظة والإحداثيات اليدوية.',
+    locationDescription:
+      'الموقع الحالي والبحث المحلي دون اتصال والمواقع المحفوظة والإحداثيات اليدوية.',
     mosqueTitle: 'المسجد والإقامة',
     mosqueDescription: 'جداول المسجد والإقامة وإعدادات رمضان والتراويح.',
     notificationsTitle: 'الإشعارات والأذان',
-    notificationsDescription: 'التذكيرات وإشعارات وقت الصلاة والاهتزاز والصوت وخيارات الأذان المحلي.',
+    notificationsDescription:
+      'التذكيرات وإشعارات وقت الصلاة والاهتزاز والصوت وخيارات الأذان المحلي.',
     appearanceTitle: 'المظهر واللغة',
     appearanceDescription: 'اللغة وتنسيق الساعة والمظهر الفاتح أو الداكن.',
     dataTitle: 'البيانات والخصوصية',
@@ -97,7 +106,8 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
     displayTitle: 'سمات شاشات العرض',
     displayDescription: 'افتح إعدادات سمات الشاشات المُدارة بعيداً عن الإعدادات اليومية.',
     advancedTitle: 'متقدم',
-    advancedDescription: 'أدوات الاستيراد والتعديلات والإعدادات غير الشائعة خلال انتقال الواجهة الجديدة.',
+    advancedDescription:
+      'أدوات الاستيراد والتعديلات والإعدادات غير الشائعة خلال انتقال الواجهة الجديدة.',
     displayAction: 'افتح سمات العرض',
     exportHelp: 'تبقى بيانات الإعدادات محلية ما لم تنسخها أو تصدرها صراحةً.',
     imported: 'تم استيراد الإعدادات بنجاح.',
@@ -106,16 +116,19 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
   },
   tr: {
     heading: 'Ayarlar',
-    intro: 'Bir kategori seçin. Günlük kontroller odaklı kalırken seyrek kullanılan araçlar geri planda tutulur.',
+    intro:
+      'Bir kategori seçin. Günlük kontroller odaklı kalırken seyrek kullanılan araçlar geri planda tutulur.',
     back: 'Tüm ayarlar',
     prayerTitle: 'Namaz ayarları',
     prayerDescription: 'Vakit kaynağı, hesaplama yöntemi, ikindi yaklaşımı ve yüksek enlem kuralı.',
     locationTitle: 'Konum',
-    locationDescription: 'Mevcut konum, çevrimdışı şehir araması, kayıtlı yerler ve elle koordinatlar.',
+    locationDescription:
+      'Mevcut konum, çevrimdışı şehir araması, kayıtlı yerler ve elle koordinatlar.',
     mosqueTitle: 'Cami ve ikamet',
     mosqueDescription: 'Yerel cami vakitleri, ikamet, Ramazan ve teravih yapılandırması.',
     notificationsTitle: 'Bildirimler ve ezan',
-    notificationsDescription: 'Hatırlatmalar, vakit bildirimleri, titreşim, ses ve yerel ezan seçenekleri.',
+    notificationsDescription:
+      'Hatırlatmalar, vakit bildirimleri, titreşim, ses ve yerel ezan seçenekleri.',
     appearanceTitle: 'Görünüm ve dil',
     appearanceDescription: 'Dil, saat biçimi ve açık veya koyu görünüm.',
     dataTitle: 'Veri ve gizlilik',
@@ -123,7 +136,8 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
     displayTitle: 'Ekran temaları',
     displayDescription: 'Günlük ayarlara karıştırmadan yönetilen ekran temalarını açın.',
     advancedTitle: 'Gelişmiş',
-    advancedDescription: 'v2 geçişi sırasında eski içe aktarma, ayarlama ve seyrek kullanılan araçlar.',
+    advancedDescription:
+      'v2 geçişi sırasında eski içe aktarma, ayarlama ve seyrek kullanılan araçlar.',
     displayAction: 'Ekran temalarını aç',
     exportHelp: 'Ayar verileri, siz açıkça kopyalamadıkça veya dışa aktarmadıkça yerel kalır.',
     imported: 'Ayarlar başarıyla içe aktarıldı.',
@@ -132,26 +146,31 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
   },
   id: {
     heading: 'Pengaturan',
-    intro: 'Pilih kategori. Kontrol harian tetap fokus sementara alat yang jarang dipakai tidak mengganggu.',
+    intro:
+      'Pilih kategori. Kontrol harian tetap fokus sementara alat yang jarang dipakai tidak mengganggu.',
     back: 'Semua pengaturan',
     prayerTitle: 'Pengaturan salat',
     prayerDescription: 'Sumber waktu, metode perhitungan, aturan Asar, dan lintang tinggi.',
     locationTitle: 'Lokasi',
-    locationDescription: 'Lokasi saat ini, pencarian kota luring, lokasi tersimpan, dan koordinat manual.',
+    locationDescription:
+      'Lokasi saat ini, pencarian kota luring, lokasi tersimpan, dan koordinat manual.',
     mosqueTitle: 'Masjid & Iqamah',
     mosqueDescription: 'Jadwal masjid lokal, Iqamah, Ramadan, dan konfigurasi Tarawih.',
     notificationsTitle: 'Notifikasi & Adzan',
-    notificationsDescription: 'Pengingat, notifikasi waktu salat, getaran, suara, dan opsi Adzan lokal.',
+    notificationsDescription:
+      'Pengingat, notifikasi waktu salat, getaran, suara, dan opsi Adzan lokal.',
     appearanceTitle: 'Tampilan & bahasa',
     appearanceDescription: 'Bahasa, format jam, serta tampilan terang atau gelap.',
     dataTitle: 'Data & privasi',
     dataDescription: 'Ekspor, impor, atau atur ulang pengaturan SalahOS yang tersimpan lokal.',
     displayTitle: 'Tema layar',
-    displayDescription: 'Buka konfigurasi tema layar terkelola tanpa mencampurnya dengan pengaturan harian.',
+    displayDescription:
+      'Buka konfigurasi tema layar terkelola tanpa mencampurnya dengan pengaturan harian.',
     advancedTitle: 'Lanjutan',
     advancedDescription: 'Alat impor, penyesuaian, dan konfigurasi tidak umum selama migrasi v2.',
     displayAction: 'Buka tema layar',
-    exportHelp: 'Data pengaturan tetap lokal kecuali Anda secara eksplisit menyalin atau mengekspornya.',
+    exportHelp:
+      'Data pengaturan tetap lokal kecuali Anda secara eksplisit menyalin atau mengekspornya.',
     imported: 'Pengaturan berhasil diimpor.',
     importError: 'Data pengaturan tidak valid atau tidak didukung.',
     reset: 'Pengaturan dikembalikan ke default.',
@@ -423,6 +442,14 @@ export function SettingsScreen() {
   }, []);
 
   useEffect(() => {
+    try {
+      setSettings(loadPersistedSettings(getApplicationStorage()));
+    } catch {
+      // Keep the current in-memory settings if storage cannot be read.
+    }
+  }, [category]);
+
+  useEffect(() => {
     if (category !== 'mosque' && category !== 'notifications' && category !== 'advanced') return;
     const panel = legacyRef.current?.querySelector<HTMLDetailsElement>('.settings-panel');
     if (panel !== undefined && panel !== null) panel.open = true;
@@ -435,7 +462,11 @@ export function SettingsScreen() {
 
   const navigateCategory = (nextCategory: SettingsCategory | null) => {
     const search = categorySearch(nextCategory);
-    window.history.pushState(null, '', `${window.location.pathname}${search}${window.location.hash}`);
+    window.history.pushState(
+      null,
+      '',
+      `${window.location.pathname}${search}${window.location.hash}`,
+    );
     setCategory(nextCategory);
     window.scrollTo({ top: 0, behavior: 'auto' });
   };
@@ -561,7 +592,10 @@ export function SettingsScreen() {
       )}
 
       {category === 'display-themes' && (
-        <section className="settings-focus-panel settings-display-entry" aria-label={copy.displayTitle}>
+        <section
+          className="settings-focus-panel settings-display-entry"
+          aria-label={copy.displayTitle}
+        >
           <p>{copy.displayDescription}</p>
           <a className="surface-entry-card__action" href={administrationThemesHref()}>
             {copy.displayAction}

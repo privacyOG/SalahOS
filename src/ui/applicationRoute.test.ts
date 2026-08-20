@@ -61,7 +61,10 @@ describe('applicationRoute', () => {
   });
 
   it('creates and reads managed-administration deep links', () => {
-    const search = searchForAdminDestination('?view=settings&settingsView=appearance&debug=1', 'themes');
+    const search = searchForAdminDestination(
+      '?view=settings&settingsView=appearance&debug=1',
+      'themes',
+    );
     const params = new URLSearchParams(search);
 
     expect(readProductSurface(search)).toBe('admin');
