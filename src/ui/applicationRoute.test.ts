@@ -67,6 +67,8 @@ describe('applicationRoute', () => {
     expect(adminParams.get('debug')).toBe('1');
 
     const cleared = searchForSettingsCategory('?view=settings&settingsView=prayer&debug=1', null);
+    expect(readProductSurface(cleared)).toBe('congregation');
+    expect(readCongregationDestination(cleared)).toBe('settings');
     expect(readSettingsCategory(cleared)).toBeNull();
     expect(new URLSearchParams(cleared).get('debug')).toBe('1');
     expect(readSettingsCategory('?view=settings&settingsView=unknown')).toBeNull();
