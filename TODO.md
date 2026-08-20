@@ -784,7 +784,7 @@
 - [x] Remote administration for managed mosque displays
 - [x] Home Assistant integration
 - [x] Optional local network API for smart-home/display integration
-- [ ] Calendar integrations
+- [x] Calendar integrations
 - [ ] Wearable/watch companion exploration
 - [ ] Additional languages
 
