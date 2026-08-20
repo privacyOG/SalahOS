@@ -34,9 +34,7 @@ function settings(overrides: Partial<PersistedSettings> = {}): PersistedSettings
 
 describe('Taraweeh panel model', () => {
   it('returns the selected mosque sessions for the resolved local civil date', () => {
-    expect(
-      buildTaraweehPanelModel(settings(), new Date('2026-08-16T02:00:00.000Z')),
-    ).toEqual({
+    expect(buildTaraweehPanelModel(settings(), new Date('2026-08-16T02:00:00.000Z'))).toEqual({
       mosqueName: 'Example Mosque',
       date: '2026-08-16',
       sessions: [
@@ -56,8 +54,6 @@ describe('Taraweeh panel model', () => {
   });
 
   it('returns no panel when the resolved day has no Taraweeh sessions', () => {
-    expect(
-      buildTaraweehPanelModel(settings(), new Date('2026-08-17T02:00:00.000Z')),
-    ).toBeNull();
+    expect(buildTaraweehPanelModel(settings(), new Date('2026-08-17T02:00:00.000Z'))).toBeNull();
   });
 });
