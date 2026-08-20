@@ -1,6 +1,10 @@
 import { useEffect, useState, type ReactNode } from 'react';
 
+import { applyDocumentLocale } from '../i18n/i18n';
 import type { Locale } from '../i18n/translations';
+import { getApplicationStorage } from '../platform/applicationStorage';
+import { loadPersistedSettings } from '../platform/settingsStorage';
+import { installThemePreference } from '../platform/themePreference';
 import { PrimaryNavigation } from './PrimaryNavigation';
 import {
   readCongregationDestination,
@@ -64,16 +68,38 @@ function documentLocale(): Locale {
   return 'en';
 }
 
+function persistedLocale(): Locale {
+  try {
+    return loadPersistedSettings(getApplicationStorage()).locale;
+  } catch {
+    return documentLocale();
+  }
+}
+
 function scrollToTop(): void {
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
 }
 
 export function CongregationShell({ children }: CongregationShellProps) {
-  const [locale, setLocale] = useState<Locale>(documentLocale);
+  const [locale, setLocale] = useState<Locale>(persistedLocale);
   const [destination, setDestination] = useState<CongregationDestination>(() =>
     readCongregationDestination(window.location.search),
   );
+
+  useEffect(() => {
+    try {
+      const settings = loadPersistedSettings(getApplicationStorage());
+      applyDocumentLocale(document.documentElement, settings.locale);
+      setLocale(settings.locale);
+      return installThemePreference(settings.theme, {
+        documentTarget: document,
+        windowTarget: window,
+      });
+    } catch {
+      return undefined;
+    }
+  }, []);
 
   useEffect(() => {
     const observer = new MutationObserver(() => {
