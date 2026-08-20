@@ -45,7 +45,7 @@ describe('managed display device transport', () => {
   it('polls assigned configuration with the device credential', async () => {
     const requests: { input: RequestInfo | URL; init?: RequestInit }[] = [];
     const client = createManagedDisplayClient(connection, async (input, init) => {
-      requests.push({ input, init });
+      requests.push(init === undefined ? { input } : { input, init });
       return jsonResponse(remoteConfig);
     });
 
