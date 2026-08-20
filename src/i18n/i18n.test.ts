@@ -19,11 +19,17 @@ describe('localisation and RTL core', () => {
     expect(translate('ar', 'prayerAsr')).toBe('العصر');
     expect(translate('ar', 'prayerMaghrib')).toBe('المغرب');
     expect(translate('ar', 'prayerIsha')).toBe('العشاء');
+    expect(translate('tr', 'dailyPrayers')).toBe('Günlük namazlar');
+    expect(translate('id', 'dailyPrayers')).toBe('Salat harian');
+    expect(translate('tr', 'prayerFajr')).toBe('Sabah');
+    expect(translate('id', 'prayerFajr')).toBe('Subuh');
   });
 
   it('uses RTL only for Arabic', () => {
     expect(localeDirection('en')).toBe('ltr');
     expect(localeDirection('ar')).toBe('rtl');
+    expect(localeDirection('tr')).toBe('ltr');
+    expect(localeDirection('id')).toBe('ltr');
   });
 
   it('applies language and direction to a document-root compatible target', () => {
@@ -34,6 +40,14 @@ describe('localisation and RTL core', () => {
 
     applyDocumentLocale(target, 'en');
     expect(target.lang).toBe('en');
+    expect(target.dir).toBe('ltr');
+
+    applyDocumentLocale(target, 'tr');
+    expect(target.lang).toBe('tr');
+    expect(target.dir).toBe('ltr');
+
+    applyDocumentLocale(target, 'id');
+    expect(target.lang).toBe('id');
     expect(target.dir).toBe('ltr');
   });
 

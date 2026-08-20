@@ -42,6 +42,8 @@ interface StoredNotificationExtra {
 const prayerNames: Readonly<Record<Locale, Readonly<Record<NotificationPrayerName, string>>>> = {
   en: { fajr: 'Fajr', dhuhr: 'Dhuhr', asr: 'Asr', maghrib: 'Maghrib', isha: 'Isha' },
   ar: { fajr: 'الفجر', dhuhr: 'الظهر', asr: 'العصر', maghrib: 'المغرب', isha: 'العشاء' },
+  tr: { fajr: 'Sabah', dhuhr: 'Öğle', asr: 'İkindi', maghrib: 'Akşam', isha: 'Yatsı' },
+  id: { fajr: 'Subuh', dhuhr: 'Zuhur', asr: 'Asar', maghrib: 'Magrib', isha: 'Isya' },
 };
 
 function notificationCopy(
@@ -55,6 +57,20 @@ function notificationCopy(
     if (record.kind === 'adhan')
       return { title: `أذان ${prayer}`, body: `حان وقت صلاة ${prayer}.` };
     return { title: `وقت صلاة ${prayer}`, body: `حان وقت صلاة ${prayer}.` };
+  }
+  if (locale === 'tr') {
+    if (record.kind === 'reminder')
+      return { title: `${prayer} hatırlatması`, body: `${prayer} namazı yaklaşıyor.` };
+    if (record.kind === 'adhan')
+      return { title: `${prayer} ezanı`, body: `${prayer} vakti geldi.` };
+    return { title: `${prayer} namaz vakti`, body: `${prayer} vakti geldi.` };
+  }
+  if (locale === 'id') {
+    if (record.kind === 'reminder')
+      return { title: `Pengingat ${prayer}`, body: `Waktu salat ${prayer} sudah dekat.` };
+    if (record.kind === 'adhan')
+      return { title: `Azan ${prayer}`, body: `Waktu ${prayer} telah tiba.` };
+    return { title: `Waktu salat ${prayer}`, body: `Waktu ${prayer} telah tiba.` };
   }
   if (record.kind === 'reminder')
     return { title: `${prayer} reminder`, body: `${prayer} prayer time is approaching.` };

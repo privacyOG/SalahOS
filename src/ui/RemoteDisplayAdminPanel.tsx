@@ -1,96 +1,16 @@
 import { useMemo, useState } from 'react';
 
 import type { ManagedDisplayRemoteStatus } from '../domain/managedAdminProtocol';
+import { localeTag } from '../i18n/i18n';
 import type { Locale } from '../i18n/translations';
+import { remoteDisplayAdminCopy } from '../i18n/featureTranslations';
 import { createManagedAdminClient } from '../platform/managedAdminTransport';
 import { getApplicationStorage } from '../platform/applicationStorage';
 import { loadPersistedSettings } from '../platform/settingsStorage';
 import type { SmartDisplayThemeId } from '../platform/smartDisplayTheme';
 import { smartDisplayModeRequested } from './SmartDisplay';
 
-const copy = {
-  en: {
-    title: 'Remote display administration',
-    subtitle:
-      'Connect to an optional SalahOS managed service to enroll, monitor, configure and revoke mosque displays.',
-    endpoint: 'Managed service URL',
-    token: 'Admin token',
-    connect: 'Connect / refresh fleet',
-    disconnected: 'Not connected',
-    connected: 'Fleet loaded',
-    error: 'Remote administration request failed',
-    enroll: 'Enroll display',
-    displayId: 'Display ID',
-    organizationId: 'Organization ID',
-    mosqueId: 'Mosque ID',
-    locationId: 'Location ID',
-    resolution: 'Resolution profile',
-    orientation: 'Orientation',
-    landscape: 'Landscape',
-    portrait: 'Portrait',
-    playlist: 'Playlist ID',
-    enrollAction: 'Create enrollment',
-    deviceCredential: 'One-time device credential',
-    credentialWarning:
-      'Copy this credential into the display now. SalahOS does not persist it in the administration UI.',
-    fleet: 'Managed fleet',
-    empty: 'No displays are enrolled in this managed service.',
-    lastSeen: 'Last seen',
-    appVersion: 'App version',
-    reportedRevision: 'Reported revision',
-    targetRevision: 'Target revision',
-    syncState: 'Sync state',
-    theme: 'Display theme',
-    updateTheme: 'Publish next revision',
-    revoke: 'Revoke display',
-    never: 'Never',
-    classic: 'Classic',
-    midnight: 'Midnight',
-    sandstone: 'Sandstone',
-    emerald: 'Emerald',
-    localOnly:
-      'The service URL and admin token remain in memory for this page session and are not written to SalahOS application storage.',
-  },
-  ar: {
-    title: 'الإدارة البعيدة لشاشات العرض',
-    subtitle: 'اتصل بخدمة إدارة اختيارية لتسجيل شاشات المسجد ومراقبتها وضبطها وإلغائها.',
-    endpoint: 'رابط خدمة الإدارة',
-    token: 'رمز المشرف',
-    connect: 'اتصال / تحديث الأسطول',
-    disconnected: 'غير متصل',
-    connected: 'تم تحميل الأسطول',
-    error: 'فشل طلب الإدارة البعيدة',
-    enroll: 'تسجيل شاشة',
-    displayId: 'معرّف الشاشة',
-    organizationId: 'معرّف المؤسسة',
-    mosqueId: 'معرّف المسجد',
-    locationId: 'معرّف الموقع',
-    resolution: 'ملف دقة العرض',
-    orientation: 'اتجاه العرض',
-    landscape: 'أفقي',
-    portrait: 'عمودي',
-    playlist: 'معرّف قائمة العرض',
-    enrollAction: 'إنشاء تسجيل',
-    deviceCredential: 'بيانات اعتماد الجهاز لمرة واحدة',
-    credentialWarning: 'انسخ هذه البيانات إلى الشاشة الآن. واجهة الإدارة لا تحفظها.',
-    fleet: 'أسطول الشاشات',
-    empty: 'لا توجد شاشات مسجلة في خدمة الإدارة.',
-    lastSeen: 'آخر اتصال',
-    appVersion: 'إصدار التطبيق',
-    reportedRevision: 'الإصدار المبلّغ',
-    targetRevision: 'الإصدار المطلوب',
-    syncState: 'حالة المزامنة',
-    theme: 'سمة الشاشة',
-    updateTheme: 'نشر الإصدار التالي',
-    revoke: 'إلغاء الشاشة',
-    never: 'أبداً',
-    classic: 'كلاسيكي',
-    midnight: 'منتصف الليل',
-    sandstone: 'الحجر الرملي',
-    emerald: 'زمردي',
-    localOnly: 'رابط الخدمة ورمز المشرف يبقيان في ذاكرة الصفحة ولا يتم حفظهما في تخزين التطبيق.',
-  },
-} as const;
+const copy = remoteDisplayAdminCopy;
 
 const themeIds: readonly SmartDisplayThemeId[] = ['classic', 'midnight', 'sandstone', 'emerald'];
 
@@ -110,7 +30,7 @@ function readLocale(): Locale {
 
 function formatLastSeen(value: string | null, locale: Locale, never: string): string {
   if (value === null) return never;
-  return new Intl.DateTimeFormat(locale === 'ar' ? 'ar' : 'en-AU', {
+  return new Intl.DateTimeFormat(localeTag(locale), {
     dateStyle: 'medium',
     timeStyle: 'short',
   }).format(new Date(value));

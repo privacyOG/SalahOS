@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import type { Locale } from '../i18n/translations';
+import { managedDisplayRuntimeCopy } from '../i18n/featureTranslations';
 import { getApplicationStorage } from '../platform/applicationStorage';
 import {
   loadManagedDisplayConnection,
@@ -13,20 +14,7 @@ import { smartDisplayModeRequested } from './SmartDisplay';
 const APP_VERSION = '1.1.0';
 const SYNC_INTERVAL_MS = 60_000;
 
-const copy = {
-  en: {
-    connected: 'Managed · synced',
-    syncing: 'Managed · syncing',
-    offline: 'Managed · offline cache',
-    revoked: 'Managed · revoked',
-  },
-  ar: {
-    connected: 'مُدار · متزامن',
-    syncing: 'مُدار · تتم المزامنة',
-    offline: 'مُدار · نسخة محلية',
-    revoked: 'مُدار · ملغى',
-  },
-} as const;
+const copy = managedDisplayRuntimeCopy;
 
 type RemoteRuntimeState = 'connected' | 'syncing' | 'offline' | 'revoked';
 

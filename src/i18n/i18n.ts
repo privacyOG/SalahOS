@@ -12,12 +12,19 @@ export function translate(locale: Locale, key: TranslationKey): string {
   return translations[locale][key];
 }
 
+const localeTags: Readonly<Record<Locale, string>> = Object.freeze({
+  en: 'en-AU',
+  ar: 'ar',
+  tr: 'tr-TR',
+  id: 'id-ID',
+});
+
 export function localeDirection(locale: Locale): TextDirection {
   return locale === 'ar' ? 'rtl' : 'ltr';
 }
 
 export function localeTag(locale: Locale): string {
-  return locale === 'ar' ? 'ar' : 'en-AU';
+  return localeTags[locale];
 }
 
 export function formatLocalTime(

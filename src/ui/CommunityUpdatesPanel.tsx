@@ -1,7 +1,9 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import { buildCommunityFeed } from '../domain/communityFeed';
+import { localeTag } from '../i18n/i18n';
 import type { Locale } from '../i18n/translations';
+import { communityUpdatesCopy } from '../i18n/featureTranslations';
 import { getApplicationStorage } from '../platform/applicationStorage';
 import {
   loadCommunityContentLibrary,
@@ -15,55 +17,7 @@ import { loadMosqueProfileLibrary } from '../platform/mosqueProfileLibrary';
 import { loadPersistedSettings } from '../platform/settingsStorage';
 import { smartDisplayModeRequested } from './SmartDisplay';
 
-const copy = {
-  en: {
-    title: 'Community updates',
-    subtitle: 'Published announcements and upcoming mosque events stored on this device.',
-    announcements: 'Announcements',
-    events: 'Upcoming events',
-    priority: 'Priority',
-    pinned: 'Pinned',
-    venue: 'Venue',
-    starts: 'Starts',
-    allDay: 'All day',
-    openLink: 'Open link',
-    eventInfo: 'Event information',
-    empty: 'No published community updates are stored on this device.',
-    manage: 'Local content import / export',
-    manageHelp:
-      'Import a validated SalahOS community-content JSON bundle or export the current local cache.',
-    payload: 'Community content JSON',
-    import: 'Import local content',
-    export: 'Prepare export',
-    imported: 'Community content imported and saved locally.',
-    exported: 'Current local content is ready in the JSON field.',
-    invalid: 'The JSON bundle is invalid and was not saved.',
-    source: 'Mosque ID',
-  },
-  ar: {
-    title: 'تحديثات المجتمع',
-    subtitle: 'الإعلانات المنشورة وفعاليات المسجد القادمة المحفوظة على هذا الجهاز.',
-    announcements: 'الإعلانات',
-    events: 'الفعاليات القادمة',
-    priority: 'مهم',
-    pinned: 'مثبّت',
-    venue: 'المكان',
-    starts: 'يبدأ',
-    allDay: 'طوال اليوم',
-    openLink: 'فتح الرابط',
-    eventInfo: 'معلومات الفعالية',
-    empty: 'لا توجد تحديثات مجتمعية منشورة محفوظة على هذا الجهاز.',
-    manage: 'استيراد / تصدير المحتوى المحلي',
-    manageHelp: 'استورد حزمة JSON صالحة لمحتوى المجتمع أو صدّر النسخة المحلية الحالية.',
-    payload: 'JSON لمحتوى المجتمع',
-    import: 'استيراد المحتوى المحلي',
-    export: 'تجهيز التصدير',
-    imported: 'تم استيراد محتوى المجتمع وحفظه محلياً.',
-    exported: 'المحتوى المحلي الحالي جاهز في حقل JSON.',
-    invalid: 'حزمة JSON غير صالحة ولم يتم حفظها.',
-    source: 'معرّف المسجد',
-  },
-} as const;
+const copy = communityUpdatesCopy;
 
 function readLocale(): Locale {
   try {
@@ -91,8 +45,7 @@ function readSelectedMosqueId(): string | null {
 
 function formatEventStart(value: string, locale: Locale, allDay: boolean): string {
   const date = new Date(value);
-  const localeTag = locale === 'ar' ? 'ar' : 'en-AU';
-  return new Intl.DateTimeFormat(localeTag, {
+  return new Intl.DateTimeFormat(localeTag(locale), {
     dateStyle: 'medium',
     ...(allDay ? {} : { timeStyle: 'short' as const }),
   }).format(date);
@@ -113,7 +66,7 @@ export function CommunityUpdatesPanel() {
         announcements: library.announcements,
         events: library.events,
         now: now.toISOString(),
-        locale,
+        locale: locale === 'ar' ? 'ar' : 'en',
         surface: 'mobile',
         mosqueId: selectedMosqueId,
       }),

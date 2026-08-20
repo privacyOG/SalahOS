@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { calculateQiblaBearing } from '../domain/qibla';
 import { signedTurnToQibla } from '../domain/qiblaGuidance';
 import type { Locale } from '../i18n/translations';
+import { qiblaCompassCopy } from '../i18n/featureTranslations';
 import { getApplicationStorage } from '../platform/applicationStorage';
 import {
   installCompassHeadingListener,
@@ -13,42 +14,7 @@ import {
 import { loadPersistedSettings } from '../platform/settingsStorage';
 import { smartDisplayModeRequested } from './SmartDisplay';
 
-const copy = {
-  en: {
-    title: 'Qibla direction',
-    noLocation: 'Set a location to calculate the Qibla direction.',
-    bearing: 'Bearing from true north',
-    refresh: 'Refresh location',
-    start: 'Use device compass',
-    stop: 'Stop compass',
-    unsupported: 'North-referenced compass unavailable. Use the bearing above.',
-    denied: 'Compass permission denied. Use the bearing above.',
-    waiting: 'Move the device gently while waiting for a heading.',
-    heading: 'Device heading',
-    aligned: 'Aligned with Qibla',
-    clockwise: 'Turn clockwise',
-    counterclockwise: 'Turn counter-clockwise',
-    degrees: '°',
-    privacy: 'Qibla and compass processing stay on this device.',
-  },
-  ar: {
-    title: 'اتجاه القبلة',
-    noLocation: 'حدّد موقعاً لحساب اتجاه القبلة.',
-    bearing: 'الاتجاه من الشمال الحقيقي',
-    refresh: 'تحديث الموقع',
-    start: 'استخدام بوصلة الجهاز',
-    stop: 'إيقاف البوصلة',
-    unsupported: 'البوصلة المرتبطة بالشمال غير متاحة. استخدم الاتجاه أعلاه.',
-    denied: 'لم يُمنح إذن البوصلة. استخدم الاتجاه أعلاه.',
-    waiting: 'حرّك الجهاز برفق أثناء انتظار قراءة الاتجاه.',
-    heading: 'اتجاه الجهاز',
-    aligned: 'محاذٍ للقبلة',
-    clockwise: 'استدر مع عقارب الساعة',
-    counterclockwise: 'استدر عكس عقارب الساعة',
-    degrees: '°',
-    privacy: 'يتم حساب القبلة والبوصلة محلياً على هذا الجهاز.',
-  },
-} as const;
+const copy = qiblaCompassCopy;
 
 function readPanelState() {
   const settings = loadPersistedSettings(getApplicationStorage());
