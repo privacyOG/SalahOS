@@ -15,6 +15,11 @@ function jsonResponse(value: unknown, status = 200): Response {
   });
 }
 
+function requestInputUrl(input: RequestInfo | URL): string {
+  if (typeof input === 'string') return input;
+  return input instanceof URL ? input.toString() : input.url;
+}
+
 const remoteConfig = {
   displayId: 'display:lobby',
   contentRevision: 4,
@@ -44,27 +49,31 @@ const status = {
 describe('managed display device transport', () => {
   it('polls assigned configuration with the device credential', async () => {
     const requests: { input: RequestInfo | URL; init?: RequestInit }[] = [];
-    const client = createManagedDisplayClient(connection, async (input, init) => {
+    const client = createManagedDisplayClient(connection, (input, init) => {
       requests.push(init === undefined ? { input } : { input, init });
-      return jsonResponse(remoteConfig);
+      return Promise.resolve(jsonResponse(remoteConfig));
     });
 
     const config = await client.getConfig();
 
     expect(config).toEqual(remoteConfig);
-    expect(String(requests[0]?.input)).toBe(
+    const request = requests[0];
+    expect(request === undefined ? '' : requestInputUrl(request.input)).toBe(
       'https://admin.example.org/v1/device/config?displayId=display%3Alobby',
     );
-    expect(new Headers(requests[0]?.init?.headers).get('authorization')).toBe(
+    expect(new Headers(request?.init?.headers).get('authorization')).toBe(
       `Bearer ${connection.deviceToken}`,
     );
   });
 
   it('heartbeats an applied revision without allowing a different display ID', async () => {
     let requestBody: unknown = null;
-    const client = createManagedDisplayClient(connection, async (_input, init) => {
-      requestBody = JSON.parse(String(init?.body));
-      return jsonResponse(status);
+    const client = createManagedDisplayClient(connection, (_input, init) => {
+      if (typeof init?.body !== 'string') {
+        throw new TypeError('Heartbeat request body must be JSON text');
+      }
+      requestBody = JSON.parse(init.body) as unknown;
+      return Promise.resolve(jsonResponse(status));
     });
 
     const result = await client.heartbeat({
