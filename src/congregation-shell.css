@@ -4,22 +4,75 @@
 
 .congregation-shell-content {
   min-width: 0;
+  padding-block-end: calc(5.5rem + env(safe-area-inset-bottom));
 }
 
-.congregation-shell[data-destination='today'] .location-panel,
-.congregation-shell[data-destination='today'] .settings-panel {
+.congregation-route {
+  min-width: 0;
+  min-height: 100%;
+}
+
+/*
+ * App.tsx still owns the legacy prayer/location/settings composition during
+ * the staged v2 migration. Routing is now explicit; these two scoped rules
+ * prevent the legacy core from leaking the opposite destination until those
+ * sections are extracted into dedicated screen components.
+ */
+.legacy-core-route--today .location-panel,
+.legacy-core-route--today .settings-panel {
   display: none;
 }
 
-.congregation-shell[data-destination='settings'] .hero,
-.congregation-shell[data-destination='settings'] .prayer-panel,
-.congregation-shell[data-destination='settings'] .status-card {
+.legacy-core-route--settings .hero,
+.legacy-core-route--settings .prayer-panel,
+.legacy-core-route--settings .status-card {
   display: none;
 }
 
-.congregation-shell[data-destination='settings'] .location-panel,
-.congregation-shell[data-destination='settings'] .settings-panel {
+.legacy-core-route--settings .location-panel,
+.legacy-core-route--settings .settings-panel {
   box-shadow: var(--salah-shadow-sm);
+}
+
+.surface-entry-card {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 1.25rem auto;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-lg);
+  background: var(--salah-bg-surface);
+  box-shadow: var(--salah-shadow-sm);
+}
+
+.surface-entry-card__eyebrow {
+  margin: 0 0 var(--salah-space-2);
+  color: var(--salah-fg-tertiary);
+  font-size: var(--salah-text-xs);
+  font-weight: 750;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.surface-entry-card h2 {
+  margin: 0 0 var(--salah-space-3);
+}
+
+.surface-entry-card p:not(.surface-entry-card__eyebrow) {
+  max-width: 62ch;
+  color: var(--salah-fg-secondary);
+}
+
+.surface-entry-card__action {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  padding-inline: var(--salah-space-4);
+  border: 1px solid var(--salah-border-default);
+  border-radius: var(--salah-radius-sm);
+  color: var(--salah-fg-primary);
+  background: var(--salah-bg-accent-soft);
+  font-weight: 750;
+  text-decoration: none;
 }
 
 .congregation-nav {
@@ -28,26 +81,35 @@
   inset-inline: 0;
   bottom: 0;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: var(--salah-space-2);
-  padding: var(--salah-space-2) max(var(--salah-space-3), env(safe-area-inset-right))
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--salah-space-1);
+  padding: var(--salah-space-2) max(var(--salah-space-2), env(safe-area-inset-right))
     max(var(--salah-space-2), env(safe-area-inset-bottom))
-    max(var(--salah-space-3), env(safe-area-inset-left));
+    max(var(--salah-space-2), env(safe-area-inset-left));
   border-block-start: 1px solid var(--salah-border-subtle);
-  background: color-mix(in srgb, var(--salah-bg-surface-raised) 92%, transparent);
+  background: color-mix(in srgb, var(--salah-bg-surface-raised) 94%, transparent);
   box-shadow: 0 -0.75rem 2rem color-mix(in srgb, var(--shadow) 35%, transparent);
   backdrop-filter: blur(18px);
 }
 
 .congregation-nav-item {
+  min-width: 0;
   min-height: 3rem;
-  padding: var(--salah-space-2) var(--salah-space-3);
+  padding: var(--salah-space-2) var(--salah-space-1);
   border-color: transparent;
-  border-radius: var(--salah-radius-md);
+  border-radius: var(--salah-radius-sm);
   color: var(--salah-fg-secondary);
   background: transparent;
-  font-size: var(--salah-text-sm);
+  font-size: clamp(0.68rem, 2.7vw, var(--salah-text-sm));
   font-weight: 750;
+  line-height: 1.15;
+}
+
+.congregation-nav-item span {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .congregation-nav-item[aria-current='page'] {
@@ -60,14 +122,15 @@
   background: color-mix(in srgb, var(--accent) 8%, transparent);
 }
 
-@media (min-width: 1000px) {
+@media (min-width: 800px) {
   .congregation-shell {
     display: grid;
-    grid-template-columns: 7.25rem minmax(0, 1fr);
+    grid-template-columns: 7.5rem minmax(0, 1fr);
   }
 
   .congregation-shell-content {
     grid-column: 2;
+    padding-block-end: 0;
   }
 
   .congregation-nav {
@@ -83,7 +146,7 @@
     padding: clamp(1.25rem, 3vw, 2rem) var(--salah-space-3);
     border-block-start: 0;
     border-inline-end: 1px solid var(--salah-border-subtle);
-    background: color-mix(in srgb, var(--salah-bg-surface) 76%, transparent);
+    background: color-mix(in srgb, var(--salah-bg-surface) 82%, transparent);
     box-shadow: none;
   }
 
@@ -91,11 +154,25 @@
     width: 100%;
     min-height: 3.4rem;
     padding-inline: var(--salah-space-2);
+    font-size: var(--salah-text-sm);
+  }
+}
+
+@media (min-width: 1200px) {
+  .congregation-shell {
+    grid-template-columns: 9rem minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 720px) {
+  .surface-entry-card {
+    width: min(100% - 1rem, 1180px);
   }
 }
 
 @media (forced-colors: active) {
-  .congregation-nav {
+  .congregation-nav,
+  .surface-entry-card {
     border-color: CanvasText;
     background: Canvas;
   }
