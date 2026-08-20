@@ -1,11 +1,17 @@
 import { useEffect, useState } from 'react';
 
-import { calendarDate } from '../domain/calendar';
-import { createLocationPrayerContext } from '../domain/locationPrayerContext';
+import { buildPrayerDashboardResult } from '../domain/dashboardResult';
+import { calculationMethods } from '../domain/methods';
 import { deriveRamadanMode } from '../domain/ramadan';
+import {
+  buildRamadanFastTimes,
+  RAMADAN_IMSAK_PRESENTATION_OFFSET_MINUTES,
+} from '../domain/ramadanTimes';
+import { applyPrayerSourceToDashboard } from '../domain/sourcedDashboard';
+import { formatLocalTime } from '../i18n/i18n';
 import type { Locale } from '../i18n/translations';
 import { getApplicationStorage } from '../platform/applicationStorage';
-import { loadPersistedSettings } from '../platform/settingsStorage';
+import { loadPersistedSettings, type PersistedSettings } from '../platform/settingsStorage';
 import { smartDisplayModeRequested } from './SmartDisplay';
 
 const copy = {
@@ -14,33 +20,92 @@ const copy = {
     day: 'Ramadan day',
     yearSuffix: 'AH',
     message: 'Ramadan presentation is active for the selected location.',
-    source: 'Prayer times continue to use your selected calculation or mosque source.',
+    source: 'Times follow your selected calculation or mosque source.',
+    imsak: 'Precautionary Imsak',
+    imsakDetail: '10 min before Fajr',
+    suhur: 'Suhur ends / Fajr',
+    iftar: 'Iftar / Maghrib',
+    unavailable: 'Unavailable',
+    guidance: 'Imsak is shown as a precautionary presentation offset; the Suhur boundary is Fajr.',
   },
   ar: {
     eyebrow: 'وضع رمضان',
     day: 'اليوم من رمضان',
     yearSuffix: 'هـ',
     message: 'تم تفعيل عرض رمضان للموقع المحدد.',
-    source: 'تستمر مواقيت الصلاة باستخدام طريقة الحساب أو مصدر المسجد الذي اخترته.',
+    source: 'تتبع الأوقات طريقة الحساب أو مصدر المسجد الذي اخترته.',
+    imsak: 'الإمساك الاحتياطي',
+    imsakDetail: 'قبل الفجر بـ 10 دقائق',
+    suhur: 'نهاية السحور / الفجر',
+    iftar: 'الإفطار / المغرب',
+    unavailable: 'غير متاح',
+    guidance: 'يُعرض الإمساك كوقت احتياطي؛ أما نهاية وقت السحور فهي عند الفجر.',
   },
 } as const;
 
-function readPanelState() {
-  const settings = loadPersistedSettings(getApplicationStorage());
-  return {
-    locale: settings.locale,
-    location: settings.location,
+export interface RamadanPanelModel {
+  readonly ramadan: ReturnType<typeof deriveRamadanMode>;
+  readonly imsakLocalMinutes: number | null;
+  readonly suhurEndsAtLocalMinutes: number | null;
+  readonly iftarLocalMinutes: number | null;
+}
+
+function readSettings(): PersistedSettings {
+  return loadPersistedSettings(getApplicationStorage());
+}
+
+export function buildRamadanPanelModel(
+  settings: PersistedSettings,
+  instant: Date,
+): RamadanPanelModel | null {
+  if (settings.location === null) {
+    return null;
+  }
+
+  const dashboardResult = buildPrayerDashboardResult({
+    instant,
+    coordinates: settings.location.coordinates,
+    ...(settings.location.timeZone === undefined ? {} : { timeZone: settings.location.timeZone }),
+    method: calculationMethods[settings.calculationMethodId],
+    asrConvention: settings.asrConvention,
+    highLatitudeRule: settings.highLatitudeRule,
+    adjustments: settings.prayerAdjustments,
     hijriCorrectionDays: settings.hijriCorrectionDays,
-  };
+  });
+
+  if (!dashboardResult.ok) {
+    return null;
+  }
+
+  const ramadan = deriveRamadanMode(dashboardResult.dashboard.hijri);
+  const sourcedDashboard = applyPrayerSourceToDashboard({
+    dashboard: dashboardResult.dashboard,
+    sourceMode: settings.prayerSourceMode,
+    mosqueTimetable: settings.mosqueTimetable,
+  });
+  const displayedFajr = sourcedDashboard.prayers.find((prayer) => prayer.name === 'fajr');
+  const displayedMaghrib = sourcedDashboard.prayers.find((prayer) => prayer.name === 'maghrib');
+  const fastTimes = buildRamadanFastTimes({
+    displayedFajrLocalMinutes: displayedFajr?.localMinutes ?? null,
+    displayedMaghribLocalMinutes: displayedMaghrib?.localMinutes ?? null,
+    imsakOffsetMinutes: RAMADAN_IMSAK_PRESENTATION_OFFSET_MINUTES,
+  });
+
+  return Object.freeze({
+    ramadan,
+    imsakLocalMinutes: fastTimes.imsakLocalMinutes,
+    suhurEndsAtLocalMinutes: fastTimes.suhurEndsAtLocalMinutes,
+    iftarLocalMinutes: fastTimes.iftarLocalMinutes,
+  });
 }
 
 export function RamadanModePanel() {
-  const [panelState, setPanelState] = useState(readPanelState);
+  const [settings, setSettings] = useState(readSettings);
   const [instant, setInstant] = useState(() => new Date());
-  const locale: Locale = panelState.locale;
+  const locale: Locale = settings.locale;
   const text = copy[locale];
-  const ramadan = getCurrentRamadanMode(panelState, instant);
-  const active = ramadan?.active === true;
+  const panel = buildRamadanPanelModel(settings, instant);
+  const active = panel?.ramadan.active === true;
 
   useEffect(() => {
     if (active) {
@@ -56,7 +121,7 @@ export function RamadanModePanel() {
 
   useEffect(() => {
     const refresh = () => {
-      setPanelState(readPanelState());
+      setSettings(readSettings());
       setInstant(new Date());
     };
     const refreshWhenVisible = () => {
@@ -78,9 +143,14 @@ export function RamadanModePanel() {
     };
   }, []);
 
-  if (ramadan?.active !== true || smartDisplayModeRequested(window.location.search)) {
+  if (panel?.ramadan.active !== true || smartDisplayModeRequested(window.location.search)) {
     return null;
   }
+
+  const formatTime = (localMinutes: number | null) =>
+    localMinutes === null
+      ? text.unavailable
+      : formatLocalTime(localMinutes, locale, settings.timeFormat);
 
   return (
     <section
@@ -94,31 +164,31 @@ export function RamadanModePanel() {
       <div className="ramadan-mode-copy">
         <p className="ramadan-mode-eyebrow">{text.eyebrow}</p>
         <h2 id="ramadan-mode-title">
-          {text.day} {ramadan.ramadanDay}
+          {text.day} {panel.ramadan.ramadanDay}
         </h2>
         <p>{text.message}</p>
         <small>{text.source}</small>
+
+        <div className="ramadan-fast-times" aria-label={text.eyebrow}>
+          <div className="ramadan-fast-time">
+            <span>{text.imsak}</span>
+            <strong dir="ltr">{formatTime(panel.imsakLocalMinutes)}</strong>
+            <small>{text.imsakDetail}</small>
+          </div>
+          <div className="ramadan-fast-time">
+            <span>{text.suhur}</span>
+            <strong dir="ltr">{formatTime(panel.suhurEndsAtLocalMinutes)}</strong>
+          </div>
+          <div className="ramadan-fast-time">
+            <span>{text.iftar}</span>
+            <strong dir="ltr">{formatTime(panel.iftarLocalMinutes)}</strong>
+          </div>
+        </div>
+        <small className="ramadan-fast-guidance">{text.guidance}</small>
       </div>
       <strong className="ramadan-mode-year" dir="ltr">
-        {ramadan.hijriYear} {text.yearSuffix}
+        {panel.ramadan.hijriYear} {text.yearSuffix}
       </strong>
     </section>
   );
-}
-
-function getCurrentRamadanMode(
-  panelState: ReturnType<typeof readPanelState>,
-  instant: Date,
-): ReturnType<typeof deriveRamadanMode> | null {
-  if (panelState.location === null) {
-    return null;
-  }
-
-  const context = createLocationPrayerContext(
-    instant,
-    panelState.location.coordinates,
-    panelState.location.timeZone,
-  );
-  const hijri = calendarDate(context.civilDate, panelState.hijriCorrectionDays).hijri;
-  return deriveRamadanMode(hijri);
 }
