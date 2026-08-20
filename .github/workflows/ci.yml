@@ -13,6 +13,7 @@ permissions:
 
 jobs:
   quality:
+    # Validation branch only: use hosted Ubuntu so Stage 36 preflight is observable.
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
