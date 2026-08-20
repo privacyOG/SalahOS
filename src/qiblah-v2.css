@@ -1,0 +1,286 @@
+.congregation-route--qiblah {
+  min-width: 0;
+}
+
+.qibla-finder--v2 {
+  width: min(1280px, 100%);
+  min-height: calc(100dvh - 7rem);
+  margin: 0 auto;
+  padding: clamp(1rem, 2.6vw, 2rem);
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+}
+
+.qibla-finder--v2 .qibla-finder-header {
+  align-items: center;
+}
+
+.qibla-finder--v2 .qibla-finder-header h2 {
+  font-size: clamp(2rem, 5vw, 3.4rem);
+}
+
+.qibla-context-strip {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.qibla-finder--v2 .qibla-finder-privacy,
+.qibla-finder--v2 .qibla-location-bar {
+  margin-top: 0;
+}
+
+.qibla-primary-workspace {
+  display: grid;
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: clamp(0.9rem, 2.2vw, 1.5rem);
+  border: 1px solid var(--border-subtle, rgba(127, 127, 127, 0.25));
+  border-radius: clamp(1rem, 2.5vw, 1.5rem);
+  background: color-mix(in srgb, var(--surface-elevated, #fff) 92%, transparent);
+}
+
+.qibla-finder--v2 .qibla-bearing-summary,
+.qibla-finder--v2 .qibla-compass-layout,
+.qibla-finder--v2 .qibla-map-shell {
+  margin-top: 0;
+}
+
+.qibla-finder--v2 .qibla-bearing-summary {
+  padding: 0.8rem 1rem;
+  border: 1px solid color-mix(in srgb, var(--qibla-accent) 18%, transparent);
+}
+
+.qibla-finder--v2 .qibla-compass-layout {
+  min-height: min(66vh, 660px);
+  align-content: center;
+}
+
+.qibla-finder--v2 .qibla-compass-dial {
+  width: min(82vw, 580px);
+}
+
+.qibla-finder--v2 .qibla-guidance-column {
+  align-self: center;
+}
+
+.qibla-finder--v2 .qibla-turn-guidance {
+  padding: clamp(1rem, 2vw, 1.4rem);
+}
+
+.qibla-finder--v2 .qibla-calibration,
+.qibla-finder--v2 .qibla-heading-readout,
+.qibla-finder--v2 .qibla-compass-actions,
+.qibla-finder--v2 .inline-message {
+  font-size: 0.92rem;
+}
+
+.qibla-empty-state {
+  margin: 1rem 0 0;
+  padding: 1rem;
+  border: 1px dashed var(--border-subtle, rgba(127, 127, 127, 0.35));
+  border-radius: 1rem;
+}
+
+.qibla-location-tools {
+  margin-top: 1rem;
+  border: 1px solid var(--border-subtle, rgba(127, 127, 127, 0.25));
+  border-radius: 1rem;
+  background: var(--surface, rgba(127, 127, 127, 0.05));
+  overflow: clip;
+}
+
+.qibla-location-tools > summary {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.25rem 1rem;
+  min-height: 52px;
+  padding: 0.8rem 1rem;
+  cursor: pointer;
+  list-style: none;
+}
+
+.qibla-location-tools > summary::-webkit-details-marker {
+  display: none;
+}
+
+.qibla-location-tools > summary::after {
+  content: '+';
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  font-size: 1.4rem;
+  line-height: 1;
+  opacity: 0.72;
+}
+
+.qibla-location-tools[open] > summary::after {
+  content: '−';
+}
+
+.qibla-location-tools > summary span {
+  font-size: 0.86rem;
+  opacity: 0.72;
+}
+
+.qibla-location-tools__body {
+  display: grid;
+  gap: 1rem;
+  padding: 0 1rem 1rem;
+  border-top: 1px solid var(--border-subtle, rgba(127, 127, 127, 0.2));
+}
+
+.qibla-saved-locations {
+  padding-top: 1rem;
+}
+
+.qibla-saved-locations h3,
+.qibla-finder--v2 .qibla-manual-location h3 {
+  margin: 0 0 0.65rem;
+  font-size: 1rem;
+}
+
+.qibla-saved-locations__list {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.qibla-saved-locations__list button {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.35rem 0.8rem;
+  align-items: center;
+  width: 100%;
+  padding: 0.7rem 0.8rem;
+  text-align: start;
+  border: 1px solid var(--border-subtle, rgba(127, 127, 127, 0.25));
+  border-radius: 0.8rem;
+  background: var(--surface-elevated, rgba(127, 127, 127, 0.05));
+  color: inherit;
+}
+
+.qibla-saved-locations__list button span {
+  font-size: 0.78rem;
+  opacity: 0.68;
+}
+
+.qibla-finder--v2 .qibla-manual-location {
+  margin-top: 0;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-subtle, rgba(127, 127, 127, 0.2));
+}
+
+@media (min-width: 760px) {
+  .qibla-context-strip {
+    grid-template-columns: minmax(0, 0.85fr) minmax(320px, 1.15fr);
+    align-items: stretch;
+  }
+
+  .qibla-finder--v2 .qibla-finder-privacy {
+    display: grid;
+    align-content: center;
+  }
+
+  .qibla-location-tools__body {
+    grid-template-columns: minmax(240px, 0.8fr) minmax(0, 1.2fr);
+    align-items: start;
+  }
+
+  .qibla-location-tools__body > .qibla-manual-location:first-child,
+  .qibla-location-tools__body > .qibla-manual-location:only-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (min-width: 980px) {
+  .qibla-finder--v2 .qibla-compass-layout {
+    grid-template-columns: minmax(430px, 1.15fr) minmax(320px, 0.85fr);
+    gap: clamp(1.5rem, 4vw, 3rem);
+  }
+
+  .qibla-finder--v2 .qibla-compass-dial {
+    width: min(46vw, 620px);
+  }
+}
+
+@media (orientation: landscape) and (max-height: 620px) {
+  .qibla-finder--v2 {
+    min-height: 0;
+    padding-block: 0.75rem;
+  }
+
+  .qibla-finder--v2 .qibla-finder-header h2 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+  }
+
+  .qibla-context-strip {
+    margin-top: 0.65rem;
+  }
+
+  .qibla-primary-workspace {
+    margin-top: 0.65rem;
+    padding: 0.75rem 1rem;
+  }
+
+  .qibla-finder--v2 .qibla-compass-layout {
+    min-height: 0;
+    grid-template-columns: minmax(280px, 0.92fr) minmax(300px, 1.08fr);
+    gap: 1rem;
+  }
+
+  .qibla-finder--v2 .qibla-compass-dial {
+    width: min(58vh, 390px);
+  }
+
+  .qibla-location-tools {
+    margin-top: 0.65rem;
+  }
+}
+
+@media (max-width: 620px) {
+  .qibla-finder--v2 {
+    width: 100%;
+    min-height: calc(100dvh - 5.5rem);
+    padding: 0.75rem 0.5rem 1.25rem;
+  }
+
+  .qibla-finder--v2 .qibla-finder-header {
+    gap: 0.75rem;
+  }
+
+  .qibla-finder--v2 .qibla-finder-header h2 {
+    font-size: clamp(1.85rem, 9vw, 2.6rem);
+  }
+
+  .qibla-primary-workspace {
+    padding: 0.7rem;
+  }
+
+  .qibla-finder--v2 .qibla-compass-layout {
+    min-height: 0;
+  }
+
+  .qibla-finder--v2 .qibla-compass-dial {
+    width: min(88vw, 460px);
+  }
+
+  .qibla-location-tools > summary {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .qibla-saved-locations__list button {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (forced-colors: active) {
+  .qibla-primary-workspace,
+  .qibla-location-tools,
+  .qibla-saved-locations__list button {
+    border: 1px solid CanvasText;
+  }
+}
