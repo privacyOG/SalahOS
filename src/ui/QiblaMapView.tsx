@@ -7,7 +7,11 @@ import {
   qiblaMapTiles,
 } from '../domain/qiblaMap';
 import type { QiblaFinderCopy } from '../i18n/qiblaFinderTranslations';
-import { qiblaMapTileUrl, type QiblaMapLayer } from '../platform/qiblaMapTiles';
+import {
+  qiblaMapAttributionUrl,
+  qiblaMapTileUrl,
+  type QiblaMapLayer,
+} from '../platform/qiblaMapTiles';
 
 interface QiblaMapViewProps {
   readonly coordinates: Coordinates;
@@ -39,6 +43,7 @@ export function QiblaMapView({
   const [tileError, setTileError] = useState(false);
   const tiles = useMemo(() => qiblaMapTiles(coordinates, zoom), [coordinates, zoom]);
   const endpoint = qiblaBearingRayEndpoint(bearingDegrees, 100, 100);
+  const attributionUrl = qiblaMapAttributionUrl(layer);
 
   const dropPin = (event: MouseEvent<HTMLDivElement>) => {
     if (!tilesEnabled) return;
@@ -80,7 +85,10 @@ export function QiblaMapView({
           <button
             type="button"
             aria-label={text.zoomOut}
-            onClick={() => onZoomChange(zoom - 1)}
+            onClick={() => {
+              setTileError(false);
+              onZoomChange(zoom - 1);
+            }}
           >
             −
           </button>
@@ -88,7 +96,10 @@ export function QiblaMapView({
           <button
             type="button"
             aria-label={text.zoomIn}
-            onClick={() => onZoomChange(zoom + 1)}
+            onClick={() => {
+              setTileError(false);
+              onZoomChange(zoom + 1);
+            }}
           >
             +
           </button>
@@ -98,7 +109,7 @@ export function QiblaMapView({
       <div
         className={`qibla-map-viewport${aligned ? ' is-aligned' : ''}`}
         onClick={dropPin}
-        role="application"
+        role="group"
         aria-label={text.dropPin}
       >
         {tilesEnabled ? (
@@ -154,9 +165,13 @@ export function QiblaMapView({
             </p>
           )}
           <p className="qibla-map-attribution">
-            {layer === 'standard'
-              ? text.mapAttributionStandard
-              : text.mapAttributionSatellite}
+            {attributionUrl === null ? (
+              text.mapAttributionSatellite
+            ) : (
+              <a href={attributionUrl} target="_blank" rel="noopener noreferrer">
+                {text.mapAttributionStandard}
+              </a>
+            )}
           </p>
         </>
       )}

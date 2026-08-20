@@ -3,10 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import type { Coordinates } from '../domain/coordinates';
 import { searchLocations, type LocationSearchResult } from '../domain/locationSearch';
 import { calculateQiblaBearing } from '../domain/qibla';
-import {
-  isQiblaAligned,
-  shouldRecalculateQibla,
-} from '../domain/qiblaFinder';
+import { isQiblaAligned, shouldRecalculateQibla } from '../domain/qiblaFinder';
 import { clampQiblaMapZoom } from '../domain/qiblaMap';
 import { signedTurnToQibla } from '../domain/qiblaGuidance';
 import { localeDirection, localeTag } from '../i18n/i18n';
@@ -33,7 +30,13 @@ import { smartDisplayModeRequested } from './SmartDisplay';
 
 type FinderView = 'compass' | 'map';
 type FinderLocationSource = 'saved' | 'live' | 'city' | 'pin';
-type CompassState = 'idle' | 'starting' | 'active' | 'denied' | 'unsupported' | 'error';
+type CompassState =
+  | 'idle'
+  | 'starting'
+  | 'active'
+  | 'denied'
+  | 'unsupported'
+  | 'error';
 type LocationState = 'idle' | 'locating' | 'live' | 'error';
 
 interface FinderLocation {
@@ -42,7 +45,10 @@ interface FinderLocation {
   readonly label: string | null;
 }
 
-function readInitialState(): { readonly locale: Locale; readonly location: FinderLocation | null } {
+function readInitialState(): {
+  readonly locale: Locale;
+  readonly location: FinderLocation | null;
+} {
   const settings = loadPersistedSettings(getApplicationStorage());
   return {
     locale: settings.locale,
@@ -63,7 +69,8 @@ export function QiblaFinder() {
   const [location, setLocation] = useState<FinderLocation | null>(initial.location);
   const [view, setView] = useState<FinderView>('compass');
   const [locationState, setLocationState] = useState<LocationState>('idle');
-  const [locationError, setLocationError] = useState<QiblaLocationFailureReason | null>(null);
+  const [locationError, setLocationError] =
+    useState<QiblaLocationFailureReason | null>(null);
   const [compassState, setCompassState] = useState<CompassState>('idle');
   const [heading, setHeading] = useState<TrueHeadingSample | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -73,7 +80,10 @@ export function QiblaFinder() {
   const compassSessionRef = useRef<TrueHeadingSession | null>(null);
   const locationWatchRef = useRef<QiblaLocationWatch | null>(null);
   const headingTimerRef = useRef<number | null>(null);
+  const receivedHeadingRef = useRef(false);
   const alignedRef = useRef(false);
+  const locationRef = useRef<FinderLocation | null>(location);
+  locationRef.current = location;
   const text = qiblaFinderCopy[locale];
   const qibla = location === null ? null : calculateQiblaBearing(location.coordinates);
   const turn =
@@ -129,6 +139,7 @@ export function QiblaFinder() {
     clearHeadingTimer(headingTimerRef);
     await compassSessionRef.current?.stop();
     compassSessionRef.current = null;
+    receivedHeadingRef.current = false;
     setHeading(null);
     setCompassState('idle');
     alignedRef.current = false;
@@ -139,15 +150,21 @@ export function QiblaFinder() {
     clearHeadingTimer(headingTimerRef);
     await compassSessionRef.current?.stop();
     compassSessionRef.current = null;
+    receivedHeadingRef.current = false;
     setHeading(null);
     setCompassState('starting');
     alignedRef.current = false;
 
-    const session = await startTrueHeadingUpdates(location.coordinates, (sample) => {
-      clearHeadingTimer(headingTimerRef);
-      setHeading(sample);
-      setCompassState('active');
-    });
+    const startingCoordinates = location.coordinates;
+    const session = await startTrueHeadingUpdates(
+      () => locationRef.current?.coordinates ?? startingCoordinates,
+      (sample) => {
+        receivedHeadingRef.current = true;
+        clearHeadingTimer(headingTimerRef);
+        setHeading(sample);
+        setCompassState('active');
+      },
+    );
     compassSessionRef.current = session;
     if (session.state !== 'active') {
       setCompassState(session.state);
@@ -156,7 +173,7 @@ export function QiblaFinder() {
 
     setCompassState('active');
     headingTimerRef.current = window.setTimeout(() => {
-      if (heading === null) {
+      if (!receivedHeadingRef.current) {
         setCompassState('unsupported');
         void session.stop();
         compassSessionRef.current = null;
@@ -226,8 +243,10 @@ export function QiblaFinder() {
     setLocationError(null);
   };
 
-  const locationSource = location === null ? null : locationSourceLabel(location.source, text);
-  const staticCompass = compassState === 'unsupported' || compassState === 'denied' || compassState === 'error';
+  const locationSource =
+    location === null ? null : locationSourceLabel(location.source, text);
+  const staticCompass =
+    compassState === 'unsupported' || compassState === 'denied' || compassState === 'error';
   const calibrationNeeded =
     heading?.accuracyDegrees !== null &&
     heading?.accuracyDegrees !== undefined &&
@@ -241,7 +260,7 @@ export function QiblaFinder() {
     >
       <header className="qibla-finder-header">
         <div>
-          <p className="qibla-finder-kicker">Qiblah</p>
+          <p className="qibla-finder-kicker">{text.eyebrow}</p>
           <h2 id="qibla-finder-title">{text.title}</h2>
           <p>{text.subtitle}</p>
         </div>
@@ -270,7 +289,8 @@ export function QiblaFinder() {
           <strong>{locationSource ?? text.noLocation}</strong>
           {location !== null && (
             <span dir="ltr">
-              {location.coordinates.latitude.toFixed(5)}, {location.coordinates.longitude.toFixed(5)}
+              {location.coordinates.latitude.toFixed(5)},{' '}
+              {location.coordinates.longitude.toFixed(5)}
             </span>
           )}
           {location?.label !== null && location?.label !== undefined && (
@@ -278,7 +298,11 @@ export function QiblaFinder() {
           )}
         </div>
         <div className="qibla-location-actions">
-          <button type="button" onClick={() => void useCurrentPosition()} disabled={locationState === 'locating'}>
+          <button
+            type="button"
+            onClick={() => void useCurrentPosition()}
+            disabled={locationState === 'locating'}
+          >
             {locationState === 'locating' ? text.locating : text.currentPosition}
           </button>
           {locationState === 'live' && (

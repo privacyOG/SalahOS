@@ -46,6 +46,7 @@ export interface TrueHeadingSession {
 }
 
 type PermissionRequester = (() => Promise<'granted' | 'denied'>) | undefined;
+type HeadingCoordinatesSource = Coordinates | (() => Coordinates);
 
 function normalizeHeading(degrees: number): number {
   return ((degrees % 360) + 360) % 360;
@@ -194,7 +195,7 @@ export function trueHeadingFromBrowser(
 }
 
 export async function startTrueHeadingUpdates(
-  coordinates: Coordinates,
+  coordinates: HeadingCoordinatesSource,
   onHeading: (sample: TrueHeadingSample) => void,
 ): Promise<TrueHeadingSession> {
   if (Capacitor.isNativePlatform()) {
@@ -204,7 +205,7 @@ export async function startTrueHeadingUpdates(
 }
 
 async function startNativeHeadingUpdates(
-  coordinates: Coordinates,
+  coordinates: HeadingCoordinatesSource,
   onHeading: (sample: TrueHeadingSample) => void,
 ): Promise<TrueHeadingSession> {
   try {
@@ -217,7 +218,7 @@ async function startNativeHeadingUpdates(
     const listener = await Compass.addListener('headingChange', (reading) => {
       const sample = trueHeadingFromNative(
         reading,
-        coordinates,
+        resolveHeadingCoordinates(coordinates),
         currentScreenOrientationAngle(),
       );
       const smoothed = smoothCircularHeading(previousHeading, sample.headingDegrees);
@@ -239,7 +240,7 @@ async function startNativeHeadingUpdates(
 }
 
 async function startBrowserHeadingUpdates(
-  coordinates: Coordinates,
+  coordinates: HeadingCoordinatesSource,
   onHeading: (sample: TrueHeadingSample) => void,
 ): Promise<TrueHeadingSession> {
   const permission = await requestCompassPermission();
@@ -250,7 +251,7 @@ async function startBrowserHeadingUpdates(
   const remove = installCompassHeadingListener(window, (reading) => {
     const sample = trueHeadingFromBrowser(
       reading,
-      coordinates,
+      resolveHeadingCoordinates(coordinates),
       currentScreenOrientationAngle(),
     );
     const smoothed = smoothCircularHeading(previousHeading, sample.headingDegrees);
@@ -264,6 +265,10 @@ async function startBrowserHeadingUpdates(
       remove();
     },
   });
+}
+
+function resolveHeadingCoordinates(source: HeadingCoordinatesSource): Coordinates {
+  return typeof source === 'function' ? source() : source;
 }
 
 function stoppedSession(

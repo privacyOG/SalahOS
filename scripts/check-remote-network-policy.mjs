@@ -5,7 +5,10 @@ import { fileURLToPath } from 'node:url';
 const repositoryRoot = fileURLToPath(new URL('..', import.meta.url));
 const sourceRoot = join(repositoryRoot, 'src');
 const executableExtensions = new Set(['.ts', '.tsx', '.js', '.jsx', '.mjs']);
-const reviewedRemoteNetworkFiles = new Set(['src/platform/managedAdminTransport.ts']);
+const reviewedRemoteNetworkFiles = new Map([
+  ['src/platform/managedAdminTransport.ts', 'managed display administration'],
+  ['src/platform/qiblaMapTiles.ts', 'user-initiated Qiblah map tiles'],
+]);
 
 async function collectFiles(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
@@ -43,14 +46,16 @@ for (const file of applicationFiles) {
   for (const { label, pattern } of prohibitedPatterns) {
     if (!pattern.test(content)) continue;
     if (reviewedRemoteNetworkFiles.has(repositoryPath)) {
-      reviewedCapabilities.push(`${repositoryPath}: ${label}`);
+      reviewedCapabilities.push(
+        `${repositoryPath}: ${label} (${reviewedRemoteNetworkFiles.get(repositoryPath)})`,
+      );
     } else {
       violations.push(`${repositoryPath}: ${label}`);
     }
   }
 }
 
-for (const approvedPath of reviewedRemoteNetworkFiles) {
+for (const approvedPath of reviewedRemoteNetworkFiles.keys()) {
   if (!applicationFiles.some((file) => relative(repositoryRoot, file) === approvedPath)) {
     throw new Error(`Reviewed remote-network adapter is missing: ${approvedPath}`);
   }
@@ -58,10 +63,10 @@ for (const approvedPath of reviewedRemoteNetworkFiles) {
 
 if (violations.length > 0) {
   throw new Error(
-    `Unreviewed remote-network capability detected. SalahOS application code remains local-first except for explicitly reviewed managed-service adapters:\n${violations.join('\n')}`,
+    `Unreviewed remote-network capability detected. SalahOS application code remains local-first except for explicitly reviewed, narrowly scoped adapters:\n${violations.join('\n')}`,
   );
 }
 
 console.log(
-  `Remote network policy passed for ${applicationFiles.length} application source files. Reviewed managed-service capabilities: ${reviewedCapabilities.length}.`,
+  `Remote network policy passed for ${applicationFiles.length} application source files. Reviewed capabilities: ${reviewedCapabilities.length}.`,
 );

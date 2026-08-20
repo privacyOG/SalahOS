@@ -1,6 +1,7 @@
 import type { Locale } from './translations';
 
 export interface QiblaFinderCopy {
+  readonly eyebrow: string;
   readonly title: string;
   readonly subtitle: string;
   readonly privacy: string;
@@ -53,6 +54,7 @@ export interface QiblaFinderCopy {
 
 export const qiblaFinderCopy = {
   en: {
+    eyebrow: 'Qiblah',
     title: 'Qiblah Finder',
     subtitle: 'Face the Kaaba using a true-north compass or a map bearing.',
     privacy: 'Location and Qiblah calculations stay on this device unless you choose to load map tiles.',
@@ -90,7 +92,7 @@ export const qiblaFinderCopy = {
     calibrationTitle: 'Compass needs calibration',
     calibrationBody: 'Move the device in a figure-8. Keep it away from metal, magnetic tablet covers and keyboard cases.',
     mapPrivacyTitle: 'Map tiles use external providers',
-    mapPrivacyBody: 'Loading the map sends the viewed map area to the selected tile provider. Your SalahOS settings and precise location are not uploaded by SalahOS.',
+    mapPrivacyBody: 'Loading the map sends requested map tiles and normal network metadata to the selected provider. If centred on your location, the viewed area can reveal your approximate location. SalahOS does not attach your saved prayer settings or mosque data.',
     loadMap: 'Load map tiles',
     standardMap: 'Standard',
     satelliteMap: 'Satellite',
@@ -103,6 +105,7 @@ export const qiblaFinderCopy = {
     alignedMap: 'Aligned with Qiblah',
   },
   ar: {
+    eyebrow: 'القبلة',
     title: 'محدد القبلة',
     subtitle: 'اتجه نحو الكعبة باستخدام بوصلة مرتبطة بالشمال الحقيقي أو اتجاه على الخريطة.',
     privacy: 'يبقى تحديد الموقع وحساب القبلة على هذا الجهاز ما لم تختر تحميل مربعات الخريطة.',
@@ -140,7 +143,7 @@ export const qiblaFinderCopy = {
     calibrationTitle: 'تحتاج البوصلة إلى معايرة',
     calibrationBody: 'حرّك الجهاز على شكل رقم 8 وأبعده عن المعادن والأغطية المغناطيسية ولوحات المفاتيح المغناطيسية.',
     mapPrivacyTitle: 'تستخدم الخريطة مزودي مربعات خارجيين',
-    mapPrivacyBody: 'عند تحميل الخريطة تُرسل منطقة العرض إلى مزود المربعات المختار. لا يرفع صلاح أو إس إعداداتك أو موقعك الدقيق.',
+    mapPrivacyBody: 'عند تحميل الخريطة يتلقى مزود المربعات المختار مربعات الخريطة المطلوبة وبيانات الشبكة المعتادة. إذا كانت الخريطة متمركزة على موقعك فقد تكشف منطقة العرض موقعك التقريبي. لا يرفق صلاح أو إس إعدادات الصلاة المحفوظة أو بيانات المسجد.',
     loadMap: 'تحميل مربعات الخريطة',
     standardMap: 'قياسية',
     satelliteMap: 'أقمار صناعية',
@@ -153,6 +156,7 @@ export const qiblaFinderCopy = {
     alignedMap: 'محاذٍ للقبلة',
   },
   tr: {
+    eyebrow: 'Kıble',
     title: 'Kıble Bulucu',
     subtitle: 'Gerçek kuzey pusulası veya harita doğrultusuyla Kâbe’ye yönelin.',
     privacy: 'Harita döşemelerini yüklemeyi seçmediğiniz sürece konum ve kıble hesapları bu cihazda kalır.',
@@ -190,7 +194,7 @@ export const qiblaFinderCopy = {
     calibrationTitle: 'Pusulanın kalibre edilmesi gerekiyor',
     calibrationBody: 'Cihazı 8 şekli çizerek hareket ettirin. Metalden, manyetik tablet kapaklarından ve klavye kılıflarından uzak tutun.',
     mapPrivacyTitle: 'Harita döşemeleri harici sağlayıcıları kullanır',
-    mapPrivacyBody: 'Haritayı yüklemek görüntülenen alanı seçilen döşeme sağlayıcısına gönderir. SalahOS ayarlarınızı veya hassas konumunuzu yüklemez.',
+    mapPrivacyBody: 'Harita yüklendiğinde seçilen sağlayıcı istenen harita döşemelerini ve olağan ağ meta verilerini alır. Harita konumunuza ortalanmışsa görüntülenen alan yaklaşık konumunuzu açığa çıkarabilir. SalahOS kayıtlı namaz ayarlarınızı veya cami verilerinizi eklemez.',
     loadMap: 'Harita döşemelerini yükle',
     standardMap: 'Standart',
     satelliteMap: 'Uydu',
@@ -203,6 +207,7 @@ export const qiblaFinderCopy = {
     alignedMap: 'Kıbleyle hizalı',
   },
   id: {
+    eyebrow: 'Kiblat',
     title: 'Pencari Kiblat',
     subtitle: 'Arahkan diri ke Ka’bah dengan kompas utara sejati atau arah pada peta.',
     privacy: 'Lokasi dan perhitungan kiblat tetap di perangkat ini kecuali Anda memilih memuat ubin peta.',
@@ -240,7 +245,7 @@ export const qiblaFinderCopy = {
     calibrationTitle: 'Kompas perlu dikalibrasi',
     calibrationBody: 'Gerakkan perangkat membentuk angka 8. Jauhkan dari logam, penutup tablet magnetik, dan casing papan ketik.',
     mapPrivacyTitle: 'Ubin peta memakai penyedia eksternal',
-    mapPrivacyBody: 'Memuat peta mengirim area peta yang dilihat ke penyedia ubin yang dipilih. SalahOS tidak mengunggah pengaturan atau lokasi presisi Anda.',
+    mapPrivacyBody: 'Saat peta dimuat, penyedia yang dipilih menerima ubin peta yang diminta dan metadata jaringan normal. Jika peta dipusatkan pada lokasi Anda, area yang dilihat dapat mengungkap perkiraan lokasi Anda. SalahOS tidak menyertakan pengaturan salat tersimpan atau data masjid Anda.',
     loadMap: 'Muat ubin peta',
     standardMap: 'Standar',
     satelliteMap: 'Satelit',

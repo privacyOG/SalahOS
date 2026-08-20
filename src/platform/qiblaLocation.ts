@@ -43,30 +43,35 @@ export async function startQiblaLocationWatch(
   onFailure: (reason: QiblaLocationFailureReason) => void,
 ): Promise<QiblaLocationWatch> {
   if (Capacitor.isNativePlatform()) {
-    const id = await Geolocation.watchPosition(
-      {
-        enableHighAccuracy: true,
-        timeout: 15_000,
-        maximumAge: 5_000,
-      },
-      (position, error) => {
-        if (position !== null) {
-          onLocation({
-            coordinates: createCoordinates(position.coords.latitude, position.coords.longitude),
-            source: 'native-live',
-          });
-          return;
-        }
-        if (error !== null) {
-          onFailure(nativeFailureReason(error));
-        }
-      },
-    );
-    return Object.freeze({
-      stop: async () => {
-        await Geolocation.clearWatch({ id });
-      },
-    });
+    try {
+      const id = await Geolocation.watchPosition(
+        {
+          enableHighAccuracy: true,
+          timeout: 15_000,
+          maximumAge: 5_000,
+        },
+        (position, error) => {
+          if (position !== null) {
+            onLocation({
+              coordinates: createCoordinates(position.coords.latitude, position.coords.longitude),
+              source: 'native-live',
+            });
+            return;
+          }
+          if (error !== null) {
+            onFailure(nativeFailureReason(error));
+          }
+        },
+      );
+      return Object.freeze({
+        stop: async () => {
+          await Geolocation.clearWatch({ id });
+        },
+      });
+    } catch (error) {
+      onFailure(nativeFailureReason(error));
+      return stoppedWatch();
+    }
   }
 
   if (typeof navigator === 'undefined' || navigator.geolocation === undefined) {
@@ -74,28 +79,33 @@ export async function startQiblaLocationWatch(
     return stoppedWatch();
   }
 
-  const id = navigator.geolocation.watchPosition(
-    (position) => {
-      onLocation({
-        coordinates: createCoordinates(position.coords.latitude, position.coords.longitude),
-        source: 'browser-live',
-      });
-    },
-    (error) => {
-      onFailure(browserFailureReason(error));
-    },
-    {
-      enableHighAccuracy: true,
-      timeout: 15_000,
-      maximumAge: 5_000,
-    },
-  );
+  try {
+    const id = navigator.geolocation.watchPosition(
+      (position) => {
+        onLocation({
+          coordinates: createCoordinates(position.coords.latitude, position.coords.longitude),
+          source: 'browser-live',
+        });
+      },
+      (error) => {
+        onFailure(browserFailureReason(error));
+      },
+      {
+        enableHighAccuracy: true,
+        timeout: 15_000,
+        maximumAge: 5_000,
+      },
+    );
 
-  return Object.freeze({
-    stop: async () => {
-      navigator.geolocation.clearWatch(id);
-    },
-  });
+    return Object.freeze({
+      stop: async () => {
+        navigator.geolocation.clearWatch(id);
+      },
+    });
+  } catch {
+    onFailure('unknown');
+    return stoppedWatch();
+  }
 }
 
 async function requestNativeLocation(): Promise<QiblaLocationResult> {
