@@ -54,10 +54,7 @@ function requiredBoolean(record: JsonRecord, key: string, label: string): boolea
   return value;
 }
 
-function localizedAnnouncement(
-  value: unknown,
-  label: string,
-): AnnouncementLocalizedContent | null {
+function localizedAnnouncement(value: unknown, label: string): AnnouncementLocalizedContent | null {
   if (value === null) return null;
   if (!isRecord(value)) throw new TypeError(`${label} must be an object or null`);
   return {
@@ -75,11 +72,7 @@ function localizedEvent(value: unknown, label: string): EventLocalizedContent | 
   };
 }
 
-function stringEnum<T extends string>(
-  value: unknown,
-  allowed: readonly T[],
-  label: string,
-): T {
+function stringEnum<T extends string>(value: unknown, allowed: readonly T[], label: string): T {
   if (typeof value !== 'string' || !allowed.includes(value as T)) {
     throw new TypeError(`${label} contains an unsupported value`);
   }
@@ -203,7 +196,8 @@ export function serializeCommunityContentLibrary(library: CommunityContentLibrar
 
 export function loadCommunityContentLibrary(storage: KeyValueStorage): CommunityContentLibrary {
   const raw = storage.getItem(COMMUNITY_CONTENT_STORAGE_KEY);
-  if (raw === null) return Object.freeze({ announcements: Object.freeze([]), events: Object.freeze([]) });
+  if (raw === null)
+    return Object.freeze({ announcements: Object.freeze([]), events: Object.freeze([]) });
   try {
     return parseCommunityContentLibrary(raw);
   } catch {
