@@ -28,10 +28,7 @@ export function QiblaCompassDial({
     <div className={`qibla-compass-dial${aligned ? ' is-aligned' : ''}`} aria-label={label}>
       <svg viewBox="0 0 400 400" role="img" aria-label={label}>
         <circle className="qibla-dial-face" cx="200" cy="200" r="184" />
-        <g
-          className="qibla-dial-rotating"
-          style={{ transform: `rotate(${dialRotation}deg)` }}
-        >
+        <g className="qibla-dial-rotating" style={{ transform: `rotate(${dialRotation}deg)` }}>
           {ticks.map((degrees) => {
             const major = degrees % 30 === 0;
             return (

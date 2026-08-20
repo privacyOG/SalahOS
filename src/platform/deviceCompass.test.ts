@@ -109,10 +109,7 @@ describe('device compass', () => {
 
   it('uses WMM2025 declination for magnetic-only headings', () => {
     const sydney = createCoordinates(-33.8688, 151.2093);
-    const declination = calculateMagneticDeclination(
-      sydney,
-      new Date('2026-08-20T00:00:00.000Z'),
-    );
+    const declination = calculateMagneticDeclination(sydney, new Date('2026-08-20T00:00:00.000Z'));
     const sample = trueHeadingFromNative(
       { magneticHeading: 270, trueHeading: null, accuracy: 7 },
       sydney,

@@ -21,10 +21,7 @@ export interface TrueHeadingSample {
   readonly headingDegrees: number;
   readonly accuracyDegrees: number | null;
   readonly source:
-    | 'native-true'
-    | 'native-magnetic-wmm'
-    | 'webkit-magnetic-wmm'
-    | 'absolute-orientation';
+    'native-true' | 'native-magnetic-wmm' | 'webkit-magnetic-wmm' | 'absolute-orientation';
   readonly reference: 'true-north';
 }
 
@@ -139,8 +136,7 @@ export function trueHeadingFromNative(
   screenOrientationDegrees: number,
   date: Date = new Date(),
 ): TrueHeadingSample {
-  const hasTrueHeading =
-    Number.isFinite(reading.trueHeading) && Number(reading.trueHeading) >= 0;
+  const hasTrueHeading = Number.isFinite(reading.trueHeading) && Number(reading.trueHeading) >= 0;
   const northReferencedHeading = hasTrueHeading
     ? Number(reading.trueHeading)
     : applyMagneticDeclination(
@@ -186,10 +182,7 @@ export function trueHeadingFromBrowser(
       screenOrientationDegrees,
     ),
     accuracyDegrees: reading.accuracyDegrees,
-    source:
-      reading.source === 'webkit-compass'
-        ? 'webkit-magnetic-wmm'
-        : 'absolute-orientation',
+    source: reading.source === 'webkit-compass' ? 'webkit-magnetic-wmm' : 'absolute-orientation',
     reference: 'true-north',
   });
 }
@@ -271,9 +264,7 @@ function resolveHeadingCoordinates(source: HeadingCoordinatesSource): Coordinate
   return typeof source === 'function' ? source() : source;
 }
 
-function stoppedSession(
-  state: Exclude<TrueHeadingSession['state'], 'active'>,
-): TrueHeadingSession {
+function stoppedSession(state: Exclude<TrueHeadingSession['state'], 'active'>): TrueHeadingSession {
   return Object.freeze({ state, stop: async () => undefined });
 }
 

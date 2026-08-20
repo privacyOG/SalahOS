@@ -130,8 +130,7 @@ function worldPixelForCoordinates(coordinates: Coordinates, zoom: number): World
   const sine = Math.sin((latitude * Math.PI) / 180);
   return {
     x: ((position.longitude + 180) / 360) * worldSize,
-    y:
-      (0.5 - Math.log((1 + sine) / (1 - sine)) / (4 * Math.PI)) * worldSize,
+    y: (0.5 - Math.log((1 + sine) / (1 - sine)) / (4 * Math.PI)) * worldSize,
   };
 }
 

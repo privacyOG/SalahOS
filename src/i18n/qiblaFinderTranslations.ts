@@ -119,10 +119,8 @@ export const qiblaFinderCopy = {
     cityLocation: 'المدينة المحددة',
     pinLocation: 'دبوس الخريطة',
     noLocation: 'حدّد موقعاً لحساب اتجاه القبلة.',
-    locationDenied:
-      'تم رفض إذن الموقع. فعّل الإذن ثم أعد المحاولة أو استخدم موقعاً يدوياً.',
-    locationUnavailable:
-      'تعذر تحديد موقعك. حاول مجدداً أو اختر مدينة أو دبوساً على الخريطة.',
+    locationDenied: 'تم رفض إذن الموقع. فعّل الإذن ثم أعد المحاولة أو استخدم موقعاً يدوياً.',
+    locationUnavailable: 'تعذر تحديد موقعك. حاول مجدداً أو اختر مدينة أو دبوساً على الخريطة.',
     manualFallback: 'موقع يدوي',
     manualSearch: 'البحث عن مدينة',
     searchPlaceholder: 'مدينة أو دولة أو منطقة زمنية',
@@ -136,8 +134,7 @@ export const qiblaFinderCopy = {
     compassWaiting: 'حرّك الجهاز برفق أثناء انتظار قراءة الاتجاه.',
     compassUnavailable:
       'لا توجد بوصلة قابلة للاستخدام في هذا الجهاز. استخدم اتجاه الشمال الحقيقي أو الخريطة.',
-    compassDenied:
-      'تم رفض الوصول إلى البوصلة. استخدم اتجاه الشمال الحقيقي أو الخريطة.',
+    compassDenied: 'تم رفض الوصول إلى البوصلة. استخدم اتجاه الشمال الحقيقي أو الخريطة.',
     staticBearing: 'اتجاه ثابت من الشمال الحقيقي',
     deviceHeading: 'اتجاه الجهاز من الشمال الحقيقي',
     turnLeft: 'استدر يساراً',
@@ -191,8 +188,7 @@ export const qiblaFinderCopy = {
     compassWaiting: 'Yön bilgisi beklenirken cihazı hafifçe hareket ettirin.',
     compassUnavailable:
       'Bu cihazda kullanılabilir pusula sensörü yok. Gerçek kuzey doğrultusunu veya haritayı kullanın.',
-    compassDenied:
-      'Pusula erişimi reddedildi. Gerçek kuzey doğrultusunu veya haritayı kullanın.',
+    compassDenied: 'Pusula erişimi reddedildi. Gerçek kuzey doğrultusunu veya haritayı kullanın.',
     staticBearing: 'Sabit gerçek-kuzey doğrultusu',
     deviceHeading: 'Cihazın gerçek-kuzey yönü',
     turnLeft: 'Sola Dön',
@@ -208,8 +204,7 @@ export const qiblaFinderCopy = {
     zoomIn: 'Yakınlaştır',
     zoomOut: 'Uzaklaştır',
     dropPin: 'Kıble konumu iğnesi bırakmak için haritaya dokunun.',
-    mapUnavailable:
-      'Bazı harita döşemeleri yüklenemedi. Kıble doğrultusu kullanılabilir durumda.',
+    mapUnavailable: 'Bazı harita döşemeleri yüklenemedi. Kıble doğrultusu kullanılabilir durumda.',
     mapAttributionStandard: '© OpenStreetMap katkıda bulunanları',
     alignedMap: 'Kıbleyle hizalı',
   },
@@ -230,10 +225,8 @@ export const qiblaFinderCopy = {
     cityLocation: 'Kota terpilih',
     pinLocation: 'Pin peta',
     noLocation: 'Tetapkan lokasi untuk menghitung arah kiblat.',
-    locationDenied:
-      'Izin lokasi ditolak. Aktifkan izin lalu coba lagi atau gunakan lokasi manual.',
-    locationUnavailable:
-      'Posisi Anda tidak tersedia. Coba lagi atau gunakan kota maupun pin peta.',
+    locationDenied: 'Izin lokasi ditolak. Aktifkan izin lalu coba lagi atau gunakan lokasi manual.',
+    locationUnavailable: 'Posisi Anda tidak tersedia. Coba lagi atau gunakan kota maupun pin peta.',
     manualFallback: 'Lokasi manual',
     manualSearch: 'Cari kota',
     searchPlaceholder: 'Kota, negara, atau zona waktu',

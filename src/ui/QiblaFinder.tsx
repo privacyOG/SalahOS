@@ -29,13 +29,7 @@ import { smartDisplayModeRequested } from './SmartDisplay';
 
 type FinderView = 'compass' | 'map';
 type FinderLocationSource = 'saved' | 'live' | 'city' | 'pin';
-type CompassState =
-  | 'idle'
-  | 'starting'
-  | 'active'
-  | 'denied'
-  | 'unsupported'
-  | 'error';
+type CompassState = 'idle' | 'starting' | 'active' | 'denied' | 'unsupported' | 'error';
 type LocationState = 'idle' | 'locating' | 'live' | 'error';
 
 interface FinderLocation {
@@ -68,8 +62,7 @@ export function QiblaFinder() {
   const [location, setLocation] = useState<FinderLocation | null>(initial.location);
   const [view, setView] = useState<FinderView>('compass');
   const [locationState, setLocationState] = useState<LocationState>('idle');
-  const [locationError, setLocationError] =
-    useState<QiblaLocationFailureReason | null>(null);
+  const [locationError, setLocationError] = useState<QiblaLocationFailureReason | null>(null);
   const [compassState, setCompassState] = useState<CompassState>('idle');
   const [heading, setHeading] = useState<TrueHeadingSample | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
@@ -84,8 +77,7 @@ export function QiblaFinder() {
   locationRef.current = location;
   const text = qiblaFinderCopy[locale];
   const qiblaCoordinates = location?.coordinates ?? null;
-  const qibla =
-    qiblaCoordinates === null ? null : calculateQiblaBearing(qiblaCoordinates);
+  const qibla = qiblaCoordinates === null ? null : calculateQiblaBearing(qiblaCoordinates);
   const turn =
     qibla === null || heading === null
       ? null
@@ -207,10 +199,7 @@ export function QiblaFinder() {
     locationWatchRef.current = await startQiblaLocationWatch(
       (fix) => {
         setLocation((previous) => {
-          if (
-            previous !== null &&
-            !shouldRecalculateQibla(previous.coordinates, fix.coordinates)
-          ) {
+          if (previous !== null && !shouldRecalculateQibla(previous.coordinates, fix.coordinates)) {
             return previous;
           }
           return {
@@ -243,8 +232,7 @@ export function QiblaFinder() {
     setLocationError(null);
   };
 
-  const locationSource =
-    location === null ? null : locationSourceLabel(location.source, text);
+  const locationSource = location === null ? null : locationSourceLabel(location.source, text);
   const staticCompass =
     compassState === 'unsupported' || compassState === 'denied' || compassState === 'error';
   const calibrationNeeded =
@@ -272,11 +260,7 @@ export function QiblaFinder() {
           >
             {text.compassView}
           </button>
-          <button
-            type="button"
-            aria-pressed={view === 'map'}
-            onClick={() => setView('map')}
-          >
+          <button type="button" aria-pressed={view === 'map'} onClick={() => setView('map')}>
             {text.mapView}
           </button>
         </div>
@@ -293,9 +277,7 @@ export function QiblaFinder() {
               {location.coordinates.longitude.toFixed(5)}
             </span>
           )}
-          {location?.label !== null && location?.label !== undefined && (
-            <bdi>{location.label}</bdi>
-          )}
+          {location?.label !== null && location?.label !== undefined && <bdi>{location.label}</bdi>}
         </div>
         <div className="qibla-location-actions">
           <button
@@ -316,9 +298,7 @@ export function QiblaFinder() {
       {locationError !== null && (
         <div className="qibla-warning" role="alert">
           <p>
-            {locationError === 'permission-denied'
-              ? text.locationDenied
-              : text.locationUnavailable}
+            {locationError === 'permission-denied' ? text.locationDenied : text.locationUnavailable}
           </p>
           <div className="qibla-warning-actions">
             <button type="button" onClick={() => void useCurrentPosition()}>
@@ -388,9 +368,7 @@ export function QiblaFinder() {
                       onClick={() => void startCompass()}
                       disabled={compassState === 'starting'}
                     >
-                      {compassState === 'starting'
-                        ? text.compassStarting
-                        : text.startCompass}
+                      {compassState === 'starting' ? text.compassStarting : text.startCompass}
                     </button>
                   )}
                 </div>
@@ -400,9 +378,7 @@ export function QiblaFinder() {
                 )}
                 {staticCompass && (
                   <p className="inline-message">
-                    {compassState === 'denied'
-                      ? text.compassDenied
-                      : text.compassUnavailable}
+                    {compassState === 'denied' ? text.compassDenied : text.compassUnavailable}
                   </p>
                 )}
                 {calibrationNeeded && (

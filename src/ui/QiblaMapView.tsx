@@ -1,11 +1,7 @@
 import { useMemo, useState, type MouseEvent } from 'react';
 
 import type { Coordinates } from '../domain/coordinates';
-import {
-  coordinatesForMapPoint,
-  qiblaBearingRayEndpoint,
-  qiblaMapTiles,
-} from '../domain/qiblaMap';
+import { coordinatesForMapPoint, qiblaBearingRayEndpoint, qiblaMapTiles } from '../domain/qiblaMap';
 import type { QiblaFinderCopy } from '../i18n/qiblaFinderTranslations';
 import { qiblaMapAttributionUrl, qiblaMapTileUrl } from '../platform/qiblaMapTiles';
 
@@ -134,11 +130,7 @@ export function QiblaMapView({
             </p>
           )}
           <p className="qibla-map-attribution">
-            <a
-              href={qiblaMapAttributionUrl()}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
+            <a href={qiblaMapAttributionUrl()} target="_blank" rel="noopener noreferrer">
               {text.mapAttributionStandard}
             </a>
           </p>

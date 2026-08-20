@@ -51,8 +51,8 @@ describe('Qiblah Finder guidance math', () => {
   it('rejects invalid smoothing, declination and movement thresholds', () => {
     expect(() => applyMagneticDeclination(0, Number.NaN)).toThrow(/declination/u);
     expect(() => smoothCircularHeading(0, 10, 0)).toThrow(/smoothing/u);
-    expect(() => shouldRecalculateQibla(createCoordinates(0, 0), createCoordinates(0, 1), 0)).toThrow(
-      /threshold/u,
-    );
+    expect(() =>
+      shouldRecalculateQibla(createCoordinates(0, 0), createCoordinates(0, 1), 0),
+    ).toThrow(/threshold/u);
   });
 });

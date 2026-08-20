@@ -48,8 +48,6 @@ describe('Qiblah map projection', () => {
   it('clamps supported zoom levels and rejects invalid viewport input', () => {
     expect(clampQiblaMapZoom(1)).toBe(3);
     expect(clampQiblaMapZoom(99)).toBe(18);
-    expect(() => coordinatesForMapPoint(sydney, 15, 0, 600, { x: 1, y: 1 })).toThrow(
-      /viewport/u,
-    );
+    expect(() => coordinatesForMapPoint(sydney, 15, 0, 600, { x: 1, y: 1 })).toThrow(/viewport/u);
   });
 });

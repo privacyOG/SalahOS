@@ -4,11 +4,7 @@ import { Geolocation } from '@capacitor/geolocation';
 import { createCoordinates, type Coordinates } from '../domain/coordinates';
 
 export type QiblaLocationFailureReason =
-  | 'permission-denied'
-  | 'unavailable'
-  | 'timeout'
-  | 'unsupported'
-  | 'unknown';
+  'permission-denied' | 'unavailable' | 'timeout' | 'unsupported' | 'unknown';
 
 export type QiblaLocationSource =
   | 'native-high-accuracy'
@@ -130,10 +126,7 @@ async function requestNativeLocation(): Promise<QiblaLocationResult> {
 
 async function nativePosition(
   enableHighAccuracy: boolean,
-  source: Extract<
-    QiblaLocationSource,
-    'native-high-accuracy' | 'native-network-fallback'
-  >,
+  source: Extract<QiblaLocationSource, 'native-high-accuracy' | 'native-network-fallback'>,
 ): Promise<QiblaLocationResult> {
   try {
     const position = await Geolocation.getCurrentPosition({
@@ -167,10 +160,7 @@ async function requestBrowserLocation(): Promise<QiblaLocationResult> {
 
 function browserPosition(
   enableHighAccuracy: boolean,
-  source: Extract<
-    QiblaLocationSource,
-    'browser-high-accuracy' | 'browser-network-fallback'
-  >,
+  source: Extract<QiblaLocationSource, 'browser-high-accuracy' | 'browser-network-fallback'>,
 ): Promise<QiblaLocationResult> {
   return new Promise((resolve) => {
     navigator.geolocation.getCurrentPosition(
