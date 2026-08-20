@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url';
 const repositoryRoot = fileURLToPath(new URL('..', import.meta.url));
 const sourceRoot = join(repositoryRoot, 'src');
 const executableExtensions = new Set(['.ts', '.tsx', '.js', '.jsx', '.mjs']);
+const reviewedRemoteNetworkFiles = new Set(['src/platform/managedAdminTransport.ts']);
 
 async function collectFiles(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
@@ -35,21 +36,32 @@ const prohibitedPatterns = [
 ];
 
 const violations = [];
+const reviewedCapabilities = [];
 for (const file of applicationFiles) {
+  const repositoryPath = relative(repositoryRoot, file);
   const content = await readFile(file, 'utf8');
   for (const { label, pattern } of prohibitedPatterns) {
-    if (pattern.test(content)) {
-      violations.push(`${relative(repositoryRoot, file)}: ${label}`);
+    if (!pattern.test(content)) continue;
+    if (reviewedRemoteNetworkFiles.has(repositoryPath)) {
+      reviewedCapabilities.push(`${repositoryPath}: ${label}`);
+    } else {
+      violations.push(`${repositoryPath}: ${label}`);
     }
+  }
+}
+
+for (const approvedPath of reviewedRemoteNetworkFiles) {
+  if (!applicationFiles.some((file) => relative(repositoryRoot, file) === approvedPath)) {
+    throw new Error(`Reviewed remote-network adapter is missing: ${approvedPath}`);
   }
 }
 
 if (violations.length > 0) {
   throw new Error(
-    `Unreviewed remote-network capability detected. SalahOS v1 application code must remain local-first:\n${violations.join('\n')}`,
+    `Unreviewed remote-network capability detected. SalahOS application code remains local-first except for explicitly reviewed managed-service adapters:\n${violations.join('\n')}`,
   );
 }
 
 console.log(
-  `Remote network policy passed for ${applicationFiles.length} application source files.`,
+  `Remote network policy passed for ${applicationFiles.length} application source files. Reviewed managed-service capabilities: ${reviewedCapabilities.length}.`,
 );

@@ -8,6 +8,9 @@ coverage/
 !.env.example
 *.local
 
+# Managed administration runtime state contains device credential hashes
+managed-service/.state/
+
 # Private keys, certificates and signing material
 *.key
 *.pem

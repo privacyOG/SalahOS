@@ -6,9 +6,12 @@ import {
   initializeApplicationStorage,
 } from './platform/applicationStorage';
 import { CommunityUpdatesPanel } from './ui/CommunityUpdatesPanel';
+import { ManagedDisplayConnectionSettings } from './ui/ManagedDisplayConnectionSettings';
+import { ManagedDisplayRemoteController } from './ui/ManagedDisplayRemoteController';
 import { CongregationShell } from './ui/CongregationShell';
 import { MosqueProfilesPanel } from './ui/MosqueProfilesPanel';
 import { QiblaCompassPanel } from './ui/QiblaCompassPanel';
+import { RemoteDisplayAdminPanel } from './ui/RemoteDisplayAdminPanel';
 import { RamadanModePanel } from './ui/RamadanModePanel';
 import { SmartDisplayThemeSettings } from './ui/SmartDisplayThemeSettings';
 import { TaraweehPanel } from './ui/TaraweehPanel';
@@ -21,6 +24,8 @@ import './responsive-hardening.css';
 import './touch-display-fixture.css';
 import './smart-display.css';
 import './smart-display-themes.css';
+import './managed-display-remote.css';
+import './remote-display-admin.css';
 import './ramadan-mode.css';
 import './taraweeh-panel.css';
 import './community-updates-panel.css';
@@ -57,7 +62,10 @@ async function bootstrap(): Promise<void> {
       {touchDisplayFixtureConfig === null ? (
         <CongregationShell>
           <App />
+          <ManagedDisplayRemoteController />
           <SmartDisplayThemeSettings />
+          <ManagedDisplayConnectionSettings />
+          <RemoteDisplayAdminPanel />
           <MosqueProfilesPanel />
           <RamadanModePanel />
           <TaraweehPanel />
