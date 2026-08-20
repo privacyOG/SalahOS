@@ -1,0 +1,40 @@
+name: Stage 42 dependency bootstrap
+
+on:
+  push:
+    branches:
+      - stage-42/qiblah-finder
+
+permissions:
+  contents: write
+
+jobs:
+  dependencies:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: stage-42/qiblah-finder
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install committed dependencies
+        run: npm ci --ignore-scripts
+      - name: Add exact Qiblah Finder dependencies
+        run: >-
+          npm install --save-exact
+          @capawesome/capacitor-compass@0.1.1
+          @capacitor/haptics@8.0.2
+          magvar@2.0.2
+      - name: Remove bootstrap workflow
+        run: rm .github/workflows/stage42-dependencies.yml
+      - name: Commit generated lockfile
+        run: |
+          git config user.name privacyOG
+          git config user.email "102720550+privacyOG@users.noreply.github.com"
+          git add package.json package-lock.json .github/workflows/stage42-dependencies.yml
+          git commit -m "Stage 42: add Qiblah Finder sensor dependencies"
+          git push origin HEAD:stage-42/qiblah-finder
