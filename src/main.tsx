@@ -122,13 +122,28 @@ function AdminOverview({
         </p>
       </div>
       <div className="admin-overview__actions">
-        <button type="button" onClick={() => navigate('displays')}>
+        <button
+          type="button"
+          onClick={() => {
+            navigate('displays');
+          }}
+        >
           Display connections
         </button>
-        <button type="button" onClick={() => navigate('themes')}>
+        <button
+          type="button"
+          onClick={() => {
+            navigate('themes');
+          }}
+        >
           Display themes
         </button>
-        <button type="button" onClick={() => navigate('remote')}>
+        <button
+          type="button"
+          onClick={() => {
+            navigate('remote');
+          }}
+        >
           Remote administration
         </button>
       </div>
