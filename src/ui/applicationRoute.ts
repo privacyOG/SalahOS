@@ -1,11 +1,6 @@
 export type ProductSurface = 'congregation' | 'admin';
 
-export type CongregationDestination =
-  | 'today'
-  | 'mosques'
-  | 'qiblah'
-  | 'community'
-  | 'settings';
+export type CongregationDestination = 'today' | 'mosques' | 'qiblah' | 'community' | 'settings';
 
 export type AdminDestination = 'overview' | 'displays' | 'themes' | 'remote';
 
@@ -17,12 +12,7 @@ const congregationDestinations = new Set<CongregationDestination>([
   'settings',
 ]);
 
-const adminDestinations = new Set<AdminDestination>([
-  'overview',
-  'displays',
-  'themes',
-  'remote',
-]);
+const adminDestinations = new Set<AdminDestination>(['overview', 'displays', 'themes', 'remote']);
 
 function paramsFromSearch(search: string): URLSearchParams {
   const value = search.startsWith('?') ? search.slice(1) : search;
@@ -71,10 +61,7 @@ export function searchForCongregationDestination(
   return serialize(params);
 }
 
-export function searchForAdminDestination(
-  search: string,
-  destination: AdminDestination,
-): string {
+export function searchForAdminDestination(search: string, destination: AdminDestination): string {
   const params = paramsFromSearch(search);
   params.set('surface', 'admin');
   params.delete('view');
