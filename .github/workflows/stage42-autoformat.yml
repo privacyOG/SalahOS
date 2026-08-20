@@ -1,0 +1,56 @@
+name: Stage 42 Canonical Format
+
+on:
+  push:
+    branches:
+      - 'stage-42/qiblah-finder'
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Stage 42 branch
+        uses: actions/checkout@v4
+        with:
+          ref: stage-42/qiblah-finder
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies from lockfile
+        run: npm ci --ignore-scripts
+
+      - name: Apply canonical Prettier formatting
+        run: |
+          npx prettier --write \
+            src/domain/qiblaFinder.test.ts \
+            src/domain/qiblaMap.test.ts \
+            src/domain/qiblaMap.ts \
+            src/i18n/qiblaFinderTranslations.ts \
+            src/platform/deviceCompass.test.ts \
+            src/platform/deviceCompass.ts \
+            src/platform/qiblaLocation.ts \
+            src/ui/QiblaCompassDial.tsx \
+            src/ui/QiblaFinder.tsx \
+            src/ui/QiblaMapView.tsx
+
+      - name: Remove temporary formatter workflow
+        run: rm .github/workflows/stage42-autoformat.yml
+
+      - name: Commit canonical formatting
+        run: |
+          git config user.name privacyOG
+          git config user.email 102720550+privacyOG@users.noreply.github.com
+          git add -A
+          if git diff --cached --quiet; then
+            exit 0
+          fi
+          git commit -m "Format Stage 42 Qiblah Finder"
+          git push origin HEAD:stage-42/qiblah-finder
