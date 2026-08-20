@@ -71,7 +71,7 @@ export function ManagedDisplayRemoteController() {
   }, []);
 
   useEffect(() => {
-    if (!enabled || connection === null) {
+    if (!enabled) {
       clearManagedTheme();
       return;
     }
