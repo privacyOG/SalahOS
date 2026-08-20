@@ -1,6 +1,7 @@
 import { Capacitor } from '@capacitor/core';
 import { Preferences } from '@capacitor/preferences';
 import { COMMUNITY_CONTENT_STORAGE_KEY } from './communityContentStorage';
+import { MANAGED_DISPLAY_CONNECTION_STORAGE_KEY } from './managedDisplayConnectionStorage';
 import { MOSQUE_LIBRARY_STORAGE_KEY } from './mosqueLibrary';
 import { MOSQUE_PROFILE_LIBRARY_STORAGE_KEY } from './mosqueProfileLibrary';
 import { SAVED_LOCATIONS_STORAGE_KEY } from './savedLocations';
@@ -15,6 +16,7 @@ export const PERSISTED_APPLICATION_KEYS = Object.freeze([
   COMMUNITY_CONTENT_STORAGE_KEY,
   SMART_DISPLAY_THEME_STORAGE_KEY,
   MOSQUE_PROFILE_LIBRARY_STORAGE_KEY,
+  MANAGED_DISPLAY_CONNECTION_STORAGE_KEY,
 ] as const);
 
 export interface PreferencesStore {
