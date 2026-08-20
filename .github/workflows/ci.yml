@@ -49,7 +49,7 @@ jobs:
         run: python3 scripts/generate_pwa_icons.py --check
 
       - name: Format check
-        run: npx prettier --write src/ui/TaraweehPanel.test.tsx && git diff -- src/ui/TaraweehPanel.test.tsx
+        run: npm run format:check
 
       - name: Lint
         run: npm run lint
