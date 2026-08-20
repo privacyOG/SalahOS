@@ -11,6 +11,11 @@ function jsonResponse(value: unknown, status = 200): Response {
   });
 }
 
+function requestInputUrl(input: RequestInfo | URL): string {
+  if (typeof input === 'string') return input;
+  return input instanceof URL ? input.toString() : input.url;
+}
+
 const status = {
   identity: {
     displayId: 'display:lobby',
@@ -38,14 +43,14 @@ const status = {
 describe('managed admin transport', () => {
   it('requires HTTPS except for explicit loopback development', () => {
     expect(() =>
-      createManagedAdminClient({ baseUrl: 'http://example.org', adminToken: TOKEN }, async () =>
-        jsonResponse({}),
+      createManagedAdminClient({ baseUrl: 'http://example.org', adminToken: TOKEN }, () =>
+        Promise.resolve(jsonResponse({})),
       ),
     ).toThrow(/HTTPS/u);
 
     expect(() =>
-      createManagedAdminClient({ baseUrl: 'http://127.0.0.1:8787', adminToken: TOKEN }, async () =>
-        jsonResponse({}),
+      createManagedAdminClient({ baseUrl: 'http://127.0.0.1:8787', adminToken: TOKEN }, () =>
+        Promise.resolve(jsonResponse({})),
       ),
     ).not.toThrow();
   });
@@ -54,9 +59,9 @@ describe('managed admin transport', () => {
     const requests: { input: RequestInfo | URL; init?: RequestInit }[] = [];
     const client = createManagedAdminClient(
       { baseUrl: 'https://admin.example.org', adminToken: TOKEN },
-      async (input, init) => {
+      (input, init) => {
         requests.push(init === undefined ? { input } : { input, init });
-        return jsonResponse({ displays: [status] });
+        return Promise.resolve(jsonResponse({ displays: [status] }));
       },
     );
 
@@ -64,18 +69,21 @@ describe('managed admin transport', () => {
 
     expect(displays).toHaveLength(1);
     expect(displays[0]?.identity.displayId).toBe('display:lobby');
-    expect(String(requests[0]?.input)).toBe('https://admin.example.org/v1/admin/displays');
-    expect(new Headers(requests[0]?.init?.headers).get('authorization')).toBe(`Bearer ${TOKEN}`);
-    expect(requests[0]?.init?.credentials).toBe('omit');
-    expect(requests[0]?.init?.cache).toBe('no-store');
+    const request = requests[0];
+    expect(request === undefined ? '' : requestInputUrl(request.input)).toBe(
+      'https://admin.example.org/v1/admin/displays',
+    );
+    expect(new Headers(request?.init?.headers).get('authorization')).toBe(`Bearer ${TOKEN}`);
+    expect(request?.init?.credentials).toBe('omit');
+    expect(request?.init?.cache).toBe('no-store');
   });
 
   it('registers a display and returns the one-time device credential', async () => {
     const client = createManagedAdminClient(
       { baseUrl: 'https://admin.example.org', adminToken: TOKEN },
-      async (_input, init) => {
+      (_input, init) => {
         expect(init?.method).toBe('POST');
-        return jsonResponse({ display: status, deviceToken: 'd'.repeat(48) });
+        return Promise.resolve(jsonResponse({ display: status, deviceToken: 'd'.repeat(48) }));
       },
     );
 
@@ -89,9 +97,9 @@ describe('managed admin transport', () => {
     const methods: string[] = [];
     const client = createManagedAdminClient(
       { baseUrl: 'https://admin.example.org', adminToken: TOKEN },
-      async (_input, init) => {
+      (_input, init) => {
         methods.push(init?.method ?? 'GET');
-        return jsonResponse(status);
+        return Promise.resolve(jsonResponse(status));
       },
     );
 
@@ -109,13 +117,13 @@ describe('managed admin transport', () => {
   it('surfaces structured service errors without accepting non-JSON responses', async () => {
     const denied = createManagedAdminClient(
       { baseUrl: 'https://admin.example.org', adminToken: TOKEN },
-      async () => jsonResponse({ error: 'Not authorized' }, 403),
+      () => Promise.resolve(jsonResponse({ error: 'Not authorized' }, 403)),
     );
     await expect(denied.listDisplays()).rejects.toThrow('Not authorized');
 
     const invalid = createManagedAdminClient(
       { baseUrl: 'https://admin.example.org', adminToken: TOKEN },
-      async () => new Response('nope', { status: 500 }),
+      () => Promise.resolve(new Response('nope', { status: 500 })),
     );
     await expect(invalid.listDisplays()).rejects.toThrow(/non-JSON/u);
   });
