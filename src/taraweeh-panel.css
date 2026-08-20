@@ -1,0 +1,96 @@
+.taraweeh-panel {
+  width: min(1120px, calc(100% - 2rem));
+  margin: 1rem auto 0;
+  padding: clamp(1rem, 2vw, 1.35rem);
+  border: 1px solid var(--salah-border-default, rgba(127, 127, 127, 0.25));
+  border-radius: var(--salah-radius-lg, 1.45rem);
+  background: var(--salah-bg-surface, rgba(127, 127, 127, 0.08));
+  box-shadow: var(--salah-shadow-sm, 0 0.45rem 1.2rem rgba(0, 0, 0, 0.14));
+}
+
+.taraweeh-panel-heading {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--salah-space-4, 1rem);
+}
+
+.taraweeh-panel-heading h2,
+.taraweeh-panel-heading p {
+  margin: 0;
+}
+
+.taraweeh-panel-eyebrow {
+  margin-bottom: var(--salah-space-1, 0.25rem) !important;
+  color: var(--salah-fg-accent, currentColor);
+  font-size: var(--salah-text-xs, 0.82rem);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.taraweeh-panel-heading h2 {
+  color: var(--salah-fg-primary, inherit);
+  font-size: var(--salah-text-xl, 1.65rem);
+}
+
+.taraweeh-panel-mosque {
+  display: grid;
+  gap: 0.15rem;
+  min-width: min(16rem, 40%);
+  text-align: end;
+}
+
+.taraweeh-panel-mosque span {
+  color: var(--salah-fg-tertiary, inherit);
+  font-size: var(--salah-text-xs, 0.82rem);
+}
+
+.taraweeh-panel-mosque strong {
+  color: var(--salah-fg-secondary, inherit);
+}
+
+.taraweeh-session-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: var(--salah-space-2, 0.5rem);
+  margin-top: var(--salah-space-4, 1rem);
+}
+
+.taraweeh-session {
+  padding: 0.9rem 1rem;
+  border: 1px solid var(--salah-border-default, rgba(127, 127, 127, 0.25));
+  border-radius: var(--salah-radius-md, 1rem);
+  background: var(--salah-bg-accent-soft, rgba(127, 127, 127, 0.1));
+}
+
+.taraweeh-session span,
+.taraweeh-session strong {
+  display: block;
+}
+
+.taraweeh-session span {
+  color: var(--salah-fg-secondary, inherit);
+}
+
+.taraweeh-session strong {
+  margin-top: 0.25rem;
+  color: var(--salah-fg-primary, inherit);
+  font-size: clamp(1.25rem, 3vw, 1.65rem);
+  font-variant-numeric: tabular-nums;
+}
+
+@media (max-width: 640px) {
+  .taraweeh-panel {
+    width: min(100% - 1rem, 1120px);
+  }
+
+  .taraweeh-panel-heading {
+    display: grid;
+  }
+
+  .taraweeh-panel-mosque {
+    min-width: 0;
+    text-align: start;
+  }
+}
