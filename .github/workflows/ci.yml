@@ -37,164 +37,147 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           import re
+          from textwrap import dedent
+
+          def replace_once(text: str, old: str, new: str, label: str) -> str:
+              if old not in text:
+                  raise SystemExit(f'{label} marker missing')
+              return text.replace(old, new, 1)
+
+          def sub_once(text: str, pattern: str, replacement: str, label: str) -> str:
+              updated, count = re.subn(pattern, replacement, text, count=1, flags=re.S)
+              if count != 1:
+                  raise SystemExit(f'{label} replacement failed')
+              return updated
 
           design_path = Path('src/design-system.css')
           design = design_path.read_text()
 
-          root_marker = ':root {\n  /* Semantic surfaces */'
-          root_replacement = ":root {\n  font-family:\n    Inter,\n    ui-sans-serif,\n    system-ui,\n    -apple-system,\n    BlinkMacSystemFont,\n    'Segoe UI',\n    sans-serif;\n  color-scheme: dark;\n  color: var(--salah-fg-primary);\n  background: var(--salah-bg-canvas);\n  font-synthesis: none;\n  text-rendering: optimizeLegibility;\n\n  /* Semantic surfaces */"
-          if root_marker not in design:
-              raise SystemExit('design-system root marker missing')
-          design = design.replace(root_marker, root_replacement, 1)
+          design = replace_once(
+              design,
+              ':root {\n  /* Semantic surfaces */',
+              dedent("""\
+              :root {
+                font-family:
+                  Inter,
+                  ui-sans-serif,
+                  system-ui,
+                  -apple-system,
+                  BlinkMacSystemFont,
+                  'Segoe UI',
+                  sans-serif;
+                color-scheme: dark;
+                color: var(--salah-fg-primary);
+                background: var(--salah-bg-canvas);
+                font-synthesis: none;
+                text-rendering: optimizeLegibility;
 
-          design = design.replace(
+                /* Semantic surfaces */"""),
+              'design-system root',
+          )
+          design = replace_once(
+              design,
               ":root[data-theme='light'] {\n",
               ":root[data-theme='light'] {\n  color-scheme: light;\n",
-              1,
+              'light-theme root',
           )
-          boundary = "}\n\n@media (prefers-color-scheme: light) {"
-          if boundary not in design:
-              raise SystemExit('light-theme boundary missing')
-          design = design.replace(
-              boundary,
+          design = replace_once(
+              design,
+              "}\n\n@media (prefers-color-scheme: light) {",
               "}\n\n:root[data-theme='dark'] {\n  color-scheme: dark;\n}\n\n@media (prefers-color-scheme: light) {",
-              1,
+              'dark-theme insertion boundary',
           )
-          design = design.replace(
+          design = replace_once(
+              design,
               "  :root[data-theme='system'] {\n",
               "  :root[data-theme='system'] {\n    color-scheme: light;\n",
-              1,
+              'system light-theme root',
           )
 
-          body_old = "body {\n  background-color: var(--page);\n}"
-          body_new = """* {
-            box-sizing: border-box;
-          }
+          design = replace_once(
+              design,
+              "body {\n  background-color: var(--page);\n}",
+              dedent("""\
+              * {
+                box-sizing: border-box;
+              }
 
-          body {
-            margin: 0;
-            min-width: 320px;
-            min-height: 100vh;
-            color: var(--salah-fg-primary);
-            background:
-              radial-gradient(circle at top right, var(--page-glow), transparent 34rem),
-              var(--salah-bg-canvas);
-          }
+              body {
+                margin: 0;
+                min-width: 320px;
+                min-height: 100vh;
+                color: var(--salah-fg-primary);
+                background:
+                  radial-gradient(circle at top right, var(--page-glow), transparent 34rem),
+                  var(--salah-bg-canvas);
+              }
 
-          button,
-          input,
-          select,
-          textarea {
-            border: 1px solid var(--salah-border-default);
-            border-radius: var(--salah-radius-sm);
-            color: var(--salah-fg-primary);
-            background: var(--salah-bg-control);
-            font: inherit;
-            transition-duration: var(--salah-motion-fast);
-            transition-timing-function: var(--salah-ease-standard);
-          }
+              button,
+              input,
+              select,
+              textarea {
+                border: 1px solid var(--salah-border-default);
+                border-radius: var(--salah-radius-sm);
+                color: var(--salah-fg-primary);
+                background: var(--salah-bg-control);
+                font: inherit;
+                transition-duration: var(--salah-motion-fast);
+                transition-timing-function: var(--salah-ease-standard);
+              }
 
-          button,
-          select,
-          input {
-            min-height: 2.75rem;
-          }
+              button,
+              select,
+              input {
+                min-height: 2.75rem;
+              }
 
-          button {
-            padding-inline: var(--salah-space-4);
-            cursor: pointer;
-            font-weight: 700;
-          }
+              button {
+                padding-inline: var(--salah-space-4);
+                cursor: pointer;
+                font-weight: 700;
+              }
 
-          input,
-          select,
-          textarea {
-            padding: 0.65rem 0.7rem;
-          }
+              input,
+              select,
+              textarea {
+                padding: 0.65rem 0.7rem;
+              }
 
-          textarea {
-            width: 100%;
-            resize: vertical;
-          }
+              textarea {
+                width: 100%;
+                resize: vertical;
+              }
 
-          h1,
-          h2,
-          p {
-            margin-top: 0;
-          }
+              h1,
+              h2,
+              p {
+                margin-top: 0;
+              }
 
-          h1 {
-            margin-block-end: 0.8rem;
-            font-size: var(--salah-text-display);
-            line-height: 0.98;
-            letter-spacing: -0.055em;
-          }
+              h1 {
+                margin-block-end: 0.8rem;
+                font-size: var(--salah-text-display);
+                line-height: 0.98;
+                letter-spacing: -0.055em;
+              }
 
-          [dir='rtl'] h1 {
-            line-height: 1.15;
-            letter-spacing: 0;
-          }
+              [dir='rtl'] h1 {
+                line-height: 1.15;
+                letter-spacing: 0;
+              }
 
-          h2 {
-            margin-block-end: 0;
-            font-size: clamp(1.7rem, 3vw, 2.4rem);
-          }"""
-          body_new = '\n'.join(line[10:] if line.startswith('          ') else line for line in body_new.splitlines())
-          if body_old not in design:
-              raise SystemExit('design-system body block missing')
-          design = design.replace(body_old, body_new, 1)
+              h2 {
+                margin-block-end: 0;
+                font-size: clamp(1.7rem, 3vw, 2.4rem);
+              }"""),
+              'base document styles',
+          )
 
-          app_old = """.app-shell {
-            width: min(1240px, calc(100% - clamp(1rem, 4vw, 3rem)));
-            padding-block: clamp(1rem, 3vw, 2.75rem) clamp(5rem, 7vw, 7rem);
-          }"""
-          app_old = '\n'.join(line[10:] if line.startswith('          ') else line for line in app_old.splitlines())
-          app_new = """.app-shell {
-            display: flex;
-            width: min(1240px, calc(100% - clamp(1rem, 4vw, 3rem)));
-            margin: 0 auto;
-            padding-block-start: calc(clamp(1rem, 3vw, 2.75rem) + env(safe-area-inset-top));
-            padding-block-end: calc(clamp(5rem, 7vw, 7rem) + env(safe-area-inset-bottom));
-            padding-inline-start: env(safe-area-inset-left);
-            padding-inline-end: env(safe-area-inset-right);
-            flex-direction: column;
-          }
-
-          .offline-banner {
-            order: -30;
-          }
-
-          .hero {
-            order: -20;
-          }
-
-          .prayer-panel,
-          .status-card {
-            order: -10;
-          }
-
-          .location-panel {
-            order: 10;
-          }
-
-          .settings-panel {
-            order: 20;
-          }"""
-          app_new = '\n'.join(line[10:] if line.startswith('          ') else line for line in app_new.splitlines())
-          if app_old not in design:
-              raise SystemExit('app-shell block missing')
-          design = design.replace(app_old, app_new, 1)
-
-          replacements = {
-              """.hero {
-                max-width: none;
-                margin-block-end: var(--salah-space-8);
-                padding: clamp(1.2rem, 2.5vw, 2rem);
-                border: 1px solid var(--salah-border-subtle);
-                border-radius: var(--salah-radius-xl);
-                background: var(--salah-bg-surface);
-                box-shadow: var(--salah-shadow-md);
-              }""": """.hero {
+          design = sub_once(
+              design,
+              r"\.hero \{\n  max-width: none;.*?\n\}",
+              dedent("""\
+              .hero {
                 max-width: none;
                 margin-block-end: var(--salah-space-5);
                 padding: clamp(1rem, 2vw, 1.4rem) clamp(1.2rem, 2.5vw, 2rem);
@@ -202,20 +185,26 @@ jobs:
                 border-radius: var(--salah-radius-xl);
                 background: var(--salah-bg-surface);
                 box-shadow: var(--salah-shadow-md);
-              }""",
-              """.hero-toolbar {
-                align-items: center;
-              }""": """.hero-toolbar {
+              }"""),
+              'hero style',
+          )
+          design = replace_once(
+              design,
+              ".hero-toolbar {\n  align-items: center;\n}",
+              dedent("""\
+              .hero-toolbar {
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
                 gap: var(--salah-space-4);
-              }""",
-              """.live-clock {
-                color: var(--salah-fg-primary);
-                font-size: var(--salah-text-xl);
-                letter-spacing: -0.02em;
-              }""": """.live-clock {
+              }"""),
+              'hero toolbar',
+          )
+          design = replace_once(
+              design,
+              ".live-clock {\n  color: var(--salah-fg-primary);\n  font-size: var(--salah-text-xl);\n  letter-spacing: -0.02em;\n}",
+              dedent("""\
+              .live-clock {
                 margin: 0;
                 color: var(--salah-fg-primary);
                 font-size: var(--salah-text-xl);
@@ -230,288 +219,306 @@ jobs:
                 gap: 0.55rem;
                 color: var(--salah-fg-secondary);
                 font-size: var(--salah-text-sm);
-              }""",
-              """.hero h1 {
-                max-width: 12ch;
-                margin-block: var(--salah-space-10) var(--salah-space-4);
-                font-size: var(--salah-text-display);
-                line-height: 0.95;
-              }""": """.hero h1 {
+              }"""),
+              'live clock',
+          )
+          design = sub_once(
+              design,
+              r"\.hero h1 \{\n  max-width: 12ch;.*?\n\}",
+              dedent("""\
+              .hero h1 {
                 max-width: 18ch;
                 margin-block: var(--salah-space-6) var(--salah-space-3);
                 font-size: clamp(2rem, 1.55rem + 2vw, 3.8rem);
                 line-height: 1;
-              }""",
-              """.hero-copy {
-                max-width: 56ch;
-                margin-block-end: 0;
-                font-size: var(--salah-text-md);
-              }""": """.hero-copy {
+              }"""),
+              'hero heading',
+          )
+          design = sub_once(
+              design,
+              r"\.hero-copy \{\n  max-width: 56ch;.*?\n\}",
+              dedent("""\
+              .hero-copy {
                 max-width: 62ch;
                 margin-block-end: 0;
                 color: var(--salah-fg-secondary);
                 font-size: var(--salah-text-sm);
                 line-height: 1.55;
-              }""",
-          }
-          for old, new in replacements.items():
-              old = '\n'.join(line[14:] if line.startswith('              ') else line for line in old.splitlines())
-              new = '\n'.join(line[14:] if line.startswith('              ') else line for line in new.splitlines())
-              if old not in design:
-                  raise SystemExit(f'missing design block: {old.splitlines()[0]}')
-              design = design.replace(old, new, 1)
+              }"""),
+              'hero copy',
+          )
 
-          duplicate_controls = """button,
-          select,
-          input,
-          textarea {
-            border-radius: var(--salah-radius-sm);
-            transition-duration: var(--salah-motion-fast);
-            transition-timing-function: var(--salah-ease-standard);
-          }
+          design = sub_once(
+              design,
+              r"button,\nselect,\ninput,\ntextarea \{\n  border-radius: var\(--salah-radius-sm\);.*?\n\}\n\n",
+              '',
+              'duplicate control primitives',
+          )
+          design = sub_once(
+              design,
+              r"\.app-shell \{\n  width: min\(1240px,.*?\n\}",
+              dedent("""\
+              .app-shell {
+                display: flex;
+                width: min(1240px, calc(100% - clamp(1rem, 4vw, 3rem)));
+                margin: 0 auto;
+                padding-block-start: calc(clamp(1rem, 3vw, 2.75rem) + env(safe-area-inset-top));
+                padding-block-end: calc(clamp(5rem, 7vw, 7rem) + env(safe-area-inset-bottom));
+                padding-inline-start: env(safe-area-inset-left);
+                padding-inline-end: env(safe-area-inset-right);
+                flex-direction: column;
+              }
 
-          """
-          duplicate_controls = '\n'.join(line[10:] if line.startswith('          ') else line for line in duplicate_controls.splitlines())
-          if duplicate_controls not in design:
-              raise SystemExit('duplicate control block missing')
-          design = design.replace(duplicate_controls, '', 1)
+              .offline-banner {
+                order: -30;
+              }
 
-          panel_pattern = re.compile(r"\.location-panel,\n\.settings-panel,\n\.status-card,\n\.prayer-panel \{.*?\n\}\n\n\.location-panel,\n\.settings-panel \{.*?\n\}\n\n\.settings-panel summary \{.*?\n\}", re.S)
-          panel_new = """.location-panel,
-          .settings-panel,
-          .status-card,
-          .prayer-panel {
-            border: 1px solid var(--salah-border-subtle);
-            border-radius: var(--salah-radius-lg);
-            background: var(--salah-bg-surface);
-            box-shadow: var(--salah-shadow-sm);
-            backdrop-filter: blur(18px);
-          }
+              .hero {
+                order: -20;
+              }
 
-          .location-panel,
-          .settings-panel {
-            margin-block-end: var(--salah-space-4);
-            padding: clamp(1rem, 2vw, 1.35rem);
-            border-color: var(--salah-border-subtle);
-          }
+              .prayer-panel,
+              .status-card {
+                order: -10;
+              }
 
-          .location-panel {
-            background: color-mix(in srgb, var(--salah-bg-surface) 88%, transparent);
-            box-shadow: none;
-          }
+              .location-panel {
+                order: 10;
+              }
 
-          .settings-panel {
-            margin-block-end: 0;
-            background: color-mix(in srgb, var(--salah-bg-surface) 82%, transparent);
-            box-shadow: none;
-          }
+              .settings-panel {
+                order: 20;
+              }"""),
+              'application shell',
+          )
+          design = sub_once(
+              design,
+              r"\.location-panel,\n\.settings-panel,\n\.status-card,\n\.prayer-panel \{.*?\n\}\n\n\.location-panel,\n\.settings-panel \{.*?\n\}\n\n\.settings-panel summary \{.*?\n\}",
+              dedent("""\
+              .location-panel,
+              .settings-panel,
+              .status-card,
+              .prayer-panel {
+                border: 1px solid var(--salah-border-subtle);
+                border-radius: var(--salah-radius-lg);
+                background: var(--salah-bg-surface);
+                box-shadow: var(--salah-shadow-sm);
+                backdrop-filter: blur(18px);
+              }
 
-          .settings-panel:not([open]) {
-            padding-block: var(--salah-space-3);
-          }
+              .location-panel,
+              .settings-panel {
+                margin-block-end: var(--salah-space-4);
+                padding: clamp(1rem, 2vw, 1.35rem);
+                border-color: var(--salah-border-subtle);
+              }
 
-          .settings-panel summary {
-            display: flex;
-            min-height: 2.75rem;
-            align-items: center;
-            color: var(--salah-fg-tertiary);
-            cursor: pointer;
-            font-size: 1.05rem;
-            font-weight: 800;
-          }"""
-          panel_new = '\n'.join(line[10:] if line.startswith('          ') else line for line in panel_new.splitlines())
-          design, count = panel_pattern.subn(panel_new, design, count=1)
-          if count != 1:
-              raise SystemExit('panel ownership replacement failed')
+              .location-panel {
+                background: color-mix(in srgb, var(--salah-bg-surface) 88%, transparent);
+                box-shadow: none;
+              }
 
-          eyebrow_pattern = re.compile(r"\.eyebrow,\n\.label,\n\.prayer-time-label \{.*?\n\}", re.S)
-          eyebrow_new = """.eyebrow,
-          .label,
-          .prayer-time-label {
-            color: var(--salah-fg-tertiary);
-            font-size: var(--salah-text-xs);
-            font-weight: 750;
-            line-height: 1.4;
-            letter-spacing: 0.1em;
-            text-transform: uppercase;
-          }
+              .settings-panel {
+                margin-block-end: 0;
+                background: color-mix(in srgb, var(--salah-bg-surface) 82%, transparent);
+                box-shadow: none;
+              }
 
-          .eyebrow,
-          .label {
-            margin: 0 0 0.45rem;
-          }
+              .settings-panel:not([open]) {
+                padding-block: var(--salah-space-3);
+              }
 
-          [dir='rtl'] .eyebrow,
-          [dir='rtl'] .label,
-          [dir='rtl'] .prayer-time-label {
-            letter-spacing: 0;
-            text-transform: none;
-          }"""
-          eyebrow_new = '\n'.join(line[10:] if line.startswith('          ') else line for line in eyebrow_new.splitlines())
-          design, count = eyebrow_pattern.subn(eyebrow_new, design, count=1)
-          if count != 1:
-              raise SystemExit('eyebrow ownership replacement failed')
+              .settings-panel summary {
+                display: flex;
+                min-height: 2.75rem;
+                align-items: center;
+                color: var(--salah-fg-tertiary);
+                cursor: pointer;
+                font-size: 1.05rem;
+                font-weight: 800;
+              }"""),
+              'legacy panel primitives',
+          )
+          design = sub_once(
+              design,
+              r"\.eyebrow,\n\.label,\n\.prayer-time-label \{.*?\n\}",
+              dedent("""\
+              .eyebrow,
+              .label,
+              .prayer-time-label {
+                color: var(--salah-fg-tertiary);
+                font-size: var(--salah-text-xs);
+                font-weight: 750;
+                line-height: 1.4;
+                letter-spacing: 0.1em;
+                text-transform: uppercase;
+              }
 
-          offline_pattern = re.compile(r"\.offline-banner \{\n  border-radius:.*?\n\}", re.S)
-          offline_new = """.offline-banner {
-            margin: 0 0 var(--salah-space-4);
-            padding: var(--salah-space-3) var(--salah-space-4);
-            border: 1px solid color-mix(in srgb, var(--salah-fg-warning) 35%, transparent);
-            border-radius: var(--salah-radius-md);
-            color: var(--salah-fg-warning);
-            background: var(--warning-bg);
-            box-shadow: var(--salah-shadow-sm);
-          }"""
-          offline_new = '\n'.join(line[10:] if line.startswith('          ') else line for line in offline_new.splitlines())
-          design, count = offline_pattern.subn(offline_new, design, count=1)
-          if count != 1:
-              raise SystemExit('offline-banner ownership replacement failed')
+              .eyebrow,
+              .label {
+                margin: 0 0 0.45rem;
+              }
 
-          mobile_pattern = re.compile(r"@media \(max-width: 760px\) \{\n  \.app-shell \{.*?\n\}\n\n@media \(min-width: 1600px\)", re.S)
-          mobile_new = """@media (max-width: 760px) {
-            .app-shell {
-              width: min(100% - 1rem, 42rem);
-              padding-block-start: max(0.75rem, env(safe-area-inset-top));
-              padding-inline-start: env(safe-area-inset-left);
-              padding-inline-end: env(safe-area-inset-right);
-            }
+              [dir='rtl'] .eyebrow,
+              [dir='rtl'] .label,
+              [dir='rtl'] .prayer-time-label {
+                letter-spacing: 0;
+                text-transform: none;
+              }"""),
+              'metadata typography',
+          )
+          design = sub_once(
+              design,
+              r"\.offline-banner \{\n  border-radius: var\(--salah-radius-md\);.*?\n\}",
+              dedent("""\
+              .offline-banner {
+                margin: 0 0 var(--salah-space-4);
+                padding: var(--salah-space-3) var(--salah-space-4);
+                border: 1px solid color-mix(in srgb, var(--salah-fg-warning) 35%, transparent);
+                border-radius: var(--salah-radius-md);
+                color: var(--salah-fg-warning);
+                background: var(--warning-bg);
+                box-shadow: var(--salah-shadow-sm);
+              }"""),
+              'offline banner',
+          )
+          design = sub_once(
+              design,
+              r"@media \(max-width: 760px\) \{\n  \.app-shell \{.*?\n\}\n\n@media \(min-width: 1600px\)",
+              dedent("""\
+              @media (max-width: 760px) {
+                .app-shell {
+                  width: min(100% - 1rem, 42rem);
+                  padding-block-start: max(0.75rem, env(safe-area-inset-top));
+                  padding-inline-start: env(safe-area-inset-left);
+                  padding-inline-end: env(safe-area-inset-right);
+                }
 
-            .hero {
-              padding: var(--salah-space-4);
-              border-radius: var(--salah-radius-lg);
-            }
+                .hero {
+                  padding: var(--salah-space-4);
+                  border-radius: var(--salah-radius-lg);
+                }
 
-            .hero-toolbar {
-              flex-direction: row;
-              align-items: center;
-            }
+                .hero-toolbar {
+                  flex-direction: row;
+                  align-items: center;
+                }
 
-            .hero h1 {
-              margin-block-start: var(--salah-space-5);
-              font-size: clamp(1.9rem, 8vw, 2.8rem);
-            }
+                .hero h1 {
+                  margin-block-start: var(--salah-space-5);
+                  font-size: clamp(1.9rem, 8vw, 2.8rem);
+                }
 
-            .hero-copy {
-              font-size: var(--salah-text-sm);
-            }
+                .hero-copy {
+                  font-size: var(--salah-text-sm);
+                }
 
-            .status-card > div {
-              padding-inline-end: 0;
-              padding-block-end: var(--salah-space-3);
-              border-inline-end: 0;
-              border-block-end: 1px solid var(--salah-border-subtle);
-            }
+                .status-card > div {
+                  padding-inline-end: 0;
+                  padding-block-end: var(--salah-space-3);
+                  border-inline-end: 0;
+                  border-block-end: 1px solid var(--salah-border-subtle);
+                }
 
-            .status-card > div:last-child {
-              padding-block-end: 0;
-              border-block-end: 0;
-            }
+                .status-card > div:last-child {
+                  padding-block-end: 0;
+                  border-block-end: 0;
+                }
 
-            .prayer-panel {
-              border-radius: var(--salah-radius-lg);
-            }
+                .prayer-panel {
+                  border-radius: var(--salah-radius-lg);
+                }
 
-            .prayer-card {
-              min-height: 4.65rem;
-              padding: 0.85rem 1rem;
-            }
+                .prayer-card {
+                  min-height: 4.65rem;
+                  padding: 0.85rem 1rem;
+                }
 
-            .section-heading {
-              gap: var(--salah-space-4);
-            }
+                .section-heading {
+                  gap: var(--salah-space-4);
+                }
 
-            .next-prayer-block {
-              width: 100%;
-            }
+                .next-prayer-block {
+                  width: 100%;
+                }
 
-            .location-panel,
-            .settings-panel {
-              border-radius: var(--salah-radius-md);
-            }
-          }
+                .location-panel,
+                .settings-panel {
+                  border-radius: var(--salah-radius-md);
+                }
+              }
 
-          @media (min-width: 1000px) {
-            .hero {
-              display: grid;
-              grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.45fr);
-              column-gap: var(--salah-space-8);
-              align-items: end;
-            }
+              @media (min-width: 1000px) {
+                .hero {
+                  display: grid;
+                  grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.45fr);
+                  column-gap: var(--salah-space-8);
+                  align-items: end;
+                }
 
-            .hero-toolbar {
-              grid-column: 1 / -1;
-            }
+                .hero-toolbar {
+                  grid-column: 1 / -1;
+                }
 
-            .hero h1 {
-              margin-block-end: 0;
-            }
+                .hero h1 {
+                  margin-block-end: 0;
+                }
 
-            .hero-copy {
-              align-self: end;
-              margin-block-end: 0.2rem;
-            }
-          }
+                .hero-copy {
+                  align-self: end;
+                  margin-block-end: 0.2rem;
+                }
+              }
 
-          @media (min-width: 1600px)"""
-          mobile_new = '\n'.join(line[10:] if line.startswith('          ') else line for line in mobile_new.splitlines())
-          design, count = mobile_pattern.subn(mobile_new, design, count=1)
-          if count != 1:
-              raise SystemExit('responsive design-system replacement failed')
+              @media (min-width: 1600px)"""),
+              'responsive shell primitives',
+          )
+          design = replace_once(
+              design,
+              "@media (forced-colors: active) {\n  .hero,",
+              dedent("""\
+              @media (forced-colors: active) {
+                :root {
+                  --salah-bg-canvas: Canvas;
+                  --salah-bg-subtle: Canvas;
+                  --salah-bg-surface: Canvas;
+                  --salah-bg-surface-raised: Canvas;
+                  --salah-bg-control: Canvas;
+                  --salah-bg-accent-soft: Canvas;
+                  --salah-fg-primary: CanvasText;
+                  --salah-fg-secondary: CanvasText;
+                  --salah-fg-tertiary: CanvasText;
+                  --salah-fg-accent: Highlight;
+                  --salah-fg-warning: Mark;
+                  --salah-fg-provenance: CanvasText;
+                  --salah-border-subtle: CanvasText;
+                  --salah-border-default: ButtonText;
+                  --salah-border-strong: CanvasText;
+                  --salah-focus-ring: Highlight;
+                  --page-glow: transparent;
+                  --warning-bg: Canvas;
+                  --shadow: transparent;
+                }
 
-          forced_marker = "@media (forced-colors: active) {\n  .hero,"
-          forced_new = """@media (forced-colors: active) {
-            :root {
-              --salah-bg-canvas: Canvas;
-              --salah-bg-subtle: Canvas;
-              --salah-bg-surface: Canvas;
-              --salah-bg-surface-raised: Canvas;
-              --salah-bg-control: Canvas;
-              --salah-bg-accent-soft: Canvas;
-              --salah-fg-primary: CanvasText;
-              --salah-fg-secondary: CanvasText;
-              --salah-fg-tertiary: CanvasText;
-              --salah-fg-accent: Highlight;
-              --salah-fg-warning: Mark;
-              --salah-fg-provenance: CanvasText;
-              --salah-border-subtle: CanvasText;
-              --salah-border-default: ButtonText;
-              --salah-border-strong: CanvasText;
-              --salah-focus-ring: Highlight;
-              --page-glow: transparent;
-              --warning-bg: Canvas;
-              --shadow: transparent;
-            }
-
-            .hero,"""
-          forced_new = '\n'.join(line[10:] if line.startswith('          ') else line for line in forced_new.splitlines())
-          if forced_marker not in design:
-              raise SystemExit('forced-colors marker missing')
-          design = design.replace(forced_marker, forced_new, 1)
-
-          reduced_old = """@media (prefers-reduced-motion: reduce) {
-            button,
-            select,
-            input,
-            textarea,
-            .prayer-card {
-              transition: none;
-            }
-          }"""
-          reduced_old = '\n'.join(line[10:] if line.startswith('          ') else line for line in reduced_old.splitlines())
-          reduced_new = """@media (prefers-reduced-motion: reduce) {
-            *,
-            *::before,
-            *::after {
-              scroll-behavior: auto !important;
-              transition-duration: 0.01ms !important;
-              animation-duration: 0.01ms !important;
-              animation-iteration-count: 1 !important;
-            }
-          }"""
-          reduced_new = '\n'.join(line[10:] if line.startswith('          ') else line for line in reduced_new.splitlines())
-          if reduced_old not in design:
-              raise SystemExit('reduced-motion block missing')
-          design = design.replace(reduced_old, reduced_new, 1)
+                .hero,"""),
+              'forced-colour semantic tokens',
+          )
+          design = sub_once(
+              design,
+              r"@media \(prefers-reduced-motion: reduce\) \{\n  button,.*?\n\}",
+              dedent("""\
+              @media (prefers-reduced-motion: reduce) {
+                *,
+                *::before,
+                *::after {
+                  scroll-behavior: auto !important;
+                  transition-duration: 0.01ms !important;
+                  animation-duration: 0.01ms !important;
+                  animation-iteration-count: 1 !important;
+                }
+              }"""),
+              'reduced-motion ownership',
+          )
           design_path.write_text(design)
 
           styles_path = Path('src/styles.css')
@@ -521,44 +528,45 @@ jobs:
           if index < 0:
               raise SystemExit('styles feature boundary missing')
           styles = styles[index:]
-          styles = re.sub(
+          styles = sub_once(
+              styles,
               r"@media \(prefers-contrast: more\) \{\n  :root \{.*?\n  \}\n\n  :root\[data-theme='light'\] \{.*?\n  \}\n\n",
               '@media (prefers-contrast: more) {\n',
-              styles,
-              count=1,
-              flags=re.S,
+              'legacy contrast tokens',
           )
-          styles = re.sub(
+          styles = sub_once(
+              styles,
               r"@media \(forced-colors: active\) \{\n  :root \{.*?\n  \}\n\n",
               '@media (forced-colors: active) {\n',
-              styles,
-              count=1,
-              flags=re.S,
+              'legacy forced-colour tokens',
           )
-          styles, count = re.subn(
+          styles = sub_once(
+              styles,
               r"\n@media \(prefers-reduced-motion: reduce\) \{\n  \*,\n  \*::before,\n  \*::after \{.*?\n  \}\n\}\n",
               '\n',
-              styles,
-              count=1,
-              flags=re.S,
+              'legacy reduced-motion block',
           )
-          if count != 1:
-              raise SystemExit('legacy reduced-motion block missing')
           styles_path.write_text(styles)
 
           responsive_path = Path('src/responsive-hardening.css')
           responsive = responsive_path.read_text()
-          responsive, count = re.subn(r"\.app-shell \{.*?\n\}\n\n", '', responsive, count=1, flags=re.S)
-          if count != 1:
-              raise SystemExit('responsive app-shell block missing')
+          responsive = sub_once(
+              responsive,
+              r"\.app-shell \{.*?\n\}\n\n",
+              '',
+              'responsive app-shell ownership',
+          )
           responsive_path.write_text(responsive)
 
           main_path = Path('src/main.tsx')
           main = main_path.read_text()
-          legacy_import = "import './prayer-first-home.css';\n"
-          if legacy_import not in main:
-              raise SystemExit('prayer-first-home import missing')
-          main_path.write_text(main.replace(legacy_import, '', 1))
+          main = replace_once(
+              main,
+              "import './prayer-first-home.css';\n",
+              '',
+              'prayer-first stylesheet import',
+          )
+          main_path.write_text(main)
           PY
 
           rm src/prayer-first-home.css
