@@ -67,9 +67,7 @@ describe('wearable companion snapshot', () => {
 
   it('rejects missing or reordered obligatory prayer rows', () => {
     expect(() =>
-      createWearableCompanionSnapshot(
-        draft({ prayers: draft().prayers.slice(0, 4) }),
-      ),
+      createWearableCompanionSnapshot(draft({ prayers: draft().prayers.slice(0, 4) })),
     ).toThrow(/exactly five/u);
 
     const reordered = draft().prayers.slice();
@@ -81,30 +79,26 @@ describe('wearable companion snapshot', () => {
     reordered[0] = second;
     reordered[1] = first;
 
-    expect(() =>
-      createWearableCompanionSnapshot(draft({ prayers: reordered })),
-    ).toThrow(/canonical prayer order/u);
+    expect(() => createWearableCompanionSnapshot(draft({ prayers: reordered }))).toThrow(
+      /canonical prayer order/u,
+    );
   });
 
   it('rejects invalid timezone, date and freshness metadata', () => {
+    expect(() => createWearableCompanionSnapshot(draft({ timezone: 'Not/A_Timezone' }))).toThrow(
+      /IANA timezone/u,
+    );
+    expect(() => createWearableCompanionSnapshot(draft({ civilDate: '2026-02-30' }))).toThrow(
+      /valid Gregorian date/u,
+    );
     expect(() =>
-      createWearableCompanionSnapshot(draft({ timezone: 'Not/A_Timezone' })),
-    ).toThrow(/IANA timezone/u);
-    expect(() =>
-      createWearableCompanionSnapshot(draft({ civilDate: '2026-02-30' })),
-    ).toThrow(/valid Gregorian date/u);
-    expect(() =>
-      createWearableCompanionSnapshot(
-        draft({ staleAfter: '2026-08-20T07:30:00.000Z' }),
-      ),
+      createWearableCompanionSnapshot(draft({ staleAfter: '2026-08-20T07:30:00.000Z' })),
     ).toThrow(/later than generatedAt/u);
   });
 
   it('requires exact UTC timestamps and prevents Iqamah before prayer start', () => {
     expect(() =>
-      createWearableCompanionSnapshot(
-        draft({ generatedAt: '2026-08-20T17:30:00+10:00' }),
-      ),
+      createWearableCompanionSnapshot(draft({ generatedAt: '2026-08-20T17:30:00+10:00' })),
     ).toThrow(/exact ISO-8601 UTC/u);
 
     expect(() =>
@@ -121,9 +115,7 @@ describe('wearable companion snapshot', () => {
   });
 
   it('serializes only the bounded display contract without precise location or credentials', () => {
-    const serialized = serializeWearableCompanionSnapshot(
-      createWearableCompanionSnapshot(draft()),
-    );
+    const serialized = serializeWearableCompanionSnapshot(createWearableCompanionSnapshot(draft()));
 
     expect(JSON.parse(serialized)).toMatchObject({
       version: 1,

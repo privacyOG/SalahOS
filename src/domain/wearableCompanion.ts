@@ -30,13 +30,7 @@ export interface WearableCompanionSnapshot extends WearableCompanionSnapshotDraf
   readonly nextPrayer: WearablePrayerMoment | null;
 }
 
-const PRAYER_ORDER: readonly WearablePrayerId[] = [
-  'fajr',
-  'dhuhr',
-  'asr',
-  'maghrib',
-  'isha',
-];
+const PRAYER_ORDER: readonly WearablePrayerId[] = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
 
 function assertUtcTimestamp(value: string, label: string): string {
   const parsed = new Date(value);
@@ -101,9 +95,7 @@ function normalizeMoment(
   }
   const startsAt = assertUtcTimestamp(value.startsAt, `${label} startsAt`);
   const iqamahAt =
-    value.iqamahAt === null
-      ? null
-      : assertUtcTimestamp(value.iqamahAt, `${label} iqamahAt`);
+    value.iqamahAt === null ? null : assertUtcTimestamp(value.iqamahAt, `${label} iqamahAt`);
   if (iqamahAt !== null && new Date(iqamahAt).getTime() < new Date(startsAt).getTime()) {
     throw new RangeError(`${label} iqamahAt must not precede prayer start`);
   }
@@ -151,8 +143,6 @@ export function createWearableCompanionSnapshot(
   });
 }
 
-export function serializeWearableCompanionSnapshot(
-  snapshot: WearableCompanionSnapshot,
-): string {
+export function serializeWearableCompanionSnapshot(snapshot: WearableCompanionSnapshot): string {
   return JSON.stringify(snapshot);
 }
