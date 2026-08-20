@@ -38,9 +38,7 @@ export interface ManagedAdminClient {
 export interface ManagedDisplayClient {
   readonly displayId: string;
   getConfig(): Promise<ManagedDisplayRemoteConfig>;
-  heartbeat(
-    input: Omit<ManagedDisplayHeartbeat, 'displayId'>,
-  ): Promise<ManagedDisplayRemoteStatus>;
+  heartbeat(input: Omit<ManagedDisplayHeartbeat, 'displayId'>): Promise<ManagedDisplayRemoteStatus>;
 }
 
 export function normalizeManagedServiceBaseUrl(value: string): string {
@@ -48,7 +46,9 @@ export function normalizeManagedServiceBaseUrl(value: string): string {
   const loopback =
     url.hostname === 'localhost' || url.hostname === '127.0.0.1' || url.hostname === '::1';
   if (url.protocol !== 'https:' && !(url.protocol === 'http:' && loopback)) {
-    throw new RangeError('Managed administration requires HTTPS except on loopback development hosts');
+    throw new RangeError(
+      'Managed administration requires HTTPS except on loopback development hosts',
+    );
   }
   if (url.username !== '' || url.password !== '' || url.search !== '' || url.hash !== '') {
     throw new RangeError(
@@ -61,7 +61,9 @@ export function normalizeManagedServiceBaseUrl(value: string): string {
 export function normalizeManagedServiceToken(value: string): string {
   const token = value.trim();
   if (token.length < 32 || token.length > 512 || !/^[A-Za-z0-9._~-]+$/u.test(token)) {
-    throw new RangeError('Managed administration token must contain 32 through 512 safe characters');
+    throw new RangeError(
+      'Managed administration token must contain 32 through 512 safe characters',
+    );
   }
   return token;
 }
@@ -124,14 +126,16 @@ function createAuthorizedRequest(
   fetchImpl: FetchLike,
 ): (path: string, init?: RequestInit) => Promise<unknown> {
   return async (path, init = {}) => {
+    const headers = new Headers(init.headers);
+    headers.set('accept', 'application/json');
+    headers.set('authorization', `Bearer ${token}`);
+    if (init.body !== undefined) {
+      headers.set('content-type', 'application/json');
+    }
+
     const response = await fetchImpl(`${baseUrl}${path}`, {
       ...init,
-      headers: {
-        accept: 'application/json',
-        authorization: `Bearer ${token}`,
-        ...(init.body === undefined ? {} : { 'content-type': 'application/json' }),
-        ...init.headers,
-      },
+      headers,
       credentials: 'omit',
       cache: 'no-store',
       redirect: 'error',
