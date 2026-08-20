@@ -30,16 +30,15 @@ jobs:
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
 
-      - name: Preserve legacy shell spacing
+      - name: Preserve consolidated shell behavior
         if: github.event_name == 'pull_request' && github.head_ref == 'stage-22/design-system-v2'
         run: |
           set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
 
-          path = Path('src/design-system.css')
-          text = path.read_text()
-
+          design_path = Path('src/design-system.css')
+          text = design_path.read_text()
           replacements = [
               (
                   "  --salah-text-countdown: clamp(2.25rem, 1.7rem + 2.2vw, 4.4rem);",
@@ -66,21 +65,41 @@ jobs:
                   "    padding-block-start: calc(clamp(1.5rem, 4vw, 4rem) + env(safe-area-inset-top));",
               ),
           ]
-
           for old, new in replacements:
               if old not in text:
                   raise SystemExit(f'preservation marker missing: {old}')
               text = text.replace(old, new, 1)
+          design_path.write_text(text)
 
-          path.write_text(text)
+          styles_path = Path('src/styles.css')
+          styles = styles_path.read_text()
+          dead_shell = """@media (min-width: 1600px) {
+            .app-shell {
+              width: min(1500px, calc(100% - 5rem));
+            }
+
+            .prayer-card {
+              min-height: 10rem;
+            }
+          }"""
+          dead_shell = '\n'.join(line[10:] if line.startswith('          ') else line for line in dead_shell.splitlines())
+          live_feature = """@media (min-width: 1600px) {
+            .prayer-card {
+              min-height: 10rem;
+            }
+          }"""
+          live_feature = '\n'.join(line[10:] if line.startswith('          ') else line for line in live_feature.splitlines())
+          if dead_shell not in styles:
+              raise SystemExit('residual 1600px app-shell marker missing')
+          styles_path.write_text(styles.replace(dead_shell, live_feature, 1))
           PY
 
-          npx prettier --write src/design-system.css
+          npx prettier --write src/design-system.css src/styles.css
           git show 6c0c1fda6c0bdd462c430bae0560443570b6129a:.github/workflows/ci.yml > .github/workflows/ci.yml
           git config user.name privacyOG
           git config user.email 102720550+privacyOG@users.noreply.github.com
-          git add src/design-system.css .github/workflows/ci.yml
-          git commit -m "Preserve legacy shell spacing in Design System v2"
+          git add src/design-system.css src/styles.css .github/workflows/ci.yml
+          git commit -m "Preserve legacy shell behavior in Design System v2"
           git push origin HEAD:stage-22/design-system-v2
 
       - name: Sensitive-file policy
