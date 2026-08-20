@@ -12,11 +12,12 @@ The service exposes only these `GET` routes:
 GET /api/v1/mosques/:mosqueId
 GET /api/v1/mosques/:mosqueId/prayers/:date
 GET /api/v1/mosques/:mosqueId/timetables/:month
+GET /api/v1/mosques/:mosqueId/calendar.ics
 ```
 
 Dates use `YYYY-MM-DD`; months use `YYYY-MM`. Query parameters and non-`GET` methods are rejected.
 
-The profile and daily-prayer endpoints use a 60-second public cache lifetime with stale-while-revalidate support. Monthly timetables use a 300-second public cache lifetime. Per-socket-IP request ceilings follow the SalahOS public contract: 120 profile requests/minute, 120 daily requests/minute and 60 monthly requests/minute.
+The profile and daily-prayer endpoints use a 60-second public cache lifetime with stale-while-revalidate support. Monthly timetables and calendar feeds use a 300-second public cache lifetime. Per-socket-IP request ceilings follow the SalahOS public contract: 120 profile requests/minute, 120 daily requests/minute, 60 monthly requests/minute and 60 calendar requests/minute.
 
 ## Published-data snapshot
 
@@ -35,7 +36,8 @@ Snapshot schema version 1 contains:
 - one or more normalized mosque IDs under `mosques`;
 - a public `profile` with matching `mosqueId`, name and IANA timezone;
 - optional `dailyPrayers` records keyed by `YYYY-MM-DD`;
-- optional `monthlyTimetables` records keyed by `YYYY-MM`.
+- optional `monthlyTimetables` records keyed by `YYYY-MM`;
+- optional public `events` used to generate the read-only iCalendar subscription feed.
 
 Daily records require all five obligatory prayer starts. Prayer values may use local `HH:MM`, integer local minutes, or timezone-aware ISO-8601 values. Iqamah values may also use fixed or non-negative offset rules. Monthly records contain 1 through 31 daily entries and every entry must remain inside the keyed month.
 
@@ -89,7 +91,7 @@ The service must start with one valid snapshot; it will fail closed at startup w
 
 ## Response hardening
 
-Every response is JSON and includes `nosniff`, restrictive content-security policy, frame denial and no-referrer headers. Public-resource responses include their declared cache policy. Errors do not return filesystem paths, stack traces or private state.
+JSON API responses and the `text/calendar` event feed include `nosniff`, restrictive content-security policy, frame denial and no-referrer headers. Public-resource responses include their declared cache policy. Errors do not return filesystem paths, stack traces or private state.
 
 No cross-origin browser permission is emitted by default. Server-side Home Assistant access works without CORS. Browser-based consumers should use a same-origin reverse proxy rather than broadly enabling cross-origin access.
 
@@ -101,7 +103,7 @@ The Stage 37 custom integration in `integrations/home-assistant/custom_component
 
 The repository test suite verifies:
 
-- all three versioned public endpoint shapes;
+- all three JSON endpoint shapes plus the iCalendar subscription endpoint;
 - declared cache and security headers;
 - method/query rejection;
 - last-known-good fallback after a malformed snapshot update;

@@ -26,8 +26,14 @@
             "isha": "19:00"
           },
           "iqamah": {
-            "fajr": { "kind": "offset", "offsetMinutes": 20 },
-            "dhuhr": { "kind": "fixed", "localMinutes": 740 }
+            "fajr": {
+              "kind": "offset",
+              "offsetMinutes": 20
+            },
+            "dhuhr": {
+              "kind": "fixed",
+              "localMinutes": 740
+            }
           },
           "jumuah": [],
           "hijriLabel": "7 Rabi al-Awwal 1448"
@@ -57,7 +63,24 @@
             }
           ]
         }
-      }
+      },
+      "events": [
+        {
+          "eventId": "community-iftar-2026",
+          "mosqueId": "masjid.one",
+          "english": {
+            "title": "Community Iftar",
+            "description": "Join the community for iftar after Maghrib."
+          },
+          "arabic": null,
+          "venue": "Main prayer hall",
+          "allDay": false,
+          "startsAt": "2026-08-20T08:00:00.000Z",
+          "endsAt": "2026-08-20T10:00:00.000Z",
+          "recurrence": "none",
+          "registrationUrl": "https://example.org/register"
+        }
+      ]
     }
   }
 }
