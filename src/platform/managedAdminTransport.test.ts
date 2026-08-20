@@ -96,6 +96,7 @@ describe('managed admin transport', () => {
     );
 
     await client.updateDisplayConfig('display:lobby', {
+      expectedRevision: 1,
       contentRevision: 2,
       playlistId: 'playlist:main',
       displayTheme: 'midnight',
