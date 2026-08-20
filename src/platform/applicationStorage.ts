@@ -5,12 +5,14 @@ import { MOSQUE_LIBRARY_STORAGE_KEY } from './mosqueLibrary';
 import { SAVED_LOCATIONS_STORAGE_KEY } from './savedLocations';
 import { SETTINGS_STORAGE_KEY } from './settingsStorage';
 import type { KeyValueStorage } from './settingsStorage';
+import { SMART_DISPLAY_THEME_STORAGE_KEY } from './smartDisplayTheme';
 
 export const PERSISTED_APPLICATION_KEYS = Object.freeze([
   SETTINGS_STORAGE_KEY,
   SAVED_LOCATIONS_STORAGE_KEY,
   MOSQUE_LIBRARY_STORAGE_KEY,
   COMMUNITY_CONTENT_STORAGE_KEY,
+  SMART_DISPLAY_THEME_STORAGE_KEY,
 ] as const);
 
 export interface PreferencesStore {
