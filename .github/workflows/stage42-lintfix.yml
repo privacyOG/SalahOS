@@ -1,0 +1,212 @@
+name: Stage 42 Strict Lint Corrections
+
+on:
+  push:
+    branches:
+      - 'stage-42/qiblah-finder'
+
+permissions:
+  contents: write
+
+jobs:
+  fix-and-verify:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 15
+    steps:
+      - name: Checkout Stage 42 branch
+        uses: actions/checkout@v4
+        with:
+          ref: stage-42/qiblah-finder
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies from lockfile
+        run: npm ci --ignore-scripts
+
+      - name: Apply strict lint corrections
+        run: |
+          node <<'NODE'
+          const fs = require('node:fs');
+
+          function edit(path, transform) {
+            const before = fs.readFileSync(path, 'utf8');
+            const after = transform(before);
+            if (after === before) throw new Error(`No changes applied to ${path}`);
+            fs.writeFileSync(path, after);
+          }
+
+          function replace(text, before, after, label) {
+            if (!text.includes(before)) throw new Error(`Missing pattern: ${label}`);
+            return text.replace(before, after);
+          }
+
+          function replaceAll(text, before, after, label) {
+            if (!text.includes(before)) throw new Error(`Missing pattern: ${label}`);
+            return text.split(before).join(after);
+          }
+
+          edit('src/domain/qiblaMap.ts', (text) =>
+            replace(
+              text,
+              "          key: `${normalizedZoom}/${wrappedX}/${rawY}/${xOffset}`,",
+              "          key: [normalizedZoom, wrappedX, rawY, xOffset].join('/'),",
+              'qibla map tile key',
+            ),
+          );
+
+          edit('src/platform/deviceCompass.ts', (text) => {
+            text = replace(
+              text,
+              "  const screenAngle = window.screen.orientation?.angle;\n  if (Number.isFinite(screenAngle)) return Number(screenAngle);\n  const legacyAngle = (window as Window & { orientation?: number }).orientation;\n  return Number.isFinite(legacyAngle) ? Number(legacyAngle) : 0;",
+              "  const screenAngle = window.screen.orientation.angle;\n  if (Number.isFinite(screenAngle)) return screenAngle;\n  const legacyAngle = Reflect.get(window, 'orientation') as unknown;\n  return typeof legacyAngle === 'number' && Number.isFinite(legacyAngle) ? legacyAngle : 0;",
+              'screen orientation handling',
+            );
+            text = replace(
+              text,
+              "    stop: async () => {\n      remove();\n    },",
+              "    stop: () => {\n      remove();\n      return Promise.resolve();\n    },",
+              'browser compass stop',
+            );
+            text = replace(
+              text,
+              "  return Object.freeze({ state, stop: async () => undefined });",
+              "  return Object.freeze({ state, stop: () => Promise.resolve() });",
+              'stopped compass session',
+            );
+            return text;
+          });
+
+          edit('src/platform/qiblaLocation.ts', (text) => {
+            text = replace(
+              text,
+              "          if (error !== null) {\n            onFailure(nativeFailureReason(error));\n          }",
+              "          onFailure(nativeFailureReason(error));",
+              'native watch error',
+            );
+            text = replace(
+              text,
+              "      stop: async () => {\n        navigator.geolocation.clearWatch(id);\n      },",
+              "      stop: () => {\n        navigator.geolocation.clearWatch(id);\n        return Promise.resolve();\n      },",
+              'browser location stop',
+            );
+            text = replaceAll(
+              text,
+              "if (highAccuracy.ok || highAccuracy.reason === 'permission-denied')",
+              "if (highAccuracy.ok || isPermissionDeniedResult(highAccuracy))",
+              'permission denied result checks',
+            );
+            text = replace(
+              text,
+              "function browserFailureReason(error: GeolocationPositionError): QiblaLocationFailureReason {",
+              "function isPermissionDeniedResult(result: QiblaLocationResult): boolean {\n  return result.ok ? false : result.reason === 'permission-denied';\n}\n\nfunction browserFailureReason(error: GeolocationPositionError): QiblaLocationFailureReason {",
+              'permission denied helper',
+            );
+            text = replace(
+              text,
+              "  return Object.freeze({ stop: async () => undefined });",
+              "  return Object.freeze({ stop: () => Promise.resolve() });",
+              'stopped location watch',
+            );
+            return text;
+          });
+
+          edit('src/ui/QiblaCompassDial.tsx', (text) => {
+            text = replaceAll(text, '${dialRotation}', '${String(dialRotation)}', 'dial rotation');
+            text = replaceAll(text, '${bearingDegrees}', '${String(bearingDegrees)}', 'bearing rotation');
+            text = replaceAll(text, '${degrees}', '${String(degrees)}', 'degree transforms');
+            text = replaceAll(text, '${x}', '${String(x)}', 'x transforms');
+            text = replaceAll(text, '${y}', '${String(y)}', 'y transforms');
+            return text;
+          });
+
+          edit('src/ui/QiblaFinder.tsx', (text) => {
+            text = replace(
+              text,
+              "    return () => window.removeEventListener('focus', refreshSettings);",
+              "    return () => {\n      window.removeEventListener('focus', refreshSettings);\n    };",
+              'focus cleanup',
+            );
+            text = replaceAll(
+              text,
+              "onClick={() => void useCurrentPosition()}",
+              "onClick={() => {\n              void useCurrentPosition();\n            }}",
+              'current position handlers',
+            );
+            text = replace(
+              text,
+              "onClick={() => void stopLiveLocation()}",
+              "onClick={() => {\n                void stopLiveLocation();\n              }}",
+              'stop live location handler',
+            );
+            text = replace(
+              text,
+              "onClick={() => void stopCompass()}",
+              "onClick={() => {\n                      void stopCompass();\n                    }}",
+              'stop compass handler',
+            );
+            text = replace(
+              text,
+              "onClick={() => void startCompass()}",
+              "onClick={() => {\n                        void startCompass();\n                      }}",
+              'start compass handler',
+            );
+            text = replace(
+              text,
+              "onZoomChange={(zoom) => setMapZoom(clampQiblaMapZoom(zoom))}",
+              "onZoomChange={(zoom) => {\n                setMapZoom(clampQiblaMapZoom(zoom));\n              }}",
+              'map zoom handler',
+            );
+            text = replace(
+              text,
+              "onEnableTiles={() => setMapTilesEnabled(true)}",
+              "onEnableTiles={() => {\n                setMapTilesEnabled(true);\n              }}",
+              'map tile handler',
+            );
+            text = replace(
+              text,
+              "onDropPin={(coordinates) => void useMapPin(coordinates)}",
+              "onDropPin={(coordinates) => {\n                void useMapPin(coordinates);\n              }}",
+              'map pin handler',
+            );
+            text = replace(
+              text,
+              "onClick={() => void useCity(result)}",
+              "onClick={() => {\n                  void useCity(result);\n                }}",
+              'city handler',
+            );
+            return text;
+          });
+
+          edit('src/ui/QiblaMapView.tsx', (text) => {
+            text = replaceAll(text, '${tile.offsetX}', '${String(tile.offsetX)}', 'map tile x offset');
+            text = replaceAll(text, '${tile.offsetY}', '${String(tile.offsetY)}', 'map tile y offset');
+            text = replace(
+              text,
+              "onError={() => setTileError(true)}",
+              "onError={() => {\n                    setTileError(true);\n                  }}",
+              'map tile error handler',
+            );
+            return text;
+          });
+          NODE
+
+      - name: Apply canonical formatting
+        run: npx prettier --write src/domain/qiblaMap.ts src/platform/deviceCompass.ts src/platform/qiblaLocation.ts src/ui/QiblaCompassDial.tsx src/ui/QiblaFinder.tsx src/ui/QiblaMapView.tsx
+
+      - name: Run full repository quality gate
+        run: npm run check
+
+      - name: Remove temporary lint workflow
+        run: rm .github/workflows/stage42-lintfix.yml
+
+      - name: Commit verified lint corrections
+        run: |
+          git config user.name privacyOG
+          git config user.email 102720550+privacyOG@users.noreply.github.com
+          git add -A
+          git commit -m "Fix Stage 42 strict lint issues"
+          git push origin HEAD:stage-42/qiblah-finder
