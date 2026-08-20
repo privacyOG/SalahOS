@@ -37,6 +37,10 @@ describe('native application storage', () => {
       '{"version":1,"announcements":[],"events":[]}',
     );
     preferences.values.set(PERSISTED_APPLICATION_KEYS[4], 'midnight');
+    preferences.values.set(
+      PERSISTED_APPLICATION_KEYS[5],
+      '{"version":1,"profiles":[],"selectedProfileId":null}',
+    );
 
     const storage = await createNativePreferencesStorage(preferences);
 
@@ -47,6 +51,9 @@ describe('native application storage', () => {
       '{"version":1,"announcements":[],"events":[]}',
     );
     expect(storage.getItem(PERSISTED_APPLICATION_KEYS[4])).toBe('midnight');
+    expect(storage.getItem(PERSISTED_APPLICATION_KEYS[5])).toBe(
+      '{"version":1,"profiles":[],"selectedProfileId":null}',
+    );
   });
 
   it('updates synchronous reads immediately and persists writes in order', async () => {

@@ -7,6 +7,7 @@ import {
 } from './platform/applicationStorage';
 import { CommunityUpdatesPanel } from './ui/CommunityUpdatesPanel';
 import { CongregationShell } from './ui/CongregationShell';
+import { MosqueProfilesPanel } from './ui/MosqueProfilesPanel';
 import { QiblaCompassPanel } from './ui/QiblaCompassPanel';
 import { RamadanModePanel } from './ui/RamadanModePanel';
 import { SmartDisplayThemeSettings } from './ui/SmartDisplayThemeSettings';
@@ -23,6 +24,7 @@ import './smart-display-themes.css';
 import './ramadan-mode.css';
 import './taraweeh-panel.css';
 import './community-updates-panel.css';
+import './mosque-profiles-panel.css';
 import './qibla-compass.css';
 
 async function bootstrap(): Promise<void> {
@@ -56,6 +58,7 @@ async function bootstrap(): Promise<void> {
         <CongregationShell>
           <App />
           <SmartDisplayThemeSettings />
+          <MosqueProfilesPanel />
           <RamadanModePanel />
           <TaraweehPanel />
           <CommunityUpdatesPanel />

@@ -780,7 +780,7 @@
 - [x] Taraweeh timetable support
 - [x] Mosque announcements/events
 - [x] Configurable smart-display themes
-- [ ] Multiple mosque profiles
+- [x] Multiple mosque profiles
 - [ ] Remote administration for managed mosque displays
 - [ ] Home Assistant integration
 - [ ] Optional local network API for smart-home/display integration

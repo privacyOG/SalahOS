@@ -1,0 +1,179 @@
+.mosque-profiles-panel {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 1.25rem auto;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  border: 1px solid var(--card-border);
+  border-radius: 1.5rem;
+  background: var(--card);
+  box-shadow: 0 1.2rem 3rem var(--shadow);
+}
+
+.mosque-profiles-panel__heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.mosque-profiles-panel__heading > p {
+  max-width: 44rem;
+  margin: 0;
+  color: var(--muted);
+}
+
+.mosque-profiles-panel__eyebrow {
+  margin: 0 0 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.mosque-profiles-panel h2,
+.mosque-profiles-panel h3 {
+  margin-top: 0;
+}
+
+.mosque-profiles-panel__selection {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr));
+  gap: 0.8rem;
+}
+
+.mosque-profile-choice {
+  min-height: 5rem;
+  padding: 0.85rem;
+  border: 1px solid var(--card-border);
+  border-radius: 1rem;
+  background: var(--page);
+  color: var(--text);
+  text-align: start;
+}
+
+.mosque-profile-choice[aria-pressed='true'],
+.mosque-profile-choice--profile:has(button[aria-pressed='true']) {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.mosque-profile-choice--profile {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.mosque-profile-choice--profile > div:first-child {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.mosque-profile-choice small {
+  color: var(--muted);
+}
+
+.mosque-profile-choice__actions,
+.mosque-profiles-panel__manage-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.mosque-profile-choice__actions button {
+  flex: 1 1 auto;
+}
+
+.mosque-profile-details {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(18rem, 1fr);
+  gap: 1rem;
+  margin-top: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--card-border);
+  border-radius: 1rem;
+  background: var(--next-card);
+}
+
+.mosque-profile-details p {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+.mosque-profile-details dl {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.mosque-profile-details dl div {
+  display: grid;
+  grid-template-columns: minmax(6rem, auto) 1fr;
+  gap: 0.75rem;
+}
+
+.mosque-profile-details dt {
+  color: var(--muted);
+}
+
+.mosque-profile-details dd {
+  margin: 0;
+}
+
+.mosque-profiles-panel__empty {
+  margin: 1rem 0 0;
+  padding: 1rem;
+  border-radius: 1rem;
+  background: var(--next-card);
+  color: var(--muted);
+}
+
+.mosque-profiles-panel__manage {
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--card-border);
+}
+
+.mosque-profiles-panel__manage summary {
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.mosque-profiles-panel__manage label {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 1rem;
+}
+
+.mosque-profiles-panel__manage textarea {
+  width: 100%;
+  min-height: 10rem;
+  resize: vertical;
+  font:
+    0.85rem/1.45 ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Consolas,
+    monospace;
+}
+
+.mosque-profiles-panel__message {
+  margin-bottom: 0;
+  color: var(--muted);
+}
+
+@media (max-width: 720px) {
+  .mosque-profiles-panel {
+    width: min(100% - 1rem, 1180px);
+    border-radius: 1.1rem;
+  }
+
+  .mosque-profiles-panel__heading,
+  .mosque-profile-details {
+    grid-template-columns: 1fr;
+    align-items: start;
+  }
+
+  .mosque-profiles-panel__heading {
+    flex-direction: column;
+  }
+}
