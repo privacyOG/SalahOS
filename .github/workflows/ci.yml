@@ -45,12 +45,19 @@ jobs:
 
           server = Path('local-api/server.mjs')
           text = server.read_text()
-          old = "throw new RangeError(`${label} must be a supported IANA timezone`) from error;"
-          new = "throw new RangeError(`${label} must be a supported IANA timezone`, { cause: error });"
-          if old in text:
-              text = text.replace(old, new)
-          elif new not in text:
-              raise SystemExit('timezone validation line is not in an expected state')
+          replacements = {
+              "throw new RangeError(`${label} must be a supported IANA timezone`) from error;":
+                  "throw new RangeError(`${label} must be a supported IANA timezone`, { cause: error });",
+              "if (error instanceof URIError) throw new RangeError('Route mosqueId is malformed') from error;":
+                  "if (error instanceof URIError) throw new RangeError('Route mosqueId is malformed', { cause: error });",
+          }
+          for old, new in replacements.items():
+              if old in text:
+                  text = text.replace(old, new)
+              elif new not in text:
+                  raise SystemExit(f'expected Stage 38 syntax line is missing: {old}')
+          if ' from error;' in text:
+              raise SystemExit('unexpected Python-style exception chaining remains in local-api/server.mjs')
           server.write_text(text)
 
           todo = Path('TODO.md')
