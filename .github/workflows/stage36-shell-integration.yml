@@ -1,0 +1,56 @@
+name: Stage 36 shell integration
+
+on:
+  push:
+    branches:
+      - 'stage-36/remote-managed-admin'
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: stage-36/remote-managed-admin
+          fetch-depth: 0
+
+      - name: Wire remote managed administration into shell
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('src/main.tsx')
+          text = path.read_text(encoding='utf-8')
+          replacements = [
+              (
+                  "import { CommunityUpdatesPanel } from './ui/CommunityUpdatesPanel';\n",
+                  "import { CommunityUpdatesPanel } from './ui/CommunityUpdatesPanel';\nimport { ManagedDisplayConnectionSettings } from './ui/ManagedDisplayConnectionSettings';\nimport { ManagedDisplayRemoteController } from './ui/ManagedDisplayRemoteController';\n",
+              ),
+              (
+                  "import { QiblaCompassPanel } from './ui/QiblaCompassPanel';\n",
+                  "import { QiblaCompassPanel } from './ui/QiblaCompassPanel';\nimport { RemoteDisplayAdminPanel } from './ui/RemoteDisplayAdminPanel';\n",
+              ),
+              (
+                  "import './smart-display-themes.css';\n",
+                  "import './smart-display-themes.css';\nimport './managed-display-remote.css';\nimport './remote-display-admin.css';\n",
+              ),
+              (
+                  "          <App />\n          <SmartDisplayThemeSettings />\n",
+                  "          <App />\n          <ManagedDisplayRemoteController />\n          <SmartDisplayThemeSettings />\n          <ManagedDisplayConnectionSettings />\n          <RemoteDisplayAdminPanel />\n",
+              ),
+          ]
+          for old, new in replacements:
+              if text.count(old) != 1:
+                  raise SystemExit(f'Expected exactly one shell integration anchor: {old!r}')
+              text = text.replace(old, new, 1)
+          path.write_text(text, encoding='utf-8')
+          PY
+          git rm .github/workflows/stage36-shell-integration.yml
+          git config user.name privacyOG
+          git config user.email kriptiik@proton.me
+          git add src/main.tsx
+          git commit -m "Wire remote managed administration into app shell"
+          git push origin HEAD:stage-36/remote-managed-admin
