@@ -13,15 +13,14 @@ import { ManagedDisplayConnectionSettings } from './ui/ManagedDisplayConnectionS
 import { ManagedDisplayRemoteController } from './ui/ManagedDisplayRemoteController';
 import { MosqueProfilesPanel } from './ui/MosqueProfilesPanel';
 import { QiblaFinder } from './ui/QiblaFinder';
-import { RamadanModePanel } from './ui/RamadanModePanel';
 import { RemoteDisplayAdminPanel } from './ui/RemoteDisplayAdminPanel';
+import { SettingsScreen } from './ui/SettingsScreen';
 import { smartDisplayModeRequested } from './ui/SmartDisplay';
 import { SmartDisplayThemeSettings } from './ui/SmartDisplayThemeSettings';
-import { TaraweehPanel } from './ui/TaraweehPanel';
+import { TodayScreen } from './ui/TodayScreen';
 import { readTouchDisplayFixtureConfig, TouchDisplayFixture } from './ui/TouchDisplayFixture';
 import {
   readProductSurface,
-  searchForAdminDestination,
   type AdminDestination,
   type CongregationDestination,
 } from './ui/applicationRoute';
@@ -30,6 +29,7 @@ import './design-system.css';
 import './prayer-first-home.css';
 import './congregation-shell.css';
 import './admin-shell.css';
+import './today-screen.css';
 import './responsive-hardening.css';
 import './touch-display-fixture.css';
 import './smart-display.css';
@@ -41,11 +41,6 @@ import './taraweeh-panel.css';
 import './community-updates-panel.css';
 import './mosque-profiles-panel.css';
 import './qibla-compass.css';
-
-function administrationHref(): string {
-  const search = searchForAdminDestination(window.location.search, 'overview');
-  return `${window.location.pathname}${search}${window.location.hash}`;
-}
 
 function CongregationRoute({ destination }: Readonly<{ destination: CongregationDestination }>) {
   switch (destination) {
@@ -70,31 +65,14 @@ function CongregationRoute({ destination }: Readonly<{ destination: Congregation
     case 'settings':
       return (
         <div className="congregation-route congregation-route--settings">
-          <div className="legacy-core-route legacy-core-route--settings">
-            <App />
-          </div>
-          <RamadanModePanel />
-          <TaraweehPanel />
-          <section className="surface-entry-card" aria-labelledby="managed-admin-entry-title">
-            <p className="surface-entry-card__eyebrow">SalahOS</p>
-            <h2 id="managed-admin-entry-title">Managed mosque administration</h2>
-            <p>
-              Display credentials, themes and remote-management controls are kept outside the
-              everyday prayer interface.
-            </p>
-            <a className="surface-entry-card__action" href={administrationHref()}>
-              Open administration
-            </a>
-          </section>
+          <SettingsScreen />
         </div>
       );
     case 'today':
     default:
       return (
         <div className="congregation-route congregation-route--today">
-          <div className="legacy-core-route legacy-core-route--today">
-            <App />
-          </div>
+          <TodayScreen />
         </div>
       );
   }
