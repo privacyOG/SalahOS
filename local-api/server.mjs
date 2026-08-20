@@ -599,7 +599,7 @@ function sendCalendar(response, status, body, mosqueId, options = {}) {
   response.writeHead(status, {
     'Content-Type': 'text/calendar; charset=utf-8',
     'Content-Length': Buffer.byteLength(body),
-    'Content-Disposition': `inline; filename=\"${mosqueId}-events.ics\"`,
+    'Content-Disposition': `inline; filename="${mosqueId}-events.ics"`,
     ...responseHeaders(options.cacheControl ?? 'no-store', options.stale ?? false),
   });
   response.end(body);
