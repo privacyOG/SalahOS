@@ -18,7 +18,8 @@ import { smartDisplayModeRequested } from './SmartDisplay';
 const copy = {
   en: {
     title: 'Mosque profiles',
-    subtitle: 'Keep multiple mosque profiles on this device and choose the active community context.',
+    subtitle:
+      'Keep multiple mosque profiles on this device and choose the active community context.',
     none: 'All mosques',
     selected: 'Selected',
     select: 'Select profile',
@@ -29,7 +30,8 @@ const copy = {
     contact: 'Contact',
     noProfiles: 'No mosque profiles are stored on this device yet.',
     manage: 'Local profile import / export',
-    manageHelp: 'Import a validated SalahOS mosque-profile-library JSON bundle or export the local library.',
+    manageHelp:
+      'Import a validated SalahOS mosque-profile-library JSON bundle or export the local library.',
     payload: 'Mosque profile library JSON',
     import: 'Import profiles',
     export: 'Prepare export',
@@ -165,7 +167,10 @@ export function MosqueProfilesPanel() {
         {library.profiles.map((profile) => {
           const selected = profile.id === library.selectedProfileId;
           return (
-            <article className="mosque-profile-choice mosque-profile-choice--profile" key={profile.id}>
+            <article
+              className="mosque-profile-choice mosque-profile-choice--profile"
+              key={profile.id}
+            >
               <div>
                 <strong>{localizedText(profile.name, locale)}</strong>
                 <small>{profile.address.formatted}</small>
@@ -194,7 +199,9 @@ export function MosqueProfilesPanel() {
         })}
       </div>
 
-      {library.profiles.length === 0 && <p className="mosque-profiles-panel__empty">{text.noProfiles}</p>}
+      {library.profiles.length === 0 && (
+        <p className="mosque-profiles-panel__empty">{text.noProfiles}</p>
+      )}
 
       {selectedProfile !== null && (
         <article className="mosque-profile-details">
@@ -215,7 +222,11 @@ export function MosqueProfilesPanel() {
             </div>
             <div>
               <dt>{text.facilities}</dt>
-              <dd>{selectedProfile.facilities.length === 0 ? '—' : selectedProfile.facilities.join(', ')}</dd>
+              <dd>
+                {selectedProfile.facilities.length === 0
+                  ? '—'
+                  : selectedProfile.facilities.join(', ')}
+              </dd>
             </div>
             <div>
               <dt>{text.contact}</dt>
