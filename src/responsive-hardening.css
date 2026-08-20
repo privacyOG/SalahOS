@@ -5,13 +5,6 @@
  * translucent status bars. viewport-fit=cover is enabled in index.html so
  * WebKit exposes these environment insets; browser targets resolve them to 0.
  */
-.app-shell {
-  padding-block-start: calc(clamp(1.5rem, 4vw, 4rem) + env(safe-area-inset-top));
-  padding-block-end: calc(clamp(1.5rem, 4vw, 4rem) + env(safe-area-inset-bottom));
-  padding-inline-start: env(safe-area-inset-left);
-  padding-inline-end: env(safe-area-inset-right);
-}
-
 .settings-grid > *,
 .offset-grid > *,
 .settings-transfer > *,
