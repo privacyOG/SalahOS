@@ -2,6 +2,8 @@ name: Release Assets
 
 on:
   push:
+    branches:
+      - 'release/v*'
     tags:
       - 'v*'
   workflow_dispatch:
@@ -55,13 +57,23 @@ jobs:
           set -euo pipefail
           PACKAGE_VERSION="$(node -p "require('./package.json').version")"
           ANDROID_VERSION="$(sed -n 's/^[[:space:]]*versionName[[:space:]]*"\([^"]*\)".*/\1/p' android/app/build.gradle | head -1)"
+          IOS_VERSION="$(sed -n 's/^[[:space:]]*MARKETING_VERSION = \([^;]*\);/\1/p' ios/App/App.xcodeproj/project.pbxproj | sort -u)"
           [[ -n "$PACKAGE_VERSION" && "$ANDROID_VERSION" == "$PACKAGE_VERSION" ]] || {
             echo "Package version ${PACKAGE_VERSION} and Android version ${ANDROID_VERSION} do not match" >&2
+            exit 1
+          }
+          [[ "$IOS_VERSION" == "$PACKAGE_VERSION" ]] || {
+            echo "Package version ${PACKAGE_VERSION} and iOS marketing version ${IOS_VERSION} do not match" >&2
             exit 1
           }
           if [[ "${GITHUB_REF_TYPE:-}" == "tag" ]]; then
             [[ "$GITHUB_REF_NAME" == "v${PACKAGE_VERSION}" ]] || {
               echo "Tag ${GITHUB_REF_NAME} does not match package version v${PACKAGE_VERSION}" >&2
+              exit 1
+            }
+          elif [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == release/* ]]; then
+            [[ "$GITHUB_REF_NAME" == "release/v${PACKAGE_VERSION}" ]] || {
+              echo "Release branch ${GITHUB_REF_NAME} does not match package version release/v${PACKAGE_VERSION}" >&2
               exit 1
             }
           fi
@@ -305,12 +317,25 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          [[ "$GITHUB_REF_NAME" == v* ]]
-          if gh release view "$GITHUB_REF_NAME" >/dev/null 2>&1; then
-            gh release upload "$GITHUB_REF_NAME" release/* --clobber
+          VERSION='${{ needs.preflight.outputs.version }}'
+          RELEASE_TAG="v${VERSION}"
+          if [[ "${GITHUB_REF_TYPE:-}" == "tag" ]]; then
+            [[ "$GITHUB_REF_NAME" == "$RELEASE_TAG" ]] || {
+              echo "Tag ${GITHUB_REF_NAME} does not match release version ${RELEASE_TAG}" >&2
+              exit 1
+            }
           else
-            gh release create "$GITHUB_REF_NAME" \
-              --title "SalahOS ${GITHUB_REF_NAME}" \
+            [[ "${GITHUB_REF_NAME:-}" == "release/${RELEASE_TAG}" ]] || {
+              echo "Release branch ${GITHUB_REF_NAME:-unknown} must be release/${RELEASE_TAG}" >&2
+              exit 1
+            }
+          fi
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" release/* --clobber
+          else
+            gh release create "$RELEASE_TAG" \
+              --target "$GITHUB_SHA" \
+              --title "SalahOS ${RELEASE_TAG}" \
               --notes-file RELEASE_NOTES.md \
               release/*
           fi
