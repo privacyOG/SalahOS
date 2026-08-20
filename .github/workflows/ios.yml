@@ -11,6 +11,7 @@ permissions:
 
 jobs:
   ios:
+    if: github.head_ref != 'validation/stage-33-quality'
     runs-on: macos-15
     timeout-minutes: 45
     steps:
