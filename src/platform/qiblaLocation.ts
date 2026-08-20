@@ -152,11 +152,7 @@ async function requestBrowserLocation(): Promise<QiblaLocationResult> {
     return { ok: false, reason: 'unsupported' };
   }
 
-  const highAccuracy = await browserPosition(
-    browserGeolocation,
-    true,
-    'browser-high-accuracy',
-  );
+  const highAccuracy = await browserPosition(browserGeolocation, true, 'browser-high-accuracy');
   if (highAccuracy.ok || isPermissionDeniedResult(highAccuracy)) {
     return highAccuracy;
   }
