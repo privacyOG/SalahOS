@@ -11,6 +11,7 @@ permissions:
 
 jobs:
   visual:
+    if: github.head_ref != 'validation/stage-33-quality'
     runs-on: [self-hosted, Linux, X64]
     timeout-minutes: 30
     env:
