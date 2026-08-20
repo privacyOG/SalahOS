@@ -34,7 +34,9 @@ describe('smart-display themes', () => {
       'sandstone',
       'emerald',
     ]);
-    expect(new Set(smartDisplayThemes.map((theme) => theme.id)).size).toBe(smartDisplayThemes.length);
+    expect(new Set(smartDisplayThemes.map((theme) => theme.id)).size).toBe(
+      smartDisplayThemes.length,
+    );
   });
 
   it('defaults invalid or missing persisted values to Classic', () => {
