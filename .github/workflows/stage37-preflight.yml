@@ -1,0 +1,28 @@
+name: Stage 37 preflight
+
+on:
+  push:
+    branches:
+      - 'stage-37/home-assistant-integration'
+
+permissions:
+  contents: read
+
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies from lockfile
+        run: npm ci --ignore-scripts
+      - name: Compile Home Assistant Python package
+        run: python3 -m compileall -q integrations/home-assistant
+      - name: Full repository check
+        run: npm run check
