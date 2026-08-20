@@ -15,17 +15,19 @@ import {
   type TrueHeadingSample,
   type TrueHeadingSession,
 } from '../platform/deviceCompass';
-import { triggerQiblaAlignmentHaptic } from '../platform/qiblaHaptics';
 import {
   requestQiblaLocation,
   startQiblaLocationWatch,
   type QiblaLocationFailureReason,
   type QiblaLocationWatch,
 } from '../platform/qiblaLocation';
+import { triggerQiblaAlignmentHaptic } from '../platform/qiblaHaptics';
+import { loadSavedLocations, type SavedLocation } from '../platform/savedLocations';
 import { loadPersistedSettings } from '../platform/settingsStorage';
 import { QiblaCompassDial } from './QiblaCompassDial';
 import { QiblaMapView } from './QiblaMapView';
 import { smartDisplayModeRequested } from './SmartDisplay';
+import '../qiblah-v2.css';
 
 type FinderView = 'compass' | 'map';
 type FinderLocationSource = 'saved' | 'live' | 'city' | 'pin';
@@ -41,8 +43,10 @@ interface FinderLocation {
 function readInitialState(): {
   readonly locale: Locale;
   readonly location: FinderLocation | null;
+  readonly savedLocations: readonly SavedLocation[];
 } {
-  const settings = loadPersistedSettings(getApplicationStorage());
+  const storage = getApplicationStorage();
+  const settings = loadPersistedSettings(storage);
   return {
     locale: settings.locale,
     location:
@@ -53,6 +57,7 @@ function readInitialState(): {
             source: 'saved',
             label: null,
           },
+    savedLocations: loadSavedLocations(storage),
   };
 }
 
@@ -60,6 +65,7 @@ export function QiblaFinder() {
   const initial = useMemo(readInitialState, []);
   const [locale, setLocale] = useState(initial.locale);
   const [location, setLocation] = useState<FinderLocation | null>(initial.location);
+  const [savedLocations, setSavedLocations] = useState(initial.savedLocations);
   const [view, setView] = useState<FinderView>('compass');
   const [locationState, setLocationState] = useState<LocationState>('idle');
   const [locationError, setLocationError] = useState<QiblaLocationFailureReason | null>(null);
@@ -100,8 +106,10 @@ export function QiblaFinder() {
 
   useEffect(() => {
     const refreshSettings = () => {
-      const settings = loadPersistedSettings(getApplicationStorage());
+      const storage = getApplicationStorage();
+      const settings = loadPersistedSettings(storage);
       setLocale(settings.locale);
+      setSavedLocations(loadSavedLocations(storage));
       if (settings.location !== null && location?.source === 'saved') {
         setLocation({
           coordinates: settings.location.coordinates,
@@ -228,6 +236,16 @@ export function QiblaFinder() {
     setSearchQuery(result.city);
   };
 
+  const useSavedLocation = async (savedLocation: SavedLocation) => {
+    await stopLiveLocation();
+    setLocation({
+      coordinates: savedLocation.coordinates,
+      source: 'saved',
+      label: savedLocation.label,
+    });
+    setLocationError(null);
+  };
+
   const useMapPin = async (coordinates: Coordinates) => {
     await stopLiveLocation();
     setLocation({ coordinates, source: 'pin', label: null });
@@ -244,7 +262,7 @@ export function QiblaFinder() {
 
   return (
     <section
-      className="qibla-finder"
+      className="qibla-finder qibla-finder--v2"
       aria-labelledby="qibla-finder-title"
       dir={localeDirection(locale)}
     >
@@ -276,39 +294,40 @@ export function QiblaFinder() {
         </div>
       </header>
 
-      <p className="qibla-finder-privacy">{text.privacy}</p>
-
-      <div className="qibla-location-bar">
-        <div>
-          <strong>{locationSource ?? text.noLocation}</strong>
-          {location !== null && (
-            <span dir="ltr">
-              {location.coordinates.latitude.toFixed(5)},{' '}
-              {location.coordinates.longitude.toFixed(5)}
-            </span>
-          )}
-          {location?.label !== null && location?.label !== undefined && <bdi>{location.label}</bdi>}
-        </div>
-        <div className="qibla-location-actions">
-          <button
-            type="button"
-            onClick={() => {
-              void useCurrentPosition();
-            }}
-            disabled={locationState === 'locating'}
-          >
-            {locationState === 'locating' ? text.locating : text.currentPosition}
-          </button>
-          {locationState === 'live' && (
+      <div className="qibla-context-strip">
+        <p className="qibla-finder-privacy">{text.privacy}</p>
+        <div className="qibla-location-bar">
+          <div>
+            <strong>{locationSource ?? text.noLocation}</strong>
+            {location !== null && (
+              <span dir="ltr">
+                {location.coordinates.latitude.toFixed(5)},{' '}
+                {location.coordinates.longitude.toFixed(5)}
+              </span>
+            )}
+            {location?.label !== null && location?.label !== undefined && <bdi>{location.label}</bdi>}
+          </div>
+          <div className="qibla-location-actions">
             <button
               type="button"
               onClick={() => {
-                void stopLiveLocation();
+                void useCurrentPosition();
               }}
+              disabled={locationState === 'locating'}
             >
-              {text.stopLiveLocation}
+              {locationState === 'locating' ? text.locating : text.currentPosition}
             </button>
-          )}
+            {locationState === 'live' && (
+              <button
+                type="button"
+                onClick={() => {
+                  void stopLiveLocation();
+                }}
+              >
+                {text.stopLiveLocation}
+              </button>
+            )}
+          </div>
         </div>
       </div>
 
@@ -332,9 +351,9 @@ export function QiblaFinder() {
       )}
 
       {qibla === null || qiblaCoordinates === null ? (
-        <p className="inline-message">{text.noLocation}</p>
+        <p className="inline-message qibla-empty-state">{text.noLocation}</p>
       ) : (
-        <>
+        <section className="qibla-primary-workspace" aria-label={text.bearing}>
           <div className="qibla-bearing-summary" dir="ltr">
             <span>{text.bearing}</span>
             <strong>{formatDegrees(qibla.degreesFromTrueNorth)}</strong>
@@ -437,49 +456,80 @@ export function QiblaFinder() {
               }}
             />
           )}
-        </>
+        </section>
       )}
 
-      <section id="qibla-manual-location" className="qibla-manual-location">
-        <h3>{text.manualSearch}</h3>
-        <label>
+      <details id="qibla-manual-location" className="qibla-location-tools">
+        <summary>
+          <strong>{text.manualFallback}</strong>
           <span>{text.searchHelp}</span>
-          <input
-            type="search"
-            value={searchQuery}
-            placeholder={text.searchPlaceholder}
-            onChange={(event) => {
-              setSearchQuery(event.target.value);
-            }}
-            autoComplete="off"
-            dir="auto"
-          />
-        </label>
-        {searchResults.length > 0 && (
-          <ul className="qibla-city-results">
-            {searchResults.map((result) => (
-              <li key={result.id}>
-                <div>
-                  <strong>
-                    <bdi>{result.city}</bdi>
-                  </strong>
-                  <span>
-                    <bdi>{result.countryNames.join(', ')}</bdi>
-                  </span>
-                </div>
-                <button
-                  type="button"
-                  onClick={() => {
-                    void useCity(result);
-                  }}
-                >
-                  {text.useCity}
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
+        </summary>
+        <div className="qibla-location-tools__body">
+          {savedLocations.length > 0 && (
+            <section className="qibla-saved-locations" aria-labelledby="qibla-saved-title">
+              <h3 id="qibla-saved-title">{text.savedLocation}</h3>
+              <div className="qibla-saved-locations__list">
+                {savedLocations.map((savedLocation) => (
+                  <button
+                    type="button"
+                    key={savedLocation.id}
+                    onClick={() => {
+                      void useSavedLocation(savedLocation);
+                    }}
+                  >
+                    <strong>{savedLocation.label}</strong>
+                    <span dir="ltr">
+                      {savedLocation.coordinates.latitude.toFixed(4)},{' '}
+                      {savedLocation.coordinates.longitude.toFixed(4)}
+                    </span>
+                  </button>
+                ))}
+              </div>
+            </section>
+          )}
+
+          <section className="qibla-manual-location">
+            <h3>{text.manualSearch}</h3>
+            <label>
+              <span>{text.searchHelp}</span>
+              <input
+                type="search"
+                value={searchQuery}
+                placeholder={text.searchPlaceholder}
+                onChange={(event) => {
+                  setSearchQuery(event.target.value);
+                }}
+                autoComplete="off"
+                dir="auto"
+              />
+            </label>
+            {searchResults.length > 0 && (
+              <ul className="qibla-city-results">
+                {searchResults.map((result) => (
+                  <li key={result.id}>
+                    <div>
+                      <strong>
+                        <bdi>{result.city}</bdi>
+                      </strong>
+                      <span>
+                        <bdi>{result.countryNames.join(', ')}</bdi>
+                      </span>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        void useCity(result);
+                      }}
+                    >
+                      {text.useCity}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        </div>
+      </details>
     </section>
   );
 }
