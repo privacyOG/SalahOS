@@ -68,6 +68,7 @@
   --salah-text-xl: clamp(1.55rem, 1.25rem + 1vw, 2.3rem);
   --salah-text-display: clamp(2.5rem, 1.8rem + 3vw, 5.4rem);
   --salah-text-countdown: clamp(2.25rem, 1.7rem + 2.2vw, 4.4rem);
+  --salah-text-page-title: clamp(2.35rem, 7vw, 5.5rem);
 
   /* Motion */
   --salah-motion-fast: 120ms;
@@ -207,7 +208,7 @@ p {
 
 h1 {
   margin-block-end: 0.8rem;
-  font-size: var(--salah-text-display);
+  font-size: var(--salah-text-page-title);
   line-height: 0.98;
   letter-spacing: -0.055em;
 }
@@ -226,8 +227,8 @@ h2 {
   display: flex;
   width: min(1240px, calc(100% - clamp(1rem, 4vw, 3rem)));
   margin: 0 auto;
-  padding-block-start: calc(clamp(1rem, 3vw, 2.75rem) + env(safe-area-inset-top));
-  padding-block-end: calc(clamp(5rem, 7vw, 7rem) + env(safe-area-inset-bottom));
+  padding-block-start: calc(clamp(1.5rem, 4vw, 4rem) + env(safe-area-inset-top));
+  padding-block-end: calc(clamp(1.5rem, 4vw, 4rem) + env(safe-area-inset-bottom));
   padding-inline-start: env(safe-area-inset-left);
   padding-inline-end: env(safe-area-inset-right);
   flex-direction: column;
@@ -353,6 +354,7 @@ summary:focus-visible {
 }
 
 .location-panel {
+  margin-block-end: var(--salah-space-3);
   background: color-mix(in srgb, var(--salah-bg-surface) 88%, transparent);
   box-shadow: none;
 }
@@ -393,6 +395,7 @@ summary:focus-visible {
 }
 
 .prayer-panel {
+  margin-block-end: var(--salah-space-5);
   padding: clamp(1.2rem, 3vw, 2.2rem);
   box-shadow: var(--salah-shadow-hero);
 }
@@ -539,7 +542,7 @@ summary:focus-visible {
 @media (max-width: 760px) {
   .app-shell {
     width: min(100% - 1rem, 42rem);
-    padding-block-start: max(0.75rem, env(safe-area-inset-top));
+    padding-block-start: calc(clamp(1.5rem, 4vw, 4rem) + env(safe-area-inset-top));
     padding-inline-start: env(safe-area-inset-left);
     padding-inline-end: env(safe-area-inset-right);
   }

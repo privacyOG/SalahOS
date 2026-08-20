@@ -338,10 +338,6 @@
 }
 
 @media (min-width: 1600px) {
-  .app-shell {
-    width: min(1500px, calc(100% - 5rem));
-  }
-
   .prayer-card {
     min-height: 10rem;
   }
