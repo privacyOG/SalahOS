@@ -776,7 +776,7 @@
 - [x] Qibla bearing from current coordinates
 - [~] Device compass integration where supported
 - [x] Ramadan mode
-- [ ] Suhur/Imsak and Iftar presentation
+- [x] Suhur/Imsak and Iftar presentation
 - [ ] Taraweeh timetable support
 - [ ] Mosque announcements/events
 - [ ] Configurable smart-display themes
