@@ -31,9 +31,6 @@ export function loadSmartDisplayTheme(storage: KeyValueStorage): SmartDisplayThe
   return parseSmartDisplayTheme(storage.getItem(SMART_DISPLAY_THEME_STORAGE_KEY));
 }
 
-export function saveSmartDisplayTheme(
-  storage: KeyValueStorage,
-  theme: SmartDisplayThemeId,
-): void {
+export function saveSmartDisplayTheme(storage: KeyValueStorage, theme: SmartDisplayThemeId): void {
   storage.setItem(SMART_DISPLAY_THEME_STORAGE_KEY, parseSmartDisplayTheme(theme));
 }
