@@ -8,7 +8,7 @@ SalahOS is local-first. The web/PWA shell should therefore deny network and embe
 
 - application scripts are same-origin only;
 - styles are same-origin, with inline styles allowed because development/runtime tooling and browser rendering can require them;
-- images are same-origin or `data:` by default, with exactly two reviewed HTTPS image origins for the user-initiated Qiblah map: `tile.openstreetmap.org` and `server.arcgisonline.com`;
+- images are same-origin or `data:` by default, with one reviewed HTTPS image origin for the user-initiated Qiblah map: `tile.openstreetmap.org`;
 - fonts are same-origin only;
 - network connections are same-origin, with `ws:` and `wss:` retained for development-server hot reload and compatible local deployments;
 - media is same-origin or `blob:` so user-selected local Adhan media can remain local;
@@ -16,22 +16,24 @@ SalahOS is local-first. The web/PWA shell should therefore deny network and embe
 - plugins/objects and frames are disabled;
 - document base URLs and form submission are restricted to the same origin.
 
-The Qiblah map exception is intentionally limited to image loading. SalahOS does not grant those providers `connect-src`, script, font, worker, frame, or form capabilities. Map tiles are not requested until the user selects **Load map tiles** in the Qiblah Finder. That action necessarily discloses the requested map tiles/viewed area and normal network metadata to the selected provider, as described in `PRIVACY.md` and `docs/QIBLA_FINDER.md`.
+The Qiblah map exception is intentionally limited to image loading. SalahOS does not grant the map provider `connect-src`, script, font, worker, frame, or form capabilities. Map tiles are not requested until the user selects **Load map tiles** in the Qiblah Finder. That action necessarily discloses the requested map tiles/viewed area and normal network metadata to OpenStreetMap, as described in `PRIVACY.md` and `docs/QIBLA_FINDER.md`.
 
 The policy intentionally does not grant arbitrary remote HTTP origins. Any future mosque-provider, map-provider, or other remote integration must receive an explicit, narrowly scoped CSP and privacy review before its origin is added.
 
 ## Deployment headers
 
-A CSP delivered as an HTTP response header is preferred for deployed production sites because some directives and protections cannot be fully represented by a meta policy. Production deployments should add equivalent or stricter response headers at the reverse proxy/CDN/web server. If the Qiblah map is expected to function, the response-header CSP must preserve the same two reviewed `img-src` origins or deliberately replace them with another reviewed deployment policy; a stricter same-origin-only production CSP will leave the local Qiblah bearing functional but block optional map imagery.
+A CSP delivered as an HTTP response header is preferred for deployed production sites because some directives and protections cannot be fully represented by a meta policy. Production deployments should add equivalent or stricter response headers at the reverse proxy/CDN/web server. If the Qiblah map is expected to function, the response-header CSP must preserve the reviewed OpenStreetMap `img-src` origin or deliberately replace it with another reviewed deployment policy; a stricter same-origin-only production CSP will leave the local Qiblah bearing functional but block optional map imagery.
 
 Recommended deployment-level controls include:
 
 - `Content-Security-Policy` matching or tightening the in-document baseline;
 - `frame-ancestors 'none'` in the response CSP unless an intentional embedding use case is approved;
 - `X-Content-Type-Options: nosniff`;
-- `Referrer-Policy` chosen deliberately after considering third-party map-provider requirements rather than weakened globally merely to make a provider work;
+- `Referrer-Policy` chosen deliberately after considering the map-provider requirements rather than weakened globally merely to make a provider work;
 - `Permissions-Policy` denying unused sensors/capabilities and allowing geolocation only where the deployed application requires it;
 - HTTPS plus HSTS only after the operator confirms the hostname is permanently HTTPS-capable.
+
+OpenStreetMap's standard tile policy requires normal browser identification/referrer behaviour and visible attribution. Do not add a restrictive per-image referrer policy that strips required identification from Qiblah tile requests, and do not add bulk/offline prefetching against the public tile service.
 
 Do not add `unsafe-eval`, wildcard network sources, wildcard framing, or broad third-party script origins merely to silence a browser error. A required exception must be tied to a documented feature and reviewed against the privacy/threat model.
 

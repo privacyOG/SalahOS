@@ -1,27 +1,15 @@
 import { QIBLA_MAP_MAX_ZOOM, QIBLA_MAP_MIN_ZOOM } from '../domain/qiblaMap';
 
-export type QiblaMapLayer = 'standard' | 'satellite';
-
 const STANDARD_TILE_ROOT = 'https://tile.openstreetmap.org';
-const SATELLITE_TILE_ROOT =
-  'https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile';
 const STANDARD_ATTRIBUTION_URL = 'https://www.openstreetmap.org/copyright';
 
-export function qiblaMapTileUrl(
-  layer: QiblaMapLayer,
-  zoom: number,
-  x: number,
-  y: number,
-): string {
+export function qiblaMapTileUrl(zoom: number, x: number, y: number): string {
   assertMapTileCoordinate(zoom, x, y);
-  if (layer === 'standard') {
-    return `${STANDARD_TILE_ROOT}/${String(zoom)}/${String(x)}/${String(y)}.png`;
-  }
-  return `${SATELLITE_TILE_ROOT}/${String(zoom)}/${String(y)}/${String(x)}`;
+  return `${STANDARD_TILE_ROOT}/${String(zoom)}/${String(x)}/${String(y)}.png`;
 }
 
-export function qiblaMapAttributionUrl(layer: QiblaMapLayer): string | null {
-  return layer === 'standard' ? STANDARD_ATTRIBUTION_URL : null;
+export function qiblaMapAttributionUrl(): string {
+  return STANDARD_ATTRIBUTION_URL;
 }
 
 function assertMapTileCoordinate(zoom: number, x: number, y: number): void {

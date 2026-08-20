@@ -7,21 +7,15 @@ import {
   qiblaMapTiles,
 } from '../domain/qiblaMap';
 import type { QiblaFinderCopy } from '../i18n/qiblaFinderTranslations';
-import {
-  qiblaMapAttributionUrl,
-  qiblaMapTileUrl,
-  type QiblaMapLayer,
-} from '../platform/qiblaMapTiles';
+import { qiblaMapAttributionUrl, qiblaMapTileUrl } from '../platform/qiblaMapTiles';
 
 interface QiblaMapViewProps {
   readonly coordinates: Coordinates;
   readonly bearingDegrees: number;
   readonly aligned: boolean;
-  readonly layer: QiblaMapLayer;
   readonly zoom: number;
   readonly tilesEnabled: boolean;
   readonly text: QiblaFinderCopy;
-  readonly onLayerChange: (layer: QiblaMapLayer) => void;
   readonly onZoomChange: (zoom: number) => void;
   readonly onEnableTiles: () => void;
   readonly onDropPin: (coordinates: Coordinates) => void;
@@ -31,11 +25,9 @@ export function QiblaMapView({
   coordinates,
   bearingDegrees,
   aligned,
-  layer,
   zoom,
   tilesEnabled,
   text,
-  onLayerChange,
   onZoomChange,
   onEnableTiles,
   onDropPin,
@@ -43,7 +35,6 @@ export function QiblaMapView({
   const [tileError, setTileError] = useState(false);
   const tiles = useMemo(() => qiblaMapTiles(coordinates, zoom), [coordinates, zoom]);
   const endpoint = qiblaBearingRayEndpoint(bearingDegrees, 100, 100);
-  const attributionUrl = qiblaMapAttributionUrl(layer);
 
   const dropPin = (event: MouseEvent<HTMLDivElement>) => {
     if (!tilesEnabled) return;
@@ -59,28 +50,6 @@ export function QiblaMapView({
   return (
     <div className="qibla-map-shell">
       <div className="qibla-map-toolbar" aria-label={text.mapView}>
-        <div className="qibla-segmented-control">
-          <button
-            type="button"
-            aria-pressed={layer === 'standard'}
-            onClick={() => {
-              setTileError(false);
-              onLayerChange('standard');
-            }}
-          >
-            {text.standardMap}
-          </button>
-          <button
-            type="button"
-            aria-pressed={layer === 'satellite'}
-            onClick={() => {
-              setTileError(false);
-              onLayerChange('satellite');
-            }}
-          >
-            {text.satelliteMap}
-          </button>
-        </div>
         <div className="qibla-map-zoom">
           <button
             type="button"
@@ -117,9 +86,9 @@ export function QiblaMapView({
             <div className="qibla-map-tiles" aria-hidden="true">
               {tiles.map((tile) => (
                 <img
-                  key={`${layer}/${tile.key}`}
+                  key={tile.key}
                   className="qibla-map-tile"
-                  src={qiblaMapTileUrl(layer, tile.zoom, tile.x, tile.y)}
+                  src={qiblaMapTileUrl(tile.zoom, tile.x, tile.y)}
                   alt=""
                   draggable={false}
                   style={{
@@ -165,13 +134,13 @@ export function QiblaMapView({
             </p>
           )}
           <p className="qibla-map-attribution">
-            {attributionUrl === null ? (
-              text.mapAttributionSatellite
-            ) : (
-              <a href={attributionUrl} target="_blank" rel="noopener noreferrer">
-                {text.mapAttributionStandard}
-              </a>
-            )}
+            <a
+              href={qiblaMapAttributionUrl()}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              {text.mapAttributionStandard}
+            </a>
           </p>
         </>
       )}

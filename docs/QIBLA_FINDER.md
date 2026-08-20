@@ -33,20 +33,17 @@ The live Qiblah location is not written as a route or location history. The ordi
 
 The map view is intentionally privacy-gated. No third-party map image request is made until the user selects **Load map tiles**.
 
-Two narrowly reviewed image providers are currently supported:
+The reviewed map source is OpenStreetMap's standard public tile service. SalahOS deliberately does not bundle an unauthenticated commercial satellite-imagery endpoint: a future satellite provider must have an explicit licensing, authentication, attribution, privacy, caching and availability review before it can be added.
 
-- OpenStreetMap standard tiles;
-- Esri World Imagery satellite tiles.
+Enabling map tiles sends the requested tile coordinates/viewed area and normal network request metadata to OpenStreetMap. If the map is centred on the current or manually selected location, that viewed area can reveal the approximate location area to the provider. SalahOS does not attach stored prayer settings, mosque data, prayer history, or a separate raw-coordinate payload to the tile request.
 
-Enabling map tiles sends the requested tile coordinates/viewed area and normal network request metadata to the selected provider. If the map is centred on the current or manually selected location, that viewed area can reveal the approximate location area to the provider. SalahOS does not attach stored prayer settings, mosque data, prayer history, or a separate raw-coordinate payload to the tile request.
+The Web/PWA Content Security Policy permits only the reviewed OpenStreetMap tile image origin for this feature. The repository remote-network policy also treats the tile URL adapter as an explicit reviewed exception; unrelated new remote URL or network capabilities still fail closed.
 
-The Web/PWA Content Security Policy permits only those two map image origins for this feature. The repository remote-network policy also treats the tile URL adapter as an explicit reviewed exception; unrelated new remote URL or network capabilities still fail closed.
-
-If tiles fail or the device is offline, the locally calculated Qiblah bearing remains available. A map pin is an optional pointer-based location-selection convenience; offline city search and the saved location remain non-map alternatives.
+SalahOS requests only the small visible tile set needed by the current view and does not bulk-download or prefetch the public OpenStreetMap tile service for offline use. If tiles fail or the device is offline, the locally calculated Qiblah bearing remains available. A map pin is an optional pointer-based location-selection convenience; offline city search and the saved location remain non-map alternatives.
 
 ## Provider attribution
 
-OpenStreetMap attribution is shown with its required copyright destination while standard tiles are active. Esri World Imagery attribution is shown in the map view when the satellite layer is active.
+OpenStreetMap attribution is shown with its copyright destination while map tiles are active. The public tile service's usage policy requires visible attribution and normal browser request identification/referrer behaviour.
 
 ## Verification coverage
 
@@ -56,7 +53,8 @@ Stage 42 includes focused unit coverage for:
 - circular heading smoothing and alignment tolerance;
 - live-location distance thresholds;
 - map tile projection, wrapping, click-to-coordinate conversion, and Qiblah ray geometry;
-- reviewed OpenStreetMap/Esri tile URL shapes and out-of-range request rejection;
-- native true-heading preference and WMM2025 magnetic-heading conversion.
+- the reviewed OpenStreetMap tile URL shape and out-of-range request rejection;
+- native true-heading preference and WMM2025 magnetic-heading conversion;
+- consent-gating that emits no third-party map tile URL before the user enables map imagery.
 
 Full repository acceptance still depends on the permanent Quality Gate, Android Build, iOS Build, and applicable visual/runtime gates when the branch enters the pull-request validation path. Sensor accuracy on real hardware remains inherently device/environment dependent and must not be inferred solely from automated tests.

@@ -27,9 +27,9 @@ Coordinate-to-timezone resolution should prefer a local/offline strategy where p
 
 The Qiblah bearing, compass guidance, saved-location path, and bundled city search remain local. Map imagery is optional and is not requested until the user explicitly selects **Load map tiles**.
 
-When map tiles are enabled, the selected third-party tile provider receives the requested tile coordinates/viewed map area and normal network request metadata such as the device's public IP address. A map centred on a current or manually selected location can therefore reveal that approximate viewed area to the provider. SalahOS does not attach stored prayer settings, mosque data, prayer history, or a separate raw-coordinate payload to those tile requests.
+When map tiles are enabled, OpenStreetMap receives the requested tile coordinates/viewed map area and normal network request metadata such as the device's public IP address. A map centred on a current or manually selected location can therefore reveal that approximate viewed area to OpenStreetMap. SalahOS does not attach stored prayer settings, mosque data, prayer history, or a separate raw-coordinate payload to those tile requests.
 
-The reviewed Web/PWA image-source policy limits Qiblah map imagery to the documented OpenStreetMap standard-tile and Esri World Imagery hosts. Core Qiblah direction continues to work without those providers.
+The reviewed Web/PWA image-source policy limits Qiblah map imagery to the documented OpenStreetMap standard-tile host. Core Qiblah direction continues to work without that provider.
 
 ## Telemetry
 

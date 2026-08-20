@@ -13,11 +13,9 @@ function renderMap(tilesEnabled: boolean): string {
       coordinates={coordinates}
       bearingDegrees={277.5}
       aligned={false}
-      layer="standard"
       zoom={15}
       tilesEnabled={tilesEnabled}
       text={qiblaFinderCopy.en}
-      onLayerChange={vi.fn()}
       onZoomChange={vi.fn()}
       onEnableTiles={vi.fn()}
       onDropPin={vi.fn()}
@@ -31,7 +29,6 @@ describe('QiblaMapView', () => {
 
     expect(markup).toContain('Load map tiles');
     expect(markup).not.toContain('tile.openstreetmap.org');
-    expect(markup).not.toContain('server.arcgisonline.com');
   });
 
   it('renders reviewed tiles and linked OpenStreetMap attribution after consent', () => {

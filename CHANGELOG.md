@@ -15,7 +15,7 @@ All notable SalahOS changes are recorded here.
 
 - Add the full Qiblah Finder with true-north live compass guidance, WMM2025 magnetic-declination correction, screen-orientation compensation, circular smoothing, calibration feedback and alignment haptics.
 - Add saved/current/offline-city/map-pin Qiblah locations plus meaningful-movement live recalculation.
-- Add privacy-gated OpenStreetMap and Esri map imagery with narrow CSP/network-policy exceptions, provider attribution, offline fallback and explicit third-party data disclosure.
+- Add privacy-gated OpenStreetMap map imagery with a narrow CSP/network-policy exception, provider attribution, offline fallback and explicit third-party data disclosure.
 - Add English, Arabic, Turkish and Indonesian Qiblah Finder presentation plus focused compass, map-projection and map-provider regression coverage.
 
 ## 1.0.0 — 2026-08-18

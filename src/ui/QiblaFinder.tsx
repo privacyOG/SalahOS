@@ -22,7 +22,6 @@ import {
   type QiblaLocationFailureReason,
   type QiblaLocationWatch,
 } from '../platform/qiblaLocation';
-import type { QiblaMapLayer } from '../platform/qiblaMapTiles';
 import { loadPersistedSettings } from '../platform/settingsStorage';
 import { QiblaCompassDial } from './QiblaCompassDial';
 import { QiblaMapView } from './QiblaMapView';
@@ -74,7 +73,6 @@ export function QiblaFinder() {
   const [compassState, setCompassState] = useState<CompassState>('idle');
   const [heading, setHeading] = useState<TrueHeadingSample | null>(null);
   const [searchQuery, setSearchQuery] = useState('');
-  const [mapLayer, setMapLayer] = useState<QiblaMapLayer>('standard');
   const [mapZoom, setMapZoom] = useState(15);
   const [mapTilesEnabled, setMapTilesEnabled] = useState(false);
   const compassSessionRef = useRef<TrueHeadingSession | null>(null);
@@ -418,11 +416,9 @@ export function QiblaFinder() {
               coordinates={location.coordinates}
               bearingDegrees={qibla.degreesFromTrueNorth}
               aligned={aligned}
-              layer={mapLayer}
               zoom={mapZoom}
               tilesEnabled={mapTilesEnabled}
               text={text}
-              onLayerChange={setMapLayer}
               onZoomChange={(zoom) => setMapZoom(clampQiblaMapZoom(zoom))}
               onEnableTiles={() => setMapTilesEnabled(true)}
               onDropPin={(coordinates) => void useMapPin(coordinates)}
