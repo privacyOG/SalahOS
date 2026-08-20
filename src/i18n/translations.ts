@@ -1,4 +1,6 @@
-export type Locale = 'en' | 'ar';
+import { indonesianTranslations, turkishTranslations } from './additionalTranslations';
+
+export type Locale = 'en' | 'ar' | 'tr' | 'id';
 
 export const translations = {
   en: {
@@ -14,6 +16,8 @@ export const translations = {
     language: 'Language',
     english: 'English',
     arabic: 'Arabic',
+    turkish: 'Turkish',
+    indonesian: 'Indonesian',
     prayerFajr: 'Fajr',
     prayerSunrise: 'Sunrise',
     prayerDhuhr: 'Dhuhr',
@@ -164,6 +168,8 @@ export const translations = {
     language: 'اللغة',
     english: 'الإنجليزية',
     arabic: 'العربية',
+    turkish: 'التركية',
+    indonesian: 'الإندونيسية',
     prayerFajr: 'الفجر',
     prayerSunrise: 'الشروق',
     prayerDhuhr: 'الظهر',
@@ -300,6 +306,8 @@ export const translations = {
     settingsImportError: 'بيانات الإعدادات غير صالحة أو تستخدم إصداراً غير مدعوم.',
     settingsReset: 'تمت إعادة الإعدادات الافتراضية.',
   },
+  tr: turkishTranslations,
+  id: indonesianTranslations,
 } as const;
 
 export type TranslationKey = keyof (typeof translations)['en'];

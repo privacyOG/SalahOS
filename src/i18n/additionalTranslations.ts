@@ -44,7 +44,8 @@ export const turkishTranslations = {
   applyCoordinates: 'Koordinatları uygula',
   locationPermissionDenied: 'Konum izni reddedildi. Koordinatları elle girin.',
   locationUnavailable: 'Konum kullanılamıyor. Koordinatları elle girin.',
-  locationTimeout: 'Konum isteği zaman aşımına uğradı. Yeniden deneyin veya koordinatları elle girin.',
+  locationTimeout:
+    'Konum isteği zaman aşımına uğradı. Yeniden deneyin veya koordinatları elle girin.',
   locationUnsupported: 'Konum burada desteklenmiyor. Koordinatları elle girin.',
   locationUnknownError: 'Konum okunamadı. Koordinatları elle girin.',
   invalidCoordinates: 'Geçerli enlem ve boylam değerleri girin.',
@@ -197,7 +198,8 @@ export const indonesianTranslations = {
   applyCoordinates: 'Terapkan koordinat',
   locationPermissionDenied: 'Izin lokasi ditolak. Masukkan koordinat secara manual.',
   locationUnavailable: 'Lokasi tidak tersedia. Masukkan koordinat secara manual.',
-  locationTimeout: 'Permintaan lokasi kehabisan waktu. Coba lagi atau masukkan koordinat secara manual.',
+  locationTimeout:
+    'Permintaan lokasi kehabisan waktu. Coba lagi atau masukkan koordinat secara manual.',
   locationUnsupported: 'Lokasi tidak didukung di sini. Masukkan koordinat secara manual.',
   locationUnknownError: 'Lokasi tidak dapat dibaca. Masukkan koordinat secara manual.',
   invalidCoordinates: 'Masukkan nilai lintang dan bujur yang valid.',
@@ -230,7 +232,8 @@ export const indonesianTranslations = {
   timetableData: 'Data jadwal',
   importMosqueTimetable: 'Impor jadwal masjid',
   mosqueTimetableImported: 'Jadwal masjid diimpor dan dipilih.',
-  mosqueTimetableImportError: 'Data jadwal tidak valid. Periksa format CSV/JSON yang didokumentasikan.',
+  mosqueTimetableImportError:
+    'Data jadwal tidak valid. Periksa format CSV/JSON yang didokumentasikan.',
   mosqueTimetableRemoved: 'Jadwal masjid dihapus.',
   manualMosqueEntry: 'Hari jadwal manual',
   manualMosqueEntryHelp:

@@ -741,6 +741,8 @@ export function App() {
             >
               <option value="en">{translate(locale, 'english')}</option>
               <option value="ar">{translate(locale, 'arabic')}</option>
+              <option value="tr">{translate(locale, 'turkish')}</option>
+              <option value="id">{translate(locale, 'indonesian')}</option>
             </select>
           </label>
         </div>
