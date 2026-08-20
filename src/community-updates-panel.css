@@ -147,7 +147,12 @@
   width: 100%;
   min-height: 10rem;
   resize: vertical;
-  font: 0.85rem/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font:
+    0.85rem/1.45 ui-monospace,
+    SFMono-Regular,
+    Menlo,
+    Consolas,
+    monospace;
 }
 
 .community-updates-panel__actions {
