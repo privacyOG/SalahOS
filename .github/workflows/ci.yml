@@ -48,6 +48,9 @@ jobs:
       - name: PWA raster icon reproducibility
         run: python3 scripts/generate_pwa_icons.py --check
 
+      - name: Design-system ownership policy
+        run: npm run ui:design-system-ownership
+
       - name: Format check
         run: npm run format:check
 

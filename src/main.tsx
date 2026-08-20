@@ -26,7 +26,6 @@ import {
 } from './ui/applicationRoute';
 import './styles.css';
 import './design-system.css';
-import './prayer-first-home.css';
 import './congregation-shell.css';
 import './admin-shell.css';
 import './today-screen.css';
