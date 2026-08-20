@@ -1,0 +1,43 @@
+name: Stage 41 TODO marker
+
+on:
+  push:
+    branches:
+      - 'stage-41/additional-languages-todo'
+
+permissions:
+  contents: write
+
+jobs:
+  mark:
+    if: github.event.head_commit.message != 'Mark Stage 41 additional languages complete'
+    runs-on: self-hosted
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: stage-41/additional-languages-todo
+          fetch-depth: 0
+
+      - name: Mark tracker
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('TODO.md')
+          text = path.read_text()
+          old = '- [ ] Additional languages'
+          new = '- [x] Additional languages'
+          if text.count(old) != 1:
+              raise SystemExit('Expected exactly one Additional languages TODO marker')
+          path.write_text(text.replace(old, new, 1))
+          PY
+
+      - name: Commit tracker
+        run: |
+          set -euo pipefail
+          rm .github/workflows/stage41-todo-marker.yml
+          git config user.name 'privacyOG'
+          git config user.email 'kriptiik@proton.me'
+          git add TODO.md .github/workflows/stage41-todo-marker.yml
+          git commit -m 'Mark Stage 41 additional languages complete'
+          git push origin HEAD:stage-41/additional-languages-todo
