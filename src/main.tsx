@@ -72,7 +72,9 @@ function CongregationRoute({ destination }: Readonly<{ destination: Congregation
     default:
       return (
         <div className="congregation-route congregation-route--today">
-          <TodayScreen />
+          <div className="app-shell today-route-shell">
+            <TodayScreen />
+          </div>
         </div>
       );
   }
