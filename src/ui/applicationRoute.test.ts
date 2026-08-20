@@ -54,6 +54,18 @@ describe('applicationRoute', () => {
       expect(new URLSearchParams(search).get('debug')).toBe('1');
     }
 
+    const fromAdmin = searchForSettingsCategory(
+      '?surface=admin&adminView=remote&debug=1',
+      'appearance',
+    );
+    const adminParams = new URLSearchParams(fromAdmin);
+    expect(readProductSurface(fromAdmin)).toBe('congregation');
+    expect(readCongregationDestination(fromAdmin)).toBe('settings');
+    expect(readSettingsCategory(fromAdmin)).toBe('appearance');
+    expect(adminParams.has('surface')).toBe(false);
+    expect(adminParams.has('adminView')).toBe(false);
+    expect(adminParams.get('debug')).toBe('1');
+
     const cleared = searchForSettingsCategory('?view=settings&settingsView=prayer&debug=1', null);
     expect(readSettingsCategory(cleared)).toBeNull();
     expect(new URLSearchParams(cleared).get('debug')).toBe('1');
