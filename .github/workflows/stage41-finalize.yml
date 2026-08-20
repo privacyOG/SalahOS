@@ -1,0 +1,85 @@
+name: Stage 41 finalize
+
+on:
+  push:
+    branches:
+      - 'stage-41/additional-languages'
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    if: github.event.head_commit.message != 'Finalize Stage 41 additional languages'
+    runs-on: self-hosted
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: stage-41/additional-languages
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Add completion tests and tracker update
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          i18n = Path('src/i18n/i18n.test.ts')
+          text = i18n.read_text()
+          import_marker = "import { applyDocumentLocale, formatLocalTime, localeDirection, translate } from './i18n';\n"
+          if "import { translations } from './translations';" not in text:
+              if import_marker not in text:
+                  raise SystemExit('i18n import marker not found')
+              text = text.replace(import_marker, import_marker + "import { translations } from './translations';\n", 1)
+          test_marker = "describe('internationalization helpers', () => {\n"
+          parity_test = "  it('keeps Turkish and Indonesian catalogues complete and non-empty', () => {\n    const englishKeys = Object.keys(translations.en).sort();\n    expect(Object.keys(translations.tr).sort()).toEqual(englishKeys);\n    expect(Object.keys(translations.id).sort()).toEqual(englishKeys);\n    expect(Object.values(translations.tr).every((value) => value.trim().length > 0)).toBe(true);\n    expect(Object.values(translations.id).every((value) => value.trim().length > 0)).toBe(true);\n  });\n\n"
+          if parity_test not in text:
+              if test_marker not in text:
+                  raise SystemExit('i18n describe marker not found')
+              text = text.replace(test_marker, test_marker + parity_test, 1)
+          i18n.write_text(text)
+
+          settings = Path('src/platform/settingsStorage.test.ts')
+          text = settings.read_text()
+          end_marker = "\n});\n"
+          locale_test = "\n  it.each(['tr', 'id'] as const)('round-trips the %s locale through settings export/import', (locale) => {\n    const settings = { ...defaultPersistedSettings, locale };\n    expect(importPersistedSettings(exportPersistedSettings(settings)).locale).toBe(locale);\n  });\n\n  it('falls back to English when an imported locale identifier is unsupported', () => {\n    const payload = JSON.parse(exportPersistedSettings(defaultPersistedSettings)) as Record<string, unknown>;\n    payload.locale = 'xx';\n    expect(importPersistedSettings(JSON.stringify(payload)).locale).toBe('en');\n  });\n"
+          if locale_test not in text:
+              index = text.rfind(end_marker)
+              if index < 0:
+                  raise SystemExit('settings test closing marker not found')
+              text = text[:index] + locale_test + text[index:]
+          settings.write_text(text)
+
+          todo = Path('TODO.md')
+          text = todo.read_text()
+          old = '- [ ] Additional languages'
+          new = '- [x] Additional languages'
+          if text.count(old) != 1:
+              raise SystemExit('Expected exactly one Additional languages TODO marker')
+          todo.write_text(text.replace(old, new, 1))
+          PY
+
+      - name: Canonical formatting
+        run: npx prettier --write src/i18n/i18n.test.ts src/platform/settingsStorage.test.ts
+
+      - name: Full repository check
+        run: npm run check
+
+      - name: Commit verified completion source
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/stage41-finalize.yml .github/workflows/stage41-feature-copy.yml
+          git config user.name 'privacyOG'
+          git config user.email 'kriptiik@proton.me'
+          git add TODO.md src/i18n/i18n.test.ts src/platform/settingsStorage.test.ts .github/workflows/stage41-finalize.yml .github/workflows/stage41-feature-copy.yml
+          git commit -m 'Finalize Stage 41 additional languages'
+          git push origin HEAD:stage-41/additional-languages
