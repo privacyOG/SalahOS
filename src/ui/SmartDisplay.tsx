@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 import type { SourcedPrayerDashboard } from '../domain/sourcedDashboard';
 import type { PrayerName } from '../domain/prayerEngine';
 import {
@@ -9,7 +11,13 @@ import {
   translate,
 } from '../i18n/i18n';
 import type { Locale, TranslationKey } from '../i18n/translations';
+import { getApplicationStorage } from '../platform/applicationStorage';
 import type { PersistedSettings } from '../platform/settingsStorage';
+import {
+  loadSmartDisplayTheme,
+  SMART_DISPLAY_THEME_CHANGE_EVENT,
+  type SmartDisplayThemeId,
+} from '../platform/smartDisplayTheme';
 import { BidiText } from './BidiText';
 import { NextPrayerBlock } from './NextPrayerBlock';
 import { PrayerCard } from './PrayerCard';
@@ -46,6 +54,14 @@ export function smartDisplayModeRequested(search: string): boolean {
   return new URLSearchParams(search).get('mode') === 'smart-display';
 }
 
+function readSmartDisplayTheme(): SmartDisplayThemeId {
+  try {
+    return loadSmartDisplayTheme(getApplicationStorage());
+  } catch {
+    return 'classic';
+  }
+}
+
 export function SmartDisplay({
   locale,
   currentClock,
@@ -56,12 +72,24 @@ export function SmartDisplay({
   systemTimeUnavailable,
   calculationUnavailable,
 }: SmartDisplayProps) {
+  const [displayTheme, setDisplayTheme] = useState<SmartDisplayThemeId>(readSmartDisplayTheme);
   const obligatoryPrayers = dashboard?.prayers.filter((prayer) => prayer.name !== 'sunrise') ?? [];
+
+  useEffect(() => {
+    const refresh = () => {
+      setDisplayTheme(readSmartDisplayTheme());
+    };
+    window.addEventListener(SMART_DISPLAY_THEME_CHANGE_EVENT, refresh);
+    return () => {
+      window.removeEventListener(SMART_DISPLAY_THEME_CHANGE_EVENT, refresh);
+    };
+  }, []);
 
   return (
     <main
       className="smart-display"
       data-mode="smart-display"
+      data-display-theme={displayTheme}
       dir={localeDirection(locale)}
       lang={locale}
     >

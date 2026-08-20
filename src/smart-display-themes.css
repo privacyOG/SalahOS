@@ -1,0 +1,156 @@
+.smart-display[data-display-theme='classic'] {
+  --page: #f4f7f6;
+  --page-glow: rgba(16, 185, 129, 0.14);
+  --text: #10201c;
+  --muted: #61716b;
+  --card: rgba(255, 255, 255, 0.94);
+  --card-border: rgba(15, 79, 62, 0.12);
+  --next-card: #e7f5ef;
+  --shadow: rgba(15, 41, 34, 0.12);
+  --warning-bg: #fff7e8;
+  --warning-text: #8a4b12;
+}
+
+.smart-display[data-display-theme='midnight'] {
+  --page: #07111f;
+  --page-glow: rgba(212, 175, 55, 0.12);
+  --text: #f7f2df;
+  --muted: #aeb8c5;
+  --card: rgba(12, 27, 45, 0.94);
+  --card-border: rgba(226, 201, 116, 0.2);
+  --next-card: rgba(31, 48, 68, 0.98);
+  --shadow: rgba(0, 0, 0, 0.34);
+  --warning-bg: #3c2b16;
+  --warning-text: #f9d99a;
+}
+
+.smart-display[data-display-theme='sandstone'] {
+  --page: #eee5d5;
+  --page-glow: rgba(161, 98, 42, 0.14);
+  --text: #392e24;
+  --muted: #75685b;
+  --card: rgba(255, 250, 240, 0.96);
+  --card-border: rgba(101, 73, 48, 0.16);
+  --next-card: #ead9bd;
+  --shadow: rgba(75, 54, 36, 0.14);
+  --warning-bg: #fff0cb;
+  --warning-text: #7a4514;
+}
+
+.smart-display[data-display-theme='emerald'] {
+  --page: #031b16;
+  --page-glow: rgba(52, 211, 153, 0.17);
+  --text: #effcf7;
+  --muted: #9bc4b5;
+  --card: rgba(7, 45, 36, 0.94);
+  --card-border: rgba(110, 231, 183, 0.18);
+  --next-card: rgba(11, 67, 53, 0.98);
+  --shadow: rgba(0, 0, 0, 0.3);
+  --warning-bg: #3b2d16;
+  --warning-text: #f6d58e;
+}
+
+.smart-display-theme-settings {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 1.25rem auto;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  border: 1px solid var(--card-border);
+  border-radius: 1.5rem;
+  background: var(--card);
+  box-shadow: 0 1.2rem 3rem var(--shadow);
+}
+
+.smart-display-theme-settings header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.smart-display-theme-settings header > * {
+  margin: 0;
+}
+
+.smart-display-theme-settings header p {
+  max-width: 42rem;
+  color: var(--muted);
+}
+
+.smart-display-theme-settings__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 14rem), 1fr));
+  gap: 0.8rem;
+}
+
+.smart-display-theme-option {
+  display: grid;
+  grid-template-columns: 2.7rem minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 5.5rem;
+  padding: 0.8rem;
+  border: 1px solid var(--card-border);
+  border-radius: 1rem;
+  background: var(--page);
+  color: var(--text);
+  text-align: start;
+}
+
+.smart-display-theme-option[aria-pressed='true'] {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.smart-display-theme-option__swatch {
+  width: 2.7rem;
+  height: 2.7rem;
+  border: 1px solid rgba(127, 127, 127, 0.25);
+  border-radius: 0.85rem;
+  box-shadow: inset 0 0 0 0.45rem rgba(255, 255, 255, 0.12);
+}
+
+.smart-display-theme-option[data-theme-preview='classic'] .smart-display-theme-option__swatch {
+  background: linear-gradient(135deg, #f4f7f6 0 55%, #168466 55% 100%);
+}
+
+.smart-display-theme-option[data-theme-preview='midnight'] .smart-display-theme-option__swatch {
+  background: linear-gradient(135deg, #07111f 0 55%, #d4af37 55% 100%);
+}
+
+.smart-display-theme-option[data-theme-preview='sandstone'] .smart-display-theme-option__swatch {
+  background: linear-gradient(135deg, #eee5d5 0 55%, #a1622a 55% 100%);
+}
+
+.smart-display-theme-option[data-theme-preview='emerald'] .smart-display-theme-option__swatch {
+  background: linear-gradient(135deg, #031b16 0 55%, #34d399 55% 100%);
+}
+
+.smart-display-theme-option__copy {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.smart-display-theme-option__copy small {
+  color: var(--muted);
+}
+
+.smart-display-theme-option__selected {
+  padding: 0.25rem 0.5rem;
+  border-radius: 999px;
+  background: var(--next-card);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+@media (max-width: 720px) {
+  .smart-display-theme-settings {
+    width: min(100% - 1rem, 1180px);
+    border-radius: 1.1rem;
+  }
+
+  .smart-display-theme-settings header {
+    align-items: start;
+    flex-direction: column;
+  }
+}
