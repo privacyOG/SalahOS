@@ -50,15 +50,7 @@ jobs:
         run: python3 scripts/generate_pwa_icons.py --check
 
       - name: Format check
-        run: |
-          npx prettier --write \
-            src/mosque-profiles-panel.css \
-            src/platform/mosqueProfileLibrary.ts \
-            src/ui/MosqueProfilesPanel.tsx
-          git diff -- \
-            src/mosque-profiles-panel.css \
-            src/platform/mosqueProfileLibrary.ts \
-            src/ui/MosqueProfilesPanel.tsx
+        run: npm run format:check
 
       - name: Lint
         run: npm run lint

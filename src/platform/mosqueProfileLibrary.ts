@@ -171,13 +171,18 @@ function parseProfile(value: unknown): MosqueProfile {
 }
 
 function normalizeState(state: MosqueProfileLibraryState): MosqueProfileLibraryState {
-  const profiles = state.profiles.map((profile) => parseProfile(JSON.parse(JSON.stringify(profile))));
+  const profiles = state.profiles.map((profile) =>
+    parseProfile(JSON.parse(JSON.stringify(profile))),
+  );
   const ids = new Set(profiles.map((profile) => profile.id));
   if (ids.size !== profiles.length) throw new RangeError('Mosque profile IDs must be unique');
   if (state.selectedProfileId !== null && !ids.has(state.selectedProfileId)) {
     throw new RangeError('Selected mosque profile must exist in the profile library');
   }
-  return Object.freeze({ profiles: Object.freeze(profiles), selectedProfileId: state.selectedProfileId });
+  return Object.freeze({
+    profiles: Object.freeze(profiles),
+    selectedProfileId: state.selectedProfileId,
+  });
 }
 
 export function parseMosqueProfileLibrary(raw: string): MosqueProfileLibraryState {
