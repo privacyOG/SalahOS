@@ -30,6 +30,7 @@ import './prayer-first-home.css';
 import './congregation-shell.css';
 import './admin-shell.css';
 import './today-screen.css';
+import './settings-screen.css';
 import './responsive-hardening.css';
 import './touch-display-fixture.css';
 import './smart-display.css';
