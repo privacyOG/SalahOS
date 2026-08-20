@@ -55,7 +55,7 @@ describe('managed admin transport', () => {
     const client = createManagedAdminClient(
       { baseUrl: 'https://admin.example.org', adminToken: TOKEN },
       async (input, init) => {
-        requests.push({ input, init });
+        requests.push(init === undefined ? { input } : { input, init });
         return jsonResponse({ displays: [status] });
       },
     );
