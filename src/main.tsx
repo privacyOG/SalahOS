@@ -10,7 +10,7 @@ import { ManagedDisplayConnectionSettings } from './ui/ManagedDisplayConnectionS
 import { ManagedDisplayRemoteController } from './ui/ManagedDisplayRemoteController';
 import { CongregationShell } from './ui/CongregationShell';
 import { MosqueProfilesPanel } from './ui/MosqueProfilesPanel';
-import { QiblaCompassPanel } from './ui/QiblaCompassPanel';
+import { QiblaFinder } from './ui/QiblaFinder';
 import { RemoteDisplayAdminPanel } from './ui/RemoteDisplayAdminPanel';
 import { RamadanModePanel } from './ui/RamadanModePanel';
 import { SmartDisplayThemeSettings } from './ui/SmartDisplayThemeSettings';
@@ -70,7 +70,7 @@ async function bootstrap(): Promise<void> {
           <RamadanModePanel />
           <TaraweehPanel />
           <CommunityUpdatesPanel />
-          <QiblaCompassPanel />
+          <QiblaFinder />
         </CongregationShell>
       ) : (
         <TouchDisplayFixture {...touchDisplayFixtureConfig} />
