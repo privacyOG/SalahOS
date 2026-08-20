@@ -790,6 +790,67 @@
 
 ---
 
+## 22. UI/UX v2 architecture and visual redesign
+
+- [~] Complete the UI/UX v2 architecture and visual redesign defined in `docs/UI_UX_V2_PLAN.md`
+- [x] Separate congregation, managed administration, smart-display and Touch Display fixture surfaces
+- [x] Provide reloadable Today, Mosques, Qiblah, Community and Settings destinations
+- [x] Replace the legacy Today composition with a dedicated prayer-first Today screen
+- [x] Provide five-item phone navigation, compact tablet navigation and readable desktop navigation with RTL support
+- [~] Replace the legacy Settings monolith with category-based progressive disclosure
+- [ ] Complete dedicated Qiblah, Mosques and Community experience refinements
+- [ ] Complete Design System v2 consolidation and retire overlapping global layout rules
+
+**Stage 22 progress note (2026-08-21):** PR #165 established explicit product surfaces, reloadable congregation destinations and the managed administration shell. PR #166 replaced the legacy Today composition with the dedicated prayer-first Today experience and corrected phone/tablet/desktop/RTL navigation. Its exact final head `f17437139e96bcc097a893f430102dec75560f72` passed Quality Gate #1502, Android Build #507, Visual Regression #352 and iOS Build #417, including fresh iPhone/iPad Simulator install-launch-relaunch acceptance. The Visual #352 artifact also received human review for phone, tablet, 1080p and Arabic/RTL composition before merge. Stage 22 remains partial because Settings extraction, Design System consolidation and destination-specific Qiblah/Mosques/Community refinement are still in progress.
+
+---
+
+## 23. Daily Prayer Display Theme Library
+
+- [ ] Build the shared prayer-board template/data contract
+- [ ] Implement Heritage Classic
+- [ ] Implement Minimal Modern
+- [ ] Implement Bold Countdown Focus
+- [ ] Implement Structured Split Board
+- [ ] Implement Scenic Spiritual
+- [ ] Implement Family & Classroom
+- [ ] Add template preview, configuration, branding and managed-display assignment
+
+---
+
+## 24. Managed-masjid admin UX redesign
+
+- [~] Continue the dedicated managed-masjid administration surface introduced in Stage 22
+- [ ] Complete the administration information architecture and overview dashboard
+- [ ] Complete display-theme management, assignment, publication and rollback UX
+
+---
+
+## 25. Device-specific UX refinement
+
+- [~] Continue phone, tablet and desktop responsive refinement
+- [ ] Complete Raspberry Pi Touch Display 2 close-range UX refinement
+- [ ] Complete 1080p/4K TV and kiosk refinement for all required prayer-board templates
+
+---
+
+## 26. Accessibility, RTL and visual acceptance
+
+- [~] Continue accessibility, RTL and human visual acceptance across redesigned surfaces
+- [ ] Complete the full Stage 26 accessibility and internationalisation matrix
+- [ ] Complete screenshot and golden-state coverage for all redesigned application/display surfaces
+
+---
+
+## 27. Legacy UI retirement and migration completion
+
+- [ ] Remove legacy destination-hiding and superseded global CSS only after all consumers migrate
+- [ ] Run the complete cross-platform regression suite after legacy retirement
+- [ ] Update final design-system/platform documentation and screenshots
+- [ ] Mark UI/UX v2 complete only after automated and human acceptance are complete
+
+---
+
 ## Definition of Done for SalahOS v1
 
 For the v1.0.0 repository/source release, completion means the implemented software and permanent automated acceptance gates are release-ready. Physical hardware and store-distribution acceptance may remain open only when the corresponding `[!]`/partial items stay explicitly documented and are not represented as tested:
