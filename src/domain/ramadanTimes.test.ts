@@ -1,9 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  buildRamadanFastTimes,
-  RAMADAN_IMSAK_PRESENTATION_OFFSET_MINUTES,
-} from './ramadanTimes';
+import { buildRamadanFastTimes, RAMADAN_IMSAK_PRESENTATION_OFFSET_MINUTES } from './ramadanTimes';
 
 describe('Ramadan fasting-time presentation', () => {
   it('uses displayed Fajr for the Suhur boundary and displayed Maghrib for Iftar', () => {
