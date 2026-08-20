@@ -2,9 +2,9 @@
 
 ## Purpose
 
-This domain defines the local contract for mosque-managed announcements before remote persistence and notification delivery are introduced.
+This domain defines the local contract for mosque-managed announcements while keeping remote persistence and notification delivery separate from personal prayer operation.
 
-It keeps announcement composition, lifecycle validation and surface targeting deterministic and testable without coupling the model to a particular server, account provider or push-notification service.
+Announcement composition, lifecycle validation, surface targeting and congregation presentation remain deterministic and testable without coupling the model to a particular server, account provider or push-notification service.
 
 ## Content
 
@@ -36,14 +36,16 @@ The normalized announcement model supports these lifecycle states:
 
 Publication end, when supplied, must be later than publication start.
 
+The congregation community feed exposes only `published` announcements for its target surface. Draft, scheduled, expired and archived content remains hidden.
+
 ## Priority and pinning
 
 Priority and pinning are distinct fields.
 
 - `priority` communicates elevated importance.
-- `pinned` controls whether a presentation surface should keep the item prominent.
+- `pinned` keeps the item prominent in the congregation feed.
 
-The domain does not decide the visual styling for either state.
+Pinned items sort before non-pinned items; priority items sort before normal items within the same pinning group.
 
 ## Target surfaces
 
@@ -55,6 +57,8 @@ Announcements explicitly target one or more of:
 
 At least one surface is required. Duplicate surface values are normalized away using deterministic mobile/web/display ordering.
 
+The current congregation panel consumes the `mobile` surface. Web and display targeting remain available to the existing preview/signage contracts and future synchronized publishing layers.
+
 ## Recurrence
 
 The first recurrence contract supports:
@@ -63,9 +67,9 @@ The first recurrence contract supports:
 - daily
 - weekly
 
-This is publication metadata only. Server-side expansion, timezone-aware scheduling and delivery retries remain later synchronization work.
+This is publication metadata only. Server-side recurrence expansion, timezone-aware scheduling and delivery retries remain later synchronization work.
 
-## Preview
+## Preview and congregation presentation
 
 `previewMosqueAnnouncement` returns the normalized announcement, its current lifecycle state and non-blocking presentation warnings.
 
@@ -75,17 +79,22 @@ Current warnings include:
 - Arabic content missing
 - display-targeted announcement without an image
 
-These warnings do not replace later phone/web/TV visual preview surfaces.
+`CommunityPublishingPreview` provides phone, web and TV authoring previews. `CommunityUpdatesPanel` provides the live local congregation surface with locale fallback, lifecycle filtering, target-surface filtering, priority/pinning and safe external-link presentation.
+
+## Local persistence and import/export
+
+The congregation panel reads a versioned local community-content cache. Imported JSON is structurally parsed and passed through the same announcement validator before it is stored. Invalid bundles fail closed and do not replace valid local content.
+
+On Android the community-content key is included in the native Preferences hydration allow-list, so the cache survives application restart just like prayer settings and mosque timetable data.
 
 ## Boundaries
 
 This slice does not add:
 
-- remote persistence
+- remote persistence or synchronization
 - authenticated publishing mutations
 - media upload or processing
 - notification delivery
 - retry or deduplication logic
-- concrete phone, web or TV preview UI
 
-Those capabilities remain separate so managed publishing can be added without affecting account-free personal prayer use.
+Those capabilities remain separate so managed publishing can evolve without affecting account-free personal prayer use.
