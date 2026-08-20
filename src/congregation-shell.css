@@ -12,6 +12,13 @@
   min-height: 100%;
 }
 
+.app-shell.today-route-shell {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
 /*
  * Settings still uses the legacy configuration core during the staged v2
  * migration. Its prayer presentation is intentionally suppressed because
