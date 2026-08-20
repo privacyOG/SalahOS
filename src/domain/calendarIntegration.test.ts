@@ -43,9 +43,7 @@ describe('calendar integrations', () => {
     expect(calendar).toContain('VERSION:2.0\r\n');
     expect(calendar).toContain('CALSCALE:GREGORIAN\r\n');
     expect(calendar).toContain('METHOD:PUBLISH\r\n');
-    expect(calendar).toContain(
-      'UID:community-iftar-2026.masjid-al-noor:sydney@salahos\r\n',
-    );
+    expect(calendar).toContain('UID:community-iftar-2026.masjid-al-noor:sydney@salahos\r\n');
     expect(calendar).toContain('DTSTAMP:20260820T043000Z\r\n');
     expect(calendar).toContain('DTSTART:20260820T080000Z\r\n');
     expect(calendar).toContain('DTEND:20260820T100000Z\r\n');
