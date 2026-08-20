@@ -68,13 +68,14 @@ export async function startQiblaLocationWatch(
     }
   }
 
-  if (typeof navigator === 'undefined' || navigator.geolocation === undefined) {
+  const browserGeolocation = getBrowserGeolocation();
+  if (browserGeolocation === null) {
     onFailure('unsupported');
     return stoppedWatch();
   }
 
   try {
-    const id = navigator.geolocation.watchPosition(
+    const id = browserGeolocation.watchPosition(
       (position) => {
         onLocation({
           coordinates: createCoordinates(position.coords.latitude, position.coords.longitude),
@@ -93,7 +94,7 @@ export async function startQiblaLocationWatch(
 
     return Object.freeze({
       stop: () => {
-        navigator.geolocation.clearWatch(id);
+        browserGeolocation.clearWatch(id);
         return Promise.resolve();
       },
     });
@@ -146,23 +147,29 @@ async function nativePosition(
 }
 
 async function requestBrowserLocation(): Promise<QiblaLocationResult> {
-  if (typeof navigator === 'undefined' || navigator.geolocation === undefined) {
+  const browserGeolocation = getBrowserGeolocation();
+  if (browserGeolocation === null) {
     return { ok: false, reason: 'unsupported' };
   }
 
-  const highAccuracy = await browserPosition(true, 'browser-high-accuracy');
+  const highAccuracy = await browserPosition(
+    browserGeolocation,
+    true,
+    'browser-high-accuracy',
+  );
   if (highAccuracy.ok || isPermissionDeniedResult(highAccuracy)) {
     return highAccuracy;
   }
-  return browserPosition(false, 'browser-network-fallback');
+  return browserPosition(browserGeolocation, false, 'browser-network-fallback');
 }
 
 function browserPosition(
+  geolocation: Geolocation,
   enableHighAccuracy: boolean,
   source: Extract<QiblaLocationSource, 'browser-high-accuracy' | 'browser-network-fallback'>,
 ): Promise<QiblaLocationResult> {
   return new Promise((resolve) => {
-    navigator.geolocation.getCurrentPosition(
+    geolocation.getCurrentPosition(
       (position) => {
         resolve({
           ok: true,
@@ -182,6 +189,11 @@ function browserPosition(
       },
     );
   });
+}
+
+function getBrowserGeolocation(): Geolocation | null {
+  if (typeof navigator === 'undefined') return null;
+  return (navigator as Partial<Navigator>).geolocation ?? null;
 }
 
 function isPermissionDeniedResult(result: QiblaLocationResult): boolean {
