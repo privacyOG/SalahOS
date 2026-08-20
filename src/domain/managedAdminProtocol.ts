@@ -34,6 +34,7 @@ export interface ManagedDisplayHeartbeat {
 }
 
 export interface ManagedDisplayConfigUpdate {
+  readonly expectedRevision: number;
   readonly contentRevision: number;
   readonly playlistId: string | null;
   readonly displayTheme: SmartDisplayThemeId;
@@ -139,8 +140,14 @@ export function createManagedDisplayRemoteStatus(
 export function createManagedDisplayConfigUpdate(
   input: ManagedDisplayConfigUpdate,
 ): ManagedDisplayConfigUpdate {
+  const expectedRevision = assertRevision(input.expectedRevision, 'Expected revision');
+  const contentRevision = assertRevision(input.contentRevision, 'Content revision');
+  if (contentRevision <= expectedRevision) {
+    throw new RangeError('Content revision must advance beyond the expected revision');
+  }
   return Object.freeze({
-    contentRevision: assertRevision(input.contentRevision, 'Content revision'),
+    expectedRevision,
+    contentRevision,
     playlistId: normalizeNullableIdentifier(input.playlistId),
     displayTheme: parseSmartDisplayTheme(input.displayTheme),
   });
