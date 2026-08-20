@@ -41,6 +41,13 @@ SalahOS is designed around accurate local prayer calculations, selectable calcul
 - Web/PWA offline shell and locally persisted settings/timetables.
 - Raspberry Pi Touch Display 2 fixture/deployment tooling and browser-based smart-display mode for TV/kiosk use.
 
+## Phase 2 capabilities
+
+- Qiblah Finder with local great-circle bearing, true-north live compass guidance, magnetic-declination and screen-orientation correction, calibration feedback, alignment haptics, saved/current/offline-city/map-pin location choices, and privacy-gated optional map tiles.
+- Ramadan mode with Suhur/Imsak and Iftar presentation plus Taraweeh timetable support.
+- Mosque announcements/events, configurable smart-display themes, and multiple mosque profiles.
+- Managed-display remote administration, Home Assistant support, optional local-network API, calendar integrations, wearable companion exploration, and additional Turkish/Indonesian localisation.
+
 ## Downloads
 
 Beginning with v1.1.0, GitHub releases are designed to include ready-to-use, checksum-verified packages rather than source archives alone:
@@ -59,6 +66,7 @@ See [Downloadable release assets](docs/RELEASE_ASSETS.md) for installation choic
 - [Build and Web/PWA deployment](BUILD.md)
 - [Android build and install](docs/ANDROID.md)
 - [iOS/iPadOS build, install and signing](docs/IOS_BUILD_SIGNING.md)
+- [Qiblah Finder](docs/QIBLA_FINDER.md)
 - [Downloadable release assets](docs/RELEASE_ASSETS.md)
 - [Canonical branding](docs/BRANDING.md)
 - [Native permission review](docs/NATIVE_PERMISSIONS.md)
