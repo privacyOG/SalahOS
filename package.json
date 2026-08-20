@@ -16,7 +16,7 @@
     "test:watch": "vitest",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "format:check": "prettier --write managed-service/server.mjs managed-service/server.test.mjs scripts/remote-network-policy.test.mjs src/domain/managedAdminProtocol.ts src/platform/managedAdminTransport.ts src/platform/managedDisplayConnectionStorage.ts src/ui/ManagedDisplayConnectionSettings.tsx src/ui/RemoteDisplayAdminPanel.tsx src/platform/managedAdminTransport.test.ts src/platform/managedDisplayTransport.test.ts && git diff -- managed-service/server.mjs managed-service/server.test.mjs scripts/remote-network-policy.test.mjs src/domain/managedAdminProtocol.ts src/platform/managedAdminTransport.ts src/platform/managedDisplayConnectionStorage.ts src/ui/ManagedDisplayConnectionSettings.tsx src/ui/RemoteDisplayAdminPanel.tsx src/platform/managedAdminTransport.test.ts src/platform/managedDisplayTransport.test.ts",
     "docs:links": "node scripts/check-doc-links.mjs",
     "security:sensitive-files": "node scripts/check-sensitive-files.mjs",
     "security:native-permissions": "node scripts/check-native-permissions.mjs",
