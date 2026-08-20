@@ -786,7 +786,7 @@
 - [x] Optional local network API for smart-home/display integration
 - [x] Calendar integrations
 - [x] Wearable/watch companion exploration
-- [ ] Additional languages
+- [x] Additional languages
 
 ---
 
