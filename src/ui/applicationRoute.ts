@@ -25,7 +25,8 @@ const adminDestinations = new Set<AdminDestination>([
 ]);
 
 function paramsFromSearch(search: string): URLSearchParams {
-  return new URLSearchParams(search.startsWith('?') ? search.slice(1) : search);
+  const value = search.startsWith('?') ? search.slice(1) : search;
+  return new URLSearchParams(value);
 }
 
 function serialize(params: URLSearchParams): string {
@@ -34,23 +35,29 @@ function serialize(params: URLSearchParams): string {
 }
 
 export function readProductSurface(search: string): ProductSurface {
-  return paramsFromSearch(search).get('surface') === 'admin' ? 'admin' : 'congregation';
+  const surface = paramsFromSearch(search).get('surface');
+  if (surface === 'admin') return 'admin';
+  return 'congregation';
 }
 
 export function readCongregationDestination(search: string): CongregationDestination {
   const candidate = paramsFromSearch(search).get('view');
-  if (candidate === null || !congregationDestinations.has(candidate as CongregationDestination)) {
-    return 'today';
-  }
-  return candidate as CongregationDestination;
+  if (candidate === null) return 'today';
+
+  const destination = candidate as CongregationDestination;
+  if (!congregationDestinations.has(destination)) return 'today';
+
+  return destination;
 }
 
 export function readAdminDestination(search: string): AdminDestination {
   const candidate = paramsFromSearch(search).get('adminView');
-  if (candidate === null || !adminDestinations.has(candidate as AdminDestination)) {
-    return 'overview';
-  }
-  return candidate as AdminDestination;
+  if (candidate === null) return 'overview';
+
+  const destination = candidate as AdminDestination;
+  if (!adminDestinations.has(destination)) return 'overview';
+
+  return destination;
 }
 
 export function searchForCongregationDestination(
@@ -64,7 +71,10 @@ export function searchForCongregationDestination(
   return serialize(params);
 }
 
-export function searchForAdminDestination(search: string, destination: AdminDestination): string {
+export function searchForAdminDestination(
+  search: string,
+  destination: AdminDestination,
+): string {
   const params = paramsFromSearch(search);
   params.set('surface', 'admin');
   params.delete('view');
