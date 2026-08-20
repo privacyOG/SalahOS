@@ -1,9 +1,12 @@
 import { afterEach, describe, expect, it, vi } from 'vitest';
 
+import { createCoordinates } from '../domain/coordinates';
 import {
+  calculateMagneticDeclination,
   compassHeadingFromOrientation,
   installCompassHeadingListener,
   requestCompassPermission,
+  trueHeadingFromNative,
 } from './deviceCompass';
 
 class FakeCompassTarget {
@@ -86,5 +89,41 @@ describe('device compass', () => {
     await expect(
       requestCompassPermission(() => Promise.reject(new Error('blocked'))),
     ).resolves.toBe('denied');
+  });
+
+  it('uses native geographic heading directly and compensates screen rotation', () => {
+    const sample = trueHeadingFromNative(
+      { magneticHeading: 80, trueHeading: 100, accuracy: 3 },
+      createCoordinates(-33.8688, 151.2093),
+      90,
+      new Date('2026-08-20T00:00:00.000Z'),
+    );
+
+    expect(sample).toEqual({
+      headingDegrees: 190,
+      accuracyDegrees: 3,
+      source: 'native-true',
+      reference: 'true-north',
+    });
+  });
+
+  it('uses WMM2025 declination for magnetic-only headings', () => {
+    const sydney = createCoordinates(-33.8688, 151.2093);
+    const declination = calculateMagneticDeclination(
+      sydney,
+      new Date('2026-08-20T00:00:00.000Z'),
+    );
+    const sample = trueHeadingFromNative(
+      { magneticHeading: 270, trueHeading: null, accuracy: 7 },
+      sydney,
+      0,
+      new Date('2026-08-20T00:00:00.000Z'),
+    );
+
+    expect(declination).toBeGreaterThan(0);
+    expect(declination).toBeLessThan(20);
+    expect(sample.source).toBe('native-magnetic-wmm');
+    expect(sample.reference).toBe('true-north');
+    expect(sample.headingDegrees).toBeCloseTo((270 + declination) % 360, 2);
   });
 });
