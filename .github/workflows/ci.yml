@@ -32,4 +32,39 @@ jobs:
           set -euo pipefail
           rm -f .github/workflows/release-prep-v1.2.0.yml
           rm -f .github/workflows/release-prep-pr-finalizer.yml
+          python3 <<'PY'
+          from pathlib import Path
+
+          path = Path('scripts/finalize-v1.2.0-release.sh')
+          text = path.read_text()
+          old = '''git add -- \\
+            package.json \\
+            package-lock.json \\
+            android/app/build.gradle \\
+            ios/App/App.xcodeproj/project.pbxproj \\
+            CHANGELOG.md \\
+            RELEASE_NOTES.md \\
+            README.md \\
+            .github/workflows/release-assets.yml \\
+            scripts/release-packaging.test.mjs \\
+            .github/workflows/ci.yml \\
+            .github/workflows/release-prep-v1.2.0.yml \\
+            .github/workflows/release-prep-pr-finalizer.yml \\
+            scripts/finalize-v1.2.0-release.sh
+          '''
+          new = '''git add -- \\
+            package.json \\
+            package-lock.json \\
+            android/app/build.gradle \\
+            ios/App/App.xcodeproj/project.pbxproj \\
+            CHANGELOG.md \\
+            RELEASE_NOTES.md \\
+            README.md \\
+            scripts/release-packaging.test.mjs \\
+            scripts/finalize-v1.2.0-release.sh
+          '''
+          if text.count(old) != 1:
+              raise SystemExit(f'Expected one release staging block, found {text.count(old)}')
+          path.write_text(text.replace(old, new, 1))
+          PY
           bash scripts/finalize-v1.2.0-release.sh
