@@ -1,0 +1,603 @@
+name: Design System v2 consolidation preflight
+
+on:
+  push:
+    branches:
+      - stage-22/design-system-v2
+
+permissions:
+  contents: write
+
+jobs:
+  consolidate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: stage-22/design-system-v2
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Consolidate global style ownership
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          design_path = Path('src/design-system.css')
+          design = design_path.read_text()
+
+          root_marker = ':root {\n  /* Semantic surfaces */'
+          root_replacement = ":root {\n  font-family:\n    Inter,\n    ui-sans-serif,\n    system-ui,\n    -apple-system,\n    BlinkMacSystemFont,\n    'Segoe UI',\n    sans-serif;\n  color-scheme: dark;\n  color: var(--salah-fg-primary);\n  background: var(--salah-bg-canvas);\n  font-synthesis: none;\n  text-rendering: optimizeLegibility;\n\n  /* Semantic surfaces */"
+          if root_marker not in design:
+              raise SystemExit('design-system root marker missing')
+          design = design.replace(root_marker, root_replacement, 1)
+
+          design = design.replace(
+              ":root[data-theme='light'] {\n",
+              ":root[data-theme='light'] {\n  color-scheme: light;\n",
+              1,
+          )
+          light_end = "}\n\n@media (prefers-color-scheme: light) {"
+          if light_end not in design:
+              raise SystemExit('light-theme boundary missing')
+          design = design.replace(
+              light_end,
+              "}\n\n:root[data-theme='dark'] {\n  color-scheme: dark;\n}\n\n@media (prefers-color-scheme: light) {",
+              1,
+          )
+          design = design.replace(
+              "  :root[data-theme='system'] {\n",
+              "  :root[data-theme='system'] {\n    color-scheme: light;\n",
+              1,
+          )
+
+          body_old = "body {\n  background-color: var(--page);\n}"
+          body_new = """* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  color: var(--salah-fg-primary);
+  background:
+    radial-gradient(circle at top right, var(--page-glow), transparent 34rem),
+    var(--salah-bg-canvas);
+}
+
+button,
+input,
+select,
+textarea {
+  border: 1px solid var(--salah-border-default);
+  border-radius: var(--salah-radius-sm);
+  color: var(--salah-fg-primary);
+  background: var(--salah-bg-control);
+  font: inherit;
+  transition-duration: var(--salah-motion-fast);
+  transition-timing-function: var(--salah-ease-standard);
+}
+
+button,
+select,
+input {
+  min-height: 2.75rem;
+}
+
+button {
+  padding-inline: var(--salah-space-4);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+input,
+select,
+textarea {
+  padding: 0.65rem 0.7rem;
+}
+
+textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-block-end: 0.8rem;
+  font-size: var(--salah-text-display);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+}
+
+[dir='rtl'] h1 {
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+
+h2 {
+  margin-block-end: 0;
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+}"""
+          if body_old not in design:
+              raise SystemExit('design-system body block missing')
+          design = design.replace(body_old, body_new, 1)
+
+          app_old = """.app-shell {
+  width: min(1240px, calc(100% - clamp(1rem, 4vw, 3rem)));
+  padding-block: clamp(1rem, 3vw, 2.75rem) clamp(5rem, 7vw, 7rem);
+}"""
+          app_new = """.app-shell {
+  display: flex;
+  width: min(1240px, calc(100% - clamp(1rem, 4vw, 3rem)));
+  margin: 0 auto;
+  padding-block-start: calc(clamp(1rem, 3vw, 2.75rem) + env(safe-area-inset-top));
+  padding-block-end: calc(clamp(5rem, 7vw, 7rem) + env(safe-area-inset-bottom));
+  padding-inline-start: env(safe-area-inset-left);
+  padding-inline-end: env(safe-area-inset-right);
+  flex-direction: column;
+}
+
+.offline-banner {
+  order: -30;
+}
+
+.hero {
+  order: -20;
+}
+
+.prayer-panel,
+.status-card {
+  order: -10;
+}
+
+.location-panel {
+  order: 10;
+}
+
+.settings-panel {
+  order: 20;
+}"""
+          if app_old not in design:
+              raise SystemExit('design-system app-shell block missing')
+          design = design.replace(app_old, app_new, 1)
+
+          hero_old = """.hero {
+  max-width: none;
+  margin-block-end: var(--salah-space-8);
+  padding: clamp(1.2rem, 2.5vw, 2rem);
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-xl);
+  background: var(--salah-bg-surface);
+  box-shadow: var(--salah-shadow-md);
+}"""
+          hero_new = """.hero {
+  max-width: none;
+  margin-block-end: var(--salah-space-5);
+  padding: clamp(1rem, 2vw, 1.4rem) clamp(1.2rem, 2.5vw, 2rem);
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-xl);
+  background: var(--salah-bg-surface);
+  box-shadow: var(--salah-shadow-md);
+}"""
+          if hero_old not in design:
+              raise SystemExit('design-system hero block missing')
+          design = design.replace(hero_old, hero_new, 1)
+
+          toolbar_old = """.hero-toolbar {
+  align-items: center;
+}"""
+          toolbar_new = """.hero-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--salah-space-4);
+}"""
+          design = design.replace(toolbar_old, toolbar_new, 1)
+
+          live_old = """.live-clock {
+  color: var(--salah-fg-primary);
+  font-size: var(--salah-text-xl);
+  letter-spacing: -0.02em;
+}"""
+          live_new = """.live-clock {
+  margin: 0;
+  color: var(--salah-fg-primary);
+  font-size: var(--salah-text-xl);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.02em;
+}
+
+.language-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--salah-fg-secondary);
+  font-size: var(--salah-text-sm);
+}"""
+          if live_old not in design:
+              raise SystemExit('live-clock block missing')
+          design = design.replace(live_old, live_new, 1)
+
+          hero_h1_old = """.hero h1 {
+  max-width: 12ch;
+  margin-block: var(--salah-space-10) var(--salah-space-4);
+  font-size: var(--salah-text-display);
+  line-height: 0.95;
+}"""
+          hero_h1_new = """.hero h1 {
+  max-width: 18ch;
+  margin-block: var(--salah-space-6) var(--salah-space-3);
+  font-size: clamp(2rem, 1.55rem + 2vw, 3.8rem);
+  line-height: 1;
+}"""
+          design = design.replace(hero_h1_old, hero_h1_new, 1)
+
+          hero_copy_old = """.hero-copy {
+  max-width: 56ch;
+  margin-block-end: 0;
+  font-size: var(--salah-text-md);
+}"""
+          hero_copy_new = """.hero-copy {
+  max-width: 62ch;
+  margin-block-end: 0;
+  color: var(--salah-fg-secondary);
+  font-size: var(--salah-text-sm);
+  line-height: 1.55;
+}"""
+          design = design.replace(hero_copy_old, hero_copy_new, 1)
+
+          controls_old = """button,
+select,
+input,
+textarea {
+  border-radius: var(--salah-radius-sm);
+  transition-duration: var(--salah-motion-fast);
+  transition-timing-function: var(--salah-ease-standard);
+}
+
+"""
+          if controls_old in design:
+              design = design.replace(controls_old, '', 1)
+
+          panels_old = """.location-panel,
+.settings-panel,
+.status-card,
+.prayer-panel {
+  border-radius: var(--salah-radius-lg);
+  box-shadow: var(--salah-shadow-sm);
+  backdrop-filter: blur(18px);
+}
+
+.location-panel,
+.settings-panel {
+  padding: clamp(1rem, 2vw, 1.35rem);
+}
+
+.settings-panel summary {
+  display: flex;
+  min-height: 2.75rem;
+  align-items: center;
+  color: var(--salah-fg-secondary);
+}"""
+          panels_new = """.location-panel,
+.settings-panel,
+.status-card,
+.prayer-panel {
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-lg);
+  background: var(--salah-bg-surface);
+  box-shadow: var(--salah-shadow-sm);
+  backdrop-filter: blur(18px);
+}
+
+.location-panel,
+.settings-panel {
+  margin-block-end: var(--salah-space-4);
+  padding: clamp(1rem, 2vw, 1.35rem);
+  border-color: var(--salah-border-subtle);
+}
+
+.location-panel {
+  background: color-mix(in srgb, var(--salah-bg-surface) 88%, transparent);
+  box-shadow: none;
+}
+
+.settings-panel {
+  margin-block-end: 0;
+  background: color-mix(in srgb, var(--salah-bg-surface) 82%, transparent);
+  box-shadow: none;
+}
+
+.settings-panel:not([open]) {
+  padding-block: var(--salah-space-3);
+}
+
+.settings-panel summary {
+  display: flex;
+  min-height: 2.75rem;
+  align-items: center;
+  color: var(--salah-fg-tertiary);
+  cursor: pointer;
+  font-size: 1.05rem;
+  font-weight: 800;
+}"""
+          if panels_old not in design:
+              raise SystemExit('common panel block missing')
+          design = design.replace(panels_old, panels_new, 1)
+
+          eyebrow_old = """.eyebrow,
+.label,
+.prayer-time-label {
+  font-size: var(--salah-text-xs);
+  letter-spacing: 0.1em;
+}"""
+          eyebrow_new = """.eyebrow,
+.label,
+.prayer-time-label {
+  color: var(--salah-fg-tertiary);
+  font-size: var(--salah-text-xs);
+  font-weight: 750;
+  line-height: 1.4;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.eyebrow,
+.label {
+  margin: 0 0 0.45rem;
+}
+
+[dir='rtl'] .eyebrow,
+[dir='rtl'] .label,
+[dir='rtl'] .prayer-time-label {
+  letter-spacing: 0;
+  text-transform: none;
+}"""
+          design = design.replace(eyebrow_old, eyebrow_new, 1)
+
+          offline_old = """.offline-banner {
+  border-radius: var(--salah-radius-md);
+  box-shadow: var(--salah-shadow-sm);
+}"""
+          offline_new = """.offline-banner {
+  margin: 0 0 var(--salah-space-4);
+  padding: var(--salah-space-3) var(--salah-space-4);
+  border: 1px solid color-mix(in srgb, var(--salah-fg-warning) 35%, transparent);
+  border-radius: var(--salah-radius-md);
+  color: var(--salah-fg-warning);
+  background: var(--warning-bg);
+  box-shadow: var(--salah-shadow-sm);
+}"""
+          design = design.replace(offline_old, offline_new, 1)
+
+          mobile_pattern = re.compile(r"@media \(max-width: 760px\) \{\n  \.app-shell \{.*?\n\}\n\n@media \(min-width: 1600px\)", re.S)
+          mobile_new = """@media (max-width: 760px) {
+  .app-shell {
+    width: min(100% - 1rem, 42rem);
+    padding-block-start: max(0.75rem, env(safe-area-inset-top));
+    padding-inline-start: env(safe-area-inset-left);
+    padding-inline-end: env(safe-area-inset-right);
+  }
+
+  .hero {
+    padding: var(--salah-space-4);
+    border-radius: var(--salah-radius-lg);
+  }
+
+  .hero-toolbar {
+    flex-direction: row;
+    align-items: center;
+  }
+
+  .hero h1 {
+    margin-block-start: var(--salah-space-5);
+    font-size: clamp(1.9rem, 8vw, 2.8rem);
+  }
+
+  .hero-copy {
+    font-size: var(--salah-text-sm);
+  }
+
+  .status-card > div {
+    padding-inline-end: 0;
+    padding-block-end: var(--salah-space-3);
+    border-inline-end: 0;
+    border-block-end: 1px solid var(--salah-border-subtle);
+  }
+
+  .status-card > div:last-child {
+    padding-block-end: 0;
+    border-block-end: 0;
+  }
+
+  .prayer-panel {
+    border-radius: var(--salah-radius-lg);
+  }
+
+  .prayer-card {
+    min-height: 4.65rem;
+    padding: 0.85rem 1rem;
+  }
+
+  .section-heading {
+    gap: var(--salah-space-4);
+  }
+
+  .next-prayer-block {
+    width: 100%;
+  }
+
+  .location-panel,
+  .settings-panel {
+    border-radius: var(--salah-radius-md);
+  }
+}
+
+@media (min-width: 1000px) {
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(16rem, 0.45fr);
+    column-gap: var(--salah-space-8);
+    align-items: end;
+  }
+
+  .hero-toolbar {
+    grid-column: 1 / -1;
+  }
+
+  .hero h1 {
+    margin-block-end: 0;
+  }
+
+  .hero-copy {
+    align-self: end;
+    margin-block-end: 0.2rem;
+  }
+}
+
+@media (min-width: 1600px)"""
+          design, count = mobile_pattern.subn(mobile_new, design, count=1)
+          if count != 1:
+              raise SystemExit('mobile design-system block replacement failed')
+
+          forced_marker = "@media (forced-colors: active) {\n  .hero,"
+          forced_replacement = """@media (forced-colors: active) {
+  :root {
+    --salah-bg-canvas: Canvas;
+    --salah-bg-subtle: Canvas;
+    --salah-bg-surface: Canvas;
+    --salah-bg-surface-raised: Canvas;
+    --salah-bg-control: Canvas;
+    --salah-bg-accent-soft: Canvas;
+    --salah-fg-primary: CanvasText;
+    --salah-fg-secondary: CanvasText;
+    --salah-fg-tertiary: CanvasText;
+    --salah-fg-accent: Highlight;
+    --salah-fg-warning: Mark;
+    --salah-fg-provenance: CanvasText;
+    --salah-border-subtle: CanvasText;
+    --salah-border-default: ButtonText;
+    --salah-border-strong: CanvasText;
+    --salah-focus-ring: Highlight;
+    --page-glow: transparent;
+    --warning-bg: Canvas;
+    --shadow: transparent;
+  }
+
+  .hero,"""
+          if forced_marker not in design:
+              raise SystemExit('forced-colors marker missing')
+          design = design.replace(forced_marker, forced_replacement, 1)
+
+          reduced_old = """@media (prefers-reduced-motion: reduce) {
+  button,
+  select,
+  input,
+  textarea,
+  .prayer-card {
+    transition: none;
+  }
+}"""
+          reduced_new = """@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+}"""
+          if reduced_old not in design:
+              raise SystemExit('reduced-motion block missing')
+          design = design.replace(reduced_old, reduced_new, 1)
+          design_path.write_text(design)
+
+          styles_path = Path('src/styles.css')
+          styles = styles_path.read_text()
+          feature_marker = '.settings-grid,\n.offset-grid {'
+          feature_index = styles.find(feature_marker)
+          if feature_index < 0:
+              raise SystemExit('styles feature boundary missing')
+          styles = styles[feature_index:]
+
+          contrast_pattern = re.compile(
+              r"@media \(prefers-contrast: more\) \{\n  :root \{.*?\n  \}\n\n  :root\[data-theme='light'\] \{.*?\n  \}\n\n",
+              re.S,
+          )
+          styles, count = contrast_pattern.subn('@media (prefers-contrast: more) {\n', styles, count=1)
+          if count != 1:
+              raise SystemExit('legacy contrast token block missing')
+
+          forced_pattern = re.compile(
+              r"@media \(forced-colors: active\) \{\n  :root \{.*?\n  \}\n\n",
+              re.S,
+          )
+          styles, count = forced_pattern.subn('@media (forced-colors: active) {\n', styles, count=1)
+          if count != 1:
+              raise SystemExit('legacy forced-color token block missing')
+
+          reduced_pattern = re.compile(
+              r"\n@media \(prefers-reduced-motion: reduce\) \{\n  \*,\n  \*::before,\n  \*::after \{.*?\n  \}\n\}\n",
+              re.S,
+          )
+          styles, count = reduced_pattern.subn('\n', styles, count=1)
+          if count != 1:
+              raise SystemExit('legacy reduced-motion block missing')
+          styles_path.write_text(styles)
+
+          responsive_path = Path('src/responsive-hardening.css')
+          responsive = responsive_path.read_text()
+          responsive_pattern = re.compile(r"\.app-shell \{.*?\n\}\n\n", re.S)
+          responsive, count = responsive_pattern.subn('', responsive, count=1)
+          if count != 1:
+              raise SystemExit('responsive app-shell block missing')
+          responsive_path.write_text(responsive)
+
+          main_path = Path('src/main.tsx')
+          main = main_path.read_text()
+          legacy_import = "import './prayer-first-home.css';\n"
+          if legacy_import not in main:
+              raise SystemExit('prayer-first-home import missing')
+          main_path.write_text(main.replace(legacy_import, '', 1))
+          PY
+
+          rm src/prayer-first-home.css
+
+      - name: Format migrated files
+        run: npx prettier --write src/design-system.css src/styles.css src/responsive-hardening.css src/main.tsx
+
+      - name: Validate migration
+        run: |
+          npm run format:check
+          npm run lint
+          npm run typecheck
+          npm run test
+          npm run build
+          npm run verify:web-build
+
+      - name: Commit validated consolidation
+        run: |
+          rm .github/workflows/design-system-v2-preflight.yml
+          git config user.name privacyOG
+          git config user.email 102720550+privacyOG@users.noreply.github.com
+          git add -A
+          git commit -m "Consolidate Design System v2 style ownership"
+          git push origin HEAD:stage-22/design-system-v2
