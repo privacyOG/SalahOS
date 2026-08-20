@@ -62,6 +62,8 @@ describe('applicationRoute', () => {
     expect(readProductSurface(fromAdmin)).toBe('congregation');
     expect(readCongregationDestination(fromAdmin)).toBe('settings');
     expect(readSettingsCategory(fromAdmin)).toBe('appearance');
+    expect(adminParams.get('view')).toBe('settings');
+    expect(adminParams.get('settingsView')).toBe('appearance');
     expect(adminParams.has('surface')).toBe(false);
     expect(adminParams.has('adminView')).toBe(false);
     expect(adminParams.get('debug')).toBe('1');
