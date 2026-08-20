@@ -34,6 +34,13 @@ jobs:
         if: github.event_name == 'pull_request' && github.head_ref == 'stage-22/design-system-v2'
         run: |
           set -euo pipefail
+
+          if grep -q -- '--salah-text-page-title:' src/design-system.css && \
+             ! grep -Eq '^\s*\.app-shell\s*\{' src/styles.css; then
+            echo 'Consolidated shell behavior is already preserved.'
+            exit 0
+          fi
+
           python3 - <<'PY'
           from pathlib import Path
 
@@ -95,10 +102,9 @@ jobs:
           PY
 
           npx prettier --write src/design-system.css src/styles.css
-          git show 6c0c1fda6c0bdd462c430bae0560443570b6129a:.github/workflows/ci.yml > .github/workflows/ci.yml
           git config user.name privacyOG
           git config user.email 102720550+privacyOG@users.noreply.github.com
-          git add src/design-system.css src/styles.css .github/workflows/ci.yml
+          git add src/design-system.css src/styles.css
           git commit -m "Preserve legacy shell behavior in Design System v2"
           git push origin HEAD:stage-22/design-system-v2
 
