@@ -49,15 +49,7 @@ jobs:
         run: python3 scripts/generate_pwa_icons.py --check
 
       - name: Format check
-        shell: bash
-        run: |
-          set -euo pipefail
-          if npm run format:check; then
-            exit 0
-          fi
-          npx prettier --write src/ui/applicationRoute.ts
-          git diff -- src/ui/applicationRoute.ts
-          exit 1
+        run: npm run format:check
 
       - name: Lint
         run: npm run lint
