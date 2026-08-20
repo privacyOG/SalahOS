@@ -4,6 +4,7 @@ import type {
   MosqueDayTimetable,
   MosquePrayerTime,
   MosqueTimetable,
+  TaraweehSession,
 } from './mosqueTimetable';
 import { validateMosqueTimetable } from './mosqueTimetable';
 import type { ObligatoryPrayerName } from './prayerEngine';
@@ -128,6 +129,17 @@ function parseJsonJumuah(value: unknown, label: string): JumuahSession {
   };
 }
 
+function parseJsonTaraweeh(value: unknown, label: string): TaraweehSession {
+  if (!isRecord(value) || typeof value.label !== 'string') {
+    throw new RangeError(`${label} must be a Taraweeh session object`);
+  }
+
+  return {
+    label: value.label,
+    startLocalMinutes: requireNumber(value, 'startLocalMinutes', `${label} start`),
+  };
+}
+
 function parseJsonDay(value: unknown, index: number): MosqueDayTimetable {
   const label = `Timetable day ${String(index + 1)}`;
   if (!isRecord(value) || typeof value.date !== 'string' || !isRecord(value.prayers)) {
@@ -149,19 +161,31 @@ function parseJsonDay(value: unknown, index: number): MosqueDayTimetable {
     }
   }
 
-  if (value.jumuahSessions === undefined) {
-    return { date: value.date, prayers };
+  let jumuahSessions: readonly JumuahSession[] | undefined;
+  if (value.jumuahSessions !== undefined) {
+    if (!Array.isArray(value.jumuahSessions)) {
+      throw new RangeError(`${label} Jumuah sessions must be an array`);
+    }
+    jumuahSessions = value.jumuahSessions.map((session, sessionIndex) =>
+      parseJsonJumuah(session, `${label} Jumuah ${String(sessionIndex + 1)}`),
+    );
   }
-  if (!Array.isArray(value.jumuahSessions)) {
-    throw new RangeError(`${label} Jumuah sessions must be an array`);
+
+  let taraweehSessions: readonly TaraweehSession[] | undefined;
+  if (value.taraweehSessions !== undefined) {
+    if (!Array.isArray(value.taraweehSessions)) {
+      throw new RangeError(`${label} Taraweeh sessions must be an array`);
+    }
+    taraweehSessions = value.taraweehSessions.map((session, sessionIndex) =>
+      parseJsonTaraweeh(session, `${label} Taraweeh ${String(sessionIndex + 1)}`),
+    );
   }
 
   return {
     date: value.date,
     prayers,
-    jumuahSessions: value.jumuahSessions.map((session, sessionIndex) =>
-      parseJsonJumuah(session, `${label} Jumuah ${String(sessionIndex + 1)}`),
-    ),
+    ...(jumuahSessions === undefined ? {} : { jumuahSessions }),
+    ...(taraweehSessions === undefined ? {} : { taraweehSessions }),
   };
 }
 

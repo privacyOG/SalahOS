@@ -4,6 +4,7 @@ import {
   isFriday,
   jumuahSessionsForDate,
   resolvePrayerSource,
+  taraweehSessionsForDate,
   validateMosqueDay,
   validateMosqueTimetable,
 } from './mosqueTimetable';
@@ -52,6 +53,10 @@ const friday: MosqueDayTimetable = {
       khutbahLocalMinutes: 13 * 60 + 15,
       salahLocalMinutes: 13 * 60 + 35,
     },
+  ],
+  taraweehSessions: [
+    { label: 'Main hall', startLocalMinutes: 20 * 60 + 15 },
+    { label: 'Late session', startLocalMinutes: 22 * 60 },
   ],
 };
 
@@ -107,6 +112,13 @@ describe('mosque timetable domain', () => {
     expect(jumuahSessionsForDate(saturday)).toEqual([]);
   });
 
+  it('returns configured Taraweeh sessions without imposing a rakah convention', () => {
+    expect(taraweehSessionsForDate(friday)).toEqual([
+      { label: 'Main hall', startLocalMinutes: 20 * 60 + 15 },
+      { label: 'Late session', startLocalMinutes: 22 * 60 },
+    ]);
+  });
+
   it('rejects invalid iqamah rollover and invalid Jumuah ordering', () => {
     expect(() => {
       validateMosqueDay({
@@ -133,6 +145,24 @@ describe('mosque timetable domain', () => {
         ],
       });
     }).toThrow(RangeError);
+  });
+
+  it('rejects empty or invalid Taraweeh sessions', () => {
+    expect(() => {
+      validateMosqueDay({
+        date: '2026-08-21',
+        prayers: {},
+        taraweehSessions: [{ label: ' ', startLocalMinutes: 20 * 60 }],
+      });
+    }).toThrow(/Taraweeh session label/u);
+
+    expect(() => {
+      validateMosqueDay({
+        date: '2026-08-21',
+        prayers: {},
+        taraweehSessions: [{ label: 'Main', startLocalMinutes: 1_440 }],
+      });
+    }).toThrow(/Taraweeh start/u);
   });
 
   it('rejects duplicate civil dates in one timetable', () => {

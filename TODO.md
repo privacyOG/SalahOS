@@ -777,7 +777,7 @@
 - [~] Device compass integration where supported
 - [x] Ramadan mode
 - [x] Suhur/Imsak and Iftar presentation
-- [ ] Taraweeh timetable support
+- [x] Taraweeh timetable support
 - [ ] Mosque announcements/events
 - [ ] Configurable smart-display themes
 - [ ] Multiple mosque profiles

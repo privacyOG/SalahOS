@@ -42,6 +42,30 @@ describe('mosque timetable import and export', () => {
     expect(parseMosqueTimetableJson(exported)).toEqual(timetable);
   });
 
+  it('imports and round-trips multiple Taraweeh sessions in JSON', () => {
+    const timetable = parseMosqueTimetableJson(
+      JSON.stringify({
+        mosqueName: 'Example Mosque',
+        days: [
+          {
+            date: '2026-08-21',
+            prayers: {},
+            taraweehSessions: [
+              { label: 'Main hall', startLocalMinutes: 1_215 },
+              { label: 'Late session', startLocalMinutes: 1_320 },
+            ],
+          },
+        ],
+      }),
+    );
+
+    expect(timetable.days[0]?.taraweehSessions).toEqual([
+      { label: 'Main hall', startLocalMinutes: 1_215 },
+      { label: 'Late session', startLocalMinutes: 1_320 },
+    ]);
+    expect(parseMosqueTimetableJson(exportMosqueTimetableJson(timetable))).toEqual(timetable);
+  });
+
   it('rejects unexpected CSV schemas, invalid times and orphan iqamah values', () => {
     expect(() => parseMosqueTimetableCsv('date,fajr\n2026-08-21,05:25', 'Example Mosque')).toThrow(
       /CSV header/,
@@ -80,6 +104,20 @@ describe('mosque timetable import and export', () => {
     expectInvalidJson({
       mosqueName: 'Example Mosque',
       days: [{ date: '2026-08-21', prayers: {}, jumuahSessions: '12:30' }],
+    });
+    expectInvalidJson({
+      mosqueName: 'Example Mosque',
+      days: [{ date: '2026-08-21', prayers: {}, taraweehSessions: '20:15' }],
+    });
+    expectInvalidJson({
+      mosqueName: 'Example Mosque',
+      days: [
+        {
+          date: '2026-08-21',
+          prayers: {},
+          taraweehSessions: [{ label: 'Main', startLocalMinutes: '20:15' }],
+        },
+      ],
     });
   });
 });
