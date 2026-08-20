@@ -117,7 +117,9 @@ export function SmartDisplayThemeSettings() {
                 <strong>{label}</strong>
                 <small>{help}</small>
               </span>
-              {selected && <span className="smart-display-theme-option__selected">{text.selected}</span>}
+              {selected && (
+                <span className="smart-display-theme-option__selected">{text.selected}</span>
+              )}
             </button>
           );
         })}
