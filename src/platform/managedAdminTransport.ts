@@ -1,10 +1,12 @@
 import {
   createManagedDisplayConfigUpdate,
+  createManagedDisplayHeartbeat,
   createManagedDisplayRegistration,
   createManagedDisplayRemoteConfig,
   createManagedDisplayRemoteStatus,
   type ManagedDisplayConfigUpdate,
   type ManagedDisplayEnrollment,
+  type ManagedDisplayHeartbeat,
   type ManagedDisplayRegistration,
   type ManagedDisplayRemoteConfig,
   type ManagedDisplayRemoteStatus,
@@ -17,6 +19,12 @@ export interface ManagedAdminConnection {
   readonly adminToken: string;
 }
 
+export interface ManagedDisplayConnection {
+  readonly baseUrl: string;
+  readonly displayId: string;
+  readonly deviceToken: string;
+}
+
 export interface ManagedAdminClient {
   listDisplays(): Promise<readonly ManagedDisplayRemoteStatus[]>;
   registerDisplay(input: ManagedDisplayRegistration): Promise<ManagedDisplayEnrollment>;
@@ -27,19 +35,30 @@ export interface ManagedAdminClient {
   revokeDisplay(displayId: string): Promise<ManagedDisplayRemoteStatus>;
 }
 
-function normalizeBaseUrl(value: string): string {
+export interface ManagedDisplayClient {
+  readonly displayId: string;
+  getConfig(): Promise<ManagedDisplayRemoteConfig>;
+  heartbeat(
+    input: Omit<ManagedDisplayHeartbeat, 'displayId'>,
+  ): Promise<ManagedDisplayRemoteStatus>;
+}
+
+export function normalizeManagedServiceBaseUrl(value: string): string {
   const url = new URL(value.trim());
-  const loopback = url.hostname === 'localhost' || url.hostname === '127.0.0.1' || url.hostname === '::1';
+  const loopback =
+    url.hostname === 'localhost' || url.hostname === '127.0.0.1' || url.hostname === '::1';
   if (url.protocol !== 'https:' && !(url.protocol === 'http:' && loopback)) {
     throw new RangeError('Managed administration requires HTTPS except on loopback development hosts');
   }
   if (url.username !== '' || url.password !== '' || url.search !== '' || url.hash !== '') {
-    throw new RangeError('Managed administration service URL may not contain credentials, query or fragment');
+    throw new RangeError(
+      'Managed administration service URL may not contain credentials, query or fragment',
+    );
   }
   return url.toString().replace(/\/$/u, '');
 }
 
-function normalizeToken(value: string): string {
+export function normalizeManagedServiceToken(value: string): string {
   const token = value.trim();
   if (token.length < 32 || token.length > 512 || !/^[A-Za-z0-9._~-]+$/u.test(token)) {
     throw new RangeError('Managed administration token must contain 32 through 512 safe characters');
@@ -47,7 +66,7 @@ function normalizeToken(value: string): string {
   return token;
 }
 
-function normalizeDisplayId(value: string): string {
+export function normalizeManagedDisplayId(value: string): string {
   const normalized = value.trim().toLowerCase();
   if (
     normalized.length < 2 ||
@@ -99,19 +118,17 @@ function parseEnrollment(value: unknown): ManagedDisplayEnrollment {
   });
 }
 
-export function createManagedAdminClient(
-  connection: ManagedAdminConnection,
-  fetchImpl: FetchLike = globalThis.fetch.bind(globalThis),
-): ManagedAdminClient {
-  const baseUrl = normalizeBaseUrl(connection.baseUrl);
-  const adminToken = normalizeToken(connection.adminToken);
-
-  const request = async (path: string, init: RequestInit = {}): Promise<unknown> => {
+function createAuthorizedRequest(
+  baseUrl: string,
+  token: string,
+  fetchImpl: FetchLike,
+): (path: string, init?: RequestInit) => Promise<unknown> {
+  return async (path, init = {}) => {
     const response = await fetchImpl(`${baseUrl}${path}`, {
       ...init,
       headers: {
         accept: 'application/json',
-        authorization: `Bearer ${adminToken}`,
+        authorization: `Bearer ${token}`,
         ...(init.body === undefined ? {} : { 'content-type': 'application/json' }),
         ...init.headers,
       },
@@ -122,6 +139,15 @@ export function createManagedAdminClient(
     });
     return parseJsonResponse(response);
   };
+}
+
+export function createManagedAdminClient(
+  connection: ManagedAdminConnection,
+  fetchImpl: FetchLike = globalThis.fetch.bind(globalThis),
+): ManagedAdminClient {
+  const baseUrl = normalizeManagedServiceBaseUrl(connection.baseUrl);
+  const adminToken = normalizeManagedServiceToken(connection.adminToken);
+  const request = createAuthorizedRequest(baseUrl, adminToken, fetchImpl);
 
   return Object.freeze({
     async listDisplays() {
@@ -142,19 +168,49 @@ export function createManagedAdminClient(
     },
 
     async updateDisplayConfig(displayId, update) {
-      const normalizedDisplayId = normalizeDisplayId(displayId);
+      const normalizedDisplayId = normalizeManagedDisplayId(displayId);
       const normalizedUpdate = createManagedDisplayConfigUpdate(update);
-      const body = await request(`/v1/admin/displays/${encodeURIComponent(normalizedDisplayId)}/config`, {
-        method: 'PUT',
-        body: JSON.stringify(normalizedUpdate),
-      });
+      const body = await request(
+        `/v1/admin/displays/${encodeURIComponent(normalizedDisplayId)}/config`,
+        {
+          method: 'PUT',
+          body: JSON.stringify(normalizedUpdate),
+        },
+      );
       return parseRemoteStatus(body);
     },
 
     async revokeDisplay(displayId) {
-      const normalizedDisplayId = normalizeDisplayId(displayId);
-      const body = await request(`/v1/admin/displays/${encodeURIComponent(normalizedDisplayId)}/revoke`, {
+      const normalizedDisplayId = normalizeManagedDisplayId(displayId);
+      const body = await request(
+        `/v1/admin/displays/${encodeURIComponent(normalizedDisplayId)}/revoke`,
+        { method: 'POST' },
+      );
+      return parseRemoteStatus(body);
+    },
+  });
+}
+
+export function createManagedDisplayClient(
+  connection: ManagedDisplayConnection,
+  fetchImpl: FetchLike = globalThis.fetch.bind(globalThis),
+): ManagedDisplayClient {
+  const baseUrl = normalizeManagedServiceBaseUrl(connection.baseUrl);
+  const displayId = normalizeManagedDisplayId(connection.displayId);
+  const deviceToken = normalizeManagedServiceToken(connection.deviceToken);
+  const request = createAuthorizedRequest(baseUrl, deviceToken, fetchImpl);
+
+  return Object.freeze({
+    displayId,
+    async getConfig() {
+      const body = await request(`/v1/device/config?displayId=${encodeURIComponent(displayId)}`);
+      return parseManagedDeviceRemoteConfig(body);
+    },
+    async heartbeat(input) {
+      const heartbeat = createManagedDisplayHeartbeat({ ...input, displayId });
+      const body = await request('/v1/device/heartbeat', {
         method: 'POST',
+        body: JSON.stringify(heartbeat),
       });
       return parseRemoteStatus(body);
     },
