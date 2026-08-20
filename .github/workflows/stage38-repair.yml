@@ -1,0 +1,64 @@
+name: Stage 38 repair and finalize
+
+on:
+  push:
+    branches:
+      - 'stage-38/local-network-api'
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: stage-38/local-network-api
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies from lockfile
+        run: npm ci --ignore-scripts
+      - name: Repair timezone validation syntax
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('local-api/server.mjs')
+          text = path.read_text()
+          old = "throw new RangeError(`${label} must be a supported IANA timezone`) from error;"
+          new = "throw new RangeError(`${label} must be a supported IANA timezone`, { cause: error });"
+          if text.count(old) != 1:
+              raise SystemExit(f'expected one timezone syntax line, found {text.count(old)}')
+          path.write_text(text.replace(old, new))
+          PY
+      - name: Apply canonical formatting
+        run: npm run format
+      - name: Mark Stage 38 complete
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('TODO.md')
+          text = path.read_text()
+          old = '- [ ] Optional local network API for smart-home/display integration'
+          new = '- [x] Optional local network API for smart-home/display integration'
+          if old in text:
+              text = text.replace(old, new)
+          elif new not in text:
+              raise SystemExit('Stage 38 roadmap row is missing')
+          path.write_text(text)
+          PY
+      - name: Full repository check
+        run: npm run check
+      - name: Commit verified Stage 38 result
+        run: |
+          rm .github/workflows/stage38-finalize.yml .github/workflows/stage38-repair.yml
+          git config user.name privacyOG
+          git config user.email kriptiik@proton.me
+          git add -- .gitignore TODO.md docs/LOCAL_NETWORK_API.md eslint.config.js package.json local-api .github/workflows/stage38-finalize.yml .github/workflows/stage38-repair.yml
+          git commit -m 'Finalize Stage 38 local network API'
+          git push origin HEAD:stage-38/local-network-api
