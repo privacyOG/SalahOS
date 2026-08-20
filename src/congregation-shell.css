@@ -13,16 +13,10 @@
 }
 
 /*
- * App.tsx still owns the legacy prayer/location/settings composition during
- * the staged v2 migration. Routing is now explicit; these two scoped rules
- * prevent the legacy core from leaking the opposite destination until those
- * sections are extracted into dedicated screen components.
+ * Settings still uses the legacy configuration core during the staged v2
+ * migration. Its prayer presentation is intentionally suppressed because
+ * the dedicated Today screen now owns congregation prayer presentation.
  */
-.legacy-core-route--today .location-panel,
-.legacy-core-route--today .settings-panel {
-  display: none;
-}
-
 .legacy-core-route--settings .hero,
 .legacy-core-route--settings .prayer-panel,
 .legacy-core-route--settings .status-card {
@@ -93,19 +87,35 @@
 }
 
 .congregation-nav-item {
+  display: grid;
   min-width: 0;
-  min-height: 3rem;
-  padding: var(--salah-space-2) var(--salah-space-1);
+  min-height: 3.4rem;
+  place-items: center;
+  gap: 0.2rem;
+  padding: var(--salah-space-1);
   border-color: transparent;
   border-radius: var(--salah-radius-sm);
   color: var(--salah-fg-secondary);
   background: transparent;
-  font-size: clamp(0.68rem, 2.7vw, var(--salah-text-sm));
+  font-size: clamp(0.64rem, 2.6vw, 0.76rem);
   font-weight: 750;
-  line-height: 1.15;
+  line-height: 1.1;
 }
 
-.congregation-nav-item span {
+.congregation-nav-icon {
+  display: grid;
+  width: 1.35rem;
+  height: 1.35rem;
+  place-items: center;
+}
+
+.congregation-nav-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.congregation-nav-label {
   display: block;
   max-width: 100%;
   overflow-wrap: anywhere;
@@ -151,16 +161,19 @@
   }
 
   .congregation-nav-item {
-    width: 100%;
+    grid-template-columns: 1.4rem minmax(0, 1fr);
     min-height: 3.4rem;
-    padding-inline: var(--salah-space-2);
+    justify-items: start;
+    gap: var(--salah-space-2);
+    padding: var(--salah-space-2);
     font-size: var(--salah-text-sm);
+    text-align: start;
   }
 }
 
 @media (min-width: 1200px) {
   .congregation-shell {
-    grid-template-columns: 9rem minmax(0, 1fr);
+    grid-template-columns: 9.5rem minmax(0, 1fr);
   }
 }
 
