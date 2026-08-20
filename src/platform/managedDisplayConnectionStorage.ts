@@ -8,6 +8,8 @@ import {
 
 export const MANAGED_DISPLAY_CONNECTION_STORAGE_KEY = 'salahos.managedDisplayConnection';
 export const MANAGED_DISPLAY_CONNECTION_SCHEMA_VERSION = 1;
+export const MANAGED_DISPLAY_CONNECTION_CHANGE_EVENT =
+  'salahos:managed-display-connection-change';
 
 interface ManagedDisplayConnectionEnvelope {
   readonly version: 1;
