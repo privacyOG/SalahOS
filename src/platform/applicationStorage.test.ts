@@ -32,7 +32,10 @@ describe('native application storage', () => {
     const preferences = new MemoryPreferences();
     preferences.values.set(PERSISTED_APPLICATION_KEYS[0], '{"version":2}');
     preferences.values.set(PERSISTED_APPLICATION_KEYS[1], '{"version":1,"locations":[]}');
-    preferences.values.set(PERSISTED_APPLICATION_KEYS[3], '{"version":1,"announcements":[],"events":[]}');
+    preferences.values.set(
+      PERSISTED_APPLICATION_KEYS[3],
+      '{"version":1,"announcements":[],"events":[]}',
+    );
 
     const storage = await createNativePreferencesStorage(preferences);
 
