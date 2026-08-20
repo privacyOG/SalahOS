@@ -5,6 +5,7 @@ import {
   flushApplicationStorage,
   initializeApplicationStorage,
 } from './platform/applicationStorage';
+import { CommunityUpdatesPanel } from './ui/CommunityUpdatesPanel';
 import { CongregationShell } from './ui/CongregationShell';
 import { QiblaCompassPanel } from './ui/QiblaCompassPanel';
 import { RamadanModePanel } from './ui/RamadanModePanel';
@@ -19,6 +20,7 @@ import './touch-display-fixture.css';
 import './smart-display.css';
 import './ramadan-mode.css';
 import './taraweeh-panel.css';
+import './community-updates-panel.css';
 import './qibla-compass.css';
 
 async function bootstrap(): Promise<void> {
@@ -53,6 +55,7 @@ async function bootstrap(): Promise<void> {
           <App />
           <RamadanModePanel />
           <TaraweehPanel />
+          <CommunityUpdatesPanel />
           <QiblaCompassPanel />
         </CongregationShell>
       ) : (

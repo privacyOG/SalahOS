@@ -778,7 +778,7 @@
 - [x] Ramadan mode
 - [x] Suhur/Imsak and Iftar presentation
 - [x] Taraweeh timetable support
-- [ ] Mosque announcements/events
+- [x] Mosque announcements/events
 - [ ] Configurable smart-display themes
 - [ ] Multiple mosque profiles
 - [ ] Remote administration for managed mosque displays

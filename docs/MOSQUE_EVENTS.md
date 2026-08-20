@@ -2,7 +2,7 @@
 
 ## Purpose
 
-The managed mosque event domain provides a local, transport-independent contract for mosque events before any authenticated server mutation, notification delivery or concrete admin UI is connected.
+The managed mosque event domain provides a local, transport-independent contract for mosque events while authenticated server mutation, notification delivery and synchronization remain separate layers.
 
 It is designed for congregation mobile, public web and managed display surfaces while preserving the existing account-free personal prayer experience.
 
@@ -27,7 +27,7 @@ External links are limited to credential-free HTTP(S) URLs.
 
 Timed events require ISO-8601 UTC start and end timestamps and the end must be later than the start.
 
-All-day events use UTC-midnight boundaries so the domain has deterministic date semantics without depending on a device timezone. Presentation layers may map these boundaries into the mosque timezone when rendering the event.
+All-day events use UTC-midnight boundaries so the domain has deterministic date semantics without depending on a device timezone. Presentation layers may map these boundaries into the user or mosque timezone when rendering the event.
 
 Initial recurrence support is:
 
@@ -35,7 +35,7 @@ Initial recurrence support is:
 - daily;
 - weekly.
 
-More complex recurrence rules can be introduced later when the administrative scheduling UX and server persistence model are defined.
+More complex recurrence expansion remains a later scheduling/synchronization concern.
 
 ## Surface exposure
 
@@ -47,7 +47,13 @@ Events may target any combination of:
 
 Target ordering is normalized and duplicate-free so consumers receive deterministic event metadata.
 
-`upcomingMosqueEvents` filters ended events and returns remaining events in start-time order for congregation and signage presentation.
+`upcomingMosqueEvents` filters ended events and returns remaining events in start-time order. The congregation `CommunityUpdatesPanel` further applies the mobile target and locale fallback before presentation, so ended or non-mobile events are not surfaced there.
+
+## Congregation presentation
+
+The local community feed presents upcoming event title, description, start, venue, all-day status and optional registration/information action. English and Arabic remain independent; when the selected locale is unavailable the supplied language is used without synthesizing a translation.
+
+The same versioned local community-content cache used by announcements stores validated events. Imported JSON is rejected before persistence if event structure, identifiers, dates, URLs or target surfaces are invalid.
 
 ## Calendar compatibility
 
@@ -66,7 +72,7 @@ Transport layers may wrap these entries in a `VCALENDAR` document or feed withou
 
 ## Boundary
 
-This domain does not implement:
+This slice does not implement:
 
 - authenticated event mutations;
 - remote event persistence or synchronization;
@@ -74,7 +80,6 @@ This domain does not implement:
 - registration processing;
 - payment handling;
 - notification delivery;
-- calendar subscription hosting;
-- concrete phone, web or signage layouts.
+- calendar subscription hosting.
 
-Those capabilities are intentionally layered on top of the normalized event contract.
+Those capabilities remain layered on top of the normalized event and local congregation presentation contracts.
