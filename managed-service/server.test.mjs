@@ -19,7 +19,8 @@ async function startService() {
     server.listen(0, '127.0.0.1', resolve);
   });
   const address = server.address();
-  if (address === null || typeof address === 'string') throw new Error('Test server address unavailable');
+  if (address === null || typeof address === 'string')
+    throw new Error('Test server address unavailable');
   return {
     statePath,
     server,
@@ -43,7 +44,9 @@ async function request(baseUrl, path, options = {}) {
 }
 
 afterEach(async () => {
-  await Promise.all(temporaryDirectories.splice(0).map((directory) => rm(directory, { recursive: true })));
+  await Promise.all(
+    temporaryDirectories.splice(0).map((directory) => rm(directory, { recursive: true })),
+  );
 });
 
 describe('managed administration service', () => {
@@ -103,11 +106,9 @@ describe('managed administration service', () => {
       });
       const deviceToken = enrollment.body.deviceToken;
 
-      const configuration = await request(
-        baseUrl,
-        '/v1/device/config?displayId=display%3Afoyer',
-        { headers: { authorization: `Bearer ${deviceToken}` } },
-      );
+      const configuration = await request(baseUrl, '/v1/device/config?displayId=display%3Afoyer', {
+        headers: { authorization: `Bearer ${deviceToken}` },
+      });
       expect(configuration.response.status).toBe(200);
       expect(configuration.body.displayTheme).toBe('classic');
 
@@ -248,14 +249,18 @@ describe('managed administration service', () => {
       await closeServer(first.server);
     }
 
-    const service = await createManagedAdminService({ adminToken: ADMIN_TOKEN, statePath: first.statePath });
+    const service = await createManagedAdminService({
+      adminToken: ADMIN_TOKEN,
+      statePath: first.statePath,
+    });
     const server = service.createHttpServer();
     await new Promise((resolve, reject) => {
       server.once('error', reject);
       server.listen(0, '127.0.0.1', resolve);
     });
     const address = server.address();
-    if (address === null || typeof address === 'string') throw new Error('Test server address unavailable');
+    if (address === null || typeof address === 'string')
+      throw new Error('Test server address unavailable');
     const baseUrl = `http://127.0.0.1:${String(address.port)}`;
     try {
       const configuration = await request(

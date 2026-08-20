@@ -59,7 +59,11 @@ function assertRevision(value: number, label: string): number {
 
 function assertUtcTimestamp(value: string, label: string): string {
   const parsed = new Date(value);
-  if (!value.endsWith('Z') || !Number.isFinite(parsed.getTime()) || parsed.toISOString() !== value) {
+  if (
+    !value.endsWith('Z') ||
+    !Number.isFinite(parsed.getTime()) ||
+    parsed.toISOString() !== value
+  ) {
     throw new RangeError(`${label} must be an ISO-8601 UTC timestamp`);
   }
   return value;

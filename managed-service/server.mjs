@@ -59,7 +59,11 @@ function normalizeVersion(value) {
 function normalizeTimestamp(value, label) {
   if (typeof value !== 'string') throw new TypeError(`${label} must be a string`);
   const parsed = new Date(value);
-  if (!value.endsWith('Z') || !Number.isFinite(parsed.getTime()) || parsed.toISOString() !== value) {
+  if (
+    !value.endsWith('Z') ||
+    !Number.isFinite(parsed.getTime()) ||
+    parsed.toISOString() !== value
+  ) {
     throw new RangeError(`${label} must be an ISO-8601 UTC timestamp`);
   }
   return value;
@@ -155,7 +159,10 @@ function validatePersistedState(value) {
     if (identity.displayId !== normalizeIdentifier(key, 'Display state key')) {
       throw new RangeError('Managed display state key does not match identity');
     }
-    if (typeof entry.deviceTokenHash !== 'string' || !/^[0-9a-f]{64}$/u.test(entry.deviceTokenHash)) {
+    if (
+      typeof entry.deviceTokenHash !== 'string' ||
+      !/^[0-9a-f]{64}$/u.test(entry.deviceTokenHash)
+    ) {
       throw new RangeError('Managed display token hash is invalid');
     }
     const remoteConfig = entry.remoteConfig;
@@ -456,7 +463,10 @@ export async function createManagedAdminService(options) {
       }
 
       if (request.method === 'GET' && url.pathname === '/v1/device/config') {
-        const displayId = normalizeIdentifier(url.searchParams.get('displayId') ?? '', 'Display ID');
+        const displayId = normalizeIdentifier(
+          url.searchParams.get('displayId') ?? '',
+          'Display ID',
+        );
         const entry = state.displays[displayId];
         if (entry === undefined) {
           const error = new Error('Display not found');
@@ -493,8 +503,17 @@ export async function createManagedAdminService(options) {
 
       json(response, 404, { error: 'Not found' }, corsOrigin);
     } catch (error) {
-      const status = Number.isInteger(error?.statusCode) ? error.statusCode : error instanceof RangeError || error instanceof TypeError || error instanceof SyntaxError ? 400 : 500;
-      json(response, status, { error: status === 500 ? 'Internal service error' : error.message }, corsOrigin);
+      const status = Number.isInteger(error?.statusCode)
+        ? error.statusCode
+        : error instanceof RangeError || error instanceof TypeError || error instanceof SyntaxError
+          ? 400
+          : 500;
+      json(
+        response,
+        status,
+        { error: status === 500 ? 'Internal service error' : error.message },
+        corsOrigin,
+      );
     }
   };
 
