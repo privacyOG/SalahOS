@@ -1,0 +1,188 @@
+.remote-display-admin-panel,
+.managed-display-connection-settings {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 1.25rem auto;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  border: 1px solid var(--card-border);
+  border-radius: 1.5rem;
+  background: var(--card);
+  box-shadow: 0 1.2rem 3rem var(--shadow);
+}
+
+.remote-display-admin-panel__heading,
+.managed-display-connection-settings header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.remote-display-admin-panel__heading > p,
+.managed-display-connection-settings header > p {
+  max-width: 46rem;
+  margin: 0;
+  color: var(--muted);
+}
+
+.remote-display-admin-panel__eyebrow {
+  margin: 0 0 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.remote-display-admin-panel__privacy,
+.managed-display-connection-settings__security {
+  padding: 0.8rem 1rem;
+  border-radius: 0.9rem;
+  background: var(--next-card);
+  color: var(--muted);
+}
+
+.remote-display-admin-panel__connection,
+.remote-display-admin-panel__form-grid,
+.managed-display-connection-settings__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr));
+  gap: 0.8rem;
+}
+
+.remote-display-admin-panel label,
+.managed-display-connection-settings label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.remote-display-admin-panel input,
+.remote-display-admin-panel select,
+.managed-display-connection-settings input {
+  width: 100%;
+}
+
+.remote-display-admin-panel__status,
+.managed-display-connection-settings__message {
+  color: var(--muted);
+}
+
+.remote-display-admin-panel__enroll {
+  margin-block: 1rem;
+  padding-block: 1rem;
+  border-block: 1px solid var(--card-border);
+}
+
+.remote-display-admin-panel__enroll summary {
+  cursor: pointer;
+  font-weight: 800;
+}
+
+.remote-display-admin-panel__enroll > button {
+  margin-top: 0.8rem;
+}
+
+.remote-display-admin-panel__credential {
+  display: grid;
+  gap: 0.45rem;
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid var(--card-border);
+  border-radius: 1rem;
+  background: var(--next-card);
+}
+
+.remote-display-admin-panel__credential code {
+  overflow-wrap: anywhere;
+  font-size: 0.8rem;
+}
+
+.remote-display-admin-panel__fleet {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr));
+  gap: 0.9rem;
+}
+
+.remote-display-card {
+  display: grid;
+  gap: 0.8rem;
+  padding: 1rem;
+  border: 1px solid var(--card-border);
+  border-radius: 1rem;
+  background: var(--page);
+}
+
+.remote-display-card > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.remote-display-card > header span {
+  padding: 0.2rem 0.5rem;
+  border-radius: 999px;
+  background: var(--next-card);
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.remote-display-card > header span[data-sync-state='revoked'] {
+  background: #fee2e2;
+  color: #991b1b;
+}
+
+.remote-display-card > header span[data-sync-state='offline'],
+.remote-display-card > header span[data-sync-state='stale'] {
+  background: #fef3c7;
+  color: #92400e;
+}
+
+.remote-display-card dl {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+}
+
+.remote-display-card dl div {
+  display: grid;
+  grid-template-columns: minmax(7rem, auto) 1fr;
+  gap: 0.75rem;
+}
+
+.remote-display-card dt {
+  color: var(--muted);
+}
+
+.remote-display-card dd {
+  margin: 0;
+}
+
+.remote-display-card__actions,
+.managed-display-connection-settings__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 0.8rem;
+}
+
+.remote-display-admin-panel__empty {
+  padding: 1rem;
+  border-radius: 1rem;
+  background: var(--next-card);
+  color: var(--muted);
+}
+
+@media (max-width: 720px) {
+  .remote-display-admin-panel,
+  .managed-display-connection-settings {
+    width: min(100% - 1rem, 1180px);
+    border-radius: 1.1rem;
+  }
+
+  .remote-display-admin-panel__heading,
+  .managed-display-connection-settings header {
+    align-items: start;
+    flex-direction: column;
+  }
+}

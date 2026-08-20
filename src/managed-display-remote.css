@@ -1,0 +1,85 @@
+html[data-managed-display-theme='classic'] .smart-display {
+  --page: #f4f7f6;
+  --page-glow: rgba(16, 185, 129, 0.14);
+  --text: #10201c;
+  --muted: #61716b;
+  --card: rgba(255, 255, 255, 0.94);
+  --card-border: rgba(15, 79, 62, 0.12);
+  --next-card: #e7f5ef;
+  --shadow: rgba(15, 41, 34, 0.12);
+  --warning-bg: #fff7e8;
+  --warning-text: #8a4b12;
+}
+
+html[data-managed-display-theme='midnight'] .smart-display {
+  --page: #07111f;
+  --page-glow: rgba(212, 175, 55, 0.12);
+  --text: #f7f2df;
+  --muted: #aeb8c5;
+  --card: rgba(12, 27, 45, 0.94);
+  --card-border: rgba(226, 201, 116, 0.2);
+  --next-card: rgba(31, 48, 68, 0.98);
+  --shadow: rgba(0, 0, 0, 0.34);
+  --warning-bg: #3c2b16;
+  --warning-text: #f9d99a;
+}
+
+html[data-managed-display-theme='sandstone'] .smart-display {
+  --page: #eee5d5;
+  --page-glow: rgba(161, 98, 42, 0.14);
+  --text: #392e24;
+  --muted: #75685b;
+  --card: rgba(255, 250, 240, 0.96);
+  --card-border: rgba(101, 73, 48, 0.16);
+  --next-card: #ead9bd;
+  --shadow: rgba(75, 54, 36, 0.14);
+  --warning-bg: #fff0cb;
+  --warning-text: #7a4514;
+}
+
+html[data-managed-display-theme='emerald'] .smart-display {
+  --page: #031b16;
+  --page-glow: rgba(52, 211, 153, 0.17);
+  --text: #effcf7;
+  --muted: #9bc4b5;
+  --card: rgba(7, 45, 36, 0.94);
+  --card-border: rgba(110, 231, 183, 0.18);
+  --next-card: rgba(11, 67, 53, 0.98);
+  --shadow: rgba(0, 0, 0, 0.3);
+  --warning-bg: #3b2d16;
+  --warning-text: #f6d58e;
+}
+
+.managed-display-remote-status {
+  position: fixed;
+  right: max(1rem, env(safe-area-inset-right));
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  z-index: 20;
+  padding: 0.4rem 0.7rem;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  background: rgba(15, 23, 42, 0.82);
+  color: #f8fafc;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  backdrop-filter: blur(10px);
+}
+
+.managed-display-remote-status[data-state='connected'] {
+  background: rgba(5, 87, 70, 0.88);
+}
+
+.managed-display-remote-status[data-state='offline'] {
+  background: rgba(120, 53, 15, 0.9);
+}
+
+.managed-display-remote-status[data-state='revoked'] {
+  background: rgba(127, 29, 29, 0.92);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .managed-display-remote-status {
+    transition: none;
+  }
+}
