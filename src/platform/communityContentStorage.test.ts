@@ -90,15 +90,18 @@ describe('community content storage', () => {
   });
 
   it('rejects malformed content and duplicate per-mosque identifiers', () => {
-    expect(() => parseCommunityContentLibrary('{"version":1,"announcements":[],"events":{}}')).toThrow(
-      /arrays/u,
-    );
+    expect(() =>
+      parseCommunityContentLibrary('{"version":1,"announcements":[],"events":{}}'),
+    ).toThrow(/arrays/u);
 
     const duplicate = library();
+    const firstAnnouncement = duplicate.announcements[0];
+    if (firstAnnouncement === undefined) throw new Error('Announcement fixture is missing');
+
     expect(() =>
       serializeCommunityContentLibrary({
         ...duplicate,
-        announcements: [duplicate.announcements[0]!, duplicate.announcements[0]!],
+        announcements: [firstAnnouncement, firstAnnouncement],
       }),
     ).toThrow(/Duplicate announcement/u);
   });
