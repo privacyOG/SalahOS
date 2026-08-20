@@ -25,10 +25,16 @@ export interface JumuahSession {
   readonly salahLocalMinutes: number;
 }
 
+export interface TaraweehSession {
+  readonly label: string;
+  readonly startLocalMinutes: number;
+}
+
 export interface MosqueDayTimetable {
   readonly date: string;
   readonly prayers: Readonly<Partial<Record<ObligatoryPrayerName, MosquePrayerTime>>>;
   readonly jumuahSessions?: readonly JumuahSession[];
+  readonly taraweehSessions?: readonly TaraweehSession[];
 }
 
 export interface MosqueTimetable {
@@ -109,6 +115,13 @@ export function validateMosqueDay(day: MosqueDayTimetable): void {
     if (session.salahLocalMinutes < session.khutbahLocalMinutes) {
       throw new RangeError('Jumuah salah may not precede its khutbah');
     }
+  }
+
+  for (const session of day.taraweehSessions ?? []) {
+    if (session.label.trim().length === 0) {
+      throw new RangeError('Taraweeh session label may not be empty');
+    }
+    assertDayMinutes(session.startLocalMinutes, 'Taraweeh start');
   }
 }
 
@@ -200,4 +213,9 @@ export function isFriday(date: string): boolean {
 export function jumuahSessionsForDate(day: MosqueDayTimetable): readonly JumuahSession[] {
   validateMosqueDay(day);
   return isFriday(day.date) ? (day.jumuahSessions ?? []) : [];
+}
+
+export function taraweehSessionsForDate(day: MosqueDayTimetable): readonly TaraweehSession[] {
+  validateMosqueDay(day);
+  return day.taraweehSessions ?? [];
 }
