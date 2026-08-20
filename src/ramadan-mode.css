@@ -59,6 +59,47 @@
   line-height: 1.45;
 }
 
+.ramadan-fast-times {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--salah-space-2, 0.5rem);
+  margin-top: var(--salah-space-4, 1rem);
+}
+
+.ramadan-fast-time {
+  min-width: 0;
+  padding: 0.8rem;
+  border: 1px solid var(--salah-border-default, rgba(127, 127, 127, 0.25));
+  border-radius: var(--salah-radius-md, 1rem);
+  background: var(--salah-bg-surface, rgba(127, 127, 127, 0.08));
+}
+
+.ramadan-fast-time span,
+.ramadan-fast-time strong {
+  display: block;
+}
+
+.ramadan-fast-time span {
+  color: var(--salah-fg-secondary, inherit);
+  font-size: var(--salah-text-sm, 0.92rem);
+}
+
+.ramadan-fast-time strong {
+  margin-top: 0.2rem;
+  color: var(--salah-fg-primary, inherit);
+  font-size: clamp(1.2rem, 3vw, 1.55rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.ramadan-fast-time small {
+  margin-top: 0.2rem;
+  font-size: var(--salah-text-xs, 0.78rem);
+}
+
+.ramadan-fast-guidance {
+  max-width: 52rem;
+}
+
 .ramadan-mode-year {
   align-self: start;
   padding: 0.45rem 0.7rem;
@@ -67,6 +108,12 @@
   color: var(--salah-fg-secondary, inherit);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
+}
+
+@media (max-width: 760px) {
+  .ramadan-fast-times {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 640px) {
