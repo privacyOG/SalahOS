@@ -148,21 +148,21 @@ describe('mosque timetable domain', () => {
   });
 
   it('rejects empty or invalid Taraweeh sessions', () => {
-    expect(() =>
+    expect(() => {
       validateMosqueDay({
         date: '2026-08-21',
         prayers: {},
         taraweehSessions: [{ label: ' ', startLocalMinutes: 20 * 60 }],
-      }),
-    ).toThrow(/Taraweeh session label/u);
+      });
+    }).toThrow(/Taraweeh session label/u);
 
-    expect(() =>
+    expect(() => {
       validateMosqueDay({
         date: '2026-08-21',
         prayers: {},
         taraweehSessions: [{ label: 'Main', startLocalMinutes: 1_440 }],
-      }),
-    ).toThrow(/Taraweeh start/u);
+      });
+    }).toThrow(/Taraweeh start/u);
   });
 
   it('rejects duplicate civil dates in one timetable', () => {
