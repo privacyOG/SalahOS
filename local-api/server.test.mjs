@@ -129,9 +129,7 @@ describe('local public API service', () => {
         timezone: 'Australia/Sydney',
       });
 
-      const daily = await fetch(
-        `${running.baseUrl}/api/v1/mosques/masjid.one/prayers/2026-08-20`,
-      );
+      const daily = await fetch(`${running.baseUrl}/api/v1/mosques/masjid.one/prayers/2026-08-20`);
       expect(daily.status).toBe(200);
       expect(await daily.json()).toMatchObject({
         mosqueId: 'masjid.one',
@@ -193,7 +191,9 @@ describe('local public API service', () => {
   it('rejects privileged data and mismatched public identifiers before startup', () => {
     const withCredential = exampleSnapshot();
     withCredential.mosques['masjid.one'].profile.deviceToken = 'not-public';
-    expect(() => validatePublicSnapshot(withCredential)).toThrow(/not permitted in public API data/u);
+    expect(() => validatePublicSnapshot(withCredential)).toThrow(
+      /not permitted in public API data/u,
+    );
 
     const mismatched = exampleSnapshot();
     mismatched.mosques['masjid.one'].profile.mosqueId = 'masjid.two';

@@ -8,21 +8,14 @@ on:
   pull_request:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   quality:
     runs-on: [self-hosted, Linux, X64]
-    timeout-minutes: 20
+    timeout-minutes: 15
     steps:
-      - name: Checkout Stage 38 head for finalization
-        if: github.event_name == 'pull_request' && github.head_ref == 'stage-38/local-network-api'
-        uses: actions/checkout@v4
-        with:
-          ref: stage-38/local-network-api
-
       - name: Checkout
-        if: github.event_name != 'pull_request' || github.head_ref != 'stage-38/local-network-api'
         uses: actions/checkout@v4
 
       - name: Setup Node.js
@@ -34,129 +27,41 @@ jobs:
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
 
-      - name: Finalize Stage 38 source
-        if: github.event_name == 'pull_request' && github.head_ref == 'stage-38/local-network-api'
-        env:
-          BASE_SHA: ${{ github.event.pull_request.base.sha }}
-        run: |
-          set -euo pipefail
-          python3 - <<'PY'
-          from pathlib import Path
-
-          server = Path('local-api/server.mjs')
-          text = server.read_text()
-          replacements = {
-              "throw new RangeError(`${label} must be a supported IANA timezone`) from error;":
-                  "throw new RangeError(`${label} must be a supported IANA timezone`, { cause: error });",
-              "if (error instanceof URIError) throw new RangeError('Route mosqueId is malformed') from error;":
-                  "if (error instanceof URIError) throw new RangeError('Route mosqueId is malformed', { cause: error });",
-          }
-          for old, new in replacements.items():
-              if old in text:
-                  text = text.replace(old, new)
-              elif new not in text:
-                  raise SystemExit(f'expected Stage 38 syntax line is missing: {old}')
-          if ' from error;' in text:
-              raise SystemExit('unexpected Python-style exception chaining remains in local-api/server.mjs')
-          server.write_text(text)
-
-          todo = Path('TODO.md')
-          text = todo.read_text()
-          old = '- [ ] Optional local network API for smart-home/display integration'
-          new = '- [x] Optional local network API for smart-home/display integration'
-          if old in text:
-              text = text.replace(old, new)
-          elif new not in text:
-              raise SystemExit('Stage 38 roadmap row is missing')
-          todo.write_text(text)
-          PY
-
-          npx prettier --write \
-            local-api/server.mjs \
-            local-api/server.test.mjs \
-            local-api/public-data.example.json \
-            docs/LOCAL_NETWORK_API.md \
-            eslint.config.js \
-            package.json \
-            .github/workflows/ci.yml \
-            .github/workflows/stage38-finalize.yml \
-            .github/workflows/stage38-repair.yml \
-            .github/workflows/stage38-format-repair.yml
-
-          npm run check
-
-          git fetch --no-tags --depth=1 origin "$BASE_SHA"
-          git show "$BASE_SHA:.github/workflows/ci.yml" > .github/workflows/ci.yml
-          rm -f \
-            .github/workflows/stage38-finalize.yml \
-            .github/workflows/stage38-repair.yml \
-            .github/workflows/stage38-format-repair.yml
-
-          git config user.name privacyOG
-          git config user.email kriptiik@proton.me
-          git add -- \
-            .gitignore \
-            TODO.md \
-            docs/LOCAL_NETWORK_API.md \
-            eslint.config.js \
-            package.json \
-            local-api \
-            .github/workflows/ci.yml \
-            .github/workflows/stage38-finalize.yml \
-            .github/workflows/stage38-repair.yml \
-            .github/workflows/stage38-format-repair.yml
-          git diff --cached --check
-          git commit -m 'Finalize Stage 38 local network API'
-          git push origin HEAD:stage-38/local-network-api
-
       - name: Sensitive-file policy
-        if: github.event_name != 'pull_request' || github.head_ref != 'stage-38/local-network-api'
         run: npm run security:sensitive-files
 
       - name: Native permission policy
-        if: github.event_name != 'pull_request' || github.head_ref != 'stage-38/local-network-api'
         run: npm run security:native-permissions
 
       - name: Remote network policy
-        if: github.event_name != 'pull_request' || github.head_ref != 'stage-38/local-network-api'
         run: npm run security:remote-network
 
       - name: Dependency vulnerability audit
-        if: github.event_name != 'pull_request' || github.head_ref != 'stage-38/local-network-api'
         run: npm run security:audit
 
       - name: Dependency license policy
-        if: github.event_name != 'pull_request' || github.head_ref != 'stage-38/local-network-api'
         run: npm run security:licenses
 
       - name: Documentation link verification
-        if: github.event_name != 'pull_request' || github.head_ref != 'stage-38/local-network-api'
         run: npm run docs:links
 
       - name: PWA raster icon reproducibility
-        if: github.event_name != 'pull_request' || github.head_ref != 'stage-38/local-network-api'
         run: python3 scripts/generate_pwa_icons.py --check
 
       - name: Format check
-        if: github.event_name != 'pull_request' || github.head_ref != 'stage-38/local-network-api'
         run: npm run format:check
 
       - name: Lint
-        if: github.event_name != 'pull_request' || github.head_ref != 'stage-38/local-network-api'
         run: npm run lint
 
       - name: Typecheck
-        if: github.event_name != 'pull_request' || github.head_ref != 'stage-38/local-network-api'
         run: npm run typecheck
 
       - name: Test
-        if: github.event_name != 'pull_request' || github.head_ref != 'stage-38/local-network-api'
         run: npm run test
 
       - name: Production build
-        if: github.event_name != 'pull_request' || github.head_ref != 'stage-38/local-network-api'
         run: npm run build
 
       - name: Verify deployable web artifact
-        if: github.event_name != 'pull_request' || github.head_ref != 'stage-38/local-network-api'
         run: npm run verify:web-build

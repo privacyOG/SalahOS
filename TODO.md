@@ -783,7 +783,7 @@
 - [x] Multiple mosque profiles
 - [x] Remote administration for managed mosque displays
 - [x] Home Assistant integration
-- [ ] Optional local network API for smart-home/display integration
+- [x] Optional local network API for smart-home/display integration
 - [ ] Calendar integrations
 - [ ] Wearable/watch companion exploration
 - [ ] Additional languages

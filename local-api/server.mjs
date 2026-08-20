@@ -101,14 +101,16 @@ function assertTimezone(value, label) {
   try {
     new Intl.DateTimeFormat('en-AU', { timeZone: timezone }).format(new Date(0));
   } catch (error) {
-    throw new RangeError(`${label} must be a supported IANA timezone`) from error;
+    throw new RangeError(`${label} must be a supported IANA timezone`, { cause: error });
   }
   return timezone;
 }
 
 function assertNoForbiddenPublicFields(value, path = 'payload') {
   if (Array.isArray(value)) {
-    value.forEach((entry, index) => assertNoForbiddenPublicFields(entry, `${path}[${String(index)}]`));
+    value.forEach((entry, index) =>
+      assertNoForbiddenPublicFields(entry, `${path}[${String(index)}]`),
+    );
     return;
   }
   if (typeof value !== 'object' || value === null) return;
@@ -190,7 +192,8 @@ function assertPublicationMetadata(value, label) {
   if (value.publishedAt !== undefined) assertTimestamp(value.publishedAt, `${label}.publishedAt`);
   if (value.revision !== undefined) {
     const revision = value.revision;
-    const validString = typeof revision === 'string' && revision.trim().length > 0 && revision.length <= 120;
+    const validString =
+      typeof revision === 'string' && revision.trim().length > 0 && revision.length <= 120;
     const validInteger = Number.isInteger(revision) && revision >= 0;
     if (!validString && !validInteger) {
       throw new RangeError(`${label}.revision must be a non-negative integer or bounded string`);
@@ -235,7 +238,8 @@ function normalizeMonthly(value, expectedMosqueId, monthKey) {
     throw new RangeError(`Monthly mosqueId does not match snapshot key ${expectedMosqueId}`);
   }
   const month = assertMonth(monthly.month, 'Monthly month');
-  if (month !== monthKey) throw new RangeError(`Monthly month does not match snapshot key ${monthKey}`);
+  if (month !== monthKey)
+    throw new RangeError(`Monthly month does not match snapshot key ${monthKey}`);
   const timezone = assertTimezone(monthly.timezone, 'Monthly timezone');
   if (!Array.isArray(monthly.days) || monthly.days.length === 0 || monthly.days.length > 31) {
     throw new RangeError('Monthly days must contain 1 through 31 daily entries');
@@ -247,7 +251,8 @@ function normalizeMonthly(value, expectedMosqueId, monthKey) {
     if (!date.startsWith(`${monthKey}-`)) {
       throw new RangeError(`Monthly day ${date} is outside ${monthKey}`);
     }
-    if (seenDates.has(date)) throw new RangeError(`Monthly timetable contains duplicate day ${date}`);
+    if (seenDates.has(date))
+      throw new RangeError(`Monthly timetable contains duplicate day ${date}`);
     seenDates.add(date);
     assertPrayerMap(day.prayers, `Monthly day ${date} prayers`);
     assertIqamahMap(day.iqamah, `Monthly day ${date} iqamah`);
@@ -271,7 +276,8 @@ export function validatePublicSnapshot(value) {
   const mosques = {};
   for (const [key, rawMosque] of mosqueEntries) {
     const mosqueId = normalizeIdentifier(key, 'Snapshot mosque key');
-    if (mosqueId !== key) throw new RangeError(`Snapshot mosque key must already be normalized: ${key}`);
+    if (mosqueId !== key)
+      throw new RangeError(`Snapshot mosque key must already be normalized: ${key}`);
     const mosque = assertObject(rawMosque, `Snapshot mosque ${mosqueId}`);
     const profile = normalizeProfile(mosque.profile, mosqueId);
 
@@ -316,7 +322,9 @@ async function loadPublicSnapshot(path) {
   const metadata = await stat(path);
   if (!metadata.isFile()) throw new RangeError('Local API data path must be a regular file');
   if (metadata.size <= 0 || metadata.size > MAX_SNAPSHOT_BYTES) {
-    throw new RangeError(`Local API snapshot must be between 1 byte and ${String(MAX_SNAPSHOT_BYTES)} bytes`);
+    throw new RangeError(
+      `Local API snapshot must be between 1 byte and ${String(MAX_SNAPSHOT_BYTES)} bytes`,
+    );
   }
   const raw = await readFile(path, 'utf8');
   let parsed;
@@ -325,7 +333,10 @@ async function loadPublicSnapshot(path) {
   } catch (error) {
     throw new SyntaxError('Local API snapshot is not valid JSON', { cause: error });
   }
-  return { snapshot: validatePublicSnapshot(parsed), fingerprint: `${metadata.mtimeMs}:${metadata.size}` };
+  return {
+    snapshot: validatePublicSnapshot(parsed),
+    fingerprint: `${metadata.mtimeMs}:${metadata.size}`,
+  };
 }
 
 export class PublicSnapshotStore {
@@ -421,7 +432,8 @@ function decodeIdentifier(value) {
   try {
     return normalizeIdentifier(decodeURIComponent(value), 'Route mosqueId');
   } catch (error) {
-    if (error instanceof URIError) throw new RangeError('Route mosqueId is malformed') from error;
+    if (error instanceof URIError)
+      throw new RangeError('Route mosqueId is malformed', { cause: error });
     throw error;
   }
 }
@@ -491,7 +503,12 @@ export async function createLocalPublicApiService(options = {}) {
   const requestHandler = async (request, response) => {
     try {
       if (request.method !== 'GET') {
-        sendJson(response, 405, { error: 'Method not allowed' }, { extraHeaders: { Allow: 'GET' } });
+        sendJson(
+          response,
+          405,
+          { error: 'Method not allowed' },
+          { extraHeaders: { Allow: 'GET' } },
+        );
         return;
       }
 
@@ -508,14 +525,24 @@ export async function createLocalPublicApiService(options = {}) {
 
       const address = request.socket.remoteAddress ?? 'unknown';
       if (!rateLimiter.allow(address, route.kind)) {
-        sendJson(response, 429, { error: 'Rate limit exceeded' }, { extraHeaders: { 'Retry-After': '60' } });
+        sendJson(
+          response,
+          429,
+          { error: 'Rate limit exceeded' },
+          { extraHeaders: { 'Retry-After': '60' } },
+        );
         return;
       }
 
       const current = await store.current();
       const payload = findPublicPayload(current.snapshot, route);
       if (payload === null) {
-        sendJson(response, 404, { error: 'Published resource not found' }, { stale: current.stale });
+        sendJson(
+          response,
+          404,
+          { error: 'Published resource not found' },
+          { stale: current.stale },
+        );
         return;
       }
       sendJson(response, 200, payload, {
@@ -523,8 +550,13 @@ export async function createLocalPublicApiService(options = {}) {
         stale: current.stale,
       });
     } catch (error) {
-      const status = error instanceof RangeError || error instanceof TypeError || error instanceof SyntaxError ? 400 : 500;
-      sendJson(response, status, { error: status === 500 ? 'Internal service error' : error.message });
+      const status =
+        error instanceof RangeError || error instanceof TypeError || error instanceof SyntaxError
+          ? 400
+          : 500;
+      sendJson(response, status, {
+        error: status === 500 ? 'Internal service error' : error.message,
+      });
     }
   };
 
@@ -564,7 +596,9 @@ if (isMainModule()) {
         process.exitCode = 1;
       });
       server.listen(service.port, service.host, () => {
-        console.log(`SalahOS local API listening on http://${service.host}:${String(service.port)}`);
+        console.log(
+          `SalahOS local API listening on http://${service.host}:${String(service.port)}`,
+        );
       });
     })
     .catch((error) => {
