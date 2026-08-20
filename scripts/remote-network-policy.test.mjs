@@ -33,6 +33,6 @@ describe('remote network policy', () => {
 
     const clean = runPolicy();
     expect(clean.status).toBe(0);
-    expect(clean.stdout).toContain('Reviewed managed-service capabilities');
+    expect(clean.stdout).toContain('Reviewed capabilities:');
   });
 });
