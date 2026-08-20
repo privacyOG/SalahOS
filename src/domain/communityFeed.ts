@@ -1,13 +1,5 @@
-import {
-  announcementLifecycleAt,
-  type AnnouncementSurface,
-  type MosqueAnnouncement,
-} from './mosqueAnnouncement';
-import {
-  upcomingMosqueEvents,
-  type MosqueEvent,
-  type MosqueEventSurface,
-} from './mosqueEvent';
+import { announcementLifecycleAt, type MosqueAnnouncement } from './mosqueAnnouncement';
+import { upcomingMosqueEvents, type MosqueEvent } from './mosqueEvent';
 
 export type CommunityFeedLocale = 'en' | 'ar';
 export type CommunityFeedSurface = 'mobile' | 'web' | 'display';
@@ -58,11 +50,11 @@ function announcementTargets(
   announcement: MosqueAnnouncement,
   surface: CommunityFeedSurface,
 ): boolean {
-  return announcement.surfaces.includes(surface as AnnouncementSurface);
+  return announcement.surfaces.includes(surface);
 }
 
 function eventTargets(event: MosqueEvent, surface: CommunityFeedSurface): boolean {
-  return event.surfaces.includes(surface as MosqueEventSurface);
+  return event.surfaces.includes(surface);
 }
 
 function mosqueMatches(itemMosqueId: string, mosqueId: string | null | undefined): boolean {

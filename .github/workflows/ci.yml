@@ -50,19 +50,7 @@ jobs:
         run: python3 scripts/generate_pwa_icons.py --check
 
       - name: Format check
-        run: |
-          npx prettier --write \
-            src/community-updates-panel.css \
-            src/domain/communityFeed.ts \
-            src/platform/applicationStorage.test.ts \
-            src/platform/communityContentStorage.test.ts \
-            src/platform/communityContentStorage.ts
-          git diff -- \
-            src/community-updates-panel.css \
-            src/domain/communityFeed.ts \
-            src/platform/applicationStorage.test.ts \
-            src/platform/communityContentStorage.test.ts \
-            src/platform/communityContentStorage.ts
+        run: npm run format:check
 
       - name: Lint
         run: npm run lint
