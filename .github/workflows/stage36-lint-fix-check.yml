@@ -1,0 +1,36 @@
+name: Stage 36 lint fix validation
+
+on:
+  push:
+    branches:
+      - 'validation/stage-36-lint-fix'
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies from lockfile
+        run: npm ci --ignore-scripts
+      - name: Format check
+        run: npm run format:check
+      - name: Lint
+        run: npm run lint
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Test
+        run: npm run test
+      - name: Production build
+        run: npm run build
+      - name: Verify deployable web artifact
+        run: npm run verify:web-build
