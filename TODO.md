@@ -779,7 +779,7 @@
 - [x] Suhur/Imsak and Iftar presentation
 - [x] Taraweeh timetable support
 - [x] Mosque announcements/events
-- [ ] Configurable smart-display themes
+- [x] Configurable smart-display themes
 - [ ] Multiple mosque profiles
 - [ ] Remote administration for managed mosque displays
 - [ ] Home Assistant integration
