@@ -1,0 +1,40 @@
+name: Stage 31 Tracker Reconcile
+
+on:
+  push:
+    branches:
+      - stage-31/tracker-reconcile
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: stage-31/tracker-reconcile
+
+      - name: Reconcile completed roadmap item
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('TODO.md')
+          text = path.read_text()
+          old = '- [ ] Suhur/Imsak and Iftar presentation'
+          new = '- [x] Suhur/Imsak and Iftar presentation'
+          if text.count(old) != 1:
+              raise SystemExit(f'Expected exactly one open Stage 31 marker, found {text.count(old)}')
+          text = text.replace(old, new)
+          path.write_text(text)
+          PY
+          rm .github/workflows/stage-31-tracker-reconcile.yml
+          git config user.name privacyOG
+          git config user.email kriptiik@proton.me
+          git add -A
+          git commit -m "Reconcile Stage 31 roadmap completion"
+          git push origin HEAD:stage-31/tracker-reconcile
