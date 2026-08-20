@@ -258,11 +258,19 @@ export function QiblaFinder() {
           <button
             type="button"
             aria-pressed={view === 'compass'}
-            onClick={() => setView('compass')}
+            onClick={() => {
+              setView('compass');
+            }}
           >
             {text.compassView}
           </button>
-          <button type="button" aria-pressed={view === 'map'} onClick={() => setView('map')}>
+          <button
+            type="button"
+            aria-pressed={view === 'map'}
+            onClick={() => {
+              setView('map');
+            }}
+          >
             {text.mapView}
           </button>
         </div>
@@ -440,7 +448,9 @@ export function QiblaFinder() {
             type="search"
             value={searchQuery}
             placeholder={text.searchPlaceholder}
-            onChange={(event) => setSearchQuery(event.target.value)}
+            onChange={(event) => {
+              setSearchQuery(event.target.value);
+            }}
             autoComplete="off"
             dir="auto"
           />
