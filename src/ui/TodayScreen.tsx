@@ -172,9 +172,8 @@ export function TodayScreen() {
   const nextPrayerRow =
     sourcedDashboard?.nextPrayer === null || sourcedDashboard?.nextPrayer === undefined
       ? null
-      : (sourcedDashboard.prayers.find(
-          (prayer) => prayer.name === sourcedDashboard.nextPrayer,
-        ) ?? null);
+      : (sourcedDashboard.prayers.find((prayer) => prayer.name === sourcedDashboard.nextPrayer) ??
+        null);
   const nextPrayerLabel =
     sourcedDashboard?.nextPrayer === null || sourcedDashboard?.nextPrayer === undefined
       ? translate(locale, 'notConfigured')
@@ -193,7 +192,9 @@ export function TodayScreen() {
       ? translate(locale, 'noIqamah')
       : formatLocalTime(nextPrayerIqamahMinutes, locale, settings.timeFormat);
   const contextLabel =
-    sourcedDashboard?.mosqueName ?? settings.location?.timeZone ?? translate(locale, 'notConfigured');
+    sourcedDashboard?.mosqueName ??
+    settings.location?.timeZone ??
+    translate(locale, 'notConfigured');
   const quickLabels = destinationLabels[locale];
 
   return (
@@ -303,7 +304,11 @@ export function TodayScreen() {
               </span>
             </div>
 
-            <div className="today-prayer-table" role="table" aria-label={translate(locale, 'dailyPrayers')}>
+            <div
+              className="today-prayer-table"
+              role="table"
+              aria-label={translate(locale, 'dailyPrayers')}
+            >
               <div className="today-prayer-row today-prayer-row--header" role="row">
                 <span role="columnheader">{translate(locale, 'dailyPrayers')}</span>
                 <span role="columnheader">{translate(locale, 'prayerStart')}</span>
@@ -346,7 +351,8 @@ export function TodayScreen() {
                       )}
                       {manualAdjustmentMinutes !== null && (
                         <small>
-                          {translate(locale, 'manualOffset')} {manualAdjustmentMinutes > 0 ? '+' : ''}
+                          {translate(locale, 'manualOffset')}{' '}
+                          {manualAdjustmentMinutes > 0 ? '+' : ''}
                           {String(manualAdjustmentMinutes)} {translate(locale, 'minutesShort')}
                         </small>
                       )}
@@ -361,11 +367,7 @@ export function TodayScreen() {
                         ? '—'
                         : prayer.iqamahLocalMinutes === null
                           ? translate(locale, 'noIqamah')
-                          : formatLocalTime(
-                              prayer.iqamahLocalMinutes,
-                              locale,
-                              settings.timeFormat,
-                            )}
+                          : formatLocalTime(prayer.iqamahLocalMinutes, locale, settings.timeFormat)}
                     </strong>
                   </div>
                 );
@@ -415,7 +417,8 @@ export function TodayScreen() {
 
           <footer className="today-provenance">
             <span>
-              {translate(locale, 'method')}: <BidiText>{sourcedDashboard.base.method.name}</BidiText>
+              {translate(locale, 'method')}:{' '}
+              <BidiText>{sourcedDashboard.base.method.name}</BidiText>
             </span>
             <span>
               {translate(locale, 'timezone')}: <BidiText>{sourcedDashboard.base.timeZone}</BidiText>

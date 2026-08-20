@@ -93,13 +93,21 @@
   border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--salah-border-subtle));
   border-radius: clamp(var(--salah-radius-lg), 2vw, 1.5rem);
   background:
-    radial-gradient(circle at top right, color-mix(in srgb, var(--accent) 14%, transparent), transparent 46%),
+    radial-gradient(
+      circle at top right,
+      color-mix(in srgb, var(--accent) 14%, transparent),
+      transparent 46%
+    ),
     var(--salah-bg-surface-raised);
 }
 
 [dir='rtl'] .today-next {
   background:
-    radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 14%, transparent), transparent 46%),
+    radial-gradient(
+      circle at top left,
+      color-mix(in srgb, var(--accent) 14%, transparent),
+      transparent 46%
+    ),
     var(--salah-bg-surface-raised);
 }
 
