@@ -12,17 +12,18 @@
   min-height: 100%;
 }
 
-/*
- * App.tsx still owns the legacy prayer/location/settings composition during
- * the staged v2 migration. Routing is now explicit; these two scoped rules
- * prevent the legacy core from leaking the opposite destination until those
- * sections are extracted into dedicated screen components.
- */
-.legacy-core-route--today .location-panel,
-.legacy-core-route--today .settings-panel {
-  display: none;
+.app-shell.today-route-shell {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
 }
 
+/*
+ * Settings still uses the legacy configuration core during the staged v2
+ * migration. Its prayer presentation is intentionally suppressed because
+ * the dedicated Today screen now owns congregation prayer presentation.
+ */
 .legacy-core-route--settings .hero,
 .legacy-core-route--settings .prayer-panel,
 .legacy-core-route--settings .status-card {
@@ -93,19 +94,35 @@
 }
 
 .congregation-nav-item {
+  display: grid;
   min-width: 0;
-  min-height: 3rem;
-  padding: var(--salah-space-2) var(--salah-space-1);
+  min-height: 3.4rem;
+  place-items: center;
+  gap: 0.2rem;
+  padding: var(--salah-space-1);
   border-color: transparent;
   border-radius: var(--salah-radius-sm);
   color: var(--salah-fg-secondary);
   background: transparent;
-  font-size: clamp(0.68rem, 2.7vw, var(--salah-text-sm));
+  font-size: clamp(0.64rem, 2.6vw, 0.76rem);
   font-weight: 750;
-  line-height: 1.15;
+  line-height: 1.1;
 }
 
-.congregation-nav-item span {
+.congregation-nav-icon {
+  display: grid;
+  width: 1.35rem;
+  height: 1.35rem;
+  place-items: center;
+}
+
+.congregation-nav-icon svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.congregation-nav-label {
   display: block;
   max-width: 100%;
   overflow-wrap: anywhere;
@@ -125,7 +142,7 @@
 @media (min-width: 800px) {
   .congregation-shell {
     display: grid;
-    grid-template-columns: 7.5rem minmax(0, 1fr);
+    grid-template-columns: 6.5rem minmax(0, 1fr);
   }
 
   .congregation-shell-content {
@@ -140,10 +157,12 @@
     grid-column: 1;
     grid-row: 1;
     align-self: start;
+    align-content: start;
     grid-template-columns: 1fr;
+    grid-auto-rows: max-content;
     gap: var(--salah-space-2);
     min-height: 100vh;
-    padding: clamp(1.25rem, 3vw, 2rem) var(--salah-space-3);
+    padding: clamp(1.25rem, 3vw, 2rem) var(--salah-space-2);
     border-block-start: 0;
     border-inline-end: 1px solid var(--salah-border-subtle);
     background: color-mix(in srgb, var(--salah-bg-surface) 82%, transparent);
@@ -151,16 +170,49 @@
   }
 
   .congregation-nav-item {
-    width: 100%;
-    min-height: 3.4rem;
-    padding-inline: var(--salah-space-2);
-    font-size: var(--salah-text-sm);
+    grid-template-columns: 1fr;
+    min-height: 4rem;
+    justify-items: center;
+    gap: var(--salah-space-1);
+    padding: var(--salah-space-2) var(--salah-space-1);
+    font-size: 0.7rem;
+    text-align: center;
+  }
+
+  .congregation-nav-icon {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+
+  .congregation-nav-label {
+    overflow-wrap: normal;
+    white-space: nowrap;
   }
 }
 
 @media (min-width: 1200px) {
   .congregation-shell {
-    grid-template-columns: 9rem minmax(0, 1fr);
+    grid-template-columns: 13rem minmax(0, 1fr);
+  }
+
+  .congregation-nav {
+    padding-inline: var(--salah-space-4);
+  }
+
+  .congregation-nav-item {
+    grid-template-columns: 1.5rem minmax(0, 1fr);
+    min-height: 3.5rem;
+    justify-items: start;
+    gap: var(--salah-space-3);
+    padding: var(--salah-space-2) var(--salah-space-3);
+    font-size: var(--salah-text-sm);
+    text-align: start;
+  }
+}
+
+@media (min-width: 1600px) {
+  .congregation-shell {
+    grid-template-columns: 14rem minmax(0, 1fr);
   }
 }
 

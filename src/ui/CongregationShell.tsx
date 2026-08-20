@@ -148,6 +148,7 @@ export function CongregationShell({ children }: CongregationShellProps) {
         items={[
           {
             id: 'today',
+            icon: 'today',
             label: labels.today,
             current: destination === 'today',
             onSelect: () => {
@@ -156,6 +157,7 @@ export function CongregationShell({ children }: CongregationShellProps) {
           },
           {
             id: 'mosques',
+            icon: 'mosques',
             label: labels.mosques,
             current: destination === 'mosques',
             onSelect: () => {
@@ -164,6 +166,7 @@ export function CongregationShell({ children }: CongregationShellProps) {
           },
           {
             id: 'qiblah',
+            icon: 'qiblah',
             label: labels.qiblah,
             current: destination === 'qiblah',
             onSelect: () => {
@@ -172,6 +175,7 @@ export function CongregationShell({ children }: CongregationShellProps) {
           },
           {
             id: 'community',
+            icon: 'community',
             label: labels.community,
             current: destination === 'community',
             onSelect: () => {
@@ -180,6 +184,7 @@ export function CongregationShell({ children }: CongregationShellProps) {
           },
           {
             id: 'settings',
+            icon: 'settings',
             label: labels.settings,
             current: destination === 'settings',
             onSelect: () => {
