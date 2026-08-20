@@ -42,11 +42,10 @@
 }
 
 .admin-shell-brand span {
-  overflow: hidden;
   color: var(--salah-fg-secondary);
   font-size: var(--salah-text-xs);
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
 
 .admin-shell-nav {
