@@ -1,6 +1,41 @@
 # Changelog
 
-## 1.1.0 — Downloadable release assets and canonical branding
+All notable SalahOS changes are recorded here.
+
+## Unreleased
+
+## 1.2.0 — 2026-08-20
+
+### Managed masjid and congregation experience
+
+- Add a modern prayer-first design system, responsive congregation navigation and separate Today/Settings views.
+- Add managed mosque profiles, authoritative prayer/Iqamah/Jumu'ah publication revisions, mosque following/offline cache, multiple local mosque profiles and a congregation mosque-profile experience.
+- Add role/permission, invitation/session and administrator-dashboard domain foundations while keeping core personal prayer functionality account-free.
+- Add mosque announcements, events, congregation community feeds, managed community-notification policy and phone/web/TV publishing previews.
+- Add mosque discovery/directory flows, monthly timetable presentation and CSV/JSON exports.
+
+### Managed displays and integrations
+
+- Add managed signage scenes, playlists, scheduling, display pairing/fleet state, TV/kiosk layouts and configurable display themes.
+- Add optional remote administration for managed mosque displays with typed configuration, one-time display credentials, revision control, cached fail-soft operation and explicit network-policy review.
+- Add public embed widgets and a versioned read-only mosque API surface.
+- Add Home Assistant support, a loopback-default optional local-network API and RFC 5545 mosque-event calendar export/subscription.
+- Add a privacy-minimised wearable companion snapshot contract and platform exploration for future watchOS/Wear OS targets.
+
+### Qiblah, Ramadan and languages
+
+- Add deterministic local Qiblah bearing and the full Qiblah Finder with true-north compass guidance, WMM2025 magnetic-declination correction, screen-orientation compensation, smoothing, calibration feedback, alignment haptics and saved/current/city/map-pin location flows.
+- Add privacy-gated OpenStreetMap imagery for the Qiblah Finder with attribution, offline fallback and a narrowly reviewed network capability.
+- Add automatic Ramadan mode, Suhur/Imsak/Iftar presentation and mosque-specific Taraweeh timetable support.
+- Add complete bundled Turkish and Indonesian application localisation alongside English and Arabic/RTL.
+
+### Release and quality
+
+- Keep the v1.1.0 downloadable asset matrix: signed Android APK, Web/PWA ZIP, Raspberry Pi kiosk tarball and portable SHA-256 manifest.
+- Extend release preflight to verify npm, Android and iOS version consistency.
+- Add an exact-main `release/v*` publication path so release assets can be built and published only from the current `main` commit.
+
+## 1.1.0 — 2026-08-18
 
 - Adopt the project owner's canonical SalahOS logo and icon across Web/PWA, Android, iOS and smart-display surfaces.
 - Add reproducible source/hash/dimension validation for the canonical platform icon set.
@@ -8,15 +43,6 @@
 - Add a signed Android release APK pipeline that refuses to publish unsigned or debug APKs.
 - Add SHA-256 checksum publication for downloadable release assets.
 - Document the current distribution boundary: iOS IPA awaits Apple distribution signing and macOS DMG awaits a real macOS application target.
-
-All notable SalahOS changes are recorded here.
-
-## Unreleased
-
-- Add the full Qiblah Finder with true-north live compass guidance, WMM2025 magnetic-declination correction, screen-orientation compensation, circular smoothing, calibration feedback and alignment haptics.
-- Add saved/current/offline-city/map-pin Qiblah locations plus meaningful-movement live recalculation.
-- Add privacy-gated OpenStreetMap map imagery with a narrow CSP/network-policy exception, provider attribution, offline fallback and explicit third-party data disclosure.
-- Add English, Arabic, Turkish and Indonesian Qiblah Finder presentation plus focused compass, map-projection and map-provider regression coverage.
 
 ## 1.0.0 — 2026-08-18
 

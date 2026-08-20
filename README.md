@@ -110,11 +110,11 @@ The dependency lockfile is committed and pinned for reproducible installation. N
 
 ## Release status
 
-SalahOS v1.0.0 is the first production repository/source release and is tagged at exact release commit `b03482d06d989bfa42dd1dfd55bcc2e2994d97b8`. That revision passed Quality Gate `32061495596`, Android Build `32061495556`, Visual Regression `32061495626` and iOS Build `32061495534` before the tag was created. The release boundary intentionally does not convert unperformed physical iPhone/iPad, Android OEM, Raspberry Pi Touch Display 2 or TV/panel checks into completed evidence, and it does not imply App Store/Play Store publication or signed store binaries.
+SalahOS v1.0.0 is the first production repository/source release. SalahOS v1.1.0, tagged at `ed194c8608e7cb471ba552ab625a4abcb95ba55b`, established the downloadable release pipeline with canonical branding, a persistently signed Android APK, Web/PWA ZIP, Raspberry Pi kiosk tarball and portable SHA-256 checksums.
 
-The v1.1.0 candidate adds the canonical SalahOS branding and a release-asset pipeline for nontechnical distribution. The v1.1.0 tag must not be created until its exact release revision passes the permanent gates and the signed Android APK job succeeds with the persistent release signing identity.
+SalahOS v1.2.0 packages the Phase 2 managed-masjid/community expansion, managed displays and integrations, Ramadan improvements, additional languages and the full Qiblah Finder. Publication remains fail-closed: the release revision must be the exact current `main` commit, permanent Quality/Android/Visual/iOS gates must pass, the Android APK must be signed with the persistent release identity and verified with `apksigner`, and final package preflight must contain only the expected four downloadable assets.
 
-The tested platform matrix and remaining physical/target-environment validation are documented in [docs/PLATFORM_STATUS.md](docs/PLATFORM_STATUS.md), [TESTING.md](TESTING.md) and [TODO.md](TODO.md).
+The tested platform matrix and remaining physical/target-environment validation are documented in [docs/PLATFORM_STATUS.md](docs/PLATFORM_STATUS.md), [TESTING.md](TESTING.md) and [TODO.md](TODO.md). App Store/Play Store publication, a consumer iOS `.ipa`, a native macOS `.dmg`, and unperformed physical-device acceptance are not implied by the GitHub release.
 
 ## Author
 

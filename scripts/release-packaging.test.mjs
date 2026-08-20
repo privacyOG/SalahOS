@@ -20,10 +20,12 @@ describe('release asset workflow', () => {
     expect(workflow).toContain('Exact-main release preflight');
     expect(workflow).toContain('git fetch origin main --no-tags');
     expect(workflow).toContain('git rev-parse origin/main');
+    expect(workflow).toContain("- 'release/v*'");
     expect(workflow).toContain(
       'Release candidate ${HEAD_SHA} is not exact current main ${MAIN_SHA}',
     );
     expect(workflow).toContain('does not match package version v${PACKAGE_VERSION}');
+    expect(workflow).toContain('iOS marketing version ${IOS_VERSION} do not match');
   });
 
   it('publishes versioned Web/PWA and Raspberry Pi bundles', () => {
@@ -84,6 +86,9 @@ describe('release asset workflow', () => {
     );
     expect(workflow).toContain('name: release-final');
     expect(workflow).toContain("if: github.event_name == 'push'");
+    expect(workflow).toContain('RELEASE_TAG="v${VERSION}"');
+    expect(workflow).toContain('release/${RELEASE_TAG}');
+    expect(workflow).toContain('--target "$GITHUB_SHA"');
   });
 
   it('does not misrepresent unsupported consumer installers', () => {
