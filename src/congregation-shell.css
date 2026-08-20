@@ -107,9 +107,9 @@
 
 .congregation-nav-item span {
   display: block;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  max-width: 100%;
+  overflow-wrap: anywhere;
+  white-space: normal;
 }
 
 .congregation-nav-item[aria-current='page'] {
