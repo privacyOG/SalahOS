@@ -1,0 +1,38 @@
+name: Stage 34 tracker reconciliation
+
+on:
+  push:
+    branches:
+      - 'stage-34/smart-display-themes'
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout feature branch
+        uses: actions/checkout@v4
+        with:
+          ref: stage-34/smart-display-themes
+          fetch-depth: 0
+
+      - name: Mark smart-display themes roadmap item complete
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('TODO.md')
+          text = path.read_text(encoding='utf-8')
+          old = '- [ ] Configurable smart-display themes'
+          new = '- [x] Configurable smart-display themes'
+          if text.count(old) != 1:
+              raise SystemExit('Expected exactly one open configurable smart-display themes roadmap item')
+          path.write_text(text.replace(old, new, 1), encoding='utf-8')
+          PY
+          git rm .github/workflows/stage34-tracker-reconcile.yml
+          git config user.name privacyOG
+          git config user.email kriptiik@proton.me
+          git add TODO.md
+          git commit -m "Mark Stage 34 smart-display themes complete"
+          git push origin HEAD:stage-34/smart-display-themes
