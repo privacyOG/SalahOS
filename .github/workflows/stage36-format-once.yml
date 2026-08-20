@@ -1,0 +1,46 @@
+name: Stage 36 formatter once
+
+on:
+  push:
+    branches:
+      - 'validation/stage-36-prettier-commit'
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: validation/stage-36-prettier-commit
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Apply repository formatter
+        run: >-
+          npx prettier --write
+          managed-service/server.mjs
+          managed-service/server.test.mjs
+          scripts/remote-network-policy.test.mjs
+          src/domain/managedAdminProtocol.ts
+          src/platform/managedAdminTransport.ts
+          src/platform/managedDisplayConnectionStorage.ts
+          src/ui/ManagedDisplayConnectionSettings.tsx
+          src/ui/RemoteDisplayAdminPanel.tsx
+          src/platform/managedAdminTransport.test.ts
+          src/platform/managedDisplayTransport.test.ts
+          src/ui/ManagedDisplayRemoteController.tsx
+          eslint.config.js
+      - name: Commit canonical formatting and remove this workflow
+        run: |
+          git config user.name privacyOG
+          git config user.email kriptiik@proton.me
+          git rm .github/workflows/stage36-format-once.yml
+          git add managed-service/server.mjs managed-service/server.test.mjs scripts/remote-network-policy.test.mjs src/domain/managedAdminProtocol.ts src/platform/managedAdminTransport.ts src/platform/managedDisplayConnectionStorage.ts src/ui/ManagedDisplayConnectionSettings.tsx src/ui/RemoteDisplayAdminPanel.tsx src/platform/managedAdminTransport.test.ts src/platform/managedDisplayTransport.test.ts src/ui/ManagedDisplayRemoteController.tsx eslint.config.js
+          git commit -m 'Apply canonical Stage 36 formatting'
+          git push origin HEAD:validation/stage-36-prettier-commit
