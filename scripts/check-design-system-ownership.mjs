@@ -20,6 +20,7 @@ const designSystem = read('src/design-system.css');
 const legacyStyles = read('src/styles.css');
 const responsiveHardening = read('src/responsive-hardening.css');
 const main = read('src/main.tsx');
+const qualityWorkflow = read('.github/workflows/ci.yml');
 
 requireText(designSystem, '--salah-bg-canvas:', 'semantic colour tokens in design-system.css');
 requireText(designSystem, '--salah-space-4:', 'spacing tokens in design-system.css');
@@ -43,4 +44,9 @@ if (existsSync('src/prayer-first-home.css')) {
   throw new Error('Design-system ownership policy: retired src/prayer-first-home.css must stay removed');
 }
 
-console.log('Design-system ownership policy passed.');
+requireText(qualityWorkflow, 'permissions:\n  contents: read', 'read-only Quality Gate permissions');
+forbid(qualityWorkflow, /contents:\s*write/, 'Quality Gate must not request repository write permission');
+forbid(qualityWorkflow, /\bgit\s+commit\b/, 'Quality Gate must not create repository commits');
+forbid(qualityWorkflow, /\bgit\s+push\b/, 'Quality Gate must not push repository changes');
+
+console.log('Design-system ownership and Quality Gate mutation policies passed.');
