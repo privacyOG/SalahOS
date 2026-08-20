@@ -117,7 +117,9 @@ export function CommunityUpdatesPanel() {
     const refreshWhenVisible = () => {
       if (document.visibilityState === 'visible') refresh();
     };
-    const timer = window.setInterval(() => setNow(new Date()), 60_000);
+    const timer = window.setInterval(() => {
+      setNow(new Date());
+    }, 60_000);
     window.addEventListener('focus', refresh);
     document.addEventListener('visibilitychange', refreshWhenVisible);
     return () => {
@@ -249,7 +251,13 @@ export function CommunityUpdatesPanel() {
         <p>{text.manageHelp}</p>
         <label>
           <span>{text.payload}</span>
-          <textarea value={payload} onChange={(event) => setPayload(event.target.value)} rows={8} />
+          <textarea
+            value={payload}
+            onChange={(event) => {
+              setPayload(event.target.value);
+            }}
+            rows={8}
+          />
         </label>
         <div className="community-updates-panel__actions">
           <button type="button" onClick={importPayload}>
