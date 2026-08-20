@@ -1,0 +1,45 @@
+{
+  "title": "SalahOS",
+  "config": {
+    "step": {
+      "user": {
+        "title": "Connect to SalahOS",
+        "description": "Connect Home Assistant to a read-only SalahOS published mosque endpoint.",
+        "data": {
+          "url": "SalahOS base URL",
+          "mosque_id": "Mosque ID"
+        },
+        "data_description": {
+          "url": "The HTTP or HTTPS base URL that serves the SalahOS /api/v1 public contract.",
+          "mosque_id": "The stable public mosque identifier, for example masjid.one."
+        }
+      }
+    },
+    "error": {
+      "cannot_connect": "Unable to read the published mosque profile from this SalahOS endpoint.",
+      "invalid_input": "The URL or mosque ID is invalid."
+    },
+    "abort": {
+      "already_configured": "This SalahOS mosque endpoint is already configured."
+    }
+  },
+  "entity": {
+    "sensor": {
+      "fajr": {
+        "name": "Fajr"
+      },
+      "dhuhr": {
+        "name": "Dhuhr"
+      },
+      "asr": {
+        "name": "Asr"
+      },
+      "maghrib": {
+        "name": "Maghrib"
+      },
+      "isha": {
+        "name": "Isha"
+      }
+    }
+  }
+}

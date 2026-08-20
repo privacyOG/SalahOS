@@ -782,7 +782,7 @@
 - [x] Configurable smart-display themes
 - [x] Multiple mosque profiles
 - [x] Remote administration for managed mosque displays
-- [ ] Home Assistant integration
+- [x] Home Assistant integration
 - [ ] Optional local network API for smart-home/display integration
 - [ ] Calendar integrations
 - [ ] Wearable/watch companion exploration

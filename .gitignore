@@ -31,6 +31,10 @@ Thumbs.db
 .vscode/
 .idea/
 
+# Generated Python bytecode
+__pycache__/
+*.pyc
+
 # Generated TypeScript incremental build metadata
 *.tsbuildinfo
 ios/DerivedData/
