@@ -43,3 +43,7 @@ Automated tests cover:
 - rejection of non-civil-date instants.
 
 UI presentation, locale-specific date formatting and automatic live date rollover remain separate application/runtime work.
+
+## External calendar interoperability
+
+Mosque-event calendar interoperability is implemented separately from Hijri/Gregorian date calculation. `calendarIntegration.ts` creates complete RFC 5545 `VCALENDAR` exports, while the optional local-network API publishes a read-only `calendar.ics` subscription feed from explicitly public mosque events. See `CALENDAR_INTEGRATIONS.md` for schema, security and client guidance.

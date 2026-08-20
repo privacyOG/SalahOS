@@ -3,6 +3,8 @@ import { createServer } from 'node:http';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { createPublicEventCalendar } from './calendar.mjs';
+
 const DEFAULT_HOST = '127.0.0.1';
 const DEFAULT_PORT = 8788;
 const DEFAULT_DATA_PATH = 'local-api/public-data.json';
@@ -14,11 +16,12 @@ const DATE_PATTERN = /^\d{4}-\d{2}-\d{2}$/u;
 const MONTH_PATTERN = /^\d{4}-\d{2}$/u;
 const CLOCK_PATTERN = /^(?:[01]\d|2[0-3]):[0-5]\d$/u;
 const REQUIRED_PRAYERS = ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'];
-const RATE_LIMITS = Object.freeze({ profile: 120, daily: 120, monthly: 60 });
+const RATE_LIMITS = Object.freeze({ profile: 120, daily: 120, monthly: 60, calendar: 60 });
 const CACHE_POLICIES = Object.freeze({
   profile: 'public, max-age=60, stale-while-revalidate=300',
   daily: 'public, max-age=60, stale-while-revalidate=300',
   monthly: 'public, max-age=300, stale-while-revalidate=900',
+  calendar: 'public, max-age=300, stale-while-revalidate=900',
 });
 const FORBIDDEN_PUBLIC_KEYS = new Set(
   [
@@ -261,6 +264,104 @@ function normalizeMonthly(value, expectedMosqueId, monthKey) {
   return Object.freeze({ ...monthly, mosqueId, month, timezone });
 }
 
+function assertExactUtcTimestamp(value, label) {
+  const normalized = assertTimestamp(value, label);
+  const parsed = new Date(normalized);
+  if (parsed.toISOString() !== normalized) {
+    throw new RangeError(`${label} must be an exact ISO-8601 UTC timestamp`);
+  }
+  return normalized;
+}
+
+function normalizeLocalizedEventContent(value, label) {
+  if (value === null || value === undefined) return null;
+  const content = assertObject(value, label);
+  return Object.freeze({
+    title: assertBoundedString(content.title, `${label} title`, 140),
+    description: assertBoundedString(content.description, `${label} description`, 6000),
+  });
+}
+
+function normalizePublicEventUrl(value, label) {
+  if (value === null || value === undefined) return null;
+  const normalized = assertBoundedString(value, label, 2048);
+  let parsed;
+  try {
+    parsed = new URL(normalized);
+  } catch (error) {
+    throw new RangeError(`${label} must be a valid HTTP(S) URL`, { cause: error });
+  }
+  if (
+    (parsed.protocol !== 'https:' && parsed.protocol !== 'http:') ||
+    parsed.username !== '' ||
+    parsed.password !== ''
+  ) {
+    throw new RangeError(`${label} must be a credential-free HTTP(S) URL`);
+  }
+  return parsed.toString();
+}
+
+function normalizePublicEvent(value, expectedMosqueId, index) {
+  const event = assertObject(value, `Calendar event ${String(index)}`);
+  assertNoForbiddenPublicFields(event, `events.${expectedMosqueId}[${String(index)}]`);
+  const eventId = normalizeIdentifier(event.eventId, 'Calendar event ID');
+  const mosqueId = normalizeIdentifier(event.mosqueId, 'Calendar event mosqueId');
+  if (mosqueId !== expectedMosqueId) {
+    throw new RangeError('Calendar event mosqueId does not match snapshot mosque');
+  }
+  const english = normalizeLocalizedEventContent(event.english, 'Calendar event English');
+  const arabic = normalizeLocalizedEventContent(event.arabic, 'Calendar event Arabic');
+  if (english === null && arabic === null) {
+    throw new RangeError('Calendar event requires English or Arabic content');
+  }
+  const venue = assertBoundedString(event.venue, 'Calendar event venue', 300);
+  if (typeof event.allDay !== 'boolean') {
+    throw new TypeError('Calendar event allDay must be boolean');
+  }
+  const startsAt = assertExactUtcTimestamp(event.startsAt, 'Calendar event startsAt');
+  const endsAt = assertExactUtcTimestamp(event.endsAt, 'Calendar event endsAt');
+  if (new Date(endsAt).getTime() <= new Date(startsAt).getTime()) {
+    throw new RangeError('Calendar event end must be later than start');
+  }
+  if (
+    event.allDay &&
+    (!startsAt.endsWith('T00:00:00.000Z') || !endsAt.endsWith('T00:00:00.000Z'))
+  ) {
+    throw new RangeError('All-day calendar events require UTC-midnight boundaries');
+  }
+  if (!['none', 'daily', 'weekly'].includes(event.recurrence)) {
+    throw new RangeError('Calendar event recurrence must be none, daily or weekly');
+  }
+  return Object.freeze({
+    eventId,
+    mosqueId,
+    english,
+    arabic,
+    venue,
+    allDay: event.allDay,
+    startsAt,
+    endsAt,
+    recurrence: event.recurrence,
+    registrationUrl: normalizePublicEventUrl(
+      event.registrationUrl,
+      'Calendar event registration URL',
+    ),
+  });
+}
+
+function normalizePublicEvents(value, expectedMosqueId) {
+  if (value === undefined) return Object.freeze([]);
+  if (!Array.isArray(value) || value.length > 500) {
+    throw new RangeError('Calendar events must be an array containing at most 500 entries');
+  }
+  const events = value.map((entry, index) => normalizePublicEvent(entry, expectedMosqueId, index));
+  const eventIds = new Set(events.map((event) => event.eventId));
+  if (eventIds.size !== events.length) {
+    throw new RangeError('Calendar event IDs must be unique within a mosque snapshot');
+  }
+  return Object.freeze(events);
+}
+
 export function validatePublicSnapshot(value) {
   const root = assertObject(value, 'Local API snapshot');
   if (root.version !== SNAPSHOT_VERSION) {
@@ -304,10 +405,19 @@ export function validatePublicSnapshot(value) {
       monthlyTimetables[monthKey] = normalizeMonthly(monthly, mosqueId, monthKey);
     }
 
+    const events = normalizePublicEvents(mosque.events, mosqueId);
+    if (events.length > 0) {
+      if (root.generatedAt === undefined) {
+        throw new RangeError('Snapshot generatedAt is required when calendar events are published');
+      }
+      assertExactUtcTimestamp(root.generatedAt, 'Snapshot generatedAt');
+    }
+
     mosques[mosqueId] = Object.freeze({
       profile,
       dailyPrayers: Object.freeze(dailyPrayers),
       monthlyTimetables: Object.freeze(monthlyTimetables),
+      events,
     });
   }
 
@@ -451,6 +561,10 @@ function matchPublicRoute(pathname) {
       date: assertDate(daily[2], 'Route date'),
     };
   }
+  const calendar = /^\/api\/v1\/mosques\/([^/]+)\/calendar\.ics$/u.exec(pathname);
+  if (calendar !== null) {
+    return { kind: 'calendar', mosqueId: decodeIdentifier(calendar[1]) };
+  }
   const monthly = /^\/api\/v1\/mosques\/([^/]+)\/timetables\/(\d{4}-\d{2})$/u.exec(pathname);
   if (monthly !== null) {
     return {
@@ -479,6 +593,16 @@ function responseHeaders(cacheControl, stale) {
     'X-Frame-Options': 'DENY',
     'X-SalahOS-Snapshot-State': stale ? 'stale' : 'fresh',
   };
+}
+
+function sendCalendar(response, status, body, mosqueId, options = {}) {
+  response.writeHead(status, {
+    'Content-Type': 'text/calendar; charset=utf-8',
+    'Content-Length': Buffer.byteLength(body),
+    'Content-Disposition': `inline; filename="${mosqueId}-events.ics"`,
+    ...responseHeaders(options.cacheControl ?? 'no-store', options.stale ?? false),
+  });
+  response.end(body);
 }
 
 function sendJson(response, status, payload, options = {}) {
@@ -535,6 +659,27 @@ export async function createLocalPublicApiService(options = {}) {
       }
 
       const current = await store.current();
+      if (route.kind === 'calendar') {
+        const mosque = current.snapshot.mosques[route.mosqueId];
+        const calendar =
+          mosque === undefined
+            ? null
+            : createPublicEventCalendar(mosque, current.snapshot.generatedAt);
+        if (calendar === null) {
+          sendJson(
+            response,
+            404,
+            { error: 'Published calendar not found' },
+            { stale: current.stale },
+          );
+          return;
+        }
+        sendCalendar(response, 200, calendar, route.mosqueId, {
+          cacheControl: CACHE_POLICIES.calendar,
+          stale: current.stale,
+        });
+        return;
+      }
       const payload = findPublicPayload(current.snapshot, route);
       if (payload === null) {
         sendJson(
