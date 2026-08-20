@@ -1,6 +1,10 @@
 import { useEffect, useState, type ReactNode } from 'react';
 
+import { applyDocumentLocale } from '../i18n/i18n';
 import type { Locale } from '../i18n/translations';
+import { getApplicationStorage } from '../platform/applicationStorage';
+import { loadPersistedSettings } from '../platform/settingsStorage';
+import { installThemePreference } from '../platform/themePreference';
 import {
   readAdminDestination,
   searchForAdminDestination,
@@ -77,11 +81,33 @@ function documentLocale(): Locale {
   return 'en';
 }
 
+function persistedLocale(): Locale {
+  try {
+    return loadPersistedSettings(getApplicationStorage()).locale;
+  } catch {
+    return documentLocale();
+  }
+}
+
 export function AdminShell({ children }: AdminShellProps) {
-  const [locale, setLocale] = useState<Locale>(documentLocale);
+  const [locale, setLocale] = useState<Locale>(persistedLocale);
   const [destination, setDestination] = useState<AdminDestination>(() =>
     readAdminDestination(window.location.search),
   );
+
+  useEffect(() => {
+    try {
+      const settings = loadPersistedSettings(getApplicationStorage());
+      applyDocumentLocale(document.documentElement, settings.locale);
+      setLocale(settings.locale);
+      return installThemePreference(settings.theme, {
+        documentTarget: document,
+        windowTarget: window,
+      });
+    } catch {
+      return undefined;
+    }
+  }, []);
 
   useEffect(() => {
     const observer = new MutationObserver(() => {
