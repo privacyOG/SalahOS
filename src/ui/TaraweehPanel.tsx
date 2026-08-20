@@ -6,22 +6,12 @@ import { mosqueDayForDate, taraweehSessionsForDate } from '../domain/mosqueTimet
 import type { TaraweehSession } from '../domain/mosqueTimetable';
 import { formatLocalTime } from '../i18n/i18n';
 import type { Locale } from '../i18n/translations';
+import { taraweehCopy } from '../i18n/featureTranslations';
 import { getApplicationStorage } from '../platform/applicationStorage';
 import { loadPersistedSettings, type PersistedSettings } from '../platform/settingsStorage';
 import { smartDisplayModeRequested } from './SmartDisplay';
 
-const copy = {
-  en: {
-    eyebrow: 'Taraweeh timetable',
-    title: 'Tonight at your selected mosque',
-    source: 'Mosque timetable',
-  },
-  ar: {
-    eyebrow: 'جدول التراويح',
-    title: 'تراويح الليلة في المسجد المحدد',
-    source: 'جدول المسجد',
-  },
-} as const;
+const copy = taraweehCopy;
 
 export interface TaraweehPanelModel {
   readonly mosqueName: string;

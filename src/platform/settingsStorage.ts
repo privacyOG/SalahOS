@@ -80,7 +80,8 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 function parseLocale(value: unknown): Locale {
-  return value === 'ar' ? 'ar' : 'en';
+  if (value === 'ar' || value === 'tr' || value === 'id') return value;
+  return 'en';
 }
 
 function parseTheme(value: unknown): ThemePreference {

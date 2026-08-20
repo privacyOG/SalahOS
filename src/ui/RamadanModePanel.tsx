@@ -10,38 +10,12 @@ import {
 import { applyPrayerSourceToDashboard } from '../domain/sourcedDashboard';
 import { formatLocalTime } from '../i18n/i18n';
 import type { Locale } from '../i18n/translations';
+import { ramadanModeCopy } from '../i18n/featureTranslations';
 import { getApplicationStorage } from '../platform/applicationStorage';
 import { loadPersistedSettings, type PersistedSettings } from '../platform/settingsStorage';
 import { smartDisplayModeRequested } from './SmartDisplay';
 
-const copy = {
-  en: {
-    eyebrow: 'Ramadan mode',
-    day: 'Ramadan day',
-    yearSuffix: 'AH',
-    message: 'Ramadan presentation is active for the selected location.',
-    source: 'Times follow your selected calculation or mosque source.',
-    imsak: 'Precautionary Imsak',
-    imsakDetail: '10 min before Fajr',
-    suhur: 'Suhur ends / Fajr',
-    iftar: 'Iftar / Maghrib',
-    unavailable: 'Unavailable',
-    guidance: 'Imsak is shown as a precautionary presentation offset; the Suhur boundary is Fajr.',
-  },
-  ar: {
-    eyebrow: 'وضع رمضان',
-    day: 'اليوم من رمضان',
-    yearSuffix: 'هـ',
-    message: 'تم تفعيل عرض رمضان للموقع المحدد.',
-    source: 'تتبع الأوقات طريقة الحساب أو مصدر المسجد الذي اخترته.',
-    imsak: 'الإمساك الاحتياطي',
-    imsakDetail: 'قبل الفجر بـ 10 دقائق',
-    suhur: 'نهاية السحور / الفجر',
-    iftar: 'الإفطار / المغرب',
-    unavailable: 'غير متاح',
-    guidance: 'يُعرض الإمساك كوقت احتياطي؛ أما نهاية وقت السحور فهي عند الفجر.',
-  },
-} as const;
+const copy = ramadanModeCopy;
 
 export interface RamadanPanelModel {
   readonly ramadan: ReturnType<typeof deriveRamadanMode>;

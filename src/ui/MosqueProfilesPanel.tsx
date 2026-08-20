@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import type { Locale } from '../i18n/translations';
+import { mosqueProfilesCopy } from '../i18n/featureTranslations';
 import { getApplicationStorage } from '../platform/applicationStorage';
 import { MOSQUE_PROFILE_LIBRARY_CHANGE_EVENT } from '../platform/mosqueProfileEvents';
 import {
@@ -15,52 +16,7 @@ import {
 import { loadPersistedSettings } from '../platform/settingsStorage';
 import { smartDisplayModeRequested } from './SmartDisplay';
 
-const copy = {
-  en: {
-    title: 'Mosque profiles',
-    subtitle:
-      'Keep multiple mosque profiles on this device and choose the active community context.',
-    none: 'All mosques',
-    selected: 'Selected',
-    select: 'Select profile',
-    remove: 'Remove',
-    address: 'Address',
-    timezone: 'Timezone',
-    facilities: 'Facilities',
-    contact: 'Contact',
-    noProfiles: 'No mosque profiles are stored on this device yet.',
-    manage: 'Local profile import / export',
-    manageHelp:
-      'Import a validated SalahOS mosque-profile-library JSON bundle or export the local library.',
-    payload: 'Mosque profile library JSON',
-    import: 'Import profiles',
-    export: 'Prepare export',
-    imported: 'Mosque profiles imported and saved locally.',
-    exported: 'Current mosque profiles are ready in the JSON field.',
-    invalid: 'The profile bundle is invalid and was not saved.',
-  },
-  ar: {
-    title: 'ملفات المساجد',
-    subtitle: 'احفظ عدة ملفات للمساجد على هذا الجهاز واختر سياق المجتمع النشط.',
-    none: 'كل المساجد',
-    selected: 'محدد',
-    select: 'اختيار الملف',
-    remove: 'حذف',
-    address: 'العنوان',
-    timezone: 'المنطقة الزمنية',
-    facilities: 'المرافق',
-    contact: 'التواصل',
-    noProfiles: 'لا توجد ملفات مساجد محفوظة على هذا الجهاز بعد.',
-    manage: 'استيراد / تصدير الملفات المحلية',
-    manageHelp: 'استورد حزمة JSON صالحة لملفات المساجد أو صدّر المكتبة المحلية.',
-    payload: 'JSON لمكتبة ملفات المساجد',
-    import: 'استيراد الملفات',
-    export: 'تجهيز التصدير',
-    imported: 'تم استيراد ملفات المساجد وحفظها محلياً.',
-    exported: 'ملفات المساجد الحالية جاهزة في حقل JSON.',
-    invalid: 'حزمة الملفات غير صالحة ولم يتم حفظها.',
-  },
-} as const;
+const copy = mosqueProfilesCopy;
 
 function readLocale(): Locale {
   try {
