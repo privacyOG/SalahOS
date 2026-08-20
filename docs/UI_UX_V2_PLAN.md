@@ -29,22 +29,22 @@ The daily prayer display surface must also become a first-class configurable pro
 
 ## 22.1 Product-surface separation
 
-- [ ] Replace the current feature-stacked composition with explicit product surfaces.
-- [ ] Create a dedicated congregation application layout.
-- [ ] Create a dedicated managed-masjid administration layout.
-- [ ] Keep TV/kiosk/signage presentation separate from congregation navigation and administration forms.
-- [ ] Keep deterministic Touch Display 2 fixture/testing routes isolated from unrelated application chrome.
-- [ ] Define stable screen/destination state instead of relying on DOM scrolling and CSS hiding as the primary navigation mechanism.
-- [ ] Preserve deep-link/reload behaviour for supported destinations.
-- [ ] Ensure route/surface separation does not duplicate or fork prayer-domain logic.
+- [x] Replace the current feature-stacked composition with explicit product surfaces.
+- [x] Create a dedicated congregation application layout.
+- [x] Create a dedicated managed-masjid administration layout.
+- [x] Keep TV/kiosk/signage presentation separate from congregation navigation and administration forms.
+- [x] Keep deterministic Touch Display 2 fixture/testing routes isolated from unrelated application chrome.
+- [x] Define stable screen/destination state instead of relying on DOM scrolling and CSS hiding as the primary navigation mechanism.
+- [x] Preserve deep-link/reload behaviour for supported destinations.
+- [x] Ensure route/surface separation does not duplicate or fork prayer-domain logic.
 
 ### Congregation application information architecture
 
-- [ ] Today.
-- [ ] Mosques.
-- [ ] Qiblah.
-- [ ] Community.
-- [ ] Settings.
+- [x] Today.
+- [x] Mosques.
+- [x] Qiblah.
+- [x] Community.
+- [x] Settings.
 - [ ] Place Announcements and Events inside Community using clear secondary navigation/tabs rather than expanding phone primary navigation beyond five destinations.
 
 ### Managed-masjid administration information architecture
@@ -60,11 +60,11 @@ The daily prayer display surface must also become a first-class configurable pro
 
 ### Responsive navigation
 
-- [ ] Phone: five-item bottom navigation with consistent iconography and labels.
-- [ ] Tablet: compact navigation rail with content-aware two-column layouts where useful.
-- [ ] Desktop/web: persistent or collapsible sidebar with page title/context area.
-- [ ] TV/kiosk: no ordinary congregation navigation chrome in normal display mode.
-- [ ] Support logical RTL navigation order and icon/text alignment.
+- [x] Phone: five-item bottom navigation with consistent iconography and labels.
+- [x] Tablet: compact navigation rail with content-aware two-column layouts where useful.
+- [x] Desktop/web: persistent or collapsible sidebar with page title/context area.
+- [x] TV/kiosk: no ordinary congregation navigation chrome in normal display mode.
+- [x] Support logical RTL navigation order and icon/text alignment.
 
 ---
 
@@ -89,17 +89,17 @@ The daily prayer display surface must also become a first-class configurable pro
 
 ## 22.3 Today / daily prayer application redesign
 
-- [ ] Replace the large introductory hero treatment with a compact application/header area.
-- [ ] Keep SalahOS branding, current location/preferred mosque, date and language access visible without dominating the page.
-- [ ] Make the next prayer the dominant content block.
-- [ ] Show next prayer name, Athan/start time, Iqamah/Jama'ah time and countdown with unambiguous labels.
-- [ ] Present today's full prayer schedule as a clean secondary timetable instead of six visually competing cards on narrow screens.
-- [ ] Clearly distinguish obligatory prayers from supplementary times such as Sunrise.
-- [ ] Highlight current/next prayer without relying on colour alone.
-- [ ] Surface selected mosque/location and data provenance in a compact secondary treatment.
-- [ ] Surface Jumu'ah context when relevant.
+- [x] Replace the large introductory hero treatment with a compact application/header area.
+- [x] Keep SalahOS branding, current location/preferred mosque, date and language access visible without dominating the page.
+- [x] Make the next prayer the dominant content block.
+- [x] Show next prayer name, Athan/start time, Iqamah/Jama'ah time and countdown with unambiguous labels.
+- [x] Present today's full prayer schedule as a clean secondary timetable instead of six visually competing cards on narrow screens.
+- [x] Clearly distinguish obligatory prayers from supplementary times such as Sunrise.
+- [x] Highlight current/next prayer without relying on colour alone.
+- [x] Surface selected mosque/location and data provenance in a compact secondary treatment.
+- [x] Surface Jumu'ah context when relevant.
 - [ ] Surface Ramadan/Suhur/Imsak/Iftar/Taraweeh context only when relevant rather than permanently increasing daily density.
-- [ ] Add at most a small number of useful quick actions below prayer information, such as Qiblah, Mosque and Notifications.
+- [x] Add at most a small number of useful quick actions below prayer information, such as Qiblah, Mosque and Notifications.
 - [ ] Add optional announcement/event preview beneath core prayer information without allowing community content to dominate the prayer view.
 - [ ] Design polished states for no location, no selected mosque, offline managed data, stale managed data and unavailable astronomical events.
 
@@ -107,7 +107,7 @@ The daily prayer display surface must also become a first-class configurable pro
 
 ## 22.4 Dedicated Qiblah experience
 
-- [ ] Move the Qiblah Finder out of the long stacked home flow into its own primary congregation destination.
+- [x] Move the Qiblah Finder out of the long stacked home flow into its own primary congregation destination.
 - [ ] Give the live compass/bearing a dedicated full-screen hierarchy.
 - [ ] Present current location and bearing clearly above/beside the compass depending on device size.
 - [ ] Keep calibration, sensor quality, true-north/magnetic-declination and alignment guidance understandable but visually subordinate.
@@ -129,7 +129,7 @@ The daily prayer display surface must also become a first-class configurable pro
 
 ### Community
 
-- [ ] Create a dedicated Community destination.
+- [x] Create a dedicated Community destination.
 - [ ] Add Announcements and Events as clear secondary tabs/views.
 - [ ] Remove community administration/import controls from the normal congregation reading experience.
 - [ ] Use compact preview cards with clear hierarchy, expiry/status and optional call-to-action.

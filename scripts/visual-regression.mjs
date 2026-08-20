@@ -57,7 +57,6 @@ const applicationScenarios = [
     theme: 'dark',
     url: '?view=settings',
     fontScale: 1.25,
-    openSettings: true,
   },
   {
     name: 'phone-settings-en-light',
