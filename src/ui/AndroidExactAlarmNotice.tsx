@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Locale } from '../i18n/translations';
+import { androidExactAlarmCopy } from '../i18n/featureTranslations';
 import {
   openAndroidExactAlarmSettings,
   readAndroidExactAlarmCapability,
@@ -8,26 +9,7 @@ import {
 
 export const ANDROID_EXACT_ALARM_CAPABILITY_CHANGE_EVENT = 'salahos-exact-alarm-capability-change';
 
-const copy: Readonly<
-  Record<
-    Locale,
-    {
-      readonly message: string;
-      readonly action: string;
-    }
-  >
-> = {
-  en: {
-    message:
-      'Android precise alarm access is off. Prayer notifications remain scheduled, but Android may deliver them later than the requested time.',
-    action: 'Allow precise prayer alarms',
-  },
-  ar: {
-    message:
-      'إذن المنبّهات الدقيقة في أندرويد غير مفعّل. ستبقى تنبيهات الصلاة مجدولة، لكن قد يؤخر أندرويد وصولها عن الوقت المطلوب.',
-    action: 'السماح بمنبّهات الصلاة الدقيقة',
-  },
-};
+const copy = androidExactAlarmCopy;
 
 export interface AndroidExactAlarmNoticeProps {
   readonly locale: Locale;

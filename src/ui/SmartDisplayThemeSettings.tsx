@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import type { Locale } from '../i18n/translations';
+import { smartDisplayThemeCopy } from '../i18n/featureTranslations';
 import { getApplicationStorage } from '../platform/applicationStorage';
 import { loadPersistedSettings } from '../platform/settingsStorage';
 import {
@@ -12,34 +13,7 @@ import {
 } from '../platform/smartDisplayTheme';
 import { smartDisplayModeRequested } from './SmartDisplay';
 
-const copy = {
-  en: {
-    title: 'Smart-display theme',
-    subtitle: 'Choose the presentation used only on TV, kiosk and smart-display mode.',
-    classic: 'Classic',
-    classicHelp: 'Bright, neutral and highly legible.',
-    midnight: 'Midnight',
-    midnightHelp: 'Deep navy with restrained gold accents.',
-    sandstone: 'Sandstone',
-    sandstoneHelp: 'Warm stone and parchment tones.',
-    emerald: 'Emerald',
-    emeraldHelp: 'Dark green with luminous prayer highlights.',
-    selected: 'Selected',
-  },
-  ar: {
-    title: 'سمة شاشة العرض',
-    subtitle: 'اختر المظهر الخاص بوضع التلفاز والكشك وشاشة العرض فقط.',
-    classic: 'كلاسيكي',
-    classicHelp: 'فاتح ومحايد وواضح للقراءة.',
-    midnight: 'منتصف الليل',
-    midnightHelp: 'كحلي عميق مع لمسات ذهبية هادئة.',
-    sandstone: 'الحجر الرملي',
-    sandstoneHelp: 'درجات دافئة من الحجر والورق.',
-    emerald: 'زمردي',
-    emeraldHelp: 'أخضر داكن مع إبراز واضح لأوقات الصلاة.',
-    selected: 'محدد',
-  },
-} as const;
+const copy = smartDisplayThemeCopy;
 
 function readLocale(): Locale {
   try {

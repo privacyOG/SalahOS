@@ -476,7 +476,8 @@ export const ramadanModeCopy = {
     suhur: 'Sahur berakhir / Subuh',
     iftar: 'Iftar / Magrib',
     unavailable: 'Tidak tersedia',
-    guidance: 'Imsak ditampilkan sebagai selisih kehati-hatian; batas akhir sahur adalah waktu Subuh.',
+    guidance:
+      'Imsak ditampilkan sebagai selisih kehati-hatian; batas akhir sahur adalah waktu Subuh.',
   },
 } as const;
 

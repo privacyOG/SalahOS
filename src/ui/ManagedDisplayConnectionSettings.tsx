@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import type { Locale } from '../i18n/translations';
+import { managedDisplayConnectionCopy } from '../i18n/featureTranslations';
 import { getApplicationStorage } from '../platform/applicationStorage';
 import {
   clearManagedDisplayConnection,
@@ -11,37 +12,7 @@ import {
 import { loadPersistedSettings } from '../platform/settingsStorage';
 import { smartDisplayModeRequested } from './SmartDisplay';
 
-const copy = {
-  en: {
-    title: 'Managed display connection',
-    subtitle:
-      'Provision this device once with the managed-service endpoint, display ID and one-time device credential.',
-    endpoint: 'Managed service URL',
-    displayId: 'Display ID',
-    credential: 'Device credential',
-    save: 'Save managed connection',
-    clear: 'Clear managed connection',
-    saved: 'Managed display connection saved locally.',
-    cleared: 'Managed display connection removed.',
-    invalid: 'The managed display connection is invalid and was not saved.',
-    security:
-      'The device credential is a revocable secret stored only in SalahOS application storage on this device. Do not share it or place it in a URL.',
-  },
-  ar: {
-    title: 'اتصال شاشة العرض المُدارة',
-    subtitle: 'جهّز هذا الجهاز مرة واحدة برابط خدمة الإدارة ومعرّف الشاشة وبيانات اعتماد الجهاز.',
-    endpoint: 'رابط خدمة الإدارة',
-    displayId: 'معرّف الشاشة',
-    credential: 'بيانات اعتماد الجهاز',
-    save: 'حفظ اتصال الشاشة',
-    clear: 'حذف اتصال الشاشة',
-    saved: 'تم حفظ اتصال الشاشة المُدارة محلياً.',
-    cleared: 'تم حذف اتصال الشاشة المُدارة.',
-    invalid: 'اتصال الشاشة غير صالح ولم يتم حفظه.',
-    security:
-      'بيانات اعتماد الجهاز سر قابل للإلغاء وتحفظ فقط في تخزين التطبيق على هذا الجهاز. لا تشاركها ولا تضعها في رابط.',
-  },
-} as const;
+const copy = managedDisplayConnectionCopy;
 
 function readLocale(): Locale {
   try {
