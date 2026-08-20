@@ -785,7 +785,7 @@
 - [x] Home Assistant integration
 - [x] Optional local network API for smart-home/display integration
 - [x] Calendar integrations
-- [ ] Wearable/watch companion exploration
+- [x] Wearable/watch companion exploration
 - [ ] Additional languages
 
 ---
