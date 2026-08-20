@@ -1,0 +1,502 @@
+.today-screen {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 0 auto;
+  padding: clamp(1rem, 2.5vw, 2.5rem) 0 clamp(2rem, 5vw, 4rem);
+  color: var(--salah-fg-primary);
+}
+
+.today-screen__offline {
+  margin: 0 0 var(--salah-space-3);
+  padding: var(--salah-space-2) var(--salah-space-3);
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-sm);
+  color: var(--salah-fg-secondary);
+  background: var(--salah-bg-surface);
+  font-size: var(--salah-text-sm);
+}
+
+.today-appbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--salah-space-4);
+  margin-block-end: clamp(1rem, 2.5vw, 2rem);
+}
+
+.today-appbar__brand {
+  display: flex;
+  min-width: 0;
+  align-items: center;
+  gap: var(--salah-space-3);
+}
+
+.today-appbar__brand img {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: var(--salah-radius-sm);
+}
+
+.today-appbar__brand div {
+  display: grid;
+  min-width: 0;
+  gap: 0.1rem;
+}
+
+.today-appbar__brand strong {
+  font-size: var(--salah-text-md);
+}
+
+.today-appbar__brand span {
+  min-width: 0;
+  overflow: hidden;
+  color: var(--salah-fg-secondary);
+  font-size: var(--salah-text-sm);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.today-appbar__meta {
+  display: flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: var(--salah-space-3);
+}
+
+.today-appbar__clock {
+  font-size: clamp(1rem, 0.9rem + 0.5vw, 1.35rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 780;
+  letter-spacing: -0.02em;
+}
+
+.today-appbar__meta a {
+  display: inline-flex;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-sm);
+  color: var(--salah-fg-secondary);
+  background: var(--salah-bg-surface);
+  font-size: var(--salah-text-xs);
+  font-weight: 800;
+  text-decoration: none;
+}
+
+.today-next {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: clamp(1rem, 3vw, 2rem);
+  align-items: end;
+  padding: clamp(1.25rem, 3.5vw, 2.25rem);
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--salah-border-subtle));
+  border-radius: clamp(var(--salah-radius-lg), 2vw, 1.5rem);
+  background:
+    radial-gradient(circle at top right, color-mix(in srgb, var(--accent) 14%, transparent), transparent 46%),
+    var(--salah-bg-surface-raised);
+}
+
+[dir='rtl'] .today-next {
+  background:
+    radial-gradient(circle at top left, color-mix(in srgb, var(--accent) 14%, transparent), transparent 46%),
+    var(--salah-bg-surface-raised);
+}
+
+.today-next__identity p,
+.today-next__countdown span,
+.today-section-heading p,
+.today-dates span,
+.today-next__times dt {
+  margin: 0;
+  color: var(--salah-fg-tertiary);
+  font-size: var(--salah-text-xs);
+  font-weight: 780;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+[dir='rtl'] .today-next__identity p,
+[dir='rtl'] .today-next__countdown span,
+[dir='rtl'] .today-section-heading p,
+[dir='rtl'] .today-dates span,
+[dir='rtl'] .today-next__times dt {
+  letter-spacing: 0;
+}
+
+.today-next__identity h1 {
+  margin: var(--salah-space-2) 0 0;
+  font-size: clamp(2.5rem, 1.8rem + 4vw, 5.5rem);
+  line-height: 0.95;
+  letter-spacing: -0.055em;
+}
+
+[dir='rtl'] .today-next__identity h1 {
+  letter-spacing: 0;
+}
+
+.today-next__tomorrow {
+  display: inline-flex;
+  margin-block-start: var(--salah-space-3);
+  padding: 0.35rem 0.65rem;
+  border-radius: 999px;
+  color: var(--salah-fg-secondary);
+  background: var(--salah-bg-accent-soft);
+  font-size: var(--salah-text-xs);
+  font-weight: 750;
+}
+
+.today-next__countdown {
+  display: grid;
+  justify-items: end;
+  gap: var(--salah-space-1);
+  text-align: end;
+}
+
+.today-next__countdown strong {
+  font-size: clamp(2rem, 1.5rem + 2.5vw, 4rem);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.045em;
+  line-height: 1;
+}
+
+.today-next__times {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--salah-space-3);
+  margin: 0;
+  padding-block-start: var(--salah-space-4);
+  border-block-start: 1px solid var(--salah-border-subtle);
+}
+
+.today-next__times div {
+  display: grid;
+  gap: var(--salah-space-1);
+}
+
+.today-next__times dd {
+  margin: 0;
+  font-size: clamp(1.5rem, 1.2rem + 1vw, 2.3rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+}
+
+.today-dates {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--salah-space-3);
+  margin-block: var(--salah-space-4);
+}
+
+.today-dates div {
+  display: grid;
+  gap: var(--salah-space-1);
+  padding-inline: var(--salah-space-1);
+}
+
+.today-dates strong {
+  font-size: var(--salah-text-sm);
+  font-weight: 720;
+}
+
+.today-schedule,
+.today-jumuah {
+  margin-block-start: var(--salah-space-5);
+}
+
+.today-section-heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: var(--salah-space-4);
+  margin-block-end: var(--salah-space-3);
+}
+
+.today-section-heading h2 {
+  margin: var(--salah-space-1) 0 0;
+  font-size: clamp(1.35rem, 1.2rem + 0.8vw, 2rem);
+  letter-spacing: -0.025em;
+}
+
+[dir='rtl'] .today-section-heading h2 {
+  letter-spacing: 0;
+}
+
+.today-section-heading > span {
+  max-width: 48ch;
+  color: var(--salah-fg-tertiary);
+  font-size: var(--salah-text-xs);
+  text-align: end;
+}
+
+.today-prayer-table {
+  overflow: hidden;
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-lg);
+  background: var(--salah-bg-surface);
+}
+
+.today-prayer-row {
+  display: grid;
+  grid-template-columns: minmax(8rem, 1.45fr) minmax(5rem, 0.7fr) minmax(5rem, 0.8fr);
+  min-height: 4.65rem;
+  align-items: center;
+  gap: var(--salah-space-3);
+  padding: var(--salah-space-3) var(--salah-space-4);
+  border-block-start: 1px solid var(--salah-border-subtle);
+}
+
+.today-prayer-row:first-child {
+  border-block-start: 0;
+}
+
+.today-prayer-row--header {
+  min-height: auto;
+  padding-block: var(--salah-space-2);
+  color: var(--salah-fg-tertiary);
+  background: var(--salah-bg-surface-raised);
+  font-size: var(--salah-text-xs);
+  font-weight: 780;
+}
+
+.today-prayer-row.is-current {
+  box-shadow: inset 0.22rem 0 0 var(--accent);
+}
+
+[dir='rtl'] .today-prayer-row.is-current {
+  box-shadow: inset -0.22rem 0 0 var(--accent);
+}
+
+.today-prayer-row.is-next {
+  background: color-mix(in srgb, var(--accent) 7%, var(--salah-bg-surface));
+}
+
+.today-prayer-row.is-supplementary {
+  color: var(--salah-fg-secondary);
+}
+
+.today-prayer-row__name {
+  display: flex;
+  min-width: 0;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--salah-space-2);
+}
+
+.today-prayer-row__name > strong {
+  font-size: clamp(1rem, 0.95rem + 0.25vw, 1.2rem);
+}
+
+.today-prayer-row__name > span {
+  display: inline-flex;
+  padding: 0.25rem 0.55rem;
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  border-radius: 999px;
+  color: var(--salah-fg-primary);
+  background: var(--salah-bg-accent-soft);
+  font-size: 0.7rem;
+  font-weight: 800;
+}
+
+.today-prayer-row__name small {
+  flex-basis: 100%;
+  color: var(--salah-fg-tertiary);
+  font-size: 0.72rem;
+  line-height: 1.35;
+}
+
+.today-prayer-row__time {
+  font-size: clamp(1rem, 0.92rem + 0.4vw, 1.35rem);
+  font-variant-numeric: tabular-nums;
+  text-align: end;
+}
+
+.today-prayer-row__iqamah {
+  color: var(--salah-fg-secondary);
+}
+
+.today-schedule__notice {
+  margin: var(--salah-space-3) 0 0;
+  color: var(--salah-fg-secondary);
+  font-size: var(--salah-text-sm);
+}
+
+.today-jumuah__sessions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+  gap: var(--salah-space-3);
+}
+
+.today-jumuah__sessions > div {
+  display: grid;
+  gap: var(--salah-space-1);
+  padding: var(--salah-space-4);
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-md);
+  background: var(--salah-bg-surface);
+}
+
+.today-jumuah__sessions span {
+  color: var(--salah-fg-secondary);
+  font-size: var(--salah-text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.today-quick-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--salah-space-2);
+  margin-block-start: var(--salah-space-5);
+}
+
+.today-quick-actions a,
+.today-state__action {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  padding-inline: var(--salah-space-4);
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-sm);
+  color: var(--salah-fg-primary);
+  background: var(--salah-bg-surface);
+  font-size: var(--salah-text-sm);
+  font-weight: 750;
+  text-decoration: none;
+}
+
+.today-quick-actions a:hover,
+.today-state__action:hover,
+.today-appbar__meta a:hover {
+  background: var(--salah-bg-accent-soft);
+}
+
+.today-provenance {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--salah-space-2) var(--salah-space-4);
+  margin-block-start: var(--salah-space-5);
+  padding-block-start: var(--salah-space-3);
+  border-block-start: 1px solid var(--salah-border-subtle);
+  color: var(--salah-fg-tertiary);
+  font-size: var(--salah-text-xs);
+}
+
+.today-state {
+  display: grid;
+  gap: var(--salah-space-3);
+  min-height: 20rem;
+  align-content: center;
+  justify-items: start;
+  padding: clamp(1.5rem, 4vw, 3rem);
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-lg);
+  background: var(--salah-bg-surface);
+}
+
+.today-state p,
+.today-state h1,
+.today-state span {
+  margin: 0;
+}
+
+.today-state p {
+  color: var(--salah-fg-tertiary);
+  font-size: var(--salah-text-xs);
+  font-weight: 780;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.today-state h1 {
+  max-width: 18ch;
+  font-size: clamp(1.8rem, 1.4rem + 2vw, 3.5rem);
+  line-height: 1.05;
+}
+
+.today-state span {
+  max-width: 60ch;
+  color: var(--salah-fg-secondary);
+}
+
+@media (max-width: 720px) {
+  .today-screen {
+    width: min(100% - 1rem, 1180px);
+  }
+
+  .today-appbar {
+    align-items: flex-start;
+  }
+
+  .today-appbar__clock {
+    display: none;
+  }
+
+  .today-next {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .today-next__countdown {
+    justify-items: start;
+    text-align: start;
+  }
+
+  .today-prayer-row {
+    grid-template-columns: minmax(6.7rem, 1.25fr) minmax(4.7rem, 0.75fr) minmax(4.7rem, 0.85fr);
+    gap: var(--salah-space-2);
+    padding-inline: var(--salah-space-3);
+  }
+
+  .today-prayer-row--header {
+    font-size: 0.68rem;
+  }
+
+  .today-prayer-row__time {
+    font-size: 0.95rem;
+  }
+
+  .today-section-heading {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .today-section-heading > span {
+    text-align: start;
+  }
+}
+
+@media (max-width: 390px) {
+  .today-dates {
+    grid-template-columns: 1fr;
+  }
+
+  .today-prayer-row {
+    grid-template-columns: minmax(6rem, 1.15fr) minmax(4.2rem, 0.75fr) minmax(4.2rem, 0.8fr);
+    padding-inline: var(--salah-space-2);
+  }
+
+  .today-prayer-row__name > span {
+    padding-inline: 0.4rem;
+    font-size: 0.64rem;
+  }
+}
+
+@media (forced-colors: active) {
+  .today-next,
+  .today-prayer-table,
+  .today-jumuah__sessions > div,
+  .today-state,
+  .today-appbar__meta a,
+  .today-quick-actions a,
+  .today-state__action {
+    border-color: CanvasText;
+    background: Canvas;
+  }
+
+  .today-prayer-row.is-current {
+    border-inline-start: 0.25rem solid Highlight;
+    box-shadow: none;
+  }
+}
