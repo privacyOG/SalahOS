@@ -58,9 +58,7 @@ describe('native application storage', () => {
     expect(storage.getItem(PERSISTED_APPLICATION_KEYS[5])).toBe(
       '{"version":1,"profiles":[],"selectedProfileId":null}',
     );
-    expect(storage.getItem(PERSISTED_APPLICATION_KEYS[6])).toContain(
-      '"displayId":"display:lobby"',
-    );
+    expect(storage.getItem(PERSISTED_APPLICATION_KEYS[6])).toContain('"displayId":"display:lobby"');
   });
 
   it('updates synchronous reads immediately and persists writes in order', async () => {
