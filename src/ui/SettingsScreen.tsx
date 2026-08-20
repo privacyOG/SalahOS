@@ -539,7 +539,10 @@ export function SettingsScreen() {
             navigateCategory(null);
           }}
         >
-          ← {copy.back}
+          <span className="settings-screen__back-arrow" aria-hidden="true">
+            ←
+          </span>
+          <span>{copy.back}</span>
         </button>
         <p className="settings-screen__eyebrow">{copy.heading}</p>
         <h1>{copy[selectedDefinition.title]}</h1>

@@ -105,6 +105,14 @@
   direction: rtl;
 }
 
+.settings-screen__back-arrow {
+  display: inline-block;
+}
+
+[dir='rtl'] .settings-screen__back-arrow {
+  transform: scaleX(-1);
+}
+
 .settings-focus-panel {
   padding: clamp(1rem, 2.2vw, 1.6rem);
   border: 1px solid var(--salah-border-subtle);
