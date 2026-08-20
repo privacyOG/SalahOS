@@ -1,54 +1,62 @@
-# SalahOS v1.1.0 release notes
+# SalahOS v1.2.0 release notes
 
-SalahOS v1.1.0 adds the canonical SalahOS visual identity and introduces verified downloadable release packages so users do not need to build supported distributions from source.
+SalahOS v1.2.0 expands the local-first prayer application into a broader mosque, congregation and managed-display platform while preserving the privacy boundary of the core prayer experience. It also introduces the full Qiblah Finder, Ramadan presentation improvements and complete Turkish/Indonesian localisation.
 
-## Canonical SalahOS branding
+## Managed masjid and congregation platform
 
-- Uses the project owner's supplied SalahOS mosque/clock/crescent artwork as the canonical source.
-- Applies the canonical identity to Web/PWA, Android launcher/adaptive/round icons, iOS AppIcon, the application header and smart-display presentation.
-- Retains the canonical source in the repository and verifies generated platform assets by source hash, output hash and image dimensions.
-- Removes the prior generic placeholder SVG icon fallbacks.
-- Updates the PWA application-shell cache so installed Web/PWA clients receive the new branding cleanly.
+- Modern prayer-first design system with responsive congregation navigation.
+- Managed mosque identities, authoritative prayer/Iqamah/Jumu'ah publication revisions, mosque following/offline cache, directory/profile experiences, monthly timetables and multiple local mosque profiles.
+- Managed authorization and administrator-dashboard foundations without making personal prayer use account-dependent.
+- Mosque announcements/events, congregation feeds, publishing previews and managed community-notification policy.
 
-## Downloadable release assets
+## Managed displays and signage
 
-A successful v1.1.0 release workflow publishes:
+- Managed signage scenes, ordered playlists, scheduling, display pairing/fleet state and dedicated TV/foyer/Raspberry Pi display layouts.
+- Four deterministic smart-display themes: Classic, Midnight, Sandstone and Emerald.
+- Optional remote managed-display administration with authenticated fleet actions, one-time display credentials, revisioned configuration, heartbeats and fail-soft cached prayer operation.
 
-- `SalahOS-v1.1.0-android.apk` — cryptographically signed Android release APK;
-- `SalahOS-v1.1.0-web-pwa.zip` — production Web/PWA package;
-- `SalahOS-v1.1.0-raspberry-pi-kiosk.tar.gz` — production Web/PWA files plus Raspberry Pi/Linux Chromium kiosk launch and autostart helpers;
-- `SHA256SUMS.txt` — integrity hashes for the downloadable packages.
+## Public and home integrations
 
-The Android APK is a mandatory release job for a tagged v1.1.0 release. The workflow refuses to publish an unsigned or debug APK and verifies the signed result using Android `apksigner` before release publication.
+- Versioned read-only mosque API contracts and constrained embeddable prayer widgets.
+- Home Assistant integration exposing timezone-aware obligatory-prayer sensors.
+- Optional loopback-default local network API with explicit LAN opt-in, validation, rate limits and last-known-good snapshots.
+- RFC 5545 mosque-event calendar export and read-only subscription feed.
+- Privacy-minimised wearable companion snapshot contract and future watchOS/Wear OS architecture exploration.
 
-The persistent Android signing identity is supplied only through GitHub Actions secrets and is never committed to the repository.
+## Qiblah Finder
+
+- Deterministic local great-circle Qiblah bearing and true-north live compass guidance where supported.
+- WMM2025 magnetic-declination correction, screen-orientation compensation, circular smoothing, calibration feedback, alignment tolerance and haptics.
+- Saved/current/live/offline-city/map-pin location modes.
+- Optional user-enabled OpenStreetMap imagery with attribution and an explicit reviewed privacy/network boundary; core bearing and compass operation remain local/offline.
+
+## Ramadan and languages
+
+- Automatic Ramadan mode, Suhur/Imsak/Iftar presentation and mosque-specific Taraweeh timetable sessions.
+- Complete bundled Turkish and Indonesian application localisation alongside English and Arabic/RTL.
+
+## Downloadable v1.2.0 assets
+
+A successful v1.2.0 release publishes the same verified distribution set established by v1.1.0:
+
+- `SalahOS-v1.2.0-android.apk` — persistently signed Android release APK, verified with Android `apksigner`;
+- `SalahOS-v1.2.0-web-pwa.zip` — production Web/PWA package;
+- `SalahOS-v1.2.0-raspberry-pi-kiosk.tar.gz` — production Web/PWA files plus Raspberry Pi/Linux Chromium kiosk launch and autostart helpers;
+- `SHA256SUMS.txt` — portable SHA-256 hashes for all published packages.
+
+The workflow fails closed if Android release signing is unavailable and verifies archive integrity, checksums and the exact final asset set before publication.
 
 ## Distribution boundaries
 
-- The iOS/iPadOS native application remains build- and Simulator-validated, but a consumer `.ipa` is not published until Apple distribution signing/provisioning is configured and the distribution archive can be validated.
-- SalahOS does not yet contain a native macOS desktop application target, so a `.dmg` is not published. A Web/PWA or iOS Simulator artifact will not be relabeled as a macOS installer.
-- Physical Raspberry Pi, TV/panel, iPhone/iPad and broad Android OEM acceptance remains separate from CI packaging evidence and is not marked as completed by this release.
-
-## Existing prayer, location and display functionality
-
-v1.1.0 retains the v1 prayer/time engine and application capabilities, including:
-
-- five obligatory prayer calculations plus Sunrise;
-- Standard/Shafi'i-family and Hanafi Asr conventions;
-- recognised calculation-method profiles, high-latitude handling and manual adjustments;
-- Gregorian and Hijri/Umm al-Qura presentation;
-- local/offline city search, saved locations and IANA timezone resolution;
-- local mosque timetable import/manual entry, Iqamah and multiple Jumu'ah sessions;
-- native Android/iOS prayer notification adapters with documented lifecycle constraints;
-- private user-selected local Adhan audio for foreground playback attempts;
-- English/Arabic RTL, light/dark/system themes and accessibility support;
-- Web/PWA offline shell and Raspberry Pi/TV/kiosk smart-display operation.
+- A consumer iOS/iPadOS `.ipa` is not published until Apple distribution signing/provisioning is configured and validated.
+- No native macOS `.dmg` is published because SalahOS does not yet contain a native macOS application target.
+- Physical Raspberry Pi, TV/panel, iPhone/iPad and broad Android OEM acceptance remains separate from CI packaging evidence.
 
 ## Release gates
 
-The exact v1.1.0 release revision must pass the permanent Quality, Android, Visual Regression and iOS workflows before tagging. In addition, the release-asset workflow must successfully produce the Web/PWA and Raspberry Pi packages and a persistently signed, `apksigner`-verified Android APK before the GitHub release is published.
+The v1.2.0 release revision must be the exact current `main` commit and pass the permanent Quality, Android, Visual Regression and iOS workflows. The release-asset workflow reruns the full repository quality gate for Web/PWA/kiosk packaging, verifies persistent Android signing and `apksigner`, verifies portable checksums and the exact four-file package, and only then creates/uploads the GitHub release.
 
-See `docs/RELEASE_ASSETS.md`, `TESTING.md`, `TODO.md` and `docs/PLATFORM_STATUS.md` for the exact distribution and validation boundaries.
+See `docs/RELEASE_ASSETS.md`, `TESTING.md`, `TODO.md` and `docs/PLATFORM_STATUS.md` for exact distribution and validation boundaries.
 
 ## Author
 

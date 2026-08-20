@@ -1,21 +1,22 @@
 name: Quality Gate
 
 on:
+  push:
+    branches:
+      - main
+      - 'agent/**'
   pull_request:
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   quality:
-    if: github.head_ref == 'release-prep/v1.2.0'
     runs-on: [self-hosted, Linux, X64]
-    timeout-minutes: 25
+    timeout-minutes: 15
     steps:
-      - name: Checkout release preparation branch
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: release-prep/v1.2.0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -26,45 +27,41 @@ jobs:
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
 
-      - name: Finalize and verify v1.2.0 release preparation
-        shell: bash
-        run: |
-          set -euo pipefail
-          rm -f .github/workflows/release-prep-v1.2.0.yml
-          rm -f .github/workflows/release-prep-pr-finalizer.yml
-          python3 <<'PY'
-          from pathlib import Path
+      - name: Sensitive-file policy
+        run: npm run security:sensitive-files
 
-          path = Path('scripts/finalize-v1.2.0-release.sh')
-          text = path.read_text()
-          old = '''git add -- \\
-            package.json \\
-            package-lock.json \\
-            android/app/build.gradle \\
-            ios/App/App.xcodeproj/project.pbxproj \\
-            CHANGELOG.md \\
-            RELEASE_NOTES.md \\
-            README.md \\
-            .github/workflows/release-assets.yml \\
-            scripts/release-packaging.test.mjs \\
-            .github/workflows/ci.yml \\
-            .github/workflows/release-prep-v1.2.0.yml \\
-            .github/workflows/release-prep-pr-finalizer.yml \\
-            scripts/finalize-v1.2.0-release.sh
-          '''
-          new = '''git add -- \\
-            package.json \\
-            package-lock.json \\
-            android/app/build.gradle \\
-            ios/App/App.xcodeproj/project.pbxproj \\
-            CHANGELOG.md \\
-            RELEASE_NOTES.md \\
-            README.md \\
-            scripts/release-packaging.test.mjs \\
-            scripts/finalize-v1.2.0-release.sh
-          '''
-          if text.count(old) != 1:
-              raise SystemExit(f'Expected one release staging block, found {text.count(old)}')
-          path.write_text(text.replace(old, new, 1))
-          PY
-          bash scripts/finalize-v1.2.0-release.sh
+      - name: Native permission policy
+        run: npm run security:native-permissions
+
+      - name: Remote network policy
+        run: npm run security:remote-network
+
+      - name: Dependency vulnerability audit
+        run: npm run security:audit
+
+      - name: Dependency license policy
+        run: npm run security:licenses
+
+      - name: Documentation link verification
+        run: npm run docs:links
+
+      - name: PWA raster icon reproducibility
+        run: python3 scripts/generate_pwa_icons.py --check
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm run test
+
+      - name: Production build
+        run: npm run build
+
+      - name: Verify deployable web artifact
+        run: npm run verify:web-build
