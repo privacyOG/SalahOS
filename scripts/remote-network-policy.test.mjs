@@ -18,10 +18,15 @@ describe('remote network policy', () => {
   it('continues to reject unreviewed application network capability', async () => {
     await mkdir(dirname(probePath), { recursive: true });
     try {
-      await writeFile(probePath, "export async function probe() { return fetch('https://example.invalid'); }\n");
+      await writeFile(
+        probePath,
+        "export async function probe() { return fetch('https://example.invalid'); }\n",
+      );
       const blocked = runPolicy();
       expect(blocked.status).not.toBe(0);
-      expect(`${blocked.stdout}\n${blocked.stderr}`).toContain('src/__remote-network-policy-probe.mjs');
+      expect(`${blocked.stdout}\n${blocked.stderr}`).toContain(
+        'src/__remote-network-policy-probe.mjs',
+      );
     } finally {
       await rm(probePath, { force: true });
     }

@@ -8,8 +8,7 @@ import {
 
 export const MANAGED_DISPLAY_CONNECTION_STORAGE_KEY = 'salahos.managedDisplayConnection';
 export const MANAGED_DISPLAY_CONNECTION_SCHEMA_VERSION = 1;
-export const MANAGED_DISPLAY_CONNECTION_CHANGE_EVENT =
-  'salahos:managed-display-connection-change';
+export const MANAGED_DISPLAY_CONNECTION_CHANGE_EVENT = 'salahos:managed-display-connection-change';
 
 interface ManagedDisplayConnectionEnvelope {
   readonly version: 1;
@@ -32,7 +31,11 @@ export function parseManagedDisplayConnection(raw: string): ManagedDisplayConnec
   if (!('version' in value) || value.version !== MANAGED_DISPLAY_CONNECTION_SCHEMA_VERSION) {
     throw new RangeError('Unsupported managed display connection schema version');
   }
-  if (!('connection' in value) || typeof value.connection !== 'object' || value.connection === null) {
+  if (
+    !('connection' in value) ||
+    typeof value.connection !== 'object' ||
+    value.connection === null
+  ) {
     throw new TypeError('Managed display connection payload is missing');
   }
   const connection = value.connection as Record<string, unknown>;
@@ -74,7 +77,10 @@ export function saveManagedDisplayConnection(
   storage: KeyValueStorage,
   connection: ManagedDisplayConnection,
 ): void {
-  storage.setItem(MANAGED_DISPLAY_CONNECTION_STORAGE_KEY, serializeManagedDisplayConnection(connection));
+  storage.setItem(
+    MANAGED_DISPLAY_CONNECTION_STORAGE_KEY,
+    serializeManagedDisplayConnection(connection),
+  );
 }
 
 export function clearManagedDisplayConnection(storage: KeyValueStorage): void {
