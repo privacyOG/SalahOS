@@ -10,6 +10,8 @@ import {
   serializeCommunityContentLibrary,
   type CommunityContentLibrary,
 } from '../platform/communityContentStorage';
+import { MOSQUE_PROFILE_LIBRARY_CHANGE_EVENT } from '../platform/mosqueProfileEvents';
+import { loadMosqueProfileLibrary } from '../platform/mosqueProfileLibrary';
 import { loadPersistedSettings } from '../platform/settingsStorage';
 import { smartDisplayModeRequested } from './SmartDisplay';
 
@@ -79,6 +81,14 @@ function readLibrary(): CommunityContentLibrary {
   }
 }
 
+function readSelectedMosqueId(): string | null {
+  try {
+    return loadMosqueProfileLibrary(getApplicationStorage()).selectedProfileId;
+  } catch {
+    return null;
+  }
+}
+
 function formatEventStart(value: string, locale: Locale, allDay: boolean): string {
   const date = new Date(value);
   const localeTag = locale === 'ar' ? 'ar' : 'en-AU';
@@ -91,6 +101,7 @@ function formatEventStart(value: string, locale: Locale, allDay: boolean): strin
 export function CommunityUpdatesPanel() {
   const [locale, setLocale] = useState<Locale>(readLocale);
   const [library, setLibrary] = useState<CommunityContentLibrary>(readLibrary);
+  const [selectedMosqueId, setSelectedMosqueId] = useState<string | null>(readSelectedMosqueId);
   const [now, setNow] = useState(() => new Date());
   const [payload, setPayload] = useState('');
   const [message, setMessage] = useState<'imported' | 'exported' | 'invalid' | null>(null);
@@ -104,14 +115,16 @@ export function CommunityUpdatesPanel() {
         now: now.toISOString(),
         locale,
         surface: 'mobile',
+        mosqueId: selectedMosqueId,
       }),
-    [library, locale, now],
+    [library, locale, now, selectedMosqueId],
   );
 
   useEffect(() => {
     const refresh = () => {
       setLocale(readLocale());
       setLibrary(readLibrary());
+      setSelectedMosqueId(readSelectedMosqueId());
       setNow(new Date());
     };
     const refreshWhenVisible = () => {
@@ -121,10 +134,12 @@ export function CommunityUpdatesPanel() {
       setNow(new Date());
     }, 60_000);
     window.addEventListener('focus', refresh);
+    window.addEventListener(MOSQUE_PROFILE_LIBRARY_CHANGE_EVENT, refresh);
     document.addEventListener('visibilitychange', refreshWhenVisible);
     return () => {
       window.clearInterval(timer);
       window.removeEventListener('focus', refresh);
+      window.removeEventListener(MOSQUE_PROFILE_LIBRARY_CHANGE_EVENT, refresh);
       document.removeEventListener('visibilitychange', refreshWhenVisible);
     };
   }, []);
