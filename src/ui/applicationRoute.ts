@@ -4,6 +4,16 @@ export type CongregationDestination = 'today' | 'mosques' | 'qiblah' | 'communit
 
 export type AdminDestination = 'overview' | 'displays' | 'themes' | 'remote';
 
+export type SettingsCategory =
+  | 'prayer'
+  | 'location'
+  | 'mosque'
+  | 'notifications'
+  | 'appearance'
+  | 'data-privacy'
+  | 'display-themes'
+  | 'advanced';
+
 const congregationDestinations = new Set<CongregationDestination>([
   'today',
   'mosques',
@@ -13,6 +23,17 @@ const congregationDestinations = new Set<CongregationDestination>([
 ]);
 
 const adminDestinations = new Set<AdminDestination>(['overview', 'displays', 'themes', 'remote']);
+
+const settingsCategories = new Set<SettingsCategory>([
+  'prayer',
+  'location',
+  'mosque',
+  'notifications',
+  'appearance',
+  'data-privacy',
+  'display-themes',
+  'advanced',
+]);
 
 function paramsFromSearch(search: string): URLSearchParams {
   const value = search.startsWith('?') ? search.slice(1) : search;
@@ -50,6 +71,16 @@ export function readAdminDestination(search: string): AdminDestination {
   return destination;
 }
 
+export function readSettingsCategory(search: string): SettingsCategory | null {
+  const candidate = paramsFromSearch(search).get('settingsView');
+  if (candidate === null) return null;
+
+  const category = candidate as SettingsCategory;
+  if (!settingsCategories.has(category)) return null;
+
+  return category;
+}
+
 export function searchForCongregationDestination(
   search: string,
   destination: CongregationDestination,
@@ -57,7 +88,21 @@ export function searchForCongregationDestination(
   const params = paramsFromSearch(search);
   params.delete('surface');
   params.delete('adminView');
+  params.delete('settingsView');
   params.set('view', destination);
+  return serialize(params);
+}
+
+export function searchForSettingsCategory(search: string, category: SettingsCategory | null): string {
+  const params = paramsFromSearch(search);
+  params.delete('surface');
+  params.delete('adminView');
+  params.set('view', 'settings');
+  if (category === null) {
+    params.delete('settingsView');
+  } else {
+    params.set('settingsView', category);
+  }
   return serialize(params);
 }
 
@@ -65,6 +110,7 @@ export function searchForAdminDestination(search: string, destination: AdminDest
   const params = paramsFromSearch(search);
   params.set('surface', 'admin');
   params.delete('view');
+  params.delete('settingsView');
   params.set('adminView', destination);
   return serialize(params);
 }
