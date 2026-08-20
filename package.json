@@ -15,7 +15,7 @@
     "test:watch": "vitest",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "format:check": "prettier --write src/domain/ramadanTimes.ts src/domain/ramadanTimes.test.ts src/ui/RamadanModePanel.tsx src/ui/RamadanModePanel.test.tsx src/ramadan-mode.css && git diff -- src/domain/ramadanTimes.ts src/domain/ramadanTimes.test.ts src/ui/RamadanModePanel.tsx src/ui/RamadanModePanel.test.tsx src/ramadan-mode.css",
+    "format:check": "prettier --check .",
     "docs:links": "node scripts/check-doc-links.mjs",
     "security:sensitive-files": "node scripts/check-sensitive-files.mjs",
     "security:native-permissions": "node scripts/check-native-permissions.mjs",
