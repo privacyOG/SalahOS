@@ -1,0 +1,179 @@
+.community-updates-panel {
+  width: min(1180px, calc(100% - 2rem));
+  margin: 1.25rem auto;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  border: 1px solid var(--border-subtle, rgba(148, 163, 184, 0.2));
+  border-radius: 1.5rem;
+  background: var(--surface-elevated, rgba(15, 23, 42, 0.72));
+  box-shadow: var(--shadow-card, 0 18px 45px rgba(2, 6, 23, 0.12));
+}
+
+.community-updates-panel__heading {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1.25rem;
+}
+
+.community-updates-panel__heading > p {
+  max-width: 42rem;
+  margin: 0;
+  color: var(--text-muted, #94a3b8);
+}
+
+.community-updates-panel__eyebrow {
+  margin: 0 0 0.25rem;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-muted, #94a3b8);
+}
+
+.community-updates-panel h2,
+.community-updates-panel h3,
+.community-updates-panel h4 {
+  margin-top: 0;
+}
+
+.community-updates-panel > section + section {
+  margin-top: 1.5rem;
+}
+
+.community-updates-panel__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 18rem), 1fr));
+  gap: 1rem;
+}
+
+.community-update-card {
+  overflow: hidden;
+  border: 1px solid var(--border-subtle, rgba(148, 163, 184, 0.2));
+  border-radius: 1.1rem;
+  background: var(--surface-card, rgba(15, 23, 42, 0.52));
+}
+
+.community-update-card[data-priority='priority'] {
+  border-width: 2px;
+}
+
+.community-update-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.community-update-card__body {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+}
+
+.community-update-card__body > * {
+  margin: 0;
+}
+
+.community-update-card__badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.community-update-card__badges span {
+  padding: 0.25rem 0.55rem;
+  border-radius: 999px;
+  background: var(--surface-soft, rgba(148, 163, 184, 0.12));
+  font-size: 0.75rem;
+  font-weight: 700;
+}
+
+.community-update-card dl {
+  display: grid;
+  gap: 0.4rem;
+  margin: 0;
+}
+
+.community-update-card dl div {
+  display: grid;
+  grid-template-columns: minmax(4rem, auto) 1fr;
+  gap: 0.75rem;
+}
+
+.community-update-card dt {
+  color: var(--text-muted, #94a3b8);
+}
+
+.community-update-card dd {
+  margin: 0;
+}
+
+.community-update-card small {
+  color: var(--text-muted, #94a3b8);
+}
+
+.community-update-card a {
+  width: fit-content;
+  font-weight: 700;
+}
+
+.community-updates-panel__empty {
+  margin: 0;
+  padding: 1rem;
+  border-radius: 1rem;
+  background: var(--surface-soft, rgba(148, 163, 184, 0.1));
+  color: var(--text-muted, #94a3b8);
+}
+
+.community-updates-panel__manage {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-subtle, rgba(148, 163, 184, 0.2));
+}
+
+.community-updates-panel__manage summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.community-updates-panel__manage label {
+  display: grid;
+  gap: 0.45rem;
+  margin-top: 1rem;
+}
+
+.community-updates-panel__manage textarea {
+  width: 100%;
+  min-height: 10rem;
+  resize: vertical;
+  font: 0.85rem/1.45 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.community-updates-panel__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+}
+
+.community-updates-panel__message {
+  margin-bottom: 0;
+  color: var(--text-muted, #94a3b8);
+}
+
+@media (max-width: 720px) {
+  .community-updates-panel {
+    width: min(100% - 1rem, 1180px);
+    border-radius: 1.1rem;
+  }
+
+  .community-updates-panel__heading {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .community-updates-panel__actions > button {
+    flex: 1 1 12rem;
+  }
+}
