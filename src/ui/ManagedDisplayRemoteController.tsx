@@ -77,14 +77,11 @@ export function ManagedDisplayRemoteController() {
     }
 
     const client = createManagedDisplayClient(connection);
-    let active = true;
 
     const synchronize = async () => {
-      if (!active) return;
       setRuntimeState('syncing');
       try {
         const config = await client.getConfig();
-        if (!active) return;
         if (config.revoked) {
           setRuntimeState('revoked');
           return;
@@ -95,9 +92,9 @@ export function ManagedDisplayRemoteController() {
           contentRevision: config.contentRevision,
           seenAt: new Date().toISOString(),
         });
-        if (active) setRuntimeState('connected');
+        setRuntimeState('connected');
       } catch {
-        if (active) setRuntimeState('offline');
+        setRuntimeState('offline');
       }
     };
 
@@ -107,7 +104,6 @@ export function ManagedDisplayRemoteController() {
     }, SYNC_INTERVAL_MS);
 
     return () => {
-      active = false;
       window.clearInterval(timer);
     };
   }, [connection, enabled]);
