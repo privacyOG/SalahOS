@@ -27,4 +27,9 @@ jobs:
         run: npm ci --ignore-scripts
 
       - name: Finalize and verify v1.2.0 release preparation
-        run: bash scripts/finalize-v1.2.0-release.sh
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm -f .github/workflows/release-prep-v1.2.0.yml
+          rm -f .github/workflows/release-prep-pr-finalizer.yml
+          bash scripts/finalize-v1.2.0-release.sh
