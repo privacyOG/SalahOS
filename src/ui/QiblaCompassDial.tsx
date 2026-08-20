@@ -28,7 +28,10 @@ export function QiblaCompassDial({
     <div className={`qibla-compass-dial${aligned ? ' is-aligned' : ''}`} aria-label={label}>
       <svg viewBox="0 0 400 400" role="img" aria-label={label}>
         <circle className="qibla-dial-face" cx="200" cy="200" r="184" />
-        <g className="qibla-dial-rotating" style={{ transform: `rotate(${dialRotation}deg)` }}>
+        <g
+          className="qibla-dial-rotating"
+          style={{ transform: `rotate(${String(dialRotation)}deg)` }}
+        >
           {ticks.map((degrees) => {
             const major = degrees % 30 === 0;
             return (
@@ -39,7 +42,7 @@ export function QiblaCompassDial({
                 y1="17"
                 x2="200"
                 y2={major ? '34' : '27'}
-                transform={`rotate(${degrees} 200 200)`}
+                transform={`rotate(${String(degrees)} 200 200)`}
               />
             );
           })}
@@ -56,7 +59,7 @@ export function QiblaCompassDial({
                 y={y}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                transform={`rotate(${degrees} ${x} ${y})`}
+                transform={`rotate(${String(degrees)} ${String(x)} ${String(y)})`}
               >
                 {degrees}
               </text>
@@ -75,7 +78,7 @@ export function QiblaCompassDial({
                 y={y}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                transform={`rotate(${degrees} ${x} ${y})`}
+                transform={`rotate(${String(degrees)} ${String(x)} ${String(y)})`}
               >
                 {cardinal}
               </text>
@@ -84,7 +87,7 @@ export function QiblaCompassDial({
 
           <g
             className="qibla-kaaba-marker"
-            transform={`rotate(${bearingDegrees} 200 200) translate(200 42)`}
+            transform={`rotate(${String(bearingDegrees)} 200 200) translate(200 42)`}
           >
             <rect x="-18" y="-18" width="36" height="36" rx="4" />
             <rect className="qibla-kaaba-band" x="-18" y="-5" width="36" height="6" />

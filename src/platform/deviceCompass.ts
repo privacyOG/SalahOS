@@ -124,10 +124,10 @@ export function calculateMagneticDeclination(
 
 export function currentScreenOrientationAngle(): number {
   if (typeof window === 'undefined') return 0;
-  const screenAngle = window.screen.orientation?.angle;
-  if (Number.isFinite(screenAngle)) return Number(screenAngle);
-  const legacyAngle = (window as Window & { orientation?: number }).orientation;
-  return Number.isFinite(legacyAngle) ? Number(legacyAngle) : 0;
+  const screenAngle = window.screen.orientation.angle;
+  if (Number.isFinite(screenAngle)) return screenAngle;
+  const legacyAngle = Reflect.get(window, 'orientation') as unknown;
+  return typeof legacyAngle === 'number' && Number.isFinite(legacyAngle) ? legacyAngle : 0;
 }
 
 export function trueHeadingFromNative(
@@ -165,9 +165,6 @@ export function trueHeadingFromBrowser(
   screenOrientationDegrees: number,
   date: Date = new Date(),
 ): TrueHeadingSample {
-  // Safari's WebKit heading is magnetic north. Correct it with the local WMM
-  // declination before comparing it with the true-north Qiblah bearing.
-  // Standards-based orientation is accepted only when explicitly absolute.
   const northReferencedHeading =
     reading.source === 'webkit-compass'
       ? applyMagneticDeclination(
@@ -254,8 +251,9 @@ async function startBrowserHeadingUpdates(
 
   return Object.freeze({
     state: 'active' as const,
-    stop: async () => {
+    stop: () => {
       remove();
+      return Promise.resolve();
     },
   });
 }
@@ -265,7 +263,7 @@ function resolveHeadingCoordinates(source: HeadingCoordinatesSource): Coordinate
 }
 
 function stoppedSession(state: Exclude<TrueHeadingSession['state'], 'active'>): TrueHeadingSession {
-  return Object.freeze({ state, stop: async () => undefined });
+  return Object.freeze({ state, stop: () => Promise.resolve() });
 }
 
 function defaultPermissionRequester(): PermissionRequester {

@@ -88,10 +88,12 @@ export function QiblaMapView({
                   alt=""
                   draggable={false}
                   style={{
-                    left: `calc(50% + ${tile.offsetX}px)`,
-                    top: `calc(50% + ${tile.offsetY}px)`,
+                    left: `calc(50% + ${String(tile.offsetX)}px)`,
+                    top: `calc(50% + ${String(tile.offsetY)}px)`,
                   }}
-                  onError={() => setTileError(true)}
+                  onError={() => {
+                    setTileError(true);
+                  }}
                 />
               ))}
             </div>

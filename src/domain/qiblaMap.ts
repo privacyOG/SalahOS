@@ -61,7 +61,7 @@ export function qiblaMapTiles(
           y: rawY,
           offsetX: rawX * QIBLA_MAP_TILE_SIZE - center.x,
           offsetY: rawY * QIBLA_MAP_TILE_SIZE - center.y,
-          key: `${normalizedZoom}/${wrappedX}/${rawY}/${xOffset}`,
+          key: [normalizedZoom, wrappedX, rawY, xOffset].join('/'),
         }),
       );
     }

@@ -54,9 +54,7 @@ export async function startQiblaLocationWatch(
             });
             return;
           }
-          if (error !== null) {
-            onFailure(nativeFailureReason(error));
-          }
+          onFailure(nativeFailureReason(error));
         },
       );
       return Object.freeze({
@@ -94,8 +92,9 @@ export async function startQiblaLocationWatch(
     );
 
     return Object.freeze({
-      stop: async () => {
+      stop: () => {
         navigator.geolocation.clearWatch(id);
+        return Promise.resolve();
       },
     });
   } catch {
@@ -118,7 +117,7 @@ async function requestNativeLocation(): Promise<QiblaLocationResult> {
   }
 
   const highAccuracy = await nativePosition(true, 'native-high-accuracy');
-  if (highAccuracy.ok || highAccuracy.reason === 'permission-denied') {
+  if (highAccuracy.ok || isPermissionDeniedResult(highAccuracy)) {
     return highAccuracy;
   }
   return nativePosition(false, 'native-network-fallback');
@@ -152,7 +151,7 @@ async function requestBrowserLocation(): Promise<QiblaLocationResult> {
   }
 
   const highAccuracy = await browserPosition(true, 'browser-high-accuracy');
-  if (highAccuracy.ok || highAccuracy.reason === 'permission-denied') {
+  if (highAccuracy.ok || isPermissionDeniedResult(highAccuracy)) {
     return highAccuracy;
   }
   return browserPosition(false, 'browser-network-fallback');
@@ -185,6 +184,10 @@ function browserPosition(
   });
 }
 
+function isPermissionDeniedResult(result: QiblaLocationResult): boolean {
+  return result.ok ? false : result.reason === 'permission-denied';
+}
+
 function browserFailureReason(error: GeolocationPositionError): QiblaLocationFailureReason {
   if (error.code === error.PERMISSION_DENIED) return 'permission-denied';
   if (error.code === error.POSITION_UNAVAILABLE) return 'unavailable';
@@ -211,5 +214,5 @@ function nativeFailureReason(error: unknown): QiblaLocationFailureReason {
 }
 
 function stoppedWatch(): QiblaLocationWatch {
-  return Object.freeze({ stop: async () => undefined });
+  return Object.freeze({ stop: () => Promise.resolve() });
 }

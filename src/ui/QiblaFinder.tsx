@@ -111,7 +111,9 @@ export function QiblaFinder() {
       }
     };
     window.addEventListener('focus', refreshSettings);
-    return () => window.removeEventListener('focus', refreshSettings);
+    return () => {
+      window.removeEventListener('focus', refreshSettings);
+    };
   }, [location?.source]);
 
   useEffect(
@@ -282,13 +284,20 @@ export function QiblaFinder() {
         <div className="qibla-location-actions">
           <button
             type="button"
-            onClick={() => void useCurrentPosition()}
+            onClick={() => {
+              void useCurrentPosition();
+            }}
             disabled={locationState === 'locating'}
           >
             {locationState === 'locating' ? text.locating : text.currentPosition}
           </button>
           {locationState === 'live' && (
-            <button type="button" onClick={() => void stopLiveLocation()}>
+            <button
+              type="button"
+              onClick={() => {
+                void stopLiveLocation();
+              }}
+            >
               {text.stopLiveLocation}
             </button>
           )}
@@ -301,7 +310,12 @@ export function QiblaFinder() {
             {locationError === 'permission-denied' ? text.locationDenied : text.locationUnavailable}
           </p>
           <div className="qibla-warning-actions">
-            <button type="button" onClick={() => void useCurrentPosition()}>
+            <button
+              type="button"
+              onClick={() => {
+                void useCurrentPosition();
+              }}
+            >
               {text.retryLocation}
             </button>
             <a href="#qibla-manual-location">{text.manualFallback}</a>
@@ -359,13 +373,20 @@ export function QiblaFinder() {
 
                 <div className="qibla-compass-actions">
                   {compassState === 'active' ? (
-                    <button type="button" onClick={() => void stopCompass()}>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        void stopCompass();
+                      }}
+                    >
                       {text.stopCompass}
                     </button>
                   ) : (
                     <button
                       type="button"
-                      onClick={() => void startCompass()}
+                      onClick={() => {
+                        void startCompass();
+                      }}
                       disabled={compassState === 'starting'}
                     >
                       {compassState === 'starting' ? text.compassStarting : text.startCompass}
@@ -397,9 +418,15 @@ export function QiblaFinder() {
               zoom={mapZoom}
               tilesEnabled={mapTilesEnabled}
               text={text}
-              onZoomChange={(zoom) => setMapZoom(clampQiblaMapZoom(zoom))}
-              onEnableTiles={() => setMapTilesEnabled(true)}
-              onDropPin={(coordinates) => void useMapPin(coordinates)}
+              onZoomChange={(zoom) => {
+                setMapZoom(clampQiblaMapZoom(zoom));
+              }}
+              onEnableTiles={() => {
+                setMapTilesEnabled(true);
+              }}
+              onDropPin={(coordinates) => {
+                void useMapPin(coordinates);
+              }}
             />
           )}
         </>
@@ -430,7 +457,12 @@ export function QiblaFinder() {
                     <bdi>{result.countryNames.join(', ')}</bdi>
                   </span>
                 </div>
-                <button type="button" onClick={() => void useCity(result)}>
+                <button
+                  type="button"
+                  onClick={() => {
+                    void useCity(result);
+                  }}
+                >
                   {text.useCity}
                 </button>
               </li>
