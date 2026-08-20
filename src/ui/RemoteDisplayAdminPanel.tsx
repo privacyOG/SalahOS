@@ -94,6 +94,12 @@ const copy = {
 
 const themeIds: readonly SmartDisplayThemeId[] = ['classic', 'midnight', 'sandstone', 'emerald'];
 
+interface EnrollmentField {
+  readonly label: string;
+  readonly value: string;
+  readonly setValue: (value: string) => void;
+}
+
 function readLocale(): Locale {
   try {
     return loadPersistedSettings(getApplicationStorage()).locale;
@@ -215,6 +221,15 @@ export function RemoteDisplayAdminPanel() {
     }
   };
 
+  const enrollmentFields: readonly EnrollmentField[] = [
+    { label: text.displayId, value: displayId, setValue: setDisplayId },
+    { label: text.organizationId, value: organizationId, setValue: setOrganizationId },
+    { label: text.mosqueId, value: mosqueId, setValue: setMosqueId },
+    { label: text.locationId, value: locationId, setValue: setLocationId },
+    { label: text.resolution, value: resolutionProfile, setValue: setResolutionProfile },
+    { label: text.playlist, value: playlistId, setValue: setPlaylistId },
+  ];
+
   return (
     <section
       className="remote-display-admin-panel"
@@ -273,20 +288,13 @@ export function RemoteDisplayAdminPanel() {
         <details className="remote-display-admin-panel__enroll">
           <summary>{text.enroll}</summary>
           <div className="remote-display-admin-panel__form-grid">
-            {[
-              [text.displayId, displayId, setDisplayId],
-              [text.organizationId, organizationId, setOrganizationId],
-              [text.mosqueId, mosqueId, setMosqueId],
-              [text.locationId, locationId, setLocationId],
-              [text.resolution, resolutionProfile, setResolutionProfile],
-              [text.playlist, playlistId, setPlaylistId],
-            ].map(([label, value, setter]) => (
-              <label key={label as string}>
-                <span>{label}</span>
+            {enrollmentFields.map((field) => (
+              <label key={field.label}>
+                <span>{field.label}</span>
                 <input
-                  value={value as string}
+                  value={field.value}
                   onChange={(event) => {
-                    (setter as (next: string) => void)(event.target.value);
+                    field.setValue(event.target.value);
                   }}
                 />
               </label>
