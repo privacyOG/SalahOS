@@ -42,9 +42,11 @@ Rules:
 
 A sample file is provided at `examples/mosque-timetable.csv`.
 
+The legacy CSV contract intentionally remains limited to the five prayer starts and Iqamah values. Advanced day-specific data such as Jumu'ah and Taraweeh sessions is represented by the JSON timetable schema so existing CSV integrations remain backward-compatible.
+
 ## JSON import/export
 
-JSON import uses runtime structural validation before the domain timetable validator runs. The importer rejects malformed nested prayer objects, unsupported prayer keys, malformed Iqamah rules, malformed Jumu'ah data, invalid dates/times, duplicate dates and an empty mosque name.
+JSON import uses runtime structural validation before the domain timetable validator runs. The importer rejects malformed nested prayer objects, unsupported prayer keys, malformed Iqamah rules, malformed Jumu'ah or Taraweeh data, invalid dates/times, duplicate dates and an empty mosque name.
 
 Exported JSON preserves the typed timetable structure and can be re-imported without changing the timetable data.
 
@@ -57,6 +59,32 @@ Friday is detected from the timetable civil date. A mosque day may store one or 
 - Salah local time.
 
 Salah may not precede the associated Khutbah. Jumu'ah sessions are returned only for Friday.
+
+## Taraweeh
+
+A mosque day may store one or multiple mosque-defined Taraweeh sessions. Each session contains only:
+
+- a non-empty label chosen by the mosque; and
+- a validated local start time in minutes from local midnight.
+
+For example:
+
+```json
+{
+  "date": "2026-08-21",
+  "prayers": {},
+  "taraweehSessions": [
+    { "label": "Main hall", "startLocalMinutes": 1215 },
+    { "label": "Late session", "startLocalMinutes": 1320 }
+  ]
+}
+```
+
+SalahOS does not assign a rak'ah count, recitation plan or jurisprudential convention to a Taraweeh session. Those details remain mosque-defined rather than being inferred from a clock time.
+
+The user-facing Taraweeh panel is date-aware. It resolves the current civil date from the configured location/timezone and surfaces sessions only when `local-mosque` is the selected prayer source and the selected mosque has Taraweeh data for that date. Multiple sessions are shown independently and use the user's 12-hour or 24-hour display preference.
+
+Taraweeh sessions are supported by JSON import/export. The strict legacy CSV schema is unchanged and therefore does not serialize Jumu'ah or Taraweeh session metadata.
 
 ## Offline and trust model
 
