@@ -184,10 +184,14 @@ export function TodayScreen() {
     sourcedDashboard?.nextPrayerLocalMinutes === undefined
       ? '—'
       : formatLocalTime(sourcedDashboard.nextPrayerLocalMinutes, locale, settings.timeFormat);
+  const nextPrayerIqamahMinutes =
+    sourcedDashboard?.nextPrayerDayOffset === 0 && nextPrayerRow !== null
+      ? nextPrayerRow.iqamahLocalMinutes
+      : null;
   const nextPrayerIqamah =
-    sourcedDashboard?.nextPrayerDayOffset === 0 && nextPrayerRow?.iqamahLocalMinutes !== null
-      ? formatLocalTime(nextPrayerRow.iqamahLocalMinutes, locale, settings.timeFormat)
-      : translate(locale, 'noIqamah');
+    nextPrayerIqamahMinutes === null
+      ? translate(locale, 'noIqamah')
+      : formatLocalTime(nextPrayerIqamahMinutes, locale, settings.timeFormat);
   const contextLabel =
     sourcedDashboard?.mosqueName ?? settings.location?.timeZone ?? translate(locale, 'notConfigured');
   const quickLabels = destinationLabels[locale];
