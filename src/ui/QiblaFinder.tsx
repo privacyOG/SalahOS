@@ -83,7 +83,9 @@ export function QiblaFinder() {
   const locationRef = useRef<FinderLocation | null>(location);
   locationRef.current = location;
   const text = qiblaFinderCopy[locale];
-  const qibla = location === null ? null : calculateQiblaBearing(location.coordinates);
+  const qiblaCoordinates = location?.coordinates ?? null;
+  const qibla =
+    qiblaCoordinates === null ? null : calculateQiblaBearing(qiblaCoordinates);
   const turn =
     qibla === null || heading === null
       ? null
@@ -327,7 +329,7 @@ export function QiblaFinder() {
         </div>
       )}
 
-      {qibla === null ? (
+      {qibla === null || qiblaCoordinates === null ? (
         <p className="inline-message">{text.noLocation}</p>
       ) : (
         <>
@@ -413,7 +415,7 @@ export function QiblaFinder() {
             </div>
           ) : (
             <QiblaMapView
-              coordinates={location.coordinates}
+              coordinates={qiblaCoordinates}
               bearingDegrees={qibla.degreesFromTrueNorth}
               aligned={aligned}
               zoom={mapZoom}
