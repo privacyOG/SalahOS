@@ -55,8 +55,45 @@ const applicationScenarios = [
     height: 844,
     locale: 'ar',
     theme: 'dark',
+    url: '?view=settings',
     fontScale: 1.25,
     openSettings: true,
+  },
+  {
+    name: 'phone-mosques-en-light',
+    width: 390,
+    height: 844,
+    locale: 'en',
+    theme: 'light',
+    url: '?view=mosques',
+    readySelector: '.mosque-profiles-panel',
+  },
+  {
+    name: 'phone-qiblah-en-dark',
+    width: 390,
+    height: 844,
+    locale: 'en',
+    theme: 'dark',
+    url: '?view=qiblah',
+    readySelector: '.qibla-finder',
+  },
+  {
+    name: 'tablet-community-ar-dark',
+    width: 1024,
+    height: 1366,
+    locale: 'ar',
+    theme: 'dark',
+    url: '?view=community',
+    readySelector: '.community-updates-panel',
+  },
+  {
+    name: 'desktop-admin-en-light',
+    width: 1440,
+    height: 1000,
+    locale: 'en',
+    theme: 'light',
+    url: '?surface=admin',
+    readySelector: '.admin-shell',
   },
 ];
 
@@ -202,8 +239,9 @@ async function validateApplicationScenario(browser, scenario) {
 
   try {
     await seedApplication(page, scenario.locale, scenario.theme);
-    await page.goto(baseUrl, { waitUntil: 'networkidle' });
-    await page.locator('.app-shell').waitFor({ state: 'visible' });
+    const targetUrl = scenario.url ? `${baseUrl}/${scenario.url}` : baseUrl;
+    await page.goto(targetUrl, { waitUntil: 'networkidle' });
+    await page.locator(scenario.readySelector ?? '.app-shell').waitFor({ state: 'visible' });
 
     if (scenario.fontScale) {
       await page.evaluate((scale) => {
