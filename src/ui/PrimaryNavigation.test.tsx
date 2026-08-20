@@ -18,6 +18,7 @@ describe('PrimaryNavigation', () => {
     expect(markup).toContain('aria-current="page"');
     expect(markup).toContain('congregation-nav-icon');
     expect(markup).toContain('<svg');
+    expect(markup).toContain('aria-hidden="true"');
     expect(markup).toContain('Today');
     expect(markup).toContain('Settings');
     expect(markup).not.toContain('Mosques');
