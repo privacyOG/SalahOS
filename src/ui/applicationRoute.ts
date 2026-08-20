@@ -39,16 +39,18 @@ export function readProductSurface(search: string): ProductSurface {
 
 export function readCongregationDestination(search: string): CongregationDestination {
   const candidate = paramsFromSearch(search).get('view');
-  return candidate !== null && congregationDestinations.has(candidate as CongregationDestination)
-    ? (candidate as CongregationDestination)
-    : 'today';
+  if (candidate === null || !congregationDestinations.has(candidate as CongregationDestination)) {
+    return 'today';
+  }
+  return candidate as CongregationDestination;
 }
 
 export function readAdminDestination(search: string): AdminDestination {
   const candidate = paramsFromSearch(search).get('adminView');
-  return candidate !== null && adminDestinations.has(candidate as AdminDestination)
-    ? (candidate as AdminDestination)
-    : 'overview';
+  if (candidate === null || !adminDestinations.has(candidate as AdminDestination)) {
+    return 'overview';
+  }
+  return candidate as AdminDestination;
 }
 
 export function searchForCongregationDestination(
