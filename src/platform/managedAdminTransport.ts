@@ -158,7 +158,7 @@ export function createManagedAdminClient(
       return Object.freeze(body.displays.map(parseRemoteStatus));
     },
 
-    async registerDisplay(input) {
+    async registerDisplay(input: ManagedDisplayRegistration) {
       const registration = createManagedDisplayRegistration(input);
       const body = await request('/v1/admin/displays', {
         method: 'POST',
@@ -167,7 +167,7 @@ export function createManagedAdminClient(
       return parseEnrollment(body);
     },
 
-    async updateDisplayConfig(displayId, update) {
+    async updateDisplayConfig(displayId: string, update: ManagedDisplayConfigUpdate) {
       const normalizedDisplayId = normalizeManagedDisplayId(displayId);
       const normalizedUpdate = createManagedDisplayConfigUpdate(update);
       const body = await request(
@@ -180,7 +180,7 @@ export function createManagedAdminClient(
       return parseRemoteStatus(body);
     },
 
-    async revokeDisplay(displayId) {
+    async revokeDisplay(displayId: string) {
       const normalizedDisplayId = normalizeManagedDisplayId(displayId);
       const body = await request(
         `/v1/admin/displays/${encodeURIComponent(normalizedDisplayId)}/revoke`,
@@ -206,7 +206,7 @@ export function createManagedDisplayClient(
       const body = await request(`/v1/device/config?displayId=${encodeURIComponent(displayId)}`);
       return parseManagedDeviceRemoteConfig(body);
     },
-    async heartbeat(input) {
+    async heartbeat(input: Omit<ManagedDisplayHeartbeat, 'displayId'>) {
       const heartbeat = createManagedDisplayHeartbeat({ ...input, displayId });
       const body = await request('/v1/device/heartbeat', {
         method: 'POST',
