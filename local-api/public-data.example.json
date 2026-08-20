@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "generatedAt": "2026-08-20T04:15:00Z",
+  "mosques": {
+    "masjid.one": {
+      "profile": {
+        "mosqueId": "masjid.one",
+        "name": "Masjid One",
+        "timezone": "Australia/Sydney",
+        "address": "1 Example Street, Sydney NSW",
+        "publishedAt": "2026-08-20T04:15:00Z",
+        "revision": 1
+      },
+      "dailyPrayers": {
+        "2026-08-20": {
+          "mosqueId": "masjid.one",
+          "date": "2026-08-20",
+          "timezone": "Australia/Sydney",
+          "publishedAt": "2026-08-20T04:15:00Z",
+          "revision": 1,
+          "prayers": {
+            "fajr": "05:18",
+            "dhuhr": "12:03",
+            "asr": "15:21",
+            "maghrib": "17:33",
+            "isha": "19:00"
+          },
+          "iqamah": {
+            "fajr": { "kind": "offset", "offsetMinutes": 20 },
+            "dhuhr": { "kind": "fixed", "localMinutes": 740 }
+          },
+          "jumuah": [],
+          "hijriLabel": "7 Rabi al-Awwal 1448"
+        }
+      },
+      "monthlyTimetables": {
+        "2026-08": {
+          "mosqueId": "masjid.one",
+          "month": "2026-08",
+          "timezone": "Australia/Sydney",
+          "publishedAt": "2026-08-20T04:15:00Z",
+          "revision": 1,
+          "days": [
+            {
+              "date": "2026-08-20",
+              "prayers": {
+                "fajr": "05:18",
+                "dhuhr": "12:03",
+                "asr": "15:21",
+                "maghrib": "17:33",
+                "isha": "19:00"
+              },
+              "iqamah": {
+                "fajr": "05:38",
+                "dhuhr": "12:20"
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

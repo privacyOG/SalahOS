@@ -9,6 +9,7 @@
     "build": "tsc -b && vite build",
     "preview": "vite preview",
     "managed-admin:serve": "node managed-service/server.mjs",
+    "local-api:serve": "node local-api/server.mjs",
     "verify:web-build": "node scripts/verify-web-build.mjs",
     "visual:check": "node scripts/visual-regression.mjs",
     "typecheck": "tsc -b --pretty false",
