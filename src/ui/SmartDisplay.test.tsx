@@ -67,6 +67,9 @@ describe('SmartDisplay', () => {
     expect(smartDisplayTemplateRequested('?mode=smart-display&template=bold-countdown-focus')).toBe(
       'bold-countdown-focus',
     );
+    expect(smartDisplayTemplateRequested('?mode=smart-display&template=structured-split-board')).toBe(
+      'structured-split-board',
+    );
     expect(smartDisplayTemplateRequested('?template=scenic-spiritual')).toBe('heritage-classic');
   });
 
@@ -153,6 +156,36 @@ describe('SmartDisplay', () => {
     expect(html).not.toContain('data-prayer-board-template="minimal-modern"');
   });
 
+  it('renders Structured Split Board from the same prayer-board contract', () => {
+    const html = renderToStaticMarkup(
+      <SmartDisplay
+        locale="en"
+        currentClock="4:00:00 pm"
+        dashboard={fridayDashboard()}
+        timeFormat="h12"
+        hijriCorrectionDays={0}
+        offline={false}
+        systemTimeUnavailable={false}
+        calculationUnavailable={false}
+        templateId="structured-split-board"
+      />,
+    );
+
+    expect(html).toContain('data-display-template="structured-split-board"');
+    expect(html).toContain('data-prayer-board-template="structured-split-board"');
+    expect(html.match(/data-prayer="(?:fajr|dhuhr|asr|maghrib|isha)"/g)).toHaveLength(5);
+    expect(html).toContain('structured-prayer-row__start');
+    expect(html).toContain('structured-prayer-row__iqamah');
+    expect(html).toContain('Central Mosque');
+    expect(html).toContain('First Jumuah');
+    expect(html).toContain('Iqamah');
+    expect(html).toContain('is-current');
+    expect(html).toContain('is-next');
+    expect(html).not.toContain('data-prayer-board-template="heritage-classic"');
+    expect(html).not.toContain('data-prayer-board-template="minimal-modern"');
+    expect(html).not.toContain('data-prayer-board-template="bold-countdown-focus"');
+  });
+
   it('renders configured Friday Jumuah sessions from the shared prayer-board contract', () => {
     const html = renderToStaticMarkup(
       <SmartDisplay
@@ -192,6 +225,7 @@ describe('SmartDisplay', () => {
     expect(html).not.toContain('data-prayer-board-template="heritage-classic"');
     expect(html).not.toContain('data-prayer-board-template="minimal-modern"');
     expect(html).not.toContain('data-prayer-board-template="bold-countdown-focus"');
+    expect(html).not.toContain('data-prayer-board-template="structured-split-board"');
   });
 
   it('preserves Arabic presentation and offline status', () => {

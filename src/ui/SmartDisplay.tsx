@@ -14,8 +14,13 @@ import {
 import { BoldCountdownFocusPrayerBoard } from './BoldCountdownFocusPrayerBoard';
 import { HeritageClassicPrayerBoard } from './HeritageClassicPrayerBoard';
 import { MinimalModernPrayerBoard, type MinimalModernVariant } from './MinimalModernPrayerBoard';
+import { StructuredSplitBoard } from './StructuredSplitBoard';
 
-export type SmartDisplayTemplateId = 'heritage-classic' | 'minimal-modern' | 'bold-countdown-focus';
+export type SmartDisplayTemplateId =
+  | 'heritage-classic'
+  | 'minimal-modern'
+  | 'bold-countdown-focus'
+  | 'structured-split-board';
 
 export interface SmartDisplayProps {
   readonly locale: Locale;
@@ -35,7 +40,13 @@ export function smartDisplayModeRequested(search: string): boolean {
 
 export function smartDisplayTemplateRequested(search: string): SmartDisplayTemplateId {
   const requested = new URLSearchParams(search).get('template');
-  if (requested === 'minimal-modern' || requested === 'bold-countdown-focus') return requested;
+  if (
+    requested === 'minimal-modern' ||
+    requested === 'bold-countdown-focus' ||
+    requested === 'structured-split-board'
+  ) {
+    return requested;
+  }
   return 'heritage-classic';
 }
 
@@ -133,6 +144,13 @@ export function SmartDisplay({
         />
       ) : resolvedTemplateId === 'bold-countdown-focus' ? (
         <BoldCountdownFocusPrayerBoard
+          data={boardData}
+          locale={locale}
+          timeFormat={timeFormat}
+          displayTheme={displayTheme}
+        />
+      ) : resolvedTemplateId === 'structured-split-board' ? (
+        <StructuredSplitBoard
           data={boardData}
           locale={locale}
           timeFormat={timeFormat}
