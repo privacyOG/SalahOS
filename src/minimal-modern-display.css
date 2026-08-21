@@ -1,0 +1,139 @@
+.minimal-modern-board {
+  grid-template-rows: auto minmax(0, 0.95fr) minmax(0, 0.62fr) minmax(0, 0.33fr) auto;
+}
+
+.minimal-modern-board__masthead-meta {
+  display: grid;
+  justify-items: end;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.minimal-modern-board__status {
+  margin: 0;
+}
+
+.minimal-modern-board__hero,
+.minimal-modern-board__prayer-strip,
+.minimal-modern-board__lower {
+  min-height: 0;
+}
+
+.minimal-modern-board__clock,
+.minimal-modern-board__next,
+.minimal-modern-prayer,
+.minimal-modern-board__solar,
+.minimal-modern-board__jumuah {
+  height: 100%;
+}
+
+.minimal-modern-board__solar,
+.minimal-modern-board__jumuah {
+  align-content: center;
+}
+
+@media (min-width: 2560px) and (min-height: 1400px) {
+  .minimal-modern-board {
+    gap: 2rem;
+    padding: 2.75rem;
+    border-radius: 2rem;
+  }
+
+  .minimal-modern-board__brand > span,
+  .minimal-modern-board__clock span,
+  .minimal-modern-board__next span,
+  .minimal-modern-board__module-title,
+  .minimal-modern-prayer dt,
+  .minimal-modern-board__solar span,
+  .minimal-modern-board__jumuah article span {
+    font-size: 1.35rem;
+  }
+
+  .minimal-modern-board__brand strong {
+    max-width: min(62vw, 92rem);
+    font-size: clamp(2.4rem, 1.7vw, 4rem);
+  }
+
+  .minimal-modern-board__dates {
+    font-size: 1.45rem;
+  }
+
+  .minimal-modern-board__clock,
+  .minimal-modern-board__next {
+    padding: 4rem;
+    border-radius: 1.8rem;
+  }
+
+  .minimal-modern-board__clock strong {
+    font-size: clamp(9rem, 7vw, 17rem);
+  }
+
+  .minimal-modern-board__next-label > strong {
+    font-size: clamp(5rem, 4vw, 9rem);
+  }
+
+  .minimal-modern-board__countdown strong {
+    font-size: clamp(5rem, 4.2vw, 9rem);
+  }
+
+  .minimal-modern-board__next dt {
+    font-size: 1.35rem;
+  }
+
+  .minimal-modern-board__next dd {
+    font-size: 3rem;
+  }
+
+  .minimal-modern-board__prayer-strip {
+    border-radius: 1.8rem;
+  }
+
+  .minimal-modern-prayer {
+    padding: 2.5rem;
+  }
+
+  .minimal-modern-prayer header strong {
+    font-size: 3rem;
+  }
+
+  .minimal-modern-prayer header span {
+    padding: 0.4rem 0.75rem;
+    font-size: 1.1rem;
+  }
+
+  .minimal-modern-prayer dd {
+    font-size: 3rem;
+  }
+
+  .minimal-modern-board__solar,
+  .minimal-modern-board__jumuah {
+    padding: 2rem;
+    border-radius: 1.6rem;
+  }
+
+  .minimal-modern-board__solar strong {
+    font-size: 3rem;
+  }
+
+  .minimal-modern-board__jumuah article strong {
+    font-size: 2rem;
+  }
+
+  .minimal-modern-board__footer {
+    font-size: 1.15rem;
+  }
+}
+
+@media (max-width: 1100px), (orientation: landscape) and (max-height: 760px) {
+  .minimal-modern-board {
+    grid-template-rows: none;
+  }
+
+  .minimal-modern-board__clock,
+  .minimal-modern-board__next,
+  .minimal-modern-prayer,
+  .minimal-modern-board__solar,
+  .minimal-modern-board__jumuah {
+    height: auto;
+  }
+}
