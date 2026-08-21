@@ -1,0 +1,91 @@
+name: Stage 23.4 Format Cleanup
+
+on:
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  format-stage-23-4:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - name: Checkout PR head branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Finalize and format Stage 23.4 files
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('scripts/visual-bold-countdown-focus.mjs')
+          text = path.read_text()
+          probe_marker = "\nconst { readFile } = await import('node:fs/promises');\n"
+          if probe_marker in text:
+              text = text.split(probe_marker, 1)[0].rstrip() + "\n"
+
+          if 'board under-fills viewport' not in text:
+              marker = "    const countdownBox = await page.locator('.bold-countdown-board__countdown strong').boundingBox();"
+              assertion = """    const minimumBoardHeight = boardGeometry.viewportHeight * 0.9;\n    if (boardGeometry.height < minimumBoardHeight) {\n      throw new Error(\n        `${scenario.name} board under-fills viewport: ${JSON.stringify(boardGeometry)}`,\n      );\n    }\n\n"""
+              if marker not in text:
+                  raise SystemExit('Bold Countdown Focus countdown marker not found')
+              text = text.replace(marker, assertion + marker, 1)
+
+          path.write_text(text)
+          PY
+
+          npx prettier --write \
+            scripts/visual-bold-countdown-focus.mjs \
+            src/bold-countdown-focus.css \
+            src/bold-countdown-focus-display.css \
+            src/ui/BoldCountdownFocusPrayerBoard.tsx \
+            src/ui/BoldCountdownFocusPrayerBoard.test.tsx \
+            src/ui/SmartDisplay.tsx \
+            src/ui/SmartDisplay.test.tsx
+          npx prettier --check \
+            scripts/visual-bold-countdown-focus.mjs \
+            src/bold-countdown-focus.css \
+            src/bold-countdown-focus-display.css \
+            src/ui/BoldCountdownFocusPrayerBoard.tsx \
+            src/ui/BoldCountdownFocusPrayerBoard.test.tsx \
+            src/ui/SmartDisplay.tsx \
+            src/ui/SmartDisplay.test.tsx
+
+      - name: Commit canonical Stage 23.4 sources
+        run: |
+          if git diff --quiet -- \
+            scripts/visual-bold-countdown-focus.mjs \
+            src/bold-countdown-focus.css \
+            src/bold-countdown-focus-display.css \
+            src/ui/BoldCountdownFocusPrayerBoard.tsx \
+            src/ui/BoldCountdownFocusPrayerBoard.test.tsx \
+            src/ui/SmartDisplay.tsx \
+            src/ui/SmartDisplay.test.tsx; then
+            echo 'Stage 23.4 files already canonical.'
+            exit 0
+          fi
+          git config user.name 'privacyOG'
+          git config user.email 'kriptiik@proton.me'
+          git add \
+            scripts/visual-bold-countdown-focus.mjs \
+            src/bold-countdown-focus.css \
+            src/bold-countdown-focus-display.css \
+            src/ui/BoldCountdownFocusPrayerBoard.tsx \
+            src/ui/BoldCountdownFocusPrayerBoard.test.tsx \
+            src/ui/SmartDisplay.tsx \
+            src/ui/SmartDisplay.test.tsx
+          git commit -m 'Canonicalize Bold Countdown Focus sources'
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
