@@ -165,21 +165,23 @@ The daily prayer display surface must also become a first-class configurable pro
 
 ## 23.1 Shared prayer-board template engine
 
-- [ ] Define one shared display data contract for all prayer-board templates.
-- [ ] Define reusable slots/modules for current time, dates, next prayer, countdown, prayer timetable, Jumu'ah, sunrise/sunset, mosque branding, announcements and optional weather.
-- [ ] Create a template registry with stable template identifiers and versioned configuration.
-- [ ] Ensure template choice never changes prayer calculations or prayer-source semantics.
-- [ ] Allow per-template module visibility without allowing required prayer information to become ambiguous.
-- [ ] Support 12-hour and 24-hour clock presentation.
-- [ ] Support English, Arabic/RTL, Turkish and Indonesian.
-- [ ] Support bilingual English/Arabic display mode where layout space permits.
-- [ ] Support mosque name and validated logo branding.
-- [ ] Support controlled accent-colour presets.
-- [ ] Support approved custom background images with crop/focal-point controls.
-- [ ] Enforce contrast overlays/scrims automatically when background imagery reduces readability.
-- [ ] Provide sensible built-in artwork/pattern fallbacks so custom images are optional.
-- [ ] Keep external/remote content isolated from the authoritative local prayer board.
-- [ ] Keep all templates deterministic and usable when offline.
+- [x] Define one shared display data contract for all prayer-board templates.
+- [x] Define reusable slots/modules for current time, dates, next prayer, countdown, prayer timetable, Jumu'ah, sunrise/sunset, mosque branding, announcements and optional weather.
+- [x] Create a template registry with stable template identifiers and versioned configuration.
+- [x] Ensure template choice never changes prayer calculations or prayer-source semantics.
+- [x] Allow per-template module visibility without allowing required prayer information to become ambiguous.
+- [x] Support 12-hour and 24-hour clock presentation.
+- [x] Support English, Arabic/RTL, Turkish and Indonesian.
+- [x] Support bilingual English/Arabic display mode where layout space permits.
+- [x] Support mosque name and validated logo branding.
+- [x] Support controlled accent-colour presets.
+- [x] Support approved custom background images with crop/focal-point controls.
+- [x] Enforce contrast overlays/scrims automatically when background imagery reduces readability.
+- [x] Provide sensible built-in artwork/pattern fallbacks so custom images are optional.
+- [x] Keep external/remote content isolated from the authoritative local prayer board.
+- [x] Keep all templates deterministic and usable when offline.
+
+**Stage 23.1 verification note (2026-08-21):** PR #175 code-bearing head `d154cf035e13282bfdc46e78ec7a7fa455914b0c` passed Quality Gate `32460157253`, Android Build `32460157312`, Visual Regression `32460157295` and iOS Build `32460157409`, including fresh iPhone and iPad Simulator install, launch and relaunch acceptance. `src/domain/prayerBoardTemplate.ts` now defines the versioned six-template registry, required/optional module policy, four-locale and English/Arabic bilingual presentation capabilities, 12/24-hour and controlled-accent configuration, validated mosque branding/local-image metadata with focal-point/cover/automatic-scrim contracts, and deterministic built-in artwork fallbacks. `buildPrayerBoardData()` consumes only the already-resolved `SourcedPrayerDashboard`; template selection is deliberately absent from that builder, so visual choice cannot alter prayer calculations, selected source semantics, Iqamah values or next-prayer state. Optional announcement/weather inputs remain isolated and fail-soft, local asset IDs reject remote-looking values, and the focused domain suite verifies registry stability, core-module safety, configuration normalization, presentation isolation and weather independence. The six visual template implementations and later preview/assignment UX remain open as separate Stage 23 work.
 
 ## 23.2 Template 1 — Heritage Classic
 
