@@ -150,12 +150,7 @@ function normalizeMosqueNames(value) {
 }
 
 function normalizePrayerBoardConfig(value) {
-  if (
-    typeof value !== 'object' ||
-    value === null ||
-    Array.isArray(value) ||
-    value.version !== 1
-  ) {
+  if (typeof value !== 'object' || value === null || Array.isArray(value) || value.version !== 1) {
     throw new RangeError('Prayer-board configuration must use version 1');
   }
   const templateId = normalizeTemplateId(value.templateId);
@@ -248,7 +243,10 @@ function normalizeConfigUpdate(value) {
   if (contentRevision <= expectedRevision) {
     throw new RangeError('Content revision must advance beyond expected revision');
   }
-  const prayerBoardConfigSpecified = Object.prototype.hasOwnProperty.call(value, 'prayerBoardConfig');
+  const prayerBoardConfigSpecified = Object.prototype.hasOwnProperty.call(
+    value,
+    'prayerBoardConfig',
+  );
   return Object.freeze({
     expectedRevision,
     contentRevision,
@@ -350,9 +348,7 @@ function emptyState() {
 }
 
 function normalizeAssignmentSource(value) {
-  return value === 'mosque-default' || value === 'display-override'
-    ? value
-    : 'service-default';
+  return value === 'mosque-default' || value === 'display-override' ? value : 'service-default';
 }
 
 function validatePersistedState(value) {
@@ -722,7 +718,12 @@ export async function createManagedAdminService(options) {
           current.displays[identity.displayId] = entry;
           synchronizeEffectivePrayerBoard(current, entry, now.toISOString(), false);
         });
-        json(response, 201, { display: publicStatus(state, entry, nowMs), deviceToken }, corsOrigin);
+        json(
+          response,
+          201,
+          { display: publicStatus(state, entry, nowMs), deviceToken },
+          corsOrigin,
+        );
         return;
       }
 
