@@ -240,12 +240,14 @@ The daily prayer display surface must also become a first-class configurable pro
 
 ## 23.7 Template 6 — Family & Classroom
 
-- [ ] Implement an original SalahOS Family & Classroom design.
-- [ ] Use bright but dignified colours, large labels and approachable iconography.
-- [ ] Make prayer names, Athan and Iqamah especially easy to learn and distinguish.
-- [ ] Support optional daylight/sunrise/sunset cues.
-- [ ] Support optional simplified educational hints without adding them to mosque signage by default.
-- [ ] Keep the design appropriate for homes, Islamic schools and children's learning spaces without becoming toy-like.
+- [x] Implement an original SalahOS Family & Classroom design.
+- [x] Use bright but dignified colours, large labels and approachable iconography.
+- [x] Make prayer names, Athan and Iqamah especially easy to learn and distinguish.
+- [x] Support optional daylight/sunrise/sunset cues.
+- [x] Support optional simplified educational hints without adding them to mosque signage by default.
+- [x] Keep the design appropriate for homes, Islamic schools and children's learning spaces without becoming toy-like.
+
+**Stage 23.7 verification note (2026-08-22):** PR #181 code-bearing head `e74dcdb4b3a72b88afad72fa4024b6f6dad258bc` passed Quality Gate `32509234593`, Android Build `32509234580`, Visual Regression `32509234659` and iOS Build `32509234581`, including fresh iPhone and iPad Simulator install, launch and relaunch acceptance. Family & Classroom renders only from the shared `PrayerBoardData` presentation contract and does not recalculate prayers or alter selected source, Iqamah, notification or next-prayer semantics. Its original SalahOS composition uses bright but restrained high-contrast surfaces, large numbered prayer rows and first-party line iconography; Start/Athan and Iqamah are separate aligned learning columns and the next-prayer area repeats those distinctions. Educational explanations are opt-in and disabled by default for ordinary mosque signage, while sunrise/sunset daylight cues are independently optional. English, Arabic/RTL, Turkish and Indonesian teaching copy is included. The permanent 1920×1080 and 3840×2160 visual matrix covers long mosque names, hints/daylight toggles, exact five-prayer rendering, local-only requests and zero horizontal clipping; a dedicated 4K scale gate enforces long-distance minimum typography after human review caught and corrected an initially under-scaled 4K composition. Human review of exact Visual artifact `9456447558` confirmed the corrected 4K scale, composed English and Arabic/RTL layouts, clear Start/Iqamah hierarchy and no clipping. All six required display templates are now complete; preview/configuration/managed-display assignment and Stage 23.13 mobile variants remain open.
 
 ## 23.8 Optional future template — Ambient Minimal
 
