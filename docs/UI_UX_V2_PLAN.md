@@ -45,7 +45,7 @@ The daily prayer display surface must also become a first-class configurable pro
 - [x] Qiblah.
 - [x] Community.
 - [x] Settings.
-- [ ] Place Announcements and Events inside Community using clear secondary navigation/tabs rather than expanding phone primary navigation beyond five destinations.
+- [x] Place Announcements and Events inside Community using clear secondary navigation/tabs rather than expanding phone primary navigation beyond five destinations.
 
 ### Managed-masjid administration information architecture
 
@@ -108,12 +108,12 @@ The daily prayer display surface must also become a first-class configurable pro
 ## 22.4 Dedicated Qiblah experience
 
 - [x] Move the Qiblah Finder out of the long stacked home flow into its own primary congregation destination.
-- [ ] Give the live compass/bearing a dedicated full-screen hierarchy.
-- [ ] Present current location and bearing clearly above/beside the compass depending on device size.
-- [ ] Keep calibration, sensor quality, true-north/magnetic-declination and alignment guidance understandable but visually subordinate.
-- [ ] Put city search, saved-location selection and map-pin workflows in secondary sheets/panels rather than always-visible large forms.
-- [ ] Preserve offline bearing calculation and explicit network gating for optional map imagery.
-- [ ] Validate portrait phone, landscape phone, tablet and desktop layouts independently.
+- [x] Give the live compass/bearing a dedicated full-screen hierarchy.
+- [x] Present current location and bearing clearly above/beside the compass depending on device size.
+- [x] Keep calibration, sensor quality, true-north/magnetic-declination and alignment guidance understandable but visually subordinate.
+- [x] Put city search, saved-location selection and map-pin workflows in secondary sheets/panels rather than always-visible large forms.
+- [x] Preserve offline bearing calculation and explicit network gating for optional map imagery.
+- [x] Validate portrait phone, landscape phone, tablet and desktop layouts independently.
 
 ---
 
@@ -121,33 +121,35 @@ The daily prayer display surface must also become a first-class configurable pro
 
 ### Mosques
 
-- [ ] Create a dedicated mosque discovery/favourites screen.
-- [ ] Separate followed mosques from location/GPS settings.
-- [ ] Present mosque prayer/Iqamah freshness and provenance clearly.
-- [ ] Create a polished mosque profile screen with today's prayer times, Jumu'ah, next prayer, announcements, events and contact/facility information.
-- [ ] Keep nearby search privacy-gated and explicit.
+- [x] Create a dedicated mosque discovery/favourites screen.
+- [x] Separate followed mosques from location/GPS settings.
+- [x] Present mosque prayer/Iqamah freshness and provenance clearly.
+- [x] Create a polished mosque profile screen with today's prayer times, Jumu'ah, next prayer, announcements, events and contact/facility information.
+- [x] Keep nearby search privacy-gated and explicit.
 
 ### Community
 
 - [x] Create a dedicated Community destination.
-- [ ] Add Announcements and Events as clear secondary tabs/views.
-- [ ] Remove community administration/import controls from the normal congregation reading experience.
-- [ ] Use compact preview cards with clear hierarchy, expiry/status and optional call-to-action.
-- [ ] Provide useful empty states when no managed content exists.
+- [x] Add Announcements and Events as clear secondary tabs/views.
+- [x] Remove community administration/import controls from the normal congregation reading experience.
+- [x] Use compact preview cards with clear hierarchy, expiry/status and optional call-to-action.
+- [x] Provide useful empty states when no managed content exists.
+
+**Stage 22.5 verification note (2026-08-21):** PR #170 code-bearing head `9446b32fb34e66cf9de7fd94855b88f0f746693a` passed Quality Gate `32435976858`, Android Build `32435976877`, Visual Regression `32435976891` and iOS Build `32435976879`. The congregation Mosques destination now provides followed-mosque discovery, explicit local-only nearby sorting from already-saved coordinates, prayer/Iqamah provenance and freshness, and a focused mosque profile with prayer, Jumu'ah, community and facility/contact context. Community now provides reader-only Announcements and Events tabs with compact status/expiry/source metadata, calls to action and useful empty states; administration/import controls remain outside the congregation reading surface. Populated English phone and Arabic/RTL tablet visual scenarios were reviewed manually, while the permanent visual matrix independently passed on the exact code-bearing head.
 
 ---
 
 ## 22.6 Settings restructuring and progressive disclosure
 
-- [ ] Replace the current large settings form with category-based navigation.
-- [ ] Create Prayer Settings category.
-- [ ] Create Location category.
-- [ ] Create Mosque & Iqamah category.
-- [ ] Create Notifications & Adhan category.
-- [ ] Create Appearance & Language category.
-- [ ] Create Data & Privacy category.
-- [ ] Create Display Themes category where applicable.
-- [ ] Create Advanced category for import/export, raw coordinates and uncommon calculation controls.
+- [x] Replace the current large settings form with category-based navigation.
+- [x] Create Prayer Settings category.
+- [x] Create Location category.
+- [x] Create Mosque & Iqamah category.
+- [x] Create Notifications & Adhan category.
+- [x] Create Appearance & Language category.
+- [x] Create Data & Privacy category.
+- [x] Create Display Themes category where applicable.
+- [x] Create Advanced category for import/export, raw coordinates and uncommon calculation controls.
 - [ ] Move manual mosque timetable authoring/import into appropriate administration/advanced workflows instead of presenting it as normal daily-use configuration.
 - [ ] Use explanatory copy only where needed; do not turn settings into dense documentation pages.
 
