@@ -207,7 +207,10 @@ async function validateScenario(browser, scenario) {
     if (state.lang !== scenario.locale || state.dir !== expectedDirection) {
       throw new Error(`${scenario.name} locale/direction mismatch: ${JSON.stringify(state)}`);
     }
-    if (state.displayTheme !== scenario.displayTheme || state.displayTemplate !== 'minimal-modern') {
+    if (
+      state.displayTheme !== scenario.displayTheme ||
+      state.displayTemplate !== 'minimal-modern'
+    ) {
       throw new Error(`${scenario.name} display selection mismatch: ${JSON.stringify(state)}`);
     }
     if (state.width !== scenario.width || state.height !== scenario.height) {
@@ -219,7 +222,9 @@ async function validateScenario(browser, scenario) {
 
     const variant = await board.getAttribute('data-minimal-variant');
     if (variant !== scenario.expectedVariant) {
-      throw new Error(`${scenario.name} expected ${scenario.expectedVariant} variant, got ${variant}`);
+      throw new Error(
+        `${scenario.name} expected ${scenario.expectedVariant} variant, got ${variant}`,
+      );
     }
 
     const prayerRows = await page.locator('.minimal-modern-prayer').count();
@@ -227,7 +232,9 @@ async function validateScenario(browser, scenario) {
       throw new Error(`${scenario.name} expected 5 obligatory prayer columns, got ${prayerRows}`);
     }
 
-    const heritageBoards = await page.locator('[data-prayer-board-template="heritage-classic"]').count();
+    const heritageBoards = await page
+      .locator('[data-prayer-board-template="heritage-classic"]')
+      .count();
     if (heritageBoards !== 0) {
       throw new Error(`${scenario.name} unexpectedly rendered Heritage Classic`);
     }
