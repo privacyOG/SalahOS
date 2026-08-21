@@ -26,9 +26,6 @@ jobs:
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
 
-      - name: Prayer-board formatter diagnostic
-        run: npx prettier src/domain/prayerBoardTemplate.ts
-
       # Repository-wide format/lint/security/test checks are owned by the
       # permanent Quality Gate workflow. Keep this job platform-specific so a
       # repository lint failure is reported once instead of masquerading as an

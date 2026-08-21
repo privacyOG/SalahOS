@@ -27,9 +27,6 @@ jobs:
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
 
-      - name: Prayer-board formatter diagnostic
-        run: npx prettier src/domain/prayerBoardTemplate.test.ts
-
       - name: Sensitive-file policy
         run: npm run security:sensitive-files
 

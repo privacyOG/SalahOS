@@ -29,12 +29,7 @@ export type PrayerBoardModuleId =
 
 export type PrayerBoardTimeFormat = 'h12' | 'h23';
 export type PrayerBoardLanguageMode = 'single' | 'en-ar';
-export type PrayerBoardAccentPreset =
-  | 'emerald'
-  | 'midnight'
-  | 'sandstone'
-  | 'neutral'
-  | 'jewel';
+export type PrayerBoardAccentPreset = 'emerald' | 'midnight' | 'sandstone' | 'neutral' | 'jewel';
 export type PrayerBoardImageMimeType = 'image/png' | 'image/jpeg' | 'image/webp';
 export type PrayerBoardArtworkId =
   | 'geometric-heritage'
@@ -306,9 +301,7 @@ function normalizeModuleVisibility(
   return Object.freeze(result);
 }
 
-export function getPrayerBoardTemplate(
-  id: PrayerBoardTemplateId,
-): PrayerBoardTemplateDefinition {
+export function getPrayerBoardTemplate(id: PrayerBoardTemplateId): PrayerBoardTemplateDefinition {
   const template = TEMPLATE_BY_ID.get(id);
   if (template === undefined) throw new Error(`Unknown prayer-board template: ${id}`);
   return template;
@@ -430,9 +423,7 @@ function normalizeWeather(
 ): PrayerBoardWeatherSnapshot | null {
   if (value === null || value === undefined) return null;
   const temperatureC =
-    value.temperatureC !== null && Number.isFinite(value.temperatureC)
-      ? value.temperatureC
-      : null;
+    value.temperatureC !== null && Number.isFinite(value.temperatureC) ? value.temperatureC : null;
   const summary = value.summary === null ? null : value.summary.trim().slice(0, 160) || null;
   const observedAtIso =
     value.observedAtIso !== null && Number.isFinite(Date.parse(value.observedAtIso))
