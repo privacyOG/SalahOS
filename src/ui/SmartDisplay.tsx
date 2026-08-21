@@ -184,8 +184,14 @@ export function SmartDisplay({
     return () => {
       window.removeEventListener(SMART_DISPLAY_THEME_CHANGE_EVENT, refreshTheme);
       window.removeEventListener(PRAYER_BOARD_DISPLAY_CONFIG_CHANGE_EVENT, refreshDisplayConfig);
-      window.removeEventListener(MANAGED_PRAYER_BOARD_CACHE_CHANGE_EVENT, refreshManagedDisplayConfig);
-      window.removeEventListener(MANAGED_DISPLAY_CONNECTION_CHANGE_EVENT, refreshManagedDisplayConfig);
+      window.removeEventListener(
+        MANAGED_PRAYER_BOARD_CACHE_CHANGE_EVENT,
+        refreshManagedDisplayConfig,
+      );
+      window.removeEventListener(
+        MANAGED_DISPLAY_CONNECTION_CHANGE_EVENT,
+        refreshManagedDisplayConfig,
+      );
     };
   }, []);
 
