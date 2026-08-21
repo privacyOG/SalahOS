@@ -76,13 +76,13 @@
   display: none !important;
 }
 
-.prayer-board-configured-surface[data-module-sunrise-sunset='off']
-  .heritage-classic-board__solar,
+.prayer-board-configured-surface[data-module-sunrise-sunset='off'] .heritage-classic-board__solar,
 .prayer-board-configured-surface[data-module-sunrise-sunset='off'] .minimal-modern-board__solar,
 .prayer-board-configured-surface[data-module-sunrise-sunset='off'] .bold-countdown-board__solar,
 .prayer-board-configured-surface[data-module-sunrise-sunset='off'] .structured-split-board__solar,
 .prayer-board-configured-surface[data-module-sunrise-sunset='off'] .scenic-spiritual-board__solar,
-.prayer-board-configured-surface[data-module-sunrise-sunset='off'] .family-classroom-board__daylight {
+.prayer-board-configured-surface[data-module-sunrise-sunset='off']
+  .family-classroom-board__daylight {
   display: none !important;
 }
 
@@ -243,9 +243,7 @@
 
 .prayer-board-template-thumbnail--heritage-classic {
   color: #f0dfae;
-  background:
-    linear-gradient(135deg, rgba(230, 195, 96, 0.18), transparent 45%),
-    #123d34;
+  background: linear-gradient(135deg, rgba(230, 195, 96, 0.18), transparent 45%), #123d34;
 }
 
 .prayer-board-template-thumbnail--heritage-classic::before {
