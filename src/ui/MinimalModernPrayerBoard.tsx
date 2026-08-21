@@ -110,10 +110,7 @@ export function MinimalModernPrayerBoard({
         </div>
       </header>
 
-      <section
-        className="minimal-modern-board__hero"
-        aria-label={translate(locale, 'nextPrayer')}
-      >
+      <section className="minimal-modern-board__hero" aria-label={translate(locale, 'nextPrayer')}>
         <div className="minimal-modern-board__clock">
           <span>{translate(locale, 'currentTime')}</span>
           <strong>{displayClock(data.clock, locale, timeFormat)}</strong>
