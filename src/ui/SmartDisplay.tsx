@@ -12,6 +12,7 @@ import {
   type SmartDisplayThemeId,
 } from '../platform/smartDisplayTheme';
 import { BoldCountdownFocusPrayerBoard } from './BoldCountdownFocusPrayerBoard';
+import { FamilyClassroomPrayerBoard } from './FamilyClassroomPrayerBoard';
 import { HeritageClassicPrayerBoard } from './HeritageClassicPrayerBoard';
 import { MinimalModernPrayerBoard, type MinimalModernVariant } from './MinimalModernPrayerBoard';
 import { ScenicSpiritualPrayerBoard } from './ScenicSpiritualPrayerBoard';
@@ -22,7 +23,8 @@ export type SmartDisplayTemplateId =
   | 'minimal-modern'
   | 'bold-countdown-focus'
   | 'structured-split-board'
-  | 'scenic-spiritual';
+  | 'scenic-spiritual'
+  | 'family-classroom';
 
 export interface SmartDisplayProps {
   readonly locale: Locale;
@@ -35,6 +37,8 @@ export interface SmartDisplayProps {
   readonly calculationUnavailable: boolean;
   readonly templateId?: SmartDisplayTemplateId;
   readonly scenicArtworkEnabled?: boolean;
+  readonly familyEducationalHintsEnabled?: boolean;
+  readonly familyDaylightCuesEnabled?: boolean;
 }
 
 export function smartDisplayModeRequested(search: string): boolean {
@@ -47,7 +51,8 @@ export function smartDisplayTemplateRequested(search: string): SmartDisplayTempl
     requested === 'minimal-modern' ||
     requested === 'bold-countdown-focus' ||
     requested === 'structured-split-board' ||
-    requested === 'scenic-spiritual'
+    requested === 'scenic-spiritual' ||
+    requested === 'family-classroom'
   ) {
     return requested;
   }
@@ -56,6 +61,14 @@ export function smartDisplayTemplateRequested(search: string): SmartDisplayTempl
 
 export function smartDisplayScenicArtworkRequested(search: string): boolean {
   return new URLSearchParams(search).get('artwork') !== 'off';
+}
+
+export function smartDisplayFamilyHintsRequested(search: string): boolean {
+  return new URLSearchParams(search).get('hints') === 'on';
+}
+
+export function smartDisplayFamilyDaylightRequested(search: string): boolean {
+  return new URLSearchParams(search).get('daylight') !== 'off';
 }
 
 function readSmartDisplayTheme(): SmartDisplayThemeId {
@@ -80,6 +93,8 @@ export function SmartDisplay({
   calculationUnavailable,
   templateId,
   scenicArtworkEnabled,
+  familyEducationalHintsEnabled,
+  familyDaylightCuesEnabled,
 }: SmartDisplayProps) {
   const [displayTheme, setDisplayTheme] = useState<SmartDisplayThemeId>(readSmartDisplayTheme);
   const boardData = useMemo(
@@ -96,6 +111,16 @@ export function SmartDisplay({
     (typeof window === 'undefined'
       ? true
       : smartDisplayScenicArtworkRequested(window.location.search));
+  const resolvedFamilyEducationalHintsEnabled =
+    familyEducationalHintsEnabled ??
+    (typeof window === 'undefined'
+      ? false
+      : smartDisplayFamilyHintsRequested(window.location.search));
+  const resolvedFamilyDaylightCuesEnabled =
+    familyDaylightCuesEnabled ??
+    (typeof window === 'undefined'
+      ? true
+      : smartDisplayFamilyDaylightRequested(window.location.search));
 
   useEffect(() => {
     const refresh = () => {
@@ -177,6 +202,15 @@ export function SmartDisplay({
           timeFormat={timeFormat}
           displayTheme={displayTheme}
           artworkEnabled={resolvedScenicArtworkEnabled}
+        />
+      ) : resolvedTemplateId === 'family-classroom' ? (
+        <FamilyClassroomPrayerBoard
+          data={boardData}
+          locale={locale}
+          timeFormat={timeFormat}
+          displayTheme={displayTheme}
+          educationalHintsEnabled={resolvedFamilyEducationalHintsEnabled}
+          daylightCuesEnabled={resolvedFamilyDaylightCuesEnabled}
         />
       ) : (
         <HeritageClassicPrayerBoard
