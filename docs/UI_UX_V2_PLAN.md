@@ -257,16 +257,18 @@ The daily prayer display surface must also become a first-class configurable pro
 
 ## 23.9 Prayer-board configuration and preview UX
 
-- [ ] Add a visual template gallery with thumbnail/live previews for all six required designs.
-- [ ] Allow users/admins to switch templates without editing raw configuration.
-- [ ] Show selected-template state clearly.
-- [ ] Add full-screen preview before applying/publishing a template change.
-- [ ] Preview representative states: before prayer, near Athan, between Athan and Iqamah, Iqamah now, Jumu'ah day and Ramadan where applicable.
-- [ ] Preview English and Arabic/RTL before a template can be marked visually complete.
-- [ ] Allow show/hide configuration for optional modules: Jumu'ah, sunrise/sunset, Gregorian date, Hijri date, weather and announcements.
-- [ ] Allow compact versus detailed timetable density where the template supports it.
-- [ ] Allow landscape/portrait orientation selection only when the selected template has a validated variant.
-- [ ] Prevent invalid combinations that would hide or overlap essential prayer information.
+- [x] Add a visual template gallery with thumbnail/live previews for all six required designs.
+- [x] Allow users/admins to switch templates without editing raw configuration.
+- [x] Show selected-template state clearly.
+- [x] Add full-screen preview before applying/publishing a template change.
+- [x] Preview representative states: before prayer, near Athan, between Athan and Iqamah, Iqamah now, Jumu'ah day and Ramadan where applicable.
+- [x] Preview English and Arabic/RTL before a template can be marked visually complete.
+- [x] Allow show/hide configuration for optional modules: Jumu'ah, sunrise/sunset, Gregorian date, Hijri date, weather and announcements.
+- [x] Allow compact versus detailed timetable density where the template supports it.
+- [x] Allow landscape/portrait orientation selection only when the selected template has a validated variant.
+- [x] Prevent invalid combinations that would hide or overlap essential prayer information.
+
+**Stage 23.9 verification note (2026-08-22):** PR #182 code-bearing head `54cae00d496167aa7dc4e3a3fcf15a7806ccf3e9` passed Quality Gate `32526337045`, Android Build `32526337051`, Visual Regression `32526337061` and iOS Build `32526337060`, including fresh iPhone and iPad Simulator install, launch and relaunch acceptance. The admin Display Themes surface now provides a six-design visual gallery with an explicit selected state, presentation-only language/time/accent/mosque-name controls, mandatory core current-time/next-prayer/countdown/five-prayer-timetable modules, supported optional module visibility, and a full-screen preview that must be opened for the current draft before Apply is enabled. Representative fixtures cover before-prayer, near-Athan, Athan-to-Iqamah, Iqamah-now and Jumu'ah states; Ramadan is not fabricated because the current shared prayer-board contract carries no Ramadan-specific display state, with seasonal/mobile work remaining under Stage 23.13. English and Arabic/RTL full-screen previews exercise the real shared renderers. The Stage 23.1 contract intentionally exposes Gregorian and Hijri dates through one shared `dates` presentation module, so the UI shows/hides that combined date region rather than inventing divergent date semantics. No density or portrait choice is exposed where a template has no validated selectable variant; the editor states that landscape is the validated TV/kiosk orientation and therefore prevents unsupported combinations by omission. Applied configuration is versioned and persisted separately from prayer settings, and the smart-display runtime consumes it when no explicit fixture URL override is present while retaining backward-compatible query fixtures. Exact Visual artifact `9462330563` passed the gallery → preview → apply → smart-display browser flow, confirmed six gallery templates, applied `minimal-modern`, Arabic `family-classroom` RTL presentation and local-only requests; human review accepted the gallery, English preview/applied display and Arabic/RTL preview with clear prayer hierarchy and no visible clipping. Stage 23.10 managed-display assignment and Stage 23.13 mobile Today/home template variants remain open.
 
 ---
 
