@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
+import '../today-contextual-v2.css';
+
 import { buildPrayerDashboardResult } from '../domain/dashboardResult';
 import { displayedHighLatitudeRuleApplied } from '../domain/highLatitudeIndicators';
 import { calculationMethods } from '../domain/methods';
@@ -25,6 +27,7 @@ import {
 } from '../platform/settingsStorage';
 import { readSystemTime } from '../platform/systemTime';
 import { BidiText } from './BidiText';
+import { TodayContextualSections } from './TodayContextualSections';
 import { searchForCongregationDestination, type CongregationDestination } from './applicationRoute';
 
 const prayerTranslationKeys: Readonly<Record<PrayerName, TranslationKey>> = {
@@ -373,12 +376,6 @@ export function TodayScreen() {
                 );
               })}
             </div>
-
-            {unavailablePrayers.length > 0 && (
-              <p className="today-schedule__notice" role="status">
-                {translate(locale, 'somePrayerTimesUnavailable')}
-              </p>
-            )}
           </section>
 
           {sourcedDashboard.jumuahSessions.length > 0 && (
@@ -408,6 +405,16 @@ export function TodayScreen() {
               </div>
             </section>
           )}
+
+          <TodayContextualSections
+            settings={settings}
+            dashboard={sourcedDashboard}
+            unavailablePrayers={unavailablePrayers}
+            online={online}
+            now={now}
+            communityHref={destinationHref('community')}
+            mosquesHref={destinationHref('mosques')}
+          />
 
           <nav className="today-quick-actions" aria-label={translate(locale, 'today')}>
             <a href={destinationHref('qiblah')}>{quickLabels.qiblah}</a>
