@@ -734,7 +734,7 @@
 - [x] Document notification platform limitations
 - [x] Add troubleshooting section
 
-**Troubleshooting/documentation verification note (2026-08-16):** read-only Quality Gate run `31928551210` passed the sensitive-file policy, dependency vulnerability audit, dependency-license policy, documentation-link verification across all 27 root/docs Markdown files, formatting, typed lint, strict typecheck, the complete test suite, production build and deploy-artifact verification after adding `docs/TROUBLESHOOTING.md`, a README documentation index and an executable local Markdown-link gate. The troubleshooting guide covers the currently implemented shared/Web/PWA install, build/deploy, prayer/location/timezone, DST/date rollover, offline reload, settings, mosque timetable/Iqamah, notification-intent, RTL, service-worker, security/license and bug-report workflows without representing native shells as release-validated. The Stage 19 notification-limitations marker is synchronized here because `docs/NOTIFICATION_LIMITATIONS.md` was already implemented and verified under Stage 10 by Quality Gate run `31913144213`; this tracker update does not claim new native notification delivery capability. README screenshots/platform-status work remains partial.
+**Troubleshooting/documentation verification note (2026-08-16):** read-only Quality Gate run `31928551210` passed the sensitive-file policy, dependency vulnerability audit, dependency-license policy, documentation-link verification across all 27 root/docs Markdown files, PWA raster-icon reproducibility, formatting, typed lint, strict typecheck, the complete test suite, production build and deploy-artifact verification after adding `docs/TROUBLESHOOTING.md`, a README documentation index and an executable local Markdown-link gate. The troubleshooting guide covers the currently implemented shared/Web/PWA install, build/deploy, prayer/location/timezone, DST/date rollover, offline reload, settings, mosque timetable/Iqamah, notification-intent, RTL, service-worker, security/license and bug-report workflows without representing native shells as release-validated. The Stage 19 notification-limitations marker is synchronized here because `docs/NOTIFICATION_LIMITATIONS.md` was already implemented and verified under Stage 10 by Quality Gate run `31913144213`; this tracker update does not claim new native notification delivery capability. README screenshots/platform-status work remains partial.
 
 - [x] Add contributor/development setup instructions
 
@@ -808,7 +808,7 @@
 
 ## 23. Daily Prayer Display Theme Library
 
-- [ ] Build the shared prayer-board template/data contract
+- [x] Build the shared prayer-board template/data contract
 - [ ] Implement Heritage Classic
 - [ ] Implement Minimal Modern
 - [ ] Implement Bold Countdown Focus
@@ -816,6 +816,9 @@
 - [ ] Implement Scenic Spiritual
 - [ ] Implement Family & Classroom
 - [ ] Add template preview, configuration, branding and managed-display assignment
+- [ ] Complete mobile Today/home prayer-board template variants and visual Settings selector (Stage 23.13)
+
+**Stage 23 progress note (2026-08-21):** PR #175 established the versioned six-template registry, shared prayer-board data contract, required/optional module policy, four-locale and bilingual presentation capabilities, controlled presentation configuration, validated local imagery/branding metadata, deterministic offline fallbacks and isolation of optional weather/announcement content. Code-bearing head `d154cf035e13282bfdc46e78ec7a7fa455914b0c` passed Quality Gate `32460157253`, Android Build `32460157312`, Visual Regression `32460157295` and iOS Build `32460157409`, including fresh iPhone/iPad Simulator runtime acceptance. Stage 23.1 is therefore complete. Stage 23.13 explicitly requires the mobile Today/home prayer surface to receive original phone-adapted variants of the prayer-board designs, retain one-tap bottom navigation including Qiblah and Settings, expose a visual Settings > Display Themes selector with previews/per-surface targeting, and pass phone/RTL/offline/visual/human acceptance before it may be marked complete. The six visual templates and mobile template work remain open.
 
 ---
 
