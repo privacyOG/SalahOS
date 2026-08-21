@@ -218,12 +218,14 @@ The daily prayer display surface must also become a first-class configurable pro
 
 ## 23.5 Template 4 — Structured Split Board
 
-- [ ] Implement an original SalahOS Structured Split Board design.
-- [ ] Use a precise Athan/start versus Iqamah/Jama'ah column layout.
-- [ ] Use a separate clock/date/next-prayer column or region.
-- [ ] Provide dedicated compact areas for multiple Jumu'ah sessions and sunrise/sunset.
-- [ ] Optimize for mosques and schools that prioritise information density and precision.
-- [ ] Maintain clean alignment at both 1080p and 4K without looking like a spreadsheet.
+- [x] Implement an original SalahOS Structured Split Board design.
+- [x] Use a precise Athan/start versus Iqamah/Jama'ah column layout.
+- [x] Use a separate clock/date/next-prayer column or region.
+- [x] Provide dedicated compact areas for multiple Jumu'ah sessions and sunrise/sunset.
+- [x] Optimize for mosques and schools that prioritise information density and precision.
+- [x] Maintain clean alignment at both 1080p and 4K without looking like a spreadsheet.
+
+**Stage 23.5 verification note (2026-08-21):** PR #179 code-bearing head `13ad0a56597bc37fc955a942f4db3d7f6c8a4bd1` passed Quality Gate `32489547751`, Android Build `32489547621`, Visual Regression `32489547618` and iOS Build `32489547663`, including fresh iPhone and iPad Simulator install, launch and relaunch acceptance. Structured Split Board renders only from the shared `PrayerBoardData` presentation contract and does not recalculate prayers or change selected source, Iqamah, notification or next-prayer semantics. Its original SalahOS composition uses a distinct timetable region with precisely aligned Start/Athan and Iqamah/Jama'ah columns plus a separate clock/date/next-prayer rail, while multiple Jumu'ah sessions and sunrise/sunset remain compact. The permanent focused visual harness passed English and Arabic/RTL at 1920×1080 and 3840×2160, including deliberately long mosque names, exact five-prayer assertions, split-region separation, Start/Iqamah column-alignment checks, at least 90% viewport-height use and zero horizontal clipping. Human review of the exact screenshots confirmed high information density without a spreadsheet-like appearance, clear current/next states, composed RTL presentation and crisp alignment at both resolutions. Later templates, preview/assignment UX and Stage 23.13 mobile variants remain open.
 
 ## 23.6 Template 5 — Scenic Spiritual
 
