@@ -18,7 +18,7 @@
     "test:watch": "vitest",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "format:check": "prettier --write managed-service/server.mjs managed-service/prayer-board-assignment.test.mjs scripts/visual-managed-display-assignment.mjs src/domain/managedAdminProtocol.ts src/domain/managedPrayerBoardTarget.ts src/domain/managedPrayerBoardTarget.test.ts src/main.tsx src/managed-display-assignment.css src/platform/managedAdminTransport.ts src/platform/managedPrayerBoardCache.ts src/platform/managedPrayerBoardCache.test.ts src/ui/ManagedDisplayRemoteController.tsx src/ui/ManagedDisplayTargetPreview.tsx src/ui/RemoteDisplayAdminPanel.tsx src/ui/SmartDisplay.tsx && git diff -- managed-service/server.mjs managed-service/prayer-board-assignment.test.mjs scripts/visual-managed-display-assignment.mjs src/domain/managedAdminProtocol.ts src/domain/managedPrayerBoardTarget.ts src/domain/managedPrayerBoardTarget.test.ts src/main.tsx src/managed-display-assignment.css src/platform/managedAdminTransport.ts src/platform/managedPrayerBoardCache.ts src/platform/managedPrayerBoardCache.test.ts src/ui/ManagedDisplayRemoteController.tsx src/ui/ManagedDisplayTargetPreview.tsx src/ui/RemoteDisplayAdminPanel.tsx src/ui/SmartDisplay.tsx && exit 1",
+    "format:check": "prettier --check .",
     "docs:links": "node scripts/check-doc-links.mjs",
     "security:sensitive-files": "node scripts/check-sensitive-files.mjs",
     "security:native-permissions": "node scripts/check-native-permissions.mjs",
