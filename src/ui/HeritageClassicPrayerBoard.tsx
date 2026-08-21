@@ -85,7 +85,7 @@ export function HeritageClassicPrayerBoard({
       </header>
 
       {data.offline && (
-        <p className="heritage-classic-board__status" role="status">
+        <p className="smart-display-status heritage-classic-board__status" role="status">
           {translate(locale, 'offline')}
         </p>
       )}
