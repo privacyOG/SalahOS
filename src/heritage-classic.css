@@ -1,0 +1,529 @@
+.heritage-classic-board {
+  --heritage-accent: #0f6b52;
+  --heritage-accent-strong: #084c3a;
+  --heritage-gold: #b58a36;
+  --heritage-panel: color-mix(in srgb, var(--card) 92%, transparent);
+  --heritage-panel-strong: color-mix(in srgb, var(--next-card) 94%, transparent);
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  gap: clamp(0.9rem, 1.8vw, 1.5rem);
+  min-height: calc(100vh - clamp(2rem, 5vw, 4.5rem));
+  overflow: hidden;
+  border: 1px solid var(--card-border);
+  border-radius: clamp(1.25rem, 2vw, 2rem);
+  background:
+    linear-gradient(145deg, color-mix(in srgb, var(--page) 97%, transparent), var(--page)),
+    var(--page);
+  box-shadow: 0 1.8rem 5rem var(--shadow);
+}
+
+.heritage-classic-board[data-heritage-variant='midnight'] {
+  --heritage-accent: #d5b557;
+  --heritage-accent-strong: #f0d98b;
+  --heritage-gold: #d5b557;
+}
+
+.heritage-classic-board[data-heritage-variant='sandstone'] {
+  --heritage-accent: #8b552d;
+  --heritage-accent-strong: #634027;
+  --heritage-gold: #a87532;
+}
+
+.heritage-classic-board[data-heritage-variant='emerald'] {
+  --heritage-accent: #43d6a4;
+  --heritage-accent-strong: #99f0d1;
+  --heritage-gold: #d2b35f;
+}
+
+.heritage-classic-board__pattern {
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  opacity: 0.18;
+  background-image:
+    linear-gradient(45deg, transparent 43%, var(--heritage-accent) 44% 46%, transparent 47%),
+    linear-gradient(-45deg, transparent 43%, var(--heritage-accent) 44% 46%, transparent 47%);
+  background-size: 4.5rem 4.5rem;
+  mask-image: linear-gradient(to bottom, #000, transparent 72%);
+}
+
+.heritage-classic-board__masthead {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  min-width: 0;
+  padding: clamp(1rem, 2vw, 1.5rem) clamp(1.1rem, 2.5vw, 2rem) 0;
+}
+
+.heritage-classic-board__brand {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  min-width: 0;
+}
+
+.heritage-classic-board__brand img {
+  width: clamp(3rem, 4.8vw, 5rem);
+  height: clamp(3rem, 4.8vw, 5rem);
+  flex: 0 0 auto;
+  border-radius: 24%;
+}
+
+.heritage-classic-board__brand > div {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.heritage-classic-board__brand span {
+  color: var(--heritage-accent-strong);
+  font-size: clamp(0.85rem, 1.3vw, 1.1rem);
+  font-weight: 900;
+  letter-spacing: 0.12em;
+}
+
+.heritage-classic-board__brand strong {
+  min-width: 0;
+  max-width: min(46vw, 42rem);
+  overflow-wrap: anywhere;
+  font-size: clamp(1rem, 2vw, 1.7rem);
+  line-height: 1.15;
+}
+
+.heritage-classic-board__dates {
+  display: grid;
+  gap: 0.2rem;
+  max-width: 42rem;
+  color: var(--muted);
+  font-size: clamp(0.85rem, 1.25vw, 1.1rem);
+  text-align: end;
+}
+
+.heritage-classic-board__hero {
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.8fr) minmax(24rem, 1.2fr);
+  gap: clamp(0.8rem, 1.6vw, 1.25rem);
+  padding-inline: clamp(1rem, 2.5vw, 2rem);
+}
+
+.heritage-classic-board__clock,
+.heritage-classic-board__next,
+.heritage-classic-board__timetable,
+.heritage-classic-board__solar,
+.heritage-classic-board__jumuah {
+  border: 1px solid var(--card-border);
+  background: var(--heritage-panel);
+  box-shadow: 0 0.8rem 2.4rem color-mix(in srgb, var(--shadow) 65%, transparent);
+}
+
+.heritage-classic-board__clock,
+.heritage-classic-board__next {
+  position: relative;
+  overflow: hidden;
+  border-radius: 1.35rem;
+}
+
+.heritage-classic-board__clock::before,
+.heritage-classic-board__next::before {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: 0.32rem;
+  background: var(--heritage-accent);
+  content: '';
+}
+
+.heritage-classic-board__clock {
+  display: grid;
+  align-content: center;
+  gap: 0.3rem;
+  min-height: clamp(12rem, 25vh, 19rem);
+  padding: clamp(1.25rem, 2.8vw, 2.5rem);
+}
+
+.heritage-classic-board__clock span,
+.heritage-classic-board__next span,
+.heritage-classic-board__module-title {
+  color: var(--muted);
+  font-size: clamp(0.78rem, 1.2vw, 1rem);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+}
+
+.heritage-classic-board__clock strong {
+  font-size: clamp(4.6rem, 9vw, 9rem);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.055em;
+  line-height: 0.9;
+}
+
+.heritage-classic-board__next {
+  display: grid;
+  grid-template-columns: minmax(10rem, 0.75fr) minmax(13rem, 1fr);
+  grid-template-rows: 1fr auto;
+  gap: 0.8rem 1.5rem;
+  align-items: center;
+  min-height: clamp(12rem, 25vh, 19rem);
+  padding: clamp(1.25rem, 2.8vw, 2.5rem);
+  background: var(--heritage-panel-strong);
+}
+
+.heritage-classic-board__next > div:first-child {
+  display: grid;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.heritage-classic-board__next > div:first-child > strong {
+  overflow-wrap: anywhere;
+  color: var(--heritage-accent-strong);
+  font-size: clamp(2.2rem, 4.8vw, 4.8rem);
+  line-height: 0.95;
+}
+
+.heritage-classic-board__next small {
+  font-weight: 800;
+}
+
+.heritage-classic-board__countdown {
+  display: grid;
+  justify-items: end;
+  min-width: 0;
+}
+
+.heritage-classic-board__countdown strong {
+  font-size: clamp(3rem, 6vw, 6rem);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+}
+
+.heritage-classic-board__next dl {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin: 0;
+}
+
+.heritage-classic-board__next dl > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.8rem;
+  min-width: 0;
+  padding-block-start: 0.75rem;
+  border-block-start: 1px solid var(--card-border);
+}
+
+.heritage-classic-board__next dt {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.heritage-classic-board__next dd {
+  margin: 0;
+  font-size: clamp(1.3rem, 2.3vw, 2.1rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 900;
+}
+
+.heritage-classic-board__timetable {
+  margin-inline: clamp(1rem, 2.5vw, 2rem);
+  overflow: hidden;
+  border-radius: 1.35rem;
+}
+
+.heritage-classic-board__table-heading,
+.heritage-classic-prayer-row {
+  display: grid;
+  grid-template-columns: minmax(10rem, 1.25fr) repeat(2, minmax(8rem, 0.75fr));
+  align-items: center;
+  gap: 1rem;
+  min-width: 0;
+  padding: clamp(0.75rem, 1.35vw, 1.1rem) clamp(1rem, 2vw, 1.6rem);
+}
+
+.heritage-classic-board__table-heading {
+  color: var(--muted);
+  background: color-mix(in srgb, var(--heritage-accent) 8%, var(--heritage-panel));
+  font-size: clamp(0.78rem, 1vw, 0.95rem);
+  font-weight: 900;
+}
+
+.heritage-classic-board__table-heading span:not(:first-child),
+.heritage-classic-prayer-row > strong {
+  text-align: center;
+}
+
+.heritage-classic-prayer-row + .heritage-classic-prayer-row {
+  border-block-start: 1px solid var(--card-border);
+}
+
+.heritage-classic-prayer-row.is-current,
+.heritage-classic-prayer-row.is-next {
+  background: color-mix(in srgb, var(--heritage-accent) 12%, var(--heritage-panel));
+}
+
+.heritage-classic-prayer-row.is-current {
+  box-shadow: inset 0.3rem 0 var(--heritage-gold);
+}
+
+[dir='rtl'] .heritage-classic-prayer-row.is-current {
+  box-shadow: inset -0.3rem 0 var(--heritage-gold);
+}
+
+.heritage-classic-prayer-row.is-next {
+  outline: 2px solid color-mix(in srgb, var(--heritage-accent) 62%, transparent);
+  outline-offset: -2px;
+}
+
+.heritage-classic-prayer-row__name {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+  min-width: 0;
+}
+
+.heritage-classic-prayer-row__name strong {
+  overflow-wrap: anywhere;
+  font-size: clamp(1.25rem, 2.5vw, 2.25rem);
+}
+
+.heritage-classic-prayer-row__name span {
+  padding: 0.25rem 0.55rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  color: var(--heritage-accent-strong);
+  font-size: clamp(0.68rem, 0.9vw, 0.82rem);
+  font-weight: 900;
+}
+
+.heritage-classic-prayer-row > strong {
+  font-size: clamp(1.35rem, 2.8vw, 2.5rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.heritage-classic-board__lower-grid {
+  display: grid;
+  grid-template-columns: minmax(16rem, 0.65fr) minmax(0, 1.35fr);
+  gap: clamp(0.8rem, 1.6vw, 1.25rem);
+  padding-inline: clamp(1rem, 2.5vw, 2rem);
+}
+
+.heritage-classic-board__solar,
+.heritage-classic-board__jumuah {
+  border-radius: 1.15rem;
+  padding: clamp(0.8rem, 1.5vw, 1.2rem);
+}
+
+.heritage-classic-board__solar {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.heritage-classic-board__solar > div {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.heritage-classic-board__solar > div + div {
+  padding-inline-start: 0.75rem;
+  border-inline-start: 1px solid var(--card-border);
+}
+
+.heritage-classic-board__solar span,
+.heritage-classic-board__jumuah article span {
+  color: var(--muted);
+  font-size: clamp(0.78rem, 1vw, 0.92rem);
+}
+
+.heritage-classic-board__solar strong {
+  font-size: clamp(1.3rem, 2.2vw, 2rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.heritage-classic-board__jumuah {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.heritage-classic-board__jumuah > div {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
+  gap: 0.65rem;
+}
+
+.heritage-classic-board__jumuah article {
+  display: grid;
+  gap: 0.2rem;
+  min-width: 0;
+  padding-inline-start: 0.7rem;
+  border-inline-start: 0.2rem solid var(--heritage-gold);
+}
+
+.heritage-classic-board__jumuah article strong {
+  overflow-wrap: anywhere;
+}
+
+.heritage-classic-board__footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem 1.2rem;
+  padding: 0 clamp(1rem, 2.5vw, 2rem) clamp(1rem, 2vw, 1.5rem);
+  color: var(--muted);
+  font-size: clamp(0.75rem, 1vw, 0.9rem);
+  text-align: center;
+}
+
+@media (max-width: 960px) {
+  .heritage-classic-board__hero,
+  .heritage-classic-board__lower-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .heritage-classic-board__clock {
+    min-height: 9rem;
+  }
+
+  .heritage-classic-board__next {
+    min-height: 11rem;
+  }
+}
+
+@media (max-width: 640px) {
+  .heritage-classic-board {
+    gap: 0.65rem;
+    min-height: auto;
+    border-radius: 1rem;
+  }
+
+  .heritage-classic-board__masthead {
+    align-items: start;
+  }
+
+  .heritage-classic-board__brand strong {
+    max-width: 52vw;
+  }
+
+  .heritage-classic-board__dates {
+    font-size: 0.72rem;
+  }
+
+  .heritage-classic-board__hero {
+    gap: 0.65rem;
+  }
+
+  .heritage-classic-board__clock {
+    min-height: 7.5rem;
+    padding: 1rem;
+  }
+
+  .heritage-classic-board__clock strong {
+    font-size: clamp(3rem, 17vw, 5rem);
+  }
+
+  .heritage-classic-board__next {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    padding: 1rem;
+  }
+
+  .heritage-classic-board__countdown {
+    justify-items: start;
+  }
+
+  .heritage-classic-board__next dl {
+    grid-column: auto;
+  }
+
+  .heritage-classic-board__table-heading,
+  .heritage-classic-prayer-row {
+    grid-template-columns: minmax(7rem, 1.2fr) repeat(2, minmax(5rem, 0.8fr));
+    gap: 0.45rem;
+    padding: 0.7rem 0.65rem;
+  }
+
+  .heritage-classic-board__table-heading {
+    font-size: 0.67rem;
+  }
+
+  .heritage-classic-prayer-row__name {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.25rem;
+  }
+
+  .heritage-classic-prayer-row__name strong,
+  .heritage-classic-prayer-row > strong {
+    font-size: clamp(1rem, 4.6vw, 1.3rem);
+  }
+
+  .heritage-classic-board__lower-grid {
+    gap: 0.65rem;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 760px) {
+  .heritage-classic-board {
+    gap: 0.55rem;
+  }
+
+  .heritage-classic-board__masthead {
+    padding-block-start: 0.65rem;
+  }
+
+  .heritage-classic-board__hero {
+    grid-template-columns: minmax(15rem, 0.75fr) minmax(23rem, 1.25fr);
+  }
+
+  .heritage-classic-board__clock,
+  .heritage-classic-board__next {
+    min-height: 7.5rem;
+    padding: 0.8rem 1rem;
+  }
+
+  .heritage-classic-board__clock strong {
+    font-size: clamp(3.2rem, 8vw, 5.3rem);
+  }
+
+  .heritage-classic-board__next > div:first-child > strong {
+    font-size: clamp(1.8rem, 4vw, 3.1rem);
+  }
+
+  .heritage-classic-board__countdown strong {
+    font-size: clamp(2.3rem, 5vw, 4rem);
+  }
+
+  .heritage-classic-board__table-heading,
+  .heritage-classic-prayer-row {
+    padding-block: 0.48rem;
+  }
+
+  .heritage-classic-board__lower-grid {
+    grid-template-columns: minmax(14rem, 0.6fr) minmax(0, 1.4fr);
+  }
+}
+
+@media (forced-colors: active) {
+  .heritage-classic-board,
+  .heritage-classic-board__clock,
+  .heritage-classic-board__next,
+  .heritage-classic-board__timetable,
+  .heritage-classic-board__solar,
+  .heritage-classic-board__jumuah {
+    border: 1px solid CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+  }
+
+  .heritage-classic-board__pattern {
+    display: none;
+  }
+}

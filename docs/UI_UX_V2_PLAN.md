@@ -185,12 +185,14 @@ The daily prayer display surface must also become a first-class configurable pro
 
 ## 23.2 Template 1 — Heritage Classic
 
-- [ ] Implement an original SalahOS Heritage Classic design.
-- [ ] Use refined Islamic geometric/pattern styling and optional mosque/calligraphy imagery without copying third-party artwork.
-- [ ] Use a strong Athan/Iqamah timetable region and a separate clock/next-prayer region.
-- [ ] Include compact Jumu'ah and sunrise/sunset modules.
-- [ ] Support dark, jewel-toned and neutral preset variants while preserving high contrast.
-- [ ] Validate long mosque names and Arabic calligraphic/RTL-adjacent content without collisions.
+- [x] Implement an original SalahOS Heritage Classic design.
+- [x] Use refined Islamic geometric/pattern styling and optional mosque/calligraphy imagery without copying third-party artwork.
+- [x] Use a strong Athan/Iqamah timetable region and a separate clock/next-prayer region.
+- [x] Include compact Jumu'ah and sunrise/sunset modules.
+- [x] Support dark, jewel-toned and neutral preset variants while preserving high contrast.
+- [x] Validate long mosque names and Arabic calligraphic/RTL-adjacent content without collisions.
+
+**Stage 23.2 verification note (2026-08-21):** PR #176 code-bearing head `2f9535a059937bbd0ed06f8c2953e3c964f14255` passed Quality Gate `32471878090`, Android Build `32471878101`, Visual Regression `32471878106` and iOS Build `32471878114`, including fresh iPhone and iPad Simulator install, launch and relaunch acceptance. Heritage Classic renders only from the shared `PrayerBoardData` presentation contract, so template selection does not recalculate prayers or change selected source, Iqamah or next-prayer semantics. The original SalahOS composition uses a geometric heritage field with classic, emerald, midnight and sandstone variants, a distinct current-clock/next-prayer hero, an explicit Athan/start-versus-Iqamah timetable, compact Jumu'ah and sunrise/sunset modules, current/next state labels and preserved offline state. The permanent focused visual harness passed English and Arabic/RTL at 1920×1080 and 3840×2160, including deliberately long mosque names, exact five-row assertions, no horizontal clipping and full-board viewport-fit checks; a dedicated 1080p density profile preserves all modules while leaving 4K geometry unchanged. Human review of the successful 1080p and 4K evidence confirmed immediate next-prayer hierarchy, unambiguous Athan/Iqamah presentation, balanced density and composed Arabic/RTL layout. Later templates, preview/assignment UX and Stage 23.13 mobile variants remain open.
 
 ## 23.3 Template 2 — Minimal Modern
 

@@ -54,7 +54,7 @@ describe('SmartDisplay', () => {
     expect(smartDisplayModeRequested('?foo=1&mode=smart-display')).toBe(true);
   });
 
-  it('renders five obligatory prayers at a glance with Iqamah and current/next state', () => {
+  it('renders Heritage Classic from the shared prayer-board contract with Iqamah and state', () => {
     const html = renderToStaticMarkup(
       <SmartDisplay
         locale="en"
@@ -69,20 +69,20 @@ describe('SmartDisplay', () => {
     );
 
     expect(html).toContain('data-mode="smart-display"');
-    expect(html.match(/<article class="prayer-card/g)).toHaveLength(5);
+    expect(html).toContain('data-prayer-board-template="heritage-classic"');
+    expect(html.match(/<div class="heritage-classic-prayer-row(?: |")/g)).toHaveLength(5);
     expect(html).toContain('Fajr');
     expect(html).toContain('Dhuhr');
     expect(html).toContain('Asr');
     expect(html).toContain('Maghrib');
     expect(html).toContain('Isha');
-    expect(html).not.toContain('Sunrise');
     expect(html).toContain('Iqamah');
-    expect(html).toContain('prayer-card-current');
-    expect(html).toContain('prayer-card-next');
+    expect(html).toContain('is-current');
+    expect(html).toContain('is-next');
     expect(html).toContain('Central Mosque');
   });
 
-  it('renders configured Friday Jumuah sessions from the shared sourced dashboard', () => {
+  it('renders configured Friday Jumuah sessions from the shared prayer-board contract', () => {
     const html = renderToStaticMarkup(
       <SmartDisplay
         locale="en"
@@ -100,6 +100,7 @@ describe('SmartDisplay', () => {
     expect(html).toContain('Second Jumuah');
     expect(html).toContain('Khutbah');
     expect(html).toContain('Salah');
+    expect(html).toContain('data-solar-event="sunset"');
   });
 
   it('renders a location-not-configured state without fabricating prayer times', () => {
@@ -117,10 +118,10 @@ describe('SmartDisplay', () => {
     );
 
     expect(html).toContain('Not configured');
-    expect(html).not.toContain('class="smart-display-prayers"');
+    expect(html).not.toContain('data-prayer-board-template="heritage-classic"');
   });
 
-  it('preserves Arabic presentation and the offline status', () => {
+  it('preserves Arabic presentation and offline status', () => {
     const html = renderToStaticMarkup(
       <SmartDisplay
         locale="ar"
