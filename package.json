@@ -18,7 +18,7 @@
     "test:watch": "vitest",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "format:check": "prettier --write scripts/visual-prayer-board-config.mjs src/platform/prayerBoardDisplayConfig.ts src/smart-display-themes.css src/ui/prayerBoardPreviewData.ts src/ui/PrayerBoardRenderer.tsx src/ui/SmartDisplay.tsx src/ui/SmartDisplayThemeSettings.tsx && git diff -- scripts/visual-prayer-board-config.mjs src/platform/prayerBoardDisplayConfig.ts src/smart-display-themes.css src/ui/prayerBoardPreviewData.ts src/ui/PrayerBoardRenderer.tsx src/ui/SmartDisplay.tsx src/ui/SmartDisplayThemeSettings.tsx && exit 1",
+    "format:check": "prettier --check .",
     "docs:links": "node scripts/check-doc-links.mjs",
     "security:sensitive-files": "node scripts/check-sensitive-files.mjs",
     "security:native-permissions": "node scripts/check-native-permissions.mjs",
