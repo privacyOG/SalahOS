@@ -10,9 +10,7 @@ import type { SmartDisplayThemeId } from '../platform/smartDisplayTheme';
 import { parseSmartDisplayTheme } from '../platform/smartDisplayTheme';
 
 export type ManagedPrayerBoardAssignmentSource =
-  | 'service-default'
-  | 'mosque-default'
-  | 'display-override';
+  'service-default' | 'mosque-default' | 'display-override';
 
 export interface ManagedDisplayRemoteConfig {
   readonly displayId: string;
@@ -139,12 +137,12 @@ function parseTemplateId(value: unknown): PrayerBoardTemplateId | null {
 }
 
 function parseAssignmentSource(value: unknown): ManagedPrayerBoardAssignmentSource {
-  return value === 'mosque-default' || value === 'display-override'
-    ? value
-    : 'service-default';
+  return value === 'mosque-default' || value === 'display-override' ? value : 'service-default';
 }
 
-function accentForLegacyTheme(theme: SmartDisplayThemeId): PrayerBoardTemplateConfig['accentPreset'] {
+function accentForLegacyTheme(
+  theme: SmartDisplayThemeId,
+): PrayerBoardTemplateConfig['accentPreset'] {
   switch (theme) {
     case 'midnight':
       return 'midnight';
