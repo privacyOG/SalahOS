@@ -1,0 +1,27 @@
+name: Heritage Format Diagnostic
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  format-diagnostic:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies from lockfile
+        run: npm ci --ignore-scripts
+
+      - name: Print canonical Heritage renderer
+        run: npx prettier src/ui/HeritageClassicPrayerBoard.tsx
