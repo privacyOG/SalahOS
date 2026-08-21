@@ -14,10 +14,15 @@ import {
 import { BoldCountdownFocusPrayerBoard } from './BoldCountdownFocusPrayerBoard';
 import { HeritageClassicPrayerBoard } from './HeritageClassicPrayerBoard';
 import { MinimalModernPrayerBoard, type MinimalModernVariant } from './MinimalModernPrayerBoard';
+import { ScenicSpiritualPrayerBoard } from './ScenicSpiritualPrayerBoard';
 import { StructuredSplitBoard } from './StructuredSplitBoard';
 
 export type SmartDisplayTemplateId =
-  'heritage-classic' | 'minimal-modern' | 'bold-countdown-focus' | 'structured-split-board';
+  | 'heritage-classic'
+  | 'minimal-modern'
+  | 'bold-countdown-focus'
+  | 'structured-split-board'
+  | 'scenic-spiritual';
 
 export interface SmartDisplayProps {
   readonly locale: Locale;
@@ -29,6 +34,7 @@ export interface SmartDisplayProps {
   readonly systemTimeUnavailable: boolean;
   readonly calculationUnavailable: boolean;
   readonly templateId?: SmartDisplayTemplateId;
+  readonly scenicArtworkEnabled?: boolean;
 }
 
 export function smartDisplayModeRequested(search: string): boolean {
@@ -40,11 +46,16 @@ export function smartDisplayTemplateRequested(search: string): SmartDisplayTempl
   if (
     requested === 'minimal-modern' ||
     requested === 'bold-countdown-focus' ||
-    requested === 'structured-split-board'
+    requested === 'structured-split-board' ||
+    requested === 'scenic-spiritual'
   ) {
     return requested;
   }
   return 'heritage-classic';
+}
+
+export function smartDisplayScenicArtworkRequested(search: string): boolean {
+  return new URLSearchParams(search).get('artwork') !== 'off';
 }
 
 function readSmartDisplayTheme(): SmartDisplayThemeId {
@@ -68,6 +79,7 @@ export function SmartDisplay({
   systemTimeUnavailable,
   calculationUnavailable,
   templateId,
+  scenicArtworkEnabled,
 }: SmartDisplayProps) {
   const [displayTheme, setDisplayTheme] = useState<SmartDisplayThemeId>(readSmartDisplayTheme);
   const boardData = useMemo(
@@ -79,6 +91,11 @@ export function SmartDisplay({
     (typeof window === 'undefined'
       ? 'heritage-classic'
       : smartDisplayTemplateRequested(window.location.search));
+  const resolvedScenicArtworkEnabled =
+    scenicArtworkEnabled ??
+    (typeof window === 'undefined'
+      ? true
+      : smartDisplayScenicArtworkRequested(window.location.search));
 
   useEffect(() => {
     const refresh = () => {
@@ -152,6 +169,14 @@ export function SmartDisplay({
           locale={locale}
           timeFormat={timeFormat}
           displayTheme={displayTheme}
+        />
+      ) : resolvedTemplateId === 'scenic-spiritual' ? (
+        <ScenicSpiritualPrayerBoard
+          data={boardData}
+          locale={locale}
+          timeFormat={timeFormat}
+          displayTheme={displayTheme}
+          artworkEnabled={resolvedScenicArtworkEnabled}
         />
       ) : (
         <HeritageClassicPrayerBoard

@@ -1,0 +1,72 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice">
+  <metadata>Original SalahOS scenic artwork. Copyright privacyOG.</metadata>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0.95" y2="1">
+      <stop offset="0" stop-color="#071a33" />
+      <stop offset="0.48" stop-color="#174f62" />
+      <stop offset="1" stop-color="#c58a54" />
+    </linearGradient>
+    <radialGradient id="glow" cx="0.73" cy="0.28" r="0.42">
+      <stop offset="0" stop-color="#f6d99a" stop-opacity="0.95" />
+      <stop offset="0.35" stop-color="#e5aa68" stop-opacity="0.42" />
+      <stop offset="1" stop-color="#e5aa68" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="ridge" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#17313d" />
+      <stop offset="1" stop-color="#07141d" />
+    </linearGradient>
+    <linearGradient id="mosque" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#142a32" />
+      <stop offset="1" stop-color="#061018" />
+    </linearGradient>
+    <pattern id="stars" width="120" height="120" patternUnits="userSpaceOnUse">
+      <circle cx="14" cy="18" r="1.4" fill="#fff4d8" opacity="0.5" />
+      <circle cx="72" cy="42" r="0.9" fill="#fff4d8" opacity="0.42" />
+      <circle cx="106" cy="88" r="1.1" fill="#fff4d8" opacity="0.35" />
+    </pattern>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#sky)" />
+  <rect width="1600" height="900" fill="url(#glow)" />
+  <rect width="1600" height="480" fill="url(#stars)" opacity="0.72" />
+
+  <path
+    d="M0 590 175 470 300 540 475 405 620 535 805 425 985 545 1170 420 1325 515 1480 445 1600 520 1600 900 0 900Z"
+    fill="#254b4f"
+    opacity="0.55"
+  />
+  <path
+    d="M0 665 170 555 350 630 515 520 690 625 875 515 1050 635 1240 525 1410 605 1600 545 1600 900 0 900Z"
+    fill="url(#ridge)"
+    opacity="0.92"
+  />
+
+  <g fill="url(#mosque)">
+    <rect x="1045" y="610" width="420" height="214" rx="6" />
+    <rect x="1095" y="555" width="320" height="76" rx="8" />
+    <path d="M1128 560c15-96 78-151 127-151s112 55 127 151Z" />
+    <rect x="1223" y="386" width="64" height="54" rx="8" />
+    <circle cx="1255" cy="384" r="8" />
+    <path d="M1255 355a42 42 0 0 0 0 58 29 29 0 1 1 0-58Z" fill="#d9b36d" />
+
+    <rect x="990" y="390" width="52" height="434" rx="5" />
+    <path d="M982 390h68l-34-100Z" />
+    <rect x="984" y="466" width="64" height="18" rx="5" />
+    <circle cx="1016" cy="286" r="6" />
+
+    <rect x="1468" y="430" width="44" height="394" rx="5" />
+    <path d="M1460 430h60l-30-90Z" />
+    <rect x="1462" y="500" width="56" height="16" rx="5" />
+    <circle cx="1490" cy="336" r="5" />
+  </g>
+
+  <g fill="#d7b16d" opacity="0.72">
+    <rect x="1120" y="678" width="42" height="70" rx="21" />
+    <rect x="1184" y="678" width="42" height="70" rx="21" />
+    <rect x="1315" y="678" width="42" height="70" rx="21" />
+    <rect x="1379" y="678" width="42" height="70" rx="21" />
+  </g>
+
+  <path d="M0 790c310-70 525-42 760 15 256 62 508 31 840-34v129H0Z" fill="#050c12" opacity="0.88" />
+  <path d="M0 822c305-52 554-21 790 29 232 48 488 29 810-28v77H0Z" fill="#020609" opacity="0.7" />
+</svg>

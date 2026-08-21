@@ -1,0 +1,566 @@
+.scenic-spiritual-board {
+  --scenic-accent: #e7c27d;
+  --scenic-accent-strong: #f4daa5;
+  --scenic-panel: rgb(6 18 27 / 86%);
+  --scenic-panel-strong: rgb(4 13 21 / 92%);
+  --scenic-line: rgb(255 255 255 / 18%);
+  --scenic-muted: rgb(245 248 250 / 76%);
+  --scenic-text: #fbfcfd;
+  --scenic-shadow: 0 24px 72px rgb(0 0 0 / 32%);
+
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: clamp(0.9rem, 1.3vw, 1.55rem);
+  width: 100%;
+  height: 100dvh;
+  min-height: 100vh;
+  padding: clamp(1.35rem, 1.8vw, 2.5rem);
+  overflow: hidden;
+  color: var(--scenic-text);
+  background: #07151e;
+}
+
+.scenic-spiritual-board::before,
+.scenic-spiritual-board::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  pointer-events: none;
+}
+
+.scenic-spiritual-board::before {
+  z-index: -3;
+  background-image: url('/artwork/scenic-spiritual.svg');
+  background-position: center;
+  background-size: cover;
+  transform: scale(1.015);
+}
+
+.scenic-spiritual-board::after {
+  z-index: -2;
+  background:
+    linear-gradient(90deg, rgb(2 9 15 / 58%) 0%, rgb(2 9 15 / 18%) 52%, rgb(2 9 15 / 55%) 100%),
+    linear-gradient(180deg, rgb(1 7 12 / 36%) 0%, rgb(1 7 12 / 8%) 42%, rgb(1 7 12 / 68%) 100%);
+}
+
+.scenic-spiritual-board[data-artwork-mode='plain']::before {
+  background:
+    radial-gradient(circle at 72% 22%, rgb(231 194 125 / 28%), transparent 30%),
+    linear-gradient(135deg, #0b2232 0%, #123d46 48%, #182a35 100%);
+  transform: none;
+}
+
+.scenic-spiritual-board[data-artwork-mode='plain']::after {
+  background:
+    linear-gradient(120deg, rgb(0 8 14 / 34%), transparent 48%),
+    linear-gradient(180deg, transparent 46%, rgb(0 8 14 / 42%));
+}
+
+.scenic-spiritual-board[data-scenic-variant='emerald'] {
+  --scenic-accent: #9fd6bd;
+  --scenic-accent-strong: #d8f3e6;
+  --scenic-panel: rgb(4 29 28 / 87%);
+  --scenic-panel-strong: rgb(3 22 22 / 93%);
+}
+
+.scenic-spiritual-board[data-scenic-variant='midnight'] {
+  --scenic-accent: #a8c7ed;
+  --scenic-accent-strong: #d9e8fb;
+  --scenic-panel: rgb(5 17 35 / 88%);
+  --scenic-panel-strong: rgb(3 11 25 / 94%);
+}
+
+.scenic-spiritual-board[data-scenic-variant='sandstone'] {
+  --scenic-accent: #e9c48f;
+  --scenic-accent-strong: #ffe3ba;
+  --scenic-panel: rgb(38 27 18 / 87%);
+  --scenic-panel-strong: rgb(29 20 14 / 93%);
+}
+
+.scenic-spiritual-board__masthead,
+.scenic-spiritual-board__content,
+.scenic-spiritual-board__footer {
+  position: relative;
+  z-index: 1;
+}
+
+.scenic-spiritual-board__masthead {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 1.5rem;
+  min-width: 0;
+  padding: 0.15rem 0.3rem;
+}
+
+.scenic-spiritual-board__identity {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(0.9rem, 1.2vw, 1.4rem);
+  min-width: 0;
+}
+
+.scenic-spiritual-board__brand {
+  flex: 0 0 auto;
+  color: var(--scenic-accent-strong);
+  font-size: clamp(1.15rem, 1.2vw, 1.55rem);
+  font-weight: 800;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.scenic-spiritual-board__identity strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: clamp(1.65rem, 2.15vw, 2.95rem);
+  line-height: 1.08;
+  text-shadow: 0 2px 18px rgb(0 0 0 / 56%);
+}
+
+.scenic-spiritual-board__meta {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 1rem;
+  color: var(--scenic-muted);
+  font-size: clamp(0.95rem, 1vw, 1.25rem);
+  font-weight: 650;
+  text-align: end;
+}
+
+.scenic-spiritual-board__status {
+  margin: 0;
+  border: 1px solid rgb(255 255 255 / 24%);
+  border-radius: 999px;
+  padding: 0.38rem 0.75rem;
+  color: var(--scenic-text);
+  background: rgb(2 9 15 / 76%);
+}
+
+.scenic-spiritual-board__content {
+  display: grid;
+  grid-template-columns: minmax(0, 1.12fr) minmax(34rem, 0.88fr);
+  gap: clamp(1rem, 1.35vw, 1.7rem);
+  min-width: 0;
+  min-height: 0;
+}
+
+.scenic-spiritual-board__focus,
+.scenic-spiritual-board__schedule {
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid var(--scenic-line);
+  border-radius: clamp(1.4rem, 1.9vw, 2.4rem);
+  box-shadow: var(--scenic-shadow);
+  backdrop-filter: blur(14px) saturate(118%);
+}
+
+.scenic-spiritual-board__focus {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: clamp(1rem, 1.8vh, 1.6rem);
+  padding: clamp(1.7rem, 2.4vw, 3rem);
+  background: var(--scenic-panel-strong);
+}
+
+.scenic-spiritual-board__clock {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.scenic-spiritual-board__clock span,
+.scenic-spiritual-board__next span,
+.scenic-spiritual-board__countdown span,
+.scenic-spiritual-board__schedule-head span,
+.scenic-spiritual-board__solar span,
+.scenic-spiritual-board__jumuah span,
+.scenic-spiritual-board__footer {
+  color: var(--scenic-muted);
+}
+
+.scenic-spiritual-board__clock > strong {
+  font-size: clamp(5.25rem, 7.6vw, 9.4rem);
+  font-weight: 760;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.055em;
+  line-height: 0.92;
+  white-space: nowrap;
+}
+
+.scenic-spiritual-board__next {
+  align-self: center;
+  display: grid;
+  gap: 0.65rem;
+}
+
+.scenic-spiritual-board__next-heading {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.65rem 1rem;
+}
+
+.scenic-spiritual-board__next-heading > span {
+  font-size: clamp(1rem, 1.15vw, 1.4rem);
+  font-weight: 760;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.scenic-spiritual-board__next-heading small {
+  border: 1px solid rgb(255 255 255 / 22%);
+  border-radius: 999px;
+  padding: 0.22rem 0.62rem;
+  color: var(--scenic-accent-strong);
+  font-size: 0.86em;
+  font-weight: 750;
+}
+
+.scenic-spiritual-board__next > strong {
+  color: var(--scenic-accent-strong);
+  font-size: clamp(3.3rem, 5.6vw, 6.8rem);
+  line-height: 0.96;
+  text-shadow: 0 2px 24px rgb(0 0 0 / 36%);
+}
+
+.scenic-spiritual-board__next-times {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.65rem 1.2rem;
+  margin: 0;
+}
+
+.scenic-spiritual-board__next-times div {
+  display: flex;
+  align-items: baseline;
+  gap: 0.45rem;
+}
+
+.scenic-spiritual-board__next-times dt,
+.scenic-spiritual-board__next-times dd {
+  margin: 0;
+}
+
+.scenic-spiritual-board__next-times dt {
+  color: var(--scenic-muted);
+  font-size: clamp(0.95rem, 1vw, 1.2rem);
+}
+
+.scenic-spiritual-board__next-times dd {
+  font-size: clamp(1.35rem, 1.5vw, 1.9rem);
+  font-weight: 780;
+  font-variant-numeric: tabular-nums;
+}
+
+.scenic-spiritual-board__countdown {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: 1px solid var(--scenic-line);
+  padding-top: clamp(0.85rem, 1.4vh, 1.25rem);
+}
+
+.scenic-spiritual-board__countdown span {
+  padding-bottom: 0.45rem;
+  font-size: clamp(1rem, 1.05vw, 1.3rem);
+  font-weight: 720;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.scenic-spiritual-board__countdown strong {
+  color: var(--scenic-accent-strong);
+  font-size: clamp(3.3rem, 5vw, 6.2rem);
+  font-weight: 790;
+  font-variant-numeric: tabular-nums;
+  line-height: 0.9;
+  white-space: nowrap;
+}
+
+.scenic-spiritual-board__schedule {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: clamp(0.8rem, 1.25vh, 1.2rem);
+  padding: clamp(1.35rem, 1.9vw, 2.35rem);
+  background: var(--scenic-panel);
+}
+
+.scenic-spiritual-board__schedule-head,
+.scenic-spiritual-prayer-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.15fr) minmax(7rem, 0.82fr) minmax(7rem, 0.92fr);
+  align-items: center;
+  gap: clamp(0.55rem, 0.9vw, 1rem);
+}
+
+.scenic-spiritual-board__schedule-head {
+  border-bottom: 1px solid var(--scenic-line);
+  padding: 0 0.55rem clamp(0.6rem, 1vh, 0.9rem);
+  font-size: clamp(0.82rem, 0.85vw, 1rem);
+  font-weight: 760;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+}
+
+.scenic-spiritual-board__schedule-head span:not(:first-child) {
+  text-align: center;
+}
+
+.scenic-spiritual-board__prayers {
+  display: grid;
+  grid-template-rows: repeat(5, minmax(0, 1fr));
+  gap: clamp(0.42rem, 0.65vh, 0.7rem);
+  min-height: 0;
+}
+
+.scenic-spiritual-prayer-row {
+  position: relative;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: clamp(0.8rem, 1vw, 1.1rem);
+  padding: clamp(0.6rem, 0.85vh, 0.85rem) clamp(0.65rem, 0.95vw, 1rem);
+  background: rgb(255 255 255 / 5%);
+}
+
+.scenic-spiritual-prayer-row.is-current {
+  border-color: var(--scenic-accent);
+  box-shadow: inset 0.34rem 0 0 var(--scenic-accent);
+}
+
+[dir='rtl'] .scenic-spiritual-prayer-row.is-current {
+  box-shadow: inset -0.34rem 0 0 var(--scenic-accent);
+}
+
+.scenic-spiritual-prayer-row.is-next {
+  border-color: rgb(255 255 255 / 48%);
+  background: rgb(255 255 255 / 10%);
+}
+
+.scenic-spiritual-prayer-row__name {
+  display: grid;
+  gap: 0.1rem;
+  min-width: 0;
+}
+
+.scenic-spiritual-prayer-row__name strong {
+  overflow-wrap: anywhere;
+  font-size: clamp(1.25rem, 1.55vw, 1.95rem);
+  line-height: 1;
+}
+
+.scenic-spiritual-prayer-row__name span {
+  color: var(--scenic-accent-strong);
+  font-size: clamp(0.72rem, 0.72vw, 0.9rem);
+  font-weight: 760;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.scenic-spiritual-prayer-row__time {
+  font-size: clamp(1.3rem, 1.55vw, 1.95rem);
+  font-weight: 780;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.scenic-spiritual-board__adjuncts {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(0.6rem, 0.8vw, 0.9rem);
+  min-width: 0;
+}
+
+.scenic-spiritual-board__solar,
+.scenic-spiritual-board__jumuah {
+  border-top: 1px solid var(--scenic-line);
+  padding-top: clamp(0.65rem, 1vh, 0.95rem);
+}
+
+.scenic-spiritual-board__solar {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.scenic-spiritual-board__solar div {
+  display: grid;
+  gap: 0.18rem;
+}
+
+.scenic-spiritual-board__solar span,
+.scenic-spiritual-board__jumuah > strong {
+  font-size: clamp(0.72rem, 0.76vw, 0.95rem);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.scenic-spiritual-board__solar strong {
+  font-size: clamp(1.05rem, 1.15vw, 1.4rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.scenic-spiritual-board__jumuah {
+  display: grid;
+  gap: 0.38rem;
+}
+
+.scenic-spiritual-board__jumuah-sessions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.scenic-spiritual-board__jumuah-sessions article {
+  display: grid;
+  gap: 0.12rem;
+  min-width: 0;
+}
+
+.scenic-spiritual-board__jumuah-sessions article > span:first-child {
+  overflow-wrap: anywhere;
+  color: var(--scenic-text);
+  font-size: clamp(0.78rem, 0.82vw, 1rem);
+  font-weight: 760;
+}
+
+.scenic-spiritual-board__jumuah-sessions article > span:not(:first-child) {
+  font-size: clamp(0.68rem, 0.72vw, 0.88rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.scenic-spiritual-board__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 0.3rem;
+  font-size: clamp(0.78rem, 0.82vw, 1rem);
+  font-weight: 650;
+}
+
+[dir='rtl'] .scenic-spiritual-board__meta,
+[dir='rtl'] .scenic-spiritual-board__footer {
+  text-align: start;
+}
+
+@media (min-width: 3000px) and (min-height: 1800px) {
+  .scenic-spiritual-board {
+    gap: 2.2rem;
+    padding: 3.5rem 4.25rem;
+  }
+
+  .scenic-spiritual-board__masthead {
+    gap: 2.5rem;
+  }
+
+  .scenic-spiritual-board__brand {
+    font-size: 2rem;
+  }
+
+  .scenic-spiritual-board__identity strong {
+    font-size: 4rem;
+  }
+
+  .scenic-spiritual-board__meta {
+    gap: 1.6rem;
+    font-size: 1.55rem;
+  }
+
+  .scenic-spiritual-board__content {
+    grid-template-columns: minmax(0, 1.16fr) minmax(70rem, 0.84fr);
+    gap: 2.4rem;
+  }
+
+  .scenic-spiritual-board__focus,
+  .scenic-spiritual-board__schedule {
+    border-radius: 3rem;
+  }
+
+  .scenic-spiritual-board__focus {
+    gap: 2.5rem;
+    padding: 4.2rem;
+  }
+
+  .scenic-spiritual-board__clock > strong {
+    font-size: 12rem;
+  }
+
+  .scenic-spiritual-board__next > strong {
+    font-size: 8.4rem;
+  }
+
+  .scenic-spiritual-board__countdown strong {
+    font-size: 7.6rem;
+  }
+
+  .scenic-spiritual-board__schedule {
+    gap: 1.5rem;
+    padding: 3.3rem;
+  }
+
+  .scenic-spiritual-board__schedule-head,
+  .scenic-spiritual-prayer-row {
+    grid-template-columns: minmax(0, 1.15fr) minmax(11rem, 0.82fr) minmax(11rem, 0.92fr);
+    gap: 1.4rem;
+  }
+
+  .scenic-spiritual-board__schedule-head {
+    padding-inline: 1rem;
+    font-size: 1.35rem;
+  }
+
+  .scenic-spiritual-prayer-row {
+    border-radius: 1.5rem;
+    padding: 1rem 1.3rem;
+  }
+
+  .scenic-spiritual-prayer-row__name strong,
+  .scenic-spiritual-prayer-row__time {
+    font-size: 2.55rem;
+  }
+
+  .scenic-spiritual-prayer-row__name span {
+    font-size: 1.1rem;
+  }
+
+  .scenic-spiritual-board__solar span,
+  .scenic-spiritual-board__jumuah > strong {
+    font-size: 1.2rem;
+  }
+
+  .scenic-spiritual-board__solar strong,
+  .scenic-spiritual-board__jumuah-sessions article > span:first-child {
+    font-size: 1.6rem;
+  }
+
+  .scenic-spiritual-board__jumuah-sessions article > span:not(:first-child),
+  .scenic-spiritual-board__footer {
+    font-size: 1.2rem;
+  }
+}
+
+@media (forced-colors: active) {
+  .scenic-spiritual-board::before,
+  .scenic-spiritual-board::after {
+    display: none;
+  }
+
+  .scenic-spiritual-board,
+  .scenic-spiritual-board__focus,
+  .scenic-spiritual-board__schedule,
+  .scenic-spiritual-prayer-row {
+    border-color: CanvasText;
+    color: CanvasText;
+    background: Canvas;
+    box-shadow: none;
+  }
+
+  .scenic-spiritual-prayer-row.is-current,
+  .scenic-spiritual-prayer-row.is-next {
+    outline: 0.2rem solid CanvasText;
+    outline-offset: -0.2rem;
+  }
+}

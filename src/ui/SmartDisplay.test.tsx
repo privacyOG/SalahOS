@@ -7,6 +7,7 @@ import { applyPrayerSourceToDashboard } from '../domain/sourcedDashboard';
 import {
   SmartDisplay,
   smartDisplayModeRequested,
+  smartDisplayScenicArtworkRequested,
   smartDisplayTemplateRequested,
 } from './SmartDisplay';
 
@@ -70,7 +71,17 @@ describe('SmartDisplay', () => {
     expect(
       smartDisplayTemplateRequested('?mode=smart-display&template=structured-split-board'),
     ).toBe('structured-split-board');
-    expect(smartDisplayTemplateRequested('?template=scenic-spiritual')).toBe('heritage-classic');
+    expect(smartDisplayTemplateRequested('?mode=smart-display&template=scenic-spiritual')).toBe(
+      'scenic-spiritual',
+    );
+    expect(smartDisplayTemplateRequested('?template=family-classroom')).toBe('heritage-classic');
+  });
+
+  it('treats Scenic Spiritual artwork as enabled unless explicitly disabled', () => {
+    expect(smartDisplayScenicArtworkRequested('')).toBe(true);
+    expect(smartDisplayScenicArtworkRequested('?artwork=on')).toBe(true);
+    expect(smartDisplayScenicArtworkRequested('?artwork=off')).toBe(false);
+    expect(smartDisplayScenicArtworkRequested('?mode=smart-display&artwork=off')).toBe(false);
   });
 
   it('renders Heritage Classic from the shared prayer-board contract with Iqamah and state', () => {
@@ -186,6 +197,37 @@ describe('SmartDisplay', () => {
     expect(html).not.toContain('data-prayer-board-template="bold-countdown-focus"');
   });
 
+  it('renders Scenic Spiritual with a usable artwork-disabled mode from the same contract', () => {
+    const html = renderToStaticMarkup(
+      <SmartDisplay
+        locale="en"
+        currentClock="4:00:00 pm"
+        dashboard={fridayDashboard()}
+        timeFormat="h12"
+        hijriCorrectionDays={0}
+        offline={false}
+        systemTimeUnavailable={false}
+        calculationUnavailable={false}
+        templateId="scenic-spiritual"
+        scenicArtworkEnabled={false}
+      />,
+    );
+
+    expect(html).toContain('data-display-template="scenic-spiritual"');
+    expect(html).toContain('data-prayer-board-template="scenic-spiritual"');
+    expect(html).toContain('data-artwork-mode="plain"');
+    expect(html.match(/data-prayer="(?:fajr|dhuhr|asr|maghrib|isha)"/g)).toHaveLength(5);
+    expect(html).toContain('Central Mosque');
+    expect(html).toContain('First Jumuah');
+    expect(html).toContain('Iqamah');
+    expect(html).toContain('is-current');
+    expect(html).toContain('is-next');
+    expect(html).not.toContain('data-prayer-board-template="heritage-classic"');
+    expect(html).not.toContain('data-prayer-board-template="minimal-modern"');
+    expect(html).not.toContain('data-prayer-board-template="bold-countdown-focus"');
+    expect(html).not.toContain('data-prayer-board-template="structured-split-board"');
+  });
+
   it('renders configured Friday Jumuah sessions from the shared prayer-board contract', () => {
     const html = renderToStaticMarkup(
       <SmartDisplay
@@ -226,6 +268,7 @@ describe('SmartDisplay', () => {
     expect(html).not.toContain('data-prayer-board-template="minimal-modern"');
     expect(html).not.toContain('data-prayer-board-template="bold-countdown-focus"');
     expect(html).not.toContain('data-prayer-board-template="structured-split-board"');
+    expect(html).not.toContain('data-prayer-board-template="scenic-spiritual"');
   });
 
   it('preserves Arabic presentation and offline status', () => {
