@@ -31,10 +31,10 @@ function normalizeDisplayId(value: unknown): string {
 }
 
 function normalizeRevision(value: unknown): number {
-  if (!Number.isInteger(value) || Number(value) < 0) {
+  if (typeof value !== 'number' || !Number.isInteger(value) || value < 0) {
     throw new RangeError('Managed cache content revision must be a non-negative integer');
   }
-  return Number(value);
+  return value;
 }
 
 function normalizeTimestamp(value: unknown): string {
