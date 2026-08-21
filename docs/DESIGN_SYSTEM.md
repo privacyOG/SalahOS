@@ -19,16 +19,20 @@ The congregation experience follows this priority order:
 
 Configuration must not visually compete with prayer information during normal daily use.
 
-## Semantic tokens
+## Authoritative layer
 
-The implementation lives in `src/design-system.css`. New UI must use semantic tokens rather than introducing component-specific literal colours, radii or shadows.
+`src/design-system.css` is the only stylesheet allowed to define semantic `--salah-*` tokens. `src/design-system-primitives.css` consumes those tokens to provide reusable layout, typography, control, state and content patterns. Feature stylesheets may compose these contracts but must not redefine semantic tokens or reclaim global shell ownership.
+
+The Quality Gate runs `scripts/check-design-system-ownership.mjs` so token leakage, retired global ownership and missing primitive contracts fail CI rather than becoming gradual visual drift.
+
+## Semantic tokens
 
 ### Surfaces
 
 - `--salah-bg-canvas`: application background.
 - `--salah-bg-subtle`: low-emphasis secondary background.
 - `--salah-bg-surface`: standard card/panel surface.
-- `--salah-bg-surface-raised`: modal or elevated surface.
+- `--salah-bg-surface-raised`: dialog, menu or intentionally elevated surface.
 - `--salah-bg-control`: form/control surface.
 - `--salah-bg-accent-soft`: selected/current/next emphasis surface.
 
@@ -37,58 +41,147 @@ The implementation lives in `src/design-system.css`. New UI must use semantic to
 - `--salah-fg-primary`: primary readable content.
 - `--salah-fg-secondary`: supporting content.
 - `--salah-fg-tertiary`: labels and metadata.
-- `--salah-fg-accent`: positive/action emphasis.
-- `--salah-fg-warning`: caution/current-state emphasis.
+- `--salah-fg-accent`: positive/action and Iqamah emphasis.
+- `--salah-fg-warning`: caution, stale, offline and destructive emphasis.
 - `--salah-fg-provenance`: calculation/source provenance.
 
 ### Structure and interaction
 
-- `--salah-border-subtle`, `--salah-border-default`, `--salah-border-strong`.
-- `--salah-focus-ring`.
-- radius scale from `--salah-radius-xs` through `--salah-radius-xl`, plus `--salah-radius-pill`.
-- spacing scale from `--salah-space-1` through `--salah-space-16`.
-- elevation tokens `--salah-shadow-sm`, `--salah-shadow-md`, `--salah-shadow-hero`.
-- motion tokens `--salah-motion-fast`, `--salah-motion-standard`, `--salah-ease-standard`.
+- Borders: `--salah-border-subtle`, `--salah-border-default`, `--salah-border-strong`.
+- Focus: `--salah-focus-ring`.
+- Radius scale: `--salah-radius-xs` through `--salah-radius-xl`, plus `--salah-radius-pill`.
+- Elevation: `--salah-shadow-sm`, `--salah-shadow-md`, `--salah-shadow-hero`.
+- Motion: `--salah-motion-fast`, `--salah-motion-standard`, `--salah-ease-standard`.
 
-The existing `--page`, `--text`, `--card`, `--control` and related variables are temporarily retained as compatibility aliases while Stage 22 is incremental. New components should prefer the `--salah-*` names.
+The existing `--page`, `--text`, `--card`, `--control` and related variables remain compatibility aliases for legacy workflows during later extraction stages. New UI must use `--salah-*` tokens directly.
 
-## Typography
+## Spacing and page geometry
 
-The shared scale is intentionally fluid rather than device-specific hard-coded pixel sizes:
+The shared spacing scale is 8px-oriented. `--salah-space-2` (8px), `--salah-space-4` (16px), `--salah-space-6` (24px), `--salah-space-8` (32px), `--salah-space-10` (40px), `--salah-space-12` (48px) and `--salah-space-16` (64px) are the normal rhythm. `--salah-space-1` (4px), `--salah-space-3` (12px) and `--salah-space-5` (20px) are compact exceptions for badges, dense controls, display templates and small internal gaps.
 
-- `--salah-text-xs`: metadata, compact labels and badges.
-- `--salah-text-sm`: supporting copy.
-- `--salah-text-md`: normal body/control content.
-- `--salah-text-lg`: important values/headings.
-- `--salah-text-xl`: major clock/section information.
-- `--salah-text-display`: primary hero/display heading.
-- `--salah-text-countdown`: next-prayer countdown.
+- `.ds-page` owns normal congregation/administration content width and responsive page gutters.
+- `.ds-section` owns normal vertical section spacing.
+- `.ds-stack`, `.ds-stack--compact` and `.ds-stack--loose` own vertical rhythm.
+- `.ds-inline` owns wrapping horizontal action/status groups.
 
-Prayer times and countdowns must use tabular numerals where available. Arabic pages must not inherit Latin-only tracking or forced uppercase treatment.
+Feature screens may use a narrower maximum width when their content benefits from it, but should inherit the same page gutter and spacing scale.
 
-## Reusable primitives
+## Typography roles
 
-Stage 22 introduces CSS primitives that may be used by new React components without duplicating visual rules:
+The token scale remains fluid rather than device-specific. Reusable roles are:
 
-- `.ds-surface`: standard panel/card shell.
-- `.ds-surface-raised`: elevated panel shell.
-- `.ds-stack`: vertical content rhythm.
-- `.ds-inline`: wrapping inline action/status group.
-- `.ds-status-pill`: compact semantic state label.
-- `.ds-empty-state`: accessible empty/unconfigured state container.
+- `.ds-type-display-clock`: long-distance or hero clock.
+- `.ds-type-countdown`: next-prayer countdown.
+- `.ds-type-prayer-name`: primary prayer identity.
+- `.ds-type-prayer-time`: Athan/start time.
+- `.ds-type-iqamah`: Iqamah/Jama'ah time.
+- `.ds-type-section-heading`: page subsection heading.
+- `.ds-type-body`: normal readable prose.
+- `.ds-type-metadata`: supporting state/source/location information.
+- `.ds-type-caption`: compact labels and captions.
 
-Existing production panels are progressively mapped onto the same tokens so the application can migrate without a disruptive domain rewrite.
+Prayer times, Iqamah values, clocks and countdowns use tabular numerals where available. Arabic pages do not inherit Latin-only tracking or forced uppercase treatment.
+
+## Buttons and controls
+
+Use `.ds-button` with exactly one intent variant:
+
+- `.ds-button--primary`: strongest affirmative action on the current surface.
+- `.ds-button--secondary`: normal action.
+- `.ds-button--quiet`: low-emphasis navigation or tertiary action.
+- `.ds-button--destructive`: destructive/reset/remove action.
+- `.ds-button--icon`: icon-only button; it still requires an accessible name.
+
+`DesignButton` exposes these variants to React without duplicating class composition.
+
+Forms use `.ds-field` with `.ds-field__label`, a native input/select/textarea or `.ds-field__control`, and optional `.ds-field__hint`. `FormField` provides the shared React contract. Controls must retain native semantics and explicit labels.
+
+The following interaction patterns are defined in `design-system-primitives.css`:
+
+- `.ds-segmented`: mutually exclusive or compact mode selection using buttons with `aria-pressed`.
+- `.ds-tabs`: tablist presentation using `role="tab"` and `aria-selected`.
+- `.ds-switch`: labelled checkbox/switch row; native checkbox behavior remains authoritative.
+- `.ds-dialog`: centred modal/dialog surface.
+- `.ds-sheet`: edge/bottom sheet surface for narrow displays.
+- `.ds-popover`: anchored contextual surface.
+- `.ds-tooltip`: short non-interactive explanation.
+- `.ds-menu`: compact action/navigation menu.
+
+These classes define visual treatment, not replacement semantics. Native `<dialog>`, buttons, inputs and appropriate ARIA patterns remain required.
+
+## Reusable product components
+
+`src/ui/DesignSurface.tsx` provides:
+
+- `DesignSurface`.
+- `DesignButton`.
+- `FormField`.
+- `StatusPill`.
+- `StateBanner`.
+- `EmptyState`.
+- `PrayerRow`.
+- `NextPrayerSummary`.
+- `MosqueSummary`.
+- `AnnouncementPreview`.
+
+The matching CSS contracts are `.ds-surface`, `.ds-status-pill`, `.ds-banner`, `.ds-empty-state`, `.ds-prayer-row`, `.ds-next-prayer`, `.ds-mosque-summary` and `.ds-announcement-preview`.
+
+Nested summaries should normally use the subtle surface without another shadow. Raised shadows are reserved for deliberate hierarchy such as dialogs, overlays or the single dominant prayer surface.
+
+## Shared state model
+
+Use explicit UI states instead of ambiguous generic notices:
+
+- `loading`: work is in progress; skeletons may be used where layout is known.
+- `offline`: locally usable data remains authoritative without network access.
+- `stale`: stored or managed data is usable but not current.
+- `sync-pending`: local work is waiting to synchronize.
+- `sync-error`: synchronization failed and needs attention.
+- `permission-denied`: a requested capability is unavailable because permission was denied.
+- `empty`: the feature is configured correctly but has no content yet.
+
+`StateBanner` and `.ds-banner[data-state]` provide the common contract. `.ds-skeleton` is the shared loading placeholder and automatically disables shimmer under reduced-motion preferences.
+
+The existing offline prayer experience remains authoritative for local calculation and must never be replaced by a generic network-error screen.
+
+## Icon family
+
+`src/ui/SalahIcon.tsx` is the shared stroked icon family. It currently owns ten product concepts:
+
+- Today.
+- Mosques.
+- Qiblah.
+- Community.
+- Settings.
+- Prayer.
+- Iqamah.
+- Location.
+- Display.
+- Administration.
+
+Decorative icons are hidden from assistive technology by default. Standalone meaningful icons accept a title and image role. Feature screens should extend this family rather than introduce unrelated stroke weights or geometry.
 
 ## Responsive navigation contract
 
-The managed-platform roadmap uses one information architecture with different navigation presentations:
+- Phone: five-item bottom navigation for congregation destinations.
+- Tablet: compact navigation rail with content-aware layouts where useful.
+- Desktop/web: persistent readable navigation with page context.
+- TV/kiosk: ordinary congregation navigation is absent during normal display mode.
+- Touch Display 2 deterministic fixture routes remain isolated from congregation navigation.
 
-- Phone: bottom navigation for implemented primary congregation destinations; secondary configuration remains in the existing settings surface until dedicated screens replace it.
-- Tablet/desktop: compact side navigation for implemented destinations.
-- TV/kiosk: the congregation navigation shell is bypassed so ordinary signage remains presentation-first.
-- Touch Display 2 deterministic fixture routes remain isolated from congregation navigation so target-layout acceptance does not inherit unrelated chrome.
+`PrimaryNavigation` uses `SalahIcon` so navigation and feature iconography share one family.
 
-The first implemented shell intentionally exposes only **Today** and **Settings**, because both destinations already function. Future **Mosques**, **Calendar** and **Community** entries must not appear until their corresponding screens are implemented and usable. `PrimaryNavigation` owns the reusable accessible navigation contract, while `CongregationShell` adapts the current single-page application during the incremental Stage 22 migration.
+## Light and dark visual rules
+
+Light and dark themes are independent semantic palettes, not an inversion filter.
+
+- Canvas and surface contrast must remain distinct without requiring heavy borders.
+- Primary text keeps the highest contrast; secondary and tertiary text remain readable but visibly subordinate.
+- Accent-soft surfaces indicate selection/current/next state without saturating large areas.
+- Warning colour is reserved for caution, stale/offline/error/destructive meaning rather than decoration.
+- Raised shadows are intentionally weaker in light mode and stronger in dark mode; ordinary nested surfaces should avoid additional elevation.
+- Focus-ring contrast must remain visible against both canvas and control surfaces.
+- Screens must be reviewed in both themes because functional token substitution alone is not sufficient visual acceptance.
 
 ## Accessibility requirements
 
@@ -97,41 +190,24 @@ All new UI must:
 - retain visible keyboard focus;
 - meet the existing touch-target requirements;
 - remain usable with `prefers-reduced-motion`;
-- preserve high-contrast and forced-colours operation;
+- preserve `prefers-contrast` and forced-colours operation;
 - use semantic HTML before ARIA overrides;
 - support English and Arabic/RTL before being marked complete;
 - isolate administrator/provider mixed-direction text where required;
 - avoid using colour as the only indication of current, next, warning or failure state.
 
-## State model
-
-Managed-platform surfaces must eventually distinguish these states explicitly:
-
-- loading;
-- offline but locally usable;
-- sync pending;
-- synchronized;
-- stale remote data;
-- synchronization failure;
-- unconfigured/empty;
-- permission denied where applicable.
-
-The existing offline prayer experience remains authoritative for local calculation and must not be replaced by a generic network-error screen.
-
 ## Human visual acceptance
 
-Automated clipping/overflow and screenshot gates remain required, but Stage 22 also requires human review before a major UI milestone is called visually complete.
+Automated clipping/overflow and screenshot gates remain required, but major UI milestones also require human review for:
 
-Review each supported visual milestone for:
-
-- visual hierarchy: next prayer is immediately identifiable;
-- prayer/start/Iqamah distinction is unambiguous;
+- next-prayer hierarchy;
+- unambiguous prayer/start/Iqamah distinction;
 - restrained density and sufficient whitespace;
-- readable typography at phone/tablet sizes;
+- phone/tablet typography;
 - Arabic/RTL balance and mixed-direction safety;
-- light and dark theme quality rather than mere functional inversion;
-- no visually dominant advanced controls on the everyday prayer view;
-- 1080p/4K long-distance readability for dedicated display templates;
+- light and dark theme quality;
+- no visually dominant advanced controls on everyday prayer views;
+- 1080p/4K long-distance readability for display templates;
 - no decorative animation that conflicts with reduced-motion or long-running kiosk use.
 
 ## Stage 22 migration rule
