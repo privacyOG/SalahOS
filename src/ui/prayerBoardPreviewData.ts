@@ -5,11 +5,7 @@ import type { ObligatoryPrayerName } from '../domain/prayerEngine';
 import { applyPrayerSourceToDashboard } from '../domain/sourcedDashboard';
 
 export type PrayerBoardPreviewScenario =
-  | 'before-prayer'
-  | 'near-athan'
-  | 'between-athan-iqamah'
-  | 'iqamah-now'
-  | 'jumuah';
+  'before-prayer' | 'near-athan' | 'between-athan-iqamah' | 'iqamah-now' | 'jumuah';
 
 const BASE_DATA = buildPrayerBoardData({
   dashboard: applyPrayerSourceToDashboard({
@@ -63,14 +59,13 @@ function clockAt(localMinutes: number): PrayerBoardData['clock'] {
   return Object.freeze({ hour, minute, second, localMinutes: normalized });
 }
 
-export function buildPrayerBoardPreviewData(
-  scenario: PrayerBoardPreviewScenario,
-): PrayerBoardData {
+export function buildPrayerBoardPreviewData(scenario: PrayerBoardPreviewScenario): PrayerBoardData {
   const dhuhrStart = prayerStart('dhuhr');
   const dhuhrIqamah = dhuhrStart + iqamahOffset('dhuhr');
   const asrStart = prayerStart('asr');
   const asrIqamah = asrStart + iqamahOffset('asr');
-  const beforeDhuhr = scenario === 'before-prayer' || scenario === 'near-athan' || scenario === 'jumuah';
+  const beforeDhuhr =
+    scenario === 'before-prayer' || scenario === 'near-athan' || scenario === 'jumuah';
   const localMinutes =
     scenario === 'before-prayer'
       ? dhuhrStart - 42
