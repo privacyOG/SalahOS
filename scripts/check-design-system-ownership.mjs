@@ -29,6 +29,10 @@ requireText(designSystem, '--salah-bg-canvas:', 'semantic colour tokens in desig
 requireText(designSystem, '--salah-space-4:', 'spacing tokens in design-system.css');
 requireText(designSystem, '--salah-text-display:', 'typography tokens in design-system.css');
 requireText(designSystem, '.app-shell {', 'application-shell ownership in design-system.css');
+requireText(designSystem, '.status-card {', 'status-card ownership in design-system.css');
+requireText(designSystem, '.prayer-grid {', 'prayer-grid ownership in design-system.css');
+requireText(designSystem, '.prayer-card {', 'prayer-card ownership in design-system.css');
+requireText(designSystem, '.brand-icon {', 'brand icon ownership in design-system.css');
 requireText(designSystem, '@media (forced-colors: active)', 'forced-colours ownership');
 requireText(designSystem, '@media (prefers-reduced-motion: reduce)', 'reduced-motion ownership');
 
@@ -78,6 +82,7 @@ requireText(
   'adjacent authoritative design-system imports',
 );
 requireText(designSurface, 'export function DesignButton', 'shared button component');
+requireText(designSurface, 'export function FormField', 'shared form-field component');
 requireText(designSurface, 'export function StateBanner', 'shared state banner component');
 requireText(designSurface, 'export function PrayerRow', 'shared prayer-row component');
 requireText(designSurface, 'export function NextPrayerSummary', 'shared next-prayer component');
@@ -113,8 +118,28 @@ forbid(
   /--salah-[\w-]+\s*:/,
   'src/styles.css must not define semantic SalahOS tokens',
 );
-forbid(legacyStyles, /(^|\n)\s*\.app-shell\s*\{/, 'src/styles.css must not own .app-shell');
-forbid(legacyStyles, /(^|\n)\s*\.hero\s*\{/, 'src/styles.css must not own the global .hero shell');
+
+for (const [pattern, label] of [
+  [/(^|\n)\s*\.app-shell\s*\{/, '.app-shell'],
+  [/(^|\n)\s*\.hero\s*\{/, '.hero'],
+  [/(^|\n)\s*\.hero-toolbar\s*\{/, '.hero-toolbar'],
+  [/(^|\n)\s*\.status-card\s*\{/, '.status-card'],
+  [/(^|\n)\s*\.prayer-panel\s*\{/, '.prayer-panel'],
+  [/(^|\n)\s*\.section-heading\s*\{/, '.section-heading'],
+  [/(^|\n)\s*\.next-prayer-block\s*\{/, '.next-prayer-block'],
+  [/(^|\n)\s*\.countdown\s*\{/, '.countdown'],
+  [/(^|\n)\s*\.prayer-grid\s*\{/, '.prayer-grid'],
+  [/(^|\n)\s*\.prayer-card\s*\{/, '.prayer-card'],
+  [/(^|\n)\s*\.prayer-card-next\s*\{/, '.prayer-card-next'],
+  [/(^|\n)\s*\.prayer-card-current\s*\{/, '.prayer-card-current'],
+  [/(^|\n)\s*\.prayer-card-supplementary\s*\{/, '.prayer-card-supplementary'],
+  [/(^|\n)\s*\.prayer-time-label\s*\{/, '.prayer-time-label'],
+  [/(^|\n)\s*\.brand-icon\s*\{/, '.brand-icon'],
+  [/(^|\n)\s*\.brand-name\s*\{/, '.brand-name'],
+]) {
+  forbid(legacyStyles, pattern, `src/styles.css must not own global selector ${label}`);
+}
+
 forbid(
   responsiveHardening,
   /(^|\n)\s*\.app-shell\s*\{/,
