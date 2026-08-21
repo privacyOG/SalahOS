@@ -1,6 +1,7 @@
 import type { DisplayIdentity, DisplayOrientation, DisplaySyncState } from './displayFleet';
 import { createDisplayIdentity } from './displayFleet';
 import {
+  getPrayerBoardTemplate,
   parsePrayerBoardTemplateConfig,
   type PrayerBoardTemplateConfig,
   type PrayerBoardTemplateId,
@@ -167,6 +168,24 @@ function legacyPrayerBoardConfig(theme: SmartDisplayThemeId): PrayerBoardTemplat
   });
 }
 
+export function createManagedPrayerBoardAssignmentConfig(
+  input: PrayerBoardTemplateConfig,
+): PrayerBoardTemplateConfig {
+  const normalized = parsePrayerBoardTemplateConfig(input);
+  const fallbackArtworkId = getPrayerBoardTemplate(normalized.templateId).fallbackArtworkId;
+  return parsePrayerBoardTemplateConfig({
+    ...normalized,
+    branding: {
+      mosqueName: normalized.branding.mosqueName,
+      logo: null,
+    },
+    background: {
+      kind: 'builtin',
+      artworkId: fallbackArtworkId,
+    },
+  });
+}
+
 export function createManagedDisplayRegistration(
   input: ManagedDisplayRegistration,
 ): ManagedDisplayRegistration {
@@ -189,7 +208,7 @@ export function createManagedDisplayRemoteConfig(
   const prayerBoardConfig =
     input.prayerBoardConfig === undefined
       ? legacyPrayerBoardConfig(displayTheme)
-      : parsePrayerBoardTemplateConfig(input.prayerBoardConfig);
+      : createManagedPrayerBoardAssignmentConfig(input.prayerBoardConfig);
   return Object.freeze({
     displayId: identity.displayId,
     contentRevision: assertRevision(input.contentRevision, 'Remote content revision'),
@@ -244,7 +263,7 @@ export function createManagedDisplayConfigUpdate(
           prayerBoardConfig:
             input.prayerBoardConfig === null
               ? null
-              : parsePrayerBoardTemplateConfig(input.prayerBoardConfig),
+              : createManagedPrayerBoardAssignmentConfig(input.prayerBoardConfig),
         }),
   });
 }
@@ -255,7 +274,7 @@ export function createManagedMosquePrayerBoardDefault(
   return Object.freeze({
     mosqueId: normalizeIdentifier(input.mosqueId, 'Mosque ID'),
     revision: assertRevision(input.revision, 'Mosque prayer-board revision'),
-    prayerBoardConfig: parsePrayerBoardTemplateConfig(input.prayerBoardConfig),
+    prayerBoardConfig: createManagedPrayerBoardAssignmentConfig(input.prayerBoardConfig),
     updatedAt: assertUtcTimestamp(input.updatedAt, 'Mosque prayer-board updatedAt'),
   });
 }
@@ -271,7 +290,7 @@ export function createManagedMosquePrayerBoardDefaultUpdate(
   return Object.freeze({
     expectedRevision,
     revision,
-    prayerBoardConfig: parsePrayerBoardTemplateConfig(input.prayerBoardConfig),
+    prayerBoardConfig: createManagedPrayerBoardAssignmentConfig(input.prayerBoardConfig),
   });
 }
 
