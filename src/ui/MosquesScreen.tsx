@@ -278,7 +278,7 @@ export function MosquesScreen() {
     [now, settings, viewedProfile],
   );
   const sourcedDashboard = useMemo(() => {
-    if (dashboardResult === null || !dashboardResult.ok) return null;
+    if (dashboardResult?.ok !== true) return null;
     return applyPrayerSourceToDashboard({
       dashboard: dashboardResult.dashboard,
       sourceMode,
