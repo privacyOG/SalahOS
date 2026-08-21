@@ -5,7 +5,7 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const DEFAULT_PORT = 8787;
-const STATE_VERSION = 1;
+const STATE_VERSION = 2;
 const MAX_BODY_BYTES = 64 * 1024;
 const RATE_WINDOW_MS = 60_000;
 const RATE_LIMIT = 120;
@@ -13,7 +13,39 @@ const DISPLAY_STALE_MS = 2 * 60_000;
 const DISPLAY_OFFLINE_MS = 10 * 60_000;
 const ID_PATTERN = /^[a-z0-9][a-z0-9._:-]*[a-z0-9]$/u;
 const VERSION_PATTERN = /^\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/u;
+const EXACT_PROFILE_PATTERN = /^(\d{3,4})x(\d{3,4})$/u;
 const THEME_IDS = new Set(['classic', 'midnight', 'sandstone', 'emerald']);
+const TEMPLATE_IDS = new Set([
+  'heritage-classic',
+  'minimal-modern',
+  'bold-countdown-focus',
+  'structured-split-board',
+  'scenic-spiritual',
+  'family-classroom',
+]);
+const LOCALES = new Set(['en', 'ar', 'tr', 'id']);
+const ACCENT_PRESETS = new Set(['emerald', 'midnight', 'sandstone', 'neutral', 'jewel']);
+const MODULE_IDS = [
+  'current-time',
+  'dates',
+  'next-prayer',
+  'countdown',
+  'prayer-timetable',
+  'jumuah',
+  'sunrise-sunset',
+  'mosque-branding',
+  'announcements',
+  'weather',
+];
+const CORE_MODULES = new Set(['current-time', 'next-prayer', 'countdown', 'prayer-timetable']);
+const FALLBACK_ARTWORK = {
+  'heritage-classic': 'geometric-heritage',
+  'minimal-modern': 'quiet-grid',
+  'bold-countdown-focus': 'countdown-field',
+  'structured-split-board': 'structured-lines',
+  'scenic-spiritual': 'scenic-gradient',
+  'family-classroom': 'classroom-pattern',
+};
 
 function normalizeIdentifier(value, label) {
   if (typeof value !== 'string') throw new TypeError(`${label} must be a string`);
@@ -69,6 +101,129 @@ function normalizeTimestamp(value, label) {
   return value;
 }
 
+function normalizeTemplateId(value) {
+  if (typeof value !== 'string' || !TEMPLATE_IDS.has(value)) {
+    throw new RangeError('Prayer-board template is unsupported');
+  }
+  return value;
+}
+
+function accentForTheme(theme) {
+  switch (theme) {
+    case 'midnight':
+      return 'midnight';
+    case 'sandstone':
+      return 'sandstone';
+    case 'emerald':
+      return 'emerald';
+    case 'classic':
+    default:
+      return 'neutral';
+  }
+}
+
+function themeForPrayerBoardConfig(config) {
+  switch (config.accentPreset) {
+    case 'midnight':
+      return 'midnight';
+    case 'sandstone':
+      return 'sandstone';
+    case 'emerald':
+    case 'jewel':
+      return 'emerald';
+    case 'neutral':
+    default:
+      return 'classic';
+  }
+}
+
+function normalizeMosqueNames(value) {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) return null;
+  const names = {};
+  for (const locale of LOCALES) {
+    const raw = value[locale];
+    if (typeof raw !== 'string') continue;
+    const text = raw.trim().replace(/\s+/gu, ' ');
+    if (text.length > 0 && text.length <= 160) names[locale] = text;
+  }
+  return Object.keys(names).length === 0 ? null : names;
+}
+
+function normalizePrayerBoardConfig(value) {
+  if (
+    typeof value !== 'object' ||
+    value === null ||
+    Array.isArray(value) ||
+    value.version !== 1
+  ) {
+    throw new RangeError('Prayer-board configuration must use version 1');
+  }
+  const templateId = normalizeTemplateId(value.templateId);
+  if (typeof value.primaryLocale !== 'string' || !LOCALES.has(value.primaryLocale)) {
+    throw new RangeError('Prayer-board locale is unsupported');
+  }
+  if (value.languageMode !== 'single' && value.languageMode !== 'en-ar') {
+    throw new RangeError('Prayer-board language mode is unsupported');
+  }
+  if (value.timeFormat !== 'h12' && value.timeFormat !== 'h23') {
+    throw new RangeError('Prayer-board time format is unsupported');
+  }
+  if (typeof value.accentPreset !== 'string' || !ACCENT_PRESETS.has(value.accentPreset)) {
+    throw new RangeError('Prayer-board accent preset is unsupported');
+  }
+  const requestedModules =
+    typeof value.moduleVisibility === 'object' &&
+    value.moduleVisibility !== null &&
+    !Array.isArray(value.moduleVisibility)
+      ? value.moduleVisibility
+      : {};
+  const moduleVisibility = {};
+  for (const moduleId of MODULE_IDS) {
+    moduleVisibility[moduleId] =
+      CORE_MODULES.has(moduleId) ||
+      (typeof requestedModules[moduleId] === 'boolean'
+        ? requestedModules[moduleId]
+        : moduleId !== 'weather');
+  }
+  const branding =
+    typeof value.branding === 'object' && value.branding !== null && !Array.isArray(value.branding)
+      ? value.branding
+      : {};
+
+  return Object.freeze({
+    version: 1,
+    templateId,
+    primaryLocale: value.primaryLocale,
+    languageMode: value.languageMode,
+    timeFormat: value.timeFormat,
+    accentPreset: value.accentPreset,
+    moduleVisibility: Object.freeze(moduleVisibility),
+    branding: Object.freeze({
+      mosqueName: normalizeMosqueNames(branding.mosqueName),
+      logo: null,
+    }),
+    background: Object.freeze({
+      kind: 'builtin',
+      artworkId: FALLBACK_ARTWORK[templateId],
+    }),
+  });
+}
+
+function defaultPrayerBoardConfig(theme = 'classic') {
+  const displayTheme = normalizeTheme(theme);
+  return normalizePrayerBoardConfig({
+    version: 1,
+    templateId: 'heritage-classic',
+    primaryLocale: 'en',
+    languageMode: 'single',
+    timeFormat: 'h23',
+    accentPreset: accentForTheme(displayTheme),
+    moduleVisibility: {},
+    branding: { mosqueName: null, logo: null },
+    background: { kind: 'builtin', artworkId: 'geometric-heritage' },
+  });
+}
+
 function normalizeRegistration(value) {
   if (typeof value !== 'object' || value === null || Array.isArray(value)) {
     throw new TypeError('Display registration must be an object');
@@ -93,11 +248,33 @@ function normalizeConfigUpdate(value) {
   if (contentRevision <= expectedRevision) {
     throw new RangeError('Content revision must advance beyond expected revision');
   }
+  const prayerBoardConfigSpecified = Object.prototype.hasOwnProperty.call(value, 'prayerBoardConfig');
   return Object.freeze({
     expectedRevision,
     contentRevision,
     playlistId: normalizeNullableIdentifier(value.playlistId, 'Playlist ID'),
     displayTheme: normalizeTheme(value.displayTheme),
+    prayerBoardConfigSpecified,
+    prayerBoardConfig:
+      !prayerBoardConfigSpecified || value.prayerBoardConfig === null
+        ? null
+        : normalizePrayerBoardConfig(value.prayerBoardConfig),
+  });
+}
+
+function normalizeMosqueDefaultUpdate(value) {
+  if (typeof value !== 'object' || value === null || Array.isArray(value)) {
+    throw new TypeError('Mosque prayer-board update must be an object');
+  }
+  const expectedRevision = normalizeRevision(value.expectedRevision, 'Expected mosque revision');
+  const revision = normalizeRevision(value.revision, 'Mosque prayer-board revision');
+  if (revision <= expectedRevision) {
+    throw new RangeError('Mosque prayer-board revision must advance beyond expected revision');
+  }
+  return Object.freeze({
+    expectedRevision,
+    revision,
+    prayerBoardConfig: normalizePrayerBoardConfig(value.prayerBoardConfig),
   });
 }
 
@@ -109,8 +286,42 @@ function normalizeHeartbeat(value) {
     displayId: normalizeIdentifier(value.displayId, 'Display ID'),
     appVersion: normalizeVersion(value.appVersion),
     contentRevision: normalizeRevision(value.contentRevision, 'Reported content revision'),
+    prayerBoardTemplateId:
+      value.prayerBoardTemplateId === undefined
+        ? null
+        : normalizeTemplateId(value.prayerBoardTemplateId),
     seenAt: normalizeTimestamp(value.seenAt, 'Heartbeat seenAt'),
   });
+}
+
+function targetDimensions(identity) {
+  const exact = EXACT_PROFILE_PATTERN.exec(identity.resolutionProfile);
+  if (exact !== null) {
+    return [Number(exact[1]), Number(exact[2])];
+  }
+  switch (identity.resolutionProfile) {
+    case 'tv-16x9':
+    case 'tv-1080p':
+      return [1920, 1080];
+    case 'tv-4k':
+      return [3840, 2160];
+    case 'portrait-foyer':
+      return [1080, 1920];
+    case 'touch-display-2':
+      return identity.orientation === 'landscape' ? [1280, 720] : [720, 1280];
+    default:
+      return null;
+  }
+}
+
+function prayerBoardTargetSupported(identity) {
+  if (identity.orientation !== 'landscape') return false;
+  const dimensions = targetDimensions(identity);
+  if (dimensions === null) return false;
+  return (
+    (dimensions[0] === 1920 && dimensions[1] === 1080) ||
+    (dimensions[0] === 3840 && dimensions[1] === 2160)
+  );
 }
 
 function hashToken(token) {
@@ -135,7 +346,13 @@ function newDeviceToken() {
 }
 
 function emptyState() {
-  return { version: STATE_VERSION, displays: {} };
+  return { version: STATE_VERSION, displays: {}, mosqueDefaults: {} };
+}
+
+function normalizeAssignmentSource(value) {
+  return value === 'mosque-default' || value === 'display-override'
+    ? value
+    : 'service-default';
 }
 
 function validatePersistedState(value) {
@@ -143,13 +360,38 @@ function validatePersistedState(value) {
     typeof value !== 'object' ||
     value === null ||
     Array.isArray(value) ||
-    value.version !== STATE_VERSION ||
+    (value.version !== 1 && value.version !== STATE_VERSION) ||
     typeof value.displays !== 'object' ||
     value.displays === null ||
     Array.isArray(value.displays)
   ) {
     throw new RangeError('Managed administration state file is invalid');
   }
+
+  const mosqueDefaults = {};
+  const rawMosqueDefaults =
+    value.version === STATE_VERSION &&
+    typeof value.mosqueDefaults === 'object' &&
+    value.mosqueDefaults !== null &&
+    !Array.isArray(value.mosqueDefaults)
+      ? value.mosqueDefaults
+      : {};
+  for (const [key, entry] of Object.entries(rawMosqueDefaults)) {
+    if (typeof entry !== 'object' || entry === null || Array.isArray(entry)) {
+      throw new RangeError('Managed mosque prayer-board state entry is invalid');
+    }
+    const mosqueId = normalizeIdentifier(entry.mosqueId, 'Mosque ID');
+    if (mosqueId !== normalizeIdentifier(key, 'Mosque default state key')) {
+      throw new RangeError('Mosque default state key does not match mosque ID');
+    }
+    mosqueDefaults[mosqueId] = {
+      mosqueId,
+      revision: normalizeRevision(entry.revision, 'Mosque prayer-board revision'),
+      prayerBoardConfig: normalizePrayerBoardConfig(entry.prayerBoardConfig),
+      updatedAt: normalizeTimestamp(entry.updatedAt, 'Mosque prayer-board updatedAt'),
+    };
+  }
+
   const displays = {};
   for (const [key, entry] of Object.entries(value.displays)) {
     if (typeof entry !== 'object' || entry === null || Array.isArray(entry)) {
@@ -169,7 +411,20 @@ function validatePersistedState(value) {
     if (typeof remoteConfig !== 'object' || remoteConfig === null || Array.isArray(remoteConfig)) {
       throw new RangeError('Managed display remote configuration is invalid');
     }
-    const updatedAt = normalizeTimestamp(remoteConfig.updatedAt, 'Configuration updatedAt');
+    const displayTheme = normalizeTheme(remoteConfig.displayTheme);
+    const migratedPrayerBoardConfig =
+      remoteConfig.prayerBoardConfig === undefined
+        ? defaultPrayerBoardConfig(displayTheme)
+        : normalizePrayerBoardConfig(remoteConfig.prayerBoardConfig);
+    const serviceDefaultPrayerBoardConfig =
+      entry.serviceDefaultPrayerBoardConfig === undefined
+        ? migratedPrayerBoardConfig
+        : normalizePrayerBoardConfig(entry.serviceDefaultPrayerBoardConfig);
+    const prayerBoardOverride =
+      entry.prayerBoardOverride === undefined || entry.prayerBoardOverride === null
+        ? null
+        : normalizePrayerBoardConfig(entry.prayerBoardOverride);
+
     displays[identity.displayId] = {
       identity,
       deviceTokenHash: entry.deviceTokenHash,
@@ -182,17 +437,26 @@ function validatePersistedState(value) {
         entry.reportedContentRevision,
         'Reported content revision',
       ),
+      reportedPrayerBoardTemplateId:
+        entry.reportedPrayerBoardTemplateId === undefined ||
+        entry.reportedPrayerBoardTemplateId === null
+          ? null
+          : normalizeTemplateId(entry.reportedPrayerBoardTemplateId),
+      prayerBoardOverride,
+      serviceDefaultPrayerBoardConfig,
       remoteConfig: {
         displayId: identity.displayId,
         contentRevision: normalizeRevision(remoteConfig.contentRevision, 'Remote content revision'),
         playlistId: normalizeNullableIdentifier(remoteConfig.playlistId, 'Playlist ID'),
-        displayTheme: normalizeTheme(remoteConfig.displayTheme),
+        displayTheme,
+        prayerBoardConfig: migratedPrayerBoardConfig,
+        prayerBoardAssignment: normalizeAssignmentSource(remoteConfig.prayerBoardAssignment),
         revoked: Boolean(remoteConfig.revoked),
-        updatedAt,
+        updatedAt: normalizeTimestamp(remoteConfig.updatedAt, 'Configuration updatedAt'),
       },
     };
   }
-  return { version: STATE_VERSION, displays };
+  return { version: STATE_VERSION, displays, mosqueDefaults };
 }
 
 async function loadState(path) {
@@ -211,6 +475,31 @@ async function persistState(path, state) {
   await rename(temporaryPath, path);
 }
 
+function effectivePrayerBoardAssignment(state, entry) {
+  if (entry.prayerBoardOverride !== null) {
+    return { source: 'display-override', config: entry.prayerBoardOverride };
+  }
+  const mosqueDefault = state.mosqueDefaults[entry.identity.mosqueId];
+  if (mosqueDefault !== undefined && prayerBoardTargetSupported(entry.identity)) {
+    return { source: 'mosque-default', config: mosqueDefault.prayerBoardConfig };
+  }
+  return { source: 'service-default', config: entry.serviceDefaultPrayerBoardConfig };
+}
+
+function synchronizeEffectivePrayerBoard(state, entry, updatedAt, bumpRevision) {
+  const assignment = effectivePrayerBoardAssignment(state, entry);
+  entry.remoteConfig = {
+    ...entry.remoteConfig,
+    contentRevision: bumpRevision
+      ? entry.remoteConfig.contentRevision + 1
+      : entry.remoteConfig.contentRevision,
+    displayTheme: themeForPrayerBoardConfig(assignment.config),
+    prayerBoardConfig: assignment.config,
+    prayerBoardAssignment: assignment.source,
+    updatedAt,
+  };
+}
+
 function syncStateFor(entry, nowMs) {
   if (entry.remoteConfig.revoked) return 'revoked';
   if (entry.lastSeenAt === null) return 'offline';
@@ -221,14 +510,22 @@ function syncStateFor(entry, nowMs) {
   return 'current';
 }
 
-function publicStatus(entry, nowMs) {
+function publicStatus(state, entry, nowMs) {
+  const assignment = effectivePrayerBoardAssignment(state, entry);
+  const remoteConfig = {
+    ...entry.remoteConfig,
+    displayTheme: themeForPrayerBoardConfig(assignment.config),
+    prayerBoardConfig: assignment.config,
+    prayerBoardAssignment: assignment.source,
+  };
   return {
     identity: entry.identity,
     lastSeenAt: entry.lastSeenAt,
     appVersion: entry.appVersion,
     reportedContentRevision: entry.reportedContentRevision,
+    reportedPrayerBoardTemplateId: entry.reportedPrayerBoardTemplateId,
     syncState: syncStateFor(entry, nowMs),
-    remoteConfig: entry.remoteConfig,
+    remoteConfig,
   };
 }
 
@@ -378,9 +675,17 @@ export async function createManagedAdminService(options) {
 
       if (request.method === 'GET' && url.pathname === '/v1/admin/displays') {
         const displays = Object.values(state.displays)
-          .map((entry) => publicStatus(entry, nowMs))
+          .map((entry) => publicStatus(state, entry, nowMs))
           .sort((left, right) => left.identity.displayId.localeCompare(right.identity.displayId));
         json(response, 200, { displays }, corsOrigin);
+        return;
+      }
+
+      if (request.method === 'GET' && url.pathname === '/v1/admin/mosque-defaults') {
+        const defaults = Object.values(state.mosqueDefaults).sort((left, right) =>
+          left.mosqueId.localeCompare(right.mosqueId),
+        );
+        json(response, 200, { defaults }, corsOrigin);
         return;
       }
 
@@ -392,25 +697,70 @@ export async function createManagedAdminService(options) {
           throw error;
         }
         const deviceToken = newDeviceToken();
+        const serviceDefaultPrayerBoardConfig = defaultPrayerBoardConfig('classic');
         const entry = {
           identity,
           deviceTokenHash: hashToken(deviceToken),
           lastSeenAt: null,
           appVersion: null,
           reportedContentRevision: 0,
+          reportedPrayerBoardTemplateId: null,
+          prayerBoardOverride: null,
+          serviceDefaultPrayerBoardConfig,
           remoteConfig: {
             displayId: identity.displayId,
             contentRevision: 0,
             playlistId: identity.playlistId,
             displayTheme: 'classic',
+            prayerBoardConfig: serviceDefaultPrayerBoardConfig,
+            prayerBoardAssignment: 'service-default',
             revoked: false,
             updatedAt: now.toISOString(),
           },
         };
         await mutate(async (current) => {
           current.displays[identity.displayId] = entry;
+          synchronizeEffectivePrayerBoard(current, entry, now.toISOString(), false);
         });
-        json(response, 201, { display: publicStatus(entry, nowMs), deviceToken }, corsOrigin);
+        json(response, 201, { display: publicStatus(state, entry, nowMs), deviceToken }, corsOrigin);
+        return;
+      }
+
+      const mosqueDefaultMatch = /^\/v1\/admin\/mosques\/([^/]+)\/prayer-board-default$/u.exec(
+        url.pathname,
+      );
+      if (request.method === 'PUT' && mosqueDefaultMatch !== null) {
+        const mosqueId = normalizeIdentifier(
+          decodeURIComponent(mosqueDefaultMatch[1]),
+          'Mosque ID',
+        );
+        const update = normalizeMosqueDefaultUpdate(await readJsonBody(request));
+        const currentDefault = state.mosqueDefaults[mosqueId];
+        const currentRevision = currentDefault?.revision ?? 0;
+        if (currentRevision !== update.expectedRevision) {
+          const error = new Error('Mosque prayer-board revision conflict');
+          error.statusCode = 409;
+          throw error;
+        }
+        const nextDefault = {
+          mosqueId,
+          revision: update.revision,
+          prayerBoardConfig: update.prayerBoardConfig,
+          updatedAt: now.toISOString(),
+        };
+        await mutate(async (current) => {
+          current.mosqueDefaults[mosqueId] = nextDefault;
+          for (const entry of Object.values(current.displays)) {
+            if (
+              entry.identity.mosqueId === mosqueId &&
+              entry.prayerBoardOverride === null &&
+              prayerBoardTargetSupported(entry.identity)
+            ) {
+              synchronizeEffectivePrayerBoard(current, entry, now.toISOString(), true);
+            }
+          }
+        });
+        json(response, 200, nextDefault, corsOrigin);
         return;
       }
 
@@ -429,16 +779,36 @@ export async function createManagedAdminService(options) {
           error.statusCode = 409;
           throw error;
         }
-        await mutate(async () => {
+        if (
+          update.prayerBoardConfigSpecified &&
+          update.prayerBoardConfig !== null &&
+          !prayerBoardTargetSupported(entry.identity)
+        ) {
+          const error = new Error(
+            'Prayer-board assignment requires a validated 1920x1080 or 3840x2160 landscape target',
+          );
+          error.statusCode = 409;
+          throw error;
+        }
+        await mutate(async (current) => {
+          if (update.prayerBoardConfigSpecified) {
+            entry.prayerBoardOverride = update.prayerBoardConfig;
+          } else {
+            const currentEffective = effectivePrayerBoardAssignment(current, entry).config;
+            entry.prayerBoardOverride = normalizePrayerBoardConfig({
+              ...currentEffective,
+              accentPreset: accentForTheme(update.displayTheme),
+            });
+          }
           entry.remoteConfig = {
             ...entry.remoteConfig,
             contentRevision: update.contentRevision,
             playlistId: update.playlistId,
-            displayTheme: update.displayTheme,
             updatedAt: now.toISOString(),
           };
+          synchronizeEffectivePrayerBoard(current, entry, now.toISOString(), false);
         });
-        json(response, 200, publicStatus(entry, nowMs), corsOrigin);
+        json(response, 200, publicStatus(state, entry, nowMs), corsOrigin);
         return;
       }
 
@@ -458,7 +828,7 @@ export async function createManagedAdminService(options) {
             updatedAt: now.toISOString(),
           };
         });
-        json(response, 200, publicStatus(entry, nowMs), corsOrigin);
+        json(response, 200, publicStatus(state, entry, nowMs), corsOrigin);
         return;
       }
 
@@ -474,7 +844,7 @@ export async function createManagedAdminService(options) {
           throw error;
         }
         requireDevice(request, entry);
-        json(response, 200, entry.remoteConfig, corsOrigin);
+        json(response, 200, publicStatus(state, entry, nowMs).remoteConfig, corsOrigin);
         return;
       }
 
@@ -496,8 +866,11 @@ export async function createManagedAdminService(options) {
           entry.lastSeenAt = heartbeat.seenAt;
           entry.appVersion = heartbeat.appVersion;
           entry.reportedContentRevision = heartbeat.contentRevision;
+          if (heartbeat.prayerBoardTemplateId !== null) {
+            entry.reportedPrayerBoardTemplateId = heartbeat.prayerBoardTemplateId;
+          }
         });
-        json(response, 200, publicStatus(entry, nowMs), corsOrigin);
+        json(response, 200, publicStatus(state, entry, nowMs), corsOrigin);
         return;
       }
 
