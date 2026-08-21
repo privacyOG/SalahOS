@@ -229,12 +229,14 @@ The daily prayer display surface must also become a first-class configurable pro
 
 ## 23.6 Template 5 — Scenic Spiritual
 
-- [ ] Implement an original SalahOS Scenic Spiritual design.
-- [ ] Support full-bleed mosque, landscape or architectural backgrounds.
-- [ ] Use adaptive overlays/gradients to guarantee prayer-text contrast.
-- [ ] Present clock, next prayer and timetable in restrained translucent/solid readable regions.
-- [ ] Provide built-in scenic imagery or abstract SalahOS artwork that is licensed/owned for distribution.
-- [ ] Ensure the template remains useful with imagery disabled.
+- [x] Implement an original SalahOS Scenic Spiritual design.
+- [x] Support full-bleed mosque, landscape or architectural backgrounds.
+- [x] Use adaptive overlays/gradients to guarantee prayer-text contrast.
+- [x] Present clock, next prayer and timetable in restrained translucent/solid readable regions.
+- [x] Provide built-in scenic imagery or abstract SalahOS artwork that is licensed/owned for distribution.
+- [x] Ensure the template remains useful with imagery disabled.
+
+**Stage 23.6 verification note (2026-08-22):** PR #180 code-bearing head `5084a6086aa39f2481b5ac2fcb38759d2faa262b` passed Quality Gate `32500835938`, Android Build `32500835956`, Visual Regression `32500835923` and iOS Build `32500835937`, including fresh iPhone and iPad Simulator install, launch and relaunch acceptance. Scenic Spiritual is presentation-only over the shared `PrayerBoardData` contract and does not recalculate prayer times or alter selected source, Iqamah, notification or next-prayer semantics. The template uses original first-party SalahOS SVG landscape/mosque artwork with full-bleed `cover` presentation, layered contrast scrims and readable clock/next-prayer/timetable surfaces; artwork-disabled mode retains the complete board on a deterministic local gradient field with no remote image dependency. The permanent focused visual matrix passed English and Arabic/RTL at 1920×1080 and 3840×2160, including artwork-on/off, long mosque names, exact five-prayer rendering, local-only request enforcement, viewport containment and zero horizontal clipping. Human review of exact Visual artifact `9453619560` confirmed readable long-distance hierarchy, composed RTL, balanced plain fallbacks and artwork that remains visibly scenic without reducing prayer readability. Stage 23.7, preview/assignment UX and Stage 23.13 mobile variants remain open.
 
 ## 23.7 Template 6 — Family & Classroom
 
