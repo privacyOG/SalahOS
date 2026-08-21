@@ -1,0 +1,523 @@
+.bold-countdown-board {
+  --bold-bg: #f5f0e8;
+  --bold-panel: #fffdf8;
+  --bold-panel-strong: #15211d;
+  --bold-text: #17201d;
+  --bold-muted: #5a625f;
+  --bold-line: #c9c6bc;
+  --bold-accent: #0d7458;
+  --bold-accent-text: #ffffff;
+  --bold-alert: #a33a21;
+  --bold-shadow: 0 18px 48px rgb(25 33 29 / 10%);
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto auto;
+  gap: clamp(0.65rem, 1.1vw, 1.4rem);
+  box-sizing: border-box;
+  min-height: 100%;
+  padding: clamp(1rem, 1.8vw, 2.5rem);
+  overflow: hidden;
+  color: var(--bold-text);
+  background:
+    linear-gradient(135deg, rgb(13 116 88 / 6%), transparent 32%),
+    var(--bold-bg);
+}
+
+.bold-countdown-board[data-bold-variant='midnight'] {
+  --bold-bg: #0b1114;
+  --bold-panel: #131c20;
+  --bold-panel-strong: #f2c96f;
+  --bold-text: #f6f3eb;
+  --bold-muted: #b9c0be;
+  --bold-line: #344247;
+  --bold-accent: #f2c96f;
+  --bold-accent-text: #12191c;
+  --bold-alert: #ff9b79;
+  --bold-shadow: 0 20px 60px rgb(0 0 0 / 30%);
+}
+
+.bold-countdown-board[data-bold-variant='emerald'] {
+  --bold-bg: #071a14;
+  --bold-panel: #0d2a20;
+  --bold-panel-strong: #f1cf79;
+  --bold-text: #f8f4e7;
+  --bold-muted: #bbcabf;
+  --bold-line: #315548;
+  --bold-accent: #f1cf79;
+  --bold-accent-text: #102118;
+  --bold-alert: #ffad87;
+  --bold-shadow: 0 20px 60px rgb(0 0 0 / 28%);
+}
+
+.bold-countdown-board[data-bold-variant='sandstone'] {
+  --bold-bg: #efe4d5;
+  --bold-panel: #fbf5eb;
+  --bold-panel-strong: #6d3b25;
+  --bold-text: #2e251f;
+  --bold-muted: #6d6259;
+  --bold-line: #d5c4b1;
+  --bold-accent: #884b2c;
+  --bold-accent-text: #fffaf4;
+  --bold-alert: #9f311d;
+}
+
+.bold-countdown-board__masthead {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 0.75rem 2rem;
+  align-items: start;
+}
+
+.bold-countdown-board__identity {
+  display: flex;
+  align-items: baseline;
+  min-width: 0;
+  gap: clamp(0.75rem, 1.4vw, 1.6rem);
+}
+
+.bold-countdown-board__brand {
+  flex: 0 0 auto;
+  font-size: clamp(0.9rem, 1.2vw, 1.35rem);
+  font-weight: 800;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--bold-accent);
+}
+
+.bold-countdown-board__identity strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: clamp(1.05rem, 1.6vw, 2rem);
+  line-height: 1.12;
+}
+
+.bold-countdown-board__dates {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.45rem 1rem;
+  color: var(--bold-muted);
+  font-size: clamp(0.9rem, 1.05vw, 1.25rem);
+  font-weight: 650;
+}
+
+.bold-countdown-board__status {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 0.55rem 0.8rem;
+  border-inline-start: 0.3rem solid var(--bold-alert);
+  color: var(--bold-text);
+  background: color-mix(in srgb, var(--bold-alert) 10%, transparent);
+}
+
+.bold-countdown-board__hero {
+  display: grid;
+  grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.2fr);
+  gap: clamp(0.8rem, 1.4vw, 1.6rem);
+  min-height: 0;
+}
+
+.bold-countdown-board__clock,
+.bold-countdown-board__focus {
+  display: flex;
+  min-width: 0;
+  border: 1px solid var(--bold-line);
+  border-radius: clamp(1rem, 1.5vw, 1.7rem);
+  background: var(--bold-panel);
+  box-shadow: var(--bold-shadow);
+}
+
+.bold-countdown-board__clock {
+  flex-direction: column;
+  justify-content: center;
+  padding: clamp(1.2rem, 2vw, 2.4rem);
+}
+
+.bold-countdown-board__clock span,
+.bold-countdown-board__focus-heading > span,
+.bold-countdown-board__countdown > span {
+  color: var(--bold-muted);
+  font-size: clamp(0.85rem, 1vw, 1.15rem);
+  font-weight: 760;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.bold-countdown-board__clock strong {
+  margin-top: 0.25rem;
+  font-size: clamp(4.2rem, 7.4vw, 9.2rem);
+  line-height: 0.92;
+  letter-spacing: -0.055em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.bold-countdown-board__focus {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 0.72fr) minmax(0, 1.28fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: 0.7rem 1.25rem;
+  padding: clamp(1.2rem, 2vw, 2.4rem);
+  border-width: 2px;
+  border-color: var(--bold-accent);
+}
+
+.bold-countdown-board__focus::before {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-start: 0;
+  width: clamp(0.45rem, 0.6vw, 0.75rem);
+  content: '';
+  border-radius: inherit;
+  border-start-end-radius: 0;
+  border-end-end-radius: 0;
+  background: var(--bold-accent);
+}
+
+.bold-countdown-board__focus-heading {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  padding-inline-start: 0.4rem;
+}
+
+.bold-countdown-board__focus-heading strong {
+  overflow-wrap: anywhere;
+  font-size: clamp(2.5rem, 4.3vw, 5.2rem);
+  line-height: 0.96;
+}
+
+.bold-countdown-board__focus-heading small {
+  margin-top: 0.45rem;
+  color: var(--bold-muted);
+  font-size: clamp(0.9rem, 1vw, 1.2rem);
+  font-weight: 700;
+}
+
+.bold-countdown-board__countdown {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  text-align: end;
+}
+
+.bold-countdown-board__countdown strong {
+  color: var(--bold-accent);
+  font-size: clamp(4.5rem, 8vw, 10rem);
+  line-height: 0.88;
+  letter-spacing: -0.06em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.bold-countdown-board__focus-times {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+  margin: 0;
+  padding-top: 0.8rem;
+  border-top: 1px solid var(--bold-line);
+}
+
+.bold-countdown-board__focus-times div {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.8rem;
+  align-items: baseline;
+}
+
+.bold-countdown-board__focus-times dt,
+.bold-countdown-board__focus-times dd {
+  margin: 0;
+}
+
+.bold-countdown-board__focus-times dt {
+  color: var(--bold-muted);
+  font-size: clamp(0.85rem, 1vw, 1.15rem);
+  font-weight: 700;
+}
+
+.bold-countdown-board__focus-times dd {
+  font-size: clamp(1.2rem, 1.6vw, 2rem);
+  font-weight: 850;
+  font-variant-numeric: tabular-nums;
+}
+
+.bold-countdown-board[data-focus-state='pre-iqamah'] .bold-countdown-board__focus {
+  border-color: var(--bold-alert);
+}
+
+.bold-countdown-board[data-focus-state='pre-iqamah'] .bold-countdown-board__focus::before {
+  background: var(--bold-alert);
+}
+
+.bold-countdown-board[data-focus-state='pre-iqamah'] .bold-countdown-board__countdown strong {
+  color: var(--bold-alert);
+}
+
+.bold-countdown-board[data-focus-state='iqamah-now'] .bold-countdown-board__focus {
+  color: var(--bold-accent-text);
+  border-color: var(--bold-accent);
+  background: var(--bold-accent);
+}
+
+.bold-countdown-board[data-focus-state='iqamah-now'] .bold-countdown-board__focus::before {
+  background: var(--bold-accent-text);
+}
+
+.bold-countdown-board[data-focus-state='iqamah-now'] .bold-countdown-board__focus-heading > span,
+.bold-countdown-board[data-focus-state='iqamah-now'] .bold-countdown-board__countdown > span,
+.bold-countdown-board[data-focus-state='iqamah-now'] .bold-countdown-board__focus-heading small,
+.bold-countdown-board[data-focus-state='iqamah-now'] .bold-countdown-board__focus-times dt {
+  color: color-mix(in srgb, var(--bold-accent-text) 78%, transparent);
+}
+
+.bold-countdown-board[data-focus-state='iqamah-now'] .bold-countdown-board__countdown strong {
+  color: var(--bold-accent-text);
+}
+
+.bold-countdown-board[data-focus-state='iqamah-now'] .bold-countdown-board__focus-times {
+  border-color: color-mix(in srgb, var(--bold-accent-text) 35%, transparent);
+}
+
+.bold-countdown-board__timetable {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: clamp(0.45rem, 0.75vw, 0.9rem);
+}
+
+.bold-countdown-prayer {
+  min-width: 0;
+  padding: clamp(0.7rem, 0.9vw, 1.05rem);
+  border: 1px solid var(--bold-line);
+  border-radius: 0.9rem;
+  background: var(--bold-panel);
+}
+
+.bold-countdown-prayer header {
+  display: flex;
+  min-height: 2.2em;
+  justify-content: space-between;
+  gap: 0.45rem;
+  align-items: baseline;
+}
+
+.bold-countdown-prayer header strong {
+  font-size: clamp(1.15rem, 1.45vw, 1.8rem);
+  line-height: 1.05;
+}
+
+.bold-countdown-prayer header span {
+  padding: 0.2rem 0.4rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  color: var(--bold-accent);
+  font-size: clamp(0.65rem, 0.7vw, 0.8rem);
+  font-weight: 800;
+  line-height: 1;
+}
+
+.bold-countdown-prayer dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+  margin: 0.6rem 0 0;
+}
+
+.bold-countdown-prayer dl div {
+  min-width: 0;
+}
+
+.bold-countdown-prayer dt,
+.bold-countdown-prayer dd {
+  margin: 0;
+}
+
+.bold-countdown-prayer dt {
+  color: var(--bold-muted);
+  font-size: clamp(0.7rem, 0.72vw, 0.85rem);
+  font-weight: 700;
+}
+
+.bold-countdown-prayer dd {
+  margin-top: 0.15rem;
+  font-size: clamp(1rem, 1.2vw, 1.45rem);
+  font-weight: 820;
+  font-variant-numeric: tabular-nums;
+}
+
+.bold-countdown-prayer.is-current {
+  box-shadow: inset 0 0 0 3px var(--bold-accent);
+}
+
+.bold-countdown-prayer.is-next {
+  border-width: 3px;
+  border-color: var(--bold-accent);
+}
+
+.bold-countdown-board__lower {
+  display: grid;
+  grid-template-columns: minmax(0, 0.7fr) minmax(0, 1.3fr);
+  gap: clamp(0.55rem, 0.8vw, 1rem);
+}
+
+.bold-countdown-board__solar,
+.bold-countdown-board__jumuah {
+  min-width: 0;
+  padding: 0.7rem 0.9rem;
+  border-top: 1px solid var(--bold-line);
+}
+
+.bold-countdown-board__solar {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.bold-countdown-board__solar div,
+.bold-countdown-board__jumuah article {
+  display: flex;
+  gap: 0.45rem 0.8rem;
+  justify-content: space-between;
+  align-items: baseline;
+}
+
+.bold-countdown-board__solar span,
+.bold-countdown-board__jumuah > strong,
+.bold-countdown-board__jumuah article span {
+  color: var(--bold-muted);
+  font-size: clamp(0.75rem, 0.78vw, 0.9rem);
+  font-weight: 700;
+}
+
+.bold-countdown-board__solar strong,
+.bold-countdown-board__jumuah article bdi {
+  font-size: clamp(0.95rem, 1vw, 1.15rem);
+  font-weight: 820;
+}
+
+.bold-countdown-board__jumuah {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 0.7rem 1rem;
+  align-items: start;
+}
+
+.bold-countdown-board__jumuah > div {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem 1rem;
+}
+
+.bold-countdown-board__jumuah article {
+  flex-wrap: wrap;
+}
+
+.bold-countdown-board__footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.4rem 1rem;
+  color: var(--bold-muted);
+  font-size: clamp(0.7rem, 0.72vw, 0.85rem);
+  font-weight: 650;
+}
+
+[dir='rtl'] .bold-countdown-board__dates {
+  justify-content: flex-start;
+}
+
+[dir='rtl'] .bold-countdown-board__countdown {
+  text-align: start;
+}
+
+@media (max-width: 1100px) {
+  .bold-countdown-board__hero {
+    grid-template-columns: 1fr;
+  }
+
+  .bold-countdown-board__clock strong {
+    font-size: clamp(3.6rem, 10vw, 6.5rem);
+  }
+
+  .bold-countdown-board__timetable {
+    grid-template-columns: repeat(5, minmax(9rem, 1fr));
+    overflow-x: auto;
+  }
+}
+
+@media (max-height: 760px) and (orientation: landscape) {
+  .bold-countdown-board {
+    gap: 0.45rem;
+    padding: 0.75rem;
+  }
+
+  .bold-countdown-board__clock,
+  .bold-countdown-board__focus {
+    padding: 0.8rem 1rem;
+  }
+
+  .bold-countdown-board__clock strong {
+    font-size: clamp(3.2rem, 6vw, 5.4rem);
+  }
+
+  .bold-countdown-board__countdown strong {
+    font-size: clamp(3.4rem, 6.4vw, 6rem);
+  }
+
+  .bold-countdown-board__lower {
+    display: none;
+  }
+}
+
+@media (min-width: 3000px) and (min-height: 1600px) {
+  .bold-countdown-board {
+    gap: 2rem;
+    padding: 3.25rem;
+  }
+
+  .bold-countdown-board__clock strong {
+    font-size: clamp(8rem, 7vw, 14rem);
+  }
+
+  .bold-countdown-board__countdown strong {
+    font-size: clamp(9rem, 7.6vw, 15rem);
+  }
+
+  .bold-countdown-board__focus-heading strong {
+    font-size: clamp(5rem, 4.1vw, 8rem);
+  }
+
+  .bold-countdown-prayer {
+    padding: 1.5rem;
+  }
+
+  .bold-countdown-prayer header strong {
+    font-size: clamp(2.2rem, 1.35vw, 3.2rem);
+  }
+
+  .bold-countdown-prayer dd {
+    font-size: clamp(1.8rem, 1.05vw, 2.6rem);
+  }
+}
+
+@media (forced-colors: active) {
+  .bold-countdown-board,
+  .bold-countdown-board__clock,
+  .bold-countdown-board__focus,
+  .bold-countdown-prayer {
+    border-color: CanvasText;
+    color: CanvasText;
+    background: Canvas;
+    box-shadow: none;
+  }
+
+  .bold-countdown-board__countdown strong,
+  .bold-countdown-board__brand,
+  .bold-countdown-prayer header span {
+    color: LinkText;
+  }
+}
