@@ -199,6 +199,45 @@ const applicationScenarios = [
     readySelector: '.settings-focus-panel',
   },
   {
+    name: 'phone-settings-mosque-en-light',
+    width: 390,
+    height: 844,
+    locale: 'en',
+    theme: 'light',
+    url: '?view=settings&settingsView=mosque',
+    readySelector: ".settings-screen__legacy[data-settings-category='mosque']",
+    visibleSelectors: ['.mosque-library-row', '.settings-screen__seasonal'],
+    hiddenSelectors: [
+      '.manual-mosque-fieldset',
+      '.mosque-import-grid',
+      '.mosque-import-payload',
+      '.offsets-fieldset',
+      '.notification-fieldset',
+      '.settings-transfer',
+    ],
+  },
+  {
+    name: 'tablet-settings-advanced-ar-dark',
+    width: 1024,
+    height: 1366,
+    locale: 'ar',
+    theme: 'dark',
+    url: '?view=settings&settingsView=advanced',
+    readySelector: ".settings-screen__legacy[data-settings-category='advanced']",
+    visibleSelectors: [
+      '.manual-mosque-fieldset',
+      '.mosque-import-grid',
+      '.mosque-import-payload',
+      '.offsets-fieldset',
+    ],
+    hiddenSelectors: [
+      '.settings-grid',
+      '.mosque-library-row',
+      '.notification-fieldset',
+      '.settings-transfer',
+    ],
+  },
+  {
     name: 'phone-mosques-en-light',
     width: 390,
     height: 844,
@@ -433,6 +472,16 @@ function assertNoHorizontalOverflow(name, overflow) {
   }
 }
 
+async function visibleSelectorCount(page, selector) {
+  return page.locator(selector).evaluateAll((elements) =>
+    elements.filter((element) => {
+      const style = getComputedStyle(element);
+      const rect = element.getBoundingClientRect();
+      return style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0;
+    }).length,
+  );
+}
+
 async function validateApplicationScenario(browser, scenario) {
   const context = await browser.newContext({
     viewport: { width: scenario.width, height: scenario.height },
@@ -463,6 +512,20 @@ async function validateApplicationScenario(browser, scenario) {
       await page.locator('.settings-panel').evaluate((element) => {
         element.open = true;
       });
+    }
+
+    for (const selector of scenario.visibleSelectors ?? []) {
+      const visibleCount = await visibleSelectorCount(page, selector);
+      if (visibleCount === 0) {
+        throw new Error(`${scenario.name} expected visible selector ${selector}`);
+      }
+    }
+
+    for (const selector of scenario.hiddenSelectors ?? []) {
+      const visibleCount = await visibleSelectorCount(page, selector);
+      if (visibleCount > 0) {
+        throw new Error(`${scenario.name} expected hidden selector ${selector}`);
+      }
     }
 
     await page.evaluate(() => document.fonts.ready);
