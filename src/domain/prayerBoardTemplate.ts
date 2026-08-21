@@ -290,12 +290,11 @@ function normalizeModuleVisibility(
   const required = new Set(PRAYER_BOARD_CORE_MODULES);
   const result = {} as Record<PrayerBoardModuleId, boolean>;
   for (const moduleId of PRAYER_BOARD_ALL_MODULES) {
+    const requestedValue = requested[moduleId];
     const enabled =
       required.has(moduleId) ||
       (supported.has(moduleId) &&
-        (typeof requested[moduleId] === 'boolean'
-          ? requested[moduleId]
-          : defaults.has(moduleId)));
+        (typeof requestedValue === 'boolean' ? requestedValue : defaults.has(moduleId)));
     result[moduleId] = enabled;
   }
   return Object.freeze(result);
