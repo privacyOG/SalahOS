@@ -76,10 +76,12 @@ jobs:
           todo.write_text(text.replace(old, new, 1))
           PY
 
-          git diff --check
-          test "$(git diff --name-only | sort)" = $'TODO.md\ndocs/UI_UX_V2_PLAN.md'
+          git diff --check -- TODO.md docs/UI_UX_V2_PLAN.md
+          test -n "$(git diff --name-only -- TODO.md)"
+          test -n "$(git diff --name-only -- docs/UI_UX_V2_PLAN.md)"
           git config user.name 'privacyOG'
           git config user.email 'kriptiik@proton.me'
           git add -- TODO.md docs/UI_UX_V2_PLAN.md
+          test "$(git diff --cached --name-only | sort)" = $'TODO.md\ndocs/UI_UX_V2_PLAN.md'
           git commit -m 'Mark Stage 22.3 Today complete'
           git push origin HEAD:stage-22/today-contextual-states
