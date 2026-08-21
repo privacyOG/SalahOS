@@ -10,9 +10,7 @@ import type { SmartDisplayThemeId } from '../platform/smartDisplayTheme';
 import { parseSmartDisplayTheme } from '../platform/smartDisplayTheme';
 
 export type ManagedPrayerBoardAssignmentSource =
-  | 'service-default'
-  | 'mosque-default'
-  | 'display-override';
+  'service-default' | 'mosque-default' | 'display-override';
 
 export interface ManagedDisplayRemoteConfig {
   readonly displayId: string;
@@ -25,10 +23,7 @@ export interface ManagedDisplayRemoteConfig {
   readonly updatedAt: string;
 }
 
-type ManagedDisplayRemoteConfigInput = Omit<
-  ManagedDisplayRemoteConfig,
-  'prayerBoardConfig'
-> & {
+type ManagedDisplayRemoteConfigInput = Omit<ManagedDisplayRemoteConfig, 'prayerBoardConfig'> & {
   readonly prayerBoardConfig?: PrayerBoardTemplateConfig | undefined;
 };
 
