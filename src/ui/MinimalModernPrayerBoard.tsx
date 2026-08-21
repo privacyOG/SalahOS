@@ -136,7 +136,7 @@ export function MinimalModernPrayerBoard({
             <div>
               <dt>{translate(locale, 'iqamah')}</dt>
               <dd>
-                {nextPrayer === null || nextPrayer.iqamahLocalMinutes === null
+                {nextPrayer?.iqamahLocalMinutes === null || nextPrayer === null
                   ? translate(locale, 'noIqamah')
                   : displayTime(nextPrayer.iqamahLocalMinutes, locale, timeFormat)}
               </dd>
