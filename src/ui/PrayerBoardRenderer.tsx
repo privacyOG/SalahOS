@@ -15,7 +15,7 @@ import { StructuredSplitBoard } from './StructuredSplitBoard';
 export interface PrayerBoardRendererProps {
   readonly data: PrayerBoardData;
   readonly config: PrayerBoardTemplateConfig;
-  readonly displayThemeOverride?: SmartDisplayThemeId;
+  readonly displayThemeOverride?: SmartDisplayThemeId | undefined;
   readonly scenicArtworkEnabled?: boolean;
   readonly familyEducationalHintsEnabled?: boolean;
   readonly familyDaylightCuesEnabled?: boolean;
