@@ -177,12 +177,6 @@
   gap: var(--salah-space-4);
 }
 
-.settings-display-entry p {
-  max-width: 62ch;
-  margin: 0;
-  color: var(--salah-fg-secondary);
-}
-
 .settings-screen__legacy .app-shell {
   width: 100%;
   max-width: none;
@@ -213,7 +207,15 @@
 .settings-screen__legacy[data-settings-category='mosque'] .settings-grid,
 .settings-screen__legacy[data-settings-category='mosque'] .offsets-fieldset,
 .settings-screen__legacy[data-settings-category='mosque'] .notification-fieldset,
-.settings-screen__legacy[data-settings-category='mosque'] .settings-transfer {
+.settings-screen__legacy[data-settings-category='mosque'] .settings-transfer,
+.settings-screen__legacy[data-settings-category='mosque'] .settings-panel > .inline-message,
+.settings-screen__legacy[data-settings-category='mosque'] .manual-mosque-fieldset,
+.settings-screen__legacy[data-settings-category='mosque'] .mosque-import-grid,
+.settings-screen__legacy[data-settings-category='mosque'] .mosque-import-payload,
+.settings-screen__legacy[data-settings-category='mosque'] .mosque-library-controls > button,
+.settings-screen__legacy[data-settings-category='mosque']
+  .mosque-library-controls
+  > .inline-message {
   display: none;
 }
 
@@ -225,6 +227,14 @@
   display: none;
 }
 
+.settings-screen__legacy[data-settings-category='advanced'] .settings-grid,
+.settings-screen__legacy[data-settings-category='advanced'] .mosque-library-row,
+.settings-screen__legacy[data-settings-category='advanced'] .notification-fieldset,
+.settings-screen__legacy[data-settings-category='advanced'] .settings-transfer,
+.settings-screen__legacy[data-settings-category='advanced'] .settings-panel > .inline-message {
+  display: none;
+}
+
 .settings-screen__legacy[data-settings-category='mosque'] .settings-panel,
 .settings-screen__legacy[data-settings-category='notifications'] .settings-panel,
 .settings-screen__legacy[data-settings-category='advanced'] .settings-panel {
@@ -232,8 +242,13 @@
 }
 
 .settings-screen__legacy[data-settings-category='mosque'] .mosque-library-controls,
-.settings-screen__legacy[data-settings-category='notifications'] .notification-fieldset {
+.settings-screen__legacy[data-settings-category='notifications'] .notification-fieldset,
+.settings-screen__legacy[data-settings-category='advanced'] .mosque-library-controls {
   margin: 0;
+}
+
+.settings-screen__legacy[data-settings-category='advanced'] .offsets-fieldset {
+  margin-block-start: var(--salah-space-5);
 }
 
 .settings-screen__seasonal {
