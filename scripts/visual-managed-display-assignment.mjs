@@ -185,6 +185,7 @@ async function validateAdminAssignment(browser) {
   const context = await browser.newContext({
     viewport: { width: 1600, height: 1100 },
     reducedMotion: 'reduce',
+    serviceWorkers: 'block',
   });
   const page = await context.newPage();
   const errors = [];
@@ -317,6 +318,7 @@ async function validateManagedOfflineCache(browser) {
   const context = await browser.newContext({
     viewport: { width: 1920, height: 1080 },
     reducedMotion: 'reduce',
+    serviceWorkers: 'block',
   });
   const page = await context.newPage();
   const errors = [];
