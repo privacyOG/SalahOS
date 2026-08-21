@@ -61,7 +61,7 @@ export function ManagedDisplayRemoteController() {
   }, []);
 
   useEffect(() => {
-    if (!enabled || connection === null) return;
+    if (!smartDisplayModeRequested(window.location.search) || connection === null) return;
 
     const client = createManagedDisplayClient(connection);
 
@@ -129,7 +129,7 @@ export function ManagedDisplayRemoteController() {
     return () => {
       window.clearInterval(timer);
     };
-  }, [connection, enabled]);
+  }, [connection]);
 
   if (!enabled) return null;
 
