@@ -207,12 +207,14 @@ The daily prayer display surface must also become a first-class configurable pro
 
 ## 23.4 Template 3 — Bold Countdown Focus
 
-- [ ] Implement an original SalahOS Bold Countdown Focus design.
-- [ ] Make current time and next-prayer countdown the dominant display elements.
-- [ ] Keep today's full timetable visible as a secondary band.
-- [ ] Provide strong current/next state transitions that do not depend on animation.
-- [ ] Support optional pre-Iqamah and Iqamah-now states.
-- [ ] Prioritize long-distance readability over decorative content.
+- [x] Implement an original SalahOS Bold Countdown Focus design.
+- [x] Make current time and next-prayer countdown the dominant display elements.
+- [x] Keep today's full timetable visible as a secondary band.
+- [x] Provide strong current/next state transitions that do not depend on animation.
+- [x] Support optional pre-Iqamah and Iqamah-now states.
+- [x] Prioritize long-distance readability over decorative content.
+
+**Stage 23.4 verification note (2026-08-21):** PR #178 code-bearing head `0de2c0123010cc05a261a4229040bc54416a25ca` passed Quality Gate `32485632660`, Android Build `32485632576`, Visual Regression `32485632537` and iOS Build `32485632581`, including fresh iPhone and iPad Simulator install, launch and relaunch acceptance. Bold Countdown Focus renders only from the shared `PrayerBoardData` presentation contract. It does not recalculate prayers or change selected source, Iqamah, notification or next-prayer semantics. The original SalahOS composition makes current time and the active countdown the dominant long-distance elements while retaining the complete five-prayer Start/Athan-versus-Iqamah timetable as a secondary band. Static labels, borders and inversion distinguish current, next, pre-Iqamah and Iqamah-now states without depending on animation. The permanent focused visual harness passed English and Arabic/RTL at 1920×1080 and 3840×2160, including deliberately long mosque names, exact five-prayer assertions, at least 90% viewport-height use, minimum countdown-size checks and zero horizontal clipping. Human review of the final evidence confirmed full-height density, immediate countdown hierarchy, clear state transitions, composed RTL and an unwrapped 4K prayer label. Later templates, preview/assignment UX and Stage 23.13 mobile variants remain open.
 
 ## 23.5 Template 4 — Structured Split Board
 

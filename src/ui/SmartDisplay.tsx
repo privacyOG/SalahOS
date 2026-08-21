@@ -11,10 +11,11 @@ import {
   SMART_DISPLAY_THEME_CHANGE_EVENT,
   type SmartDisplayThemeId,
 } from '../platform/smartDisplayTheme';
+import { BoldCountdownFocusPrayerBoard } from './BoldCountdownFocusPrayerBoard';
 import { HeritageClassicPrayerBoard } from './HeritageClassicPrayerBoard';
 import { MinimalModernPrayerBoard, type MinimalModernVariant } from './MinimalModernPrayerBoard';
 
-export type SmartDisplayTemplateId = 'heritage-classic' | 'minimal-modern';
+export type SmartDisplayTemplateId = 'heritage-classic' | 'minimal-modern' | 'bold-countdown-focus';
 
 export interface SmartDisplayProps {
   readonly locale: Locale;
@@ -33,9 +34,9 @@ export function smartDisplayModeRequested(search: string): boolean {
 }
 
 export function smartDisplayTemplateRequested(search: string): SmartDisplayTemplateId {
-  return new URLSearchParams(search).get('template') === 'minimal-modern'
-    ? 'minimal-modern'
-    : 'heritage-classic';
+  const requested = new URLSearchParams(search).get('template');
+  if (requested === 'minimal-modern' || requested === 'bold-countdown-focus') return requested;
+  return 'heritage-classic';
 }
 
 function readSmartDisplayTheme(): SmartDisplayThemeId {
@@ -129,6 +130,13 @@ export function SmartDisplay({
           locale={locale}
           timeFormat={timeFormat}
           variant={minimalModernVariant(displayTheme)}
+        />
+      ) : resolvedTemplateId === 'bold-countdown-focus' ? (
+        <BoldCountdownFocusPrayerBoard
+          data={boardData}
+          locale={locale}
+          timeFormat={timeFormat}
+          displayTheme={displayTheme}
         />
       ) : (
         <HeritageClassicPrayerBoard
