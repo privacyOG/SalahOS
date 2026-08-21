@@ -139,7 +139,7 @@ The daily prayer display surface must also become a first-class configurable pro
 - [x] Use compact preview cards with clear hierarchy, expiry/status and optional call-to-action.
 - [x] Provide useful empty states when no managed content exists.
 
-**Stage 22.5 verification note (2026-08-21):** PR #170 code-bearing head `9446b32fb34e66cf9de7fd94855b88f0f746693a` passed Quality Gate `32435976858`, Android Build `32435976877`, Visual Regression `32435976891` and iOS Build `32435976879`. The congregation Mosques destination now provides followed-mosque discovery, explicit local-only nearby sorting from already-saved coordinates, prayer/Iqamah provenance and freshness, and a focused mosque profile with prayer, Jumu'ah, community and facility/contact context. Community now provides reader-only Announcements and Events tabs with compact status/expiry/source metadata, calls to action and useful empty states; administration/import controls remain outside the congregation reading surface. Populated English phone and Arabic/RTL tablet visual scenarios were reviewed manually, while the permanent visual matrix independently passed on the exact code-bearing head.
+**Stage 22.5 verification note (2026-08-21):** PR #170 code-bearing head `9446b32fb34e66cf9de7fd94855b88f0f746693a` passed Quality Gate `32435976858`, Android Build `32435976877`, Visual Regression `32435976891` and iOS Build `32435976879`. The congregation Mosques destination now provides followed-mosque discovery, explicit local-only nearby sorting from already-saved coordinates, prayer/Iqamah provenance and freshness, and a focused mosque profile with prayer, Jumu'ah, community and facility/contact context. Community now provides reader-only Announcements and Events tabs with compact status/expiry/source metadata, calls to action and useful empty states; administration/import controls remain outside the congregation reading surface. Populated English phone and Arabic/RTL tablet Stage 22.5 screenshots were reviewed manually, while the permanent visual matrix independently passed on the exact code-bearing head.
 
 ---
 
@@ -165,21 +165,23 @@ The daily prayer display surface must also become a first-class configurable pro
 
 ## 23.1 Shared prayer-board template engine
 
-- [ ] Define one shared display data contract for all prayer-board templates.
-- [ ] Define reusable slots/modules for current time, dates, next prayer, countdown, prayer timetable, Jumu'ah, sunrise/sunset, mosque branding, announcements and optional weather.
-- [ ] Create a template registry with stable template identifiers and versioned configuration.
-- [ ] Ensure template choice never changes prayer calculations or prayer-source semantics.
-- [ ] Allow per-template module visibility without allowing required prayer information to become ambiguous.
-- [ ] Support 12-hour and 24-hour clock presentation.
-- [ ] Support English, Arabic/RTL, Turkish and Indonesian.
-- [ ] Support bilingual English/Arabic display mode where layout space permits.
-- [ ] Support mosque name and validated logo branding.
-- [ ] Support controlled accent-colour presets.
-- [ ] Support approved custom background images with crop/focal-point controls.
-- [ ] Enforce contrast overlays/scrims automatically when background imagery reduces readability.
-- [ ] Provide sensible built-in artwork/pattern fallbacks so custom images are optional.
-- [ ] Keep external/remote content isolated from the authoritative local prayer board.
-- [ ] Keep all templates deterministic and usable when offline.
+- [x] Define one shared display data contract for all prayer-board templates.
+- [x] Define reusable slots/modules for current time, dates, next prayer, countdown, prayer timetable, Jumu'ah, sunrise/sunset, mosque branding, announcements and optional weather.
+- [x] Create a template registry with stable template identifiers and versioned configuration.
+- [x] Ensure template choice never changes prayer calculations or prayer-source semantics.
+- [x] Allow per-template module visibility without allowing required prayer information to become ambiguous.
+- [x] Support 12-hour and 24-hour clock presentation.
+- [x] Support English, Arabic/RTL, Turkish and Indonesian.
+- [x] Support bilingual English/Arabic display mode where layout space permits.
+- [x] Support mosque name and validated logo branding.
+- [x] Support controlled accent-colour presets.
+- [x] Support approved custom background images with crop/focal-point controls.
+- [x] Enforce contrast overlays/scrims automatically when background imagery reduces readability.
+- [x] Provide sensible built-in artwork/pattern fallbacks so custom images are optional.
+- [x] Keep external/remote content isolated from the authoritative local prayer board.
+- [x] Keep all templates deterministic and usable when offline.
+
+**Stage 23.1 verification note (2026-08-21):** PR #175 code-bearing head `d154cf035e13282bfdc46e78ec7a7fa455914b0c` passed Quality Gate `32460157253`, Android Build `32460157312`, Visual Regression `32460157295` and iOS Build `32460157409`, including fresh iPhone and iPad Simulator install, launch and relaunch acceptance. `src/domain/prayerBoardTemplate.ts` now defines the versioned six-template registry, required/optional module policy, four-locale and English/Arabic bilingual presentation capabilities, 12/24-hour and controlled-accent configuration, validated mosque branding/local-image metadata with focal-point/cover/automatic-scrim contracts, and deterministic built-in artwork fallbacks. `buildPrayerBoardData()` consumes only the already-resolved `SourcedPrayerDashboard`; template selection is deliberately absent from that builder, so visual choice cannot alter prayer calculations, selected source semantics, Iqamah values or next-prayer state. Optional announcement/weather inputs remain isolated and fail-soft, local asset IDs reject remote-looking values, and the focused domain suite verifies registry stability, core-module safety, configuration normalization, presentation isolation and weather independence. The six visual template implementations and later preview/assignment UX remain open as separate Stage 23 work.
 
 ## 23.2 Template 1 — Heritage Classic
 
@@ -286,6 +288,31 @@ The daily prayer display surface must also become a first-class configurable pro
 - [ ] Allow administrators to disable announcement rotation for prayer-board-only displays.
 - [ ] Integrate with existing signage scene/playlist scheduling rather than creating a second conflicting scheduler.
 - [ ] Define safe transitions that respect reduced-motion and long-running kiosk use.
+
+---
+
+## 23.13 Mobile Today/home prayer-board templates
+
+The phone Today/home experience must receive the same design quality and template choice as the dedicated display product, while remaining a native-feeling mobile application rather than shrinking a television layout. Masjidal/Athan+ and comparable prayer products may be used only as broad interaction and information-hierarchy references; SalahOS must use original layouts, artwork, assets and styling.
+
+- [ ] Make the mobile Today/home prayer-times surface consume the shared Stage 23 prayer-board data contract instead of creating a separate mobile prayer-presentation model.
+- [ ] Provide polished phone-adapted variants of all six required SalahOS prayer-board designs wherever their information hierarchy is suitable for mobile.
+- [ ] Keep the mobile home visually prayer-first: current date/time and selected location/mosque, dominant next-prayer/countdown region, and an immediately scannable daily Athan/start versus Iqamah timetable.
+- [ ] Highlight the current/next prayer clearly without depending on colour alone, using a treatment suitable for quick one-handed phone viewing.
+- [ ] Support compact Jumu'ah, Sunrise/Sunset, Gregorian/Hijri date and selected-mosque branding modules without allowing optional content to crowd the core prayer schedule.
+- [ ] Keep Ramadan/Suhur/Imsak/Iftar/Taraweeh context conditional so the ordinary home screen stays calm outside the relevant season/state.
+- [ ] Preserve the existing five-item bottom navigation on phone, with Today, Mosques, Qiblah, Community and Settings always reachable and Qiblah/Settings available in one tap from the home prayer view.
+- [ ] Ensure the bottom navigation respects Android/iOS safe areas, enlarged text, RTL ordering/alignment and modern gesture-navigation regions without obscuring prayer content.
+- [ ] Expand Settings > Display Themes into a visual design selector with thumbnail cards or tabs and an obvious selected state rather than a text-only/raw configuration control.
+- [ ] Separate theme targets in Settings where necessary (for example Phone/Home, TV/Kiosk and Touch Display) so choosing a phone design does not unintentionally change a mosque display; provide an explicit opt-in sync/apply-to-all action instead of implicit coupling.
+- [ ] Provide live or representative phone previews before applying a mobile home template, including English and Arabic/RTL states.
+- [ ] Allow the six required designs to expose appropriate light/dark, jewel/neutral and approved accent variants on mobile while keeping prayer-text contrast deterministic.
+- [ ] Keep template selection, colours, backgrounds and module visibility presentation-only; changing the mobile design must never change prayer calculations, selected prayer source, Iqamah values, notification schedules or next-prayer semantics.
+- [ ] Preserve fully usable offline mobile prayer display with built-in artwork/pattern fallbacks and no dependency on remote imagery or optional content.
+- [ ] Validate every released mobile-home template at 320px minimum width, representative 390–430px phones, portrait and supported landscape states, with no clipping or horizontal overflow.
+- [ ] Validate English, Arabic/RTL, Turkish and Indonesian text expansion; specifically test long mosque names, mixed-direction times/numbers and Arabic-adjacent branding without collisions.
+- [ ] Add permanent visual-regression screenshots for each released phone/home template in representative light/dark and English/Arabic states.
+- [ ] Perform human visual review of every released mobile-home template for prayer hierarchy, Athan/Iqamah clarity, bottom-navigation usability, density and originality before marking it complete.
 
 ---
 
@@ -422,7 +449,7 @@ The daily prayer display surface must also become a first-class configurable pro
 2. Stage 22.2 Design System v2 consolidation.
 3. Stage 22.3 Today redesign and Stage 22.4 dedicated Qiblah screen.
 4. Stage 22.5 Mosques/Community and Stage 22.6 Settings restructuring.
-5. Stage 23 shared prayer-board template engine and the six required designs.
+5. Stage 23 shared prayer-board template engine, the six required designs and their validated mobile Today/home variants.
 6. Stage 23 preview/configuration and managed-display assignment.
 7. Stage 24 admin console redesign.
 8. Stage 25 device-specific refinement.
@@ -434,7 +461,7 @@ The daily prayer display surface must also become a first-class configurable pro
 This plan must not be marked complete merely because the new layouts render. Completion requires that:
 
 - all required destinations are usable and appropriately separated;
-- the six required prayer-board designs are selectable and independently usable;
+- the six required prayer-board designs are selectable and independently usable, including validated phone Today/home variants where applicable;
 - the template engine preserves authoritative prayer data and offline behaviour;
 - congregation and admin experiences no longer appear as one long feature stack;
 - responsive and RTL acceptance matrices pass;
