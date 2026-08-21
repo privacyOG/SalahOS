@@ -12,6 +12,9 @@ import {
   type SmartDisplayThemeId,
 } from '../platform/smartDisplayTheme';
 import { HeritageClassicPrayerBoard } from './HeritageClassicPrayerBoard';
+import { MinimalModernPrayerBoard, type MinimalModernVariant } from './MinimalModernPrayerBoard';
+
+export type SmartDisplayTemplateId = 'heritage-classic' | 'minimal-modern';
 
 export interface SmartDisplayProps {
   readonly locale: Locale;
@@ -22,10 +25,17 @@ export interface SmartDisplayProps {
   readonly offline: boolean;
   readonly systemTimeUnavailable: boolean;
   readonly calculationUnavailable: boolean;
+  readonly templateId?: SmartDisplayTemplateId;
 }
 
 export function smartDisplayModeRequested(search: string): boolean {
   return new URLSearchParams(search).get('mode') === 'smart-display';
+}
+
+export function smartDisplayTemplateRequested(search: string): SmartDisplayTemplateId {
+  return new URLSearchParams(search).get('template') === 'minimal-modern'
+    ? 'minimal-modern'
+    : 'heritage-classic';
 }
 
 function readSmartDisplayTheme(): SmartDisplayThemeId {
@@ -36,6 +46,10 @@ function readSmartDisplayTheme(): SmartDisplayThemeId {
   }
 }
 
+function minimalModernVariant(displayTheme: SmartDisplayThemeId): MinimalModernVariant {
+  return displayTheme === 'midnight' || displayTheme === 'emerald' ? 'dark' : 'light';
+}
+
 export function SmartDisplay({
   locale,
   currentClock,
@@ -44,12 +58,18 @@ export function SmartDisplay({
   offline,
   systemTimeUnavailable,
   calculationUnavailable,
+  templateId,
 }: SmartDisplayProps) {
   const [displayTheme, setDisplayTheme] = useState<SmartDisplayThemeId>(readSmartDisplayTheme);
   const boardData = useMemo(
     () => (dashboard === null ? null : buildPrayerBoardData({ dashboard, offline })),
     [dashboard, offline],
   );
+  const resolvedTemplateId =
+    templateId ??
+    (typeof window === 'undefined'
+      ? 'heritage-classic'
+      : smartDisplayTemplateRequested(window.location.search));
 
   useEffect(() => {
     const refresh = () => {
@@ -66,6 +86,7 @@ export function SmartDisplay({
       className="smart-display"
       data-mode="smart-display"
       data-display-theme={displayTheme}
+      data-display-template={resolvedTemplateId}
       dir={localeDirection(locale)}
       lang={locale}
     >
@@ -102,6 +123,13 @@ export function SmartDisplay({
             <span>{translate(locale, 'notConfigured')}</span>
           </section>
         </>
+      ) : resolvedTemplateId === 'minimal-modern' ? (
+        <MinimalModernPrayerBoard
+          data={boardData}
+          locale={locale}
+          timeFormat={timeFormat}
+          variant={minimalModernVariant(displayTheme)}
+        />
       ) : (
         <HeritageClassicPrayerBoard
           data={boardData}

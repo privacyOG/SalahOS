@@ -196,12 +196,14 @@ The daily prayer display surface must also become a first-class configurable pro
 
 ## 23.3 Template 2 — Minimal Modern
 
-- [ ] Implement an original SalahOS Minimal Modern design.
-- [ ] Use a calm neutral canvas, large clock, restrained cards and strong typography.
-- [ ] Present prayer times in a clean lower strip/grid.
-- [ ] Use a compact next-prayer/countdown component that remains obvious from viewing distance.
-- [ ] Provide light and dark variants.
-- [ ] Avoid unnecessary ornamentation and visual noise.
+- [x] Implement an original SalahOS Minimal Modern design.
+- [x] Use a calm neutral canvas, large clock, restrained cards and strong typography.
+- [x] Present prayer times in a clean lower strip/grid.
+- [x] Use a compact next-prayer/countdown component that remains obvious from viewing distance.
+- [x] Provide light and dark variants.
+- [x] Avoid unnecessary ornamentation and visual noise.
+
+**Stage 23.3 verification note (2026-08-21):** PR #177 code-bearing head `f20d73f6b3d76d371205508f43e930b50ea1ed84` passed Quality Gate `32478598067`, Android Build `32478597925`, Visual Regression `32478597889` and iOS Build `32478598033`, including fresh iPhone and iPad Simulator install, launch and relaunch acceptance. Minimal Modern renders only from the shared `PrayerBoardData` presentation contract and does not recalculate prayers or change selected source, Iqamah, notification or next-prayer semantics. Its original SalahOS composition uses a calm neutral canvas with intentional light/dark variants, a large current clock, compact next-prayer/countdown hero, a five-prayer Athan/start-versus-Iqamah strip, restrained Jumu'ah and sunrise/sunset modules, explicit non-colour-only current/next state labels and preserved offline presentation. The permanent focused visual harness passed English and Arabic/RTL at 1920×1080 and 3840×2160, including deliberately long mosque names, exact five-prayer assertions, no horizontal clipping and full-board viewport-fit checks. Human review of the final evidence confirmed balanced full-height density at both resolutions, immediate next-prayer hierarchy, unambiguous Athan/Iqamah presentation and composed RTL layout. Later templates, preview/assignment UX and Stage 23.13 mobile variants remain open.
 
 ## 23.4 Template 3 — Bold Countdown Focus
 

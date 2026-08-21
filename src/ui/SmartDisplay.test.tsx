@@ -4,7 +4,11 @@ import { createCoordinates } from '../domain/coordinates';
 import { buildPrayerDashboard } from '../domain/dashboard';
 import type { MosqueTimetable } from '../domain/mosqueTimetable';
 import { applyPrayerSourceToDashboard } from '../domain/sourcedDashboard';
-import { SmartDisplay, smartDisplayModeRequested } from './SmartDisplay';
+import {
+  SmartDisplay,
+  smartDisplayModeRequested,
+  smartDisplayTemplateRequested,
+} from './SmartDisplay';
 
 const sydney = createCoordinates(-33.8688, 151.2093);
 
@@ -54,6 +58,15 @@ describe('SmartDisplay', () => {
     expect(smartDisplayModeRequested('?foo=1&mode=smart-display')).toBe(true);
   });
 
+  it('resolves only implemented smart-display templates from the route', () => {
+    expect(smartDisplayTemplateRequested('')).toBe('heritage-classic');
+    expect(smartDisplayTemplateRequested('?mode=smart-display')).toBe('heritage-classic');
+    expect(smartDisplayTemplateRequested('?mode=smart-display&template=minimal-modern')).toBe(
+      'minimal-modern',
+    );
+    expect(smartDisplayTemplateRequested('?template=scenic-spiritual')).toBe('heritage-classic');
+  });
+
   it('renders Heritage Classic from the shared prayer-board contract with Iqamah and state', () => {
     const html = renderToStaticMarkup(
       <SmartDisplay
@@ -69,6 +82,7 @@ describe('SmartDisplay', () => {
     );
 
     expect(html).toContain('data-mode="smart-display"');
+    expect(html).toContain('data-display-template="heritage-classic"');
     expect(html).toContain('data-prayer-board-template="heritage-classic"');
     expect(html.match(/<div class="heritage-classic-prayer-row(?: |")/g)).toHaveLength(5);
     expect(html).toContain('Fajr');
@@ -80,6 +94,32 @@ describe('SmartDisplay', () => {
     expect(html).toContain('is-current');
     expect(html).toContain('is-next');
     expect(html).toContain('Central Mosque');
+  });
+
+  it('renders Minimal Modern from the same prayer-board contract without changing prayer data', () => {
+    const html = renderToStaticMarkup(
+      <SmartDisplay
+        locale="en"
+        currentClock="4:00:00 pm"
+        dashboard={fridayDashboard()}
+        timeFormat="h12"
+        hijriCorrectionDays={0}
+        offline={false}
+        systemTimeUnavailable={false}
+        calculationUnavailable={false}
+        templateId="minimal-modern"
+      />,
+    );
+
+    expect(html).toContain('data-display-template="minimal-modern"');
+    expect(html).toContain('data-prayer-board-template="minimal-modern"');
+    expect(html.match(/data-prayer="(?:fajr|dhuhr|asr|maghrib|isha)"/g)).toHaveLength(5);
+    expect(html).toContain('Central Mosque');
+    expect(html).toContain('First Jumuah');
+    expect(html).toContain('Iqamah');
+    expect(html).toContain('is-current');
+    expect(html).toContain('is-next');
+    expect(html).not.toContain('data-prayer-board-template="heritage-classic"');
   });
 
   it('renders configured Friday Jumuah sessions from the shared prayer-board contract', () => {
@@ -119,6 +159,7 @@ describe('SmartDisplay', () => {
 
     expect(html).toContain('Not configured');
     expect(html).not.toContain('data-prayer-board-template="heritage-classic"');
+    expect(html).not.toContain('data-prayer-board-template="minimal-modern"');
   });
 
   it('preserves Arabic presentation and offline status', () => {
