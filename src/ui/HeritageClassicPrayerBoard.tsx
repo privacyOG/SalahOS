@@ -13,6 +13,7 @@ import type { SmartDisplayThemeId } from '../platform/smartDisplayTheme';
 import { BidiText } from './BidiText';
 
 import '../heritage-classic.css';
+import '../heritage-classic-1080.css';
 
 const prayerTranslationKeys: Readonly<Record<PrayerName, TranslationKey>> = {
   fajr: 'prayerFajr',
