@@ -286,11 +286,11 @@ export function MosquesScreen() {
     });
   }, [dashboardResult, linkedTimetable, settings.mosqueTimetable, sourceMode]);
   const timetableHasToday =
-    linkedTimetable && dashboardResult?.ok === true && settings.mosqueTimetable !== null
-      ? settings.mosqueTimetable.days.some(
-          (day) => day.date === dashboardResult.dashboard.today.date,
-        )
-      : false;
+    linkedTimetable &&
+    dashboardResult?.ok === true &&
+    settings.mosqueTimetable?.days.some(
+      (day) => day.date === dashboardResult.dashboard.today.date,
+    ) === true;
 
   const profileCommunity = useMemo(
     () =>
