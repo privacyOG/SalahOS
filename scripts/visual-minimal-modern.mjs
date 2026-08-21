@@ -1,7 +1,7 @@
 import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
-import { format } from 'prettier';
+import { format, resolveConfig } from 'prettier';
 
 const baseUrl = process.env.SALAHOS_VISUAL_BASE_URL ?? 'http://127.0.0.1:4173';
 const playwrightModule = process.env.SALAHOS_VISUAL_PLAYWRIGHT_MODULE;
@@ -317,7 +317,8 @@ const formatterTargets = [
 ];
 for (const targetPath of formatterTargets) {
   const source = await readFile(targetPath, 'utf8');
-  const formatted = await format(source, { filepath: targetPath });
+  const config = (await resolveConfig(targetPath)) ?? {};
+  const formatted = await format(source, { ...config, filepath: targetPath });
   await writeFile(
     path.join(artifactDirectory, `formatted-${path.basename(targetPath)}`),
     formatted,
