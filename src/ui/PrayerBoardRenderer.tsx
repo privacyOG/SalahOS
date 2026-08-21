@@ -66,7 +66,8 @@ export function PrayerBoardRenderer({
   const timeFormat = normalized.timeFormat;
   const displayTheme = displayThemeOverride ?? displayThemeForPrayerBoardConfig(normalized);
   const mosqueName = localizedBrandName(normalized, locale, data.mosqueName);
-  const renderedData = mosqueName === data.mosqueName ? data : Object.freeze({ ...data, mosqueName });
+  const renderedData =
+    mosqueName === data.mosqueName ? data : Object.freeze({ ...data, mosqueName });
 
   const board =
     normalized.templateId === 'minimal-modern' ? (
