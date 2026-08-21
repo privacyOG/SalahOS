@@ -110,6 +110,25 @@ describe('prayer-board template engine', () => {
     });
   });
 
+  it('rejects remote-looking image identifiers from imported configuration', () => {
+    const config = parsePrayerBoardTemplateConfig({
+      version: 1,
+      templateId: 'scenic-spiritual',
+      background: {
+        kind: 'local-image',
+        asset: {
+          assetId: 'https://example.invalid/background.webp',
+          mimeType: 'image/webp',
+          byteSize: 2_000_000,
+          width: 3840,
+          height: 2160,
+        },
+      },
+    });
+
+    expect(config.background).toEqual({ kind: 'builtin', artworkId: 'scenic-gradient' });
+  });
+
   it('falls back to built-in artwork when custom image metadata is invalid', () => {
     const config = parsePrayerBoardTemplateConfig({
       version: 1,
