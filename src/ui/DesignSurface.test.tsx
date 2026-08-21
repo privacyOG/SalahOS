@@ -52,12 +52,12 @@ describe('DesignSurface', () => {
   });
 
   it('uses assertive semantics only for actionable failure states', () => {
-    expect(
-      renderToStaticMarkup(<StateBanner state="sync-error" title="Sync failed" />),
-    ).toContain('role="alert"');
-    expect(
-      renderToStaticMarkup(<StateBanner state="offline" title="Working offline" />),
-    ).toContain('role="status"');
+    expect(renderToStaticMarkup(<StateBanner state="sync-error" title="Sync failed" />)).toContain(
+      'role="alert"',
+    );
+    expect(renderToStaticMarkup(<StateBanner state="offline" title="Working offline" />)).toContain(
+      'role="status"',
+    );
   });
 
   it('renders an accessible empty state with optional action content', () => {
@@ -78,12 +78,7 @@ describe('DesignSurface', () => {
     const markup = renderToStaticMarkup(
       <>
         <PrayerRow name="Fajr" startTime="05:18" iqamahTime="05:45" />
-        <NextPrayerSummary
-          name="Dhuhr"
-          startTime="12:05"
-          iqamahTime="12:30"
-          countdown="01:12:09"
-        />
+        <NextPrayerSummary name="Dhuhr" startTime="12:05" iqamahTime="12:30" countdown="01:12:09" />
         <MosqueSummary name="Masjid Al Noor" detail="Local timetable" />
         <AnnouncementPreview title="Friday parking" meta="Priority" />
       </>,

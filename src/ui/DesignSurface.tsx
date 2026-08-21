@@ -80,13 +80,7 @@ export function StatusPill({ children, className }: StatusPillProps) {
 }
 
 export type DesignState =
-  | 'loading'
-  | 'offline'
-  | 'stale'
-  | 'sync-pending'
-  | 'sync-error'
-  | 'permission-denied'
-  | 'empty';
+  'loading' | 'offline' | 'stale' | 'sync-pending' | 'sync-error' | 'permission-denied' | 'empty';
 
 type StateBannerProps = Readonly<{
   state: DesignState;
@@ -170,13 +164,9 @@ export function NextPrayerSummary({
       <strong className="ds-type-prayer-name">{name}</strong>
       <div className="ds-next-prayer__times">
         <span className="ds-type-prayer-time">{startTime}</span>
-        {iqamahTime === undefined ? null : (
-          <span className="ds-type-iqamah">{iqamahTime}</span>
-        )}
+        {iqamahTime === undefined ? null : <span className="ds-type-iqamah">{iqamahTime}</span>}
       </div>
-      {countdown === undefined ? null : (
-        <span className="ds-type-countdown">{countdown}</span>
-      )}
+      {countdown === undefined ? null : <span className="ds-type-countdown">{countdown}</span>}
     </section>
   );
 }
