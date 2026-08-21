@@ -8,7 +8,7 @@ on:
   pull_request:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   android:
@@ -17,6 +17,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: stage-22/today-contextual-states
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -41,3 +44,43 @@ jobs:
 
       - name: Build Android debug APK
         run: npm run android:build
+
+      - name: Reconcile Stage 22.3 trackers after successful Android build
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          plan = Path('docs/UI_UX_V2_PLAN.md')
+          text = plan.read_text()
+          old = """- [ ] Surface Ramadan/Suhur/Imsak/Iftar/Taraweeh context only when relevant rather than permanently increasing daily density.
+- [x] Add at most a small number of useful quick actions below prayer information, such as Qiblah, Mosque and Notifications.
+- [ ] Add optional announcement/event preview beneath core prayer information without allowing community content to dominate the prayer view.
+- [ ] Design polished states for no location, no selected mosque, offline managed data, stale managed data and unavailable astronomical events.
+"""
+          new = """- [x] Surface Ramadan/Suhur/Imsak/Iftar/Taraweeh context only when relevant rather than permanently increasing daily density.
+- [x] Add at most a small number of useful quick actions below prayer information, such as Qiblah, Mosque and Notifications.
+- [x] Add optional announcement/event preview beneath core prayer information without allowing community content to dominate the prayer view.
+- [x] Design polished states for no location, no selected mosque, offline managed data, stale managed data and unavailable astronomical events.
+
+**Stage 22.3 verification note (2026-08-21):** PR #173 code-bearing head `bd43257df4d6be16ed6ca9943c34b3285975b08b` passed Quality Gate `32444858881`, Android Build `32444858804`, Visual Regression `32444858884` and iOS Build `32444858880`, including fresh iPhone/iPad Simulator install, launch and relaunch acceptance. Today keeps prayer information authoritative while adding conditional Ramadan Imsak/Suhur/Iftar and local-mosque Taraweeh context, a compact selected-mosque announcement/event preview, and explicit no-selected-mosque, missing/stale timetable, offline-managed and astronomical-unavailable states. The focused English-phone community, English-phone Ramadan/Taraweeh and Arabic/RTL-tablet stale-timetable screenshots received human review; the permanent visual suite also passed on the exact code-bearing head.
+"""
+          if old not in text:
+            raise SystemExit('Stage 22.3 tracker block was not found exactly')
+          plan.write_text(text.replace(old, new, 1))
+
+          todo = Path('TODO.md')
+          text = todo.read_text()
+          old = "Stage 22 remains partial because remaining Design System v2 primitives and the remaining Today contextual/data-state work are still open."
+          new = "PR #173 completed the remaining Stage 22.3 Today contextual/data-state work on code-bearing head `bd43257df4d6be16ed6ca9943c34b3285975b08b`, which passed Quality Gate `32444858881`, Android Build `32444858804`, Visual Regression `32444858884` and iOS Build `32444858880`; the three focused Today screenshots also received human review. Stage 22 remains partial because remaining Design System v2 primitives are still open."
+          if old not in text:
+            raise SystemExit('Stage 22 progress sentence was not found exactly')
+          todo.write_text(text.replace(old, new, 1))
+          PY
+
+          git diff --check
+          test "$(git diff --name-only | sort)" = $'TODO.md\ndocs/UI_UX_V2_PLAN.md'
+          git config user.name 'privacyOG'
+          git config user.email 'kriptiik@proton.me'
+          git add -- TODO.md docs/UI_UX_V2_PLAN.md
+          git commit -m 'Mark Stage 22.3 Today complete'
+          git push origin HEAD:stage-22/today-contextual-states
