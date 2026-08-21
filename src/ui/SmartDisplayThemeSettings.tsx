@@ -145,8 +145,10 @@ const displayConfigCopy: Readonly<Record<Locale, DisplayConfigCopy>> = {
     branding: 'Identitas masjid',
     mosqueName: 'Nama masjid di layar',
     modules: 'Modul opsional',
-    modulesHelp: 'Waktu, salat berikutnya, hitung mundur, dan jadwal lima salat tidak dapat disembunyikan.',
-    landscapeOnly: 'Lanskap adalah satu-satunya orientasi yang tervalidasi untuk desain TV/kios ini.',
+    modulesHelp:
+      'Waktu, salat berikutnya, hitung mundur, dan jadwal lima salat tidak dapat disembunyikan.',
+    landscapeOnly:
+      'Lanskap adalah satu-satunya orientasi yang tervalidasi untuk desain TV/kios ini.',
     previewState: 'Keadaan contoh',
     previewLanguage: 'Bahasa pratinjau',
     coreLocked: 'Inti · selalu tampil',
@@ -214,7 +216,9 @@ const moduleLabels: Readonly<Record<Locale, Readonly<Record<PrayerBoardModuleId,
   },
 };
 
-const scenarioLabels: Readonly<Record<Locale, Readonly<Record<PrayerBoardPreviewScenario, string>>>> = {
+const scenarioLabels: Readonly<
+  Record<Locale, Readonly<Record<PrayerBoardPreviewScenario, string>>>
+> = {
   en: {
     'before-prayer': 'Before prayer',
     'near-athan': 'Near Athan',
@@ -301,12 +305,12 @@ function TemplateThumbnail({ templateId }: Readonly<{ templateId: PrayerBoardTem
 
 export function SmartDisplayThemeSettings() {
   const [locale, setLocale] = useState<Locale>(readLocale);
-  const [appliedConfig, setAppliedConfig] = useState<PrayerBoardTemplateConfig>(initialDisplayConfig);
+  const [appliedConfig, setAppliedConfig] =
+    useState<PrayerBoardTemplateConfig>(initialDisplayConfig);
   const [draftConfig, setDraftConfig] = useState<PrayerBoardTemplateConfig>(initialDisplayConfig);
   const [previewOpen, setPreviewOpen] = useState(false);
   const [previewLocale, setPreviewLocale] = useState<'en' | 'ar'>('en');
-  const [previewScenario, setPreviewScenario] =
-    useState<PrayerBoardPreviewScenario>('near-athan');
+  const [previewScenario, setPreviewScenario] = useState<PrayerBoardPreviewScenario>('near-athan');
   const [previewedFingerprint, setPreviewedFingerprint] = useState<string | null>(null);
   const [status, setStatus] = useState<string | null>(null);
   const text = displayConfigCopy[locale];
@@ -567,14 +571,19 @@ export function SmartDisplayThemeSettings() {
                   setPreviewScenario(event.target.value as PrayerBoardPreviewScenario);
                 }}
               >
-                {(Object.keys(scenarioLabels.en) as PrayerBoardPreviewScenario[]).map((scenario) => (
-                  <option key={scenario} value={scenario}>
-                    {scenarioLabels[locale][scenario]}
-                  </option>
-                ))}
+                {(Object.keys(scenarioLabels.en) as PrayerBoardPreviewScenario[]).map(
+                  (scenario) => (
+                    <option key={scenario} value={scenario}>
+                      {scenarioLabels[locale][scenario]}
+                    </option>
+                  ),
+                )}
               </select>
             </label>
-            <div className="prayer-board-fullscreen-preview__language" aria-label={text.previewLanguage}>
+            <div
+              className="prayer-board-fullscreen-preview__language"
+              aria-label={text.previewLanguage}
+            >
               <button
                 type="button"
                 aria-pressed={previewLocale === 'en'}
