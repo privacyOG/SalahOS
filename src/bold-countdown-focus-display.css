@@ -13,12 +13,18 @@
     font-size: clamp(12rem, 10vw, 22rem);
   }
 
+  .bold-countdown-board__focus {
+    grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+  }
+
   .bold-countdown-board__countdown strong {
     font-size: clamp(13rem, 10.5vw, 23rem);
   }
 
   .bold-countdown-board__focus-heading strong {
-    font-size: clamp(6rem, 5.5vw, 11rem);
+    overflow-wrap: normal;
+    font-size: clamp(5.5rem, 5vw, 10rem);
+    white-space: nowrap;
   }
 
   .bold-countdown-prayer header strong {
