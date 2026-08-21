@@ -327,3 +327,20 @@ if (failures.length > 0) {
 }
 
 console.log(`Bold Countdown Focus visual acceptance passed ${String(results.length)} scenarios.`);
+
+const { readFile } = await import('node:fs/promises');
+const { format, resolveConfig } = await import('prettier');
+const formatterTargets = [
+  'scripts/visual-bold-countdown-focus.mjs',
+  'src/bold-countdown-focus.css',
+  'src/ui/BoldCountdownFocusPrayerBoard.tsx',
+  'src/ui/SmartDisplay.test.tsx',
+  'src/ui/SmartDisplay.tsx',
+];
+for (const target of formatterTargets) {
+  const source = await readFile(target, 'utf8');
+  const config = (await resolveConfig(target)) ?? {};
+  const formatted = await format(source, { ...config, filepath: target });
+  const outputName = `formatted-${target.replaceAll('/', '__')}`;
+  await writeFile(path.join(artifactDirectory, outputName), formatted, 'utf8');
+}
