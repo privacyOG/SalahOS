@@ -1,4 +1,4 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 
@@ -282,58 +282,6 @@ async function validateScenario(browser, scenario) {
   }
 }
 
-async function writeTrackerReconciliation() {
-  const rootTodo = await readFile('TODO.md', 'utf8');
-  const uiPlan = await readFile('docs/UI_UX_V2_PLAN.md', 'utf8');
-
-  const stage23RootNote =
-    "PR #177 completed Minimal Modern on code-bearing head `f20d73f6b3d76d371205508f43e930b50ea1ed84`, which passed Quality Gate `32478598067`, Android Build `32478597925`, Visual Regression `32478597889` and iOS Build `32478598033`, including fresh iPhone/iPad Simulator runtime acceptance. The Minimal Modern board consumes the shared prayer-board data contract, preserves authoritative calculation/source/Iqamah/next-prayer semantics, provides deliberate light/dark neutral variants, keeps current time and next-prayer/countdown prominent, presents five obligatory prayers with explicit Athan/start and Iqamah values, and includes restrained Jumu'ah and solar modules. Dedicated 1920×1080 and 3840×2160 English/Arabic/RTL long-mosque-name scenarios passed viewport/overflow assertions, and human screenshot review confirmed balanced full-height composition, clear hierarchy and composed RTL presentation. Stage 23.3 is therefore complete.";
-
-  const updatedRootTodo = rootTodo
-    .replace('- [ ] Implement Minimal Modern', '- [x] Implement Minimal Modern')
-    .replace(
-      'Stage 23.13 explicitly requires the mobile Today/home prayer surface to receive original phone-adapted variants of the prayer-board designs, retain one-tap bottom navigation including Qiblah and Settings, expose a visual Settings > Display Themes selector with previews/per-surface targeting, and pass phone/RTL/offline/visual/human acceptance before it may be marked complete. Five required visual templates and the mobile template work remain open.',
-      `Stage 23.13 explicitly requires the mobile Today/home prayer surface to receive original phone-adapted variants of the prayer-board designs, retain one-tap bottom navigation including Qiblah and Settings, expose a visual Settings > Display Themes selector with previews/per-surface targeting, and pass phone/RTL/offline/visual/human acceptance before it may be marked complete. ${stage23RootNote} Four required visual templates and the mobile template work remain open.`,
-    );
-
-  const stage23DetailNote =
-    "**Stage 23.3 verification note (2026-08-21):** PR #177 code-bearing head `f20d73f6b3d76d371205508f43e930b50ea1ed84` passed Quality Gate `32478598067`, Android Build `32478597925`, Visual Regression `32478597889` and iOS Build `32478598033`, including fresh iPhone and iPad Simulator install, launch and relaunch acceptance. Minimal Modern renders only from the shared `PrayerBoardData` presentation contract and does not recalculate prayers or change selected source, Iqamah, notification or next-prayer semantics. Its original SalahOS composition uses a calm neutral canvas with intentional light/dark variants, a large current clock, compact next-prayer/countdown hero, a five-prayer Athan/start-versus-Iqamah strip, restrained Jumu'ah and sunrise/sunset modules, explicit non-colour-only current/next state labels and preserved offline presentation. The permanent focused visual harness passed English and Arabic/RTL at 1920×1080 and 3840×2160, including deliberately long mosque names, exact five-prayer assertions, no horizontal clipping and full-board viewport-fit checks. Human review of the final evidence confirmed balanced full-height density at both resolutions, immediate next-prayer hierarchy, unambiguous Athan/Iqamah presentation and composed RTL layout. Later templates, preview/assignment UX and Stage 23.13 mobile variants remain open.";
-
-  const updatedUiPlan = uiPlan
-    .replace(
-      '- [ ] Implement an original SalahOS Minimal Modern design.',
-      '- [x] Implement an original SalahOS Minimal Modern design.',
-    )
-    .replace(
-      '- [ ] Use a calm neutral canvas, large clock, restrained cards and strong typography.',
-      '- [x] Use a calm neutral canvas, large clock, restrained cards and strong typography.',
-    )
-    .replace(
-      '- [ ] Present prayer times in a clean lower strip/grid.',
-      '- [x] Present prayer times in a clean lower strip/grid.',
-    )
-    .replace(
-      '- [ ] Use a compact next-prayer/countdown component that remains obvious from viewing distance.',
-      '- [x] Use a compact next-prayer/countdown component that remains obvious from viewing distance.',
-    )
-    .replace('- [ ] Provide light and dark variants.', '- [x] Provide light and dark variants.')
-    .replace(
-      '- [ ] Avoid unnecessary ornamentation and visual noise.',
-      `- [x] Avoid unnecessary ornamentation and visual noise.\n\n${stage23DetailNote}`,
-    );
-
-  if (updatedRootTodo === rootTodo || updatedUiPlan === uiPlan) {
-    throw new Error('Stage 23.3 tracker reconciliation did not modify both tracker files');
-  }
-
-  await writeFile(path.join(artifactDirectory, 'tracker-TODO.md'), updatedRootTodo, 'utf8');
-  await writeFile(
-    path.join(artifactDirectory, 'tracker-UI_UX_V2_PLAN.md'),
-    updatedUiPlan,
-    'utf8',
-  );
-}
-
 await mkdir(artifactDirectory, { recursive: true });
 
 const browser = await chromium.launch({ headless: true });
@@ -365,7 +313,5 @@ await writeFile(
 if (failures.length > 0) {
   throw new Error(`Minimal Modern visual failures: ${JSON.stringify(failures)}`);
 }
-
-await writeTrackerReconciliation();
 
 console.log(`Minimal Modern visual acceptance passed ${String(results.length)} scenarios.`);
