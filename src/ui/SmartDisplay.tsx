@@ -20,10 +20,7 @@ import {
   SMART_DISPLAY_THEME_CHANGE_EVENT,
   type SmartDisplayThemeId,
 } from '../platform/smartDisplayTheme';
-import {
-  displayThemeForPrayerBoardConfig,
-  PrayerBoardRenderer,
-} from './PrayerBoardRenderer';
+import { displayThemeForPrayerBoardConfig, PrayerBoardRenderer } from './PrayerBoardRenderer';
 
 export type SmartDisplayTemplateId = PrayerBoardTemplateId;
 
@@ -116,7 +113,8 @@ export function SmartDisplay({
   );
   const queryTemplate =
     typeof window === 'undefined' ? null : smartDisplayTemplateOverride(window.location.search);
-  const resolvedTemplateId = templateId ?? queryTemplate ?? displayConfig?.templateId ?? 'heritage-classic';
+  const resolvedTemplateId =
+    templateId ?? queryTemplate ?? displayConfig?.templateId ?? 'heritage-classic';
   const resolvedConfig = useMemo(
     () =>
       parsePrayerBoardTemplateConfig({
