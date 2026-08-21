@@ -20,11 +20,7 @@ const DISPLAY_ID_PATTERN = /^[a-z0-9][a-z0-9._:-]*[a-z0-9]$/u;
 function normalizeDisplayId(value: unknown): string {
   if (typeof value !== 'string') throw new TypeError('Managed cache display ID must be a string');
   const normalized = value.trim().toLowerCase();
-  if (
-    normalized.length < 2 ||
-    normalized.length > 160 ||
-    !DISPLAY_ID_PATTERN.test(normalized)
-  ) {
+  if (normalized.length < 2 || normalized.length > 160 || !DISPLAY_ID_PATTERN.test(normalized)) {
     throw new RangeError('Managed cache display ID is invalid');
   }
   return normalized;
@@ -40,18 +36,28 @@ function normalizeRevision(value: unknown): number {
 function normalizeTimestamp(value: unknown): string {
   if (typeof value !== 'string') throw new TypeError('Managed cache timestamp must be a string');
   const parsed = new Date(value);
-  if (!value.endsWith('Z') || !Number.isFinite(parsed.getTime()) || parsed.toISOString() !== value) {
+  if (
+    !value.endsWith('Z') ||
+    !Number.isFinite(parsed.getTime()) ||
+    parsed.toISOString() !== value
+  ) {
     throw new RangeError('Managed cache timestamp must be an ISO-8601 UTC timestamp');
   }
   return value;
 }
 
 function parseManagedPrayerBoardCache(value: unknown): ManagedPrayerBoardCache {
-  if (typeof value !== 'object' || value === null || Array.isArray(value) || !('version' in value)) {
+  if (
+    typeof value !== 'object' ||
+    value === null ||
+    Array.isArray(value) ||
+    !('version' in value)
+  ) {
     throw new TypeError('Managed prayer-board cache is malformed');
   }
   const source = value as Record<string, unknown>;
-  if (source.version !== 1) throw new RangeError('Managed prayer-board cache version is unsupported');
+  if (source.version !== 1)
+    throw new RangeError('Managed prayer-board cache version is unsupported');
   return Object.freeze({
     version: 1,
     displayId: normalizeDisplayId(source.displayId),
@@ -61,7 +67,9 @@ function parseManagedPrayerBoardCache(value: unknown): ManagedPrayerBoardCache {
   });
 }
 
-export function loadManagedPrayerBoardCache(storage: KeyValueStorage): ManagedPrayerBoardCache | null {
+export function loadManagedPrayerBoardCache(
+  storage: KeyValueStorage,
+): ManagedPrayerBoardCache | null {
   const serialized = storage.getItem(MANAGED_PRAYER_BOARD_CACHE_STORAGE_KEY);
   if (serialized === null) return null;
   try {
@@ -85,9 +93,7 @@ export function clearManagedPrayerBoardCache(storage: KeyValueStorage): void {
 }
 
 export type ManagedPrayerBoardReconciliationAction =
-  | 'apply-remote'
-  | 'keep-local'
-  | 'report-conflict';
+  'apply-remote' | 'keep-local' | 'report-conflict';
 
 export function reconcileManagedPrayerBoardRevision(
   local: ManagedPrayerBoardCache | null,
