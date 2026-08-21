@@ -34,7 +34,7 @@ function withIqamahRows(
         ...prayer,
         iqamahLocalMinutes:
           obligatory && prayer.startLocalMinutes !== null
-            ? prayer.startLocalMinutes + iqamahOffset(prayer.name as ObligatoryPrayerName)
+            ? prayer.startLocalMinutes + iqamahOffset(prayer.name)
             : null,
         isCurrent: prayer.name === currentPrayer,
         isNext: prayer.name === nextPrayer,
