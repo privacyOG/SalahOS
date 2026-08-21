@@ -108,7 +108,10 @@ export function MinimalModernPrayerBoard({
         </p>
       )}
 
-      <section className="minimal-modern-board__hero" aria-label={translate(locale, 'nextPrayer')}>
+      <section
+        className="minimal-modern-board__hero"
+        aria-label={translate(locale, 'nextPrayer')}
+      >
         <div className="minimal-modern-board__clock">
           <span>{translate(locale, 'currentTime')}</span>
           <strong>{displayClock(data.clock, locale, timeFormat)}</strong>
@@ -183,7 +186,10 @@ export function MinimalModernPrayerBoard({
       </section>
 
       <div className="minimal-modern-board__lower">
-        <section className="minimal-modern-board__solar" aria-label={translate(locale, 'prayerSunrise')}>
+        <section
+          className="minimal-modern-board__solar"
+          aria-label={translate(locale, 'prayerSunrise')}
+        >
           <div>
             <span>{translate(locale, 'prayerSunrise')}</span>
             <strong>{displayTime(data.solarEvents.sunriseLocalMinutes, locale, timeFormat)}</strong>
@@ -195,8 +201,13 @@ export function MinimalModernPrayerBoard({
         </section>
 
         {data.jumuahSessions.length > 0 && (
-          <section className="minimal-modern-board__jumuah" aria-label={translate(locale, 'jumuah')}>
-            <span className="minimal-modern-board__module-title">{translate(locale, 'jumuah')}</span>
+          <section
+            className="minimal-modern-board__jumuah"
+            aria-label={translate(locale, 'jumuah')}
+          >
+            <span className="minimal-modern-board__module-title">
+              {translate(locale, 'jumuah')}
+            </span>
             <div>
               {data.jumuahSessions.map((session) => (
                 <article key={session.label}>
