@@ -17,9 +17,7 @@
   padding: clamp(1rem, 1.8vw, 2.5rem);
   overflow: hidden;
   color: var(--bold-text);
-  background:
-    linear-gradient(135deg, rgb(13 116 88 / 6%), transparent 32%),
-    var(--bold-bg);
+  background: linear-gradient(135deg, rgb(13 116 88 / 6%), transparent 32%), var(--bold-bg);
 }
 
 .bold-countdown-board[data-bold-variant='midnight'] {

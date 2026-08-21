@@ -15,10 +15,7 @@ import { BoldCountdownFocusPrayerBoard } from './BoldCountdownFocusPrayerBoard';
 import { HeritageClassicPrayerBoard } from './HeritageClassicPrayerBoard';
 import { MinimalModernPrayerBoard, type MinimalModernVariant } from './MinimalModernPrayerBoard';
 
-export type SmartDisplayTemplateId =
-  | 'heritage-classic'
-  | 'minimal-modern'
-  | 'bold-countdown-focus';
+export type SmartDisplayTemplateId = 'heritage-classic' | 'minimal-modern' | 'bold-countdown-focus';
 
 export interface SmartDisplayProps {
   readonly locale: Locale;

@@ -64,9 +64,9 @@ describe('SmartDisplay', () => {
     expect(smartDisplayTemplateRequested('?mode=smart-display&template=minimal-modern')).toBe(
       'minimal-modern',
     );
-    expect(
-      smartDisplayTemplateRequested('?mode=smart-display&template=bold-countdown-focus'),
-    ).toBe('bold-countdown-focus');
+    expect(smartDisplayTemplateRequested('?mode=smart-display&template=bold-countdown-focus')).toBe(
+      'bold-countdown-focus',
+    );
     expect(smartDisplayTemplateRequested('?template=scenic-spiritual')).toBe('heritage-classic');
   });
 

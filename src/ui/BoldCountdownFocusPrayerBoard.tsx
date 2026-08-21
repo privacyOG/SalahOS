@@ -254,7 +254,10 @@ export function BoldCountdownFocusPrayerBoard({
         </section>
 
         {data.jumuahSessions.length > 0 && (
-          <section className="bold-countdown-board__jumuah" aria-label={translate(locale, 'jumuah')}>
+          <section
+            className="bold-countdown-board__jumuah"
+            aria-label={translate(locale, 'jumuah')}
+          >
             <strong>{translate(locale, 'jumuah')}</strong>
             <div>
               {data.jumuahSessions.map((session) => (

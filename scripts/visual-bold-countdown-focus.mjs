@@ -265,7 +265,16 @@ async function validateScenario(browser, scenario) {
       throw new Error(`${scenario.name} board exceeds viewport: ${JSON.stringify(boardGeometry)}`);
     }
 
-    const countdownBox = await page.locator('.bold-countdown-board__countdown strong').boundingBox();
+    const minimumBoardHeight = boardGeometry.viewportHeight * 0.9;
+    if (boardGeometry.height < minimumBoardHeight) {
+      throw new Error(
+        `${scenario.name} board under-fills viewport: ${JSON.stringify(boardGeometry)}`,
+      );
+    }
+
+    const countdownBox = await page
+      .locator('.bold-countdown-board__countdown strong')
+      .boundingBox();
     const minimumCountdownHeight = scenario.height >= 2000 ? 120 : 64;
     if (countdownBox === null || countdownBox.height < minimumCountdownHeight) {
       throw new Error(
@@ -327,20 +336,3 @@ if (failures.length > 0) {
 }
 
 console.log(`Bold Countdown Focus visual acceptance passed ${String(results.length)} scenarios.`);
-
-const { readFile } = await import('node:fs/promises');
-const { format, resolveConfig } = await import('prettier');
-const formatterTargets = [
-  'scripts/visual-bold-countdown-focus.mjs',
-  'src/bold-countdown-focus.css',
-  'src/ui/BoldCountdownFocusPrayerBoard.tsx',
-  'src/ui/SmartDisplay.test.tsx',
-  'src/ui/SmartDisplay.tsx',
-];
-for (const target of formatterTargets) {
-  const source = await readFile(target, 'utf8');
-  const config = (await resolveConfig(target)) ?? {};
-  const formatted = await format(source, { ...config, filepath: target });
-  const outputName = `formatted-${target.replaceAll('/', '__')}`;
-  await writeFile(path.join(artifactDirectory, outputName), formatted, 'utf8');
-}
