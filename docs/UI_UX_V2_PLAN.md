@@ -70,20 +70,22 @@ The daily prayer display surface must also become a first-class configurable pro
 
 ## 22.2 Design System v2
 
-- [ ] Consolidate semantic colour, spacing, typography, radius, border, elevation and motion tokens into one authoritative layer.
-- [ ] Remove overlapping global overrides where multiple stylesheets redefine the same shell, hero, spacing or responsive rules.
-- [ ] Define an 8px-oriented spacing rhythm with documented exceptions for compact display layouts.
-- [ ] Define consistent content-width, page-gutter and section-spacing rules.
-- [ ] Define typography roles for display clock, countdown, prayer name, prayer time, Iqamah, section heading, body, metadata and captions.
-- [ ] Ensure prayer times and countdowns use tabular numerals where appropriate.
-- [ ] Define consistent button variants: primary, secondary, quiet, destructive and icon-only.
-- [ ] Define consistent form-field, segmented-control, tabs, switch, banner, dialog, sheet, popover, tooltip and menu patterns.
-- [ ] Define reusable prayer-row, next-prayer, mosque-summary, announcement-preview and status components.
-- [ ] Define a coherent icon family for Today, Mosques, Qiblah, Community, Settings, prayer, Iqamah, location, display and administration concepts.
-- [ ] Reduce unnecessary borders, nested cards and shadows.
-- [ ] Preserve high-contrast, forced-colours and reduced-motion support.
-- [ ] Add explicit skeleton/loading, offline, stale, sync-pending, sync-error, permission-denied and empty states.
-- [ ] Document light and dark visual rules rather than relying on simple colour inversion.
+- [x] Consolidate semantic colour, spacing, typography, radius, border, elevation and motion tokens into one authoritative layer.
+- [x] Remove overlapping global overrides where multiple stylesheets redefine the same shell, hero, spacing or responsive rules.
+- [x] Define an 8px-oriented spacing rhythm with documented exceptions for compact display layouts.
+- [x] Define consistent content-width, page-gutter and section-spacing rules.
+- [x] Define typography roles for display clock, countdown, prayer name, prayer time, Iqamah, section heading, body, metadata and captions.
+- [x] Ensure prayer times and countdowns use tabular numerals where appropriate.
+- [x] Define consistent button variants: primary, secondary, quiet, destructive and icon-only.
+- [x] Define consistent form-field, segmented-control, tabs, switch, banner, dialog, sheet, popover, tooltip and menu patterns.
+- [x] Define reusable prayer-row, next-prayer, mosque-summary, announcement-preview and status components.
+- [x] Define a coherent icon family for Today, Mosques, Qiblah, Community, Settings, prayer, Iqamah, location, display and administration concepts.
+- [x] Reduce unnecessary borders, nested cards and shadows.
+- [x] Preserve high-contrast, forced-colours and reduced-motion support.
+- [x] Add explicit skeleton/loading, offline, stale, sync-pending, sync-error, permission-denied and empty states.
+- [x] Document light and dark visual rules rather than relying on simple colour inversion.
+
+**Stage 22.2 verification note (2026-08-21):** PR #174 code-bearing head `f0fd43594313b37a1a9882e595d764c75ef12eb7` passed Quality Gate `32453061013`, Android Build `32453061003` and Visual Regression `32453060967`; the deterministic Xcode Simulator compile gate in iOS Build `32453060996` also passed before its separately bounded, non-blocking hosted-Simulator runtime acceptance completed. `src/design-system.css` is the sole semantic `--salah-*` token owner; `src/design-system-primitives.css` and `src/ui/DesignSurface.tsx` define reusable layout, typography, control, state and product primitives; `src/ui/SalahIcon.tsx` provides the ten-concept icon family; duplicated global prayer/status/brand selectors were retired from `src/styles.css`; and the Quality Gate enforces token/selector ownership plus required primitive contracts. `docs/DESIGN_SYSTEM.md` documents the spacing rhythm and page geometry, typography roles and tabular numerals, control patterns, explicit loading/offline/stale/sync/permission/empty states, light/dark visual rules and accessibility requirements. The permanent Visual Regression matrix passed on the same code-bearing head.
 
 ---
 
