@@ -84,6 +84,12 @@ export function HeritageClassicPrayerBoard({
         </div>
       </header>
 
+      {data.offline && (
+        <p className="heritage-classic-board__status" role="status">
+          {translate(locale, 'offline')}
+        </p>
+      )}
+
       <section
         className="heritage-classic-board__hero"
         aria-label={translate(locale, 'nextPrayer')}
