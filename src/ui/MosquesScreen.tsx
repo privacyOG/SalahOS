@@ -84,7 +84,8 @@ const timetableFreshnessLabels: Readonly<
 > = {
   en: {
     current: 'Today’s timetable row is available on this device.',
-    missing: 'The linked timetable has no row for today; mosque start and Iqamah times are unavailable.',
+    missing:
+      'The linked timetable has no row for today; mosque start and Iqamah times are unavailable.',
   },
   ar: {
     current: 'صف جدول اليوم متاح على هذا الجهاز.',
@@ -92,11 +93,13 @@ const timetableFreshnessLabels: Readonly<
   },
   tr: {
     current: 'Bugünün takvim satırı bu cihazda mevcut.',
-    missing: 'Bağlı takvimde bugün için satır yok; cami başlangıç ve kamet saatleri kullanılamıyor.',
+    missing:
+      'Bağlı takvimde bugün için satır yok; cami başlangıç ve kamet saatleri kullanılamıyor.',
   },
   id: {
     current: 'Baris jadwal hari ini tersedia di perangkat ini.',
-    missing: 'Jadwal tertaut tidak memiliki baris untuk hari ini; waktu mulai dan iqamah masjid tidak tersedia.',
+    missing:
+      'Jadwal tertaut tidak memiliki baris untuk hari ini; waktu mulai dan iqamah masjid tidak tersedia.',
   },
 };
 
@@ -144,7 +147,10 @@ function timetableMatchesProfile(settings: PersistedSettings, profile: MosquePro
     .some((value) => normalized(value) === timetableName);
 }
 
-function profileSourceMode(settings: PersistedSettings, linkedTimetable: boolean): PrayerSourceMode {
+function profileSourceMode(
+  settings: PersistedSettings,
+  linkedTimetable: boolean,
+): PrayerSourceMode {
   if (settings.prayerSourceMode === 'local-mosque') {
     return linkedTimetable ? 'local-mosque' : 'calculated';
   }
@@ -237,11 +243,11 @@ export function MosquesScreen() {
         .toLocaleLowerCase('en-AU');
       return haystack.includes(needle);
     });
-    if (mode !== 'nearby' || !nearbyEnabled || settings.location === null) return matches;
+    const savedCoordinates = settings.location?.coordinates ?? null;
+    if (mode !== 'nearby' || !nearbyEnabled || savedCoordinates === null) return matches;
     return [...matches].sort(
       (left, right) =>
-        distanceKm(settings.location!.coordinates, left.coordinates) -
-        distanceKm(settings.location!.coordinates, right.coordinates),
+        distanceKm(savedCoordinates, left.coordinates) - distanceKm(savedCoordinates, right.coordinates),
     );
   }, [library.profiles, mode, nearbyEnabled, query, settings.location]);
 
@@ -251,7 +257,8 @@ export function MosquesScreen() {
     library.profiles[0] ??
     null;
 
-  const linkedTimetable = viewedProfile === null ? false : timetableMatchesProfile(settings, viewedProfile);
+  const linkedTimetable =
+    viewedProfile === null ? false : timetableMatchesProfile(settings, viewedProfile);
   const sourceMode = profileSourceMode(settings, linkedTimetable);
   const dashboardResult = useMemo(
     () =>
@@ -279,7 +286,9 @@ export function MosquesScreen() {
   }, [dashboardResult, linkedTimetable, settings.mosqueTimetable, sourceMode]);
   const timetableHasToday =
     linkedTimetable && dashboardResult?.ok === true && settings.mosqueTimetable !== null
-      ? settings.mosqueTimetable.days.some((day) => day.date === dashboardResult.dashboard.today.date)
+      ? settings.mosqueTimetable.days.some(
+          (day) => day.date === dashboardResult.dashboard.today.date,
+        )
       : false;
 
   const profileCommunity = useMemo(
@@ -493,7 +502,10 @@ export function MosquesScreen() {
             </div>
           </div>
 
-          <section className="mosque-profile-prayers" aria-labelledby="mosque-profile-prayers-title">
+          <section
+            className="mosque-profile-prayers"
+            aria-labelledby="mosque-profile-prayers-title"
+          >
             <h3 id="mosque-profile-prayers-title">{text.todayPrayerTimes}</h3>
             <div className="mosque-profile-prayers__list">
               {sourcedDashboard === null ? (
@@ -502,7 +514,11 @@ export function MosquesScreen() {
                 sourcedDashboard.prayers
                   .filter((row) => row.name !== 'sunrise')
                   .map((row) => (
-                    <div className="mosque-profile-prayer-row" data-next={row.isNext} key={row.name}>
+                    <div
+                      className="mosque-profile-prayer-row"
+                      data-next={row.isNext}
+                      key={row.name}
+                    >
                       <strong>{translate(locale, prayerTranslationKeys[row.name])}</strong>
                       <span>
                         {row.localMinutes === null
