@@ -177,7 +177,12 @@ function RootApplication() {
   }
 
   if (smartDisplayModeRequested(window.location.search)) {
-    return <App />;
+    return (
+      <>
+        <ManagedDisplayRemoteController />
+        <App />
+      </>
+    );
   }
 
   if (readProductSurface(window.location.search) === 'admin') {
