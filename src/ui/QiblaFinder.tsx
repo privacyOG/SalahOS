@@ -256,6 +256,7 @@ export function QiblaFinder() {
   };
 
   const locationSource = location === null ? null : locationSourceLabel(location.source, text);
+  const locationLabel = location?.label ?? null;
   const staticCompass =
     compassState === 'unsupported' || compassState === 'denied' || compassState === 'error';
   const calibrationNeeded =
@@ -308,7 +309,7 @@ export function QiblaFinder() {
                 {location.coordinates.longitude.toFixed(5)}
               </span>
             )}
-            {location?.label !== null && location?.label !== undefined && <bdi>{location.label}</bdi>}
+            {locationLabel !== null && <bdi>{locationLabel}</bdi>}
           </div>
           <div className="qibla-location-actions">
             <button
