@@ -10,7 +10,9 @@ import type { SmartDisplayThemeId } from '../platform/smartDisplayTheme';
 import { parseSmartDisplayTheme } from '../platform/smartDisplayTheme';
 
 export type ManagedPrayerBoardAssignmentSource =
-  'service-default' | 'mosque-default' | 'display-override';
+  | 'service-default'
+  | 'mosque-default'
+  | 'display-override';
 
 export interface ManagedDisplayRemoteConfig {
   readonly displayId: string;
@@ -22,6 +24,10 @@ export interface ManagedDisplayRemoteConfig {
   readonly revoked: boolean;
   readonly updatedAt: string;
 }
+
+type ManagedDisplayRemoteConfigInput = Omit<ManagedDisplayRemoteConfig, 'prayerBoardConfig'> & {
+  readonly prayerBoardConfig?: PrayerBoardTemplateConfig | undefined;
+};
 
 export interface ManagedDisplayRemoteStatus {
   readonly identity: DisplayIdentity;
@@ -137,12 +143,12 @@ function parseTemplateId(value: unknown): PrayerBoardTemplateId | null {
 }
 
 function parseAssignmentSource(value: unknown): ManagedPrayerBoardAssignmentSource {
-  return value === 'mosque-default' || value === 'display-override' ? value : 'service-default';
+  return value === 'mosque-default' || value === 'display-override'
+    ? value
+    : 'service-default';
 }
 
-function accentForLegacyTheme(
-  theme: SmartDisplayThemeId,
-): PrayerBoardTemplateConfig['accentPreset'] {
+function accentForLegacyTheme(theme: SmartDisplayThemeId): PrayerBoardTemplateConfig['accentPreset'] {
   switch (theme) {
     case 'midnight':
       return 'midnight';
@@ -191,7 +197,7 @@ export function createManagedDisplayRegistration(
 }
 
 export function createManagedDisplayRemoteConfig(
-  input: ManagedDisplayRemoteConfig,
+  input: ManagedDisplayRemoteConfigInput,
 ): ManagedDisplayRemoteConfig {
   const identity = createDisplayIdentity({
     displayId: input.displayId,
