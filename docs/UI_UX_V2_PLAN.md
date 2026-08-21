@@ -150,8 +150,10 @@ The daily prayer display surface must also become a first-class configurable pro
 - [x] Create Data & Privacy category.
 - [x] Create Display Themes category where applicable.
 - [x] Create Advanced category for import/export, raw coordinates and uncommon calculation controls.
-- [ ] Move manual mosque timetable authoring/import into appropriate administration/advanced workflows instead of presenting it as normal daily-use configuration.
-- [ ] Use explanatory copy only where needed; do not turn settings into dense documentation pages.
+- [x] Move manual mosque timetable authoring/import into appropriate administration/advanced workflows instead of presenting it as normal daily-use configuration.
+- [x] Use explanatory copy only where needed; do not turn settings into dense documentation pages.
+
+**Stage 22.6 verification note (2026-08-21):** PR #171 code-bearing head `eba6340cfe22a21f7f112921156c6620a40cf1ac` passed Quality Gate `32440308947`, Android Build `32440308898`, Visual Regression `32440309003` and iOS Build `32440308865`, including fresh iPhone and iPad Simulator install, launch and relaunch acceptance. Settings retains eight reloadable categories while ordinary Mosque & Iqamah is limited to timetable selection/use plus existing seasonal configuration; manual timetable day authoring, CSV/JSON timetable import and prayer offsets are progressively disclosed under Advanced. Notifications & Adhan and Data & Privacy retain ownership of their focused controls, duplicated Display Themes explanatory text and stale mosque-import guidance were removed, and the exact visual run passed all 28 scenarios without horizontal-overflow offenders. English phone Mosque settings and Arabic/RTL tablet Advanced settings also received human visual review. Full retirement of the scoped legacy configuration core remains a Stage 27 migration task rather than a Stage 22.6 completion requirement.
 
 ---
 
