@@ -78,9 +78,7 @@ function displayClock(
 }
 
 export function deriveBoldCountdownFocus(data: PrayerBoardData): BoldFocusModel {
-  const currentPrayer = data.prayers.find(
-    (prayer) => prayer.name === data.currentPrayer && prayer.name !== 'sunrise',
-  );
+  const currentPrayer = data.prayers.find((prayer) => prayer.name === data.currentPrayer);
   const currentIqamah = currentPrayer?.iqamahLocalMinutes ?? null;
   const localMinutes = data.clock.localMinutes;
 
@@ -139,12 +137,7 @@ export function BoldCountdownFocusPrayerBoard({
     focus.prayerName === null
       ? translate(locale, 'notConfigured')
       : translate(locale, prayerTranslationKeys[focus.prayerName]);
-  const focusHeading =
-    focus.state === 'next-prayer'
-      ? translate(locale, 'nextPrayer')
-      : focus.state === 'pre-iqamah'
-        ? translate(locale, 'iqamah')
-        : translate(locale, 'iqamah');
+  const focusHeading = translate(locale, focus.state === 'next-prayer' ? 'nextPrayer' : 'iqamah');
 
   return (
     <div
