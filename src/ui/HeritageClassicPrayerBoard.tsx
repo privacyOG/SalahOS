@@ -1,6 +1,15 @@
-import type { PrayerBoardData, PrayerBoardTimeFormat } from '../domain/prayerBoardTemplate';
+import type {
+  PrayerBoardData,
+  PrayerBoardTimeFormat,
+} from '../domain/prayerBoardTemplate';
 import type { PrayerName } from '../domain/prayerEngine';
-import { formatCountdown, formatGregorianCivilDate, formatHijriCivilDate, formatLocalTime, translate } from '../i18n/i18n';
+import {
+  formatCountdown,
+  formatGregorianCivilDate,
+  formatHijriCivilDate,
+  formatLocalTime,
+  translate,
+} from '../i18n/i18n';
 import type { Locale, TranslationKey } from '../i18n/translations';
 import type { SmartDisplayThemeId } from '../platform/smartDisplayTheme';
 import { BidiText } from './BidiText';
@@ -29,7 +38,11 @@ export interface HeritageClassicPrayerBoardProps {
   readonly displayTheme: SmartDisplayThemeId;
 }
 
-function displayTime(minutes: number | null, locale: Locale, timeFormat: PrayerBoardTimeFormat): string {
+function displayTime(
+  minutes: number | null,
+  locale: Locale,
+  timeFormat: PrayerBoardTimeFormat,
+): string {
   return minutes === null ? '—' : formatLocalTime(minutes, locale, timeFormat);
 }
 
@@ -74,7 +87,10 @@ export function HeritageClassicPrayerBoard({
         </div>
       </header>
 
-      <section className="heritage-classic-board__hero" aria-label={translate(locale, 'nextPrayer')}>
+      <section
+        className="heritage-classic-board__hero"
+        aria-label={translate(locale, 'nextPrayer')}
+      >
         <div className="heritage-classic-board__clock">
           <span>{translate(locale, 'currentTime')}</span>
           <strong>{formatLocalTime(data.clock.localMinutes, locale, timeFormat)}</strong>
@@ -88,7 +104,9 @@ export function HeritageClassicPrayerBoard({
           </div>
           <div className="heritage-classic-board__countdown">
             <span>{translate(locale, 'countdown')}</span>
-            <strong>{nextPrayer === null ? '—' : formatCountdown(nextPrayer.secondsUntil, locale)}</strong>
+            <strong>
+              {nextPrayer === null ? '—' : formatCountdown(nextPrayer.secondsUntil, locale)}
+            </strong>
           </div>
           <dl>
             <div>
@@ -97,17 +115,20 @@ export function HeritageClassicPrayerBoard({
             </div>
             <div>
               <dt>{translate(locale, 'iqamah')}</dt>
-              <dd>{
-                nextPrayer?.iqamahLocalMinutes === null || nextPrayer === null
+              <dd>
+                {nextPrayer?.iqamahLocalMinutes === null || nextPrayer === null
                   ? translate(locale, 'noIqamah')
-                  : displayTime(nextPrayer.iqamahLocalMinutes, locale, timeFormat)
-              }</dd>
+                  : displayTime(nextPrayer.iqamahLocalMinutes, locale, timeFormat)}
+              </dd>
             </div>
           </dl>
         </div>
       </section>
 
-      <section className="heritage-classic-board__timetable" aria-label={translate(locale, 'dailyPrayers')}>
+      <section
+        className="heritage-classic-board__timetable"
+        aria-label={translate(locale, 'dailyPrayers')}
+      >
         <div className="heritage-classic-board__table-heading" role="row">
           <span>{translate(locale, 'dailyPrayers')}</span>
           <span>{translate(locale, 'prayerStart')}</span>
@@ -129,7 +150,9 @@ export function HeritageClassicPrayerBoard({
                 <strong>{translate(locale, prayerTranslationKeys[prayer.name])}</strong>
                 {stateLabel !== null && <span>{stateLabel}</span>}
               </div>
-              <strong role="cell">{displayTime(prayer.startLocalMinutes, locale, timeFormat)}</strong>
+              <strong role="cell">
+                {displayTime(prayer.startLocalMinutes, locale, timeFormat)}
+              </strong>
               <strong role="cell">
                 {prayer.iqamahLocalMinutes === null
                   ? translate(locale, 'noIqamah')
@@ -141,7 +164,10 @@ export function HeritageClassicPrayerBoard({
       </section>
 
       <div className="heritage-classic-board__lower-grid">
-        <section className="heritage-classic-board__solar" aria-label={translate(locale, 'prayerSunrise')}>
+        <section
+          className="heritage-classic-board__solar"
+          aria-label={translate(locale, 'prayerSunrise')}
+        >
           <div>
             <span>{translate(locale, 'prayerSunrise')}</span>
             <strong>{displayTime(data.solarEvents.sunriseLocalMinutes, locale, timeFormat)}</strong>
@@ -153,8 +179,13 @@ export function HeritageClassicPrayerBoard({
         </section>
 
         {data.jumuahSessions.length > 0 && (
-          <section className="heritage-classic-board__jumuah" aria-label={translate(locale, 'jumuah')}>
-            <span className="heritage-classic-board__module-title">{translate(locale, 'jumuah')}</span>
+          <section
+            className="heritage-classic-board__jumuah"
+            aria-label={translate(locale, 'jumuah')}
+          >
+            <span className="heritage-classic-board__module-title">
+              {translate(locale, 'jumuah')}
+            </span>
             <div>
               {data.jumuahSessions.map((session) => (
                 <article key={session.label}>
@@ -162,10 +193,12 @@ export function HeritageClassicPrayerBoard({
                     <BidiText>{session.label}</BidiText>
                   </strong>
                   <span>
-                    {translate(locale, 'khutbah')} · {formatLocalTime(session.khutbahLocalMinutes, locale, timeFormat)}
+                    {translate(locale, 'khutbah')} ·{' '}
+                    {formatLocalTime(session.khutbahLocalMinutes, locale, timeFormat)}
                   </span>
                   <span>
-                    {translate(locale, 'salah')} · {formatLocalTime(session.salahLocalMinutes, locale, timeFormat)}
+                    {translate(locale, 'salah')} ·{' '}
+                    {formatLocalTime(session.salahLocalMinutes, locale, timeFormat)}
                   </span>
                 </article>
               ))}
