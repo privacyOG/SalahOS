@@ -5,6 +5,7 @@ import {
   formatGregorianCivilDate,
   formatHijriCivilDate,
   formatLocalTime,
+  localeTag,
   translate,
 } from '../i18n/i18n';
 import type { Locale, TranslationKey } from '../i18n/translations';
@@ -35,12 +36,34 @@ export interface HeritageClassicPrayerBoardProps {
   readonly displayTheme: SmartDisplayThemeId;
 }
 
+function normalizedDisplayMinutes(minutes: number): number {
+  const rounded = Math.round(minutes);
+  return ((rounded % 1_440) + 1_440) % 1_440;
+}
+
 function displayTime(
   minutes: number | null,
   locale: Locale,
   timeFormat: PrayerBoardTimeFormat,
 ): string {
-  return minutes === null ? '—' : formatLocalTime(minutes, locale, timeFormat);
+  return minutes === null
+    ? '—'
+    : formatLocalTime(normalizedDisplayMinutes(minutes), locale, timeFormat);
+}
+
+function displayClock(
+  clock: PrayerBoardData['clock'],
+  locale: Locale,
+  timeFormat: PrayerBoardTimeFormat,
+): string {
+  const instant = new Date(Date.UTC(2000, 0, 1, clock.hour, clock.minute, clock.second));
+  return new Intl.DateTimeFormat(localeTag(locale), {
+    timeZone: 'UTC',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hourCycle: timeFormat,
+  }).format(instant);
 }
 
 export function HeritageClassicPrayerBoard({
@@ -96,7 +119,7 @@ export function HeritageClassicPrayerBoard({
       >
         <div className="heritage-classic-board__clock">
           <span>{translate(locale, 'currentTime')}</span>
-          <strong>{formatLocalTime(data.clock.localMinutes, locale, timeFormat)}</strong>
+          <strong>{displayClock(data.clock, locale, timeFormat)}</strong>
         </div>
 
         <div className="heritage-classic-board__next">
