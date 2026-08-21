@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   format-stage-23-6:
-    runs-on: [self-hosted, Linux, X64]
+    runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
       - name: Checkout Scenic branch
