@@ -56,7 +56,9 @@ describe('MinimalModernPrayerBoard', () => {
 
     expect(html).toContain('data-prayer-board-template="minimal-modern"');
     expect(html).toContain('data-minimal-variant="light"');
-    expect(html.match(/data-prayer="(?:fajr|dhuhr|asr|maghrib|isha)"/g)).toHaveLength(5);
+    expect(html.match(/data-prayer="(?:fajr|dhuhr|asr|maghrib|isha)"/g)).toHaveLength(
+      5,
+    );
     expect(html).toContain('Start');
     expect(html).toContain('Iqamah');
     expect(html).toContain('Minimal Modern Community Mosque and Education Centre');
