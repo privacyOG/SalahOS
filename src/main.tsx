@@ -38,6 +38,7 @@ import './smart-display-themes.css';
 import './family-classroom-4k.css';
 import './managed-display-remote.css';
 import './remote-display-admin.css';
+import './managed-display-assignment.css';
 import './ramadan-mode.css';
 import './taraweeh-panel.css';
 import './qibla-compass.css';
