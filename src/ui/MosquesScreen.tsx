@@ -247,7 +247,8 @@ export function MosquesScreen() {
     if (mode !== 'nearby' || !nearbyEnabled || savedCoordinates === null) return matches;
     return [...matches].sort(
       (left, right) =>
-        distanceKm(savedCoordinates, left.coordinates) - distanceKm(savedCoordinates, right.coordinates),
+        distanceKm(savedCoordinates, left.coordinates) -
+        distanceKm(savedCoordinates, right.coordinates),
     );
   }, [library.profiles, mode, nearbyEnabled, query, settings.location]);
 
