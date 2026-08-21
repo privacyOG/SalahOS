@@ -1,0 +1,480 @@
+.minimal-modern-board {
+  --minimal-bg: #f4f5f3;
+  --minimal-surface: #ffffff;
+  --minimal-surface-strong: #eef2ef;
+  --minimal-ink: #161a18;
+  --minimal-muted: #69716d;
+  --minimal-line: #d7ddd9;
+  --minimal-accent: #246b55;
+  --minimal-accent-soft: #e3efe9;
+  display: grid;
+  grid-template-rows: auto auto auto auto 1fr auto;
+  gap: clamp(0.75rem, 1.4vw, 1.2rem);
+  min-height: calc(100vh - clamp(2rem, 5vw, 4.5rem));
+  padding: clamp(1rem, 2vw, 1.6rem);
+  border: 1px solid var(--minimal-line);
+  border-radius: clamp(1.1rem, 1.7vw, 1.6rem);
+  color: var(--minimal-ink);
+  background: var(--minimal-bg);
+}
+
+.minimal-modern-board[data-minimal-variant='dark'] {
+  --minimal-bg: #111513;
+  --minimal-surface: #181d1a;
+  --minimal-surface-strong: #202824;
+  --minimal-ink: #f4f7f5;
+  --minimal-muted: #a7b0ab;
+  --minimal-line: #343d38;
+  --minimal-accent: #8bcbb4;
+  --minimal-accent-soft: #20352d;
+}
+
+.minimal-modern-board__masthead {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  min-width: 0;
+}
+
+.minimal-modern-board__brand {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.minimal-modern-board__brand > span {
+  color: var(--minimal-accent);
+  font-size: clamp(0.78rem, 1vw, 0.98rem);
+  font-weight: 800;
+  letter-spacing: 0.09em;
+}
+
+.minimal-modern-board__brand strong {
+  max-width: min(58vw, 68rem);
+  overflow-wrap: anywhere;
+  font-size: clamp(1.15rem, 1.9vw, 1.75rem);
+  line-height: 1.1;
+}
+
+.minimal-modern-board__dates {
+  display: grid;
+  gap: 0.15rem;
+  flex: 0 0 auto;
+  color: var(--minimal-muted);
+  font-size: clamp(0.82rem, 1.1vw, 1.02rem);
+  text-align: end;
+}
+
+.minimal-modern-board__status {
+  margin: 0;
+}
+
+.minimal-modern-board__hero {
+  display: grid;
+  grid-template-columns: minmax(20rem, 0.9fr) minmax(28rem, 1.1fr);
+  gap: clamp(0.75rem, 1.4vw, 1.2rem);
+}
+
+.minimal-modern-board__clock,
+.minimal-modern-board__next,
+.minimal-modern-prayer,
+.minimal-modern-board__solar,
+.minimal-modern-board__jumuah {
+  border: 1px solid var(--minimal-line);
+  background: var(--minimal-surface);
+}
+
+.minimal-modern-board__clock,
+.minimal-modern-board__next {
+  border-radius: 1.1rem;
+}
+
+.minimal-modern-board__clock {
+  display: grid;
+  align-content: center;
+  gap: 0.25rem;
+  min-height: clamp(10rem, 21vh, 16rem);
+  padding: clamp(1rem, 2.2vw, 2rem);
+}
+
+.minimal-modern-board__clock span,
+.minimal-modern-board__next span,
+.minimal-modern-board__module-title,
+.minimal-modern-prayer dt,
+.minimal-modern-board__solar span,
+.minimal-modern-board__jumuah article span {
+  color: var(--minimal-muted);
+  font-size: clamp(0.72rem, 0.95vw, 0.9rem);
+  font-weight: 700;
+}
+
+.minimal-modern-board__clock strong {
+  font-size: clamp(4.2rem, 8vw, 8rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 750;
+  letter-spacing: -0.055em;
+  line-height: 0.9;
+}
+
+.minimal-modern-board__next {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  grid-template-rows: 1fr auto;
+  gap: 0.75rem 1.5rem;
+  align-items: center;
+  min-height: clamp(10rem, 21vh, 16rem);
+  padding: clamp(1rem, 2.2vw, 2rem);
+  background: var(--minimal-surface-strong);
+}
+
+.minimal-modern-board__next-label {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.minimal-modern-board__next-label > strong {
+  overflow-wrap: anywhere;
+  color: var(--minimal-ink);
+  font-size: clamp(2.2rem, 4.2vw, 4.2rem);
+  line-height: 0.95;
+}
+
+.minimal-modern-board__next-label small {
+  color: var(--minimal-accent);
+  font-weight: 800;
+}
+
+.minimal-modern-board__countdown {
+  display: grid;
+  justify-items: end;
+  min-width: 0;
+}
+
+.minimal-modern-board__countdown strong {
+  color: var(--minimal-accent);
+  font-size: clamp(2.5rem, 4.4vw, 4.5rem);
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.04em;
+  line-height: 0.95;
+}
+
+.minimal-modern-board__next dl {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+  margin: 0;
+}
+
+.minimal-modern-board__next dl > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.8rem;
+  padding-block-start: 0.6rem;
+  border-block-start: 1px solid var(--minimal-line);
+}
+
+.minimal-modern-board__next dt {
+  color: var(--minimal-muted);
+  font-size: clamp(0.72rem, 0.95vw, 0.9rem);
+  font-weight: 700;
+}
+
+.minimal-modern-board__next dd {
+  margin: 0;
+  font-size: clamp(1.2rem, 1.9vw, 1.8rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+}
+
+.minimal-modern-board__prayer-strip {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  overflow: hidden;
+  border: 1px solid var(--minimal-line);
+  border-radius: 1.1rem;
+  background: var(--minimal-surface);
+}
+
+.minimal-modern-prayer {
+  display: grid;
+  align-content: space-between;
+  gap: clamp(0.7rem, 1.2vw, 1rem);
+  min-width: 0;
+  min-height: clamp(8.5rem, 16vh, 12rem);
+  padding: clamp(0.8rem, 1.4vw, 1.2rem);
+  border: 0;
+  background: transparent;
+}
+
+.minimal-modern-prayer + .minimal-modern-prayer {
+  border-inline-start: 1px solid var(--minimal-line);
+}
+
+.minimal-modern-prayer.is-current,
+.minimal-modern-prayer.is-next {
+  background: var(--minimal-accent-soft);
+}
+
+.minimal-modern-prayer.is-current {
+  box-shadow: inset 0 0.22rem var(--minimal-accent);
+}
+
+.minimal-modern-prayer.is-next {
+  outline: 2px solid var(--minimal-accent);
+  outline-offset: -2px;
+}
+
+.minimal-modern-prayer header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.5rem;
+  min-width: 0;
+}
+
+.minimal-modern-prayer header strong {
+  overflow-wrap: anywhere;
+  font-size: clamp(1.2rem, 2vw, 1.9rem);
+  line-height: 1.05;
+}
+
+.minimal-modern-prayer header span {
+  flex: 0 0 auto;
+  padding: 0.18rem 0.45rem;
+  border: 1px solid var(--minimal-accent);
+  border-radius: 999px;
+  color: var(--minimal-accent);
+  font-size: clamp(0.62rem, 0.75vw, 0.76rem);
+  font-weight: 800;
+}
+
+.minimal-modern-prayer dl {
+  display: grid;
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.minimal-modern-prayer dl > div {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.55rem;
+}
+
+.minimal-modern-prayer dd {
+  margin: 0;
+  font-size: clamp(1.15rem, 1.85vw, 1.75rem);
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+  text-align: end;
+}
+
+.minimal-modern-board__lower {
+  display: grid;
+  grid-template-columns: minmax(14rem, 0.58fr) minmax(0, 1.42fr);
+  gap: clamp(0.75rem, 1.4vw, 1.2rem);
+  align-self: end;
+}
+
+.minimal-modern-board__solar,
+.minimal-modern-board__jumuah {
+  border-radius: 1rem;
+  padding: clamp(0.75rem, 1.2vw, 1rem);
+}
+
+.minimal-modern-board__solar {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.minimal-modern-board__solar > div {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+}
+
+.minimal-modern-board__solar > div + div {
+  padding-inline-start: 0.65rem;
+  border-inline-start: 1px solid var(--minimal-line);
+}
+
+.minimal-modern-board__solar strong {
+  font-size: clamp(1.15rem, 1.8vw, 1.65rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.minimal-modern-board__jumuah {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.minimal-modern-board__jumuah > div {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 0.55rem;
+}
+
+.minimal-modern-board__jumuah article {
+  display: grid;
+  gap: 0.12rem;
+  min-width: 0;
+  padding-inline-start: 0.65rem;
+  border-inline-start: 0.18rem solid var(--minimal-line);
+}
+
+.minimal-modern-board__jumuah article strong {
+  overflow-wrap: anywhere;
+  font-size: clamp(0.95rem, 1.25vw, 1.15rem);
+}
+
+.minimal-modern-board__footer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.35rem 1rem;
+  color: var(--minimal-muted);
+  font-size: clamp(0.68rem, 0.85vw, 0.82rem);
+  text-align: center;
+}
+
+@media (max-width: 1100px) {
+  .minimal-modern-board__hero,
+  .minimal-modern-board__lower {
+    grid-template-columns: 1fr;
+  }
+
+  .minimal-modern-board__prayer-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .minimal-modern-prayer + .minimal-modern-prayer {
+    border-inline-start: 0;
+    border-block-start: 1px solid var(--minimal-line);
+  }
+
+  .minimal-modern-prayer:nth-child(even) {
+    border-inline-start: 1px solid var(--minimal-line);
+  }
+
+  .minimal-modern-prayer:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 640px) {
+  .minimal-modern-board {
+    gap: 0.65rem;
+    min-height: auto;
+    padding: 0.75rem;
+    border-radius: 0.9rem;
+  }
+
+  .minimal-modern-board__masthead {
+    gap: 0.75rem;
+  }
+
+  .minimal-modern-board__brand strong {
+    max-width: 54vw;
+  }
+
+  .minimal-modern-board__dates {
+    font-size: 0.68rem;
+  }
+
+  .minimal-modern-board__clock {
+    min-height: 7rem;
+    padding: 0.9rem;
+  }
+
+  .minimal-modern-board__clock strong {
+    font-size: clamp(3rem, 16vw, 4.8rem);
+  }
+
+  .minimal-modern-board__next {
+    grid-template-columns: 1fr;
+    min-height: 0;
+    padding: 0.9rem;
+  }
+
+  .minimal-modern-board__countdown {
+    justify-items: start;
+  }
+
+  .minimal-modern-board__next dl {
+    grid-column: auto;
+  }
+
+  .minimal-modern-board__prayer-strip {
+    grid-template-columns: 1fr;
+  }
+
+  .minimal-modern-prayer,
+  .minimal-modern-prayer:last-child {
+    grid-column: auto;
+  }
+
+  .minimal-modern-prayer:nth-child(even) {
+    border-inline-start: 0;
+  }
+}
+
+@media (orientation: landscape) and (max-height: 760px) {
+  .minimal-modern-board {
+    gap: 0.5rem;
+    padding: 0.65rem;
+  }
+
+  .minimal-modern-board__clock,
+  .minimal-modern-board__next {
+    min-height: 6.8rem;
+    padding: 0.7rem 0.9rem;
+  }
+
+  .minimal-modern-board__clock strong {
+    font-size: clamp(3rem, 7vw, 5rem);
+  }
+
+  .minimal-modern-board__next-label > strong {
+    font-size: clamp(1.7rem, 3.3vw, 2.8rem);
+  }
+
+  .minimal-modern-board__countdown strong {
+    font-size: clamp(2rem, 3.7vw, 3.2rem);
+  }
+
+  .minimal-modern-prayer {
+    min-height: 6.2rem;
+    padding: 0.55rem 0.7rem;
+  }
+
+  .minimal-modern-board__solar,
+  .minimal-modern-board__jumuah {
+    padding: 0.55rem 0.7rem;
+  }
+}
+
+@media (forced-colors: active) {
+  .minimal-modern-board,
+  .minimal-modern-board__clock,
+  .minimal-modern-board__next,
+  .minimal-modern-board__prayer-strip,
+  .minimal-modern-prayer,
+  .minimal-modern-board__solar,
+  .minimal-modern-board__jumuah {
+    border-color: CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    box-shadow: none;
+  }
+
+  .minimal-modern-prayer.is-current,
+  .minimal-modern-prayer.is-next {
+    outline: 2px solid CanvasText;
+    background: Canvas;
+  }
+}
