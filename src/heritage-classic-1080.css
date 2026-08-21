@@ -1,0 +1,154 @@
+@media (min-width: 1600px) and (max-height: 1100px) and (orientation: landscape) {
+  .heritage-classic-board {
+    gap: 0.6rem;
+  }
+
+  .heritage-classic-board__masthead {
+    gap: 0.75rem;
+    padding: 0.65rem 1.25rem 0;
+  }
+
+  .heritage-classic-board__brand {
+    flex: 1 1 auto;
+    gap: 0.65rem;
+  }
+
+  .heritage-classic-board__brand img {
+    width: 3.25rem;
+    height: 3.25rem;
+  }
+
+  .heritage-classic-board__brand span {
+    font-size: 0.72rem;
+  }
+
+  .heritage-classic-board__brand strong {
+    max-width: min(64vw, 74rem);
+    font-size: 1.15rem;
+    line-height: 1.08;
+  }
+
+  .heritage-classic-board__dates {
+    flex: 0 0 auto;
+    gap: 0.1rem;
+    font-size: 0.78rem;
+  }
+
+  .heritage-classic-board__hero {
+    grid-template-columns: minmax(17rem, 0.75fr) minmax(25rem, 1.25fr);
+    gap: 0.65rem;
+    padding-inline: 1.25rem;
+  }
+
+  .heritage-classic-board__clock,
+  .heritage-classic-board__next {
+    min-height: 9rem;
+    padding: 0.8rem 1.15rem;
+  }
+
+  .heritage-classic-board__clock span,
+  .heritage-classic-board__next span,
+  .heritage-classic-board__module-title {
+    font-size: 0.72rem;
+  }
+
+  .heritage-classic-board__clock strong {
+    font-size: 5.25rem;
+  }
+
+  .heritage-classic-board__next {
+    gap: 0.45rem 1rem;
+  }
+
+  .heritage-classic-board__next > div:first-child > strong {
+    font-size: 2.6rem;
+  }
+
+  .heritage-classic-board__countdown strong {
+    font-size: 3.7rem;
+  }
+
+  .heritage-classic-board__next dl {
+    gap: 0.55rem;
+  }
+
+  .heritage-classic-board__next dl > div {
+    padding-block-start: 0.45rem;
+  }
+
+  .heritage-classic-board__next dd {
+    font-size: 1.35rem;
+  }
+
+  .heritage-classic-board__timetable {
+    margin-inline: 1.25rem;
+    border-radius: 1rem;
+  }
+
+  .heritage-classic-board__table-heading,
+  .heritage-classic-prayer-row {
+    gap: 0.75rem;
+    padding: 0.4rem 1rem;
+  }
+
+  .heritage-classic-board__table-heading {
+    font-size: 0.7rem;
+  }
+
+  .heritage-classic-prayer-row__name {
+    gap: 0.45rem;
+  }
+
+  .heritage-classic-prayer-row__name strong {
+    font-size: 1.35rem;
+    line-height: 1.05;
+  }
+
+  .heritage-classic-prayer-row__name span {
+    padding: 0.15rem 0.4rem;
+    font-size: 0.62rem;
+  }
+
+  .heritage-classic-prayer-row > strong {
+    font-size: 1.45rem;
+  }
+
+  .heritage-classic-board__lower-grid {
+    gap: 0.65rem;
+    padding-inline: 1.25rem;
+  }
+
+  .heritage-classic-board__solar,
+  .heritage-classic-board__jumuah {
+    padding: 0.6rem 0.75rem;
+  }
+
+  .heritage-classic-board__solar span,
+  .heritage-classic-board__jumuah article span {
+    font-size: 0.7rem;
+  }
+
+  .heritage-classic-board__solar strong {
+    font-size: 1.25rem;
+  }
+
+  .heritage-classic-board__jumuah {
+    gap: 0.4rem;
+  }
+
+  .heritage-classic-board__jumuah > div {
+    gap: 0.5rem;
+  }
+
+  .heritage-classic-board__jumuah article {
+    gap: 0.1rem;
+    padding-inline-start: 0.5rem;
+    font-size: 0.78rem;
+  }
+
+  .heritage-classic-board__footer {
+    gap: 0.25rem 0.9rem;
+    padding: 0 1.25rem 0.55rem;
+    font-size: 0.68rem;
+  }
+}
