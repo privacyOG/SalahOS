@@ -52,28 +52,27 @@ jobs:
 
           plan = Path('docs/UI_UX_V2_PLAN.md')
           text = plan.read_text()
-          old = """- [ ] Surface Ramadan/Suhur/Imsak/Iftar/Taraweeh context only when relevant rather than permanently increasing daily density.
-- [x] Add at most a small number of useful quick actions below prayer information, such as Qiblah, Mosque and Notifications.
-- [ ] Add optional announcement/event preview beneath core prayer information without allowing community content to dominate the prayer view.
-- [ ] Design polished states for no location, no selected mosque, offline managed data, stale managed data and unavailable astronomical events.
-"""
-          new = """- [x] Surface Ramadan/Suhur/Imsak/Iftar/Taraweeh context only when relevant rather than permanently increasing daily density.
-- [x] Add at most a small number of useful quick actions below prayer information, such as Qiblah, Mosque and Notifications.
-- [x] Add optional announcement/event preview beneath core prayer information without allowing community content to dominate the prayer view.
-- [x] Design polished states for no location, no selected mosque, offline managed data, stale managed data and unavailable astronomical events.
+          replacements = (
+              ('- [ ] Surface Ramadan/Suhur/Imsak/Iftar/Taraweeh context only when relevant rather than permanently increasing daily density.', '- [x] Surface Ramadan/Suhur/Imsak/Iftar/Taraweeh context only when relevant rather than permanently increasing daily density.'),
+              ('- [ ] Add optional announcement/event preview beneath core prayer information without allowing community content to dominate the prayer view.', '- [x] Add optional announcement/event preview beneath core prayer information without allowing community content to dominate the prayer view.'),
+              ('- [ ] Design polished states for no location, no selected mosque, offline managed data, stale managed data and unavailable astronomical events.', '- [x] Design polished states for no location, no selected mosque, offline managed data, stale managed data and unavailable astronomical events.'),
+          )
+          for old, new in replacements:
+              if text.count(old) != 1:
+                  raise SystemExit(f'Expected one Stage 22.3 tracker item: {old}')
+              text = text.replace(old, new, 1)
 
-**Stage 22.3 verification note (2026-08-21):** PR #173 code-bearing head `bd43257df4d6be16ed6ca9943c34b3285975b08b` passed Quality Gate `32444858881`, Android Build `32444858804`, Visual Regression `32444858884` and iOS Build `32444858880`, including fresh iPhone/iPad Simulator install, launch and relaunch acceptance. Today keeps prayer information authoritative while adding conditional Ramadan Imsak/Suhur/Iftar and local-mosque Taraweeh context, a compact selected-mosque announcement/event preview, and explicit no-selected-mosque, missing/stale timetable, offline-managed and astronomical-unavailable states. The focused English-phone community, English-phone Ramadan/Taraweeh and Arabic/RTL-tablet stale-timetable screenshots received human review; the permanent visual suite also passed on the exact code-bearing head.
-"""
-          if old not in text:
-            raise SystemExit('Stage 22.3 tracker block was not found exactly')
-          plan.write_text(text.replace(old, new, 1))
+          anchor = '- [x] Design polished states for no location, no selected mosque, offline managed data, stale managed data and unavailable astronomical events.'
+          note = '**Stage 22.3 verification note (2026-08-21):** PR #173 code-bearing head `bd43257df4d6be16ed6ca9943c34b3285975b08b` passed Quality Gate `32444858881`, Android Build `32444858804`, Visual Regression `32444858884` and iOS Build `32444858880`, including fresh iPhone/iPad Simulator install, launch and relaunch acceptance. Today keeps prayer information authoritative while adding conditional Ramadan Imsak/Suhur/Iftar and local-mosque Taraweeh context, a compact selected-mosque announcement/event preview, and explicit no-selected-mosque, missing/stale timetable, offline-managed and astronomical-unavailable states. The focused English-phone community, English-phone Ramadan/Taraweeh and Arabic/RTL-tablet stale-timetable screenshots received human review; the permanent visual suite also passed on the exact code-bearing head.'
+          text = text.replace(anchor, anchor + '\n\n' + note, 1)
+          plan.write_text(text)
 
           todo = Path('TODO.md')
           text = todo.read_text()
-          old = "Stage 22 remains partial because remaining Design System v2 primitives and the remaining Today contextual/data-state work are still open."
-          new = "PR #173 completed the remaining Stage 22.3 Today contextual/data-state work on code-bearing head `bd43257df4d6be16ed6ca9943c34b3285975b08b`, which passed Quality Gate `32444858881`, Android Build `32444858804`, Visual Regression `32444858884` and iOS Build `32444858880`; the three focused Today screenshots also received human review. Stage 22 remains partial because remaining Design System v2 primitives are still open."
-          if old not in text:
-            raise SystemExit('Stage 22 progress sentence was not found exactly')
+          old = 'Stage 22 remains partial because remaining Design System v2 primitives and the remaining Today contextual/data-state work are still open.'
+          new = 'PR #173 completed the remaining Stage 22.3 Today contextual/data-state work on code-bearing head `bd43257df4d6be16ed6ca9943c34b3285975b08b`, which passed Quality Gate `32444858881`, Android Build `32444858804`, Visual Regression `32444858884` and iOS Build `32444858880`; the three focused Today screenshots also received human review. Stage 22 remains partial because remaining Design System v2 primitives are still open.'
+          if text.count(old) != 1:
+              raise SystemExit('Stage 22 progress sentence was not found exactly once')
           todo.write_text(text.replace(old, new, 1))
           PY
 
