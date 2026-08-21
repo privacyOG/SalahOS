@@ -188,7 +188,10 @@ async function validateArabicPreview(browser) {
 
     const stage = page.locator('.prayer-board-fullscreen-preview__stage');
     await stage.waitFor({ state: 'visible' });
-    if ((await stage.getAttribute('dir')) !== 'rtl' || (await stage.getAttribute('lang')) !== 'ar') {
+    if (
+      (await stage.getAttribute('dir')) !== 'rtl' ||
+      (await stage.getAttribute('lang')) !== 'ar'
+    ) {
       throw new Error('Arabic preview did not preserve RTL direction and language');
     }
     if ((await page.locator('[data-prayer-board-template="family-classroom"]').count()) !== 1) {
