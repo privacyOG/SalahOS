@@ -7,11 +7,11 @@ import {
   initializeApplicationStorage,
 } from './platform/applicationStorage';
 import { AdminShell } from './ui/AdminShell';
-import { CommunityUpdatesPanel } from './ui/CommunityUpdatesPanel';
+import { CommunityScreen } from './ui/CommunityScreen';
 import { CongregationShell } from './ui/CongregationShell';
 import { ManagedDisplayConnectionSettings } from './ui/ManagedDisplayConnectionSettings';
 import { ManagedDisplayRemoteController } from './ui/ManagedDisplayRemoteController';
-import { MosqueProfilesPanel } from './ui/MosqueProfilesPanel';
+import { MosquesScreen } from './ui/MosquesScreen';
 import { QiblaFinder } from './ui/QiblaFinder';
 import { RemoteDisplayAdminPanel } from './ui/RemoteDisplayAdminPanel';
 import { SettingsScreen } from './ui/SettingsScreen';
@@ -38,17 +38,16 @@ import './managed-display-remote.css';
 import './remote-display-admin.css';
 import './ramadan-mode.css';
 import './taraweeh-panel.css';
-import './community-updates-panel.css';
-import './mosque-profiles-panel.css';
 import './qibla-compass.css';
 import './qiblah-v2.css';
+import './mosques-community-v2.css';
 
 function CongregationRoute({ destination }: Readonly<{ destination: CongregationDestination }>) {
   switch (destination) {
     case 'mosques':
       return (
         <div className="congregation-route congregation-route--mosques">
-          <MosqueProfilesPanel />
+          <MosquesScreen />
         </div>
       );
     case 'qiblah':
@@ -60,7 +59,7 @@ function CongregationRoute({ destination }: Readonly<{ destination: Congregation
     case 'community':
       return (
         <div className="congregation-route congregation-route--community">
-          <CommunityUpdatesPanel />
+          <CommunityScreen />
         </div>
       );
     case 'settings':
