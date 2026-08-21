@@ -36,7 +36,9 @@ describe('prayer-board template engine', () => {
       'family-classroom',
     ]);
     expect(new Set(prayerBoardTemplateRegistry.map((template) => template.id)).size).toBe(6);
-    expect(prayerBoardTemplateRegistry.every((template) => template.version === 1)).toBe(true);
+    expect(prayerBoardTemplateRegistry.map((template) => template.version)).toEqual([
+      1, 1, 1, 1, 1, 1,
+    ]);
     expect(
       prayerBoardTemplateRegistry.every(
         (template) =>
