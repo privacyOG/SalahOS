@@ -13,6 +13,7 @@ import type { SmartDisplayThemeId } from '../platform/smartDisplayTheme';
 import { BidiText } from './BidiText';
 
 import '../bold-countdown-focus.css';
+import '../bold-countdown-focus-display.css';
 
 const prayerTranslationKeys: Readonly<Record<PrayerName, TranslationKey>> = {
   fajr: 'prayerFajr',
