@@ -294,7 +294,7 @@ function normalizeModuleVisibility(
       required.has(moduleId) ||
       (supported.has(moduleId) &&
         (typeof requested[moduleId] === 'boolean'
-          ? Boolean(requested[moduleId])
+          ? requested[moduleId]
           : defaults.has(moduleId)));
     result[moduleId] = enabled;
   }
