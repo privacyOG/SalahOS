@@ -1,0 +1,470 @@
+/*
+ * Stage 22 Design System v2 primitives.
+ *
+ * Semantic tokens remain owned exclusively by design-system.css. This module
+ * composes those tokens into reusable layout, typography, control, state and
+ * content patterns without introducing feature-specific colour or spacing
+ * constants.
+ */
+
+.ds-page {
+  width: min(1240px, calc(100% - clamp(1rem, 4vw, 3rem)));
+  margin-inline: auto;
+}
+
+.ds-section {
+  margin-block: 0 var(--salah-space-8);
+}
+
+.ds-section + .ds-section {
+  margin-block-start: var(--salah-space-8);
+}
+
+.ds-stack--compact {
+  gap: var(--salah-space-2);
+}
+
+.ds-stack--loose {
+  gap: var(--salah-space-6);
+}
+
+.ds-type-display-clock,
+.ds-type-countdown,
+.ds-type-prayer-time,
+.ds-type-iqamah {
+  font-variant-numeric: tabular-nums;
+}
+
+.ds-type-display-clock {
+  margin: 0;
+  font-size: var(--salah-text-display);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+}
+
+.ds-type-countdown {
+  margin: 0;
+  font-size: var(--salah-text-countdown);
+  font-weight: 800;
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+
+.ds-type-prayer-name {
+  font-size: var(--salah-text-lg);
+  font-weight: 800;
+  line-height: 1.15;
+}
+
+.ds-type-prayer-time {
+  font-size: var(--salah-text-lg);
+  font-weight: 750;
+}
+
+.ds-type-iqamah {
+  color: var(--salah-fg-accent);
+  font-size: var(--salah-text-md);
+  font-weight: 750;
+}
+
+.ds-type-section-heading {
+  margin: 0;
+  font-size: var(--salah-text-xl);
+  font-weight: 800;
+  line-height: 1.1;
+}
+
+.ds-type-body {
+  color: var(--salah-fg-primary);
+  font-size: var(--salah-text-md);
+  line-height: 1.6;
+}
+
+.ds-type-metadata,
+.ds-type-caption {
+  color: var(--salah-fg-tertiary);
+  line-height: 1.45;
+}
+
+.ds-type-metadata {
+  font-size: var(--salah-text-sm);
+}
+
+.ds-type-caption {
+  font-size: var(--salah-text-xs);
+}
+
+[dir='rtl'] .ds-type-display-clock,
+[dir='rtl'] .ds-type-countdown,
+[dir='rtl'] .ds-type-prayer-name,
+[dir='rtl'] .ds-type-section-heading {
+  letter-spacing: 0;
+}
+
+.ds-button {
+  display: inline-flex;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  gap: var(--salah-space-2);
+  padding-inline: var(--salah-space-4);
+  border: 1px solid var(--salah-border-default);
+  border-radius: var(--salah-radius-sm);
+  color: var(--salah-fg-primary);
+  background: var(--salah-bg-control);
+  font: inherit;
+  font-weight: 750;
+  text-decoration: none;
+  cursor: pointer;
+  transition:
+    border-color var(--salah-motion-fast) var(--salah-ease-standard),
+    background var(--salah-motion-fast) var(--salah-ease-standard),
+    transform var(--salah-motion-fast) var(--salah-ease-standard);
+}
+
+.ds-button:hover:not(:disabled) {
+  border-color: var(--salah-border-strong);
+}
+
+.ds-button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+.ds-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.ds-button--primary {
+  border-color: color-mix(in srgb, var(--salah-fg-accent) 62%, var(--salah-border-default));
+  color: var(--salah-bg-canvas);
+  background: var(--salah-fg-accent);
+}
+
+.ds-button--secondary {
+  background: var(--salah-bg-surface-raised);
+}
+
+.ds-button--quiet {
+  border-color: transparent;
+  color: var(--salah-fg-secondary);
+  background: transparent;
+}
+
+.ds-button--destructive {
+  border-color: color-mix(in srgb, var(--salah-fg-warning) 58%, var(--salah-border-default));
+  color: var(--salah-fg-warning);
+  background: color-mix(in srgb, var(--salah-fg-warning) 10%, var(--salah-bg-control));
+}
+
+.ds-button--icon {
+  inline-size: 2.75rem;
+  padding-inline: 0;
+}
+
+.ds-field {
+  display: grid;
+  min-width: 0;
+  gap: var(--salah-space-2);
+}
+
+.ds-field__label {
+  color: var(--salah-fg-secondary);
+  font-size: var(--salah-text-sm);
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.ds-field__hint {
+  margin: 0;
+  color: var(--salah-fg-tertiary);
+  font-size: var(--salah-text-xs);
+  line-height: 1.45;
+}
+
+.ds-field > input,
+.ds-field > select,
+.ds-field > textarea,
+.ds-field__control {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+.ds-segmented,
+.ds-tabs {
+  display: inline-flex;
+  max-width: 100%;
+  flex-wrap: wrap;
+  gap: var(--salah-space-1);
+  padding: var(--salah-space-1);
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-md);
+  background: var(--salah-bg-subtle);
+}
+
+.ds-segmented > button,
+.ds-tabs > button,
+.ds-tabs > [role='tab'] {
+  min-height: 2.5rem;
+  border-color: transparent;
+  background: transparent;
+}
+
+.ds-segmented > [aria-pressed='true'],
+.ds-tabs > [aria-selected='true'] {
+  border-color: var(--salah-border-default);
+  background: var(--salah-bg-surface-raised);
+}
+
+.ds-switch {
+  display: inline-grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--salah-space-3);
+  color: var(--salah-fg-secondary);
+  font-size: var(--salah-text-sm);
+}
+
+.ds-switch input[type='checkbox'] {
+  inline-size: 1.2rem;
+  block-size: 1.2rem;
+  min-height: 0;
+  margin: 0;
+}
+
+.ds-banner {
+  display: grid;
+  gap: var(--salah-space-2);
+  padding: var(--salah-space-3) var(--salah-space-4);
+  border: 1px solid var(--salah-border-default);
+  border-radius: var(--salah-radius-md);
+  color: var(--salah-fg-secondary);
+  background: var(--salah-bg-subtle);
+}
+
+.ds-banner[data-state='loading'],
+.ds-banner[data-state='sync-pending'] {
+  border-style: dashed;
+}
+
+.ds-banner[data-state='offline'],
+.ds-banner[data-state='stale'],
+.ds-banner[data-state='sync-error'],
+.ds-banner[data-state='permission-denied'] {
+  border-color: color-mix(in srgb, var(--salah-fg-warning) 42%, var(--salah-border-default));
+  color: var(--salah-fg-warning);
+  background: color-mix(in srgb, var(--salah-fg-warning) 8%, var(--salah-bg-subtle));
+}
+
+.ds-banner[data-state='empty'] {
+  border-style: dashed;
+}
+
+.ds-skeleton {
+  min-height: 1em;
+  border-radius: var(--salah-radius-xs);
+  background: linear-gradient(
+    90deg,
+    var(--salah-bg-subtle),
+    var(--salah-bg-accent-soft),
+    var(--salah-bg-subtle)
+  );
+  background-size: 200% 100%;
+  animation: ds-skeleton-shimmer 1.2s var(--salah-ease-standard) infinite;
+}
+
+@keyframes ds-skeleton-shimmer {
+  from {
+    background-position: 100% 0;
+  }
+  to {
+    background-position: -100% 0;
+  }
+}
+
+.ds-dialog,
+.ds-sheet,
+.ds-popover,
+.ds-menu {
+  border: 1px solid var(--salah-border-default);
+  color: var(--salah-fg-primary);
+  background: var(--salah-bg-surface-raised);
+  box-shadow: var(--salah-shadow-md);
+}
+
+.ds-dialog {
+  width: min(34rem, calc(100% - var(--salah-space-8)));
+  max-height: min(80vh, 44rem);
+  padding: var(--salah-space-6);
+  border-radius: var(--salah-radius-lg);
+}
+
+.ds-sheet {
+  width: min(30rem, 100%);
+  max-height: 88vh;
+  padding: var(--salah-space-6);
+  border-radius: var(--salah-radius-lg) var(--salah-radius-lg) 0 0;
+}
+
+.ds-popover,
+.ds-menu {
+  padding: var(--salah-space-2);
+  border-radius: var(--salah-radius-md);
+}
+
+.ds-menu {
+  display: grid;
+  gap: var(--salah-space-1);
+  min-width: 12rem;
+}
+
+.ds-menu > button,
+.ds-menu > [role='menuitem'] {
+  justify-content: flex-start;
+  text-align: start;
+}
+
+.ds-tooltip {
+  max-width: 22rem;
+  padding: var(--salah-space-2) var(--salah-space-3);
+  border-radius: var(--salah-radius-xs);
+  color: var(--salah-bg-canvas);
+  background: var(--salah-fg-primary);
+  font-size: var(--salah-text-xs);
+  line-height: 1.4;
+  box-shadow: var(--salah-shadow-sm);
+}
+
+.ds-prayer-row,
+.ds-mosque-summary,
+.ds-announcement-preview,
+.ds-next-prayer {
+  min-width: 0;
+}
+
+.ds-prayer-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto auto;
+  align-items: center;
+  gap: var(--salah-space-4);
+  padding-block: var(--salah-space-3);
+  border-block-end: 1px solid var(--salah-border-subtle);
+}
+
+.ds-prayer-row:last-child {
+  border-block-end: 0;
+}
+
+.ds-prayer-row__name {
+  font-weight: 800;
+}
+
+.ds-prayer-row__time,
+.ds-prayer-row__iqamah {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.ds-prayer-row__iqamah {
+  color: var(--salah-fg-accent);
+}
+
+.ds-next-prayer {
+  display: grid;
+  gap: var(--salah-space-3);
+  padding: var(--salah-space-6);
+  border: 1px solid var(--salah-border-default);
+  border-radius: var(--salah-radius-lg);
+  background: var(--salah-bg-accent-soft);
+}
+
+.ds-next-prayer__times {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--salah-space-4);
+}
+
+.ds-mosque-summary,
+.ds-announcement-preview {
+  display: grid;
+  gap: var(--salah-space-2);
+  padding: var(--salah-space-4);
+  border-radius: var(--salah-radius-md);
+  background: var(--salah-bg-subtle);
+}
+
+.ds-mosque-summary strong,
+.ds-announcement-preview strong {
+  overflow-wrap: anywhere;
+}
+
+.ds-surface .ds-surface,
+.ds-surface .ds-mosque-summary,
+.ds-surface .ds-announcement-preview {
+  box-shadow: none;
+}
+
+.salah-icon {
+  display: inline-block;
+  inline-size: 1.35em;
+  block-size: 1.35em;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 760px) {
+  .ds-page {
+    width: min(100% - 1rem, 42rem);
+  }
+
+  .ds-section,
+  .ds-section + .ds-section {
+    margin-block-end: var(--salah-space-6);
+  }
+
+  .ds-prayer-row {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .ds-prayer-row__iqamah {
+    grid-column: 1 / -1;
+  }
+
+  .ds-dialog,
+  .ds-sheet {
+    padding: var(--salah-space-4);
+  }
+}
+
+@media (forced-colors: active) {
+  .ds-button,
+  .ds-segmented,
+  .ds-tabs,
+  .ds-banner,
+  .ds-dialog,
+  .ds-sheet,
+  .ds-popover,
+  .ds-menu,
+  .ds-prayer-row,
+  .ds-next-prayer,
+  .ds-mosque-summary,
+  .ds-announcement-preview {
+    border-color: CanvasText;
+    color: CanvasText;
+    background: Canvas;
+    box-shadow: none;
+  }
+
+  .ds-tooltip {
+    color: Canvas;
+    background: CanvasText;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ds-skeleton {
+    animation: none;
+    background: var(--salah-bg-subtle);
+  }
+}
