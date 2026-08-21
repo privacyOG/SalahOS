@@ -30,15 +30,15 @@ function profileDimensions(identity: DisplayIdentity): readonly [number, number]
     case 'portrait-foyer':
       return [1080, 1920] as const;
     case 'touch-display-2':
-      return identity.orientation === 'landscape'
-        ? ([1280, 720] as const)
-        : ([720, 1280] as const);
+      return identity.orientation === 'landscape' ? ([1280, 720] as const) : ([720, 1280] as const);
     default:
       return null;
   }
 }
 
-export function resolveManagedPrayerBoardTarget(identity: DisplayIdentity): ManagedPrayerBoardTarget {
+export function resolveManagedPrayerBoardTarget(
+  identity: DisplayIdentity,
+): ManagedPrayerBoardTarget {
   const dimensions = profileDimensions(identity);
   if (dimensions === null) {
     return Object.freeze({
@@ -75,8 +75,7 @@ export function resolveManagedPrayerBoardTarget(identity: DisplayIdentity): Mana
     });
   }
 
-  const validated =
-    (width === 1920 && height === 1080) || (width === 3840 && height === 2160);
+  const validated = (width === 1920 && height === 1080) || (width === 3840 && height === 2160);
   return Object.freeze({
     width,
     height,
