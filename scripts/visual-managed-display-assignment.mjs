@@ -13,6 +13,7 @@ if (!playwrightModule) {
 }
 
 const { chromium } = await import(pathToFileURL(playwrightModule).href);
+const applicationOrigin = new URL(baseUrl).origin;
 const managedOrigin = 'https://admin.example.org';
 const adminToken = 'a'.repeat(48);
 const deviceToken = 'd'.repeat(48);
@@ -116,6 +117,31 @@ function status({
   };
 }
 
+function corsHeaders() {
+  return {
+    'access-control-allow-origin': applicationOrigin,
+    'access-control-allow-headers': 'authorization, content-type',
+    'access-control-allow-methods': 'GET, POST, PUT, OPTIONS',
+  };
+}
+
+async function fulfillJson(route, body, statusCode = 200) {
+  await route.fulfill({
+    status: statusCode,
+    contentType: 'application/json',
+    headers: corsHeaders(),
+    body: typeof body === 'string' ? body : JSON.stringify(body),
+  });
+}
+
+async function fulfillPreflight(route) {
+  await route.fulfill({
+    status: 204,
+    headers: corsHeaders(),
+    body: '',
+  });
+}
+
 async function seed(page, { locale = 'en', connection = false, draft = null } = {}) {
   await page.addInitScript(
     ({ serializedSettings, serializedConnection, serializedDraft }) => {
@@ -123,7 +149,10 @@ async function seed(page, { locale = 'en', connection = false, draft = null } = 
       if (serializedConnection !== null) {
         localStorage.setItem('salahos.managedDisplayConnection', serializedConnection);
       }
-      if (serializedDraft !== null && localStorage.getItem('salahos.prayerBoardDisplayConfig') === null) {
+      if (
+        serializedDraft !== null &&
+        localStorage.getItem('salahos.prayerBoardDisplayConfig') === null
+      ) {
         localStorage.setItem('salahos.prayerBoardDisplayConfig', serializedDraft);
       }
     },
@@ -175,30 +204,29 @@ async function validateAdminAssignment(browser) {
 
   await page.route(`${managedOrigin}/**`, async (route) => {
     const request = route.request();
+    if (request.method() === 'OPTIONS') {
+      await fulfillPreflight(route);
+      return;
+    }
     const url = new URL(request.url());
     const authorization = request.headers().authorization;
     if (authorization !== `Bearer ${adminToken}`) {
-      await route.fulfill({ status: 401, contentType: 'application/json', body: '{"error":"Not authorized"}' });
+      await fulfillJson(route, '{"error":"Not authorized"}', 401);
       return;
     }
 
     if (url.pathname === '/v1/admin/displays' && request.method() === 'GET') {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({ displays: [lobby, foyer] }),
-      });
+      await fulfillJson(route, { displays: [lobby, foyer] });
       return;
     }
     if (url.pathname === '/v1/admin/mosque-defaults' && request.method() === 'GET') {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify({ defaults: [] }),
-      });
+      await fulfillJson(route, { defaults: [] });
       return;
     }
-    if (url.pathname === '/v1/admin/displays/display%3Alobby/config' && request.method() === 'PUT') {
+    if (
+      url.pathname === '/v1/admin/displays/display%3Alobby/config' &&
+      request.method() === 'PUT'
+    ) {
       publishedBody = request.postDataJSON();
       lobby = status({
         revision: 5,
@@ -207,10 +235,10 @@ async function validateAdminAssignment(browser) {
         assignment: 'display-override',
         reportedTemplate: 'heritage-classic',
       });
-      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(lobby) });
+      await fulfillJson(route, lobby);
       return;
     }
-    await route.fulfill({ status: 404, contentType: 'application/json', body: '{"error":"Not found"}' });
+    await fulfillJson(route, '{"error":"Not found"}', 404);
   });
 
   try {
@@ -293,41 +321,43 @@ async function validateManagedOfflineCache(browser) {
       return;
     }
     const request = route.request();
+    if (request.method() === 'OPTIONS') {
+      await fulfillPreflight(route);
+      return;
+    }
     const url = new URL(request.url());
     if (request.headers().authorization !== `Bearer ${deviceToken}`) {
-      await route.fulfill({ status: 401, contentType: 'application/json', body: '{"error":"Not authorized"}' });
+      await fulfillJson(route, '{"error":"Not authorized"}', 401);
       return;
     }
     if (url.pathname === '/v1/device/config' && request.method() === 'GET') {
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify(status({
+      await fulfillJson(
+        route,
+        status({
           revision: 7,
           reportedRevision: 6,
           config: managedConfig,
           assignment: 'display-override',
           reportedTemplate: 'minimal-modern',
-        }).remoteConfig),
-      });
+        }).remoteConfig,
+      );
       return;
     }
     if (url.pathname === '/v1/device/heartbeat' && request.method() === 'POST') {
       const heartbeat = request.postDataJSON();
-      await route.fulfill({
-        status: 200,
-        contentType: 'application/json',
-        body: JSON.stringify(status({
+      await fulfillJson(
+        route,
+        status({
           revision: 7,
           reportedRevision: heartbeat.contentRevision,
           config: managedConfig,
           assignment: 'display-override',
           reportedTemplate: heartbeat.prayerBoardTemplateId,
-        })),
-      });
+        }),
+      );
       return;
     }
-    await route.fulfill({ status: 404, contentType: 'application/json', body: '{"error":"Not found"}' });
+    await fulfillJson(route, '{"error":"Not found"}', 404);
   });
 
   try {
@@ -337,8 +367,10 @@ async function validateManagedOfflineCache(browser) {
     await display.waitFor({ state: 'visible' });
     await page.waitForFunction(() => {
       const root = document.querySelector('.smart-display');
-      return root?.getAttribute('data-managed-prayer-board') === 'on' &&
-        root?.getAttribute('data-display-template') === 'family-classroom';
+      return (
+        root?.getAttribute('data-managed-prayer-board') === 'on' &&
+        root?.getAttribute('data-display-template') === 'family-classroom'
+      );
     });
 
     const cached = await page.evaluate(() => {
@@ -355,8 +387,10 @@ async function validateManagedOfflineCache(browser) {
     await page.locator('.smart-display').waitFor({ state: 'visible' });
     await page.waitForFunction(() => {
       const root = document.querySelector('.smart-display');
-      return root?.getAttribute('data-managed-prayer-board') === 'on' &&
-        root?.getAttribute('data-display-template') === 'family-classroom';
+      return (
+        root?.getAttribute('data-managed-prayer-board') === 'on' &&
+        root?.getAttribute('data-display-template') === 'family-classroom'
+      );
     });
     await page.locator('.managed-display-remote-status[data-state="offline"]').waitFor({
       state: 'visible',
