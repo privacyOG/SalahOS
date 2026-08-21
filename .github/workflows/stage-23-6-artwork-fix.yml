@@ -1,0 +1,44 @@
+name: Stage 23.6 Artwork Fix
+
+on:
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  fix-stage-23-6-artwork:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checkout PR head branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          fetch-depth: 0
+
+      - name: Remove artwork overscan transform
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('src/scenic-spiritual.css')
+          text = path.read_text()
+          old = '  transform: scale(1.015);'
+          new = '  transform: none;'
+          if old not in text and new not in text:
+              raise SystemExit('Expected Scenic artwork transform not found')
+          path.write_text(text.replace(old, new, 1))
+          PY
+          git diff --check
+
+      - name: Commit artwork fix
+        run: |
+          if git diff --quiet -- src/scenic-spiritual.css; then
+            echo 'Scenic artwork transform already corrected.'
+            exit 0
+          fi
+          git config user.name 'privacyOG'
+          git config user.email 'kriptiik@proton.me'
+          git add src/scenic-spiritual.css
+          git commit -m 'Remove Scenic artwork overscan overflow'
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
