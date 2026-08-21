@@ -234,7 +234,9 @@ async function validateScenario(browser, scenario) {
       throw new Error(`${scenario.name} page errors: ${pageErrors.join(' | ')}`);
     }
     if (externalRequests.length > 0) {
-      throw new Error(`${scenario.name} made external requests: ${JSON.stringify(externalRequests)}`);
+      throw new Error(
+        `${scenario.name} made external requests: ${JSON.stringify(externalRequests)}`,
+      );
     }
 
     const expectedArtworkMode = scenario.artworkEnabled ? 'scenic' : 'plain';
@@ -289,7 +291,9 @@ async function validateScenario(browser, scenario) {
       throw new Error(`${scenario.name} board exceeds viewport: ${JSON.stringify(boardGeometry)}`);
     }
     if (boardGeometry.height < boardGeometry.viewportHeight * 0.9) {
-      throw new Error(`${scenario.name} board under-fills viewport: ${JSON.stringify(boardGeometry)}`);
+      throw new Error(
+        `${scenario.name} board under-fills viewport: ${JSON.stringify(boardGeometry)}`,
+      );
     }
 
     const presentation = await board.evaluate((element) => {
@@ -317,11 +321,15 @@ async function validateScenario(browser, scenario) {
       presentation.scheduleBackground === 'transparent' ||
       presentation.scheduleBackground === 'rgba(0, 0, 0, 0)'
     ) {
-      throw new Error(`${scenario.name} readability panels are transparent: ${JSON.stringify(presentation)}`);
+      throw new Error(
+        `${scenario.name} readability panels are transparent: ${JSON.stringify(presentation)}`,
+      );
     }
     const hasScenicAsset = presentation.backgroundImage.includes('scenic-spiritual.svg');
     if (scenario.artworkEnabled !== hasScenicAsset) {
-      throw new Error(`${scenario.name} artwork presentation mismatch: ${JSON.stringify(presentation)}`);
+      throw new Error(
+        `${scenario.name} artwork presentation mismatch: ${JSON.stringify(presentation)}`,
+      );
     }
 
     const overflow = await findHorizontalOverflow(page);
