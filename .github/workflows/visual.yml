@@ -7,7 +7,7 @@ on:
       - main
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   visual:
@@ -65,25 +65,6 @@ jobs:
 
       - name: Run visual regression matrix
         run: npm run visual:check
-
-      - name: Commit Stage 23.3 tracker reconciliation
-        if: github.event_name == 'pull_request' && github.event.pull_request.head.ref == 'stage-23/minimal-modern'
-        run: |
-          cp visual-artifacts/tracker-TODO.md /tmp/salahos-tracker-TODO.md
-          cp visual-artifacts/tracker-UI_UX_V2_PLAN.md /tmp/salahos-tracker-UI_UX_V2_PLAN.md
-          git fetch origin stage-23/minimal-modern
-          git checkout -B stage-23/minimal-modern origin/stage-23/minimal-modern
-          cp /tmp/salahos-tracker-TODO.md TODO.md
-          cp /tmp/salahos-tracker-UI_UX_V2_PLAN.md docs/UI_UX_V2_PLAN.md
-          git config user.name privacyOG
-          git config user.email kriptiik@proton.me
-          git add TODO.md docs/UI_UX_V2_PLAN.md
-          if git diff --cached --quiet; then
-            echo 'Stage 23.3 trackers are already reconciled.'
-            exit 0
-          fi
-          git commit -m 'Complete Stage 23.3 tracker reconciliation'
-          git push origin HEAD:stage-23/minimal-modern
 
       - name: Upload visual evidence
         if: always()
