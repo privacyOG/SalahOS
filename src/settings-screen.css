@@ -208,6 +208,7 @@
 .settings-screen__legacy[data-settings-category='mosque'] .offsets-fieldset,
 .settings-screen__legacy[data-settings-category='mosque'] .notification-fieldset,
 .settings-screen__legacy[data-settings-category='mosque'] .settings-transfer,
+.settings-screen__legacy[data-settings-category='mosque'] .settings-panel > .inline-message,
 .settings-screen__legacy[data-settings-category='mosque'] .manual-mosque-fieldset,
 .settings-screen__legacy[data-settings-category='mosque'] .mosque-import-grid,
 .settings-screen__legacy[data-settings-category='mosque'] .mosque-import-payload,

@@ -214,6 +214,7 @@ const applicationScenarios = [
       '.offsets-fieldset',
       '.notification-fieldset',
       '.settings-transfer',
+      ".settings-screen__legacy[data-settings-category='mosque'] .settings-panel > .inline-message",
     ],
   },
   {
