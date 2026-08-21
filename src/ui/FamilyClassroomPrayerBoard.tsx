@@ -332,10 +332,7 @@ export function FamilyClassroomPrayerBoard({
 
           <div className="family-classroom-board__adjuncts">
             {daylightCuesEnabled && (
-              <section
-                className="family-classroom-board__daylight"
-                aria-label={copy.daylightTitle}
-              >
+              <section className="family-classroom-board__daylight" aria-label={copy.daylightTitle}>
                 <div className="family-classroom-board__daylight-heading">
                   <strong>{copy.daylightTitle}</strong>
                 </div>
