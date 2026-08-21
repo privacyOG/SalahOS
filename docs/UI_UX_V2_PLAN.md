@@ -98,10 +98,12 @@ The daily prayer display surface must also become a first-class configurable pro
 - [x] Highlight current/next prayer without relying on colour alone.
 - [x] Surface selected mosque/location and data provenance in a compact secondary treatment.
 - [x] Surface Jumu'ah context when relevant.
-- [ ] Surface Ramadan/Suhur/Imsak/Iftar/Taraweeh context only when relevant rather than permanently increasing daily density.
+- [x] Surface Ramadan/Suhur/Imsak/Iftar/Taraweeh context only when relevant rather than permanently increasing daily density.
 - [x] Add at most a small number of useful quick actions below prayer information, such as Qiblah, Mosque and Notifications.
-- [ ] Add optional announcement/event preview beneath core prayer information without allowing community content to dominate the prayer view.
-- [ ] Design polished states for no location, no selected mosque, offline managed data, stale managed data and unavailable astronomical events.
+- [x] Add optional announcement/event preview beneath core prayer information without allowing community content to dominate the prayer view.
+- [x] Design polished states for no location, no selected mosque, offline managed data, stale managed data and unavailable astronomical events.
+
+**Stage 22.3 verification note (2026-08-21):** PR #173 code-bearing head `bd43257df4d6be16ed6ca9943c34b3285975b08b` passed Quality Gate `32444858881`, Android Build `32444858804`, Visual Regression `32444858884` and iOS Build `32444858880`, including fresh iPhone/iPad Simulator install, launch and relaunch acceptance. Today keeps prayer information authoritative while adding conditional Ramadan Imsak/Suhur/Iftar and local-mosque Taraweeh context, a compact selected-mosque announcement/event preview, and explicit no-selected-mosque, missing/stale timetable, offline-managed and astronomical-unavailable states. The focused English-phone community, English-phone Ramadan/Taraweeh and Arabic/RTL-tablet stale-timetable screenshots received human review; the permanent visual suite also passed on the exact code-bearing head.
 
 ---
 
