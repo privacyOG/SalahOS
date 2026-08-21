@@ -1,7 +1,4 @@
-import type {
-  PrayerBoardData,
-  PrayerBoardTimeFormat,
-} from '../domain/prayerBoardTemplate';
+import type { PrayerBoardData, PrayerBoardTimeFormat } from '../domain/prayerBoardTemplate';
 import type { PrayerName } from '../domain/prayerEngine';
 import {
   formatCountdown,
