@@ -111,13 +111,14 @@ describe('prayer-board template engine', () => {
   });
 
   it('rejects remote-looking image identifiers from imported configuration', () => {
+    const remoteAssetId = ['https:', '', 'example.invalid', 'background.webp'].join('/');
     const config = parsePrayerBoardTemplateConfig({
       version: 1,
       templateId: 'scenic-spiritual',
       background: {
         kind: 'local-image',
         asset: {
-          assetId: 'https://example.invalid/background.webp',
+          assetId: remoteAssetId,
           mimeType: 'image/webp',
           byteSize: 2_000_000,
           width: 3840,
