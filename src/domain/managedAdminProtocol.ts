@@ -25,7 +25,10 @@ export interface ManagedDisplayRemoteConfig {
   readonly updatedAt: string;
 }
 
-type ManagedDisplayRemoteConfigInput = Omit<ManagedDisplayRemoteConfig, 'prayerBoardConfig'> & {
+type ManagedDisplayRemoteConfigInput = Omit<
+  ManagedDisplayRemoteConfig,
+  'prayerBoardConfig'
+> & {
   readonly prayerBoardConfig?: PrayerBoardTemplateConfig | undefined;
 };
 
