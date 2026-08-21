@@ -27,54 +27,56 @@ jobs:
       - name: Install dependencies
         run: npm ci --ignore-scripts
 
-      - name: Apply Stage 22.6 cleanup
+      - name: Remove stale mosque import guidance
         run: |
           python3 - <<'PY'
           from pathlib import Path
 
           visual = Path('scripts/visual-regression.mjs')
           text = visual.read_text()
-          old = "visibleSelectors: ['.mosque-library-row', '.settings-screen__seasonal'],"
+          old = """      '.notification-fieldset',
+                '.settings-transfer',
+              ],
+            },
+            {
+              name: 'tablet-settings-advanced-ar-dark',
+          """
+          new = """      '.notification-fieldset',
+                '.settings-transfer',
+                \".settings-screen__legacy[data-settings-category='mosque'] .settings-panel > .inline-message\",
+              ],
+            },
+            {
+              name: 'tablet-settings-advanced-ar-dark',
+          """
           assert old in text
-          visual.write_text(text.replace(old, "visibleSelectors: ['.mosque-library-row'],", 1))
-
-          settings = Path('src/ui/SettingsScreen.tsx')
-          text = settings.read_text()
-          old = "          <p>{copy.displayDescription}</p>\n"
-          assert old in text
-          settings.write_text(text.replace(old, '', 1))
+          visual.write_text(text.replace(old, new, 1))
 
           styles = Path('src/settings-screen.css')
           text = styles.read_text()
-          old = """.settings-display-entry p {
-            max-width: 62ch;
-            margin: 0;
-            color: var(--salah-fg-secondary);
-          }
-
+          old = """.settings-screen__legacy[data-settings-category='mosque'] .settings-transfer,
+          .settings-screen__legacy[data-settings-category='mosque'] .manual-mosque-fieldset,
+          """
+          new = """.settings-screen__legacy[data-settings-category='mosque'] .settings-transfer,
+          .settings-screen__legacy[data-settings-category='mosque'] .settings-panel > .inline-message,
+          .settings-screen__legacy[data-settings-category='mosque'] .manual-mosque-fieldset,
           """
           assert old in text
-          styles.write_text(text.replace(old, '', 1))
+          styles.write_text(text.replace(old, new, 1))
           PY
 
-          npx prettier --write \
-            scripts/visual-regression.mjs \
-            src/settings-screen.css \
-            src/ui/SettingsScreen.tsx \
-            src/ui/SettingsProgressiveDisclosureV2.test.ts
+          npx prettier --write scripts/visual-regression.mjs src/settings-screen.css
           npm run format:check
 
       - name: Commit target changes
         run: |
-          printf '%s\n' 'Stage 22.6 settings cleanup applied and formatted.' > .stage22-settings-fix-ready
+          printf '%s\n' 'Stage 22.6 human-review cleanup applied and formatted.' > .stage22-settings-fix-ready
           git config user.name 'privacyOG'
           git config user.email 'kriptiik@proton.me'
           git add -- \
             .stage22-settings-fix-ready \
             scripts/visual-regression.mjs \
-            src/settings-screen.css \
-            src/ui/SettingsScreen.tsx \
-            src/ui/SettingsProgressiveDisclosureV2.test.ts
+            src/settings-screen.css
           git diff --cached --check
-          git commit -m 'Finish Stage 22.6 settings disclosure cleanup'
+          git commit -m 'Hide stale mosque import guidance'
           git push origin HEAD:stage-22/settings-v2-completion
