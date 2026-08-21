@@ -1,0 +1,255 @@
+.today-contextual {
+  display: grid;
+  gap: var(--salah-space-5);
+  margin-block-start: var(--salah-space-5);
+}
+
+.today-context-states {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: var(--salah-space-3);
+}
+
+.today-context-state {
+  display: grid;
+  gap: var(--salah-space-2);
+  padding: var(--salah-space-4);
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-md);
+  background: var(--salah-bg-surface);
+}
+
+.today-context-state[data-state='stale-timetable'],
+.today-context-state[data-state='missing-timetable'],
+.today-context-state[data-state='astronomical-unavailable'] {
+  border-color: color-mix(in srgb, var(--salah-warning, #b7791f) 38%, var(--salah-border-subtle));
+}
+
+.today-context-state[data-state='offline-managed'] {
+  border-color: color-mix(in srgb, var(--accent) 28%, var(--salah-border-subtle));
+}
+
+.today-context-state strong,
+.today-context-state p,
+.today-context-state small {
+  margin: 0;
+}
+
+.today-context-state p,
+.today-context-state small {
+  color: var(--salah-fg-secondary);
+  font-size: var(--salah-text-sm);
+  line-height: 1.5;
+}
+
+.today-context-state a {
+  width: fit-content;
+  color: var(--salah-fg-primary);
+  font-size: var(--salah-text-sm);
+  font-weight: 760;
+  text-underline-offset: 0.2em;
+}
+
+.today-seasonal {
+  overflow: hidden;
+  border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--salah-border-subtle));
+  border-radius: var(--salah-radius-lg);
+  background:
+    radial-gradient(
+      circle at top right,
+      color-mix(in srgb, var(--accent) 12%, transparent),
+      transparent 46%
+    ),
+    var(--salah-bg-surface-raised);
+}
+
+[dir='rtl'] .today-seasonal {
+  background:
+    radial-gradient(
+      circle at top left,
+      color-mix(in srgb, var(--accent) 12%, transparent),
+      transparent 46%
+    ),
+    var(--salah-bg-surface-raised);
+}
+
+.today-seasonal > header,
+.today-community-preview > header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--salah-space-4);
+  padding: var(--salah-space-4);
+}
+
+.today-seasonal header p,
+.today-community-preview header p {
+  margin: 0;
+  color: var(--salah-fg-tertiary);
+  font-size: var(--salah-text-xs);
+  font-weight: 780;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+[dir='rtl'] .today-seasonal header p,
+[dir='rtl'] .today-community-preview header p {
+  letter-spacing: 0;
+}
+
+.today-seasonal header h2,
+.today-community-preview header h2 {
+  margin: var(--salah-space-1) 0 0;
+  font-size: clamp(1.25rem, 1.15rem + 0.7vw, 1.8rem);
+}
+
+.today-seasonal > header > strong {
+  color: var(--salah-fg-secondary);
+  font-size: var(--salah-text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.today-seasonal__times {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  border-block-start: 1px solid var(--salah-border-subtle);
+}
+
+.today-seasonal__times > div {
+  display: grid;
+  gap: var(--salah-space-1);
+  padding: var(--salah-space-4);
+  border-inline-start: 1px solid var(--salah-border-subtle);
+}
+
+.today-seasonal__times > div:first-child {
+  border-inline-start: 0;
+}
+
+.today-seasonal__times span,
+.today-seasonal__taraweeh > span,
+.today-community-preview article > span,
+.today-community-preview dt {
+  color: var(--salah-fg-tertiary);
+  font-size: var(--salah-text-xs);
+  font-weight: 760;
+}
+
+.today-seasonal__times strong {
+  font-size: clamp(1.25rem, 1.05rem + 0.8vw, 1.8rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.today-seasonal__taraweeh {
+  display: grid;
+  grid-template-columns: minmax(7rem, auto) minmax(0, 1fr);
+  gap: var(--salah-space-3);
+  padding: var(--salah-space-4);
+  border-block-start: 1px solid var(--salah-border-subtle);
+}
+
+.today-seasonal__taraweeh > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: end;
+  gap: var(--salah-space-2) var(--salah-space-4);
+}
+
+.today-seasonal__taraweeh strong {
+  font-size: var(--salah-text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.today-community-preview {
+  border-block-start: 1px solid var(--salah-border-subtle);
+  padding-block-start: var(--salah-space-1);
+}
+
+.today-community-preview > header {
+  padding-inline: 0;
+}
+
+.today-community-preview header a {
+  color: var(--salah-fg-primary);
+  font-size: var(--salah-text-sm);
+  font-weight: 760;
+  text-underline-offset: 0.2em;
+}
+
+.today-community-preview__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(17rem, 1fr));
+  gap: var(--salah-space-3);
+}
+
+.today-community-preview article {
+  display: grid;
+  gap: var(--salah-space-2);
+  min-width: 0;
+  padding: var(--salah-space-4);
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-md);
+  background: var(--salah-bg-surface);
+}
+
+.today-community-preview article > strong {
+  font-size: var(--salah-text-md);
+}
+
+.today-community-preview article > p {
+  display: -webkit-box;
+  overflow: hidden;
+  margin: 0;
+  color: var(--salah-fg-secondary);
+  font-size: var(--salah-text-sm);
+  line-height: 1.5;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.today-community-preview dl {
+  display: grid;
+  gap: var(--salah-space-2);
+  margin: 0;
+}
+
+.today-community-preview dl > div {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.today-community-preview dd {
+  margin: 0;
+  color: var(--salah-fg-secondary);
+  font-size: var(--salah-text-sm);
+}
+
+@media (max-width: 560px) {
+  .today-seasonal > header,
+  .today-community-preview > header {
+    align-items: flex-start;
+  }
+
+  .today-seasonal__times {
+    grid-template-columns: 1fr;
+  }
+
+  .today-seasonal__times > div {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: baseline;
+    border-inline-start: 0;
+    border-block-start: 1px solid var(--salah-border-subtle);
+  }
+
+  .today-seasonal__times > div:first-child {
+    border-block-start: 0;
+  }
+
+  .today-seasonal__taraweeh {
+    grid-template-columns: 1fr;
+  }
+
+  .today-seasonal__taraweeh > div {
+    justify-content: start;
+  }
+}
