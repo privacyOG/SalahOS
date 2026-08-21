@@ -40,7 +40,6 @@ jobs:
           PY
           npx prettier --write \
             package.json \
-            public/artwork/scenic-spiritual.svg \
             scripts/visual-scenic-spiritual.mjs \
             src/scenic-spiritual.css \
             src/ui/ScenicSpiritualPrayerBoard.tsx \
@@ -49,7 +48,6 @@ jobs:
             src/ui/SmartDisplay.test.tsx
           npx prettier --check \
             package.json \
-            public/artwork/scenic-spiritual.svg \
             scripts/visual-scenic-spiritual.mjs \
             src/scenic-spiritual.css \
             src/ui/ScenicSpiritualPrayerBoard.tsx \
@@ -67,7 +65,6 @@ jobs:
           git config user.email 'kriptiik@proton.me'
           git add \
             package.json \
-            public/artwork/scenic-spiritual.svg \
             scripts/visual-scenic-spiritual.mjs \
             src/scenic-spiritual.css \
             src/ui/ScenicSpiritualPrayerBoard.tsx \
