@@ -1,30 +1,31 @@
 import { useEffect, useMemo, useState } from 'react';
 
-import { buildPrayerBoardData } from '../domain/prayerBoardTemplate';
+import {
+  buildPrayerBoardData,
+  parsePrayerBoardTemplateConfig,
+  type PrayerBoardTemplateConfig,
+  type PrayerBoardTemplateId,
+} from '../domain/prayerBoardTemplate';
 import type { SourcedPrayerDashboard } from '../domain/sourcedDashboard';
 import { localeDirection, translate } from '../i18n/i18n';
 import type { Locale } from '../i18n/translations';
 import { getApplicationStorage } from '../platform/applicationStorage';
+import {
+  loadPrayerBoardDisplayConfig,
+  PRAYER_BOARD_DISPLAY_CONFIG_CHANGE_EVENT,
+} from '../platform/prayerBoardDisplayConfig';
 import type { PersistedSettings } from '../platform/settingsStorage';
 import {
   loadSmartDisplayTheme,
   SMART_DISPLAY_THEME_CHANGE_EVENT,
   type SmartDisplayThemeId,
 } from '../platform/smartDisplayTheme';
-import { BoldCountdownFocusPrayerBoard } from './BoldCountdownFocusPrayerBoard';
-import { FamilyClassroomPrayerBoard } from './FamilyClassroomPrayerBoard';
-import { HeritageClassicPrayerBoard } from './HeritageClassicPrayerBoard';
-import { MinimalModernPrayerBoard, type MinimalModernVariant } from './MinimalModernPrayerBoard';
-import { ScenicSpiritualPrayerBoard } from './ScenicSpiritualPrayerBoard';
-import { StructuredSplitBoard } from './StructuredSplitBoard';
+import {
+  displayThemeForPrayerBoardConfig,
+  PrayerBoardRenderer,
+} from './PrayerBoardRenderer';
 
-export type SmartDisplayTemplateId =
-  | 'heritage-classic'
-  | 'minimal-modern'
-  | 'bold-countdown-focus'
-  | 'structured-split-board'
-  | 'scenic-spiritual'
-  | 'family-classroom';
+export type SmartDisplayTemplateId = PrayerBoardTemplateId;
 
 export interface SmartDisplayProps {
   readonly locale: Locale;
@@ -45,9 +46,10 @@ export function smartDisplayModeRequested(search: string): boolean {
   return new URLSearchParams(search).get('mode') === 'smart-display';
 }
 
-export function smartDisplayTemplateRequested(search: string): SmartDisplayTemplateId {
+function smartDisplayTemplateOverride(search: string): SmartDisplayTemplateId | null {
   const requested = new URLSearchParams(search).get('template');
   if (
+    requested === 'heritage-classic' ||
     requested === 'minimal-modern' ||
     requested === 'bold-countdown-focus' ||
     requested === 'structured-split-board' ||
@@ -56,7 +58,11 @@ export function smartDisplayTemplateRequested(search: string): SmartDisplayTempl
   ) {
     return requested;
   }
-  return 'heritage-classic';
+  return null;
+}
+
+export function smartDisplayTemplateRequested(search: string): SmartDisplayTemplateId {
+  return smartDisplayTemplateOverride(search) ?? 'heritage-classic';
 }
 
 export function smartDisplayScenicArtworkRequested(search: string): boolean {
@@ -79,8 +85,12 @@ function readSmartDisplayTheme(): SmartDisplayThemeId {
   }
 }
 
-function minimalModernVariant(displayTheme: SmartDisplayThemeId): MinimalModernVariant {
-  return displayTheme === 'midnight' || displayTheme === 'emerald' ? 'dark' : 'light';
+function readPrayerBoardDisplayConfig(): PrayerBoardTemplateConfig | null {
+  try {
+    return loadPrayerBoardDisplayConfig(getApplicationStorage());
+  } catch {
+    return null;
+  }
 }
 
 export function SmartDisplay({
@@ -97,15 +107,30 @@ export function SmartDisplay({
   familyDaylightCuesEnabled,
 }: SmartDisplayProps) {
   const [displayTheme, setDisplayTheme] = useState<SmartDisplayThemeId>(readSmartDisplayTheme);
+  const [displayConfig, setDisplayConfig] = useState<PrayerBoardTemplateConfig | null>(
+    readPrayerBoardDisplayConfig,
+  );
   const boardData = useMemo(
     () => (dashboard === null ? null : buildPrayerBoardData({ dashboard, offline })),
     [dashboard, offline],
   );
-  const resolvedTemplateId =
-    templateId ??
-    (typeof window === 'undefined'
-      ? 'heritage-classic'
-      : smartDisplayTemplateRequested(window.location.search));
+  const queryTemplate =
+    typeof window === 'undefined' ? null : smartDisplayTemplateOverride(window.location.search);
+  const resolvedTemplateId = templateId ?? queryTemplate ?? displayConfig?.templateId ?? 'heritage-classic';
+  const resolvedConfig = useMemo(
+    () =>
+      parsePrayerBoardTemplateConfig({
+        ...(displayConfig ?? {}),
+        version: 1,
+        templateId: resolvedTemplateId,
+        primaryLocale: displayConfig?.primaryLocale ?? locale,
+        timeFormat: displayConfig?.timeFormat ?? timeFormat,
+      }),
+    [displayConfig, locale, resolvedTemplateId, timeFormat],
+  );
+  const resolvedLocale = resolvedConfig.primaryLocale;
+  const resolvedDisplayTheme =
+    displayConfig === null ? displayTheme : displayThemeForPrayerBoardConfig(resolvedConfig);
   const resolvedScenicArtworkEnabled =
     scenicArtworkEnabled ??
     (typeof window === 'undefined'
@@ -123,12 +148,17 @@ export function SmartDisplay({
       : smartDisplayFamilyDaylightRequested(window.location.search));
 
   useEffect(() => {
-    const refresh = () => {
+    const refreshTheme = () => {
       setDisplayTheme(readSmartDisplayTheme());
     };
-    window.addEventListener(SMART_DISPLAY_THEME_CHANGE_EVENT, refresh);
+    const refreshDisplayConfig = () => {
+      setDisplayConfig(readPrayerBoardDisplayConfig());
+    };
+    window.addEventListener(SMART_DISPLAY_THEME_CHANGE_EVENT, refreshTheme);
+    window.addEventListener(PRAYER_BOARD_DISPLAY_CONFIG_CHANGE_EVENT, refreshDisplayConfig);
     return () => {
-      window.removeEventListener(SMART_DISPLAY_THEME_CHANGE_EVENT, refresh);
+      window.removeEventListener(SMART_DISPLAY_THEME_CHANGE_EVENT, refreshTheme);
+      window.removeEventListener(PRAYER_BOARD_DISPLAY_CONFIG_CHANGE_EVENT, refreshDisplayConfig);
     };
   }, []);
 
@@ -136,20 +166,20 @@ export function SmartDisplay({
     <main
       className="smart-display"
       data-mode="smart-display"
-      data-display-theme={displayTheme}
+      data-display-theme={resolvedDisplayTheme}
       data-display-template={resolvedTemplateId}
-      dir={localeDirection(locale)}
-      lang={locale}
+      dir={localeDirection(resolvedLocale)}
+      lang={resolvedLocale}
     >
       {systemTimeUnavailable ? (
         <section className="smart-display-empty" role="alert">
-          <strong>{translate(locale, 'systemTimeInvalid')}</strong>
-          <span>{translate(locale, 'systemTimeInvalidHelp')}</span>
+          <strong>{translate(resolvedLocale, 'systemTimeInvalid')}</strong>
+          <span>{translate(resolvedLocale, 'systemTimeInvalidHelp')}</span>
         </section>
       ) : calculationUnavailable ? (
         <section className="smart-display-empty" role="alert">
-          <strong>{translate(locale, 'calculationUnavailable')}</strong>
-          <span>{translate(locale, 'calculationUnavailableHelp')}</span>
+          <strong>{translate(resolvedLocale, 'calculationUnavailable')}</strong>
+          <span>{translate(resolvedLocale, 'calculationUnavailableHelp')}</span>
         </section>
       ) : boardData === null ? (
         <>
@@ -159,65 +189,32 @@ export function SmartDisplay({
                 <img src="/icons/salahos-192.png" alt="" aria-hidden="true" />
                 <span>SalahOS</span>
               </div>
-              <p className="smart-display-clock" aria-label={translate(locale, 'currentTime')}>
+              <p
+                className="smart-display-clock"
+                aria-label={translate(resolvedLocale, 'currentTime')}
+              >
                 {currentClock}
               </p>
             </div>
           </header>
           {offline && (
             <p className="smart-display-status" role="status">
-              {translate(locale, 'offline')}
+              {translate(resolvedLocale, 'offline')}
             </p>
           )}
           <section className="smart-display-empty">
-            <strong>{translate(locale, 'currentLocation')}</strong>
-            <span>{translate(locale, 'notConfigured')}</span>
+            <strong>{translate(resolvedLocale, 'currentLocation')}</strong>
+            <span>{translate(resolvedLocale, 'notConfigured')}</span>
           </section>
         </>
-      ) : resolvedTemplateId === 'minimal-modern' ? (
-        <MinimalModernPrayerBoard
-          data={boardData}
-          locale={locale}
-          timeFormat={timeFormat}
-          variant={minimalModernVariant(displayTheme)}
-        />
-      ) : resolvedTemplateId === 'bold-countdown-focus' ? (
-        <BoldCountdownFocusPrayerBoard
-          data={boardData}
-          locale={locale}
-          timeFormat={timeFormat}
-          displayTheme={displayTheme}
-        />
-      ) : resolvedTemplateId === 'structured-split-board' ? (
-        <StructuredSplitBoard
-          data={boardData}
-          locale={locale}
-          timeFormat={timeFormat}
-          displayTheme={displayTheme}
-        />
-      ) : resolvedTemplateId === 'scenic-spiritual' ? (
-        <ScenicSpiritualPrayerBoard
-          data={boardData}
-          locale={locale}
-          timeFormat={timeFormat}
-          displayTheme={displayTheme}
-          artworkEnabled={resolvedScenicArtworkEnabled}
-        />
-      ) : resolvedTemplateId === 'family-classroom' ? (
-        <FamilyClassroomPrayerBoard
-          data={boardData}
-          locale={locale}
-          timeFormat={timeFormat}
-          displayTheme={displayTheme}
-          educationalHintsEnabled={resolvedFamilyEducationalHintsEnabled}
-          daylightCuesEnabled={resolvedFamilyDaylightCuesEnabled}
-        />
       ) : (
-        <HeritageClassicPrayerBoard
+        <PrayerBoardRenderer
           data={boardData}
-          locale={locale}
-          timeFormat={timeFormat}
-          displayTheme={displayTheme}
+          config={resolvedConfig}
+          displayThemeOverride={displayConfig === null ? displayTheme : undefined}
+          scenicArtworkEnabled={resolvedScenicArtworkEnabled}
+          familyEducationalHintsEnabled={resolvedFamilyEducationalHintsEnabled}
+          familyDaylightCuesEnabled={resolvedFamilyDaylightCuesEnabled}
         />
       )}
     </main>
