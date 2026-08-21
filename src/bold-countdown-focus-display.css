@@ -1,0 +1,31 @@
+.bold-countdown-board {
+  min-height: calc(100vh - clamp(2rem, 5vw, 4.5rem));
+  grid-template-rows: auto minmax(0, 2fr) minmax(0, 1fr) auto auto;
+}
+
+.bold-countdown-prayer {
+  display: grid;
+  align-content: center;
+}
+
+@media (min-width: 3000px) and (min-height: 1600px) {
+  .bold-countdown-board__clock strong {
+    font-size: clamp(12rem, 10vw, 22rem);
+  }
+
+  .bold-countdown-board__countdown strong {
+    font-size: clamp(13rem, 10.5vw, 23rem);
+  }
+
+  .bold-countdown-board__focus-heading strong {
+    font-size: clamp(6rem, 5.5vw, 11rem);
+  }
+
+  .bold-countdown-prayer header strong {
+    font-size: clamp(2.6rem, 1.65vw, 4rem);
+  }
+
+  .bold-countdown-prayer dd {
+    font-size: clamp(2.2rem, 1.3vw, 3.2rem);
+  }
+}
