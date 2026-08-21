@@ -46,12 +46,7 @@ function boardData() {
 describe('MinimalModernPrayerBoard', () => {
   it('renders five restrained prayer columns with explicit Athan/start and Iqamah values', () => {
     const html = renderToStaticMarkup(
-      <MinimalModernPrayerBoard
-        data={boardData()}
-        locale="en"
-        timeFormat="h12"
-        variant="light"
-      />,
+      <MinimalModernPrayerBoard data={boardData()} locale="en" timeFormat="h12" variant="light" />,
     );
 
     expect(html).toContain('data-prayer-board-template="minimal-modern"');
@@ -70,12 +65,7 @@ describe('MinimalModernPrayerBoard', () => {
 
   it('supports the dark variant with Arabic presentation', () => {
     const html = renderToStaticMarkup(
-      <MinimalModernPrayerBoard
-        data={boardData()}
-        locale="ar"
-        timeFormat="h23"
-        variant="dark"
-      />,
+      <MinimalModernPrayerBoard data={boardData()} locale="ar" timeFormat="h23" variant="dark" />,
     );
 
     expect(html).toContain('data-minimal-variant="dark"');
