@@ -26,10 +26,7 @@ import type { PersistedSettings } from '../platform/settingsStorage';
 import { BidiText } from './BidiText';
 
 export type TodayManagedDataState =
-  | 'no-selected-mosque'
-  | 'missing-timetable'
-  | 'stale-timetable'
-  | 'offline-managed';
+  'no-selected-mosque' | 'missing-timetable' | 'stale-timetable' | 'offline-managed';
 
 export interface TodaySeasonalContext {
   readonly ramadanDay: number;
@@ -242,9 +239,7 @@ export function TodayContextualSections(props: {
         }[model.managedDataState];
 
   const formatTime = (localMinutes: number | null) =>
-    localMinutes === null
-      ? '—'
-      : formatLocalTime(localMinutes, locale, props.settings.timeFormat);
+    localMinutes === null ? '—' : formatLocalTime(localMinutes, locale, props.settings.timeFormat);
 
   return (
     <div className="today-contextual" dir={locale === 'ar' ? 'rtl' : 'ltr'}>
