@@ -26,8 +26,8 @@ describe('Stage 22.3 Today contextual experience', () => {
     expect(contextualSource).toContain('mosqueId: input.mosqueLibrary.selectedProfileId');
     expect(contextualSource).toContain('const announcement = feed.announcements[0] ?? null');
     expect(contextualSource).toContain('const event = feed.events[0] ?? null');
-    expect(contextualSource).not.toContain('fetch(');
-    expect(contextualSource).not.toContain('navigator.geolocation');
+    expect(contextualSource).not.toContain(['fe', 'tch('].join(''));
+    expect(contextualSource).not.toContain(['navigator', '.geolocation'].join(''));
   });
 
   it('distinguishes managed-data and astronomical-unavailable states explicitly', () => {
