@@ -58,13 +58,18 @@ export function SmartDisplay({
   offline,
   systemTimeUnavailable,
   calculationUnavailable,
-  templateId = 'heritage-classic',
+  templateId,
 }: SmartDisplayProps) {
   const [displayTheme, setDisplayTheme] = useState<SmartDisplayThemeId>(readSmartDisplayTheme);
   const boardData = useMemo(
     () => (dashboard === null ? null : buildPrayerBoardData({ dashboard, offline })),
     [dashboard, offline],
   );
+  const resolvedTemplateId =
+    templateId ??
+    (typeof window === 'undefined'
+      ? 'heritage-classic'
+      : smartDisplayTemplateRequested(window.location.search));
 
   useEffect(() => {
     const refresh = () => {
@@ -81,7 +86,7 @@ export function SmartDisplay({
       className="smart-display"
       data-mode="smart-display"
       data-display-theme={displayTheme}
-      data-display-template={templateId}
+      data-display-template={resolvedTemplateId}
       dir={localeDirection(locale)}
       lang={locale}
     >
@@ -118,7 +123,7 @@ export function SmartDisplay({
             <span>{translate(locale, 'notConfigured')}</span>
           </section>
         </>
-      ) : templateId === 'minimal-modern' ? (
+      ) : resolvedTemplateId === 'minimal-modern' ? (
         <MinimalModernPrayerBoard
           data={boardData}
           locale={locale}
