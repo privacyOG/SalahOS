@@ -3,10 +3,7 @@ import { describe, expect, it } from 'vitest';
 import { createDisplayIdentity } from './displayFleet';
 import { resolveManagedPrayerBoardTarget } from './managedPrayerBoardTarget';
 
-function identity(
-  resolutionProfile: string,
-  orientation: 'landscape' | 'portrait' = 'landscape',
-) {
+function identity(resolutionProfile: string, orientation: 'landscape' | 'portrait' = 'landscape') {
   return createDisplayIdentity({
     displayId: 'display:lobby',
     organizationId: 'org:example',
