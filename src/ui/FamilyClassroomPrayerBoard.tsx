@@ -240,11 +240,7 @@ export function FamilyClassroomPrayerBoard({
                 <LearningIcon kind="start" />
                 <span>{translate(locale, 'prayerStart')}</span>
                 <strong>
-                  {displayTime(
-                    data.nextPrayer?.startLocalMinutes ?? null,
-                    locale,
-                    timeFormat,
-                  )}
+                  {displayTime(data.nextPrayer?.startLocalMinutes ?? null, locale, timeFormat)}
                 </strong>
               </div>
               <div>
