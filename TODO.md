@@ -809,7 +809,7 @@
 ## 23. Daily Prayer Display Theme Library
 
 - [x] Build the shared prayer-board template/data contract
-- [ ] Implement Heritage Classic
+- [x] Implement Heritage Classic
 - [ ] Implement Minimal Modern
 - [ ] Implement Bold Countdown Focus
 - [ ] Implement Structured Split Board
@@ -818,7 +818,7 @@
 - [ ] Add template preview, configuration, branding and managed-display assignment
 - [ ] Complete mobile Today/home prayer-board template variants and visual Settings selector (Stage 23.13)
 
-**Stage 23 progress note (2026-08-21):** PR #175 established the versioned six-template registry, shared prayer-board data contract, required/optional module policy, four-locale and bilingual presentation capabilities, controlled presentation configuration, validated local imagery/branding metadata, deterministic offline fallbacks and isolation of optional weather/announcement content. Code-bearing head `d154cf035e13282bfdc46e78ec7a7fa455914b0c` passed Quality Gate `32460157253`, Android Build `32460157312`, Visual Regression `32460157295` and iOS Build `32460157409`, including fresh iPhone/iPad Simulator runtime acceptance. Stage 23.1 is therefore complete. Stage 23.13 explicitly requires the mobile Today/home prayer surface to receive original phone-adapted variants of the prayer-board designs, retain one-tap bottom navigation including Qiblah and Settings, expose a visual Settings > Display Themes selector with previews/per-surface targeting, and pass phone/RTL/offline/visual/human acceptance before it may be marked complete. The six visual templates and mobile template work remain open.
+**Stage 23 progress note (2026-08-21):** PR #175 established the versioned six-template registry, shared prayer-board data contract, required/optional module policy, four-locale and bilingual presentation capabilities, controlled presentation configuration, validated local imagery/branding metadata, deterministic offline fallbacks and isolation of optional weather/announcement content. Code-bearing head `d154cf035e13282bfdc46e78ec7a7fa455914b0c` passed Quality Gate `32460157253`, Android Build `32460157312`, Visual Regression `32460157295` and iOS Build `32460157409`, including fresh iPhone/iPad Simulator runtime acceptance. Stage 23.1 is therefore complete. PR #176 completed Heritage Classic on code-bearing head `2f9535a059937bbd0ed06f8c2953e3c964f14255`, which passed Quality Gate `32471878090`, Android Build `32471878101`, Visual Regression `32471878106` and iOS Build `32471878114`, including fresh iPhone/iPad Simulator runtime acceptance. The Heritage board consumes the shared prayer-board data contract, preserves authoritative source/calculation/Iqamah semantics, distinguishes Athan/start from Iqamah, includes Jumu'ah and solar modules, supports legacy-compatible classic/emerald/midnight/sandstone presentation variants, and passed dedicated 1080p/4K English/Arabic/RTL long-mosque-name visual scenarios plus human screenshot review. Stage 23.2 is therefore complete. Stage 23.13 explicitly requires the mobile Today/home prayer surface to receive original phone-adapted variants of the prayer-board designs, retain one-tap bottom navigation including Qiblah and Settings, expose a visual Settings > Display Themes selector with previews/per-surface targeting, and pass phone/RTL/offline/visual/human acceptance before it may be marked complete. Five required visual templates and the mobile template work remain open.
 
 ---
 
