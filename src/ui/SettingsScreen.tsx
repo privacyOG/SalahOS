@@ -599,7 +599,6 @@ export function SettingsScreen() {
           className="settings-focus-panel settings-display-entry"
           aria-label={copy.displayTitle}
         >
-          <p>{copy.displayDescription}</p>
           <a className="surface-entry-card__action" href={administrationThemesHref()}>
             {copy.displayAction}
           </a>

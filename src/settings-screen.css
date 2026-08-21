@@ -177,12 +177,6 @@
   gap: var(--salah-space-4);
 }
 
-.settings-display-entry p {
-  max-width: 62ch;
-  margin: 0;
-  color: var(--salah-fg-secondary);
-}
-
 .settings-screen__legacy .app-shell {
   width: 100%;
   max-width: none;

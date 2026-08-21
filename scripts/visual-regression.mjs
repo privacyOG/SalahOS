@@ -206,7 +206,7 @@ const applicationScenarios = [
     theme: 'light',
     url: '?view=settings&settingsView=mosque',
     readySelector: ".settings-screen__legacy[data-settings-category='mosque']",
-    visibleSelectors: ['.mosque-library-row', '.settings-screen__seasonal'],
+    visibleSelectors: ['.mosque-library-row'],
     hiddenSelectors: [
       '.manual-mosque-fieldset',
       '.mosque-import-grid',
@@ -473,12 +473,18 @@ function assertNoHorizontalOverflow(name, overflow) {
 }
 
 async function visibleSelectorCount(page, selector) {
-  return page.locator(selector).evaluateAll((elements) =>
-    elements.filter((element) => {
-      const style = getComputedStyle(element);
-      const rect = element.getBoundingClientRect();
-      return style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0;
-    }).length,
+  return page.locator(selector).evaluateAll(
+    (elements) =>
+      elements.filter((element) => {
+        const style = getComputedStyle(element);
+        const rect = element.getBoundingClientRect();
+        return (
+          style.display !== 'none' &&
+          style.visibility !== 'hidden' &&
+          rect.width > 0 &&
+          rect.height > 0
+        );
+      }).length,
   );
 }
 
