@@ -17,10 +17,7 @@ import { MinimalModernPrayerBoard, type MinimalModernVariant } from './MinimalMo
 import { StructuredSplitBoard } from './StructuredSplitBoard';
 
 export type SmartDisplayTemplateId =
-  | 'heritage-classic'
-  | 'minimal-modern'
-  | 'bold-countdown-focus'
-  | 'structured-split-board';
+  'heritage-classic' | 'minimal-modern' | 'bold-countdown-focus' | 'structured-split-board';
 
 export interface SmartDisplayProps {
   readonly locale: Locale;

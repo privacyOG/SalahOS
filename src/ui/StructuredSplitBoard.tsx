@@ -146,7 +146,10 @@ export function StructuredSplitBoard({
         </section>
 
         <aside className="structured-split-board__rail">
-          <section className="structured-split-board__clock" aria-label={translate(locale, 'currentTime')}>
+          <section
+            className="structured-split-board__clock"
+            aria-label={translate(locale, 'currentTime')}
+          >
             <span>{translate(locale, 'currentTime')}</span>
             <strong>{displayClock(data.clock, locale, timeFormat)}</strong>
             <div className="structured-split-board__dates">
@@ -155,7 +158,10 @@ export function StructuredSplitBoard({
             </div>
           </section>
 
-          <section className="structured-split-board__next" aria-label={translate(locale, 'nextPrayer')}>
+          <section
+            className="structured-split-board__next"
+            aria-label={translate(locale, 'nextPrayer')}
+          >
             <div className="structured-split-board__next-heading">
               <span>{translate(locale, 'nextPrayer')}</span>
               <strong>{nextPrayerLabel}</strong>
@@ -190,11 +196,15 @@ export function StructuredSplitBoard({
           <section className="structured-split-board__solar">
             <div>
               <span>{translate(locale, 'prayerSunrise')}</span>
-              <strong>{displayTime(data.solarEvents.sunriseLocalMinutes, locale, timeFormat)}</strong>
+              <strong>
+                {displayTime(data.solarEvents.sunriseLocalMinutes, locale, timeFormat)}
+              </strong>
             </div>
             <div data-solar-event="sunset">
               <span>{translate(locale, 'prayerMaghrib')}</span>
-              <strong>{displayTime(data.solarEvents.sunsetLocalMinutes, locale, timeFormat)}</strong>
+              <strong>
+                {displayTime(data.solarEvents.sunsetLocalMinutes, locale, timeFormat)}
+              </strong>
             </div>
           </section>
 

@@ -291,7 +291,9 @@ async function validateScenario(browser, scenario) {
       throw new Error(`${scenario.name} board exceeds viewport: ${JSON.stringify(boardGeometry)}`);
     }
     if (boardGeometry.height < boardGeometry.viewportHeight * 0.9) {
-      throw new Error(`${scenario.name} board under-fills viewport: ${JSON.stringify(boardGeometry)}`);
+      throw new Error(
+        `${scenario.name} board under-fills viewport: ${JSON.stringify(boardGeometry)}`,
+      );
     }
 
     const splitGeometry = await page.evaluate(() => {
@@ -334,7 +336,14 @@ async function validateScenario(browser, scenario) {
       animations: 'disabled',
     });
 
-    return { name: scenario.name, status: 'passed', boardGeometry, splitGeometry, columns, overflow };
+    return {
+      name: scenario.name,
+      status: 'passed',
+      boardGeometry,
+      splitGeometry,
+      columns,
+      overflow,
+    };
   } finally {
     await context.close();
   }

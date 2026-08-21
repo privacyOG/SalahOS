@@ -67,9 +67,9 @@ describe('SmartDisplay', () => {
     expect(smartDisplayTemplateRequested('?mode=smart-display&template=bold-countdown-focus')).toBe(
       'bold-countdown-focus',
     );
-    expect(smartDisplayTemplateRequested('?mode=smart-display&template=structured-split-board')).toBe(
-      'structured-split-board',
-    );
+    expect(
+      smartDisplayTemplateRequested('?mode=smart-display&template=structured-split-board'),
+    ).toBe('structured-split-board');
     expect(smartDisplayTemplateRequested('?template=scenic-spiritual')).toBe('heritage-classic');
   });
 
