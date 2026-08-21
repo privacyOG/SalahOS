@@ -22,7 +22,7 @@ const SYNC_INTERVAL_MS = 60_000;
 
 const copy = managedDisplayRuntimeCopy;
 
-type RemoteRuntimeState = 'connected' | 'syncing' | 'offline' | 'conflict' | 'revoked';
+type RemoteRuntimeState = 'connected' | 'syncing' | 'offline' | 'revoked';
 
 function readLocale(): Locale {
   try {
@@ -92,7 +92,7 @@ export function ManagedDisplayRemoteController() {
               seenAt: new Date().toISOString(),
             });
           }
-          setRuntimeState('conflict');
+          setRuntimeState('offline');
           return;
         }
 
