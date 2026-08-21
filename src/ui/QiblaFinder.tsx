@@ -27,7 +27,6 @@ import { loadPersistedSettings } from '../platform/settingsStorage';
 import { QiblaCompassDial } from './QiblaCompassDial';
 import { QiblaMapView } from './QiblaMapView';
 import { smartDisplayModeRequested } from './SmartDisplay';
-import '../qiblah-v2.css';
 
 type FinderView = 'compass' | 'map';
 type FinderLocationSource = 'saved' | 'live' | 'city' | 'pin';
@@ -110,7 +109,7 @@ export function QiblaFinder() {
       const settings = loadPersistedSettings(storage);
       setLocale(settings.locale);
       setSavedLocations(loadSavedLocations(storage));
-      if (settings.location !== null && location?.source === 'saved') {
+      if (settings.location !== null && location?.source === 'saved' && location.label === null) {
         setLocation({
           coordinates: settings.location.coordinates,
           source: 'saved',
@@ -122,7 +121,7 @@ export function QiblaFinder() {
     return () => {
       window.removeEventListener('focus', refreshSettings);
     };
-  }, [location?.source]);
+  }, [location?.label, location?.source]);
 
   useEffect(
     () => () => {
@@ -477,7 +476,9 @@ export function QiblaFinder() {
                       void useSavedLocation(savedLocation);
                     }}
                   >
-                    <strong>{savedLocation.label}</strong>
+                    <strong>
+                      <bdi>{savedLocation.label}</bdi>
+                    </strong>
                     <span dir="ltr">
                       {savedLocation.coordinates.latitude.toFixed(4)},{' '}
                       {savedLocation.coordinates.longitude.toFixed(4)}
