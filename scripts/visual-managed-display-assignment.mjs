@@ -14,7 +14,7 @@ if (!playwrightModule) {
 
 const { chromium } = await import(pathToFileURL(playwrightModule).href);
 const applicationOrigin = new URL(baseUrl).origin;
-const managedOrigin = baseUrl;
+const managedOrigin = applicationOrigin;
 const adminToken = 'a'.repeat(48);
 const deviceToken = 'd'.repeat(48);
 
@@ -202,7 +202,7 @@ async function validateAdminAssignment(browser) {
   });
   let publishedBody = null;
 
-  await page.route(`${managedOrigin}/v1/**`, async (route) => {
+  await page.route('**/v1/**', async (route) => {
     const request = route.request();
     if (request.method() === 'OPTIONS') {
       await fulfillPreflight(route);
@@ -323,7 +323,7 @@ async function validateManagedOfflineCache(browser) {
   const managedConfig = board('family-classroom', 'emerald', 'Managed Offline Masjid');
   let offline = false;
 
-  await page.route(`${managedOrigin}/v1/**`, async (route) => {
+  await page.route('**/v1/**', async (route) => {
     if (offline) {
       await route.abort('failed');
       return;
