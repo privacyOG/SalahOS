@@ -109,11 +109,7 @@ export function QiblaFinder() {
       const settings = loadPersistedSettings(storage);
       setLocale(settings.locale);
       setSavedLocations(loadSavedLocations(storage));
-      if (
-        settings.location !== null &&
-        location?.source === 'saved' &&
-        location.label === null
-      ) {
+      if (settings.location !== null && location?.source === 'saved' && location.label === null) {
         setLocation({
           coordinates: settings.location.coordinates,
           source: 'saved',
