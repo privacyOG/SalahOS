@@ -1,0 +1,228 @@
+name: Stage 22 Today Context Runner
+
+on:
+  push:
+    branches:
+      - stage-22/today-context-runner
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout target branch
+        uses: actions/checkout@v4
+        with:
+          ref: stage-22/today-contextual-states
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Wire Today contextual states and fixtures
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          today = Path('src/ui/TodayScreen.tsx')
+          text = today.read_text()
+          old = "import { useEffect, useMemo, useState } from 'react';\n\n"
+          new = "import { useEffect, useMemo, useState } from 'react';\n\nimport '../today-contextual-v2.css';\n\n"
+          assert old in text
+          text = text.replace(old, new, 1)
+
+          old = "import { BidiText } from './BidiText';\n"
+          new = "import { BidiText } from './BidiText';\nimport { TodayContextualSections } from './TodayContextualSections';\n"
+          assert old in text
+          text = text.replace(old, new, 1)
+
+          old = """            {unavailablePrayers.length > 0 && (
+              <p className=\"today-schedule__notice\" role=\"status\">
+                {translate(locale, 'somePrayerTimesUnavailable')}
+              </p>
+            )}
+"""
+          assert old in text
+          text = text.replace(old, '', 1)
+
+          old = """          <nav className=\"today-quick-actions\" aria-label={translate(locale, 'today')}>
+"""
+          new = """          <TodayContextualSections
+            settings={settings}
+            dashboard={sourcedDashboard}
+            unavailablePrayers={unavailablePrayers}
+            online={online}
+            now={now}
+            communityHref={destinationHref('community')}
+            mosquesHref={destinationHref('mosques')}
+          />
+
+          <nav className=\"today-quick-actions\" aria-label={translate(locale, 'today')}>
+"""
+          assert old in text
+          text = text.replace(old, new, 1)
+          today.write_text(text)
+
+          contextual = Path('src/ui/TodayContextualSections.tsx')
+          text = contextual.read_text()
+          old = """  const formatTime = (localMinutes: number | null) =>
+    localMinutes === null
+      ? '—'
+      : formatLocalTime(localMinutes, locale, props.settings.timeFormat);
+
+  return (
+"""
+          new = """  const formatTime = (localMinutes: number | null) =>
+    localMinutes === null
+      ? '—'
+      : formatLocalTime(localMinutes, locale, props.settings.timeFormat);
+
+  if (
+    managedCopy === null &&
+    !model.astronomicalUnavailable &&
+    model.seasonal === null &&
+    model.community === null
+  ) {
+    return null;
+  }
+
+  return (
+"""
+          assert old in text
+          contextual.write_text(text.replace(old, new, 1))
+
+          visual = Path('scripts/visual-regression.mjs')
+          text = visual.read_text()
+          old = "const stage22FixedNow = Date.parse('2026-08-21T03:00:00.000Z');\n"
+          new = old + "const ramadanFixedNow = Date.parse('2026-03-01T03:00:00.000Z');\n"
+          assert old in text
+          text = text.replace(old, new, 1)
+
+          old = "function settingsFor(locale, theme, stage22Seed = false) {"
+          new = "function settingsFor(locale, theme, stage22Seed = false, mosqueDate = '2026-08-21') {"
+          assert old in text
+          text = text.replace(old, new, 1)
+
+          old = "              date: '2026-08-21',"
+          assert old in text
+          text = text.replace(old, '              date: mosqueDate,', 1)
+
+          old = """              jumuahSessions: [
+                { label: 'Jumu‘ah 1', khutbahLocalMinutes: 780, salahLocalMinutes: 800 },
+                { label: 'Jumu‘ah 2', khutbahLocalMinutes: 840, salahLocalMinutes: 860 },
+              ],
+"""
+          new = old + """              taraweehSessions: [
+                { label: 'Taraweeh', startLocalMinutes: 1230 },
+              ],
+"""
+          assert old in text
+          text = text.replace(old, new, 1)
+
+          marker = """  {
+    name: 'phone-mosques-en-light',
+"""
+          scenarios = """  {
+    name: 'phone-today-community-en-light',
+    width: 390,
+    height: 844,
+    locale: 'en',
+    theme: 'light',
+    url: '?view=today',
+    readySelector: '.today-community-preview',
+    stage22Seed: true,
+    frozenNow: stage22FixedNow,
+    visibleSelectors: ['.today-community-preview'],
+    hiddenSelectors: ['.today-seasonal'],
+  },
+  {
+    name: 'tablet-today-stale-ar-dark',
+    width: 1024,
+    height: 1366,
+    locale: 'ar',
+    theme: 'dark',
+    url: '?view=today',
+    readySelector: \".today-context-state[data-state='stale-timetable']\",
+    stage22Seed: true,
+    frozenNow: stage22FixedNow,
+    mosqueDate: '2026-08-20',
+    visibleSelectors: [\".today-context-state[data-state='stale-timetable']\"],
+  },
+  {
+    name: 'phone-today-ramadan-en-dark',
+    width: 390,
+    height: 844,
+    locale: 'en',
+    theme: 'dark',
+    url: '?view=today',
+    readySelector: '.today-seasonal',
+    stage22Seed: true,
+    frozenNow: ramadanFixedNow,
+    mosqueDate: '2026-03-01',
+    communitySeed: false,
+    visibleSelectors: ['.today-seasonal', '.today-seasonal__taraweeh'],
+  },
+"""
+          assert marker in text
+          text = text.replace(marker, scenarios + marker, 1)
+
+          old = """        settingsFor(scenario.locale, scenario.theme, scenario.stage22Seed === true),
+"""
+          new = """        settingsFor(
+          scenario.locale,
+          scenario.theme,
+          scenario.stage22Seed === true,
+          scenario.mosqueDate ?? '2026-08-21',
+        ),
+"""
+          assert old in text
+          text = text.replace(old, new, 1)
+
+          old = """      serializedCommunityLibrary:
+        scenario.stage22Seed === true ? JSON.stringify(stage22CommunityLibrary) : null,
+"""
+          new = """      serializedCommunityLibrary:
+        scenario.stage22Seed === true && scenario.communitySeed !== false
+          ? JSON.stringify(stage22CommunityLibrary)
+          : null,
+"""
+          assert old in text
+          text = text.replace(old, new, 1)
+          visual.write_text(text)
+          PY
+
+          npx prettier --write \
+            src/ui/TodayScreen.tsx \
+            src/ui/TodayContextualSections.tsx \
+            src/ui/TodayContextualV2.test.ts \
+            src/i18n/todayContextV2Translations.ts \
+            src/today-contextual-v2.css \
+            scripts/visual-regression.mjs
+          npm run format:check
+          npm run lint
+          npm run test -- --run src/ui/TodayContextualV2.test.ts
+
+      - name: Commit target changes
+        run: |
+          printf '%s\n' 'Stage 22.3 Today contextual wiring applied and formatted.' > .stage22-today-context-ready
+          git config user.name 'privacyOG'
+          git config user.email 'kriptiik@proton.me'
+          git add -- \
+            .stage22-today-context-ready \
+            src/ui/TodayScreen.tsx \
+            src/ui/TodayContextualSections.tsx \
+            src/ui/TodayContextualV2.test.ts \
+            src/i18n/todayContextV2Translations.ts \
+            src/today-contextual-v2.css \
+            scripts/visual-regression.mjs
+          git diff --cached --check
+          git commit -m 'Complete Today contextual state wiring'
+          git push origin HEAD:stage-22/today-contextual-states
