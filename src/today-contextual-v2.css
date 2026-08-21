@@ -4,6 +4,11 @@
   margin-block-start: var(--salah-space-5);
 }
 
+.today-contextual:empty {
+  display: none;
+  margin: 0;
+}
+
 .today-context-states {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
