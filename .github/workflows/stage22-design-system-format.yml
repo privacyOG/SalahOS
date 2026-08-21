@@ -1,0 +1,48 @@
+name: Stage 22 Design System formatter
+
+on:
+  push:
+    branches:
+      - stage-22/design-system-format-helper
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - name: Checkout target branch
+        uses: actions/checkout@v4
+        with:
+          ref: stage-22/design-system-v2-completion
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies from lockfile
+        run: npm ci --ignore-scripts
+
+      - name: Format Design System React files
+        run: npx prettier --write src/ui/DesignSurface.tsx src/ui/DesignSurface.test.tsx
+
+      - name: Commit formatting only when needed
+        run: |
+          git diff --check -- src/ui/DesignSurface.tsx src/ui/DesignSurface.test.tsx
+          git config user.name 'privacyOG'
+          git config user.email 'kriptiik@proton.me'
+          git add -- src/ui/DesignSurface.tsx src/ui/DesignSurface.test.tsx
+          if git diff --cached --quiet; then
+            echo 'No formatting changes required.'
+            exit 0
+          fi
+          test "$(git diff --cached --name-only | wc -l)" -eq 2
+          git diff --cached --name-only | grep -Fx 'src/ui/DesignSurface.tsx'
+          git diff --cached --name-only | grep -Fx 'src/ui/DesignSurface.test.tsx'
+          git commit -m 'Format Design System v2 components'
+          git push origin HEAD:stage-22/design-system-v2-completion
