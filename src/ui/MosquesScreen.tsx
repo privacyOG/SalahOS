@@ -79,6 +79,27 @@ const facilityLabels: Readonly<Record<Locale, Readonly<Record<MosqueFacility, st
   },
 };
 
+const timetableFreshnessLabels: Readonly<
+  Record<Locale, Readonly<{ current: string; missing: string }>>
+> = {
+  en: {
+    current: 'Today’s timetable row is available on this device.',
+    missing: 'The linked timetable has no row for today; mosque start and Iqamah times are unavailable.',
+  },
+  ar: {
+    current: 'صف جدول اليوم متاح على هذا الجهاز.',
+    missing: 'الجدول المرتبط لا يحتوي على صف لليوم؛ أوقات بدء الصلاة والإقامة للمسجد غير متاحة.',
+  },
+  tr: {
+    current: 'Bugünün takvim satırı bu cihazda mevcut.',
+    missing: 'Bağlı takvimde bugün için satır yok; cami başlangıç ve kamet saatleri kullanılamıyor.',
+  },
+  id: {
+    current: 'Baris jadwal hari ini tersedia di perangkat ini.',
+    missing: 'Jadwal tertaut tidak memiliki baris untuk hari ini; waktu mulai dan iqamah masjid tidak tersedia.',
+  },
+};
+
 function readSettings(): PersistedSettings {
   try {
     return loadPersistedSettings(getApplicationStorage());
@@ -256,6 +277,10 @@ export function MosquesScreen() {
       mosqueTimetable: linkedTimetable ? settings.mosqueTimetable : null,
     });
   }, [dashboardResult, linkedTimetable, settings.mosqueTimetable, sourceMode]);
+  const timetableHasToday =
+    linkedTimetable && dashboardResult?.ok === true && settings.mosqueTimetable !== null
+      ? settings.mosqueTimetable.days.some((day) => day.date === dashboardResult.dashboard.today.date)
+      : false;
 
   const profileCommunity = useMemo(
     () =>
@@ -435,7 +460,11 @@ export function MosquesScreen() {
           <div className="mosque-profile-v2__prayer-context">
             <div className="mosque-profile-next">
               <span>{text.nextPrayer}</span>
-              <strong>{nextPrayer === null ? text.unavailable : translate(locale, prayerTranslationKeys[nextPrayer])}</strong>
+              <strong>
+                {nextPrayer === null
+                  ? text.unavailable
+                  : translate(locale, prayerTranslationKeys[nextPrayer])}
+              </strong>
               <bdi>
                 {nextPrayerTime === null
                   ? '—'
@@ -446,7 +475,18 @@ export function MosquesScreen() {
             </div>
             <div className="mosque-profile-source">
               <span>{text.source}</span>
-              <strong>{linkedTimetable && sourceMode === 'local-mosque' ? text.localTimetableSource : text.calculatedSource}</strong>
+              <strong>
+                {linkedTimetable && sourceMode === 'local-mosque'
+                  ? text.localTimetableSource
+                  : text.calculatedSource}
+              </strong>
+              {linkedTimetable && sourceMode === 'local-mosque' && (
+                <small>
+                  {timetableHasToday
+                    ? timetableFreshnessLabels[locale].current
+                    : timetableFreshnessLabels[locale].missing}
+                </small>
+              )}
               {!linkedTimetable && settings.prayerSourceMode === 'local-mosque' && (
                 <small>{text.localTimetableNotLinked}</small>
               )}
@@ -491,7 +531,9 @@ export function MosquesScreen() {
                   {sourcedDashboard.jumuahSessions.map((session) => (
                     <li key={`${session.label}:${String(session.salahLocalMinutes)}`}>
                       <strong>{session.label}</strong>
-                      <span>{formatLocalTime(session.salahLocalMinutes, locale, settings.timeFormat)}</span>
+                      <span>
+                        {formatLocalTime(session.salahLocalMinutes, locale, settings.timeFormat)}
+                      </span>
                     </li>
                   ))}
                 </ul>
@@ -546,12 +588,16 @@ export function MosquesScreen() {
                   <dd>
                     {viewedProfile.facilities.length === 0
                       ? text.noFacilities
-                      : viewedProfile.facilities.map((facility) => facilityLabels[locale][facility]).join(', ')}
+                      : viewedProfile.facilities
+                          .map((facility) => facilityLabels[locale][facility])
+                          .join(', ')}
                   </dd>
                 </div>
                 <div>
                   <dt>{text.contact}</dt>
-                  <dd>{viewedProfile.contact.email ?? viewedProfile.contact.phone ?? text.noContact}</dd>
+                  <dd>
+                    {viewedProfile.contact.email ?? viewedProfile.contact.phone ?? text.noContact}
+                  </dd>
                 </div>
               </dl>
               {viewedProfile.contact.links.length > 0 && (
