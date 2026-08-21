@@ -217,7 +217,10 @@ export function FamilyClassroomPrayerBoard({
       </header>
 
       <div className="family-classroom-board__content">
-        <section className="family-classroom-board__focus" aria-label={translate(locale, 'nextPrayer')}>
+        <section
+          className="family-classroom-board__focus"
+          aria-label={translate(locale, 'nextPrayer')}
+        >
           <div className="family-classroom-board__clock">
             <div className="family-classroom-board__eyebrow">
               <LearningIcon kind="clock" />
@@ -236,7 +239,13 @@ export function FamilyClassroomPrayerBoard({
               <div>
                 <LearningIcon kind="start" />
                 <span>{translate(locale, 'prayerStart')}</span>
-                <strong>{displayTime(data.nextPrayer?.startLocalMinutes ?? null, locale, timeFormat)}</strong>
+                <strong>
+                  {displayTime(
+                    data.nextPrayer?.startLocalMinutes ?? null,
+                    locale,
+                    timeFormat,
+                  )}
+                </strong>
               </div>
               <div>
                 <LearningIcon kind="iqamah" />
@@ -253,24 +262,41 @@ export function FamilyClassroomPrayerBoard({
           <div className="family-classroom-board__countdown">
             <span>{translate(locale, 'countdown')}</span>
             <strong>
-              {data.nextPrayer === null ? '—' : formatCountdown(data.nextPrayer.secondsUntil, locale)}
+              {data.nextPrayer === null
+                ? '—'
+                : formatCountdown(data.nextPrayer.secondsUntil, locale)}
             </strong>
           </div>
 
           {educationalHintsEnabled && (
             <aside className="family-classroom-board__learning" aria-label={copy.learningTitle}>
               <strong>{copy.learningTitle}</strong>
-              <p><LearningIcon kind="start" />{copy.startHint}</p>
-              <p><LearningIcon kind="iqamah" />{copy.iqamahHint}</p>
+              <p>
+                <LearningIcon kind="start" />
+                {copy.startHint}
+              </p>
+              <p>
+                <LearningIcon kind="iqamah" />
+                {copy.iqamahHint}
+              </p>
             </aside>
           )}
         </section>
 
-        <section className="family-classroom-board__schedule" aria-label={translate(locale, 'dailyPrayers')}>
+        <section
+          className="family-classroom-board__schedule"
+          aria-label={translate(locale, 'dailyPrayers')}
+        >
           <div className="family-classroom-board__schedule-head" aria-hidden="true">
             <span>{translate(locale, 'dailyPrayers')}</span>
-            <span className="family-classroom-board__column-label"><LearningIcon kind="start" />{translate(locale, 'prayerStart')}</span>
-            <span className="family-classroom-board__column-label"><LearningIcon kind="iqamah" />{translate(locale, 'iqamah')}</span>
+            <span className="family-classroom-board__column-label">
+              <LearningIcon kind="start" />
+              {translate(locale, 'prayerStart')}
+            </span>
+            <span className="family-classroom-board__column-label">
+              <LearningIcon kind="iqamah" />
+              {translate(locale, 'iqamah')}
+            </span>
           </div>
 
           <div className="family-classroom-board__prayers">
@@ -287,7 +313,9 @@ export function FamilyClassroomPrayerBoard({
                   key={prayer.name}
                 >
                   <div className="family-classroom-prayer-row__name">
-                    <span className="family-classroom-prayer-row__number" aria-hidden="true">{index + 1}</span>
+                    <span className="family-classroom-prayer-row__number" aria-hidden="true">
+                      {index + 1}
+                    </span>
                     <div>
                       <strong>{translate(locale, prayerTranslationKeys[prayer.name])}</strong>
                       {stateLabel !== null && <span>{stateLabel}</span>}
@@ -308,7 +336,10 @@ export function FamilyClassroomPrayerBoard({
 
           <div className="family-classroom-board__adjuncts">
             {daylightCuesEnabled && (
-              <section className="family-classroom-board__daylight" aria-label={copy.daylightTitle}>
+              <section
+                className="family-classroom-board__daylight"
+                aria-label={copy.daylightTitle}
+              >
                 <div className="family-classroom-board__daylight-heading">
                   <strong>{copy.daylightTitle}</strong>
                 </div>
@@ -316,13 +347,17 @@ export function FamilyClassroomPrayerBoard({
                   <div>
                     <LearningIcon kind="sunrise" />
                     <span>{translate(locale, 'prayerSunrise')}</span>
-                    <strong>{displayTime(data.solarEvents.sunriseLocalMinutes, locale, timeFormat)}</strong>
+                    <strong>
+                      {displayTime(data.solarEvents.sunriseLocalMinutes, locale, timeFormat)}
+                    </strong>
                     {educationalHintsEnabled && <small>{copy.sunriseHint}</small>}
                   </div>
                   <div data-solar-event="sunset">
                     <LearningIcon kind="sunset" />
                     <span>{translate(locale, 'prayerMaghrib')}</span>
-                    <strong>{displayTime(data.solarEvents.sunsetLocalMinutes, locale, timeFormat)}</strong>
+                    <strong>
+                      {displayTime(data.solarEvents.sunsetLocalMinutes, locale, timeFormat)}
+                    </strong>
                     {educationalHintsEnabled && <small>{copy.sunsetHint}</small>}
                   </div>
                 </div>
@@ -336,8 +371,14 @@ export function FamilyClassroomPrayerBoard({
                   {data.jumuahSessions.map((session) => (
                     <article key={session.label}>
                       <BidiText>{session.label}</BidiText>
-                      <span>{translate(locale, 'khutbah')} · {formatLocalTime(session.khutbahLocalMinutes, locale, timeFormat)}</span>
-                      <span>{translate(locale, 'salah')} · {formatLocalTime(session.salahLocalMinutes, locale, timeFormat)}</span>
+                      <span>
+                        {translate(locale, 'khutbah')} ·{' '}
+                        {formatLocalTime(session.khutbahLocalMinutes, locale, timeFormat)}
+                      </span>
+                      <span>
+                        {translate(locale, 'salah')} ·{' '}
+                        {formatLocalTime(session.salahLocalMinutes, locale, timeFormat)}
+                      </span>
                     </article>
                   ))}
                 </div>
@@ -349,7 +390,9 @@ export function FamilyClassroomPrayerBoard({
 
       <footer className="family-classroom-board__footer">
         <span>{translate(locale, sourceTranslationKeys[data.sourceMode])}</span>
-        <span>{translate(locale, 'timezone')}: <BidiText>{data.timeZone}</BidiText></span>
+        <span>
+          {translate(locale, 'timezone')}: <BidiText>{data.timeZone}</BidiText>
+        </span>
       </footer>
     </div>
   );
