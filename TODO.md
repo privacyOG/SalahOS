@@ -798,10 +798,11 @@
 - [x] Replace the legacy Today composition with a dedicated prayer-first Today screen
 - [x] Provide five-item phone navigation, compact tablet navigation and readable desktop navigation with RTL support
 - [~] Replace the legacy Settings monolith with category-based progressive disclosure
-- [ ] Complete dedicated Qiblah, Mosques and Community experience refinements
-- [ ] Complete Design System v2 consolidation and retire overlapping global layout rules
+- [x] Complete dedicated Qiblah experience refinement (Stage 22.4)
+- [ ] Complete Mosques and Community experience refinements (Stage 22.5)
+- [~] Complete Design System v2 consolidation and retire overlapping global layout rules
 
-**Stage 22 progress note (2026-08-21):** PR #165 established explicit product surfaces, reloadable congregation destinations and the managed administration shell. PR #166 replaced the legacy Today composition with the dedicated prayer-first Today experience and corrected phone/tablet/desktop/RTL navigation. Its exact final head `f17437139e96bcc097a893f430102dec75560f72` passed Quality Gate #1502, Android Build #507, Visual Regression #352 and iOS Build #417, including fresh iPhone/iPad Simulator install-launch-relaunch acceptance. The Visual #352 artifact also received human review for phone, tablet, 1080p and Arabic/RTL composition before merge. Stage 22 remains partial because Settings extraction, Design System consolidation and destination-specific Qiblah/Mosques/Community refinement are still in progress.
+**Stage 22 progress note (2026-08-21):** PR #165 established explicit product surfaces, reloadable congregation destinations and the managed administration shell. PR #166 replaced the legacy Today composition with the dedicated prayer-first Today experience and corrected phone/tablet/desktop/RTL navigation. PR #167 introduced reloadable category-based Settings navigation while retaining some progressively scoped legacy workflows for later extraction. PR #168 consolidated global design-system ownership, retired overlapping shell/theme rules and added ownership enforcement while the remaining detailed Design System v2 primitives stay open. PR #169 completes the dedicated Stage 22.4 Qiblah refinement with a dominant compass/bearing hierarchy, subordinate sensor and calibration detail, secondary saved/offline/manual location workflows, preserved local/offline bearing calculation and opt-in map networking, plus independent portrait-phone, landscape-phone, tablet/RTL and desktop visual-regression coverage. Qiblah screenshots for those four layouts received human review during PR #169. Stage 22 remains partial because Stage 22.5 Mosques/Community refinement, remaining Settings extraction, remaining Design System v2 primitives and the remaining Today contextual/data-state work are still open.
 
 ---
 
