@@ -51,21 +51,6 @@ jobs:
       - name: Design-system ownership policy
         run: npm run ui:design-system-ownership
 
-      - name: Stage 22.3 formatter diagnostic
-        run: |
-          npx prettier --write \
-            src/i18n/todayContextV2Translations.ts \
-            src/ui/TodayContextualSections.tsx \
-            src/ui/TodayContextualV2.test.ts >/dev/null
-          git diff -- \
-            src/i18n/todayContextV2Translations.ts \
-            src/ui/TodayContextualSections.tsx \
-            src/ui/TodayContextualV2.test.ts
-          git checkout -- \
-            src/i18n/todayContextV2Translations.ts \
-            src/ui/TodayContextualSections.tsx \
-            src/ui/TodayContextualV2.test.ts
-
       - name: Format check
         run: npm run format:check
 
