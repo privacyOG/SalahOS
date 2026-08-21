@@ -41,6 +41,7 @@ import './taraweeh-panel.css';
 import './community-updates-panel.css';
 import './mosque-profiles-panel.css';
 import './qibla-compass.css';
+import './qiblah-v2.css';
 
 function CongregationRoute({ destination }: Readonly<{ destination: CongregationDestination }>) {
   switch (destination) {
