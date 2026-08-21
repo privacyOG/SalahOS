@@ -66,7 +66,8 @@ interface CommunityV2Copy {
 export const mosquesV2Copy = {
   en: {
     title: 'Mosques',
-    subtitle: 'Followed mosque profiles, today’s prayer context and private on-device nearby sorting.',
+    subtitle:
+      'Followed mosque profiles, today’s prayer context and private on-device nearby sorting.',
     followed: 'Followed',
     nearby: 'Nearby',
     search: 'Search followed mosques',
@@ -107,7 +108,8 @@ export const mosquesV2Copy = {
   },
   ar: {
     title: 'المساجد',
-    subtitle: 'ملفات المساجد المتابَعة وسياق صلاة اليوم وترتيب القرب محلياً مع الحفاظ على الخصوصية.',
+    subtitle:
+      'ملفات المساجد المتابَعة وسياق صلاة اليوم وترتيب القرب محلياً مع الحفاظ على الخصوصية.',
     followed: 'المتابَعة',
     nearby: 'القريبة',
     search: 'البحث في المساجد المتابَعة',
@@ -148,7 +150,8 @@ export const mosquesV2Copy = {
   },
   tr: {
     title: 'Camiler',
-    subtitle: 'Takip edilen cami profilleri, bugünün namaz bağlamı ve cihaz üzerinde özel yakınlık sıralaması.',
+    subtitle:
+      'Takip edilen cami profilleri, bugünün namaz bağlamı ve cihaz üzerinde özel yakınlık sıralaması.',
     followed: 'Takip edilen',
     nearby: 'Yakındaki',
     search: 'Takip edilen camilerde ara',
@@ -189,7 +192,8 @@ export const mosquesV2Copy = {
   },
   id: {
     title: 'Masjid',
-    subtitle: 'Profil masjid yang diikuti, konteks salat hari ini, dan pengurutan terdekat secara privat di perangkat.',
+    subtitle:
+      'Profil masjid yang diikuti, konteks salat hari ini, dan pengurutan terdekat secara privat di perangkat.',
     followed: 'Diikuti',
     nearby: 'Terdekat',
     search: 'Cari masjid yang diikuti',
@@ -233,7 +237,8 @@ export const mosquesV2Copy = {
 export const communityV2Copy = {
   en: {
     title: 'Community',
-    subtitle: 'Published mosque announcements and upcoming events, separated from administration tools.',
+    subtitle:
+      'Published mosque announcements and upcoming events, separated from administration tools.',
     announcements: 'Announcements',
     events: 'Events',
     emptyAnnouncements: 'No published announcements are available for the selected mosque.',
@@ -290,7 +295,8 @@ export const communityV2Copy = {
   },
   id: {
     title: 'Komunitas',
-    subtitle: 'Pengumuman masjid yang diterbitkan dan acara mendatang, terpisah dari alat administrasi.',
+    subtitle:
+      'Pengumuman masjid yang diterbitkan dan acara mendatang, terpisah dari alat administrasi.',
     announcements: 'Pengumuman',
     events: 'Acara',
     emptyAnnouncements: 'Tidak ada pengumuman terbit untuk masjid yang dipilih.',
