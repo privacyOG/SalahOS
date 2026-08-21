@@ -27,56 +27,49 @@ jobs:
       - name: Install dependencies
         run: npm ci --ignore-scripts
 
-      - name: Remove stale mosque import guidance
+      - name: Reconcile Stage 22.6 trackers
         run: |
           python3 - <<'PY'
           from pathlib import Path
 
-          visual = Path('scripts/visual-regression.mjs')
-          text = visual.read_text()
-          old = """      '.notification-fieldset',
-                '.settings-transfer',
-              ],
-            },
-            {
-              name: 'tablet-settings-advanced-ar-dark',
+          plan = Path('docs/UI_UX_V2_PLAN.md')
+          text = plan.read_text()
+          old = """- [ ] Move manual mosque timetable authoring/import into appropriate administration/advanced workflows instead of presenting it as normal daily-use configuration.
+          - [ ] Use explanatory copy only where needed; do not turn settings into dense documentation pages.
           """
-          new = """      '.notification-fieldset',
-                '.settings-transfer',
-                \".settings-screen__legacy[data-settings-category='mosque'] .settings-panel > .inline-message\",
-              ],
-            },
-            {
-              name: 'tablet-settings-advanced-ar-dark',
-          """
-          assert old in text
-          visual.write_text(text.replace(old, new, 1))
+          new = """- [x] Move manual mosque timetable authoring/import into appropriate administration/advanced workflows instead of presenting it as normal daily-use configuration.
+          - [x] Use explanatory copy only where needed; do not turn settings into dense documentation pages.
 
-          styles = Path('src/settings-screen.css')
-          text = styles.read_text()
-          old = """.settings-screen__legacy[data-settings-category='mosque'] .settings-transfer,
-          .settings-screen__legacy[data-settings-category='mosque'] .manual-mosque-fieldset,
+          **Stage 22.6 verification note (2026-08-21):** PR #171 code-bearing head `eba6340cfe22a21f7f112921156c6620a40cf1ac` passed Quality Gate `32440308947`, Android Build `32440308898`, Visual Regression `32440309003` and iOS Build `32440308865`, including fresh iPhone and iPad Simulator install, launch and relaunch acceptance. Settings retains eight reloadable categories while ordinary Mosque & Iqamah is limited to timetable selection/use plus existing seasonal configuration; manual timetable day authoring, CSV/JSON timetable import and prayer offsets are progressively disclosed under Advanced. Notifications & Adhan and Data & Privacy retain ownership of their focused controls, duplicated Display Themes explanatory text and stale mosque-import guidance were removed, and the exact visual run passed all 28 scenarios without horizontal-overflow offenders. English phone Mosque settings and Arabic/RTL tablet Advanced settings also received human visual review. Full retirement of the scoped legacy configuration core remains a Stage 27 migration task rather than a Stage 22.6 completion requirement.
           """
-          new = """.settings-screen__legacy[data-settings-category='mosque'] .settings-transfer,
-          .settings-screen__legacy[data-settings-category='mosque'] .settings-panel > .inline-message,
-          .settings-screen__legacy[data-settings-category='mosque'] .manual-mosque-fieldset,
-          """
-          assert old in text
-          styles.write_text(text.replace(old, new, 1))
+          assert old in text, 'Stage 22.6 open tracker bullets changed unexpectedly'
+          plan.write_text(text.replace(old, new, 1))
+
+          todo = Path('TODO.md')
+          text = todo.read_text()
+          old = '- [~] Replace the legacy Settings monolith with category-based progressive disclosure'
+          new = '- [x] Replace the legacy Settings monolith with category-based progressive disclosure'
+          assert old in text, 'Root Settings tracker changed unexpectedly'
+          text = text.replace(old, new, 1)
+
+          old = 'Stage 22 remains partial because remaining Settings extraction, remaining Design System v2 primitives and the remaining Today contextual/data-state work are still open.'
+          new = 'PR #171 completed Stage 22.6 by preserving the eight reloadable Settings categories, moving manual mosque timetable authoring/import and prayer offsets into Advanced, keeping ordinary Mosque & Iqamah focused on timetable selection/use, preserving focused Notifications & Adhan and Data & Privacy ownership, and removing duplicated or stale explanatory copy. PR #171 code-bearing head `eba6340cfe22a21f7f112921156c6620a40cf1ac` passed Quality Gate `32440308947`, Android Build `32440308898`, Visual Regression `32440309003` and iOS Build `32440308865`; all 28 visual scenarios passed without horizontal-overflow offenders and English-phone Mosque plus Arabic/RTL-tablet Advanced screenshots received human review. Stage 22 remains partial because remaining Design System v2 primitives and the remaining Today contextual/data-state work are still open.'
+          assert old in text, 'Stage 22 progress-note boundary changed unexpectedly'
+          todo.write_text(text.replace(old, new, 1))
           PY
 
-          npx prettier --write scripts/visual-regression.mjs src/settings-screen.css
+          npx prettier --write TODO.md docs/UI_UX_V2_PLAN.md
           npm run format:check
 
       - name: Commit target changes
         run: |
-          printf '%s\n' 'Stage 22.6 human-review cleanup applied and formatted.' > .stage22-settings-fix-ready
+          printf '%s\n' 'Stage 22.6 trackers reconciled and formatted.' > .stage22-settings-fix-ready
           git config user.name 'privacyOG'
           git config user.email 'kriptiik@proton.me'
           git add -- \
             .stage22-settings-fix-ready \
-            scripts/visual-regression.mjs \
-            src/settings-screen.css
+            TODO.md \
+            docs/UI_UX_V2_PLAN.md
           git diff --cached --check
-          git commit -m 'Hide stale mosque import guidance'
+          git commit -m 'Mark Stage 22.6 Settings complete'
           git push origin HEAD:stage-22/settings-v2-completion
