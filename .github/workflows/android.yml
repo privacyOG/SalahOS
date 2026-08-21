@@ -82,6 +82,8 @@ jobs:
           git config user.name 'privacyOG'
           git config user.email 'kriptiik@proton.me'
           git add -- TODO.md docs/UI_UX_V2_PLAN.md
-          test "$(git diff --cached --name-only | sort)" = $'TODO.md\ndocs/UI_UX_V2_PLAN.md'
+          test "$(git diff --cached --name-only | wc -l)" -eq 2
+          git diff --cached --name-only | grep -Fx 'TODO.md'
+          git diff --cached --name-only | grep -Fx 'docs/UI_UX_V2_PLAN.md'
           git commit -m 'Mark Stage 22.3 Today complete'
           git push origin HEAD:stage-22/today-contextual-states
