@@ -12,6 +12,7 @@ import type { Locale, TranslationKey } from '../i18n/translations';
 import { BidiText } from './BidiText';
 
 import '../minimal-modern.css';
+import '../minimal-modern-display.css';
 
 const prayerTranslationKeys: Readonly<Record<PrayerName, TranslationKey>> = {
   fajr: 'prayerFajr',
@@ -96,17 +97,18 @@ export function MinimalModernPrayerBoard({
             </strong>
           )}
         </div>
-        <div className="minimal-modern-board__dates">
-          <span>{formatGregorianCivilDate(civilDate, locale)}</span>
-          <span>{formatHijriCivilDate(civilDate, locale, data.hijri.correctionDays)}</span>
+        <div className="minimal-modern-board__masthead-meta">
+          <div className="minimal-modern-board__dates">
+            <span>{formatGregorianCivilDate(civilDate, locale)}</span>
+            <span>{formatHijriCivilDate(civilDate, locale, data.hijri.correctionDays)}</span>
+          </div>
+          {data.offline && (
+            <p className="smart-display-status minimal-modern-board__status" role="status">
+              {translate(locale, 'offline')}
+            </p>
+          )}
         </div>
       </header>
-
-      {data.offline && (
-        <p className="smart-display-status minimal-modern-board__status" role="status">
-          {translate(locale, 'offline')}
-        </p>
-      )}
 
       <section
         className="minimal-modern-board__hero"
