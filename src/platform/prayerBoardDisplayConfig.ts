@@ -5,7 +5,8 @@ import {
 import type { KeyValueStorage } from './settingsStorage';
 
 export const PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY = 'salahos.prayerBoardDisplayConfig';
-export const PRAYER_BOARD_DISPLAY_CONFIG_CHANGE_EVENT = 'salahos:prayer-board-display-config-change';
+export const PRAYER_BOARD_DISPLAY_CONFIG_CHANGE_EVENT =
+  'salahos:prayer-board-display-config-change';
 
 export function loadPrayerBoardDisplayConfig(
   storage: KeyValueStorage,
