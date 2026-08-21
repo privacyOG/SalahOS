@@ -1,0 +1,560 @@
+.family-classroom-board {
+  --family-bg: #10233a;
+  --family-panel: #f8fbff;
+  --family-panel-soft: #edf5fb;
+  --family-text: #13233a;
+  --family-muted: #526477;
+  --family-accent: #0f7d72;
+  --family-accent-strong: #0a5f57;
+  --family-warm: #d99045;
+  --family-blue: #4c78a8;
+  --family-line: rgb(19 35 58 / 14%);
+  --family-shadow: 0 22px 64px rgb(4 19 33 / 20%);
+
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: clamp(0.85rem, 1.25vw, 1.45rem);
+  width: 100%;
+  height: calc(100dvh - clamp(2rem, 5vw, 4.5rem));
+  min-height: calc(100vh - clamp(2rem, 5vw, 4.5rem));
+  padding: clamp(1.2rem, 1.7vw, 2.2rem);
+  overflow: hidden;
+  color: var(--family-text);
+  background:
+    radial-gradient(circle at 12% 14%, rgb(85 174 161 / 30%), transparent 28%),
+    radial-gradient(circle at 88% 18%, rgb(226 169 93 / 23%), transparent 26%),
+    linear-gradient(145deg, #17314d 0%, var(--family-bg) 54%, #0d1d30 100%);
+}
+
+.family-classroom-board::before {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  content: '';
+  opacity: 0.34;
+  pointer-events: none;
+  background-image:
+    linear-gradient(30deg, transparent 24%, rgb(255 255 255 / 4%) 25%, transparent 26%),
+    linear-gradient(150deg, transparent 24%, rgb(255 255 255 / 4%) 25%, transparent 26%);
+  background-size: 64px 64px;
+}
+
+.family-classroom-board[data-family-variant='emerald'] {
+  --family-bg: #10362f;
+  --family-accent: #08796c;
+  --family-accent-strong: #056258;
+  --family-blue: #3d7894;
+}
+
+.family-classroom-board[data-family-variant='midnight'] {
+  --family-bg: #111b34;
+  --family-accent: #426b9f;
+  --family-accent-strong: #2f527e;
+  --family-blue: #486ea0;
+}
+
+.family-classroom-board[data-family-variant='sandstone'] {
+  --family-bg: #3a2b22;
+  --family-accent: #8a684d;
+  --family-accent-strong: #684b36;
+  --family-warm: #bd7843;
+  --family-blue: #6f7a91;
+}
+
+.family-classroom-board__masthead,
+.family-classroom-board__content,
+.family-classroom-board__footer {
+  position: relative;
+  z-index: 1;
+}
+
+.family-classroom-board__masthead {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 1.4rem;
+  min-width: 0;
+  color: #fff;
+}
+
+.family-classroom-board__identity {
+  display: flex;
+  align-items: baseline;
+  gap: clamp(0.75rem, 1.15vw, 1.3rem);
+  min-width: 0;
+}
+
+.family-classroom-board__brand {
+  flex: 0 0 auto;
+  color: #d7f5ee;
+  font-size: clamp(1rem, 1.1vw, 1.4rem);
+  font-weight: 850;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.family-classroom-board__identity strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  font-size: clamp(1.5rem, 2vw, 2.65rem);
+  line-height: 1.08;
+}
+
+.family-classroom-board__dates {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  gap: 0.75rem 1rem;
+  color: rgb(255 255 255 / 82%);
+  font-size: clamp(0.9rem, 0.95vw, 1.16rem);
+  font-weight: 650;
+  text-align: end;
+}
+
+.family-classroom-board__status {
+  border: 1px solid rgb(255 255 255 / 28%);
+  border-radius: 999px;
+  padding: 0.3rem 0.7rem;
+  color: #fff;
+  background: rgb(0 0 0 / 20%);
+}
+
+.family-classroom-board__content {
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(36rem, 1.18fr);
+  gap: clamp(0.95rem, 1.3vw, 1.55rem);
+  min-width: 0;
+  min-height: 0;
+}
+
+.family-classroom-board__focus,
+.family-classroom-board__schedule {
+  min-width: 0;
+  min-height: 0;
+  border: 1px solid rgb(255 255 255 / 20%);
+  border-radius: clamp(1.25rem, 1.8vw, 2.1rem);
+  box-shadow: var(--family-shadow);
+  background: var(--family-panel);
+}
+
+.family-classroom-board__focus {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto auto;
+  gap: clamp(0.9rem, 1.55vh, 1.35rem);
+  padding: clamp(1.45rem, 2vw, 2.55rem);
+}
+
+.family-classroom-board__clock {
+  display: grid;
+  gap: 0.25rem;
+}
+
+.family-classroom-board__eyebrow,
+.family-classroom-board__column-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.family-classroom-board__eyebrow {
+  color: var(--family-muted);
+  font-size: clamp(0.92rem, 0.95vw, 1.14rem);
+  font-weight: 780;
+  letter-spacing: 0.04em;
+}
+
+.family-classroom-board__clock > strong {
+  color: var(--family-text);
+  font-size: clamp(4.5rem, 6.4vw, 8.2rem);
+  font-weight: 820;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.055em;
+  line-height: 0.95;
+  white-space: nowrap;
+}
+
+.family-classroom-board__next {
+  align-self: center;
+  display: grid;
+  gap: 0.6rem;
+  border-inline-start: clamp(0.35rem, 0.45vw, 0.58rem) solid var(--family-accent);
+  padding-inline-start: clamp(0.9rem, 1.3vw, 1.4rem);
+}
+
+.family-classroom-board__next-label {
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 0.55rem 0.9rem;
+  color: var(--family-muted);
+  font-size: clamp(0.95rem, 1vw, 1.2rem);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.family-classroom-board__next-label small {
+  border-radius: 999px;
+  padding: 0.22rem 0.6rem;
+  color: var(--family-accent-strong);
+  background: #dcefe9;
+  font-size: 0.82em;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.family-classroom-board__next > strong {
+  color: var(--family-accent-strong);
+  font-size: clamp(3.1rem, 4.8vw, 6rem);
+  line-height: 0.98;
+}
+
+.family-classroom-board__next-times {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.6rem;
+}
+
+.family-classroom-board__next-times > div {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.35rem 0.5rem;
+  border: 1px solid var(--family-line);
+  border-radius: 0.9rem;
+  padding: 0.65rem 0.75rem;
+  background: var(--family-panel-soft);
+}
+
+.family-classroom-board__next-times span {
+  min-width: 0;
+  color: var(--family-muted);
+  font-size: clamp(0.84rem, 0.86vw, 1rem);
+  font-weight: 720;
+}
+
+.family-classroom-board__next-times strong {
+  font-size: clamp(1.25rem, 1.35vw, 1.65rem);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.family-classroom-board__countdown {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  border-top: 1px solid var(--family-line);
+  padding-top: clamp(0.75rem, 1.1vh, 1rem);
+}
+
+.family-classroom-board__countdown span {
+  color: var(--family-muted);
+  font-size: clamp(0.9rem, 0.95vw, 1.12rem);
+  font-weight: 780;
+}
+
+.family-classroom-board__countdown strong {
+  color: var(--family-blue);
+  font-size: clamp(2.8rem, 4vw, 5rem);
+  font-weight: 840;
+  font-variant-numeric: tabular-nums;
+  line-height: 0.9;
+  white-space: nowrap;
+}
+
+.family-classroom-board__learning {
+  display: grid;
+  gap: 0.45rem;
+  border: 1px solid #c9ddd9;
+  border-radius: 1rem;
+  padding: 0.75rem 0.9rem;
+  background: #edf8f5;
+}
+
+.family-classroom-board__learning > strong {
+  color: var(--family-accent-strong);
+  font-size: clamp(0.9rem, 0.92vw, 1.08rem);
+}
+
+.family-classroom-board__learning p {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0;
+  color: var(--family-muted);
+  font-size: clamp(0.78rem, 0.8vw, 0.94rem);
+  line-height: 1.3;
+}
+
+.family-classroom-board__schedule {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  gap: clamp(0.75rem, 1.2vh, 1.05rem);
+  padding: clamp(1.25rem, 1.75vw, 2.1rem);
+}
+
+.family-classroom-board__schedule-head,
+.family-classroom-prayer-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1.24fr) minmax(7rem, 0.8fr) minmax(7rem, 0.86fr);
+  align-items: center;
+  gap: clamp(0.5rem, 0.8vw, 0.9rem);
+}
+
+.family-classroom-board__schedule-head {
+  border-bottom: 1px solid var(--family-line);
+  padding: 0 0.5rem clamp(0.55rem, 0.9vh, 0.75rem);
+  color: var(--family-muted);
+  font-size: clamp(0.78rem, 0.82vw, 0.95rem);
+  font-weight: 800;
+  letter-spacing: 0.055em;
+  text-transform: uppercase;
+}
+
+.family-classroom-board__schedule-head > span:not(:first-child) {
+  justify-content: center;
+  text-align: center;
+}
+
+.family-classroom-board__prayers {
+  display: grid;
+  grid-template-rows: repeat(5, minmax(0, 1fr));
+  gap: clamp(0.4rem, 0.62vh, 0.65rem);
+  min-height: 0;
+}
+
+.family-classroom-prayer-row {
+  position: relative;
+  border: 1px solid var(--family-line);
+  border-radius: clamp(0.8rem, 1vw, 1.05rem);
+  padding: clamp(0.55rem, 0.78vh, 0.82rem) clamp(0.62rem, 0.9vw, 0.95rem);
+  background: #fff;
+}
+
+.family-classroom-prayer-row:nth-child(odd) {
+  background: #f7fafc;
+}
+
+.family-classroom-prayer-row.is-current {
+  border-color: var(--family-accent);
+  box-shadow: inset 0.34rem 0 0 var(--family-accent);
+  background: #eaf7f3;
+}
+
+[dir='rtl'] .family-classroom-prayer-row.is-current {
+  box-shadow: inset -0.34rem 0 0 var(--family-accent);
+}
+
+.family-classroom-prayer-row.is-next {
+  border-color: var(--family-warm);
+  background: #fff6ec;
+}
+
+.family-classroom-prayer-row__name {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-width: 0;
+}
+
+.family-classroom-prayer-row__number {
+  display: grid;
+  place-items: center;
+  flex: 0 0 auto;
+  width: clamp(2rem, 2.1vw, 2.55rem);
+  height: clamp(2rem, 2.1vw, 2.55rem);
+  border-radius: 50%;
+  color: #fff;
+  background: var(--family-blue);
+  font-size: clamp(0.88rem, 0.9vw, 1.05rem);
+  font-weight: 850;
+}
+
+.family-classroom-prayer-row__name > div {
+  display: grid;
+  gap: 0.08rem;
+  min-width: 0;
+}
+
+.family-classroom-prayer-row__name strong {
+  overflow-wrap: anywhere;
+  font-size: clamp(1.28rem, 1.52vw, 1.9rem);
+  line-height: 1;
+}
+
+.family-classroom-prayer-row__name > div > span {
+  color: var(--family-accent-strong);
+  font-size: clamp(0.68rem, 0.7vw, 0.84rem);
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.family-classroom-prayer-row__time {
+  font-size: clamp(1.3rem, 1.5vw, 1.9rem);
+  font-weight: 820;
+  font-variant-numeric: tabular-nums;
+  text-align: center;
+  white-space: nowrap;
+}
+
+.family-classroom-prayer-row__start {
+  color: var(--family-blue);
+}
+
+.family-classroom-prayer-row__iqamah {
+  color: var(--family-accent-strong);
+}
+
+.family-classroom-board__adjuncts {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 0.75rem;
+  min-width: 0;
+}
+
+.family-classroom-board__daylight,
+.family-classroom-board__jumuah {
+  min-width: 0;
+  border-top: 1px solid var(--family-line);
+  padding-top: 0.7rem;
+}
+
+.family-classroom-board__daylight-heading,
+.family-classroom-board__jumuah > strong {
+  color: var(--family-muted);
+  font-size: clamp(0.72rem, 0.76vw, 0.9rem);
+  font-weight: 820;
+  letter-spacing: 0.045em;
+  text-transform: uppercase;
+}
+
+.family-classroom-board__daylight-items {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+  margin-top: 0.4rem;
+}
+
+.family-classroom-board__daylight-items > div {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.28rem 0.4rem;
+  border-radius: 0.75rem;
+  padding: 0.48rem 0.55rem;
+  background: var(--family-panel-soft);
+}
+
+.family-classroom-board__daylight-items span {
+  color: var(--family-muted);
+  font-size: clamp(0.76rem, 0.78vw, 0.92rem);
+  font-weight: 720;
+}
+
+.family-classroom-board__daylight-items strong {
+  font-size: clamp(1rem, 1.05vw, 1.25rem);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.family-classroom-board__daylight-items small {
+  grid-column: 1 / -1;
+  color: var(--family-muted);
+  font-size: clamp(0.68rem, 0.68vw, 0.8rem);
+  line-height: 1.25;
+}
+
+.family-classroom-board__jumuah > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin-top: 0.4rem;
+}
+
+.family-classroom-board__jumuah article {
+  display: grid;
+  gap: 0.1rem;
+  min-width: 0;
+  border-radius: 0.75rem;
+  padding: 0.46rem 0.6rem;
+  background: #fff5e8;
+}
+
+.family-classroom-board__jumuah article > :first-child {
+  color: #7f5631;
+  font-size: clamp(0.78rem, 0.8vw, 0.96rem);
+  font-weight: 820;
+}
+
+.family-classroom-board__jumuah article span {
+  color: var(--family-muted);
+  font-size: clamp(0.68rem, 0.7vw, 0.84rem);
+}
+
+.family-classroom-board__footer {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  color: rgb(255 255 255 / 74%);
+  font-size: clamp(0.78rem, 0.82vw, 0.96rem);
+}
+
+.family-classroom-icon {
+  flex: 0 0 auto;
+  width: 1.08em;
+  height: 1.08em;
+  fill: none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.8;
+}
+
+@media (max-width: 1500px) {
+  .family-classroom-board {
+    gap: 0.8rem;
+    padding: 1.05rem;
+  }
+
+  .family-classroom-board__content {
+    grid-template-columns: minmax(0, 0.78fr) minmax(31rem, 1.22fr);
+    gap: 0.8rem;
+  }
+
+  .family-classroom-board__focus,
+  .family-classroom-board__schedule {
+    padding: 1.05rem;
+  }
+
+  .family-classroom-board__clock > strong {
+    font-size: clamp(4rem, 6vw, 6.6rem);
+  }
+
+  .family-classroom-board__next > strong {
+    font-size: clamp(2.8rem, 4.4vw, 4.8rem);
+  }
+
+  .family-classroom-board__learning p,
+  .family-classroom-board__daylight-items small {
+    line-height: 1.2;
+  }
+}
+
+@media (max-aspect-ratio: 5 / 3) {
+  .family-classroom-board__content {
+    grid-template-columns: minmax(0, 0.9fr) minmax(30rem, 1.1fr);
+  }
+
+  .family-classroom-board__adjuncts {
+    grid-template-columns: 1fr;
+  }
+
+  .family-classroom-board__jumuah > div {
+    flex-wrap: nowrap;
+  }
+}

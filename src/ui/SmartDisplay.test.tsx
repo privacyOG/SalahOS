@@ -6,6 +6,8 @@ import type { MosqueTimetable } from '../domain/mosqueTimetable';
 import { applyPrayerSourceToDashboard } from '../domain/sourcedDashboard';
 import {
   SmartDisplay,
+  smartDisplayFamilyDaylightRequested,
+  smartDisplayFamilyHintsRequested,
   smartDisplayModeRequested,
   smartDisplayScenicArtworkRequested,
   smartDisplayTemplateRequested,
@@ -74,7 +76,10 @@ describe('SmartDisplay', () => {
     expect(smartDisplayTemplateRequested('?mode=smart-display&template=scenic-spiritual')).toBe(
       'scenic-spiritual',
     );
-    expect(smartDisplayTemplateRequested('?template=family-classroom')).toBe('heritage-classic');
+    expect(smartDisplayTemplateRequested('?mode=smart-display&template=family-classroom')).toBe(
+      'family-classroom',
+    );
+    expect(smartDisplayTemplateRequested('?template=unknown')).toBe('heritage-classic');
   });
 
   it('treats Scenic Spiritual artwork as enabled unless explicitly disabled', () => {
@@ -82,6 +87,15 @@ describe('SmartDisplay', () => {
     expect(smartDisplayScenicArtworkRequested('?artwork=on')).toBe(true);
     expect(smartDisplayScenicArtworkRequested('?artwork=off')).toBe(false);
     expect(smartDisplayScenicArtworkRequested('?mode=smart-display&artwork=off')).toBe(false);
+  });
+
+  it('keeps Family & Classroom teaching hints opt-in and daylight cues opt-out', () => {
+    expect(smartDisplayFamilyHintsRequested('')).toBe(false);
+    expect(smartDisplayFamilyHintsRequested('?hints=off')).toBe(false);
+    expect(smartDisplayFamilyHintsRequested('?hints=on')).toBe(true);
+    expect(smartDisplayFamilyDaylightRequested('')).toBe(true);
+    expect(smartDisplayFamilyDaylightRequested('?daylight=on')).toBe(true);
+    expect(smartDisplayFamilyDaylightRequested('?daylight=off')).toBe(false);
   });
 
   it('renders Heritage Classic from the shared prayer-board contract with Iqamah and state', () => {
@@ -228,6 +242,38 @@ describe('SmartDisplay', () => {
     expect(html).not.toContain('data-prayer-board-template="structured-split-board"');
   });
 
+  it('renders Family & Classroom with opt-in hints and optional daylight cues', () => {
+    const html = renderToStaticMarkup(
+      <SmartDisplay
+        locale="en"
+        currentClock="4:00:00 pm"
+        dashboard={fridayDashboard()}
+        timeFormat="h12"
+        hijriCorrectionDays={0}
+        offline={false}
+        systemTimeUnavailable={false}
+        calculationUnavailable={false}
+        templateId="family-classroom"
+        familyEducationalHintsEnabled
+        familyDaylightCuesEnabled={false}
+      />,
+    );
+
+    expect(html).toContain('data-display-template="family-classroom"');
+    expect(html).toContain('data-prayer-board-template="family-classroom"');
+    expect(html).toContain('data-educational-hints="on"');
+    expect(html).toContain('data-daylight-cues="off"');
+    expect(html.match(/data-prayer="(?:fajr|dhuhr|asr|maghrib|isha)"/g)).toHaveLength(5);
+    expect(html).toContain('Learn the prayer schedule');
+    expect(html).toContain('Central Mosque');
+    expect(html).toContain('First Jumuah');
+    expect(html).toContain('Iqamah');
+    expect(html).toContain('is-current');
+    expect(html).toContain('is-next');
+    expect(html).not.toContain('family-classroom-board__daylight');
+    expect(html).not.toContain('data-prayer-board-template="heritage-classic"');
+  });
+
   it('renders configured Friday Jumuah sessions from the shared prayer-board contract', () => {
     const html = renderToStaticMarkup(
       <SmartDisplay
@@ -269,6 +315,7 @@ describe('SmartDisplay', () => {
     expect(html).not.toContain('data-prayer-board-template="bold-countdown-focus"');
     expect(html).not.toContain('data-prayer-board-template="structured-split-board"');
     expect(html).not.toContain('data-prayer-board-template="scenic-spiritual"');
+    expect(html).not.toContain('data-prayer-board-template="family-classroom"');
   });
 
   it('preserves Arabic presentation and offline status', () => {
