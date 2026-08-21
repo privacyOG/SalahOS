@@ -334,12 +334,7 @@ function expectedDirection(locale) {
 
 async function seedApplication(page, scenario) {
   await page.addInitScript(
-    ({
-      serializedSettings,
-      serializedMosqueLibrary,
-      serializedCommunityLibrary,
-      frozenNow,
-    }) => {
+    ({ serializedSettings, serializedMosqueLibrary, serializedCommunityLibrary, frozenNow }) => {
       localStorage.setItem('salahos.settings', serializedSettings);
       if (serializedMosqueLibrary !== null) {
         localStorage.setItem('salahos.mosqueProfileLibrary', serializedMosqueLibrary);
