@@ -2,7 +2,10 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 const todaySource = readFileSync(new URL('./TodayScreen.tsx', import.meta.url), 'utf8');
-const contextualSource = readFileSync(new URL('./TodayContextualSections.tsx', import.meta.url), 'utf8');
+const contextualSource = readFileSync(
+  new URL('./TodayContextualSections.tsx', import.meta.url),
+  'utf8',
+);
 
 describe('Stage 22.3 Today contextual experience', () => {
   it('keeps the prayer-first Today screen authoritative and composes context beneath it', () => {
