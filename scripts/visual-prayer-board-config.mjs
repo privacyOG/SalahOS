@@ -40,7 +40,6 @@ async function seed(page, locale) {
   await page.addInitScript(
     ({ serializedSettings }) => {
       localStorage.setItem('salahos.settings', serializedSettings);
-      localStorage.removeItem('salahos.prayerBoardDisplayConfig');
     },
     { serializedSettings: JSON.stringify(settingsFor(locale)) },
   );
