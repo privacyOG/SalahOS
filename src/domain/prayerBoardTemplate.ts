@@ -209,6 +209,7 @@ function normalizeAsset(value: unknown): PrayerBoardImageAsset | null {
   if (
     assetId.length < 1 ||
     assetId.length > 160 ||
+    !/^[A-Za-z0-9][A-Za-z0-9._-]*$/u.test(assetId) ||
     !['image/png', 'image/jpeg', 'image/webp'].includes(String(mimeType)) ||
     !Number.isInteger(byteSize) ||
     byteSize < 1 ||
