@@ -46,7 +46,7 @@ function CongregationRoute({ destination }: Readonly<{ destination: Congregation
   switch (destination) {
     case 'mosques':
       return (
-        <div className="congregation-route congregation-route--mosques">
+        <div className="congregation-route congregation-route--mosques mosque-profiles-panel">
           <MosquesScreen />
         </div>
       );
@@ -58,7 +58,7 @@ function CongregationRoute({ destination }: Readonly<{ destination: Congregation
       );
     case 'community':
       return (
-        <div className="congregation-route congregation-route--community">
+        <div className="congregation-route congregation-route--community community-updates-panel">
           <CommunityScreen />
         </div>
       );
