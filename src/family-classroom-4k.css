@@ -1,0 +1,237 @@
+@media (min-width: 2560px) {
+  .family-classroom-board {
+    gap: 1vw;
+    padding: 1.2vw;
+  }
+
+  .family-classroom-board__masthead {
+    gap: 1.2vw;
+  }
+
+  .family-classroom-board__brand {
+    font-size: 0.8vw;
+  }
+
+  .family-classroom-board__identity strong {
+    font-size: 1.6vw;
+  }
+
+  .family-classroom-board__dates {
+    gap: 0.6vw;
+    font-size: 0.65vw;
+  }
+
+  .family-classroom-board__status {
+    padding: 0.24vw 0.48vw;
+  }
+
+  .family-classroom-board__content {
+    grid-template-columns: minmax(0, 0.82fr) minmax(0, 1.18fr);
+    gap: 0.9vw;
+  }
+
+  .family-classroom-board__focus,
+  .family-classroom-board__schedule {
+    border-radius: 1.15vw;
+  }
+
+  .family-classroom-board__focus {
+    gap: 0.8vw;
+    padding: 1.35vw;
+  }
+
+  .family-classroom-board__eyebrow {
+    gap: 0.3vw;
+    font-size: 0.7vw;
+  }
+
+  .family-classroom-board__clock > strong {
+    font-size: 5.4vw;
+  }
+
+  .family-classroom-board__next {
+    gap: 0.42vw;
+    border-inline-start-width: 0.3vw;
+    padding-inline-start: 0.8vw;
+  }
+
+  .family-classroom-board__next-label {
+    gap: 0.4vw;
+    font-size: 0.7vw;
+  }
+
+  .family-classroom-board__next-label small {
+    padding: 0.16vw 0.38vw;
+  }
+
+  .family-classroom-board__next > strong {
+    font-size: 3.15vw;
+  }
+
+  .family-classroom-board__next-times {
+    gap: 0.45vw;
+  }
+
+  .family-classroom-board__next-times > div {
+    gap: 0.25vw;
+    border-radius: 0.55vw;
+    padding: 0.45vw 0.55vw;
+  }
+
+  .family-classroom-board__next-times span {
+    font-size: 0.62vw;
+  }
+
+  .family-classroom-board__next-times strong {
+    font-size: 0.92vw;
+  }
+
+  .family-classroom-board__countdown {
+    gap: 0.6vw;
+    padding-top: 0.6vw;
+  }
+
+  .family-classroom-board__countdown span {
+    font-size: 0.66vw;
+  }
+
+  .family-classroom-board__countdown strong {
+    font-size: 3.2vw;
+  }
+
+  .family-classroom-board__learning {
+    gap: 0.28vw;
+    border-radius: 0.6vw;
+    padding: 0.48vw 0.58vw;
+  }
+
+  .family-classroom-board__learning > strong {
+    font-size: 0.66vw;
+  }
+
+  .family-classroom-board__learning p {
+    gap: 0.3vw;
+    font-size: 0.52vw;
+  }
+
+  .family-classroom-board__schedule {
+    gap: 0.7vw;
+    padding: 1.1vw;
+  }
+
+  .family-classroom-board__schedule-head,
+  .family-classroom-prayer-row {
+    grid-template-columns: minmax(0, 1.24fr) minmax(0, 0.8fr) minmax(0, 0.86fr);
+    gap: 0.55vw;
+  }
+
+  .family-classroom-board__schedule-head {
+    padding: 0 0.35vw 0.45vw;
+    font-size: 0.55vw;
+  }
+
+  .family-classroom-board__prayers {
+    gap: 0.35vw;
+  }
+
+  .family-classroom-prayer-row {
+    border-radius: 0.6vw;
+    padding: 0.48vw 0.58vw;
+  }
+
+  .family-classroom-prayer-row.is-current {
+    box-shadow: inset 0.28vw 0 0 var(--family-accent);
+  }
+
+  [dir='rtl'] .family-classroom-prayer-row.is-current {
+    box-shadow: inset -0.28vw 0 0 var(--family-accent);
+  }
+
+  .family-classroom-prayer-row__name {
+    gap: 0.45vw;
+  }
+
+  .family-classroom-prayer-row__number {
+    width: 1.45vw;
+    height: 1.45vw;
+    font-size: 0.72vw;
+  }
+
+  .family-classroom-prayer-row__name strong {
+    font-size: 1.08vw;
+  }
+
+  .family-classroom-prayer-row__name > div > span {
+    font-size: 0.5vw;
+  }
+
+  .family-classroom-prayer-row__time {
+    font-size: 1.04vw;
+  }
+
+  .family-classroom-board__adjuncts {
+    gap: 0.55vw;
+  }
+
+  .family-classroom-board__daylight,
+  .family-classroom-board__jumuah {
+    padding-top: 0.5vw;
+  }
+
+  .family-classroom-board__daylight-heading,
+  .family-classroom-board__jumuah > strong {
+    font-size: 0.54vw;
+  }
+
+  .family-classroom-board__daylight-items {
+    gap: 0.38vw;
+    margin-top: 0.3vw;
+  }
+
+  .family-classroom-board__daylight-items > div {
+    gap: 0.22vw;
+    border-radius: 0.5vw;
+    padding: 0.36vw 0.42vw;
+  }
+
+  .family-classroom-board__daylight-items span {
+    font-size: 0.5vw;
+  }
+
+  .family-classroom-board__daylight-items strong {
+    font-size: 0.72vw;
+  }
+
+  .family-classroom-board__daylight-items small {
+    font-size: 0.44vw;
+  }
+
+  .family-classroom-board__jumuah > div {
+    gap: 0.32vw;
+    margin-top: 0.3vw;
+  }
+
+  .family-classroom-board__jumuah article {
+    gap: 0.08vw;
+    border-radius: 0.5vw;
+    padding: 0.32vw 0.42vw;
+  }
+
+  .family-classroom-board__jumuah article > :first-child {
+    font-size: 0.54vw;
+  }
+
+  .family-classroom-board__jumuah article span {
+    font-size: 0.47vw;
+  }
+
+  .family-classroom-board__footer {
+    gap: 0.6vw;
+    font-size: 0.54vw;
+  }
+
+  .family-classroom-icon {
+    width: 1.1em;
+    height: 1.1em;
+  }
+}
