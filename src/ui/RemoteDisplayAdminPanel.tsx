@@ -170,9 +170,9 @@ export function RemoteDisplayAdminPanel() {
   const [baseUrl, setBaseUrl] = useState('');
   const [adminToken, setAdminToken] = useState('');
   const [displays, setDisplays] = useState<readonly ManagedDisplayRemoteStatus[]>([]);
-  const [mosqueDefaults, setMosqueDefaults] = useState<
-    readonly ManagedMosquePrayerBoardDefault[]
-  >([]);
+  const [mosqueDefaults, setMosqueDefaults] = useState<readonly ManagedMosquePrayerBoardDefault[]>(
+    [],
+  );
   const [connectionState, setConnectionState] = useState<'idle' | 'connected' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState('');
   const [statusMessage, setStatusMessage] = useState('');
@@ -502,7 +502,12 @@ export function RemoteDisplayAdminPanel() {
                     </div>
                     <div>
                       <dt>{assignmentText.template}</dt>
-                      <dd>{getPrayerBoardTemplate(display.remoteConfig.prayerBoardConfig.templateId).label}</dd>
+                      <dd>
+                        {
+                          getPrayerBoardTemplate(display.remoteConfig.prayerBoardConfig.templateId)
+                            .label
+                        }
+                      </dd>
                     </div>
                     <div>
                       <dt>{assignmentText.source}</dt>
@@ -527,7 +532,9 @@ export function RemoteDisplayAdminPanel() {
                     <div>
                       <dt>{assignmentText.target}</dt>
                       <dd dir="ltr">
-                        {target.width > 0 ? `${String(target.width)}×${String(target.height)} · ` : ''}
+                        {target.width > 0
+                          ? `${String(target.width)}×${String(target.height)} · `
+                          : ''}
                         {display.identity.orientation} · {display.identity.resolutionProfile}
                       </dd>
                     </div>
@@ -589,7 +596,11 @@ export function RemoteDisplayAdminPanel() {
                           type="button"
                           disabled={!target.supported || display.remoteConfig.revoked}
                           onClick={() => {
-                            openTargetPreview(display, mosqueDefault.prayerBoardConfig, 'mosque-default');
+                            openTargetPreview(
+                              display,
+                              mosqueDefault.prayerBoardConfig,
+                              'mosque-default',
+                            );
                           }}
                         >
                           {assignmentText.previewMosque}
