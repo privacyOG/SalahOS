@@ -250,7 +250,8 @@ async function validateAdminAssignment(browser) {
     await page.getByRole('button', { name: 'Connect / refresh fleet' }).click();
     await page.waitForFunction(() => {
       const fleetCard = document.querySelector('.remote-display-card');
-      const statusText = document.querySelector('.remote-display-admin-panel__status')?.textContent ?? '';
+      const statusText =
+        document.querySelector('.remote-display-admin-panel__status')?.textContent ?? '';
       return fleetCard !== null || statusText.includes('failed');
     });
     if ((await page.locator('.remote-display-card').count()) === 0) {
