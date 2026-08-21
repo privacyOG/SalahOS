@@ -50,7 +50,8 @@ const scenarios = [
     hintsEnabled: true,
     daylightEnabled: false,
     now: Date.parse('2026-08-21T06:05:00.000Z'),
-    mosqueName: 'SalahOS Central Islamic Family Community School and Prayer Learning Centre of Greater Sydney',
+    mosqueName:
+      'SalahOS Central Islamic Family Community School and Prayer Learning Centre of Greater Sydney',
   },
   {
     name: 'family-classroom-4k-ar-classic-hints',
@@ -241,7 +242,9 @@ async function validateScenario(browser, scenario) {
       throw new Error(`${scenario.name} page errors: ${pageErrors.join(' | ')}`);
     }
     if (externalRequests.length > 0) {
-      throw new Error(`${scenario.name} made external requests: ${JSON.stringify(externalRequests)}`);
+      throw new Error(
+        `${scenario.name} made external requests: ${JSON.stringify(externalRequests)}`,
+      );
     }
 
     const hintsMode = await board.getAttribute('data-educational-hints');
@@ -275,7 +278,10 @@ async function validateScenario(browser, scenario) {
     if (daylightCount !== (scenario.daylightEnabled ? 1 : 0)) {
       throw new Error(`${scenario.name} daylight cue visibility mismatch`);
     }
-    if (scenario.daylightEnabled && (await page.locator('[data-solar-event="sunset"]').count()) !== 1) {
+    if (
+      scenario.daylightEnabled &&
+      (await page.locator('[data-solar-event="sunset"]').count()) !== 1
+    ) {
       throw new Error(`${scenario.name} missing sunset cue`);
     }
 
@@ -310,7 +316,9 @@ async function validateScenario(browser, scenario) {
       throw new Error(`${scenario.name} board exceeds viewport: ${JSON.stringify(boardGeometry)}`);
     }
     if (boardGeometry.height < boardGeometry.viewportHeight * 0.9) {
-      throw new Error(`${scenario.name} board under-fills viewport: ${JSON.stringify(boardGeometry)}`);
+      throw new Error(
+        `${scenario.name} board under-fills viewport: ${JSON.stringify(boardGeometry)}`,
+      );
     }
 
     const columnPresentation = await page.evaluate(() => {
@@ -324,7 +332,10 @@ async function validateScenario(browser, scenario) {
         iqamahWeight: getComputedStyle(iqamah).fontWeight,
       };
     });
-    if (columnPresentation === null || columnPresentation.startColor === columnPresentation.iqamahColor) {
+    if (
+      columnPresentation === null ||
+      columnPresentation.startColor === columnPresentation.iqamahColor
+    ) {
       throw new Error(
         `${scenario.name} Start and Iqamah columns are not visually distinct: ${JSON.stringify(columnPresentation)}`,
       );
