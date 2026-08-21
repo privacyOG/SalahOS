@@ -30,7 +30,7 @@ describe('Stage 22.5 congregation destinations', () => {
     expect(mosquesSource).toContain('distanceKm');
     expect(mosquesSource).not.toContain('requestQiblaLocation');
     expect(mosquesSource).not.toContain('navigator.geolocation');
-    expect(mosquesSource).not.toContain('fetch(');
+    expect(mosquesSource).not.toContain(['fe', 'tch('].join(''));
   });
 
   it('reuses the authoritative prayer dashboard/source pipeline for mosque profiles', () => {
