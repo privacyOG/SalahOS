@@ -77,8 +77,7 @@ export const todayContextCopy: Readonly<Record<Locale, TodayContextCopy>> = {
     offlineManagedTitle: 'استخدام جدول المسجد المحفوظ دون اتصال',
     offlineManagedBody: 'تُقرأ أوقات الصلاة والإقامة من الجدول المحفوظ مسبقًا على هذا الجهاز.',
     astronomicalUnavailableTitle: 'بعض الأوقات الفلكية غير متوفرة',
-    astronomicalUnavailableBody:
-      'تعذر تحديد حدث فلكي واحد أو أكثر لهذا الموقع والتاريخ.',
+    astronomicalUnavailableBody: 'تعذر تحديد حدث فلكي واحد أو أكثر لهذا الموقع والتاريخ.',
     communityEyebrow: 'من مسجدك',
     communityTitle: 'تحديث المجتمع',
     announcement: 'إعلان',
@@ -131,7 +130,8 @@ export const todayContextCopy: Readonly<Record<Locale, TodayContextCopy>> = {
     staleTimetableBody:
       'Jadwal tersimpan tidak memiliki data untuk hari ini, sehingga waktu salat terkelola mungkin tidak tersedia.',
     offlineManagedTitle: 'Menggunakan jadwal masjid tersimpan secara offline',
-    offlineManagedBody: 'Waktu salat dan iqamah dibaca dari jadwal yang sudah tersimpan di perangkat ini.',
+    offlineManagedBody:
+      'Waktu salat dan iqamah dibaca dari jadwal yang sudah tersimpan di perangkat ini.',
     astronomicalUnavailableTitle: 'Sebagian waktu astronomi tidak tersedia',
     astronomicalUnavailableBody:
       'Satu atau lebih peristiwa astronomi tidak dapat ditentukan untuk lokasi dan tanggal ini.',
