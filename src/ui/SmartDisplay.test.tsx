@@ -70,7 +70,7 @@ describe('SmartDisplay', () => {
 
     expect(html).toContain('data-mode="smart-display"');
     expect(html).toContain('data-prayer-board-template="heritage-classic"');
-    expect(html.match(/<div class="heritage-classic-prayer-row/g)).toHaveLength(5);
+    expect(html.match(/<div class="heritage-classic-prayer-row(?: |")/g)).toHaveLength(5);
     expect(html).toContain('Fajr');
     expect(html).toContain('Dhuhr');
     expect(html).toContain('Asr');
