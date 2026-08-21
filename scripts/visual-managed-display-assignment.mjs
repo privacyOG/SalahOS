@@ -14,7 +14,7 @@ if (!playwrightModule) {
 
 const { chromium } = await import(pathToFileURL(playwrightModule).href);
 const applicationOrigin = new URL(baseUrl).origin;
-const managedOrigin = 'https://admin.example.org';
+const managedOrigin = baseUrl;
 const adminToken = 'a'.repeat(48);
 const deviceToken = 'd'.repeat(48);
 
@@ -202,7 +202,7 @@ async function validateAdminAssignment(browser) {
   });
   let publishedBody = null;
 
-  await page.route(`${managedOrigin}/**`, async (route) => {
+  await page.route(`${managedOrigin}/v1/**`, async (route) => {
     const request = route.request();
     if (request.method() === 'OPTIONS') {
       await fulfillPreflight(route);
@@ -248,7 +248,15 @@ async function validateAdminAssignment(browser) {
     await page.getByLabel('Managed service URL').fill(managedOrigin);
     await page.getByLabel('Admin token').fill(adminToken);
     await page.getByRole('button', { name: 'Connect / refresh fleet' }).click();
-    await page.locator('.remote-display-card').first().waitFor({ state: 'visible' });
+    await page.waitForFunction(() => {
+      const fleetCard = document.querySelector('.remote-display-card');
+      const statusText = document.querySelector('.remote-display-admin-panel__status')?.textContent ?? '';
+      return fleetCard !== null || statusText.includes('failed');
+    });
+    if ((await page.locator('.remote-display-card').count()) === 0) {
+      const statusText = await page.locator('.remote-display-admin-panel__status').textContent();
+      throw new Error(`managed fleet did not load: ${statusText ?? 'unknown status'}`);
+    }
 
     if ((await page.locator('.remote-display-card').count()) !== 2) {
       throw new Error('managed fleet did not render both target profiles');
@@ -315,7 +323,7 @@ async function validateManagedOfflineCache(browser) {
   const managedConfig = board('family-classroom', 'emerald', 'Managed Offline Masjid');
   let offline = false;
 
-  await page.route(`${managedOrigin}/**`, async (route) => {
+  await page.route(`${managedOrigin}/v1/**`, async (route) => {
     if (offline) {
       await route.abort('failed');
       return;
