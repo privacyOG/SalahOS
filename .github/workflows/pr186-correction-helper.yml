@@ -31,6 +31,23 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
 
+          def remove_provider_assertion(lines, start_at=0):
+              marker = "page.locator('.qibla-map-shell').getAttribute('data-map-provider')"
+              marker_index = next(
+                  (index for index in range(start_at, len(lines)) if marker in lines[index]),
+                  None,
+              )
+              if marker_index is None:
+                  raise SystemExit('Expected Qibla provider assertion was not found')
+              block_start = marker_index - 1
+              block_end = next(
+                  (index for index in range(marker_index + 1, len(lines)) if lines[index].strip() == '}'),
+                  None,
+              )
+              if block_end is None:
+                  raise SystemExit('Qibla provider assertion end was not found')
+              return lines[:block_start] + lines[block_end + 1 :]
+
           path = Path('src/ui/QiblaMapView.tsx')
           content = path.read_text()
           old = "  const value = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;"
@@ -40,85 +57,68 @@ jobs:
           path.write_text(content.replace(old, new, 1))
 
           path = Path('scripts/visual-mobile-prayer-themes.mjs')
-          content = path.read_text()
-          provider_old = """    if (
-              (await page.locator('.qibla-map-shell').getAttribute('data-map-provider')) !== 'openstreetmap'
-            ) {
-              throw new Error('No-key visual build must retain the OpenStreetMap Qibla map fallback');
-            }
-          """
-          provider_new = """    await assertNoHorizontalOverflow(page, 'qibla-premium-compass-phone-en');
-            await capture(page, 'qibla-premium-compass-phone-en');
-            await page.locator('.qibla-view-switch button').nth(1).click();
-            const map = page.locator('.qibla-map-shell');
-            await map.waitFor({ state: 'visible' });
-            if ((await map.getAttribute('data-map-provider')) !== 'openstreetmap') {
-              throw new Error('No-key visual build must retain the OpenStreetMap Qibla map fallback');
-            }
-          """
-          if provider_old not in content:
-              raise SystemExit('Expected mobile Qibla provider block was not found')
-          content = content.replace(provider_old, provider_new, 1)
-          tail_old = """    await assertNoHorizontalOverflow(page, 'qibla-premium-phone-en');
-            await capture(page, 'qibla-premium-compass-phone-en');
-          """
-          tail_new = """    await assertNoHorizontalOverflow(page, 'qibla-premium-map-phone-en');
-            await capture(page, 'qibla-premium-map-phone-en');
-          """
-          if tail_old not in content:
-              raise SystemExit('Expected mobile Qibla capture tail was not found')
-          path.write_text(content.replace(tail_old, tail_new, 1))
+          lines = path.read_text().splitlines()
+          qibla_start = next(
+              index for index, line in enumerate(lines) if line.startswith('async function validateQibla(')
+          )
+          lines = remove_provider_assertion(lines, qibla_start)
+          capture_index = next(
+              index
+              for index in range(qibla_start, len(lines))
+              if "await capture(page, 'qibla-premium-compass-phone-en');" in lines[index]
+          )
+          insertion = [
+              '',
+              "    await page.locator('.qibla-view-switch button').nth(1).click();",
+              "    const map = page.locator('.qibla-map-shell');",
+              "    await map.waitFor({ state: 'visible' });",
+              "    if ((await map.getAttribute('data-map-provider')) !== 'openstreetmap') {",
+              "      throw new Error('No-key visual build must retain the OpenStreetMap Qibla map fallback');",
+              '    }',
+              "    await assertNoHorizontalOverflow(page, 'qibla-premium-map-phone-en');",
+              "    await capture(page, 'qibla-premium-map-phone-en');",
+          ]
+          lines[capture_index + 1 : capture_index + 1] = insertion
+          path.write_text('\n'.join(lines) + '\n')
 
           path = Path('scripts/visual-mobile-prayer-themes-extended.mjs')
-          content = path.read_text()
-          provider_old = """    if (
-              (await page.locator('.qibla-map-shell').getAttribute('data-map-provider')) !== 'openstreetmap'
-            ) {
-              throw new Error(
-                `${scenario.name} must use the no-key fallback provider in the normal visual build`,
-              );
-            }
-          """
-          provider_new = """    const box = await compass.boundingBox();
-            if (box === null || box.width < 220 || box.height < 220) {
-              throw new Error(`${scenario.name} compass is too small for readable directional guidance`);
-            }
-            await assertNoHorizontalOverflow(page, scenario.name);
-            await capture(page, scenario.name);
-            await page.locator('.qibla-view-switch button').nth(1).click();
-            const map = page.locator('.qibla-map-shell');
-            await map.waitFor({ state: 'visible' });
-            if ((await map.getAttribute('data-map-provider')) !== 'openstreetmap') {
-              throw new Error(
-                `${scenario.name} must use the no-key fallback provider in the normal visual build`,
-              );
-            }
-          """
-          if provider_old not in content:
-              raise SystemExit('Expected extended Qibla provider block was not found')
-          content = content.replace(provider_old, provider_new, 1)
-          tail_old = """    const box = await compass.boundingBox();
-            if (box === null || box.width < 220 || box.height < 220) {
-              throw new Error(`${scenario.name} compass is too small for readable directional guidance`);
-            }
-            await assertNoHorizontalOverflow(page, scenario.name);
-            await capture(page, scenario.name);
-          """
-          tail_new = """    await assertNoHorizontalOverflow(page, `${scenario.name}-map`);
-            await capture(page, `${scenario.name}-map`);
-          """
-          if tail_old not in content:
-              raise SystemExit('Expected extended Qibla compass tail was not found')
-          path.write_text(content.replace(tail_old, tail_new, 1))
+          lines = path.read_text().splitlines()
+          qibla_start = next(
+              index
+              for index, line in enumerate(lines)
+              if line.startswith('async function validateQiblaLayout(')
+          )
+          lines = remove_provider_assertion(lines, qibla_start)
+          capture_index = next(
+              index
+              for index in range(qibla_start, len(lines))
+              if 'await capture(page, scenario.name);' in lines[index]
+          )
+          insertion = [
+              '',
+              "    await page.locator('.qibla-view-switch button').nth(1).click();",
+              "    const map = page.locator('.qibla-map-shell');",
+              "    await map.waitFor({ state: 'visible' });",
+              "    if ((await map.getAttribute('data-map-provider')) !== 'openstreetmap') {",
+              '      throw new Error(',
+              '        `${scenario.name} must use the no-key fallback provider in the normal visual build`,',
+              '      );',
+              '    }',
+              '    await assertNoHorizontalOverflow(page, `${scenario.name}-map`);',
+              '    await capture(page, `${scenario.name}-map`);',
+          ]
+          lines[capture_index + 1 : capture_index + 1] = insertion
+          path.write_text('\n'.join(lines) + '\n')
 
           path = Path('scripts/visual-qibla-google.mjs')
-          content = path.read_text()
-          old = "  await page.goto(`${baseUrl}/?view=qiblah`, { waitUntil: 'networkidle' });"
-          new = """  await page.goto(`${baseUrl}/?view=qiblah`, { waitUntil: 'networkidle' });
-            await page.locator('.qibla-view-switch button').nth(1).click();"""
-          if old not in content:
-              raise SystemExit('Expected Google Qibla navigation line was not found')
-          path.write_text(content.replace(old, new, 1))
+          lines = path.read_text().splitlines()
+          goto_index = next(
+              index
+              for index, line in enumerate(lines)
+              if "await page.goto(`${baseUrl}/?view=qiblah`" in line
+          )
+          lines.insert(goto_index + 1, "  await page.locator('.qibla-view-switch button').nth(1).click();")
+          path.write_text('\n'.join(lines) + '\n')
           PY
 
       - name: Format corrected files
