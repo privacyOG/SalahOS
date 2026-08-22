@@ -19,7 +19,7 @@ An item must not be marked complete until the exact code head passes the applica
 - [~] Refresh the Today presentation when the selected template changes or the app resumes.
 - [ ] Verify the selected theme survives Android app restart.
 - [ ] Verify the selected theme survives iOS app restart/relaunch.
-- [ ] Separate Phone/Home, TV/Kiosk and Touch Display targets where independent choices are required; never silently overwrite another target.
+- [~] Separate Phone/Home, TV/Kiosk and Touch Display targets where independent choices are required; never silently overwrite another target.
 
 ## B. Premium Islamic mobile prayer themes
 
@@ -31,11 +31,11 @@ An item must not be marked complete until the exact code head passes the applica
 - [~] Provide a Family & Classroom phone/tablet treatment with bright but dignified educational colour cues.
 - [~] Add portrait and compact landscape adaptations where the information hierarchy remains usable.
 - [~] Add a tablet-specific Structured Split composition rather than simply stretching the phone layout.
-- [ ] Make Settings > Display Themes a first-class phone/tablet visual selector rather than describing it as managed-display-only.
-- [ ] Add representative phone previews before apply, including English and Arabic/RTL.
-- [ ] Validate 320px minimum width, representative 390–430px phones, large phones and tablets.
+- [~] Make Settings > Display Themes a first-class phone/tablet visual selector rather than describing it as managed-display-only.
+- [~] Add representative phone previews before apply, including English and Arabic/RTL.
+- [~] Validate 320px minimum width, representative 390–430px phones, large phones and tablets.
 - [ ] Validate English, Arabic/RTL, Turkish and Indonesian expansion and long mosque names.
-- [ ] Add permanent screenshot coverage for every released mobile-home theme.
+- [~] Add permanent screenshot coverage for every released mobile-home theme.
 - [ ] Human-review every released mobile-home theme for prayer hierarchy, Start/Iqamah clarity, density, originality and navigation usability.
 
 ## C. Qibla compass correction and enhancement
@@ -53,15 +53,25 @@ An item must not be marked complete until the exact code head passes the applica
 - [~] Keep OpenStreetMap only as a functional fallback when Google Maps is not configured.
 - [~] Remove the privacy-consent gate that prevented the map from loading by default.
 - [~] Preserve zoom, dropped-pin location selection, Qibla bearing overlay, current-location marker and Kaaba context over either provider.
-- [ ] Document Google Maps API-key setup and required Google Cloud key restrictions.
-- [ ] Add deterministic tests/visual fixtures for Google-satellite and fallback-provider modes without committing credentials.
+- [~] Document Google Maps API-key setup and required Google Cloud key restrictions.
+- [~] Add deterministic tests/visual fixtures for Google-satellite and fallback-provider modes without committing credentials.
 
 ## E. Product-direction correction
 
 - [~] Remove privacy-first language from UI where it is presented as a primary SalahOS product objective.
 - [~] Change remote-network policy wording from “local-first” to explicit reviewed network capabilities.
-- [ ] Remove or revise privacy-first claims in `README.md`, `TODO.md`, design/research documentation and UI/UX plans where they conflict with the current product direction.
-- [ ] Keep ordinary security, credential handling and user-permission requirements even though privacy-first positioning is no longer a project objective.
+- [~] Remove or revise privacy-first claims in `README.md`, `TODO.md`, design/research documentation and UI/UX plans where they conflict with the current product direction.
+- [~] Keep ordinary security, credential handling and user-permission requirements even though privacy-first positioning is no longer a project objective.
+
+## Current correction evidence
+
+- The dedicated Phone/Home prayer-board configuration uses its own `salahos.mobilePrayerBoardDisplayConfig` storage key and does not overwrite the TV/kiosk prayer-board configuration.
+- The real congregation Today route is wrapped by `MobilePrayerThemeSurface` and refreshes on theme-change, focus and foreground visibility events.
+- The real congregation `Settings > Display Themes` DOM now receives the Phone/Home visual selector while the existing managed-display target remains separately reachable.
+- The permanent mobile visual harness covers all six released Phone/Home theme IDs, includes a 320px minimum-width case, exercises preview-before-apply through the congregation Settings route and verifies five obligatory prayer rows separately from Sunrise.
+- The normal visual build verifies the no-key OpenStreetMap Qiblah fallback. A second visual-only build injects a fixed non-production key and verifies Google satellite request/provider semantics without committing a credential.
+- `docs/QIBLA_GOOGLE_MAPS.md` records build-time configuration, restriction expectations and the client-visible key boundary.
+- `README.md` now describes SalahOS in terms of prayer accuracy, platform capability, explicit networking and offline resilience rather than privacy-first positioning.
 
 ## Completion gate
 
