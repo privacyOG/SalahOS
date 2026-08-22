@@ -11,7 +11,7 @@
     "managed-admin:serve": "node managed-service/server.mjs",
     "local-api:serve": "node local-api/server.mjs",
     "verify:web-build": "node scripts/verify-web-build.mjs",
-    "visual:check": "node scripts/visual-regression.mjs && node scripts/visual-today-context.mjs && node scripts/visual-heritage-classic.mjs && node scripts/visual-minimal-modern.mjs && node scripts/visual-bold-countdown-focus.mjs && node scripts/visual-structured-split-board.mjs && node scripts/visual-scenic-spiritual.mjs && node scripts/visual-family-classroom.mjs && node scripts/visual-family-classroom-scale.mjs && node scripts/visual-prayer-board-config.mjs && node scripts/visual-managed-display-assignment.mjs && node scripts/visual-mobile-prayer-themes.mjs",
+    "visual:check": "node scripts/visual-regression.mjs && node scripts/visual-today-context.mjs && node scripts/visual-heritage-classic.mjs && node scripts/visual-minimal-modern.mjs && node scripts/visual-bold-countdown-focus.mjs && node scripts/visual-structured-split-board.mjs && node scripts/visual-scenic-spiritual.mjs && node scripts/visual-family-classroom.mjs && node scripts/visual-family-classroom-scale.mjs && node scripts/visual-prayer-board-config.mjs && node scripts/visual-managed-display-assignment.mjs && node scripts/visual-mobile-prayer-themes.mjs && node scripts/visual-mobile-prayer-themes-extended.mjs",
     "ui:design-system-ownership": "node scripts/check-design-system-ownership.mjs",
     "typecheck": "tsc -b --pretty false",
     "test": "vitest run",
@@ -44,7 +44,7 @@
     "@photostructure/tz-lookup": "11.6.0",
     "magvar": "2.0.2",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.3"
   },
   "devDependencies": {
     "@capacitor/cli": "8.4.2",
