@@ -11,6 +11,7 @@ import { CommunityScreen } from './ui/CommunityScreen';
 import { CongregationShell } from './ui/CongregationShell';
 import { ManagedDisplayConnectionSettings } from './ui/ManagedDisplayConnectionSettings';
 import { ManagedDisplayRemoteController } from './ui/ManagedDisplayRemoteController';
+import { MobilePrayerThemeSettings } from './ui/MobilePrayerThemeSettings';
 import { MobilePrayerThemeSurface } from './ui/MobilePrayerThemeSurface';
 import { MosquesScreen } from './ui/MosquesScreen';
 import { QiblaFinder } from './ui/QiblaFinder';
@@ -149,7 +150,12 @@ function AdministrationRoute({
     case 'displays':
       return <ManagedDisplayConnectionSettings />;
     case 'themes':
-      return <SmartDisplayThemeSettings />;
+      return (
+        <>
+          <MobilePrayerThemeSettings />
+          <SmartDisplayThemeSettings />
+        </>
+      );
     case 'remote':
       return (
         <>
