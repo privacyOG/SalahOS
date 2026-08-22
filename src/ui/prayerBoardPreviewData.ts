@@ -17,6 +17,12 @@ const BASE_DATA = buildPrayerBoardData({
     sourceMode: 'calculated',
     mosqueTimetable: null,
   }),
+  weather: Object.freeze({
+    state: 'ready',
+    temperatureC: 18,
+    summary: 'Partly cloudy',
+    observedAtIso: '2026-08-21T02:20:00.000Z',
+  }),
 });
 
 function iqamahOffset(prayer: ObligatoryPrayerName): number {

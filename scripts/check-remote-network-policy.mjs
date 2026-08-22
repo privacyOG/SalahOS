@@ -7,6 +7,7 @@ const sourceRoot = join(repositoryRoot, 'src');
 const executableExtensions = new Set(['.ts', '.tsx', '.js', '.jsx', '.mjs']);
 const reviewedRemoteNetworkFiles = new Map([
   ['src/platform/managedAdminTransport.ts', 'managed display administration'],
+  ['src/platform/prayerBoardWeather.ts', 'explicitly configured prayer-board weather'],
   ['src/platform/qiblaMapTiles.ts', 'user-initiated Qiblah map tiles'],
 ]);
 
