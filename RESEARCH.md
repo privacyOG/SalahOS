@@ -82,7 +82,7 @@ A mosque timetable is an independent prayer source, not a hidden adjustment to c
 - one or more Jumu'ah sessions;
 - source identity and import provenance.
 
-Manual entry and validated CSV/JSON import/export are implemented. Timetables are preserved locally. Optional provider integration research is documented in `docs/MOSQUE_INTEGRATION_RESEARCH.md`; no remote provider is required by core v1 operation.
+Manual entry and validated CSV/JSON import/export are implemented. Timetables are preserved locally. Optional provider integration research is documented in `docs/MOSQUE_INTEGRATION_RESEARCH.md`; no remote provider is required by core prayer operation.
 
 ## Hijri calendar
 
@@ -106,9 +106,11 @@ The Pi target is a browser-based kiosk using the shared production application. 
 
 The primary target is a standards-compliant browser in full-screen/kiosk mode. Smart-display runtime behavior is implemented and repository-tested. Physical viewing-distance readability, remote/HDMI-CEC mappings and long-duration panel behavior remain target-specific validation work.
 
-## Privacy/network research boundary
+## Network/provider research boundary
 
-Core v1 does not require a remote prayer-time or mosque API. Production application source is guarded against unreviewed remote networking. A future optional provider integration must define its transmitted data, authentication/secrets handling, TLS, response validation, caching/offline degradation and user disclosure before the local-first network policy is widened.
+Core prayer calculation does not require a remote prayer-time or mosque API. Optional and managed network features are allowed when they provide documented product capability, but each integration must define its transmitted data, authentication/credential handling, TLS expectations, response validation, caching/offline degradation and failure isolation. New remote hosts/capabilities remain subject to the repository network-policy review rather than being prohibited by a local-first product objective.
+
+Client-visible service identifiers must be distinguished from private credentials. For example, a Maps Static API key embedded by Vite is observable in the client and therefore requires provider-side API/application restrictions, quota controls and deployment testing; private URL-signing material must remain in a trusted service and never be embedded in the application. See `docs/QIBLA_GOOGLE_MAPS.md`.
 
 ## Validation policy
 
@@ -118,5 +120,3 @@ No single online calculator is treated as absolute ground truth. Verification us
 2. an independent calculator/API or frozen reference dataset;
 3. authoritative published timetables where practical;
 4. documented comparison tolerances that distinguish algorithm, method, timezone, adjustment, and rounding differences.
-
-Current open research/validation work is intentionally visible in `TODO.md`, especially official Diyanet institutional parity and the distinction between Dubai output parity and authoritative internal-parameter equivalence. The defined v1 direct canonical-algorithm comparison set is complete.
