@@ -139,25 +139,31 @@ export function MobilePrayerThemePreview({
 
         {modules['sunrise-sunset'] && (
           <section className="today-solar" aria-label={contextual.solarTitle}>
-            <div>
-              <span>{translate(locale, 'prayerSunrise')}</span>
-              <strong>
-                {data.solarEvents.sunriseLocalMinutes === null
-                  ? '—'
-                  : formatLocalTime(
-                      data.solarEvents.sunriseLocalMinutes,
-                      locale,
-                      config.timeFormat,
-                    )}
-              </strong>
-            </div>
-            <div>
-              <span>{contextual.sunset}</span>
-              <strong>
-                {data.solarEvents.sunsetLocalMinutes === null
-                  ? '—'
-                  : formatLocalTime(data.solarEvents.sunsetLocalMinutes, locale, config.timeFormat)}
-              </strong>
+            <div className="today-solar__times">
+              <div>
+                <span>{translate(locale, 'prayerSunrise')}</span>
+                <strong>
+                  {data.solarEvents.sunriseLocalMinutes === null
+                    ? '—'
+                    : formatLocalTime(
+                        data.solarEvents.sunriseLocalMinutes,
+                        locale,
+                        config.timeFormat,
+                      )}
+                </strong>
+              </div>
+              <div>
+                <span>{contextual.sunset}</span>
+                <strong>
+                  {data.solarEvents.sunsetLocalMinutes === null
+                    ? '—'
+                    : formatLocalTime(
+                        data.solarEvents.sunsetLocalMinutes,
+                        locale,
+                        config.timeFormat,
+                      )}
+                </strong>
+              </div>
             </div>
           </section>
         )}
