@@ -4,12 +4,16 @@ import {
   createManagedDisplayRegistration,
   createManagedDisplayRemoteConfig,
   createManagedDisplayRemoteStatus,
+  createManagedMosquePrayerBoardDefault,
+  createManagedMosquePrayerBoardDefaultUpdate,
   type ManagedDisplayConfigUpdate,
   type ManagedDisplayEnrollment,
   type ManagedDisplayHeartbeat,
   type ManagedDisplayRegistration,
   type ManagedDisplayRemoteConfig,
   type ManagedDisplayRemoteStatus,
+  type ManagedMosquePrayerBoardDefault,
+  type ManagedMosquePrayerBoardDefaultUpdate,
 } from '../domain/managedAdminProtocol';
 
 type FetchLike = (input: RequestInfo | URL, init?: RequestInit) => Promise<Response>;
@@ -27,11 +31,16 @@ export interface ManagedDisplayConnection {
 
 export interface ManagedAdminClient {
   listDisplays(): Promise<readonly ManagedDisplayRemoteStatus[]>;
+  listMosquePrayerBoardDefaults(): Promise<readonly ManagedMosquePrayerBoardDefault[]>;
   registerDisplay(input: ManagedDisplayRegistration): Promise<ManagedDisplayEnrollment>;
   updateDisplayConfig(
     displayId: string,
     update: ManagedDisplayConfigUpdate,
   ): Promise<ManagedDisplayRemoteStatus>;
+  updateMosquePrayerBoardDefault(
+    mosqueId: string,
+    update: ManagedMosquePrayerBoardDefaultUpdate,
+  ): Promise<ManagedMosquePrayerBoardDefault>;
   revokeDisplay(displayId: string): Promise<ManagedDisplayRemoteStatus>;
 }
 
@@ -68,16 +77,24 @@ export function normalizeManagedServiceToken(value: string): string {
   return token;
 }
 
-export function normalizeManagedDisplayId(value: string): string {
+function normalizeManagedIdentifier(value: string, label: string): string {
   const normalized = value.trim().toLowerCase();
   if (
     normalized.length < 2 ||
     normalized.length > 160 ||
     !/^[a-z0-9][a-z0-9._:-]*[a-z0-9]$/u.test(normalized)
   ) {
-    throw new RangeError('Display ID must be a stable lowercase-safe identifier');
+    throw new RangeError(`${label} must be a stable lowercase-safe identifier`);
   }
   return normalized;
+}
+
+export function normalizeManagedDisplayId(value: string): string {
+  return normalizeManagedIdentifier(value, 'Display ID');
+}
+
+export function normalizeManagedMosqueId(value: string): string {
+  return normalizeManagedIdentifier(value, 'Mosque ID');
 }
 
 async function parseJsonResponse(response: Response): Promise<unknown> {
@@ -118,6 +135,11 @@ function parseEnrollment(value: unknown): ManagedDisplayEnrollment {
     display: parseRemoteStatus(value.display),
     deviceToken: value.deviceToken,
   });
+}
+
+function parseMosquePrayerBoardDefault(value: unknown): ManagedMosquePrayerBoardDefault {
+  if (!isRecord(value)) throw new TypeError('Managed mosque prayer-board response is malformed');
+  return createManagedMosquePrayerBoardDefault(value as unknown as ManagedMosquePrayerBoardDefault);
 }
 
 function createAuthorizedRequest(
@@ -162,6 +184,14 @@ export function createManagedAdminClient(
       return Object.freeze(body.displays.map(parseRemoteStatus));
     },
 
+    async listMosquePrayerBoardDefaults() {
+      const body = await request('/v1/admin/mosque-defaults');
+      if (!isRecord(body) || !Array.isArray(body.defaults)) {
+        throw new TypeError('Managed mosque prayer-board list response is malformed');
+      }
+      return Object.freeze(body.defaults.map(parseMosquePrayerBoardDefault));
+    },
+
     async registerDisplay(input: ManagedDisplayRegistration) {
       const registration = createManagedDisplayRegistration(input);
       const body = await request('/v1/admin/displays', {
@@ -182,6 +212,22 @@ export function createManagedAdminClient(
         },
       );
       return parseRemoteStatus(body);
+    },
+
+    async updateMosquePrayerBoardDefault(
+      mosqueId: string,
+      update: ManagedMosquePrayerBoardDefaultUpdate,
+    ) {
+      const normalizedMosqueId = normalizeManagedMosqueId(mosqueId);
+      const normalizedUpdate = createManagedMosquePrayerBoardDefaultUpdate(update);
+      const body = await request(
+        `/v1/admin/mosques/${encodeURIComponent(normalizedMosqueId)}/prayer-board-default`,
+        {
+          method: 'PUT',
+          body: JSON.stringify(normalizedUpdate),
+        },
+      );
+      return parseMosquePrayerBoardDefault(body);
     },
 
     async revokeDisplay(displayId: string) {

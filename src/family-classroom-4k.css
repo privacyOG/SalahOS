@@ -1,3 +1,18 @@
+.family-classroom-board__next-times > div {
+  grid-template-columns: auto auto minmax(0, 1fr);
+}
+
+.family-classroom-board__next-times span {
+  white-space: nowrap;
+}
+
+.family-classroom-board__next-times strong {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  text-align: end;
+  white-space: normal;
+}
+
 @media (min-width: 2560px) {
   .family-classroom-board {
     gap: 1vw;

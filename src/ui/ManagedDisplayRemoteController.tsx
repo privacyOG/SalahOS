@@ -8,10 +8,16 @@ import {
   MANAGED_DISPLAY_CONNECTION_CHANGE_EVENT,
 } from '../platform/managedDisplayConnectionStorage';
 import { createManagedDisplayClient } from '../platform/managedAdminTransport';
+import {
+  loadManagedPrayerBoardCache,
+  MANAGED_PRAYER_BOARD_CACHE_CHANGE_EVENT,
+  reconcileManagedPrayerBoardRevision,
+  saveManagedPrayerBoardCache,
+} from '../platform/managedPrayerBoardCache';
 import { loadPersistedSettings } from '../platform/settingsStorage';
 import { smartDisplayModeRequested } from './SmartDisplay';
 
-const APP_VERSION = '1.1.0';
+const APP_VERSION = '1.2.0';
 const SYNC_INTERVAL_MS = 60_000;
 
 const copy = managedDisplayRuntimeCopy;
@@ -34,12 +40,8 @@ function readConnection() {
   }
 }
 
-function applyManagedTheme(theme: string): void {
-  document.documentElement.dataset.managedDisplayTheme = theme;
-}
-
-function clearManagedTheme(): void {
-  delete document.documentElement.dataset.managedDisplayTheme;
+function dispatchManagedPrayerBoardChange(): void {
+  window.dispatchEvent(new Event(MANAGED_PRAYER_BOARD_CACHE_CHANGE_EVENT));
 }
 
 export function ManagedDisplayRemoteController() {
@@ -59,10 +61,7 @@ export function ManagedDisplayRemoteController() {
   }, []);
 
   useEffect(() => {
-    if (!enabled) {
-      clearManagedTheme();
-      return;
-    }
+    if (!smartDisplayModeRequested(window.location.search) || connection === null) return;
 
     const client = createManagedDisplayClient(connection);
 
@@ -74,10 +73,46 @@ export function ManagedDisplayRemoteController() {
           setRuntimeState('revoked');
           return;
         }
-        applyManagedTheme(config.displayTheme);
+
+        const storage = getApplicationStorage();
+        const cached = loadManagedPrayerBoardCache(storage);
+        const local = cached?.displayId === connection.displayId ? cached : null;
+        const action = reconcileManagedPrayerBoardRevision(
+          local,
+          config.contentRevision,
+          config.prayerBoardConfig,
+        );
+
+        if (action === 'report-conflict') {
+          if (local !== null) {
+            await client.heartbeat({
+              appVersion: APP_VERSION,
+              contentRevision: local.contentRevision,
+              prayerBoardTemplateId: local.config.templateId,
+              seenAt: new Date().toISOString(),
+            });
+          }
+          setRuntimeState('offline');
+          return;
+        }
+
+        const applied =
+          action === 'apply-remote'
+            ? saveManagedPrayerBoardCache(storage, {
+                displayId: connection.displayId,
+                contentRevision: config.contentRevision,
+                config: config.prayerBoardConfig,
+                cachedAt: new Date().toISOString(),
+              })
+            : local;
+
+        if (action === 'apply-remote') dispatchManagedPrayerBoardChange();
+        if (applied === null) throw new Error('Managed prayer-board cache is unavailable');
+
         await client.heartbeat({
           appVersion: APP_VERSION,
-          contentRevision: config.contentRevision,
+          contentRevision: applied.contentRevision,
+          prayerBoardTemplateId: applied.config.templateId,
           seenAt: new Date().toISOString(),
         });
         setRuntimeState('connected');
@@ -94,13 +129,7 @@ export function ManagedDisplayRemoteController() {
     return () => {
       window.clearInterval(timer);
     };
-  }, [connection, enabled]);
-
-  useEffect(() => {
-    return () => {
-      clearManagedTheme();
-    };
-  }, []);
+  }, [connection]);
 
   if (!enabled) return null;
 

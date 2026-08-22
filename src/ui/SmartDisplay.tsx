@@ -11,6 +11,14 @@ import { localeDirection, translate } from '../i18n/i18n';
 import type { Locale } from '../i18n/translations';
 import { getApplicationStorage } from '../platform/applicationStorage';
 import {
+  loadManagedDisplayConnection,
+  MANAGED_DISPLAY_CONNECTION_CHANGE_EVENT,
+} from '../platform/managedDisplayConnectionStorage';
+import {
+  loadManagedPrayerBoardCache,
+  MANAGED_PRAYER_BOARD_CACHE_CHANGE_EVENT,
+} from '../platform/managedPrayerBoardCache';
+import {
   loadPrayerBoardDisplayConfig,
   PRAYER_BOARD_DISPLAY_CONFIG_CHANGE_EVENT,
 } from '../platform/prayerBoardDisplayConfig';
@@ -90,6 +98,17 @@ function readPrayerBoardDisplayConfig(): PrayerBoardTemplateConfig | null {
   }
 }
 
+function readManagedPrayerBoardDisplayConfig(): PrayerBoardTemplateConfig | null {
+  try {
+    const storage = getApplicationStorage();
+    const connection = loadManagedDisplayConnection(storage);
+    const cached = loadManagedPrayerBoardCache(storage);
+    return connection !== null && cached?.displayId === connection.displayId ? cached.config : null;
+  } catch {
+    return null;
+  }
+}
+
 export function SmartDisplay({
   locale,
   currentClock,
@@ -107,28 +126,31 @@ export function SmartDisplay({
   const [displayConfig, setDisplayConfig] = useState<PrayerBoardTemplateConfig | null>(
     readPrayerBoardDisplayConfig,
   );
+  const [managedDisplayConfig, setManagedDisplayConfig] =
+    useState<PrayerBoardTemplateConfig | null>(readManagedPrayerBoardDisplayConfig);
   const boardData = useMemo(
     () => (dashboard === null ? null : buildPrayerBoardData({ dashboard, offline })),
     [dashboard, offline],
   );
   const queryTemplate =
     typeof window === 'undefined' ? null : smartDisplayTemplateOverride(window.location.search);
+  const storedConfig = managedDisplayConfig ?? displayConfig;
   const resolvedTemplateId =
-    templateId ?? queryTemplate ?? displayConfig?.templateId ?? 'heritage-classic';
+    templateId ?? queryTemplate ?? storedConfig?.templateId ?? 'heritage-classic';
   const resolvedConfig = useMemo(
     () =>
       parsePrayerBoardTemplateConfig({
-        ...(displayConfig ?? {}),
+        ...(storedConfig ?? {}),
         version: 1,
         templateId: resolvedTemplateId,
-        primaryLocale: displayConfig?.primaryLocale ?? locale,
-        timeFormat: displayConfig?.timeFormat ?? timeFormat,
+        primaryLocale: storedConfig?.primaryLocale ?? locale,
+        timeFormat: storedConfig?.timeFormat ?? timeFormat,
       }),
-    [displayConfig, locale, resolvedTemplateId, timeFormat],
+    [locale, resolvedTemplateId, storedConfig, timeFormat],
   );
   const resolvedLocale = resolvedConfig.primaryLocale;
   const resolvedDisplayTheme =
-    displayConfig === null ? displayTheme : displayThemeForPrayerBoardConfig(resolvedConfig);
+    storedConfig === null ? displayTheme : displayThemeForPrayerBoardConfig(resolvedConfig);
   const resolvedScenicArtworkEnabled =
     scenicArtworkEnabled ??
     (typeof window === 'undefined'
@@ -152,11 +174,24 @@ export function SmartDisplay({
     const refreshDisplayConfig = () => {
       setDisplayConfig(readPrayerBoardDisplayConfig());
     };
+    const refreshManagedDisplayConfig = () => {
+      setManagedDisplayConfig(readManagedPrayerBoardDisplayConfig());
+    };
     window.addEventListener(SMART_DISPLAY_THEME_CHANGE_EVENT, refreshTheme);
     window.addEventListener(PRAYER_BOARD_DISPLAY_CONFIG_CHANGE_EVENT, refreshDisplayConfig);
+    window.addEventListener(MANAGED_PRAYER_BOARD_CACHE_CHANGE_EVENT, refreshManagedDisplayConfig);
+    window.addEventListener(MANAGED_DISPLAY_CONNECTION_CHANGE_EVENT, refreshManagedDisplayConfig);
     return () => {
       window.removeEventListener(SMART_DISPLAY_THEME_CHANGE_EVENT, refreshTheme);
       window.removeEventListener(PRAYER_BOARD_DISPLAY_CONFIG_CHANGE_EVENT, refreshDisplayConfig);
+      window.removeEventListener(
+        MANAGED_PRAYER_BOARD_CACHE_CHANGE_EVENT,
+        refreshManagedDisplayConfig,
+      );
+      window.removeEventListener(
+        MANAGED_DISPLAY_CONNECTION_CHANGE_EVENT,
+        refreshManagedDisplayConfig,
+      );
     };
   }, []);
 
@@ -166,6 +201,7 @@ export function SmartDisplay({
       data-mode="smart-display"
       data-display-theme={resolvedDisplayTheme}
       data-display-template={resolvedTemplateId}
+      data-managed-prayer-board={managedDisplayConfig === null ? 'off' : 'on'}
       dir={localeDirection(resolvedLocale)}
       lang={resolvedLocale}
     >
@@ -209,7 +245,7 @@ export function SmartDisplay({
         <PrayerBoardRenderer
           data={boardData}
           config={resolvedConfig}
-          displayThemeOverride={displayConfig === null ? displayTheme : undefined}
+          displayThemeOverride={storedConfig === null ? displayTheme : undefined}
           scenicArtworkEnabled={resolvedScenicArtworkEnabled}
           familyEducationalHintsEnabled={resolvedFamilyEducationalHintsEnabled}
           familyDaylightCuesEnabled={resolvedFamilyDaylightCuesEnabled}

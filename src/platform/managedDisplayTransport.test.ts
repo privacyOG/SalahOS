@@ -56,7 +56,14 @@ describe('managed display device transport', () => {
 
     const config = await client.getConfig();
 
-    expect(config).toEqual(remoteConfig);
+    expect(config).toMatchObject({
+      ...remoteConfig,
+      prayerBoardAssignment: 'service-default',
+      prayerBoardConfig: {
+        templateId: 'heritage-classic',
+        accentPreset: 'emerald',
+      },
+    });
     const request = requests[0];
     expect(request === undefined ? '' : requestInputUrl(request.input)).toBe(
       'https://admin.example.org/v1/device/config?displayId=display%3Alobby',

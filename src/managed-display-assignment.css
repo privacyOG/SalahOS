@@ -1,0 +1,191 @@
+.remote-display-admin-panel__assignment-draft {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 1rem 0;
+  padding: 1rem;
+  border: 1px solid var(--card-border);
+  border-radius: 1rem;
+  background: var(--next-card);
+}
+
+.remote-display-admin-panel__assignment-draft > div {
+  display: grid;
+  gap: 0.3rem;
+  min-width: 0;
+}
+
+.remote-display-admin-panel__assignment-draft span {
+  max-width: 54rem;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1.45;
+}
+
+.remote-display-admin-panel__assignment-draft b {
+  flex: 0 0 auto;
+  padding: 0.45rem 0.7rem;
+  border: 1px solid var(--card-border);
+  border-radius: 999px;
+  background: var(--card);
+  font-size: 0.78rem;
+}
+
+.remote-display-card__compatibility {
+  display: grid;
+  gap: 0.25rem;
+  margin: 0;
+  padding: 0.65rem 0.75rem;
+  border-radius: 0.8rem;
+  background: var(--next-card);
+  font-size: 0.76rem;
+}
+
+.remote-display-card__compatibility[data-compatible='false'] {
+  border: 1px solid #d97706;
+}
+
+.remote-display-card__compatibility span {
+  color: var(--muted);
+  line-height: 1.4;
+}
+
+.remote-display-card__assignment-actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.55rem;
+}
+
+.remote-display-card__assignment-actions button {
+  min-width: 0;
+  min-height: 2.7rem;
+  padding: 0.5rem 0.65rem;
+}
+
+.remote-display-card__assignment-note {
+  grid-column: 1 / -1;
+  color: var(--muted);
+  font-size: 0.72rem;
+  line-height: 1.4;
+}
+
+.managed-target-preview {
+  position: fixed;
+  z-index: 1200;
+  inset: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  background: rgba(2, 6, 12, 0.97);
+  color: #fff;
+}
+
+.managed-target-preview__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: max(0.8rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right)) 0.8rem
+    max(1rem, env(safe-area-inset-left));
+  border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  background: rgba(3, 8, 12, 0.94);
+}
+
+.managed-target-preview__toolbar > div {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.managed-target-preview__toolbar span {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.75rem;
+}
+
+.managed-target-preview__toolbar button,
+.managed-target-preview__unsupported button {
+  min-height: 2.6rem;
+  padding: 0.5rem 0.8rem;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 0.7rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+}
+
+.managed-target-preview__viewport {
+  display: grid;
+  place-items: center;
+  min-width: 0;
+  min-height: 0;
+  overflow: auto;
+  padding: 1rem;
+}
+
+.managed-target-preview__shell {
+  position: relative;
+  flex: 0 0 auto;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  box-shadow: 0 1.5rem 4rem rgba(0, 0, 0, 0.4);
+}
+
+.managed-target-preview__canvas {
+  position: absolute;
+  inset: 0 auto auto 0;
+  overflow: hidden;
+  transform-origin: top left;
+  background: #05080b;
+}
+
+.managed-target-preview__canvas > .prayer-board-configured-surface {
+  width: 100%;
+  height: 100%;
+}
+
+.managed-target-preview__unsupported {
+  align-self: center;
+  justify-self: center;
+  display: grid;
+  gap: 0.8rem;
+  width: min(34rem, calc(100% - 2rem));
+  padding: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.managed-target-preview__unsupported h3,
+.managed-target-preview__unsupported p {
+  margin: 0;
+}
+
+.managed-target-preview__unsupported p {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+@media (max-width: 720px) {
+  .remote-display-admin-panel__assignment-draft {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .remote-display-card__assignment-actions {
+    grid-template-columns: 1fr;
+  }
+
+  .remote-display-card__assignment-note {
+    grid-column: auto;
+  }
+
+  .managed-target-preview__toolbar {
+    align-items: start;
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .managed-target-preview *,
+  .remote-display-card__assignment-actions * {
+    scroll-behavior: auto !important;
+    transition: none !important;
+  }
+}
