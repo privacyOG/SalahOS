@@ -16,7 +16,10 @@
   width: 100%;
   max-width: none;
   margin: 0;
-  padding: 0;
+  padding-block-start: env(safe-area-inset-top);
+  padding-block-end: 0;
+  padding-inline-start: env(safe-area-inset-left);
+  padding-inline-end: env(safe-area-inset-right);
 }
 
 /*

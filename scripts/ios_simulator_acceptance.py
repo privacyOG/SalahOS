@@ -4,8 +4,8 @@
 The workflow compiles the native application before this script runs, so the
 compile gate is already proven when execution reaches here. This script proves
 the separate runtime claim: that the freshly built application installs, starts,
-renders, survives an explicit termination and starts again on a clean iPhone and
-a clean iPad Simulator.
+renders a settled application frame, survives an explicit termination and starts
+again on a clean iPhone and a clean iPad Simulator.
 
 Every external command is bounded, every created device is deleted, and the
 whole run is bounded by a single budget. A hosted macOS runner whose
@@ -180,15 +180,54 @@ def capture(deadline, udid, target):
     if not os.path.isfile(target) or os.path.getsize(target) == 0:
         raise AcceptanceError('Screenshot {} was not written.'.format(target))
     width, height = png_dimensions(target)
-    log('Screenshot {}x{}: {}'.format(width, height, target))
+    size = os.path.getsize(target)
+    log('Screenshot {}x{} / {} bytes: {}'.format(width, height, size, target))
+    return size
+
+
+def capture_settled(deadline, udid, target):
+    """Reject obvious launch/loading frames and retain the first settled screenshot."""
+
+    minimum_bytes = max(1, int(os.environ.get('MIN_SETTLED_SCREENSHOT_BYTES', '180000')))
+    attempts = max(1, int(os.environ.get('SCREENSHOT_SETTLE_ATTEMPTS', '4')))
+    delay_seconds = max(0.0, float(os.environ.get('SCREENSHOT_SETTLE_DELAY_SECONDS', '3')))
+    observed_sizes = []
+
+    for attempt in range(1, attempts + 1):
+        attempt_target = '{}.attempt-{}.png'.format(target, attempt)
+        size = capture(deadline, udid, attempt_target)
+        observed_sizes.append(size)
+        if size >= minimum_bytes:
+            os.replace(attempt_target, target)
+            log(
+                'Settled screenshot accepted on attempt {} ({} >= {} bytes): {}'.format(
+                    attempt, size, minimum_bytes, target
+                )
+            )
+            return
+
+        os.remove(attempt_target)
+        log(
+            'Screenshot attempt {} looks like an unsettled launch frame ({} < {} bytes).'.format(
+                attempt, size, minimum_bytes
+            )
+        )
+        if attempt < attempts and delay_seconds > 0:
+            time.sleep(deadline.allow(delay_seconds))
+
+    raise AcceptanceError(
+        'Application did not produce a settled screenshot after {} attempts; sizes={}.'.format(
+            attempts, observed_sizes
+        )
+    )
 
 
 def start_and_capture(deadline, udid, bundle_id, target):
     output = simctl(deadline, 90, 'launch', udid, bundle_id)
     log(output)
     pid = launch_pid(output)
-    time.sleep(4)
-    capture(deadline, udid, target)
+    time.sleep(deadline.allow(4))
+    capture_settled(deadline, udid, target)
     return pid
 
 
@@ -251,6 +290,8 @@ def exercise_once(deadline, profile, runtime, device_type, app_path, bundle_id, 
             'relaunch_pid={}'.format(second_pid),
             'launch=passed',
             'relaunch=passed',
+            'settled_launch_screenshot=passed',
+            'settled_relaunch_screenshot=passed',
         ]
         with open(os.path.join(evidence_dir, profile['name'] + '.txt'), 'w') as handle:
             handle.write('\n'.join(evidence) + '\n')
