@@ -31,3 +31,31 @@
     font-size: clamp(3rem, 7.5vw, 4.25rem);
   }
 }
+
+/* Structured Split narrows the Next Prayer hero into the tablet/desktop side
+ * pane. Stack its two dominant readings there so neither can collide while the
+ * paired Start/Iqamah row remains directly below them. */
+@media (min-width: 760px) {
+  .mobile-prayer-theme-surface[data-mobile-prayer-template='structured-split-board'] .today-next {
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .mobile-prayer-theme-surface[data-mobile-prayer-template='structured-split-board']
+    .today-next__countdown {
+    justify-items: start;
+    text-align: start;
+  }
+
+  .mobile-prayer-theme-surface[data-mobile-prayer-template='structured-split-board']
+    .today-next__identity
+    h1 {
+    font-size: clamp(3rem, 6vw, 4.5rem);
+  }
+
+  .mobile-prayer-theme-surface[data-mobile-prayer-template='structured-split-board']
+    .today-next__countdown
+    strong {
+    font-size: clamp(2.5rem, 5vw, 3.5rem);
+  }
+}
