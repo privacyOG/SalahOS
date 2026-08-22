@@ -1,0 +1,155 @@
+name: PR 186 correction helper
+
+on:
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  correct:
+    if: github.head_ref == 'uiux/mobile-prayer-theme-fix'
+    runs-on: [self-hosted, Linux, X64]
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies from lockfile
+        run: npm ci --ignore-scripts
+
+      - name: Correct Qibla acceptance flows and env typing
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('src/ui/QiblaMapView.tsx')
+          content = path.read_text()
+          old = "  const value = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;"
+          new = "  const value: unknown = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;"
+          if old not in content:
+              raise SystemExit('Expected Qibla env assignment was not found')
+          path.write_text(content.replace(old, new, 1))
+
+          path = Path('scripts/visual-mobile-prayer-themes.mjs')
+          content = path.read_text()
+          old = """    if ((await page.locator('.qibla-map-consent').count()) !== 0) {
+              throw new Error('Qibla map must not be hidden behind the removed privacy-consent gate');
+            }
+            if (
+              (await page.locator('.qibla-map-shell').getAttribute('data-map-provider')) !== 'openstreetmap'
+            ) {
+              throw new Error('No-key visual build must retain the OpenStreetMap Qibla map fallback');
+            }
+            await assertNoHorizontalOverflow(page, 'qibla-premium-phone-en');
+            await capture(page, 'qibla-premium-compass-phone-en');
+            return { degreeLabels: 12, ticks: 72, provider: 'openstreetmap' };
+          """
+          new = """    if ((await page.locator('.qibla-map-consent').count()) !== 0) {
+              throw new Error('Qibla map must not be hidden behind the removed privacy-consent gate');
+            }
+            await assertNoHorizontalOverflow(page, 'qibla-premium-phone-en');
+            await capture(page, 'qibla-premium-compass-phone-en');
+
+            await page.locator('.qibla-view-switch button').nth(1).click();
+            const map = page.locator('.qibla-map-shell');
+            await map.waitFor({ state: 'visible' });
+            if ((await map.getAttribute('data-map-provider')) !== 'openstreetmap') {
+              throw new Error('No-key visual build must retain the OpenStreetMap Qibla map fallback');
+            }
+            await assertNoHorizontalOverflow(page, 'qibla-premium-map-phone-en');
+            await capture(page, 'qibla-premium-map-phone-en');
+            return { degreeLabels: 12, ticks: 72, provider: 'openstreetmap' };
+          """
+          if old not in content:
+              raise SystemExit('Expected mobile Qibla acceptance block was not found')
+          path.write_text(content.replace(old, new, 1))
+
+          path = Path('scripts/visual-mobile-prayer-themes-extended.mjs')
+          content = path.read_text()
+          old = """    if (
+              (await page.locator('.qibla-map-shell').getAttribute('data-map-provider')) !== 'openstreetmap'
+            ) {
+              throw new Error(
+                `${scenario.name} must use the no-key fallback provider in the normal visual build`,
+              );
+            }
+            const box = await compass.boundingBox();
+            if (box === null || box.width < 220 || box.height < 220) {
+              throw new Error(`${scenario.name} compass is too small for readable directional guidance`);
+            }
+            await assertNoHorizontalOverflow(page, scenario.name);
+            await capture(page, scenario.name);
+          """
+          new = """    const box = await compass.boundingBox();
+            if (box === null || box.width < 220 || box.height < 220) {
+              throw new Error(`${scenario.name} compass is too small for readable directional guidance`);
+            }
+            await assertNoHorizontalOverflow(page, scenario.name);
+            await capture(page, scenario.name);
+
+            await page.locator('.qibla-view-switch button').nth(1).click();
+            const map = page.locator('.qibla-map-shell');
+            await map.waitFor({ state: 'visible' });
+            if ((await map.getAttribute('data-map-provider')) !== 'openstreetmap') {
+              throw new Error(
+                `${scenario.name} must use the no-key fallback provider in the normal visual build`,
+              );
+            }
+            await assertNoHorizontalOverflow(page, `${scenario.name}-map`);
+            await capture(page, `${scenario.name}-map`);
+          """
+          if old not in content:
+              raise SystemExit('Expected extended Qibla acceptance block was not found')
+          path.write_text(content.replace(old, new, 1))
+
+          path = Path('scripts/visual-qibla-google.mjs')
+          content = path.read_text()
+          old = """  await page.goto(`${baseUrl}/?view=qiblah`, { waitUntil: 'networkidle' });
+            const map = page.locator('.qibla-map-shell');
+            await map.waitFor({ state: 'visible' });
+          """
+          new = """  await page.goto(`${baseUrl}/?view=qiblah`, { waitUntil: 'networkidle' });
+            await page.locator('.qibla-view-switch button').nth(1).click();
+            const map = page.locator('.qibla-map-shell');
+            await map.waitFor({ state: 'visible' });
+          """
+          if old not in content:
+              raise SystemExit('Expected Google Qibla navigation block was not found')
+          path.write_text(content.replace(old, new, 1))
+          PY
+
+      - name: Format corrected files
+        run: |
+          npx prettier --write \
+            src/ui/QiblaMapView.tsx \
+            scripts/visual-mobile-prayer-themes.mjs \
+            scripts/visual-mobile-prayer-themes-extended.mjs \
+            scripts/visual-qibla-google.mjs
+
+      - name: Verify format and lint
+        run: |
+          npm run format:check
+          npm run lint
+
+      - name: Publish correction commit object
+        run: |
+          set -euo pipefail
+          git config user.name privacyOG
+          git config user.email '102720550+privacyOG@users.noreply.github.com'
+          git add \
+            src/ui/QiblaMapView.tsx \
+            scripts/visual-mobile-prayer-themes.mjs \
+            scripts/visual-mobile-prayer-themes-extended.mjs \
+            scripts/visual-qibla-google.mjs
+          git commit -m 'Correct Qibla acceptance user flows'
+          echo "CORRECTION_SHA=$(git rev-parse HEAD)"
+          git push origin HEAD:${GITHUB_HEAD_REF}
