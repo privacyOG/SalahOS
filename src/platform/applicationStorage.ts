@@ -5,6 +5,7 @@ import { MANAGED_DISPLAY_CONNECTION_STORAGE_KEY } from './managedDisplayConnecti
 import { MANAGED_PRAYER_BOARD_CACHE_STORAGE_KEY } from './managedPrayerBoardCache';
 import { MOSQUE_LIBRARY_STORAGE_KEY } from './mosqueLibrary';
 import { MOSQUE_PROFILE_LIBRARY_STORAGE_KEY } from './mosqueProfileLibrary';
+import { PRAYER_BOARD_WEATHER_STORAGE_KEY } from './prayerBoardWeather';
 import { SAVED_LOCATIONS_STORAGE_KEY } from './savedLocations';
 import { SETTINGS_STORAGE_KEY } from './settingsStorage';
 import type { KeyValueStorage } from './settingsStorage';
@@ -19,6 +20,7 @@ export const PERSISTED_APPLICATION_KEYS = Object.freeze([
   MOSQUE_PROFILE_LIBRARY_STORAGE_KEY,
   MANAGED_DISPLAY_CONNECTION_STORAGE_KEY,
   MANAGED_PRAYER_BOARD_CACHE_STORAGE_KEY,
+  PRAYER_BOARD_WEATHER_STORAGE_KEY,
 ] as const);
 
 export interface PreferencesStore {
