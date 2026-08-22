@@ -6,6 +6,7 @@ import {
   PERSISTED_APPLICATION_KEYS,
   type PreferencesStore,
 } from './applicationStorage';
+import { MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY } from './mobilePrayerBoardDisplayConfig';
 import { PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY } from './prayerBoardDisplayConfig';
 import type { KeyValueStorage } from './settingsStorage';
 
@@ -44,12 +45,16 @@ class MemoryStorage implements KeyValueStorage {
 }
 
 describe('prayer-board native persistence', () => {
-  it('registers the selected prayer-board configuration for native hydration', () => {
+  it('registers independent Phone/Home and TV/Kiosk configuration keys for native hydration', () => {
+    expect(PERSISTED_APPLICATION_KEYS).toContain(MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY);
     expect(PERSISTED_APPLICATION_KEYS).toContain(PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY);
+    expect(MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY).not.toBe(
+      PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY,
+    );
     expect(new Set(PERSISTED_APPLICATION_KEYS).size).toBe(PERSISTED_APPLICATION_KEYS.length);
   });
 
-  it('hydrates a saved prayer-board configuration through Capacitor Preferences storage', async () => {
+  it('hydrates a saved Phone/Home prayer-board configuration through Capacitor Preferences storage', async () => {
     const preferences = new MemoryPreferences();
     const serialized = JSON.stringify({
       version: 1,
@@ -59,29 +64,70 @@ describe('prayer-board native persistence', () => {
       timeFormat: 'h23',
       accentPreset: 'jewel',
     });
-    preferences.values.set(PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY, serialized);
+    preferences.values.set(MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY, serialized);
 
     const storage = await createNativePreferencesStorage(preferences);
 
-    expect(storage.getItem(PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY)).toBe(serialized);
+    expect(storage.getItem(MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY)).toBe(serialized);
   });
 
-  it('migrates an existing WebView selection into native Preferences without overwriting native data', async () => {
+  it('hydrates Phone/Home and TV/Kiosk selections independently', async () => {
+    const preferences = new MemoryPreferences();
+    const phoneSelection = '{"templateId":"scenic-spiritual"}';
+    const displaySelection = '{"templateId":"structured-split-board"}';
+    preferences.values.set(MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY, phoneSelection);
+    preferences.values.set(PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY, displaySelection);
+
+    const storage = await createNativePreferencesStorage(preferences);
+
+    expect(storage.getItem(MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY)).toBe(phoneSelection);
+    expect(storage.getItem(PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY)).toBe(displaySelection);
+  });
+
+  it('migrates an existing WebView Phone/Home selection without overwriting newer native data', async () => {
     const webStorage = new MemoryStorage();
     const preferences = new MemoryPreferences();
     const oldWebSelection = '{"templateId":"heritage-classic"}';
     const nativeSelection = '{"templateId":"scenic-spiritual"}';
 
-    webStorage.setItem(PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY, oldWebSelection);
+    webStorage.setItem(MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY, oldWebSelection);
     const nativeStorage = await createNativePreferencesStorage(preferences);
     migrateMissingApplicationStorageKeys(webStorage, nativeStorage);
     await nativeStorage.flush();
-    expect(preferences.values.get(PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY)).toBe(oldWebSelection);
+    expect(preferences.values.get(MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY)).toBe(
+      oldWebSelection,
+    );
 
-    preferences.values.set(PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY, nativeSelection);
+    preferences.values.set(MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY, nativeSelection);
     const alreadyNative = await createNativePreferencesStorage(preferences);
     migrateMissingApplicationStorageKeys(webStorage, alreadyNative);
     await alreadyNative.flush();
-    expect(preferences.values.get(PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY)).toBe(nativeSelection);
+    expect(preferences.values.get(MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY)).toBe(
+      nativeSelection,
+    );
+  });
+
+  it('does not use a Phone/Home migration to overwrite the separate TV/Kiosk selection', async () => {
+    const webStorage = new MemoryStorage();
+    const preferences = new MemoryPreferences();
+    webStorage.setItem(
+      MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY,
+      '{"templateId":"family-classroom"}',
+    );
+    preferences.values.set(
+      PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY,
+      '{"templateId":"minimal-modern"}',
+    );
+
+    const nativeStorage = await createNativePreferencesStorage(preferences);
+    migrateMissingApplicationStorageKeys(webStorage, nativeStorage);
+    await nativeStorage.flush();
+
+    expect(preferences.values.get(MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY)).toContain(
+      'family-classroom',
+    );
+    expect(preferences.values.get(PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY)).toContain(
+      'minimal-modern',
+    );
   });
 });
