@@ -7,13 +7,22 @@ import {
 } from '../domain/prayerBoardTemplate';
 import { getApplicationStorage } from '../platform/applicationStorage';
 import {
+  loadMobilePrayerBoardDisplayConfig,
+  MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_CHANGE_EVENT,
+} from '../platform/mobilePrayerBoardDisplayConfig';
+import {
   loadPrayerBoardDisplayConfig,
   PRAYER_BOARD_DISPLAY_CONFIG_CHANGE_EVENT,
 } from '../platform/prayerBoardDisplayConfig';
 
 function readThemeConfig(): PrayerBoardTemplateConfig {
   try {
-    return loadPrayerBoardDisplayConfig(getApplicationStorage()) ?? defaultPrayerBoardTemplateConfig;
+    const storage = getApplicationStorage();
+    return (
+      loadMobilePrayerBoardDisplayConfig(storage) ??
+      loadPrayerBoardDisplayConfig(storage) ??
+      defaultPrayerBoardTemplateConfig
+    );
   } catch {
     return defaultPrayerBoardTemplateConfig;
   }
@@ -30,10 +39,12 @@ export function MobilePrayerThemeSurface({ children }: Readonly<{ children: Reac
       if (document.visibilityState === 'visible') refresh();
     };
 
+    window.addEventListener(MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_CHANGE_EVENT, refresh);
     window.addEventListener(PRAYER_BOARD_DISPLAY_CONFIG_CHANGE_EVENT, refresh);
     window.addEventListener('focus', refresh);
     document.addEventListener('visibilitychange', refreshWhenVisible);
     return () => {
+      window.removeEventListener(MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_CHANGE_EVENT, refresh);
       window.removeEventListener(PRAYER_BOARD_DISPLAY_CONFIG_CHANGE_EVENT, refresh);
       window.removeEventListener('focus', refresh);
       document.removeEventListener('visibilitychange', refreshWhenVisible);
