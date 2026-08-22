@@ -128,8 +128,8 @@
 .congregation-nav-label {
   display: block;
   max-width: 100%;
-  overflow-wrap: anywhere;
-  white-space: normal;
+  overflow-wrap: normal;
+  white-space: nowrap;
 }
 
 .congregation-nav-item[aria-current='page'] {
@@ -186,11 +186,6 @@
     width: 1.5rem;
     height: 1.5rem;
   }
-
-  .congregation-nav-label {
-    overflow-wrap: normal;
-    white-space: nowrap;
-  }
 }
 
 @media (min-width: 1200px) {
@@ -235,11 +230,6 @@
   .congregation-nav-item {
     padding-inline: 0.1rem;
     font-size: 0.6rem;
-  }
-
-  .congregation-nav-label {
-    overflow-wrap: normal;
-    white-space: nowrap;
   }
 }
 
