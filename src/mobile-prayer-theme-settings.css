@@ -328,6 +328,8 @@
 }
 
 .mobile-theme-preview-dialog__toolbar {
+  position: relative;
+  z-index: 2;
   display: flex;
   width: min(100%, 58rem);
   align-items: center;
@@ -353,7 +355,11 @@
 }
 
 .mobile-theme-preview-dialog__device {
+  position: relative;
+  z-index: 1;
+  box-sizing: border-box;
   width: min(100%, 27rem);
+  max-height: 100%;
   min-height: 0;
   align-self: center;
   justify-self: center;
