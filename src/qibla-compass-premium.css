@@ -4,6 +4,10 @@
   --qibla-guide: #d7ad58;
 }
 
+.qibla-finder--v2 .qibla-finder-privacy {
+  display: none;
+}
+
 .qibla-finder--v2 .qibla-compass-dial {
   position: relative;
   width: min(88vw, 540px);
@@ -149,6 +153,44 @@
 .qibla-finder--v2 .qibla-compass-dial.is-aligned .qibla-bearing-arrow circle,
 .qibla-finder--v2 .qibla-compass-dial.is-aligned .qibla-needle-hub-inner {
   fill: #43b584;
+}
+
+.qibla-map-google-satellite {
+  position: absolute;
+  z-index: 0;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  object-fit: fill;
+  user-select: none;
+  pointer-events: none;
+}
+
+.qibla-map-shell[data-map-provider='google-satellite'] .qibla-map-viewport {
+  background: #101820;
+}
+
+.qibla-map-shell[data-map-provider='google-satellite'] .qibla-map-bearing-overlay line {
+  stroke: #f0bd53;
+  stroke-width: 2.2;
+  stroke-dasharray: 4 3;
+  filter: drop-shadow(0 1px 2px rgb(0 0 0 / 85%));
+}
+
+.qibla-map-shell[data-map-provider='google-satellite'] .qibla-map-user-marker {
+  border-color: #ffffff;
+  background: #2877e8;
+  box-shadow:
+    0 0 0 12px rgb(40 119 232 / 18%),
+    0 2px 8px rgb(0 0 0 / 45%);
+}
+
+.qibla-map-shell[data-map-provider='google-satellite'] .qibla-map-kaaba-chip {
+  color: #f0bd53;
+  background: #07182c;
+  border-color: #f0bd53;
 }
 
 @media (max-width: 430px) {
