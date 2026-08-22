@@ -203,7 +203,7 @@ export function MobilePrayerThemeSettings() {
   const appliedFingerprint = JSON.stringify(applied);
   const previewed = previewedFingerprint === fingerprint;
   const dirty = fingerprint !== appliedFingerprint;
-  const previewData = useMemo(() => buildPrayerBoardPreviewData('near-athan'), []);
+  const previewData = useMemo(() => buildPrayerBoardPreviewData('jumuah'), []);
 
   const chooseTemplate = (templateId: PrayerBoardTemplateId) => {
     setDraft((current) =>
