@@ -4,17 +4,17 @@
 
 ## Product scope
 
-SalahOS is a privacy-focused Islamic prayer-time application and smart-display ecosystem. The same prayer-domain logic supports Android, iOS/iPadOS, modern browsers/PWA, Raspberry Pi Touch Display 2, TV browsers, and kiosk/full-screen deployments.
+SalahOS is a cross-platform Islamic prayer-time application and smart-display ecosystem. The same prayer-domain logic supports Android, iOS/iPadOS, modern browsers/PWA, Raspberry Pi Touch Display 2, TV browsers, and kiosk/full-screen deployments.
 
 ## Architecture principles
 
-1. **Local-first:** prayer calculations, settings, saved locations, and imported mosque timetables operate locally by default.
+1. **Reliable core prayer operation:** prayer calculations, settings, saved locations, and imported mosque timetables remain usable locally, including offline after the required application data is installed.
 2. **Deterministic domain core:** astronomical and prayer-time calculations live in pure TypeScript with no UI, DOM, storage, GPS, or network dependency.
 3. **Shared application logic:** platform shells adapt location, notifications, persistence, lifecycle behaviour and supported audio policy without duplicating prayer rules.
 4. **Explicit provenance:** every displayed prayer schedule identifies calculation method/source, Asr convention, high-latitude rule, timezone, manual offsets, and mosque timetable source where applicable.
 5. **Offline capable:** core prayer-time functionality remains useful with no network connection after installation/configuration.
 6. **Accessible and bilingual from the start:** English and Arabic/RTL are architectural requirements rather than later retrofits.
-7. **Least privilege:** native permissions and application networking remain narrower than the maximum capability exposed by the host platform.
+7. **Reviewed platform capabilities:** native permissions, credentials and remote-network capabilities must be explicit, purpose-scoped and reviewed before release.
 
 ## Cross-platform strategy
 
@@ -69,11 +69,13 @@ The prayer engine remains intentionally separable from platform code; a future p
 - **Ephemeral UI state:** current clock tick, open controls, transient errors and current online state.
 - **Platform state:** permission status, app lifecycle, notification scheduling capability, exact-alarm capability and native persistence readiness.
 
-## Security and privacy boundaries
+## Security, privacy and networking boundaries
 
-Core v1 calculation and application operation do not depend on a remote prayer API or mandatory account. Production application source is guarded against silently introducing remote fetch/XHR/WebSocket/EventSource use or remote HTTP URL literals. Any future optional provider integration must be an explicit reviewed change that documents transmitted data, authentication/secrets handling, TLS, response validation, offline degradation and user disclosure before the repository network policy is widened.
+Core prayer calculation and ordinary application operation do not depend on a remote prayer API or mandatory account. Remote capabilities are allowed when they implement a documented SalahOS feature, but each capability must be explicitly reviewed for transmitted data, authentication/credential handling, TLS, response validation, failure isolation and user-facing behaviour. Optional provider failure must not invalidate the local prayer engine or corrupt authoritative prayer/source state.
 
 Native location is foreground and user-initiated. Android does not request background location or an unrestricted battery-optimisation exemption. iOS/iPadOS uses only the foreground location usage description and does not declare a background location mode. `docs/NATIVE_PERMISSIONS.md` and the native-permission policy script are the executable review boundary for permission expansion.
+
+Client-visible service credentials such as a restricted Google Maps browser key are treated as public identifiers rather than secrets. Private signing material, server credentials and URL-signing secrets must remain outside shipped application bundles. The repository network-policy gate records approved remote hosts/capabilities so a new dependency on external infrastructure cannot be introduced accidentally.
 
 ## v1 acceptance criteria
 
