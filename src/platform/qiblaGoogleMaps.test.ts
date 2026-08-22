@@ -36,9 +36,7 @@ describe('Qibla Google Maps provider', () => {
   });
 
   it('rejects invalid viewport geometry', () => {
-    expect(() => qiblaGoogleStaticMapPointForViewport(0, 480, { x: 0, y: 0 })).toThrow(
-      /viewport/u,
-    );
+    expect(() => qiblaGoogleStaticMapPointForViewport(0, 480, { x: 0, y: 0 })).toThrow(/viewport/u);
   });
 
   it('rejects an empty API key and exposes the Google Maps terms link', () => {

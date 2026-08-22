@@ -13,9 +13,7 @@
   width: min(88vw, 540px);
   padding: clamp(0.35rem, 1vw, 0.7rem);
   border-radius: 50%;
-  background:
-    radial-gradient(circle at 50% 46%, rgb(35 73 105 / 38%), transparent 52%),
-    #06182d;
+  background: radial-gradient(circle at 50% 46%, rgb(35 73 105 / 38%), transparent 52%), #06182d;
   box-shadow:
     0 1.2rem 3rem rgb(0 0 0 / 24%),
     inset 0 0 0 1px rgb(215 173 88 / 18%);

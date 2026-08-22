@@ -84,7 +84,9 @@ try {
     throw new Error('OpenStreetMap tiles rendered while Google satellite mode was selected');
   }
   if (requestedGoogleMapsUrls.length !== 1) {
-    throw new Error(`Expected one Google Static Maps request, received ${requestedGoogleMapsUrls.length}`);
+    throw new Error(
+      `Expected one Google Static Maps request, received ${requestedGoogleMapsUrls.length}`,
+    );
   }
 
   const requestedUrl = new URL(requestedGoogleMapsUrls[0]);
@@ -107,7 +109,9 @@ try {
   const width = await page.evaluate(() => document.documentElement.clientWidth);
   const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
   if (scrollWidth > width + 2) {
-    throw new Error(`Google satellite Qibla fixture has horizontal overflow: ${scrollWidth}/${width}`);
+    throw new Error(
+      `Google satellite Qibla fixture has horizontal overflow: ${scrollWidth}/${width}`,
+    );
   }
 
   await page.screenshot({

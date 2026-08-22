@@ -113,7 +113,10 @@ async function capture(page, name) {
 }
 
 async function validateTranslatedTheme(browser, scenario) {
-  const context = await browser.newContext({ viewport: scenario.viewport, reducedMotion: 'reduce' });
+  const context = await browser.newContext({
+    viewport: scenario.viewport,
+    reducedMotion: 'reduce',
+  });
   const page = await context.newPage();
   try {
     await seed(page, scenario.locale, scenario.templateId);
@@ -126,7 +129,11 @@ async function validateTranslatedTheme(browser, scenario) {
     if ((await page.locator('.congregation-nav .congregation-nav-item').count()) !== 5) {
       throw new Error(`${scenario.name} did not preserve the five-item primary navigation`);
     }
-    if ((await page.locator('.today-prayer-row:not(.today-prayer-row--header):not(.is-supplementary)').count()) !== 5) {
+    if (
+      (await page
+        .locator('.today-prayer-row:not(.today-prayer-row--header):not(.is-supplementary)')
+        .count()) !== 5
+    ) {
       throw new Error(`${scenario.name} did not preserve five obligatory prayer rows`);
     }
     await assertNoHorizontalOverflow(page, scenario.name);
@@ -137,7 +144,10 @@ async function validateTranslatedTheme(browser, scenario) {
 }
 
 async function validateQiblaLayout(browser, scenario) {
-  const context = await browser.newContext({ viewport: scenario.viewport, reducedMotion: 'reduce' });
+  const context = await browser.newContext({
+    viewport: scenario.viewport,
+    reducedMotion: 'reduce',
+  });
   const page = await context.newPage();
   await page.route('https://tile.openstreetmap.org/**', (route) =>
     route.fulfill({ status: 200, contentType: 'image/png', body: transparentPixel }),
@@ -160,8 +170,12 @@ async function validateQiblaLayout(browser, scenario) {
     if ((await compass.locator('.qibla-intercardinal-label').count()) !== 4) {
       throw new Error(`${scenario.name} lost intercardinal labels`);
     }
-    if ((await page.locator('.qibla-map-shell').getAttribute('data-map-provider')) !== 'openstreetmap') {
-      throw new Error(`${scenario.name} must use the no-key fallback provider in the normal visual build`);
+    if (
+      (await page.locator('.qibla-map-shell').getAttribute('data-map-provider')) !== 'openstreetmap'
+    ) {
+      throw new Error(
+        `${scenario.name} must use the no-key fallback provider in the normal visual build`,
+      );
     }
     const box = await compass.boundingBox();
     if (box === null || box.width < 220 || box.height < 220) {

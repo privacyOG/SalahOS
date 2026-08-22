@@ -269,7 +269,9 @@ export function MobilePrayerThemeSettings() {
         <div className="mobile-theme-preview-dialog" role="dialog" aria-modal="true">
           <div className="mobile-theme-preview-dialog__toolbar">
             <div>
-              <strong>{prayerBoardTemplateRegistry.find((item) => item.id === draft.templateId)?.label}</strong>
+              <strong>
+                {prayerBoardTemplateRegistry.find((item) => item.id === draft.templateId)?.label}
+              </strong>
               <span>{text.phoneTarget}</span>
             </div>
             <button

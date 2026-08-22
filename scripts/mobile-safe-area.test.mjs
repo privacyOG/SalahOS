@@ -27,7 +27,9 @@ describe('mobile safe-area contract', () => {
   });
 
   it('does not erase the top or horizontal safe-area contract on the Today route', () => {
-    const todayRouteRule = congregationShellCss.match(/\.app-shell\.today-route-shell\s*\{[^}]*\}/s)?.[0];
+    const todayRouteRule = congregationShellCss.match(
+      /\.app-shell\.today-route-shell\s*\{[^}]*\}/s,
+    )?.[0];
     expect(todayRouteRule).toBeDefined();
     expect(todayRouteRule).toContain('padding-block-start: env(safe-area-inset-top)');
     expect(todayRouteRule).toContain('padding-inline-start: env(safe-area-inset-left)');

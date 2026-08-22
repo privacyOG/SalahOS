@@ -116,9 +116,7 @@
 
 .mobile-theme-choice__thumb--heritage-classic {
   color: #fff8e8;
-  background:
-    radial-gradient(circle at top right, rgb(214 173 90 / 30%), transparent 55%),
-    #071d36;
+  background: radial-gradient(circle at top right, rgb(214 173 90 / 30%), transparent 55%), #071d36;
   box-shadow: inset 0 0 0 1px rgb(214 173 90 / 55%);
 }
 
@@ -195,9 +193,7 @@
 
 .mobile-theme-choice__thumb--family-classroom {
   color: #183047;
-  background:
-    radial-gradient(circle at 86% 10%, rgb(95 165 197 / 35%), transparent 50%),
-    #fff4d9;
+  background: radial-gradient(circle at 86% 10%, rgb(95 165 197 / 35%), transparent 50%), #fff4d9;
   box-shadow: inset 0 0 0 1px #dfb662;
 }
 

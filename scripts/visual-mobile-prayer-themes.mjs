@@ -130,8 +130,15 @@ async function seed(page, scenario) {
         }
       }
       globalThis.Date = FixedDate;
-      localStorage.setItem('salahos.settings', JSON.stringify(settings));
-      localStorage.setItem('salahos.mobilePrayerBoardDisplayConfig', JSON.stringify(mobileConfig));
+      if (localStorage.getItem('salahos.settings') === null) {
+        localStorage.setItem('salahos.settings', JSON.stringify(settings));
+      }
+      if (localStorage.getItem('salahos.mobilePrayerBoardDisplayConfig') === null) {
+        localStorage.setItem(
+          'salahos.mobilePrayerBoardDisplayConfig',
+          JSON.stringify(mobileConfig),
+        );
+      }
     },
     {
       now: fixedNow,
@@ -234,7 +241,9 @@ async function validateSelectorFlow(browser) {
     if ((await editor.locator('[data-mobile-theme-choice]').count()) !== 6) {
       throw new Error('Phone/Home theme selector must expose exactly six designs');
     }
-    const managedDisplayLink = page.locator('.settings-display-entry > .surface-entry-card__action');
+    const managedDisplayLink = page.locator(
+      '.settings-display-entry > .surface-entry-card__action',
+    );
     if ((await managedDisplayLink.count()) !== 1) {
       throw new Error('TV/kiosk managed-display theme target must remain separately reachable');
     }
@@ -261,8 +270,9 @@ async function validateSelectorFlow(browser) {
 
     await page.goto(`${baseUrl}/?view=today`, { waitUntil: 'networkidle' });
     if (
-      (await page.locator('.mobile-prayer-theme-surface').getAttribute('data-mobile-prayer-template')) !==
-      'scenic-spiritual'
+      (await page
+        .locator('.mobile-prayer-theme-surface')
+        .getAttribute('data-mobile-prayer-template')) !== 'scenic-spiritual'
     ) {
       throw new Error('Applied Phone/Home selection was not rendered on Today');
     }
@@ -305,7 +315,9 @@ async function validateQibla(browser) {
     if ((await page.locator('.qibla-map-consent').count()) !== 0) {
       throw new Error('Qibla map must not be hidden behind the removed privacy-consent gate');
     }
-    if ((await page.locator('.qibla-map-shell').getAttribute('data-map-provider')) !== 'openstreetmap') {
+    if (
+      (await page.locator('.qibla-map-shell').getAttribute('data-map-provider')) !== 'openstreetmap'
+    ) {
       throw new Error('No-key visual build must retain the OpenStreetMap Qibla map fallback');
     }
     await assertNoHorizontalOverflow(page, 'qibla-premium-phone-en');

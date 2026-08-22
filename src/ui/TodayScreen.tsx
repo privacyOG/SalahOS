@@ -212,11 +212,7 @@ export function TodayScreen() {
   const nextPrayerStart =
     prayerBoardData?.nextPrayer === null || prayerBoardData?.nextPrayer === undefined
       ? '—'
-      : formatLocalTime(
-          prayerBoardData.nextPrayer.startLocalMinutes,
-          locale,
-          settings.timeFormat,
-        );
+      : formatLocalTime(prayerBoardData.nextPrayer.startLocalMinutes, locale, settings.timeFormat);
   const nextPrayerIqamahMinutes = prayerBoardData?.nextPrayer?.iqamahLocalMinutes ?? null;
   const nextPrayerIqamah =
     nextPrayerIqamahMinutes === null
@@ -407,22 +403,14 @@ export function TodayScreen() {
                     <strong className="today-prayer-row__time" role="cell">
                       {prayer.startLocalMinutes === null
                         ? '—'
-                        : formatLocalTime(
-                            prayer.startLocalMinutes,
-                            locale,
-                            settings.timeFormat,
-                          )}
+                        : formatLocalTime(prayer.startLocalMinutes, locale, settings.timeFormat)}
                     </strong>
                     <strong className="today-prayer-row__time today-prayer-row__iqamah" role="cell">
                       {supplementary
                         ? '—'
                         : prayer.iqamahLocalMinutes === null
                           ? translate(locale, 'noIqamah')
-                          : formatLocalTime(
-                              prayer.iqamahLocalMinutes,
-                              locale,
-                              settings.timeFormat,
-                            )}
+                          : formatLocalTime(prayer.iqamahLocalMinutes, locale, settings.timeFormat)}
                     </strong>
                   </div>
                 );
@@ -476,7 +464,8 @@ export function TodayScreen() {
 
           <footer className="today-provenance">
             <span>
-              {translate(locale, 'method')}: <BidiText>{sourcedDashboard.base.method.name}</BidiText>
+              {translate(locale, 'method')}:{' '}
+              <BidiText>{sourcedDashboard.base.method.name}</BidiText>
             </span>
             <span>
               {translate(locale, 'timezone')}: <BidiText>{prayerBoardData.timeZone}</BidiText>
