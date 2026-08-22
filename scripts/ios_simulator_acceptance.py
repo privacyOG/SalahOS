@@ -37,6 +37,40 @@ PROFILES = (
     },
 )
 
+MOBILE_THEME_STORAGE_KEY = 'salahos.mobilePrayerBoardDisplayConfig'
+MOBILE_THEME_NATIVE_KEY = 'CapacitorStorage.' + MOBILE_THEME_STORAGE_KEY
+
+
+def mobile_theme_fixture(profile_name):
+    template_id = 'scenic-spiritual' if profile_name == 'iphone' else 'family-classroom'
+    accent = 'jewel' if profile_name == 'iphone' else 'sandstone'
+    artwork = 'scenic-gradient' if profile_name == 'iphone' else 'classroom-pattern'
+    return json.dumps(
+        {
+            'version': 1,
+            'templateId': template_id,
+            'primaryLocale': 'en',
+            'languageMode': 'single',
+            'timeFormat': 'h23',
+            'accentPreset': accent,
+            'moduleVisibility': {
+                'current-time': True,
+                'dates': True,
+                'next-prayer': True,
+                'countdown': True,
+                'prayer-timetable': True,
+                'jumuah': True,
+                'sunrise-sunset': True,
+                'mosque-branding': True,
+                'announcements': True,
+                'weather': False,
+            },
+            'branding': {'mosqueName': None, 'logo': None},
+            'background': {'kind': 'builtin', 'artworkId': artwork},
+        },
+        separators=(',', ':'),
+    )
+
 
 class AcceptanceError(RuntimeError):
     """A runtime acceptance expectation was not met."""
@@ -244,6 +278,45 @@ def diagnostics(deadline, udid):
                 log('{}: {}'.format(runtime_identifier, device))
 
 
+def seed_mobile_theme(deadline, udid, bundle_id, value):
+    simctl(
+        deadline,
+        60,
+        'spawn',
+        udid,
+        'defaults',
+        'write',
+        bundle_id,
+        MOBILE_THEME_NATIVE_KEY,
+        '-string',
+        value,
+    )
+
+
+def read_mobile_theme(deadline, udid, bundle_id):
+    return simctl(
+        deadline,
+        60,
+        'spawn',
+        udid,
+        'defaults',
+        'read',
+        bundle_id,
+        MOBILE_THEME_NATIVE_KEY,
+    )
+
+
+def assert_mobile_theme(deadline, udid, bundle_id, expected, phase):
+    observed = read_mobile_theme(deadline, udid, bundle_id)
+    if observed != expected:
+        raise AcceptanceError(
+            'Phone/Home theme changed during iOS {}. Expected {!r}, observed {!r}.'.format(
+                phase, expected, observed
+            )
+        )
+    log('Phone/Home native theme persistence verified after iOS {}.'.format(phase))
+
+
 def exercise_once(deadline, profile, runtime, device_type, app_path, bundle_id, evidence_dir):
     """Create one clean Simulator and run the full acceptance path on it."""
 
@@ -270,13 +343,19 @@ def exercise_once(deadline, profile, runtime, device_type, app_path, bundle_id, 
         if not os.path.isdir(container_path):
             raise AcceptanceError('Installed application container {} is missing.'.format(container_path))
 
+        expected_mobile_theme = mobile_theme_fixture(profile['name'])
+        seed_mobile_theme(deadline, udid, bundle_id, expected_mobile_theme)
+        assert_mobile_theme(deadline, udid, bundle_id, expected_mobile_theme, 'native seed')
+
         first_pid = start_and_capture(
             deadline, udid, bundle_id, os.path.join(evidence_dir, profile['name'] + '-launch.png')
         )
+        assert_mobile_theme(deadline, udid, bundle_id, expected_mobile_theme, 'launch')
         simctl(deadline, 90, 'terminate', udid, bundle_id)
         second_pid = start_and_capture(
             deadline, udid, bundle_id, os.path.join(evidence_dir, profile['name'] + '-relaunch.png')
         )
+        assert_mobile_theme(deadline, udid, bundle_id, expected_mobile_theme, 'process relaunch')
 
         evidence = [
             'profile={}'.format(profile['name']),
@@ -292,6 +371,11 @@ def exercise_once(deadline, profile, runtime, device_type, app_path, bundle_id, 
             'relaunch=passed',
             'settled_launch_screenshot=passed',
             'settled_relaunch_screenshot=passed',
+            'mobile_theme_storage_key={}'.format(MOBILE_THEME_STORAGE_KEY),
+            'mobile_theme_native_key={}'.format(MOBILE_THEME_NATIVE_KEY),
+            'mobile_theme_value={}'.format(expected_mobile_theme),
+            'mobile_theme_launch=passed',
+            'mobile_theme_relaunch=passed',
         ]
         with open(os.path.join(evidence_dir, profile['name'] + '.txt'), 'w') as handle:
             handle.write('\n'.join(evidence) + '\n')
