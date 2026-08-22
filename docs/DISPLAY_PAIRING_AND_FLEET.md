@@ -43,7 +43,8 @@ Display heartbeats report:
 - display ID;
 - observation time;
 - application version;
-- current content revision.
+- current applied content revision;
+- applied prayer-board template identifier when available.
 
 `buildDisplayFleetStatus` compares the heartbeat to the target revision and returns one of:
 
@@ -55,11 +56,41 @@ Display heartbeats report:
 
 The original pure-domain thresholds are intentionally stricter than the self-hosted Stage 36 reference service's operational UI thresholds. Both paths expose the same explicit state vocabulary rather than hiding connectivity failures.
 
+Managed fleet status additionally distinguishes the target prayer-board assignment from what the device last reported as actually applied. The administration surface can therefore show effective template, assignment source, target configuration revision, reported applied revision and reported applied template together.
+
 ## Revision reconciliation
 
 Remote configuration publication uses optimistic revisions. An administrator submits both the revision they read and a strictly higher target revision. A stale writer receives a conflict rather than overwriting a newer configuration.
 
-The display polls its assigned configuration, applies supported typed settings, and then reports the applied revision in its next authenticated heartbeat. Remote transport is fail-soft: the cached prayer screen continues to operate when the service cannot be reached.
+Stage 23.10 stores the complete validated prayer-board template configuration in the same revisioned managed-display configuration. Effective assignment follows compatible per-display override, then compatible mosque default, then the deterministic service default.
+
+The display polls its assigned configuration and reconciles it against a validated last-known-good prayer-board cache:
+
+- no local cache or a newer remote revision -> validate, persist and apply the remote configuration;
+- newer local cached revision -> retain the local known-good configuration;
+- equal revision with equal configuration -> retain the cache;
+- equal revision with different configuration -> report a conflict rather than silently replacing known-good state.
+
+The display then reports the revision and template it actually applied in its next authenticated heartbeat. Reconciliation affects presentation only and does not interrupt local prayer calculation, source selection, Iqamah values or next-prayer state.
+
+## Prayer-board target compatibility
+
+The managed publication path resolves stable display identity into an exact target before publication. The currently validated Stage 23.10 managed targets are landscape `1920×1080` and `3840×2160`; legacy 1080p/4K aliases resolve to those exact dimensions.
+
+The administrator must preview the current draft at the physical display's exact resolved target before publication is enabled. Unsupported portrait, Touch Display and other unvalidated target combinations are rejected rather than silently stretched.
+
+## Last-known-good display cache
+
+The display keeps a versioned local managed prayer-board cache containing:
+
+- display ID;
+- applied content revision;
+- complete normalized prayer-board template configuration;
+- cache timestamp.
+
+The cache key participates in native application-storage hydration so Android/iOS restart can restore the known-good configuration before a remote service is reachable. Corrupt cache data fails closed.
+
+If remote configuration or optional managed media synchronization fails, the cached built-in-capable prayer-board configuration continues rendering while local prayer calculation remains authoritative. On reconnect, the revision rules above determine whether remote state is applied, retained or reported as conflicting.
 
 ## Self-hosted managed transport
 
@@ -68,12 +99,15 @@ Stage 36 adds a concrete optional transport described in `docs/REMOTE_MANAGED_AD
 The reference implementation provides:
 
 - administrator-authenticated fleet listing, enrollment, configuration and revocation;
+- revisioned mosque-default prayer-board configuration with per-display overrides/inheritance;
+- exact-target compatibility validation and preview-before-publication;
 - one-time per-display credentials with only SHA-256 digests persisted server-side;
-- authenticated display configuration polling and heartbeat reporting;
-- atomic local service state persistence;
+- authenticated display configuration polling and heartbeat reporting of applied revision/template;
+- atomic local service state persistence with safe v1 -> v2 prayer-board migration;
 - a browser fleet-management surface;
 - a local device-provisioning surface;
-- smart-display polling and runtime status presentation.
+- native-persisted last-known-good prayer-board caching;
+- smart-display polling, reconnect reconciliation and offline-cache runtime status presentation.
 
 Ordinary application networking remains forbidden by repository policy. Only the reviewed `src/platform/managedAdminTransport.ts` adapter may issue application network requests.
 
