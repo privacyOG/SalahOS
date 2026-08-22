@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: write
+  issues: write
 
 jobs:
   export:
@@ -169,6 +170,13 @@ jobs:
           }
           Path('stage-23-13-final-commit.json').write_text(json.dumps(output, indent=2) + '\n', encoding='utf-8')
           print(json.dumps(output, indent=2))
+          api(
+              'POST',
+              'issues/186/comments',
+              {
+                  'body': f"Stage 23.13 tracker exporter produced clean candidate `{commit['sha']}` from accepted code head `{code_head}`. The candidate tree excludes this temporary exporter and awaits branch advancement plus exact-final-head gates."
+              },
+          )
           PY
 
       - name: Upload clean commit reference
