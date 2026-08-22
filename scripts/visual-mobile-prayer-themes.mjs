@@ -315,13 +315,17 @@ async function validateQibla(browser) {
     if ((await page.locator('.qibla-map-consent').count()) !== 0) {
       throw new Error('Qibla map must not be hidden behind the removed privacy-consent gate');
     }
-    if (
-      (await page.locator('.qibla-map-shell').getAttribute('data-map-provider')) !== 'openstreetmap'
-    ) {
-      throw new Error('No-key visual build must retain the OpenStreetMap Qibla map fallback');
-    }
     await assertNoHorizontalOverflow(page, 'qibla-premium-phone-en');
     await capture(page, 'qibla-premium-compass-phone-en');
+
+    await page.locator('.qibla-view-switch button').nth(1).click();
+    const map = page.locator('.qibla-map-shell');
+    await map.waitFor({ state: 'visible' });
+    if ((await map.getAttribute('data-map-provider')) !== 'openstreetmap') {
+      throw new Error('No-key visual build must retain the OpenStreetMap Qibla map fallback');
+    }
+    await assertNoHorizontalOverflow(page, 'qibla-premium-map-phone-en');
+    await capture(page, 'qibla-premium-map-phone-en');
     return { degreeLabels: 12, ticks: 72, provider: 'openstreetmap' };
   } finally {
     await context.close();

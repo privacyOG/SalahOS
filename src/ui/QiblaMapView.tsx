@@ -23,7 +23,7 @@ interface QiblaMapViewProps {
 }
 
 function googleMapsApiKey(): string | null {
-  const value = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
+  const value: unknown = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
   return typeof value === 'string' && value.trim().length > 0 ? value.trim() : null;
 }
 

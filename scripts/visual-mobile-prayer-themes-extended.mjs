@@ -170,19 +170,23 @@ async function validateQiblaLayout(browser, scenario) {
     if ((await compass.locator('.qibla-intercardinal-label').count()) !== 4) {
       throw new Error(`${scenario.name} lost intercardinal labels`);
     }
-    if (
-      (await page.locator('.qibla-map-shell').getAttribute('data-map-provider')) !== 'openstreetmap'
-    ) {
-      throw new Error(
-        `${scenario.name} must use the no-key fallback provider in the normal visual build`,
-      );
-    }
     const box = await compass.boundingBox();
     if (box === null || box.width < 220 || box.height < 220) {
       throw new Error(`${scenario.name} compass is too small for readable directional guidance`);
     }
     await assertNoHorizontalOverflow(page, scenario.name);
     await capture(page, scenario.name);
+
+    await page.locator('.qibla-view-switch button').nth(1).click();
+    const map = page.locator('.qibla-map-shell');
+    await map.waitFor({ state: 'visible' });
+    if ((await map.getAttribute('data-map-provider')) !== 'openstreetmap') {
+      throw new Error(
+        `${scenario.name} must use the no-key fallback provider in the normal visual build`,
+      );
+    }
+    await assertNoHorizontalOverflow(page, `${scenario.name}-map`);
+    await capture(page, `${scenario.name}-map`);
   } finally {
     await context.close();
   }

@@ -69,6 +69,7 @@ try {
   });
 
   await page.goto(`${baseUrl}/?view=qiblah`, { waitUntil: 'networkidle' });
+  await page.locator('.qibla-view-switch button').nth(1).click();
   const map = page.locator('.qibla-map-shell');
   await map.waitFor({ state: 'visible' });
 
