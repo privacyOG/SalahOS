@@ -195,14 +195,16 @@ async function validateTheme(browser, scenario) {
       throw new Error(`${scenario.name} did not apply ${scenario.templateId}`);
     }
     await assertPrayerBoardDataBoundary(page, scenario.name);
-    const obligatoryPrayerRows = page.locator(
-      '.today-prayer-row:not(.today-prayer-row--header):not(.is-supplementary)',
-    );
-    if ((await obligatoryPrayerRows.count()) !== 5) {
+    const prayerRows = page.locator('.today-prayer-row:not(.today-prayer-row--header)');
+    if ((await prayerRows.count()) !== 5) {
       throw new Error(`${scenario.name} did not preserve exactly five obligatory prayer rows`);
     }
-    if ((await page.locator('.today-prayer-row.is-supplementary').count()) !== 1) {
-      throw new Error(`${scenario.name} did not preserve Sunrise as one supplementary row`);
+    if ((await page.locator('.today-prayer-row.is-supplementary').count()) !== 0) {
+      throw new Error(`${scenario.name} left Sunrise duplicated inside the prayer timetable`);
+    }
+    const solarTimes = page.locator('.today-solar__times > div');
+    if ((await solarTimes.count()) !== 2) {
+      throw new Error(`${scenario.name} did not present distinct Sunrise and Sunset values`);
     }
     if (scenario.locale === 'ar' && (await surface.getAttribute('dir')) === 'ltr') {
       throw new Error(`${scenario.name} lost RTL presentation`);
@@ -240,6 +242,9 @@ async function validateSelectorFlow(browser) {
     await editor.waitFor({ state: 'visible' });
     if ((await editor.locator('[data-mobile-theme-choice]').count()) !== 6) {
       throw new Error('Phone/Home theme selector must expose exactly six designs');
+    }
+    if ((await editor.locator('[data-mobile-theme-module]').count()) !== 5) {
+      throw new Error('Phone/Home theme selector must expose five supported optional modules');
     }
     const managedDisplayLink = page.locator(
       '.settings-display-entry > .surface-entry-card__action',
@@ -279,6 +284,70 @@ async function validateSelectorFlow(browser) {
     await assertPrayerBoardDataBoundary(page, 'mobile-theme-selector-applied-today-en');
     await capture(page, 'mobile-theme-selector-applied-today-en');
     return { selectorApplied: stored.templateId };
+  } finally {
+    await context.close();
+  }
+}
+
+async function validateModuleFlow(browser) {
+  const scenario = scenarios[1];
+  const context = await browser.newContext({ viewport: { width: 430, height: 932 } });
+  const page = await context.newPage();
+  try {
+    await seed(page, scenario);
+    await page.goto(`${baseUrl}/?view=settings&settingsView=display-themes`, {
+      waitUntil: 'networkidle',
+    });
+    const editor = page.locator('.settings-display-entry .mobile-prayer-theme-settings');
+    await editor.waitFor({ state: 'visible' });
+    await editor.locator('[data-mobile-theme-module="dates"]').uncheck();
+    await editor.locator('[data-mobile-theme-module="sunrise-sunset"]').uncheck();
+
+    const apply = editor.locator('.mobile-prayer-theme-settings__actions button.primary');
+    await editor.locator('.mobile-prayer-theme-settings__actions button.secondary').click();
+    const preview = page.locator('.mobile-theme-preview-dialog');
+    await preview.waitFor({ state: 'visible' });
+    if ((await preview.locator('.today-dates').count()) !== 0) {
+      throw new Error('Phone/Home preview did not hide the disabled dates module');
+    }
+    if ((await preview.locator('.today-solar').count()) !== 0) {
+      throw new Error('Phone/Home preview did not hide the disabled Sunrise/Sunset module');
+    }
+    await capture(page, 'mobile-theme-modules-hidden-preview-en');
+    await preview.locator('.mobile-theme-preview-dialog__toolbar button').click();
+    if (await apply.isDisabled()) {
+      throw new Error('Phone/Home module configuration did not unlock after preview');
+    }
+    await apply.click();
+
+    const stored = await page.evaluate(() => {
+      const raw = localStorage.getItem('salahos.mobilePrayerBoardDisplayConfig');
+      return raw === null ? null : JSON.parse(raw);
+    });
+    if (stored?.moduleVisibility?.dates !== false) {
+      throw new Error('Disabled Phone/Home dates module was not persisted');
+    }
+    if (stored?.moduleVisibility?.['sunrise-sunset'] !== false) {
+      throw new Error('Disabled Phone/Home Sunrise/Sunset module was not persisted');
+    }
+
+    await page.goto(`${baseUrl}/?view=today`, { waitUntil: 'networkidle' });
+    const today = page.locator('main.today-screen');
+    if ((await today.getAttribute('data-mobile-module-dates')) !== 'hidden') {
+      throw new Error('Today did not hydrate the disabled dates module');
+    }
+    if ((await today.getAttribute('data-mobile-module-sunrise-sunset')) !== 'hidden') {
+      throw new Error('Today did not hydrate the disabled Sunrise/Sunset module');
+    }
+    if ((await page.locator('.today-dates').count()) !== 0 || (await page.locator('.today-solar').count()) !== 0) {
+      throw new Error('Today rendered a disabled optional module');
+    }
+    if ((await page.locator('.today-prayer-row:not(.today-prayer-row--header)').count()) !== 5) {
+      throw new Error('Optional module changes altered the core five-prayer timetable');
+    }
+    await assertPrayerBoardDataBoundary(page, 'mobile-theme-modules-hidden-today-en');
+    await capture(page, 'mobile-theme-modules-hidden-today-en');
+    return { modulesApplied: ['dates:false', 'sunrise-sunset:false'] };
   } finally {
     await context.close();
   }
@@ -338,6 +407,7 @@ try {
   const results = [];
   for (const scenario of scenarios) results.push(await validateTheme(browser, scenario));
   results.push(await validateSelectorFlow(browser));
+  results.push(await validateModuleFlow(browser));
   results.push(await validateQibla(browser));
   await writeFile(
     path.join(artifactDirectory, 'mobile-prayer-theme-results.json'),
