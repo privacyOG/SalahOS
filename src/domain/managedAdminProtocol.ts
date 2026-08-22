@@ -23,10 +23,7 @@ export interface ManagedDisplayRemoteConfig {
   readonly updatedAt: string;
 }
 
-type ManagedDisplayRemoteConfigInput = Omit<
-  ManagedDisplayRemoteConfig,
-  'prayerBoardConfig'
-> & {
+type ManagedDisplayRemoteConfigInput = Omit<ManagedDisplayRemoteConfig, 'prayerBoardConfig'> & {
   readonly prayerBoardConfig?: PrayerBoardTemplateConfig | undefined;
 };
 
@@ -144,12 +141,12 @@ function parseTemplateId(value: unknown): PrayerBoardTemplateId | null {
 }
 
 function parseAssignmentSource(value: unknown): ManagedPrayerBoardAssignmentSource {
-  return value === 'mosque-default' || value === 'display-override'
-    ? value
-    : 'service-default';
+  return value === 'mosque-default' || value === 'display-override' ? value : 'service-default';
 }
 
-function accentForLegacyTheme(theme: SmartDisplayThemeId): PrayerBoardTemplateConfig['accentPreset'] {
+function accentForLegacyTheme(
+  theme: SmartDisplayThemeId,
+): PrayerBoardTemplateConfig['accentPreset'] {
   switch (theme) {
     case 'midnight':
       return 'midnight';
