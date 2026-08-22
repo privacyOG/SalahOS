@@ -7,6 +7,9 @@ export interface TodayContextCopy {
   readonly suhurEnds: string;
   readonly iftar: string;
   readonly taraweeh: string;
+  readonly solarEyebrow: string;
+  readonly solarTitle: string;
+  readonly sunset: string;
   readonly noSelectedMosqueTitle: string;
   readonly noSelectedMosqueBody: string;
   readonly chooseMosque: string;
@@ -35,6 +38,9 @@ export const todayContextCopy: Readonly<Record<Locale, TodayContextCopy>> = {
     suhurEnds: 'Suhur ends',
     iftar: 'Iftar',
     taraweeh: 'Taraweeh',
+    solarEyebrow: 'Daylight',
+    solarTitle: 'Sunrise & sunset',
+    sunset: 'Sunset',
     noSelectedMosqueTitle: 'Choose a mosque for local timetable mode',
     noSelectedMosqueBody:
       'Local mosque prayer mode is selected, but no mosque profile is currently selected.',
@@ -66,6 +72,9 @@ export const todayContextCopy: Readonly<Record<Locale, TodayContextCopy>> = {
     suhurEnds: 'نهاية السحور',
     iftar: 'الإفطار',
     taraweeh: 'التراويح',
+    solarEyebrow: 'ضوء النهار',
+    solarTitle: 'الشروق والغروب',
+    sunset: 'الغروب',
     noSelectedMosqueTitle: 'اختر مسجدًا لوضع مواقيت المسجد المحلي',
     noSelectedMosqueBody: 'تم اختيار مواقيت المسجد المحلي، لكن لا يوجد ملف مسجد محدد حاليًا.',
     chooseMosque: 'اختر المسجد',
@@ -93,6 +102,9 @@ export const todayContextCopy: Readonly<Record<Locale, TodayContextCopy>> = {
     suhurEnds: 'Sahur bitişi',
     iftar: 'İftar',
     taraweeh: 'Teravih',
+    solarEyebrow: 'Gün ışığı',
+    solarTitle: 'Güneş doğumu ve batımı',
+    sunset: 'Gün batımı',
     noSelectedMosqueTitle: 'Yerel takvim modu için bir cami seçin',
     noSelectedMosqueBody: 'Yerel cami modu seçili, ancak şu anda seçili bir cami profili yok.',
     chooseMosque: 'Cami seç',
@@ -121,6 +133,9 @@ export const todayContextCopy: Readonly<Record<Locale, TodayContextCopy>> = {
     suhurEnds: 'Sahur berakhir',
     iftar: 'Iftar',
     taraweeh: 'Tarawih',
+    solarEyebrow: 'Cahaya siang',
+    solarTitle: 'Terbit & terbenam',
+    sunset: 'Terbenam',
     noSelectedMosqueTitle: 'Pilih masjid untuk mode jadwal lokal',
     noSelectedMosqueBody: 'Mode masjid lokal dipilih, tetapi belum ada profil masjid yang dipilih.',
     chooseMosque: 'Pilih masjid',

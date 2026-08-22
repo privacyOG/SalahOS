@@ -4,8 +4,8 @@
 The workflow compiles the native application before this script runs, so the
 compile gate is already proven when execution reaches here. This script proves
 the separate runtime claim: that the freshly built application installs, starts,
-renders, survives an explicit termination and starts again on a clean iPhone and
-a clean iPad Simulator.
+renders a settled application frame, survives an explicit termination and starts
+again on a clean iPhone and a clean iPad Simulator.
 
 Every external command is bounded, every created device is deleted, and the
 whole run is bounded by a single budget. A hosted macOS runner whose
@@ -36,6 +36,40 @@ PROFILES = (
         'device_type_prefix': 'iPad',
     },
 )
+
+MOBILE_THEME_STORAGE_KEY = 'salahos.mobilePrayerBoardDisplayConfig'
+MOBILE_THEME_NATIVE_KEY = 'CapacitorStorage.' + MOBILE_THEME_STORAGE_KEY
+
+
+def mobile_theme_fixture(profile_name):
+    template_id = 'scenic-spiritual' if profile_name == 'iphone' else 'family-classroom'
+    accent = 'jewel' if profile_name == 'iphone' else 'sandstone'
+    artwork = 'scenic-gradient' if profile_name == 'iphone' else 'classroom-pattern'
+    return json.dumps(
+        {
+            'version': 1,
+            'templateId': template_id,
+            'primaryLocale': 'en',
+            'languageMode': 'single',
+            'timeFormat': 'h23',
+            'accentPreset': accent,
+            'moduleVisibility': {
+                'current-time': True,
+                'dates': True,
+                'next-prayer': True,
+                'countdown': True,
+                'prayer-timetable': True,
+                'jumuah': True,
+                'sunrise-sunset': True,
+                'mosque-branding': True,
+                'announcements': True,
+                'weather': False,
+            },
+            'branding': {'mosqueName': None, 'logo': None},
+            'background': {'kind': 'builtin', 'artworkId': artwork},
+        },
+        separators=(',', ':'),
+    )
 
 
 class AcceptanceError(RuntimeError):
@@ -180,15 +214,54 @@ def capture(deadline, udid, target):
     if not os.path.isfile(target) or os.path.getsize(target) == 0:
         raise AcceptanceError('Screenshot {} was not written.'.format(target))
     width, height = png_dimensions(target)
-    log('Screenshot {}x{}: {}'.format(width, height, target))
+    size = os.path.getsize(target)
+    log('Screenshot {}x{} / {} bytes: {}'.format(width, height, size, target))
+    return size
+
+
+def capture_settled(deadline, udid, target):
+    """Reject obvious launch/loading frames and retain the first settled screenshot."""
+
+    minimum_bytes = max(1, int(os.environ.get('MIN_SETTLED_SCREENSHOT_BYTES', '180000')))
+    attempts = max(1, int(os.environ.get('SCREENSHOT_SETTLE_ATTEMPTS', '4')))
+    delay_seconds = max(0.0, float(os.environ.get('SCREENSHOT_SETTLE_DELAY_SECONDS', '3')))
+    observed_sizes = []
+
+    for attempt in range(1, attempts + 1):
+        attempt_target = '{}.attempt-{}.png'.format(target, attempt)
+        size = capture(deadline, udid, attempt_target)
+        observed_sizes.append(size)
+        if size >= minimum_bytes:
+            os.replace(attempt_target, target)
+            log(
+                'Settled screenshot accepted on attempt {} ({} >= {} bytes): {}'.format(
+                    attempt, size, minimum_bytes, target
+                )
+            )
+            return
+
+        os.remove(attempt_target)
+        log(
+            'Screenshot attempt {} looks like an unsettled launch frame ({} < {} bytes).'.format(
+                attempt, size, minimum_bytes
+            )
+        )
+        if attempt < attempts and delay_seconds > 0:
+            time.sleep(deadline.allow(delay_seconds))
+
+    raise AcceptanceError(
+        'Application did not produce a settled screenshot after {} attempts; sizes={}.'.format(
+            attempts, observed_sizes
+        )
+    )
 
 
 def start_and_capture(deadline, udid, bundle_id, target):
     output = simctl(deadline, 90, 'launch', udid, bundle_id)
     log(output)
     pid = launch_pid(output)
-    time.sleep(4)
-    capture(deadline, udid, target)
+    time.sleep(deadline.allow(4))
+    capture_settled(deadline, udid, target)
     return pid
 
 
@@ -203,6 +276,45 @@ def diagnostics(deadline, udid):
         for device in devices:
             if device.get('udid') == udid:
                 log('{}: {}'.format(runtime_identifier, device))
+
+
+def seed_mobile_theme(deadline, udid, bundle_id, value):
+    simctl(
+        deadline,
+        60,
+        'spawn',
+        udid,
+        'defaults',
+        'write',
+        bundle_id,
+        MOBILE_THEME_NATIVE_KEY,
+        '-string',
+        value,
+    )
+
+
+def read_mobile_theme(deadline, udid, bundle_id):
+    return simctl(
+        deadline,
+        60,
+        'spawn',
+        udid,
+        'defaults',
+        'read',
+        bundle_id,
+        MOBILE_THEME_NATIVE_KEY,
+    )
+
+
+def assert_mobile_theme(deadline, udid, bundle_id, expected, phase):
+    observed = read_mobile_theme(deadline, udid, bundle_id)
+    if observed != expected:
+        raise AcceptanceError(
+            'Phone/Home theme changed during iOS {}. Expected {!r}, observed {!r}.'.format(
+                phase, expected, observed
+            )
+        )
+    log('Phone/Home native theme persistence verified after iOS {}.'.format(phase))
 
 
 def exercise_once(deadline, profile, runtime, device_type, app_path, bundle_id, evidence_dir):
@@ -231,13 +343,19 @@ def exercise_once(deadline, profile, runtime, device_type, app_path, bundle_id, 
         if not os.path.isdir(container_path):
             raise AcceptanceError('Installed application container {} is missing.'.format(container_path))
 
+        expected_mobile_theme = mobile_theme_fixture(profile['name'])
+        seed_mobile_theme(deadline, udid, bundle_id, expected_mobile_theme)
+        assert_mobile_theme(deadline, udid, bundle_id, expected_mobile_theme, 'native seed')
+
         first_pid = start_and_capture(
             deadline, udid, bundle_id, os.path.join(evidence_dir, profile['name'] + '-launch.png')
         )
+        assert_mobile_theme(deadline, udid, bundle_id, expected_mobile_theme, 'launch')
         simctl(deadline, 90, 'terminate', udid, bundle_id)
         second_pid = start_and_capture(
             deadline, udid, bundle_id, os.path.join(evidence_dir, profile['name'] + '-relaunch.png')
         )
+        assert_mobile_theme(deadline, udid, bundle_id, expected_mobile_theme, 'process relaunch')
 
         evidence = [
             'profile={}'.format(profile['name']),
@@ -251,6 +369,13 @@ def exercise_once(deadline, profile, runtime, device_type, app_path, bundle_id, 
             'relaunch_pid={}'.format(second_pid),
             'launch=passed',
             'relaunch=passed',
+            'settled_launch_screenshot=passed',
+            'settled_relaunch_screenshot=passed',
+            'mobile_theme_storage_key={}'.format(MOBILE_THEME_STORAGE_KEY),
+            'mobile_theme_native_key={}'.format(MOBILE_THEME_NATIVE_KEY),
+            'mobile_theme_value={}'.format(expected_mobile_theme),
+            'mobile_theme_launch=passed',
+            'mobile_theme_relaunch=passed',
         ]
         with open(os.path.join(evidence_dir, profile['name'] + '.txt'), 'w') as handle:
             handle.write('\n'.join(evidence) + '\n')

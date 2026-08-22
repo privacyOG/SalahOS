@@ -1,10 +1,17 @@
 import { Capacitor } from '@capacitor/core';
 import { Preferences } from '@capacitor/preferences';
+
+import {
+  defaultPrayerBoardTemplateConfig,
+  parsePrayerBoardTemplateConfig,
+} from '../domain/prayerBoardTemplate';
 import { COMMUNITY_CONTENT_STORAGE_KEY } from './communityContentStorage';
 import { MANAGED_DISPLAY_CONNECTION_STORAGE_KEY } from './managedDisplayConnectionStorage';
 import { MANAGED_PRAYER_BOARD_CACHE_STORAGE_KEY } from './managedPrayerBoardCache';
+import { MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY } from './mobilePrayerBoardDisplayConfig';
 import { MOSQUE_LIBRARY_STORAGE_KEY } from './mosqueLibrary';
 import { MOSQUE_PROFILE_LIBRARY_STORAGE_KEY } from './mosqueProfileLibrary';
+import { PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY } from './prayerBoardDisplayConfig';
 import { SAVED_LOCATIONS_STORAGE_KEY } from './savedLocations';
 import { SETTINGS_STORAGE_KEY } from './settingsStorage';
 import type { KeyValueStorage } from './settingsStorage';
@@ -19,6 +26,8 @@ export const PERSISTED_APPLICATION_KEYS = Object.freeze([
   MOSQUE_PROFILE_LIBRARY_STORAGE_KEY,
   MANAGED_DISPLAY_CONNECTION_STORAGE_KEY,
   MANAGED_PRAYER_BOARD_CACHE_STORAGE_KEY,
+  PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY,
+  MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY,
 ] as const);
 
 export interface PreferencesStore {
@@ -79,14 +88,51 @@ export async function createNativePreferencesStorage(
   return storage;
 }
 
+export function migrateMissingApplicationStorageKeys(
+  source: KeyValueStorage,
+  target: KeyValueStorage,
+  keys: readonly string[] = PERSISTED_APPLICATION_KEYS,
+): void {
+  for (const key of keys) {
+    if (target.getItem(key) !== null) continue;
+    const value = source.getItem(key);
+    if (value !== null) target.setItem(key, value);
+  }
+}
+
+function normalizedLegacyPrayerBoardConfig(serialized: string | null): string {
+  if (serialized === null) return JSON.stringify(defaultPrayerBoardTemplateConfig);
+
+  try {
+    return JSON.stringify(parsePrayerBoardTemplateConfig(JSON.parse(serialized)));
+  } catch {
+    return JSON.stringify(defaultPrayerBoardTemplateConfig);
+  }
+}
+
+export function ensureIndependentMobilePrayerBoardDisplayConfig(storage: KeyValueStorage): void {
+  if (storage.getItem(MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY) !== null) return;
+
+  const legacyDisplayConfig = storage.getItem(PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY);
+  storage.setItem(
+    MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY,
+    normalizedLegacyPrayerBoardConfig(legacyDisplayConfig),
+  );
+}
+
 export async function initializeApplicationStorage(webStorage: KeyValueStorage): Promise<void> {
-  if (Capacitor.getPlatform() !== 'android') {
+  const platform = Capacitor.getPlatform();
+  if (platform !== 'android' && platform !== 'ios') {
+    ensureIndependentMobilePrayerBoardDisplayConfig(webStorage);
     activeStorage = webStorage;
     nativeStorage = null;
     return;
   }
 
   const storage = await createNativePreferencesStorage(Preferences);
+  migrateMissingApplicationStorageKeys(webStorage, storage);
+  ensureIndependentMobilePrayerBoardDisplayConfig(storage);
+  await storage.flush();
   activeStorage = storage;
   nativeStorage = storage;
 }

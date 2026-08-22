@@ -5,6 +5,7 @@ import '../today-contextual-v2.css';
 import { buildPrayerDashboardResult } from '../domain/dashboardResult';
 import { displayedHighLatitudeRuleApplied } from '../domain/highLatitudeIndicators';
 import { calculationMethods } from '../domain/methods';
+import { buildPrayerBoardData, type PrayerBoardData } from '../domain/prayerBoardTemplate';
 import { isSupplementaryPrayer } from '../domain/prayerPresentation';
 import { displayedManualPrayerAdjustmentMinutes } from '../domain/prayerAdjustments';
 import type { PrayerName } from '../domain/prayerEngine';
@@ -14,9 +15,9 @@ import {
   formatGregorianCivilDate,
   formatHijriCivilDate,
   formatLocalTime,
-  formatZonedInstantTime,
   translate,
 } from '../i18n/i18n';
+import { todayContextCopy } from '../i18n/todayContextV2Translations';
 import type { Locale, TranslationKey } from '../i18n/translations';
 import { getApplicationStorage } from '../platform/applicationStorage';
 import { installRuntimeRefreshListeners } from '../platform/runtimeRefresh';
@@ -28,6 +29,7 @@ import {
 import { readSystemTime } from '../platform/systemTime';
 import { BidiText } from './BidiText';
 import { TodayContextualSections } from './TodayContextualSections';
+import { useMobilePrayerThemeConfig } from './MobilePrayerThemeSurface';
 import { searchForCongregationDestination, type CongregationDestination } from './applicationRoute';
 
 const prayerTranslationKeys: Readonly<Record<PrayerName, TranslationKey>> = {
@@ -91,9 +93,35 @@ function localeClockTag(locale: Locale): string {
   }
 }
 
+function formatPrayerBoardClock(
+  clock: PrayerBoardData['clock'],
+  locale: Locale,
+  hourCycle: PersistedSettings['timeFormat'],
+): string {
+  const instant = new Date(Date.UTC(2000, 0, 1, clock.hour, clock.minute, clock.second));
+  return new Intl.DateTimeFormat(localeClockTag(locale), {
+    timeZone: 'UTC',
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hourCycle,
+  }).format(instant);
+}
+
+function prayerBoardCivilDate(data: PrayerBoardData): Date {
+  const value = new Date(`${data.civilDateIso}T00:00:00.000Z`);
+  if (!Number.isFinite(value.getTime())) {
+    throw new RangeError('Prayer-board civil date is invalid');
+  }
+  return value;
+}
+
 export function TodayScreen() {
   const settings = useMemo(initialSettings, []);
+  const mobileThemeConfig = useMobilePrayerThemeConfig();
+  const modules = mobileThemeConfig.moduleVisibility;
   const locale = settings.locale;
+  const contextualCopy = todayContextCopy[locale];
   const coordinates = settings.location?.coordinates ?? null;
   const timeZoneOverride = settings.location?.timeZone ?? null;
   const [now, setNow] = useState<Date | null>(() => readSystemTime());
@@ -159,50 +187,61 @@ export function TodayScreen() {
           }),
     [dashboard, settings.mosqueTimetable, settings.prayerSourceMode],
   );
+  const prayerBoardData = useMemo(
+    () =>
+      sourcedDashboard === null
+        ? null
+        : buildPrayerBoardData({
+            dashboard: sourcedDashboard,
+            offline: !online,
+          }),
+    [online, sourcedDashboard],
+  );
 
   const currentClock =
     now === null
       ? '—'
-      : dashboard === null
+      : prayerBoardData === null
         ? new Intl.DateTimeFormat(localeClockTag(locale), {
             hour: '2-digit',
             minute: '2-digit',
             second: '2-digit',
             hourCycle: settings.timeFormat,
           }).format(now)
-        : formatZonedInstantTime(now, dashboard.timeZone, locale, settings.timeFormat);
+        : formatPrayerBoardClock(prayerBoardData.clock, locale, settings.timeFormat);
 
-  const nextPrayerRow =
-    sourcedDashboard?.nextPrayer === null || sourcedDashboard?.nextPrayer === undefined
-      ? null
-      : (sourcedDashboard.prayers.find((prayer) => prayer.name === sourcedDashboard.nextPrayer) ??
-        null);
   const nextPrayerLabel =
-    sourcedDashboard?.nextPrayer === null || sourcedDashboard?.nextPrayer === undefined
+    prayerBoardData?.nextPrayer === null || prayerBoardData?.nextPrayer === undefined
       ? translate(locale, 'notConfigured')
-      : translate(locale, prayerTranslationKeys[sourcedDashboard.nextPrayer]);
+      : translate(locale, prayerTranslationKeys[prayerBoardData.nextPrayer.name]);
   const nextPrayerStart =
-    sourcedDashboard?.nextPrayerLocalMinutes === null ||
-    sourcedDashboard?.nextPrayerLocalMinutes === undefined
+    prayerBoardData?.nextPrayer === null || prayerBoardData?.nextPrayer === undefined
       ? '—'
-      : formatLocalTime(sourcedDashboard.nextPrayerLocalMinutes, locale, settings.timeFormat);
-  const nextPrayerIqamahMinutes =
-    sourcedDashboard?.nextPrayerDayOffset === 0 && nextPrayerRow !== null
-      ? nextPrayerRow.iqamahLocalMinutes
-      : null;
+      : formatLocalTime(prayerBoardData.nextPrayer.startLocalMinutes, locale, settings.timeFormat);
+  const nextPrayerIqamahMinutes = prayerBoardData?.nextPrayer?.iqamahLocalMinutes ?? null;
   const nextPrayerIqamah =
     nextPrayerIqamahMinutes === null
       ? translate(locale, 'noIqamah')
       : formatLocalTime(nextPrayerIqamahMinutes, locale, settings.timeFormat);
   const contextLabel =
-    sourcedDashboard?.mosqueName ??
+    prayerBoardData?.mosqueName ??
+    prayerBoardData?.timeZone ??
     settings.location?.timeZone ??
     translate(locale, 'notConfigured');
   const quickLabels = destinationLabels[locale];
 
   return (
-    <main className="today-screen">
-      {!online && (
+    <main
+      className="today-screen"
+      data-prayer-board-data-version={prayerBoardData?.version}
+      data-prayer-board-source={prayerBoardData?.sourceMode}
+      data-mobile-module-dates={modules.dates ? 'visible' : 'hidden'}
+      data-mobile-module-jumuah={modules.jumuah ? 'visible' : 'hidden'}
+      data-mobile-module-sunrise-sunset={modules['sunrise-sunset'] ? 'visible' : 'hidden'}
+      data-mobile-module-mosque-branding={modules['mosque-branding'] ? 'visible' : 'hidden'}
+      data-mobile-module-announcements={modules.announcements ? 'visible' : 'hidden'}
+    >
+      {prayerBoardData?.offline === true && (
         <p className="today-screen__offline" role="status">
           {translate(locale, 'offline')}
         </p>
@@ -213,9 +252,11 @@ export function TodayScreen() {
           <img src="/icons/salahos-192.png" alt="" aria-hidden="true" />
           <div>
             <strong>{translate(locale, 'appName')}</strong>
-            <span>
-              <BidiText>{contextLabel}</BidiText>
-            </span>
+            {modules['mosque-branding'] && (
+              <span>
+                <BidiText>{contextLabel}</BidiText>
+              </span>
+            )}
           </div>
         </div>
         <div className="today-appbar__meta">
@@ -240,7 +281,7 @@ export function TodayScreen() {
           <h1>{translate(locale, 'calculationUnavailable')}</h1>
           <span>{translate(locale, 'calculationUnavailableHelp')}</span>
         </section>
-      ) : sourcedDashboard === null ? (
+      ) : prayerBoardData === null || sourcedDashboard === null ? (
         <section className="today-state">
           <p>{translate(locale, 'currentLocation')}</p>
           <h1>{translate(locale, 'configureLocation')}</h1>
@@ -254,16 +295,16 @@ export function TodayScreen() {
             <div className="today-next__identity">
               <p>{translate(locale, 'nextPrayer')}</p>
               <h1 id="today-next-prayer">{nextPrayerLabel}</h1>
-              {sourcedDashboard.nextPrayerDayOffset === 1 && (
+              {prayerBoardData.nextPrayer?.dayOffset === 1 && (
                 <span className="today-next__tomorrow">{translate(locale, 'tomorrow')}</span>
               )}
             </div>
             <div className="today-next__countdown">
               <span>{translate(locale, 'countdown')}</span>
               <strong>
-                {sourcedDashboard.secondsUntilNextPrayer === null
+                {prayerBoardData.nextPrayer === null
                   ? '—'
-                  : formatCountdown(sourcedDashboard.secondsUntilNextPrayer, locale)}
+                  : formatCountdown(prayerBoardData.nextPrayer.secondsUntil, locale)}
               </strong>
             </div>
             <dl className="today-next__times">
@@ -278,22 +319,26 @@ export function TodayScreen() {
             </dl>
           </section>
 
-          <section className="today-dates" aria-label={translate(locale, 'today')}>
-            <div>
-              <span>{translate(locale, 'gregorianDate')}</span>
-              <strong>{formatGregorianCivilDate(sourcedDashboard.base.civilDate, locale)}</strong>
-            </div>
-            <div>
-              <span>{translate(locale, 'hijriDate')}</span>
-              <strong>
-                {formatHijriCivilDate(
-                  sourcedDashboard.base.civilDate,
-                  locale,
-                  settings.hijriCorrectionDays,
-                )}
-              </strong>
-            </div>
-          </section>
+          {modules.dates && (
+            <section className="today-dates" aria-label={translate(locale, 'today')}>
+              <div>
+                <span>{translate(locale, 'gregorianDate')}</span>
+                <strong>
+                  {formatGregorianCivilDate(prayerBoardCivilDate(prayerBoardData), locale)}
+                </strong>
+              </div>
+              <div>
+                <span>{translate(locale, 'hijriDate')}</span>
+                <strong>
+                  {formatHijriCivilDate(
+                    prayerBoardCivilDate(prayerBoardData),
+                    locale,
+                    prayerBoardData.hijri.correctionDays,
+                  )}
+                </strong>
+              </div>
+            </section>
+          )}
 
           <section className="today-schedule" aria-labelledby="today-schedule-title">
             <div className="today-section-heading">
@@ -303,7 +348,7 @@ export function TodayScreen() {
               </div>
               <span>
                 {translate(locale, 'sourceMode')} ·{' '}
-                {translate(locale, sourceTranslationKeys[sourcedDashboard.sourceMode])}
+                {translate(locale, sourceTranslationKeys[prayerBoardData.sourceMode])}
               </span>
             </div>
 
@@ -317,68 +362,118 @@ export function TodayScreen() {
                 <span role="columnheader">{translate(locale, 'prayerStart')}</span>
                 <span role="columnheader">{translate(locale, 'iqamah')}</span>
               </div>
-              {sourcedDashboard.prayers.map((prayer) => {
-                const supplementary = isSupplementaryPrayer(prayer.name);
-                const manualAdjustmentMinutes = displayedManualPrayerAdjustmentMinutes(
-                  prayer.name,
-                  prayer.manualAdjustmentMinutes,
-                  sourcedDashboard.sourceMode,
-                );
-                const highLatitudeApplied = displayedHighLatitudeRuleApplied(
-                  prayer.name,
-                  prayer.highLatitudeRuleApplied,
-                  sourcedDashboard.sourceMode,
-                );
-                const stateLabel = prayer.isCurrent
-                  ? translate(locale, 'currentPrayer')
-                  : prayer.isNext
-                    ? translate(locale, 'nextPrayer')
-                    : null;
-                return (
-                  <div
-                    className={`today-prayer-row${prayer.isCurrent ? ' is-current' : ''}${prayer.isNext ? ' is-next' : ''}${supplementary ? ' is-supplementary' : ''}`}
-                    role="row"
-                    key={prayer.name}
-                  >
-                    <div className="today-prayer-row__name" role="cell">
-                      <strong>{translate(locale, prayerTranslationKeys[prayer.name])}</strong>
-                      {stateLabel !== null && <span>{stateLabel}</span>}
-                      {highLatitudeApplied && (
-                        <small>
-                          {translate(locale, 'highLatitudeAdjustment')} ·{' '}
-                          {translate(
-                            locale,
-                            highLatitudeRuleTranslationKeys[sourcedDashboard.base.highLatitudeRule],
-                          )}
-                        </small>
-                      )}
-                      {manualAdjustmentMinutes !== null && (
-                        <small>
-                          {translate(locale, 'manualOffset')}{' '}
-                          {manualAdjustmentMinutes > 0 ? '+' : ''}
-                          {String(manualAdjustmentMinutes)} {translate(locale, 'minutesShort')}
-                        </small>
-                      )}
-                    </div>
-                    <strong className="today-prayer-row__time" role="cell">
-                      {prayer.localMinutes === null
-                        ? '—'
-                        : formatLocalTime(prayer.localMinutes, locale, settings.timeFormat)}
-                    </strong>
-                    <strong className="today-prayer-row__time today-prayer-row__iqamah" role="cell">
-                      {supplementary
-                        ? '—'
-                        : prayer.iqamahLocalMinutes === null
+              {prayerBoardData.prayers
+                .filter((prayer) => !isSupplementaryPrayer(prayer.name))
+                .map((prayer) => {
+                  const sourcePrayer = sourcedDashboard.prayers.find(
+                    (candidate) => candidate.name === prayer.name,
+                  );
+                  const manualAdjustmentMinutes =
+                    sourcePrayer === undefined
+                      ? null
+                      : displayedManualPrayerAdjustmentMinutes(
+                          prayer.name,
+                          sourcePrayer.manualAdjustmentMinutes,
+                          prayerBoardData.sourceMode,
+                        );
+                  const highLatitudeApplied =
+                    sourcePrayer === undefined
+                      ? false
+                      : displayedHighLatitudeRuleApplied(
+                          prayer.name,
+                          sourcePrayer.highLatitudeRuleApplied,
+                          prayerBoardData.sourceMode,
+                        );
+                  const stateLabel = prayer.isCurrent
+                    ? translate(locale, 'currentPrayer')
+                    : prayer.isNext
+                      ? translate(locale, 'nextPrayer')
+                      : null;
+                  return (
+                    <div
+                      className={`today-prayer-row${prayer.isCurrent ? ' is-current' : ''}${prayer.isNext ? ' is-next' : ''}`}
+                      role="row"
+                      key={prayer.name}
+                    >
+                      <div className="today-prayer-row__name" role="cell">
+                        <strong>{translate(locale, prayerTranslationKeys[prayer.name])}</strong>
+                        {stateLabel !== null && <span>{stateLabel}</span>}
+                        {highLatitudeApplied && (
+                          <small>
+                            {translate(locale, 'highLatitudeAdjustment')} ·{' '}
+                            {translate(
+                              locale,
+                              highLatitudeRuleTranslationKeys[
+                                sourcedDashboard.base.highLatitudeRule
+                              ],
+                            )}
+                          </small>
+                        )}
+                        {manualAdjustmentMinutes !== null && (
+                          <small>
+                            {translate(locale, 'manualOffset')}{' '}
+                            {manualAdjustmentMinutes > 0 ? '+' : ''}
+                            {String(manualAdjustmentMinutes)} {translate(locale, 'minutesShort')}
+                          </small>
+                        )}
+                      </div>
+                      <strong className="today-prayer-row__time" role="cell">
+                        {prayer.startLocalMinutes === null
+                          ? '—'
+                          : formatLocalTime(prayer.startLocalMinutes, locale, settings.timeFormat)}
+                      </strong>
+                      <strong
+                        className="today-prayer-row__time today-prayer-row__iqamah"
+                        role="cell"
+                      >
+                        {prayer.iqamahLocalMinutes === null
                           ? translate(locale, 'noIqamah')
                           : formatLocalTime(prayer.iqamahLocalMinutes, locale, settings.timeFormat)}
-                    </strong>
-                  </div>
-                );
-              })}
+                      </strong>
+                    </div>
+                  );
+                })}
             </div>
           </section>
 
-          {sourcedDashboard.jumuahSessions.length > 0 && (
+          {modules['sunrise-sunset'] && (
+            <section className="today-solar" aria-labelledby="today-solar-title">
+              <div className="today-section-heading">
+                <div>
+                  <p>{contextualCopy.solarEyebrow}</p>
+                  <h2 id="today-solar-title">{contextualCopy.solarTitle}</h2>
+                </div>
+              </div>
+              <div className="today-solar__times">
+                <div>
+                  <span>{translate(locale, 'prayerSunrise')}</span>
+                  <strong>
+                    {prayerBoardData.solarEvents.sunriseLocalMinutes === null
+                      ? '—'
+                      : formatLocalTime(
+                          prayerBoardData.solarEvents.sunriseLocalMinutes,
+                          locale,
+                          settings.timeFormat,
+                        )}
+                  </strong>
+                </div>
+                <div>
+                  <span>{contextualCopy.sunset}</span>
+                  <strong>
+                    {prayerBoardData.solarEvents.sunsetLocalMinutes === null
+                      ? '—'
+                      : formatLocalTime(
+                          prayerBoardData.solarEvents.sunsetLocalMinutes,
+                          locale,
+                          settings.timeFormat,
+                        )}
+                  </strong>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {modules.jumuah && prayerBoardData.jumuahSessions.length > 0 && (
             <section className="today-jumuah" aria-labelledby="today-jumuah-title">
               <div className="today-section-heading">
                 <div>
@@ -387,7 +482,7 @@ export function TodayScreen() {
                 </div>
               </div>
               <div className="today-jumuah__sessions">
-                {sourcedDashboard.jumuahSessions.map((session) => (
+                {prayerBoardData.jumuahSessions.map((session) => (
                   <div key={session.label}>
                     <strong>
                       <BidiText>{session.label}</BidiText>
@@ -410,10 +505,11 @@ export function TodayScreen() {
             settings={settings}
             dashboard={sourcedDashboard}
             unavailablePrayers={unavailablePrayers}
-            online={online}
+            online={!prayerBoardData.offline}
             now={now}
             communityHref={destinationHref('community')}
             mosquesHref={destinationHref('mosques')}
+            showCommunity={modules.announcements}
           />
 
           <nav className="today-quick-actions" aria-label={translate(locale, 'today')}>
@@ -428,12 +524,12 @@ export function TodayScreen() {
               <BidiText>{sourcedDashboard.base.method.name}</BidiText>
             </span>
             <span>
-              {translate(locale, 'timezone')}: <BidiText>{sourcedDashboard.base.timeZone}</BidiText>
+              {translate(locale, 'timezone')}: <BidiText>{prayerBoardData.timeZone}</BidiText>
             </span>
-            {sourcedDashboard.mosqueName !== null && (
+            {modules['mosque-branding'] && prayerBoardData.mosqueName !== null && (
               <span>
                 {translate(locale, 'selectedMosque')}:{' '}
-                <BidiText>{sourcedDashboard.mosqueName}</BidiText>
+                <BidiText>{prayerBoardData.mosqueName}</BidiText>
               </span>
             )}
           </footer>

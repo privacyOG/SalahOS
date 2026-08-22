@@ -8,13 +8,21 @@
   align-content: center;
 }
 
+.bold-countdown-board__clock strong {
+  font-size: clamp(4rem, 6.4vw, 8.5rem);
+}
+
+.bold-countdown-board__countdown strong {
+  font-size: clamp(4.25rem, 6.75vw, 9rem);
+}
+
 @media (min-width: 3000px) and (min-height: 1600px) {
   .bold-countdown-board__clock strong {
-    font-size: clamp(12rem, 10vw, 22rem);
+    font-size: clamp(9rem, 6.5vw, 16rem);
   }
 
   .bold-countdown-board__countdown strong {
-    font-size: clamp(13rem, 10.5vw, 23rem);
+    font-size: clamp(10rem, 7vw, 17rem);
   }
 
   .bold-countdown-board__focus-heading strong {

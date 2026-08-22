@@ -487,8 +487,8 @@ export function buildPrayerBoardData(
     currentPrayer: input.dashboard.currentPrayer,
     nextPrayer,
     solarEvents: Object.freeze({
-      sunriseLocalMinutes: input.dashboard.base.today.prayers.sunrise.rawLocalMinutes,
-      sunsetLocalMinutes: input.dashboard.base.today.prayers.maghrib.rawLocalMinutes,
+      sunriseLocalMinutes: input.dashboard.base.today.prayers.sunrise.roundedLocalMinutes,
+      sunsetLocalMinutes: input.dashboard.base.today.prayers.maghrib.roundedLocalMinutes,
     }),
     jumuahSessions: Object.freeze(
       input.dashboard.jumuahSessions.map((session) => Object.freeze({ ...session })),

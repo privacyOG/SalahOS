@@ -1,0 +1,82 @@
+.mobile-prayer-theme-surface .today-solar {
+  display: grid;
+  gap: var(--salah-space-4);
+  margin-block-start: var(--salah-space-6);
+}
+
+.mobile-prayer-theme-surface .today-solar__times {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--salah-space-3);
+}
+
+.mobile-prayer-theme-surface .today-solar__times > div {
+  display: grid;
+  gap: var(--salah-space-2);
+  padding: clamp(0.85rem, 2.5vw, 1.15rem);
+  border: 1px solid var(--mobile-theme-border);
+  border-radius: var(--salah-radius-md);
+  color: var(--mobile-theme-fg);
+  background: var(--mobile-theme-surface);
+}
+
+.mobile-prayer-theme-surface .today-solar__times span {
+  color: var(--mobile-theme-tertiary);
+  font-size: var(--salah-text-xs);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.mobile-prayer-theme-surface .today-solar__times strong {
+  font-size: clamp(1.25rem, 1rem + 1vw, 1.75rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.mobile-prayer-theme-preview .today-solar {
+  margin-block-start: 0.7rem;
+}
+
+.mobile-prayer-theme-preview .today-solar__times {
+  gap: 0.45rem;
+}
+
+.mobile-prayer-theme-preview .today-solar__times > div {
+  gap: 0.2rem;
+  padding: 0.55rem;
+}
+
+.mobile-prayer-theme-preview .today-solar__times span {
+  font-size: 0.58rem;
+}
+
+.mobile-prayer-theme-preview .today-solar__times strong {
+  font-size: 1rem;
+}
+
+.mobile-prayer-theme-preview .today-community-preview {
+  margin-block-start: 0.7rem;
+}
+
+.mobile-prayer-theme-preview .today-community-preview header {
+  margin-block-end: 0.45rem;
+}
+
+.mobile-prayer-theme-preview .today-community-preview__grid {
+  grid-template-columns: 1fr;
+}
+
+.mobile-prayer-theme-preview .today-community-preview article {
+  min-height: 0;
+  padding: 0.65rem;
+}
+
+@media (max-width: 370px) {
+  .mobile-prayer-theme-surface .today-solar__times {
+    gap: var(--salah-space-2);
+  }
+
+  .mobile-prayer-theme-surface .today-solar__times > div {
+    padding: 0.7rem;
+  }
+}

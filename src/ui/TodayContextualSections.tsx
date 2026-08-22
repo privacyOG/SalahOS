@@ -177,6 +177,7 @@ export function TodayContextualSections(props: {
   readonly now: Date;
   readonly communityHref: string;
   readonly mosquesHref: string;
+  readonly showCommunity?: boolean;
 }) {
   const [libraries, setLibraries] = useState<RuntimeLibraries>(readLibraries);
   const locale = props.settings.locale;
@@ -309,7 +310,7 @@ export function TodayContextualSections(props: {
         </section>
       )}
 
-      {model.community !== null && (
+      {props.showCommunity !== false && model.community !== null && (
         <section className="today-community-preview" aria-labelledby="today-community-title">
           <header>
             <div>

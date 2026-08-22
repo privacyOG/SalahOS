@@ -6,12 +6,16 @@ on:
     branches:
       - main
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 permissions:
   contents: read
 
 jobs:
   visual:
-    runs-on: [self-hosted, Linux, X64]
+    runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '["ubuntu-24.04"]' || '["self-hosted","Linux","X64"]') }}
     timeout-minutes: 30
     env:
       PLAYWRIGHT_BROWSERS_PATH: /tmp/salahos-pw-browsers-1.62.0
@@ -63,8 +67,19 @@ jobs:
           raise SystemExit('Local SalahOS production server did not become ready')
           PY
 
+      - name: Diagnose Today render readiness
+        run: node scripts/visual-today-smoke.mjs
+
       - name: Run visual regression matrix
         run: npm run visual:check
+
+      - name: Build Google satellite Qibla fixture
+        env:
+          VITE_GOOGLE_MAPS_API_KEY: salahos-visual-fixture-key
+        run: npm run build
+
+      - name: Run Google satellite Qibla visual fixture
+        run: node scripts/visual-qibla-google.mjs
 
       - name: Upload visual evidence
         if: always()
