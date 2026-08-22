@@ -17,12 +17,12 @@ const fixedNow = Date.parse('2026-08-21T03:00:00.000Z');
 
 const scenarios = [
   {
-    name: 'mobile-theme-heritage-phone-en',
+    name: 'mobile-theme-heritage-phone-minimum-en',
     templateId: 'heritage-classic',
     accentPreset: 'jewel',
     locale: 'en',
-    width: 390,
-    height: 844,
+    width: 320,
+    height: 720,
   },
   {
     name: 'mobile-theme-minimal-phone-en',
@@ -177,9 +177,14 @@ async function validateTheme(browser, scenario) {
     if ((await surface.getAttribute('data-mobile-prayer-template')) !== scenario.templateId) {
       throw new Error(`${scenario.name} did not apply ${scenario.templateId}`);
     }
-    const prayerRows = page.locator('.today-prayer-row:not(.today-prayer-row--header)');
-    if ((await prayerRows.count()) !== 5) {
+    const obligatoryPrayerRows = page.locator(
+      '.today-prayer-row:not(.today-prayer-row--header):not(.is-supplementary)',
+    );
+    if ((await obligatoryPrayerRows.count()) !== 5) {
       throw new Error(`${scenario.name} did not preserve exactly five obligatory prayer rows`);
+    }
+    if ((await page.locator('.today-prayer-row.is-supplementary').count()) !== 1) {
+      throw new Error(`${scenario.name} did not preserve Sunrise as one supplementary row`);
     }
     if (scenario.locale === 'ar' && (await surface.getAttribute('dir')) === 'ltr') {
       throw new Error(`${scenario.name} lost RTL presentation`);
@@ -194,16 +199,22 @@ async function validateTheme(browser, scenario) {
 }
 
 async function validateSelectorFlow(browser) {
-  const scenario = scenarios[0];
+  const scenario = scenarios[1];
   const context = await browser.newContext({ viewport: { width: 430, height: 932 } });
   const page = await context.newPage();
   try {
     await seed(page, scenario);
-    await page.goto(`${baseUrl}/?surface=admin&adminView=themes`, { waitUntil: 'networkidle' });
-    const editor = page.locator('.mobile-prayer-theme-settings');
+    await page.goto(`${baseUrl}/?view=settings&settingsView=display-themes`, {
+      waitUntil: 'networkidle',
+    });
+    const editor = page.locator('.settings-display-entry .mobile-prayer-theme-settings');
     await editor.waitFor({ state: 'visible' });
     if ((await editor.locator('[data-mobile-theme-choice]').count()) !== 6) {
       throw new Error('Phone/Home theme selector must expose exactly six designs');
+    }
+    const managedDisplayLink = page.locator('.settings-display-entry > .surface-entry-card__action');
+    if ((await managedDisplayLink.count()) !== 1) {
+      throw new Error('TV/kiosk managed-display theme target must remain separately reachable');
     }
 
     await editor.locator('[data-mobile-theme-choice="scenic-spiritual"]').click();
@@ -252,7 +263,7 @@ async function validateQibla(browser) {
   );
 
   try {
-    await seed(page, scenarios[0]);
+    await seed(page, scenarios[1]);
     await page.goto(`${baseUrl}/?view=qiblah`, { waitUntil: 'networkidle' });
     const compass = page.locator('.qibla-compass-dial');
     await compass.waitFor({ state: 'visible' });
@@ -271,9 +282,12 @@ async function validateQibla(browser) {
     if ((await page.locator('.qibla-map-consent').count()) !== 0) {
       throw new Error('Qibla map must not be hidden behind the removed privacy-consent gate');
     }
+    if ((await page.locator('.qibla-map-shell').getAttribute('data-map-provider')) !== 'openstreetmap') {
+      throw new Error('No-key visual build must retain the OpenStreetMap Qibla map fallback');
+    }
     await assertNoHorizontalOverflow(page, 'qibla-premium-phone-en');
     await capture(page, 'qibla-premium-compass-phone-en');
-    return { degreeLabels: 12, ticks: 72 };
+    return { degreeLabels: 12, ticks: 72, provider: 'openstreetmap' };
   } finally {
     await context.close();
   }
