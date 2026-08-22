@@ -4,6 +4,7 @@ import {
   parsePrayerBoardTemplateConfig,
   prayerBoardTemplateRegistry,
   type PrayerBoardAccentPreset,
+  type PrayerBoardModuleId,
   type PrayerBoardTemplateConfig,
   type PrayerBoardTemplateId,
 } from '../domain/prayerBoardTemplate';
@@ -34,6 +35,8 @@ interface Copy {
   readonly accent: string;
   readonly orientation: string;
   readonly orientationValue: string;
+  readonly modules: string;
+  readonly modulesHelp: string;
 }
 
 const copy: Readonly<Record<Locale, Copy>> = {
@@ -53,6 +56,9 @@ const copy: Readonly<Record<Locale, Copy>> = {
     accent: 'Accent',
     orientation: 'Orientation support',
     orientationValue: 'Portrait + compact landscape; tablet adaptations included',
+    modules: 'Optional Today modules',
+    modulesHelp:
+      'Current time, next prayer, countdown and the five-prayer timetable always stay visible.',
   },
   ar: {
     eyebrow: 'الهاتف / الرئيسية',
@@ -70,6 +76,8 @@ const copy: Readonly<Record<Locale, Copy>> = {
     accent: 'اللون المميز',
     orientation: 'دعم الاتجاه',
     orientationValue: 'عمودي + أفقي مضغوط؛ مع تخطيطات للأجهزة اللوحية',
+    modules: 'وحدات اليوم الاختيارية',
+    modulesHelp: 'يبقى الوقت والصلاة التالية والعد التنازلي وجدول الصلوات الخمس ظاهراً دائماً.',
   },
   tr: {
     eyebrow: 'Telefon / Ana Sayfa',
@@ -87,6 +95,9 @@ const copy: Readonly<Record<Locale, Copy>> = {
     accent: 'Vurgu',
     orientation: 'Yön desteği',
     orientationValue: 'Dikey + kompakt yatay; tablet uyarlamaları dahil',
+    modules: 'İsteğe bağlı Bugün modülleri',
+    modulesHelp:
+      'Saat, sonraki namaz, geri sayım ve beş vakit namaz tablosu her zaman görünür kalır.',
   },
   id: {
     eyebrow: 'Ponsel / Beranda',
@@ -104,6 +115,9 @@ const copy: Readonly<Record<Locale, Copy>> = {
     accent: 'Aksen',
     orientation: 'Dukungan orientasi',
     orientationValue: 'Potret + lanskap ringkas; adaptasi tablet disertakan',
+    modules: 'Modul Hari Ini opsional',
+    modulesHelp:
+      'Waktu saat ini, salat berikutnya, hitung mundur, dan tabel lima salat selalu tetap terlihat.',
   },
 };
 
@@ -114,6 +128,45 @@ const accentPresets: readonly PrayerBoardAccentPreset[] = [
   'neutral',
   'jewel',
 ];
+
+const mobileOptionalModules: readonly PrayerBoardModuleId[] = [
+  'dates',
+  'jumuah',
+  'sunrise-sunset',
+  'mosque-branding',
+  'announcements',
+];
+
+const moduleLabels: Readonly<Record<Locale, Readonly<Record<string, string>>>> = {
+  en: {
+    dates: 'Gregorian & Hijri dates',
+    jumuah: "Jumu'ah sessions",
+    'sunrise-sunset': 'Sunrise & sunset',
+    'mosque-branding': 'Mosque context',
+    announcements: 'Community announcements & events',
+  },
+  ar: {
+    dates: 'التاريخ الميلادي والهجري',
+    jumuah: 'صلوات الجمعة',
+    'sunrise-sunset': 'الشروق والغروب',
+    'mosque-branding': 'سياق المسجد',
+    announcements: 'إعلانات وفعاليات المجتمع',
+  },
+  tr: {
+    dates: 'Miladi ve Hicri tarihler',
+    jumuah: 'Cuma oturumları',
+    'sunrise-sunset': 'Güneş doğumu ve batımı',
+    'mosque-branding': 'Cami bağlamı',
+    announcements: 'Topluluk duyuruları ve etkinlikleri',
+  },
+  id: {
+    dates: 'Tanggal Masehi & Hijriah',
+    jumuah: 'Sesi Jumat',
+    'sunrise-sunset': 'Terbit & terbenam',
+    'mosque-branding': 'Konteks masjid',
+    announcements: 'Pengumuman & acara komunitas',
+  },
+};
 
 function initialState(): {
   readonly locale: Locale;
@@ -168,6 +221,20 @@ export function MobilePrayerThemeSettings() {
       parsePrayerBoardTemplateConfig({
         ...current,
         accentPreset,
+      }),
+    );
+    setPreviewedFingerprint(null);
+    setStatus(null);
+  };
+
+  const changeModuleVisibility = (moduleId: PrayerBoardModuleId, visible: boolean) => {
+    setDraft((current) =>
+      parsePrayerBoardTemplateConfig({
+        ...current,
+        moduleVisibility: {
+          ...current.moduleVisibility,
+          [moduleId]: visible,
+        },
       }),
     );
     setPreviewedFingerprint(null);
@@ -253,6 +320,26 @@ export function MobilePrayerThemeSettings() {
           <strong>{text.orientationValue}</strong>
         </div>
       </div>
+
+      <fieldset className="mobile-prayer-theme-settings__modules">
+        <legend>{text.modules}</legend>
+        <p>{text.modulesHelp}</p>
+        <div>
+          {mobileOptionalModules.map((moduleId) => (
+            <label key={moduleId}>
+              <span>{moduleLabels[locale][moduleId]}</span>
+              <input
+                type="checkbox"
+                data-mobile-theme-module={moduleId}
+                checked={draft.moduleVisibility[moduleId]}
+                onChange={(event) => {
+                  changeModuleVisibility(moduleId, event.target.checked);
+                }}
+              />
+            </label>
+          ))}
+        </div>
+      </fieldset>
 
       <div className="mobile-prayer-theme-settings__actions">
         <button type="button" className="secondary" onClick={openPreview}>
