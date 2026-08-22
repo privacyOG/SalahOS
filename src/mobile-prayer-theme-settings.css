@@ -1,0 +1,407 @@
+.mobile-prayer-theme-settings {
+  display: grid;
+  gap: 1.1rem;
+  margin-block-end: 1.5rem;
+  padding: clamp(1rem, 2.5vw, 1.5rem);
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-lg);
+  background: var(--salah-bg-surface);
+}
+
+.mobile-prayer-theme-settings__header {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.mobile-prayer-theme-settings__header p,
+.mobile-prayer-theme-settings__header h2,
+.mobile-prayer-theme-settings__header span {
+  margin: 0;
+}
+
+.mobile-prayer-theme-settings__header p {
+  color: var(--accent);
+  font-size: var(--salah-text-xs);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.mobile-prayer-theme-settings__header h2 {
+  margin-block: 0.2rem 0.35rem;
+  font-size: clamp(1.35rem, 1.1rem + 1vw, 2rem);
+}
+
+.mobile-prayer-theme-settings__header > div:first-child > span {
+  display: block;
+  max-width: 65ch;
+  color: var(--salah-fg-secondary);
+  line-height: 1.5;
+}
+
+.mobile-prayer-theme-settings__targets {
+  display: grid;
+  min-width: 13rem;
+  gap: 0.15rem;
+  padding: 0.7rem 0.85rem;
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-sm);
+  background: var(--salah-bg-surface-raised);
+  font-size: var(--salah-text-xs);
+}
+
+.mobile-prayer-theme-settings__targets span {
+  color: var(--salah-fg-tertiary);
+}
+
+.mobile-theme-choice-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.mobile-theme-choice {
+  display: grid;
+  min-width: 0;
+  gap: 0.65rem;
+  padding: 0.65rem;
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-md);
+  color: inherit;
+  background: var(--salah-bg-surface-raised);
+  text-align: start;
+}
+
+.mobile-theme-choice[aria-pressed='true'] {
+  border-color: color-mix(in srgb, var(--accent) 65%, var(--salah-border-subtle));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.mobile-theme-choice__thumb {
+  position: relative;
+  display: grid;
+  min-height: 9rem;
+  align-content: start;
+  gap: 0.35rem;
+  overflow: hidden;
+  padding: 0.65rem;
+  border-radius: 0.8rem;
+}
+
+.mobile-theme-choice__mini-clock,
+.mobile-theme-choice__mini-focus,
+.mobile-theme-choice__mini-row {
+  display: block;
+  border-radius: 0.35rem;
+}
+
+.mobile-theme-choice__mini-clock {
+  font-style: normal;
+  font-size: 1.45rem;
+  font-variant-numeric: tabular-nums;
+  font-weight: 800;
+}
+
+.mobile-theme-choice__mini-focus {
+  width: 74%;
+  height: 2.1rem;
+}
+
+.mobile-theme-choice__mini-row {
+  height: 0.72rem;
+  opacity: 0.85;
+}
+
+.mobile-theme-choice__thumb--heritage-classic {
+  color: #fff8e8;
+  background:
+    radial-gradient(circle at top right, rgb(214 173 90 / 30%), transparent 55%),
+    #071d36;
+  box-shadow: inset 0 0 0 1px rgb(214 173 90 / 55%);
+}
+
+.mobile-theme-choice__thumb--heritage-classic .mobile-theme-choice__mini-focus {
+  background: #e9c981;
+}
+
+.mobile-theme-choice__thumb--heritage-classic .mobile-theme-choice__mini-row {
+  background: rgb(255 248 232 / 55%);
+}
+
+.mobile-theme-choice__thumb--minimal-modern {
+  color: #10211d;
+  background: #f7f9f8;
+  box-shadow: inset 0 0 0 1px #d8e0de;
+}
+
+.mobile-theme-choice__thumb--minimal-modern .mobile-theme-choice__mini-focus {
+  background: #10211d;
+}
+
+.mobile-theme-choice__thumb--minimal-modern .mobile-theme-choice__mini-row {
+  background: #bfd0cb;
+}
+
+.mobile-theme-choice__thumb--bold-countdown-focus {
+  color: white;
+  background:
+    linear-gradient(180deg, rgb(3 17 32 / 25%), rgb(3 17 32 / 92%)),
+    url('/artwork/scenic-spiritual.svg') center / cover no-repeat;
+}
+
+.mobile-theme-choice__thumb--bold-countdown-focus .mobile-theme-choice__mini-clock {
+  font-size: 2.2rem;
+}
+
+.mobile-theme-choice__thumb--bold-countdown-focus .mobile-theme-choice__mini-focus {
+  background: #e1b35b;
+}
+
+.mobile-theme-choice__thumb--bold-countdown-focus .mobile-theme-choice__mini-row {
+  background: rgb(255 255 255 / 35%);
+}
+
+.mobile-theme-choice__thumb--structured-split-board {
+  color: white;
+  background: linear-gradient(90deg, #07192e 0 62%, #e8e8e7 62% 100%);
+  box-shadow: inset 0 0 0 1px #aeb6c0;
+}
+
+.mobile-theme-choice__thumb--structured-split-board .mobile-theme-choice__mini-focus {
+  background: #d5ad58;
+}
+
+.mobile-theme-choice__thumb--structured-split-board .mobile-theme-choice__mini-row {
+  width: 58%;
+  background: rgb(255 255 255 / 56%);
+}
+
+.mobile-theme-choice__thumb--scenic-spiritual {
+  color: white;
+  background:
+    linear-gradient(180deg, rgb(2 15 28 / 20%), rgb(2 15 28 / 78%)),
+    url('/artwork/scenic-spiritual.svg') center / cover no-repeat;
+}
+
+.mobile-theme-choice__thumb--scenic-spiritual .mobile-theme-choice__mini-focus {
+  background: rgb(220 182 95 / 78%);
+}
+
+.mobile-theme-choice__thumb--scenic-spiritual .mobile-theme-choice__mini-row {
+  background: rgb(255 255 255 / 48%);
+}
+
+.mobile-theme-choice__thumb--family-classroom {
+  color: #183047;
+  background:
+    radial-gradient(circle at 86% 10%, rgb(95 165 197 / 35%), transparent 50%),
+    #fff4d9;
+  box-shadow: inset 0 0 0 1px #dfb662;
+}
+
+.mobile-theme-choice__thumb--family-classroom .mobile-theme-choice__mini-focus {
+  background: #e5a94b;
+}
+
+.mobile-theme-choice__thumb--family-classroom .mobile-theme-choice__mini-row:nth-last-child(3) {
+  background: #78a9c1;
+}
+
+.mobile-theme-choice__thumb--family-classroom .mobile-theme-choice__mini-row:nth-last-child(2) {
+  background: #87a977;
+}
+
+.mobile-theme-choice__thumb--family-classroom .mobile-theme-choice__mini-row:last-child {
+  background: #d7755d;
+}
+
+.mobile-theme-choice__label {
+  display: grid;
+  min-width: 0;
+  gap: 0.15rem;
+}
+
+.mobile-theme-choice__label strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.mobile-theme-choice__label small {
+  color: var(--salah-fg-tertiary);
+  line-height: 1.35;
+}
+
+.mobile-prayer-theme-settings__controls {
+  display: grid;
+  grid-template-columns: minmax(10rem, 0.6fr) minmax(0, 1.4fr);
+  gap: 0.8rem;
+}
+
+.mobile-prayer-theme-settings__controls label,
+.mobile-prayer-theme-settings__controls > div {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.8rem;
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-sm);
+}
+
+.mobile-prayer-theme-settings__controls span {
+  color: var(--salah-fg-tertiary);
+  font-size: var(--salah-text-xs);
+  font-weight: 750;
+}
+
+.mobile-prayer-theme-settings__controls select {
+  min-height: 2.75rem;
+}
+
+.mobile-prayer-theme-settings__actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.mobile-prayer-theme-settings__actions > span {
+  color: var(--salah-fg-secondary);
+  font-size: var(--salah-text-sm);
+}
+
+.mobile-theme-preview-dialog {
+  position: fixed;
+  z-index: 1200;
+  inset: 0;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  padding: max(0.75rem, env(safe-area-inset-top)) 0.75rem max(0.75rem, env(safe-area-inset-bottom));
+  background: rgb(5 12 20 / 94%);
+  backdrop-filter: blur(12px);
+}
+
+.mobile-theme-preview-dialog__toolbar {
+  display: flex;
+  width: min(100%, 58rem);
+  align-items: center;
+  justify-content: space-between;
+  justify-self: center;
+  gap: 1rem;
+  padding: 0.65rem 0.85rem;
+  color: white;
+}
+
+.mobile-theme-preview-dialog__toolbar > div {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.mobile-theme-preview-dialog__toolbar span {
+  color: rgb(255 255 255 / 70%);
+  font-size: 0.78rem;
+}
+
+.mobile-theme-preview-dialog__toolbar button {
+  min-height: 2.75rem;
+}
+
+.mobile-theme-preview-dialog__device {
+  width: min(100%, 27rem);
+  min-height: 0;
+  align-self: center;
+  justify-self: center;
+  overflow: auto;
+  border: 8px solid #171b20;
+  border-radius: 2rem;
+  background: #0b1118;
+  box-shadow: 0 2rem 6rem rgb(0 0 0 / 45%);
+}
+
+.mobile-prayer-theme-preview-surface {
+  min-height: min(78vh, 52rem);
+}
+
+.mobile-prayer-theme-preview {
+  width: 100%;
+  padding: 0.65rem;
+}
+
+.mobile-prayer-theme-preview .today-appbar {
+  margin-block-end: 0.65rem;
+}
+
+.mobile-prayer-theme-preview .today-next {
+  padding: 0.85rem;
+}
+
+.mobile-prayer-theme-preview .today-next__identity h1 {
+  font-size: 2.35rem;
+}
+
+.mobile-prayer-theme-preview .today-next__countdown strong {
+  font-size: 1.8rem;
+}
+
+.mobile-prayer-theme-preview .today-next__times {
+  padding-block-start: 0.65rem;
+}
+
+.mobile-prayer-theme-preview .today-next__times dd {
+  font-size: 1.2rem;
+}
+
+.mobile-prayer-theme-preview .today-schedule {
+  margin-block-start: 0.7rem;
+}
+
+.mobile-prayer-theme-preview .today-prayer-row {
+  min-height: 3.35rem;
+  grid-template-columns: minmax(5.7rem, 1.2fr) minmax(4rem, 0.8fr) minmax(4rem, 0.8fr);
+  gap: 0.35rem;
+  padding: 0.45rem 0.55rem;
+}
+
+.mobile-prayer-theme-preview .today-prayer-row__time {
+  font-size: 0.82rem;
+}
+
+.mobile-prayer-theme-preview .today-prayer-row__name > strong {
+  font-size: 0.84rem;
+}
+
+.mobile-prayer-theme-preview .today-prayer-row__name > span {
+  font-size: 0.58rem;
+}
+
+@media (max-width: 760px) {
+  .mobile-prayer-theme-settings__header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .mobile-prayer-theme-settings__targets {
+    min-width: 0;
+  }
+
+  .mobile-theme-choice-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .mobile-prayer-theme-settings__controls {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 370px) {
+  .mobile-theme-choice-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .mobile-theme-preview-dialog {
+    background: #050c14;
+    backdrop-filter: none;
+  }
+}
