@@ -13,3 +13,21 @@
 .mobile-prayer-theme-surface[data-mobile-prayer-template='heritage-classic']::after {
   inset-inline-start: 0;
 }
+
+/* Compact landscape keeps the Bold Countdown hero dramatic without allowing
+ * the prayer name and tabular countdown to compete for the same inline space. */
+@media (max-height: 520px) and (orientation: landscape) {
+  .mobile-prayer-theme-surface[data-mobile-prayer-template='bold-countdown-focus'] .today-next {
+    min-height: 0;
+    gap: 0.75rem 1rem;
+  }
+
+  .mobile-prayer-theme-surface[data-mobile-prayer-template='bold-countdown-focus']
+    .today-next__identity
+    h1,
+  .mobile-prayer-theme-surface[data-mobile-prayer-template='bold-countdown-focus']
+    .today-next__countdown
+    strong {
+    font-size: clamp(3rem, 7.5vw, 4.25rem);
+  }
+}
