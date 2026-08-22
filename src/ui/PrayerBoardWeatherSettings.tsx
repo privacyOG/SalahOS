@@ -134,7 +134,10 @@ export function PrayerBoardWeatherSettings() {
   };
 
   return (
-    <section className="smart-display-theme-settings prayer-board-config-editor" aria-labelledby="weather-settings-title">
+    <section
+      className="prayer-board-weather-settings prayer-board-config-editor"
+      aria-labelledby="weather-settings-title"
+    >
       <header className="prayer-board-config-editor__header">
         <div>
           <h2 id="weather-settings-title">{text.title}</h2>
