@@ -67,19 +67,20 @@ describe('prayer-board weather', () => {
       longitude: 151.21,
       locationLabel: 'Sydney',
     });
-    const fetcher = vi.fn<WeatherFetch>(async (url) => {
+    const fetcher = vi.fn<WeatherFetch>((url) => {
       expect(url).toContain('latitude=-33.86');
       expect(url).toContain('longitude=151.21');
-      return {
+      return Promise.resolve({
         ok: true,
-        json: async () => ({
-          current: {
-            time: '2026-08-22T01:00',
-            temperature_2m: 18.4,
-            weather_code: 2,
-          },
-        }),
-      };
+        json: () =>
+          Promise.resolve({
+            current: {
+              time: '2026-08-22T01:00',
+              temperature_2m: 18.4,
+              weather_code: 2,
+            },
+          }),
+      });
     });
     const now = new Date('2026-08-22T01:05:00.000Z');
 
@@ -102,21 +103,21 @@ describe('prayer-board weather', () => {
       longitude: 151.21,
       locationLabel: 'Sydney',
     });
-    const goodFetch: WeatherFetch = async () => ({
-      ok: true,
-      json: async () => ({
-        current: {
-          time: '2026-08-22T01:00',
-          temperature_2m: 17,
-          weather_code: 61,
-        },
-      }),
-    });
+    const goodFetch: WeatherFetch = () =>
+      Promise.resolve({
+        ok: true,
+        json: () =>
+          Promise.resolve({
+            current: {
+              time: '2026-08-22T01:00',
+              temperature_2m: 17,
+              weather_code: 61,
+            },
+          }),
+      });
     await refreshPrayerBoardWeather(storage, goodFetch, new Date('2026-08-22T01:05:00.000Z'));
 
-    const failedFetch: WeatherFetch = async () => {
-      throw new Error('offline');
-    };
+    const failedFetch: WeatherFetch = () => Promise.reject(new Error('offline'));
     await expect(
       refreshPrayerBoardWeather(storage, failedFetch, new Date('2026-08-22T02:00:00.000Z')),
     ).resolves.toMatchObject({ temperatureC: 17, summary: 'Rain' });
