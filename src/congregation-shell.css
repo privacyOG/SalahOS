@@ -225,6 +225,24 @@
   }
 }
 
+@media (max-width: 340px) {
+  .congregation-nav {
+    gap: 0;
+    padding-inline-start: max(0.25rem, env(safe-area-inset-left));
+    padding-inline-end: max(0.25rem, env(safe-area-inset-right));
+  }
+
+  .congregation-nav-item {
+    padding-inline: 0.1rem;
+    font-size: 0.6rem;
+  }
+
+  .congregation-nav-label {
+    overflow-wrap: normal;
+    white-space: nowrap;
+  }
+}
+
 @media (forced-colors: active) {
   .congregation-nav,
   .surface-entry-card {
