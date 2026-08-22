@@ -93,3 +93,35 @@ jobs:
           emulator-options: -no-window -gpu swiftshader_indirect -no-snapshot -noaudio -no-boot-anim -camera-back none
           disable-animations: true
           script: bash scripts/android-emulator-acceptance.sh
+
+  format-export:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies from lockfile
+        run: npm ci --ignore-scripts
+
+      - name: Format correction files
+        run: npx prettier --write scripts/visual-mobile-prayer-themes.mjs src/ui/TodayScreen.tsx
+
+      - name: Verify correction formatting
+        run: npx prettier --check scripts/visual-mobile-prayer-themes.mjs src/ui/TodayScreen.tsx
+
+      - name: Upload exact formatter output
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr186-format-export-${{ github.sha }}
+          path: |
+            scripts/visual-mobile-prayer-themes.mjs
+            src/ui/TodayScreen.tsx
+          retention-days: 1
