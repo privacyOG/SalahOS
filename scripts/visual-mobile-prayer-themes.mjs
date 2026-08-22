@@ -339,7 +339,10 @@ async function validateModuleFlow(browser) {
     if ((await today.getAttribute('data-mobile-module-sunrise-sunset')) !== 'hidden') {
       throw new Error('Today did not hydrate the disabled Sunrise/Sunset module');
     }
-    if ((await page.locator('.today-dates').count()) !== 0 || (await page.locator('.today-solar').count()) !== 0) {
+    if (
+      (await page.locator('.today-dates').count()) !== 0 ||
+      (await page.locator('.today-solar').count()) !== 0
+    ) {
       throw new Error('Today rendered a disabled optional module');
     }
     if ((await page.locator('.today-prayer-row:not(.today-prayer-row--header)').count()) !== 5) {

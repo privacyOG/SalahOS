@@ -403,7 +403,9 @@ export function TodayScreen() {
                             {translate(locale, 'highLatitudeAdjustment')} ·{' '}
                             {translate(
                               locale,
-                              highLatitudeRuleTranslationKeys[sourcedDashboard.base.highLatitudeRule],
+                              highLatitudeRuleTranslationKeys[
+                                sourcedDashboard.base.highLatitudeRule
+                              ],
                             )}
                           </small>
                         )}
@@ -420,14 +422,13 @@ export function TodayScreen() {
                           ? '—'
                           : formatLocalTime(prayer.startLocalMinutes, locale, settings.timeFormat)}
                       </strong>
-                      <strong className="today-prayer-row__time today-prayer-row__iqamah" role="cell">
+                      <strong
+                        className="today-prayer-row__time today-prayer-row__iqamah"
+                        role="cell"
+                      >
                         {prayer.iqamahLocalMinutes === null
                           ? translate(locale, 'noIqamah')
-                          : formatLocalTime(
-                              prayer.iqamahLocalMinutes,
-                              locale,
-                              settings.timeFormat,
-                            )}
+                          : formatLocalTime(prayer.iqamahLocalMinutes, locale, settings.timeFormat)}
                       </strong>
                     </div>
                   );
