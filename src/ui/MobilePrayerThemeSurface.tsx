@@ -2,6 +2,7 @@ import { createContext, useContext, useEffect, useState, type ReactNode } from '
 
 import '../mobile-prayer-themes.css';
 import '../mobile-prayer-theme-geometry.css';
+import '../mobile-prayer-modules.css';
 import {
   defaultPrayerBoardTemplateConfig,
   type PrayerBoardTemplateConfig,
