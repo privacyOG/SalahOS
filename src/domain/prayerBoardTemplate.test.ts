@@ -175,6 +175,17 @@ describe('prayer-board template engine', () => {
     );
     expect(data.sourceMode).toBe(dashboard.sourceMode);
     expect(data.timeZone).toBe('Australia/Sydney');
+    expect(data.solarEvents).toEqual({
+      sunriseLocalMinutes: dashboard.base.today.prayers.sunrise.roundedLocalMinutes,
+      sunsetLocalMinutes: dashboard.base.today.prayers.maghrib.roundedLocalMinutes,
+    });
+    for (const minutes of Object.values(data.solarEvents)) {
+      if (minutes !== null) {
+        expect(Number.isInteger(minutes)).toBe(true);
+        expect(minutes).toBeGreaterThanOrEqual(0);
+        expect(minutes).toBeLessThan(1_440);
+      }
+    }
   });
 
   it('keeps optional weather isolated from authoritative prayer data', () => {
