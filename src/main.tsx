@@ -11,6 +11,7 @@ import { CommunityScreen } from './ui/CommunityScreen';
 import { CongregationShell } from './ui/CongregationShell';
 import { ManagedDisplayConnectionSettings } from './ui/ManagedDisplayConnectionSettings';
 import { ManagedDisplayRemoteController } from './ui/ManagedDisplayRemoteController';
+import { MobilePrayerThemeSurface } from './ui/MobilePrayerThemeSurface';
 import { MosquesScreen } from './ui/MosquesScreen';
 import { QiblaFinder } from './ui/QiblaFinder';
 import { RemoteDisplayAdminPanel } from './ui/RemoteDisplayAdminPanel';
@@ -75,9 +76,11 @@ function CongregationRoute({ destination }: Readonly<{ destination: Congregation
     default:
       return (
         <div className="congregation-route congregation-route--today">
-          <div className="app-shell today-route-shell">
-            <TodayScreen />
-          </div>
+          <MobilePrayerThemeSurface>
+            <div className="app-shell today-route-shell">
+              <TodayScreen />
+            </div>
+          </MobilePrayerThemeSurface>
         </div>
       );
   }
