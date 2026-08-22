@@ -66,6 +66,14 @@ jobs:
       - name: Run visual regression matrix
         run: npm run visual:check
 
+      - name: Build Google satellite Qibla fixture
+        env:
+          VITE_GOOGLE_MAPS_API_KEY: salahos-visual-fixture-key
+        run: npm run build
+
+      - name: Run Google satellite Qibla visual fixture
+        run: node scripts/visual-qibla-google.mjs
+
       - name: Upload visual evidence
         if: always()
         uses: actions/upload-artifact@v4
