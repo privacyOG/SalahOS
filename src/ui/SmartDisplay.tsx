@@ -5,6 +5,7 @@ import {
   parsePrayerBoardTemplateConfig,
   type PrayerBoardTemplateConfig,
   type PrayerBoardTemplateId,
+  type PrayerBoardWeatherSnapshot,
 } from '../domain/prayerBoardTemplate';
 import type { SourcedPrayerDashboard } from '../domain/sourcedDashboard';
 import { localeDirection, translate } from '../i18n/i18n';
@@ -22,6 +23,11 @@ import {
   loadPrayerBoardDisplayConfig,
   PRAYER_BOARD_DISPLAY_CONFIG_CHANGE_EVENT,
 } from '../platform/prayerBoardDisplayConfig';
+import {
+  loadUsablePrayerBoardWeather,
+  PRAYER_BOARD_WEATHER_CHANGE_EVENT,
+  refreshPrayerBoardWeather,
+} from '../platform/prayerBoardWeather';
 import type { PersistedSettings } from '../platform/settingsStorage';
 import {
   loadSmartDisplayTheme,
@@ -109,6 +115,14 @@ function readManagedPrayerBoardDisplayConfig(): PrayerBoardTemplateConfig | null
   }
 }
 
+function readPrayerBoardWeather(): PrayerBoardWeatherSnapshot | null {
+  try {
+    return loadUsablePrayerBoardWeather(getApplicationStorage());
+  } catch {
+    return null;
+  }
+}
+
 export function SmartDisplay({
   locale,
   currentClock,
@@ -128,10 +142,7 @@ export function SmartDisplay({
   );
   const [managedDisplayConfig, setManagedDisplayConfig] =
     useState<PrayerBoardTemplateConfig | null>(readManagedPrayerBoardDisplayConfig);
-  const boardData = useMemo(
-    () => (dashboard === null ? null : buildPrayerBoardData({ dashboard, offline })),
-    [dashboard, offline],
-  );
+  const [weather, setWeather] = useState<PrayerBoardWeatherSnapshot | null>(readPrayerBoardWeather);
   const queryTemplate =
     typeof window === 'undefined' ? null : smartDisplayTemplateOverride(window.location.search);
   const storedConfig = managedDisplayConfig ?? displayConfig;
@@ -147,6 +158,17 @@ export function SmartDisplay({
         timeFormat: storedConfig?.timeFormat ?? timeFormat,
       }),
     [locale, resolvedTemplateId, storedConfig, timeFormat],
+  );
+  const boardData = useMemo(
+    () =>
+      dashboard === null
+        ? null
+        : buildPrayerBoardData({
+            dashboard,
+            offline,
+            weather: resolvedConfig.moduleVisibility.weather ? weather : null,
+          }),
+    [dashboard, offline, resolvedConfig.moduleVisibility.weather, weather],
   );
   const resolvedLocale = resolvedConfig.primaryLocale;
   const resolvedDisplayTheme =
@@ -194,6 +216,33 @@ export function SmartDisplay({
       );
     };
   }, []);
+
+  useEffect(() => {
+    if (!resolvedConfig.moduleVisibility.weather) {
+      setWeather(null);
+      return;
+    }
+    let active = true;
+    const refresh = async () => {
+      const next = await refreshPrayerBoardWeather(getApplicationStorage());
+      if (active) setWeather(next);
+    };
+    const refreshFromConfiguration = () => {
+      setWeather(readPrayerBoardWeather());
+      void refresh();
+    };
+    setWeather(readPrayerBoardWeather());
+    void refresh();
+    const timer = window.setInterval(() => {
+      void refresh();
+    }, 15 * 60 * 1000);
+    window.addEventListener(PRAYER_BOARD_WEATHER_CHANGE_EVENT, refreshFromConfiguration);
+    return () => {
+      active = false;
+      window.clearInterval(timer);
+      window.removeEventListener(PRAYER_BOARD_WEATHER_CHANGE_EVENT, refreshFromConfiguration);
+    };
+  }, [resolvedConfig.moduleVisibility.weather]);
 
   return (
     <main
