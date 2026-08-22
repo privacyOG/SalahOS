@@ -332,6 +332,7 @@
 }
 
 .mobile-prayer-theme-preview .today-next__identity h1 {
+  color: inherit;
   font-size: 2.35rem;
 }
 
