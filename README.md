@@ -2,19 +2,20 @@
 
 <p align="center"><img src="public/icons/salahos-512.png" width="180" alt="SalahOS logo" /></p>
 
-A privacy-focused, cross-platform Islamic prayer-time application and smart-display ecosystem for Android, iOS/iPadOS, Raspberry Pi, TV, browser/PWA, and kiosk displays.
+A cross-platform Islamic prayer-time application and smart-display ecosystem for Android, iOS/iPadOS, Raspberry Pi, TV, browser/PWA, and kiosk displays.
 
-SalahOS is designed around accurate local prayer calculations, selectable calculation methods and madhhab/Asr conventions, local mosque timetables, Adhan alerts and notifications, Hijri dates, Arabic/RTL support, and useful offline operation.
+SalahOS is designed around accurate prayer calculations, selectable calculation methods and madhhab/Asr conventions, local mosque timetables, Adhan alerts and notifications, Hijri dates, Arabic/RTL support, connected mosque/display capabilities, and reliable offline prayer operation.
 
 ## Project principles
 
-- Local-first prayer calculations and settings.
+- Accurate prayer calculations remain available locally and offline after required application data is installed.
 - No mandatory account for core prayer-time functionality.
 - Pure prayer-domain engine separated from UI, network, GPS, and platform APIs.
 - Explicit calculation provenance and no fabricated astronomical events.
 - Shared application logic across mobile, Raspberry Pi, TV, PWA, and kiosk deployments.
 - English and Arabic/RTL treated as first-class requirements.
-- Least-privilege native permissions and no unnecessary remote application networking.
+- Native permissions, credentials and remote-network capabilities are explicit, reviewed and limited to their documented product purpose.
+- Optional network features fail independently and must not make core prayer calculation unavailable.
 
 ## Architecture
 
@@ -37,13 +38,13 @@ SalahOS is designed around accurate local prayer calculations, selectable calcul
 - English and Arabic localisation with RTL and bidirectional isolation.
 - Light, dark and follow-system themes plus keyboard/touch/accessibility support.
 - Android and iOS/iPadOS native local-prayer notification adapters with explicit lifecycle/platform constraints.
-- Private user-selected local Adhan audio for foreground playback attempts, with background/terminated delivery kept notification-based.
+- User-selected local Adhan audio for foreground playback attempts, with background/terminated delivery kept notification-based.
 - Web/PWA offline shell and locally persisted settings/timetables.
 - Raspberry Pi Touch Display 2 fixture/deployment tooling and browser-based smart-display mode for TV/kiosk use.
 
 ## Phase 2 capabilities
 
-- Qiblah Finder with local great-circle bearing, true-north live compass guidance, magnetic-declination and screen-orientation correction, calibration feedback, alignment haptics, saved/current/offline-city/map-pin location choices, and privacy-gated optional map tiles.
+- Qiblah Finder with local great-circle bearing, true-north live compass guidance, magnetic-declination and screen-orientation correction, calibration feedback, alignment haptics, saved/current/offline-city/map-pin location choices, and an immediately available map using configured Google satellite imagery or an OpenStreetMap fallback.
 - Ramadan mode with Suhur/Imsak and Iftar presentation plus Taraweeh timetable support.
 - Mosque announcements/events, configurable smart-display themes, and multiple mosque profiles.
 - Managed-display remote administration, Home Assistant support, optional local-network API, calendar integrations, wearable companion exploration, and additional Turkish/Indonesian localisation.
@@ -67,6 +68,7 @@ See [Downloadable release assets](docs/RELEASE_ASSETS.md) for installation choic
 - [Android build and install](docs/ANDROID.md)
 - [iOS/iPadOS build, install and signing](docs/IOS_BUILD_SIGNING.md)
 - [Qiblah Finder](docs/QIBLA_FINDER.md)
+- [Qiblah Google satellite configuration](docs/QIBLA_GOOGLE_MAPS.md)
 - [Downloadable release assets](docs/RELEASE_ASSETS.md)
 - [Canonical branding](docs/BRANDING.md)
 - [Native permission review](docs/NATIVE_PERMISSIONS.md)
@@ -83,9 +85,9 @@ See [Downloadable release assets](docs/RELEASE_ASSETS.md) for installation choic
 
 ## Platform status
 
-- **Web / PWA:** production build, install assets, service-worker offline lifecycle, local persistence and deploy-artifact verification are implemented. The permanent production-browser visual matrix covers 14 phone, tablet, 1080p/4K and Raspberry Pi Touch Display 2 viewport scenarios across English/Arabic and light/dark combinations; human aesthetic and physical-display acceptance remain separate.
-- **Android:** Capacitor shell, foreground native location, native persistence, local prayer notifications, exact-alarm fallback policy, reboot restoration contract, release-signing configuration, private foreground local-Adhan playback and Android 35 emulator acceptance have recorded evidence. Physical OEM notification timing, audio-focus behavior and broad target-device acceptance remain open.
-- **iOS / iPadOS:** Capacitor shell, foreground native location, native persistence, bounded local prayer notifications, private foreground local-Adhan playback and hosted Xcode Simulator compilation are implemented. The permanent acceptance workflow exercises fresh iPhone/iPad Simulator installation, application-container resolution, launch and explicit terminate/relaunch with screenshot artifacts; physical-device notification/audio/distribution acceptance and network-isolated offline cold start remain separate gates.
+- **Web / PWA:** production build, install assets, service-worker offline lifecycle, local persistence and deploy-artifact verification are implemented. The permanent production-browser visual matrix covers phone, tablet, 1080p/4K and Raspberry Pi Touch Display 2 viewport scenarios across English/Arabic and light/dark combinations; human aesthetic and physical-display acceptance remain separate.
+- **Android:** Capacitor shell, foreground native location, native persistence, local prayer notifications, exact-alarm fallback policy, reboot restoration contract, release-signing configuration, foreground local-Adhan playback and Android 35 emulator acceptance have recorded evidence. Physical OEM notification timing, audio-focus behavior and broad target-device acceptance remain open.
+- **iOS / iPadOS:** Capacitor shell, foreground native location, native persistence, bounded local prayer notifications, foreground local-Adhan playback and hosted Xcode Simulator compilation are implemented. The permanent acceptance workflow exercises fresh iPhone/iPad Simulator installation, application-container resolution, launch and explicit terminate/relaunch with screenshot artifacts; physical-device notification/audio/distribution acceptance and network-isolated offline cold start remain separate gates.
 - **Raspberry Pi / Touch Display 2:** repository-validated browser/kiosk deployment, touch-display fixtures and offline continuity paths are implemented; physical Touch Display 2 acceptance remains open.
 - **TV / generic kiosk:** repository-validated browser-hosted smart-display mode, runtime rollover/recovery and practical keyboard/remote exit handling are implemented; physical TV readability/remote/panel acceptance remains open.
 

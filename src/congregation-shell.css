@@ -16,7 +16,10 @@
   width: 100%;
   max-width: none;
   margin: 0;
-  padding: 0;
+  padding-block-start: env(safe-area-inset-top);
+  padding-block-end: 0;
+  padding-inline-start: env(safe-area-inset-left);
+  padding-inline-end: env(safe-area-inset-right);
 }
 
 /*
@@ -125,8 +128,8 @@
 .congregation-nav-label {
   display: block;
   max-width: 100%;
-  overflow-wrap: anywhere;
-  white-space: normal;
+  overflow-wrap: normal;
+  white-space: nowrap;
 }
 
 .congregation-nav-item[aria-current='page'] {
@@ -183,11 +186,6 @@
     width: 1.5rem;
     height: 1.5rem;
   }
-
-  .congregation-nav-label {
-    overflow-wrap: normal;
-    white-space: nowrap;
-  }
 }
 
 @media (min-width: 1200px) {
@@ -219,6 +217,19 @@
 @media (max-width: 720px) {
   .surface-entry-card {
     width: min(100% - 1rem, 1180px);
+  }
+}
+
+@media (max-width: 340px) {
+  .congregation-nav {
+    gap: 0;
+    padding-inline-start: max(0.25rem, env(safe-area-inset-left));
+    padding-inline-end: max(0.25rem, env(safe-area-inset-right));
+  }
+
+  .congregation-nav-item {
+    padding-inline: 0.1rem;
+    font-size: 0.6rem;
   }
 }
 

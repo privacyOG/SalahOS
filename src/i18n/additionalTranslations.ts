@@ -1,7 +1,7 @@
 export const turkishTranslations = {
   appName: 'SalahOS',
   heroTitle: 'Namaz vakitleri, cihazınızda hesaplanır.',
-  heroCopy: 'Mobil, Raspberry Pi, TV ve kiosk ekranları için gizlilik odaklı namaz vakitleri.',
+  heroCopy: 'Mobil, Raspberry Pi, TV ve kiosk ekranları için namaz vakitleri.',
   currentLocation: 'Mevcut konum',
   calculationSource: 'Hesaplama kaynağı',
   notConfigured: 'Yapılandırılmadı',
@@ -155,7 +155,7 @@ export const turkishTranslations = {
 export const indonesianTranslations = {
   appName: 'SalahOS',
   heroTitle: 'Waktu salat, dihitung secara lokal.',
-  heroCopy: 'Waktu salat yang mengutamakan privasi untuk ponsel, Raspberry Pi, TV, dan layar kios.',
+  heroCopy: 'Waktu salat untuk ponsel, Raspberry Pi, TV, dan layar kios.',
   currentLocation: 'Lokasi saat ini',
   calculationSource: 'Sumber perhitungan',
   notConfigured: 'Belum dikonfigurasi',

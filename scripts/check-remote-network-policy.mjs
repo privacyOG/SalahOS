@@ -7,7 +7,8 @@ const sourceRoot = join(repositoryRoot, 'src');
 const executableExtensions = new Set(['.ts', '.tsx', '.js', '.jsx', '.mjs']);
 const reviewedRemoteNetworkFiles = new Map([
   ['src/platform/managedAdminTransport.ts', 'managed display administration'],
-  ['src/platform/qiblaMapTiles.ts', 'user-initiated Qiblah map tiles'],
+  ['src/platform/qiblaMapTiles.ts', 'Qiblah OpenStreetMap fallback tiles'],
+  ['src/platform/qiblaGoogleMaps.ts', 'Qiblah Google Maps satellite imagery'],
 ]);
 
 async function collectFiles(directory) {
@@ -63,7 +64,7 @@ for (const approvedPath of reviewedRemoteNetworkFiles.keys()) {
 
 if (violations.length > 0) {
   throw new Error(
-    `Unreviewed remote-network capability detected. SalahOS application code remains local-first except for explicitly reviewed, narrowly scoped adapters:\n${violations.join('\n')}`,
+    `Unreviewed remote-network capability detected. Remote application traffic must stay in explicitly reviewed, narrowly scoped adapters:\n${violations.join('\n')}`,
   );
 }
 

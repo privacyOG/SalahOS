@@ -1,4 +1,5 @@
-import { StrictMode } from 'react';
+import { StrictMode, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { createRoot } from 'react-dom/client';
 
 import { App } from './App';
@@ -11,6 +12,8 @@ import { CommunityScreen } from './ui/CommunityScreen';
 import { CongregationShell } from './ui/CongregationShell';
 import { ManagedDisplayConnectionSettings } from './ui/ManagedDisplayConnectionSettings';
 import { ManagedDisplayRemoteController } from './ui/ManagedDisplayRemoteController';
+import { MobilePrayerThemeSettings } from './ui/MobilePrayerThemeSettings';
+import { MobilePrayerThemeSurface } from './ui/MobilePrayerThemeSurface';
 import { MosquesScreen } from './ui/MosquesScreen';
 import { QiblaFinder } from './ui/QiblaFinder';
 import { RemoteDisplayAdminPanel } from './ui/RemoteDisplayAdminPanel';
@@ -42,6 +45,7 @@ import './managed-display-assignment.css';
 import './ramadan-mode.css';
 import './taraweeh-panel.css';
 import './qibla-compass.css';
+import './qibla-compass-premium.css';
 import './qiblah-v2.css';
 import './mosques-community-v2.css';
 
@@ -75,19 +79,53 @@ function CongregationRoute({ destination }: Readonly<{ destination: Congregation
     default:
       return (
         <div className="congregation-route congregation-route--today">
-          <div className="app-shell today-route-shell">
-            <TodayScreen />
-          </div>
+          <MobilePrayerThemeSurface>
+            <div className="app-shell today-route-shell">
+              <TodayScreen />
+            </div>
+          </MobilePrayerThemeSurface>
         </div>
       );
   }
 }
 
+function CongregationDisplayThemeEditor() {
+  const [mountTarget, setMountTarget] = useState<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const updateMountTarget = () => {
+      setMountTarget(document.querySelector<HTMLElement>('.settings-display-entry'));
+    };
+
+    updateMountTarget();
+    const observer = new MutationObserver(updateMountTarget);
+    observer.observe(document.getElementById('root') ?? document.body, {
+      childList: true,
+      subtree: true,
+    });
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  if (mountTarget === null) return null;
+
+  return createPortal(
+    <div className="settings-display-entry__phone-home">
+      <MobilePrayerThemeSettings />
+    </div>,
+    mountTarget,
+  );
+}
+
 function CongregationApplication() {
   return (
-    <CongregationShell>
-      {(destination) => <CongregationRoute destination={destination} />}
-    </CongregationShell>
+    <>
+      <CongregationShell>
+        {(destination) => <CongregationRoute destination={destination} />}
+      </CongregationShell>
+      <CongregationDisplayThemeEditor />
+    </>
   );
 }
 
@@ -145,7 +183,12 @@ function AdministrationRoute({
     case 'displays':
       return <ManagedDisplayConnectionSettings />;
     case 'themes':
-      return <SmartDisplayThemeSettings />;
+      return (
+        <>
+          <MobilePrayerThemeSettings />
+          <SmartDisplayThemeSettings />
+        </>
+      );
     case 'remote':
       return (
         <>

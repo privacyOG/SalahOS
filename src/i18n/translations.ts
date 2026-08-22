@@ -6,7 +6,7 @@ export const translations = {
   en: {
     appName: 'SalahOS',
     heroTitle: 'Prayer times, locally calculated.',
-    heroCopy: 'Privacy-first prayer times for mobile, Raspberry Pi, TV, and kiosk displays.',
+    heroCopy: 'Prayer times for mobile, Raspberry Pi, TV, and kiosk displays.',
     currentLocation: 'Current location',
     calculationSource: 'Calculation source',
     notConfigured: 'Not configured',
@@ -158,7 +158,7 @@ export const translations = {
   ar: {
     appName: 'صلاح أو إس',
     heroTitle: 'مواقيت الصلاة محسوبة محلياً.',
-    heroCopy: 'مواقيت صلاة تراعي الخصوصية للهاتف وراسبيري باي والتلفاز وشاشات العرض.',
+    heroCopy: 'مواقيت الصلاة للهاتف وراسبيري باي والتلفاز وشاشات العرض.',
     currentLocation: 'الموقع الحالي',
     calculationSource: 'مصدر المواقيت',
     notConfigured: 'غير مُعدّ',
