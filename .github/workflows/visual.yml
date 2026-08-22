@@ -67,6 +67,9 @@ jobs:
           raise SystemExit('Local SalahOS production server did not become ready')
           PY
 
+      - name: Diagnose Today render readiness
+        run: node scripts/visual-today-smoke.mjs
+
       - name: Run visual regression matrix
         run: npm run visual:check
 
