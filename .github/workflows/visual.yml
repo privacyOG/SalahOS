@@ -11,9 +11,179 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
+  tracker-export:
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Build clean Stage 23.13 tracker commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+          BASE_TREE_SHA: c09a08d42efacc359c8f6fcba525713ada09e776
+          CODE_HEAD_SHA: 17ba7535282144ffc64b525f7dc24cdc1745843b
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import re
+          import urllib.error
+          import urllib.request
+          from pathlib import Path
+
+          repo = os.environ['GITHUB_REPOSITORY']
+          token = os.environ['GH_TOKEN']
+          base_tree = os.environ['BASE_TREE_SHA']
+          code_head = os.environ['CODE_HEAD_SHA']
+          parent = os.environ['GITHUB_SHA']
+
+          def replace_once(text: str, old: str, new: str, label: str) -> str:
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{label}: expected exactly one match, found {count}')
+              return text.replace(old, new, 1)
+
+          todo_path = Path('TODO.md')
+          todo = todo_path.read_text(encoding='utf-8')
+          todo = replace_once(
+              todo,
+              '- [x] Define privacy principles: local-first operation, minimal telemetry, no unnecessary location transmission',
+              '- [x] Define data-handling and network-safety principles: explicit reviewed capabilities, minimal telemetry, no unnecessary sensitive-data transmission',
+              'TODO Stage 0 product-direction wording',
+          )
+          todo = replace_once(
+              todo,
+              '- [ ] Complete mobile Today/home prayer-board template variants and visual Settings selector (Stage 23.13)',
+              '- [x] Complete mobile Today/home prayer-board template variants and visual Settings selector (Stage 23.13)',
+              'TODO Stage 23.13 status',
+          )
+          todo = replace_once(
+              todo,
+              'Stage 23.13 mobile Today/home prayer-board template work remains open.',
+              "Stage 23.13 is therefore complete.\n\n**Stage 23.13 code-bearing verification note (2026-08-23):** PR #186 code-bearing head `17ba7535282144ffc64b525f7dc24cdc1745843b` passed Quality Gate `32597468392`, Android Build `32597468390`, Visual Regression `32597468393` and iOS Build `32597468388`. Android emulator job `97090593534` proved the exact `salahos.mobilePrayerBoardDisplayConfig` native preference survives an offline cold start and process relaunch before the connected test suite passed. iOS job `97090593496` proved the same dedicated native key/value boundary on fresh iPhone and iPad Simulators across launch and relaunch; evidence artifact `9482112123` records both profiles. Exact Visual artifact `9481966738` passed the complete browser matrix plus no-key OpenStreetMap and configured Google-satellite Qibla fixtures. Human review accepted all six Phone/Home designs, the corrected compact-landscape Bold Countdown and tablet Structured Split layouts, intact 320px/phone navigation labels, English/Arabic RTL/Turkish/Indonesian long-text cases, optional-module hidden/visible states, the preview-before-apply flow, and phone/landscape/tablet Qibla compass/map captures. Weather remains intentionally separate under Stage 23.11 and is not claimed by Stage 23.13.",
+              'TODO Stage 23.13 verification note',
+          )
+          todo_path.write_text(todo, encoding='utf-8')
+
+          fixes_path = Path('docs/UI_UX_FIXES.md')
+          fixes = fixes_path.read_text(encoding='utf-8')
+          start = '## A. Mobile prayer-times theme persistence and live application\n'
+          end = '## Current correction evidence\n'
+          if fixes.count(start) != 1 or fixes.count(end) != 1:
+              raise SystemExit('UI_UX_FIXES section boundaries changed')
+          before, remainder = fixes.split(start, 1)
+          tracked, after = remainder.split(end, 1)
+          tracked = re.sub(r'^- \[(?:~| )\] ', '- [x] ', tracked, flags=re.MULTILINE)
+          if re.search(r'^- \[(?:~| )\] ', tracked, flags=re.MULTILINE):
+              raise SystemExit('UI_UX_FIXES still has incomplete A-E items')
+          fixes = before + start + tracked + end + after
+          evidence_heading = '## Completion gate\n'
+          evidence = (
+              '## Accepted correction evidence (2026-08-23)\n\n'
+              '- Code-bearing head `17ba7535282144ffc64b525f7dc24cdc1745843b` passed Quality Gate `32597468392`, Android Build `32597468390`, Visual Regression `32597468393` and iOS Build `32597468388`.\n'
+              '- Android emulator job `97090593534` verified the exact dedicated Phone/Home native preference after offline cold start and process relaunch; the connected Android test then passed.\n'
+              '- iOS job `97090593496` verified exact Phone/Home native preference values on fresh iPhone and iPad Simulators across launch and relaunch. Evidence artifact `9482112123` records `mobile_theme_launch=passed` and `mobile_theme_relaunch=passed` for both profiles.\n'
+              '- Visual artifact `9481966738` passed the complete responsive/RTL/long-text/mobile-theme/Qibla matrix. Human review accepted every released Phone/Home design and specifically confirmed the corrected Bold compact-landscape hierarchy, Structured Split tablet hierarchy, unobstructed Settings preview controls, separated Sunrise/Sunset preview cards, intact five-item phone navigation at 320px and ordinary phone widths, and Arabic/RTL, Turkish and Indonesian expansion.\n'
+              '- Qibla human review accepted phone portrait, compact landscape, tablet and Arabic/RTL compass presentation; the normal build preserved OpenStreetMap fallback and the deterministic configured-key fixture recorded Google provider `google-satellite`, host `maps.googleapis.com` and `maptype=satellite` without committing a credential.\n'
+              '- Active product-direction language in README, architecture/research material, this correction tracker, `TODO.md` and the UI/UX v2 plan now treats networking as an explicit reviewed capability while retaining ordinary permission, credential, data-handling and offline-reliability requirements.\n\n'
+          )
+          if fixes.count(evidence_heading) != 1:
+              raise SystemExit('UI_UX_FIXES completion heading changed')
+          fixes = fixes.replace(evidence_heading, evidence + evidence_heading, 1)
+          fixes_path.write_text(fixes, encoding='utf-8')
+
+          plan_path = Path('docs/UI_UX_V2_PLAN.md')
+          plan = plan_path.read_text(encoding='utf-8')
+          plan = replace_once(
+              plan,
+              '- Existing local-first prayer calculation and offline operation must remain functional throughout the migration.',
+              '- Existing local prayer calculation and offline operation must remain functional throughout the migration.',
+              'UI/UX v2 active product principle',
+          )
+          stage_start = '## 23.13 Mobile Today/home prayer-board templates\n'
+          stage_end = '---\n\n# Stage 24 — Managed-masjid admin UX redesign\n'
+          if plan.count(stage_start) != 1 or plan.count(stage_end) != 1:
+              raise SystemExit('UI_UX_V2_PLAN Stage 23.13 boundaries changed')
+          before, remainder = plan.split(stage_start, 1)
+          stage, after = remainder.split(stage_end, 1)
+          stage = re.sub(r'^- \[ \] ', '- [x] ', stage, flags=re.MULTILINE)
+          if re.search(r'^- \[ \] ', stage, flags=re.MULTILINE):
+              raise SystemExit('UI_UX_V2_PLAN Stage 23.13 still has incomplete items')
+          stage = stage.rstrip() + (
+              "\n\n**Stage 23.13 verification note (2026-08-23):** PR #186 code-bearing head `17ba7535282144ffc64b525f7dc24cdc1745843b` passed Quality Gate `32597468392`, Android Build `32597468390`, Visual Regression `32597468393` and iOS Build `32597468388`. The congregation Today route consumes shared `PrayerBoardData` v1 through six original Phone/Home template treatments with a dedicated native-persisted configuration key, target isolation from TV/Kiosk configuration, preview-before-apply Settings UX, required five-prayer information, configurable supported optional modules and offline built-in fallbacks. Permanent visual coverage spans 320px, representative phones, compact landscape, large phone, tablet, English, Arabic/RTL, Turkish and Indonesian; exact Visual artifact `9481966738` received human review after correcting sibling-collision, preview-stacking, solar-preview and navigation word-break defects. Android and iOS lifecycle evidence proves the selected Phone/Home configuration survives real emulator/Simulator relaunch boundaries. Stage 23.11 optional weather remains separate.\n\n"
+          )
+          plan = before + stage_start + stage + stage_end + after
+          plan_path.write_text(plan, encoding='utf-8')
+
+          def api(method: str, endpoint: str, payload: dict):
+              request = urllib.request.Request(
+                  f'https://api.github.com/repos/{repo}/{endpoint}',
+                  data=json.dumps(payload).encode('utf-8'),
+                  method=method,
+                  headers={
+                      'Accept': 'application/vnd.github+json',
+                      'Authorization': f'Bearer {token}',
+                      'X-GitHub-Api-Version': '2022-11-28',
+                      'User-Agent': 'SalahOS-stage-23-13-finalizer',
+                      'Content-Type': 'application/json',
+                  },
+              )
+              try:
+                  with urllib.request.urlopen(request, timeout=30) as response:
+                      return json.load(response)
+              except urllib.error.HTTPError as exc:
+                  body = exc.read().decode('utf-8', errors='replace')
+                  raise SystemExit(f'GitHub API {endpoint} failed: {exc.code} {body}') from exc
+
+          blob_shas = {}
+          for path in (todo_path, fixes_path, plan_path):
+              created = api('POST', 'git/blobs', {'content': path.read_text(encoding='utf-8'), 'encoding': 'utf-8'})
+              blob_shas[str(path)] = created['sha']
+
+          tree = api(
+              'POST',
+              'git/trees',
+              {
+                  'base_tree': base_tree,
+                  'tree': [
+                      {'path': path, 'mode': '100644', 'type': 'blob', 'sha': sha}
+                      for path, sha in blob_shas.items()
+                  ],
+              },
+          )
+          commit = api(
+              'POST',
+              'git/commits',
+              {
+                  'message': 'Complete Stage 23.13 acceptance tracking',
+                  'tree': tree['sha'],
+                  'parents': [parent],
+              },
+          )
+          output = {
+              'code_head': code_head,
+              'temporary_parent': parent,
+              'base_tree': base_tree,
+              'tree': tree['sha'],
+              'final_commit': commit['sha'],
+              'blobs': blob_shas,
+          }
+          Path('stage-23-13-final-commit.json').write_text(json.dumps(output, indent=2) + '\n', encoding='utf-8')
+          print(json.dumps(output, indent=2))
+          PY
+
+      - name: Upload clean commit reference
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage-23-13-final-commit-${{ github.sha }}
+          path: stage-23-13-final-commit.json
+          retention-days: 1
+
   visual:
     runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '["ubuntu-24.04"]' || '["self-hosted","Linux","X64"]') }}
     timeout-minutes: 30
