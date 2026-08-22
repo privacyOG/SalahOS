@@ -71,7 +71,7 @@ async function seedBase(page, weatherPayload) {
       localStorage.setItem('salahos.prayerBoardDisplayConfig', serializedBoard);
       if (serializedWeather === null) {
         localStorage.removeItem('salahos.prayerBoardWeather');
-      } else {
+      } else if (localStorage.getItem('salahos.prayerBoardWeather') === null) {
         localStorage.setItem('salahos.prayerBoardWeather', serializedWeather);
       }
     },
