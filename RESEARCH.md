@@ -120,3 +120,5 @@ No single online calculator is treated as absolute ground truth. Verification us
 2. an independent calculator/API or frozen reference dataset;
 3. authoritative published timetables where practical;
 4. documented comparison tolerances that distinguish algorithm, method, timezone, adjustment, and rounding differences.
+
+Current open research/validation work is intentionally visible in `TODO.md`, especially official Diyanet institutional parity and the distinction between Dubai output parity and authoritative internal-parameter equivalence. The defined v1 direct canonical-algorithm comparison set is complete.
