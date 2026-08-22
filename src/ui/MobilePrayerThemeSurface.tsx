@@ -1,5 +1,6 @@
 import { useEffect, useState, type ReactNode } from 'react';
 
+import '../mobile-prayer-themes.css';
 import {
   defaultPrayerBoardTemplateConfig,
   type PrayerBoardTemplateConfig,
