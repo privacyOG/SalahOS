@@ -15,6 +15,7 @@ import { ManagedDisplayRemoteController } from './ui/ManagedDisplayRemoteControl
 import { MobilePrayerThemeSettings } from './ui/MobilePrayerThemeSettings';
 import { MobilePrayerThemeSurface } from './ui/MobilePrayerThemeSurface';
 import { MosquesScreen } from './ui/MosquesScreen';
+import { PrayerBoardWeatherSettings } from './ui/PrayerBoardWeatherSettings';
 import { QiblaFinder } from './ui/QiblaFinder';
 import { RemoteDisplayAdminPanel } from './ui/RemoteDisplayAdminPanel';
 import { SettingsScreen } from './ui/SettingsScreen';
@@ -113,6 +114,7 @@ function CongregationDisplayThemeEditor() {
   return createPortal(
     <div className="settings-display-entry__phone-home">
       <MobilePrayerThemeSettings />
+      <PrayerBoardWeatherSettings />
     </div>,
     mountTarget,
   );
@@ -187,6 +189,7 @@ function AdministrationRoute({
         <>
           <MobilePrayerThemeSettings />
           <SmartDisplayThemeSettings />
+          <PrayerBoardWeatherSettings />
         </>
       );
     case 'remote':

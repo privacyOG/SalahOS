@@ -1,0 +1,83 @@
+.prayer-board-configured-surface[data-module-weather='on'] {
+  display: grid;
+  min-height: 100%;
+}
+
+.prayer-board-configured-surface[data-module-weather='on'] > * {
+  grid-area: 1 / 1;
+}
+
+.prayer-board-weather {
+  z-index: 5;
+  align-self: start;
+  justify-self: end;
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.65rem;
+  max-width: min(36vw, 28rem);
+  margin: clamp(1rem, 2vw, 2rem);
+  padding: 0.55rem 0.85rem;
+  border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
+  border-radius: 999px;
+  background: color-mix(in srgb, Canvas 78%, transparent);
+  color: CanvasText;
+  box-shadow: 0 0.35rem 1.1rem rgb(0 0 0 / 18%);
+  backdrop-filter: blur(10px);
+  pointer-events: none;
+}
+
+.prayer-board-weather strong {
+  font: 700 clamp(1rem, 1.5vw, 1.65rem) / 1 var(--salah-font-display, inherit);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.prayer-board-weather span {
+  overflow: hidden;
+  font-size: clamp(0.78rem, 1vw, 1.05rem);
+  line-height: 1.15;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.mobile-prayer-theme-surface > .prayer-board-weather {
+  z-index: 1;
+  display: flex;
+  width: calc(100% - 2 * var(--salah-space-4));
+  max-width: 42rem;
+  margin: 0 auto calc(var(--salah-space-6) + env(safe-area-inset-bottom));
+  padding: 0.75rem 1rem;
+  border-color: var(--mobile-theme-border);
+  border-radius: var(--salah-radius-md);
+  background: var(--mobile-theme-surface);
+  color: var(--mobile-theme-fg);
+  box-shadow: none;
+  backdrop-filter: none;
+  pointer-events: auto;
+}
+
+.mobile-prayer-theme-surface > .prayer-board-weather span {
+  color: var(--mobile-theme-secondary);
+}
+
+@media (prefers-reduced-transparency: reduce) {
+  .prayer-board-weather {
+    background: Canvas;
+    backdrop-filter: none;
+  }
+
+  .mobile-prayer-theme-surface > .prayer-board-weather {
+    background: var(--mobile-theme-surface);
+  }
+}
+
+@media (max-width: 720px) {
+  .prayer-board-weather {
+    max-width: 52vw;
+  }
+
+  .mobile-prayer-theme-surface > .prayer-board-weather {
+    width: calc(100% - 2 * var(--salah-space-3));
+    max-width: none;
+  }
+}

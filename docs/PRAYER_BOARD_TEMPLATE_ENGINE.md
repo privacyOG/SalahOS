@@ -6,7 +6,7 @@ Stage 23 introduces a presentation-only prayer-board contract. The template engi
 
 `src/domain/sourcedDashboard.ts` remains the authoritative resolved prayer model. It already applies the selected calculated/local-mosque source, Iqamah rules, current/next prayer state and Jumu'ah data. `src/domain/prayerBoardTemplate.ts` consumes that resolved model and copies it into a deterministic display contract. Template selection and template configuration are deliberately absent from `buildPrayerBoardData()`, so changing a prayer-board design cannot change prayer times, source provenance, Iqamah values or next-prayer semantics.
 
-The prayer-board layer performs no network access, geolocation, storage reads or prayer calculations. Optional remote content is passed in through an isolated nullable weather snapshot. Missing, stale or failed weather must not alter the authoritative prayer data.
+The prayer-board layer performs no network access, geolocation, storage reads or prayer calculations. Optional remote content is passed in through an isolated nullable weather snapshot. Missing, stale or failed weather must not alter the authoritative prayer data. The Stage 23.11 acquisition/cache boundary and its fixed-location privacy rules are documented in [`PRAYER_BOARD_WEATHER.md`](PRAYER_BOARD_WEATHER.md).
 
 ## Stable template registry
 
@@ -19,7 +19,7 @@ Version 1 reserves six stable identifiers for the required SalahOS designs:
 - `scenic-spiritual`
 - `family-classroom`
 
-Each registry entry has a template version, the four supported primary locales (`en`, `ar`, `tr`, `id`), English/Arabic bilingual capability, supported modules, default-visible modules and a first-party built-in artwork fallback. Later visual stages implement the designs against these identifiers rather than creating independent data models.
+Each registry entry has a template version, the four supported primary locales (`en`, `ar`, `tr`, `id`), English/Arabic bilingual capability, supported modules, default-visible modules and a first-party built-in artwork fallback. The six visual designs consume these identifiers rather than creating independent data models.
 
 ## Modules
 
@@ -47,4 +47,4 @@ Unknown or unsupported configuration falls back deterministically to the Heritag
 
 Given the same resolved dashboard and optional content inputs, `buildPrayerBoardData()` returns the same presentation contract and performs no external I/O. Core prayer information therefore remains usable offline. Optional announcement and weather content is structurally separated from prayer calculations and source resolution; a weather error or stale snapshot cannot block or modify prayer information.
 
-Future Stage 23 work may add visual templates, preview/configuration UI and managed-display assignment, but those layers must consume this contract rather than weakening the boundary above.
+Template implementation, preview/configuration and managed-display assignment all consume this shared contract. Later Stage 23 work must continue to preserve the same boundary rather than weakening it.

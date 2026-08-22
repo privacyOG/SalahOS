@@ -83,37 +83,38 @@ async function validateEnglishFlow(browser) {
   try {
     await seed(page, 'en');
     await page.goto(`${baseUrl}/?surface=admin&adminView=themes`, { waitUntil: 'networkidle' });
-    await page.locator('.prayer-board-config-editor').waitFor({ state: 'visible' });
+    const editor = page.locator('.smart-display-theme-settings');
+    await editor.waitFor({ state: 'visible' });
     await page.evaluate(() => document.fonts.ready);
 
-    if ((await page.locator('.prayer-board-template-card').count()) !== 6) {
+    if ((await editor.locator('.prayer-board-template-card').count()) !== 6) {
       throw new Error('display-theme gallery must render exactly six required templates');
     }
-    if ((await page.locator('.prayer-board-template-card[aria-pressed="true"]').count()) !== 1) {
+    if ((await editor.locator('.prayer-board-template-card[aria-pressed="true"]').count()) !== 1) {
       throw new Error('display-theme gallery must expose exactly one selected template');
     }
 
     await capture(page, 'prayer-board-config-gallery-en');
 
-    await page.locator('[data-template-card="minimal-modern"]').click();
-    const mosqueName = page.locator('input[placeholder="Mosque branding"]');
+    await editor.locator('[data-template-card="minimal-modern"]').click();
+    const mosqueName = editor.locator('input[placeholder="Mosque branding"]');
     await mosqueName.fill('Stage 23 Preview Masjid');
 
-    const apply = page.locator('.prayer-board-config-actions button.primary');
+    const apply = editor.locator('.prayer-board-config-actions button.primary');
     if (!(await apply.isDisabled())) {
       throw new Error('apply must remain disabled until the current draft is previewed');
     }
 
-    await page.locator('.prayer-board-config-actions button.secondary').click();
-    const preview = page.locator('.prayer-board-fullscreen-preview');
+    await editor.locator('.prayer-board-config-actions button.secondary').click();
+    const preview = editor.locator('.prayer-board-fullscreen-preview');
     await preview.waitFor({ state: 'visible' });
-    if ((await page.locator('[data-prayer-board-template="minimal-modern"]').count()) !== 1) {
+    if ((await preview.locator('[data-prayer-board-template="minimal-modern"]').count()) !== 1) {
       throw new Error('full-screen preview did not render the selected template');
     }
     await page.setViewportSize({ width: 1920, height: 1080 });
     await capture(page, 'prayer-board-config-preview-en');
 
-    await page.locator('.prayer-board-fullscreen-preview__close').click();
+    await editor.locator('.prayer-board-fullscreen-preview__close').click();
     await page.setViewportSize({ width: 1440, height: 1000 });
     if (await apply.isDisabled()) {
       throw new Error('apply must become available after previewing the current draft');
@@ -181,12 +182,13 @@ async function validateArabicPreview(browser) {
   try {
     await seed(page, 'ar');
     await page.goto(`${baseUrl}/?surface=admin&adminView=themes`, { waitUntil: 'networkidle' });
-    await page.locator('.prayer-board-config-editor').waitFor({ state: 'visible' });
-    await page.locator('[data-template-card="family-classroom"]').click();
-    await page.locator('.prayer-board-config-actions button.secondary').click();
+    const editor = page.locator('.smart-display-theme-settings');
+    await editor.waitFor({ state: 'visible' });
+    await editor.locator('[data-template-card="family-classroom"]').click();
+    await editor.locator('.prayer-board-config-actions button.secondary').click();
     await page.setViewportSize({ width: 1920, height: 1080 });
 
-    const stage = page.locator('.prayer-board-fullscreen-preview__stage');
+    const stage = editor.locator('.prayer-board-fullscreen-preview__stage');
     await stage.waitFor({ state: 'visible' });
     if (
       (await stage.getAttribute('dir')) !== 'rtl' ||
@@ -194,7 +196,7 @@ async function validateArabicPreview(browser) {
     ) {
       throw new Error('Arabic preview did not preserve RTL direction and language');
     }
-    if ((await page.locator('[data-prayer-board-template="family-classroom"]').count()) !== 1) {
+    if ((await stage.locator('[data-prayer-board-template="family-classroom"]').count()) !== 1) {
       throw new Error('Arabic full-screen preview did not render Family & Classroom');
     }
     if (!(await page.locator('body').textContent()).includes('الصلاة')) {
