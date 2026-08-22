@@ -274,14 +274,16 @@ The daily prayer display surface must also become a first-class configurable pro
 
 ## 23.10 Managed display assignment
 
-- [ ] Allow an administrator to assign a prayer-board template to each managed display.
-- [ ] Allow a default mosque template with per-display override.
-- [ ] Store template identifier and configuration in revisioned managed-display configuration.
-- [ ] Preview the exact target resolution/orientation before publication.
-- [ ] Show last-applied template/configuration revision for each display.
-- [ ] Cache the last-known-good template configuration on the display.
-- [ ] Ensure a display remains functional if remote theme/media synchronization fails.
-- [ ] Reconcile configuration after reconnect without interrupting local prayer calculation.
+- [x] Allow an administrator to assign a prayer-board template to each managed display.
+- [x] Allow a default mosque template with per-display override.
+- [x] Store template identifier and configuration in revisioned managed-display configuration.
+- [x] Preview the exact target resolution/orientation before publication.
+- [x] Show last-applied template/configuration revision for each display.
+- [x] Cache the last-known-good template configuration on the display.
+- [x] Ensure a display remains functional if remote theme/media synchronization fails.
+- [x] Reconcile configuration after reconnect without interrupting local prayer calculation.
+
+**Stage 23.10 verification note (2026-08-22):** PR #183 code-bearing head `698ee83f877da52b7fad257206a10d76fc3d7aa5` passed Quality Gate `32539309579`, Android Build `32539310016`, Visual Regression `32539309804` and iOS Build `32539309740`. Managed administration now supports a revisioned full prayer-board configuration, mosque-wide defaults with explicit per-display overrides/inheritance, effective assignment-source reporting, exact landscape target validation for 1920×1080 and 3840×2160, preview-before-publication, and target-versus-last-applied revision/template visibility. Managed displays persist a validated last-known-good prayer-board configuration in native-hydrated storage, keep local prayer calculation authoritative while remote configuration/media is unavailable, and reconcile newer/equal/conflicting revisions after reconnect without interrupting the prayer engine. Legacy managed-service state migrates to safe Heritage Classic configuration and non-portable device-local media is normalized to deterministic built-in artwork. Exact Visual artifact `9466486375` was human-reviewed across the fleet assignment view, exact 1920×1080 preview, published override state, managed online display and offline-cache display; the corrected Family & Classroom Start/Iqamah layout showed no collision, the offline cache preserved mosque branding/template content, and unsupported portrait publication remained explicitly blocked. Stage 23.11 optional weather, Stage 23.12 announcement rotation and Stage 23.13 mobile Today/home template work remain separate and open.
 
 ---
 
