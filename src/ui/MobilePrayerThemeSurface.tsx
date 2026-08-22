@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
 
 import '../mobile-prayer-themes.css';
 import '../mobile-prayer-theme-geometry.css';
@@ -12,6 +12,10 @@ import {
   MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_CHANGE_EVENT,
 } from '../platform/mobilePrayerBoardDisplayConfig';
 
+const MobilePrayerThemeConfigContext = createContext<PrayerBoardTemplateConfig>(
+  defaultPrayerBoardTemplateConfig,
+);
+
 function readThemeConfig(): PrayerBoardTemplateConfig {
   try {
     const storage = getApplicationStorage();
@@ -19,6 +23,10 @@ function readThemeConfig(): PrayerBoardTemplateConfig {
   } catch {
     return defaultPrayerBoardTemplateConfig;
   }
+}
+
+export function useMobilePrayerThemeConfig(): PrayerBoardTemplateConfig {
+  return useContext(MobilePrayerThemeConfigContext);
 }
 
 export function MobilePrayerThemeSurface({ children }: Readonly<{ children: ReactNode }>) {
@@ -43,13 +51,15 @@ export function MobilePrayerThemeSurface({ children }: Readonly<{ children: Reac
   }, []);
 
   return (
-    <div
-      className="mobile-prayer-theme-surface"
-      data-mobile-prayer-template={config.templateId}
-      data-mobile-prayer-accent={config.accentPreset}
-      data-mobile-prayer-theme-version={config.version}
-    >
-      {children}
-    </div>
+    <MobilePrayerThemeConfigContext.Provider value={config}>
+      <div
+        className="mobile-prayer-theme-surface"
+        data-mobile-prayer-template={config.templateId}
+        data-mobile-prayer-accent={config.accentPreset}
+        data-mobile-prayer-theme-version={config.version}
+      >
+        {children}
+      </div>
+    </MobilePrayerThemeConfigContext.Provider>
   );
 }
