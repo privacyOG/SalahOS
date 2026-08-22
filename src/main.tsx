@@ -1,4 +1,5 @@
-import { StrictMode } from 'react';
+import { StrictMode, useEffect, useState } from 'react';
+import { createPortal } from 'react-dom';
 import { createRoot } from 'react-dom/client';
 
 import { App } from './App';
@@ -88,11 +89,43 @@ function CongregationRoute({ destination }: Readonly<{ destination: Congregation
   }
 }
 
+function CongregationDisplayThemeEditor() {
+  const [mountTarget, setMountTarget] = useState<HTMLElement | null>(null);
+
+  useEffect(() => {
+    const updateMountTarget = () => {
+      setMountTarget(document.querySelector<HTMLElement>('.settings-display-entry'));
+    };
+
+    updateMountTarget();
+    const observer = new MutationObserver(updateMountTarget);
+    observer.observe(document.getElementById('root') ?? document.body, {
+      childList: true,
+      subtree: true,
+    });
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  if (mountTarget === null) return null;
+
+  return createPortal(
+    <div className="settings-display-entry__phone-home">
+      <MobilePrayerThemeSettings />
+    </div>,
+    mountTarget,
+  );
+}
+
 function CongregationApplication() {
   return (
-    <CongregationShell>
-      {(destination) => <CongregationRoute destination={destination} />}
-    </CongregationShell>
+    <>
+      <CongregationShell>
+        {(destination) => <CongregationRoute destination={destination} />}
+      </CongregationShell>
+      <CongregationDisplayThemeEditor />
+    </>
   );
 }
 
