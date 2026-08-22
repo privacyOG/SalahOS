@@ -1,11 +1,7 @@
 name: Format Export
 
 on:
-  push:
-    branches:
-      - 'uiux/mobile-prayer-theme-fix'
-    paths:
-      - '.github/workflows/format-export.yml'
+  pull_request:
 
 permissions:
   contents: read
