@@ -1,7 +1,13 @@
 import { useState } from 'react';
 
+import { defaultPrayerBoardTemplateConfig } from '../domain/prayerBoardTemplate';
 import type { Locale } from '../i18n/translations';
 import { getApplicationStorage } from '../platform/applicationStorage';
+import {
+  loadMobilePrayerBoardDisplayConfig,
+  MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_CHANGE_EVENT,
+  saveMobilePrayerBoardDisplayConfig,
+} from '../platform/mobilePrayerBoardDisplayConfig';
 import {
   loadPrayerBoardWeatherConfig,
   PRAYER_BOARD_WEATHER_CHANGE_EVENT,
@@ -13,6 +19,7 @@ interface Copy {
   readonly title: string;
   readonly description: string;
   readonly enabled: string;
+  readonly phoneHomeEnabled: string;
   readonly latitude: string;
   readonly longitude: string;
   readonly locationLabel: string;
@@ -27,8 +34,9 @@ const copy: Readonly<Record<Locale, Copy>> = {
   en: {
     title: 'Optional weather',
     description:
-      'Weather is off unless both the Weather display module and this fixed-location feed are enabled.',
+      'Weather stays off unless a prayer-board surface enables the Weather module and this fixed-location feed is enabled.',
     enabled: 'Enable fixed-location weather feed',
+    phoneHomeEnabled: 'Show weather on Phone / Home',
     latitude: 'Fixed latitude',
     longitude: 'Fixed longitude',
     locationLabel: 'Location label',
@@ -42,8 +50,9 @@ const copy: Readonly<Record<Locale, Copy>> = {
   ar: {
     title: 'الطقس الاختياري',
     description:
-      'يبقى الطقس متوقفاً ما لم يتم تفعيل وحدة الطقس في الشاشة وتفعيل موجز الموقع الثابت هنا.',
+      'يبقى الطقس متوقفاً ما لم تُفعّل وحدة الطقس على واجهة مواقيت الصلاة ويُفعّل موجز الموقع الثابت هنا.',
     enabled: 'تفعيل موجز الطقس لموقع ثابت',
+    phoneHomeEnabled: 'إظهار الطقس على الهاتف / الرئيسية',
     latitude: 'خط العرض الثابت',
     longitude: 'خط الطول الثابت',
     locationLabel: 'اسم الموقع',
@@ -57,8 +66,9 @@ const copy: Readonly<Record<Locale, Copy>> = {
   tr: {
     title: 'İsteğe bağlı hava durumu',
     description:
-      'Hava durumu yalnızca ekranın Hava modülü ve buradaki sabit konum beslemesi birlikte etkinse çalışır.',
+      'Hava durumu yalnızca bir namaz panosu Hava modülünü ve buradaki sabit konum beslemesini birlikte etkinleştirdiğinde çalışır.',
     enabled: 'Sabit konum hava durumu beslemesini etkinleştir',
+    phoneHomeEnabled: 'Telefon / Ana Sayfada hava durumunu göster',
     latitude: 'Sabit enlem',
     longitude: 'Sabit boylam',
     locationLabel: 'Konum etiketi',
@@ -72,8 +82,9 @@ const copy: Readonly<Record<Locale, Copy>> = {
   id: {
     title: 'Cuaca opsional',
     description:
-      'Cuaca hanya aktif jika modul Cuaca pada layar dan feed lokasi tetap ini sama-sama diaktifkan.',
+      'Cuaca hanya aktif saat permukaan papan salat mengaktifkan modul Cuaca dan feed lokasi tetap ini juga diaktifkan.',
     enabled: 'Aktifkan feed cuaca lokasi tetap',
+    phoneHomeEnabled: 'Tampilkan cuaca di Ponsel / Beranda',
     latitude: 'Lintang tetap',
     longitude: 'Bujur tetap',
     locationLabel: 'Label lokasi',
@@ -97,9 +108,14 @@ function readLocale(): Locale {
 export function PrayerBoardWeatherSettings() {
   const storage = getApplicationStorage();
   const initial = loadPrayerBoardWeatherConfig(storage);
+  const mobileInitial =
+    loadMobilePrayerBoardDisplayConfig(storage) ?? defaultPrayerBoardTemplateConfig;
   const locale = readLocale();
   const text = copy[locale];
   const [enabled, setEnabled] = useState(initial.enabled);
+  const [phoneHomeEnabled, setPhoneHomeEnabled] = useState(
+    mobileInitial.moduleVisibility.weather,
+  );
   const [latitude, setLatitude] = useState(initial.latitude?.toString() ?? '');
   const [longitude, setLongitude] = useState(initial.longitude?.toString() ?? '');
   const [locationLabel, setLocationLabel] = useState(initial.locationLabel ?? '');
@@ -121,6 +137,7 @@ export function PrayerBoardWeatherSettings() {
       setStatus(text.invalid);
       return;
     }
+
     savePrayerBoardWeatherConfig(storage, {
       version: 1,
       enabled,
@@ -129,8 +146,20 @@ export function PrayerBoardWeatherSettings() {
       longitude: coordinatesValid ? longitudeValue : null,
       locationLabel,
     });
+
+    const mobileConfig =
+      loadMobilePrayerBoardDisplayConfig(storage) ?? defaultPrayerBoardTemplateConfig;
+    saveMobilePrayerBoardDisplayConfig(storage, {
+      ...mobileConfig,
+      moduleVisibility: {
+        ...mobileConfig.moduleVisibility,
+        weather: phoneHomeEnabled,
+      },
+    });
+
     setStatus(text.saved);
     window.dispatchEvent(new Event(PRAYER_BOARD_WEATHER_CHANGE_EVENT));
+    window.dispatchEvent(new Event(MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_CHANGE_EVENT));
   };
 
   return (
@@ -153,6 +182,18 @@ export function PrayerBoardWeatherSettings() {
             checked={enabled}
             onChange={(event) => {
               setEnabled(event.target.checked);
+              setStatus(null);
+            }}
+          />
+        </label>
+        <label className="prayer-board-module-row">
+          <span>{text.phoneHomeEnabled}</span>
+          <input
+            type="checkbox"
+            data-weather-phone-home
+            checked={phoneHomeEnabled}
+            onChange={(event) => {
+              setPhoneHomeEnabled(event.target.checked);
               setStatus(null);
             }}
           />
