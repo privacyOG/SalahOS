@@ -43,6 +43,7 @@ import './managed-display-assignment.css';
 import './ramadan-mode.css';
 import './taraweeh-panel.css';
 import './qibla-compass.css';
+import './qibla-compass-premium.css';
 import './qiblah-v2.css';
 import './mosques-community-v2.css';
 
