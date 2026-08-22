@@ -1,24 +1,100 @@
 .mobile-prayer-theme-surface {
   --mobile-theme-gold: #d6ad5a;
-  --mobile-theme-gold-soft: #f0d89f;
-  --mobile-theme-navy: #06182d;
-  --mobile-theme-cream: #f5edda;
+  --mobile-theme-fg: #10211d;
+  --mobile-theme-secondary: #53635f;
+  --mobile-theme-tertiary: #74817e;
+  --mobile-theme-surface: #ffffff;
+  --mobile-theme-raised: #ffffff;
+  --mobile-theme-soft: #e7f4f0;
+  --mobile-theme-border: #d9e0de;
+  --mobile-theme-accent: #0f8a72;
   position: relative;
   min-height: 100%;
+  color: var(--mobile-theme-fg);
   isolation: isolate;
 }
 
 .mobile-prayer-theme-surface .today-screen {
   position: relative;
   z-index: 1;
+  color: var(--mobile-theme-fg);
   transition:
     color 180ms ease,
     background-color 180ms ease,
     border-color 180ms ease;
 }
 
+.mobile-prayer-theme-surface .today-appbar__brand span,
+.mobile-prayer-theme-surface .today-section-heading > span,
+.mobile-prayer-theme-surface .today-schedule__notice,
+.mobile-prayer-theme-surface .today-provenance,
+.mobile-prayer-theme-surface .today-jumuah__sessions span {
+  color: var(--mobile-theme-secondary);
+}
+
+.mobile-prayer-theme-surface .today-next__identity p,
+.mobile-prayer-theme-surface .today-next__countdown span,
+.mobile-prayer-theme-surface .today-section-heading p,
+.mobile-prayer-theme-surface .today-dates span,
+.mobile-prayer-theme-surface .today-next__times dt,
+.mobile-prayer-theme-surface .today-prayer-row__name small {
+  color: var(--mobile-theme-tertiary);
+}
+
+.mobile-prayer-theme-surface .today-appbar__meta a,
+.mobile-prayer-theme-surface .today-prayer-table,
+.mobile-prayer-theme-surface .today-jumuah__sessions > div,
+.mobile-prayer-theme-surface .today-quick-actions a,
+.mobile-prayer-theme-surface .today-state {
+  border-color: var(--mobile-theme-border);
+  color: var(--mobile-theme-fg);
+  background: var(--mobile-theme-surface);
+}
+
+.mobile-prayer-theme-surface .today-prayer-row,
+.mobile-prayer-theme-surface .today-next__times,
+.mobile-prayer-theme-surface .today-provenance {
+  border-color: var(--mobile-theme-border);
+}
+
+.mobile-prayer-theme-surface .today-prayer-row--header {
+  color: var(--mobile-theme-tertiary);
+  background: var(--mobile-theme-raised);
+}
+
+.mobile-prayer-theme-surface .today-prayer-row.is-current {
+  box-shadow: inset 0.22rem 0 0 var(--mobile-theme-accent);
+}
+
+[dir='rtl'] .mobile-prayer-theme-surface .today-prayer-row.is-current {
+  box-shadow: inset -0.22rem 0 0 var(--mobile-theme-accent);
+}
+
+.mobile-prayer-theme-surface .today-prayer-row.is-next {
+  background: color-mix(in srgb, var(--mobile-theme-accent) 9%, var(--mobile-theme-surface));
+}
+
+.mobile-prayer-theme-surface .today-prayer-row__iqamah {
+  color: var(--mobile-theme-secondary);
+}
+
+.mobile-prayer-theme-surface .today-prayer-row__name > span,
+.mobile-prayer-theme-surface .today-next__tomorrow {
+  border-color: color-mix(in srgb, var(--mobile-theme-accent) 32%, transparent);
+  color: var(--mobile-theme-fg);
+  background: var(--mobile-theme-soft);
+}
+
 /* Heritage Classic — ornate navy, cream and gold with restrained Islamic geometry. */
 .mobile-prayer-theme-surface[data-mobile-prayer-template='heritage-classic'] {
+  --mobile-theme-fg: #fffaf0;
+  --mobile-theme-secondary: #d9cfbd;
+  --mobile-theme-tertiary: #b8ab96;
+  --mobile-theme-surface: rgb(8 31 56 / 90%);
+  --mobile-theme-raised: #0a2949;
+  --mobile-theme-soft: rgb(214 173 90 / 15%);
+  --mobile-theme-border: rgb(214 173 90 / 28%);
+  --mobile-theme-accent: #d6ad5a;
   color-scheme: dark;
   background:
     radial-gradient(circle at 12% 0%, rgb(214 173 90 / 20%), transparent 24rem),
@@ -52,18 +128,6 @@
   inset-inline-start: -17rem;
 }
 
-.mobile-prayer-theme-surface[data-mobile-prayer-template='heritage-classic'] .today-screen {
-  --salah-fg-primary: #fffaf0;
-  --salah-fg-secondary: #d9cfbd;
-  --salah-fg-tertiary: #b8ab96;
-  --salah-bg-surface: rgb(8 31 56 / 88%);
-  --salah-bg-surface-raised: rgb(11 39 69 / 92%);
-  --salah-bg-accent-soft: rgb(214 173 90 / 15%);
-  --salah-border-subtle: rgb(214 173 90 / 24%);
-  --accent: var(--mobile-theme-gold);
-  color: #fffaf0;
-}
-
 .mobile-prayer-theme-surface[data-mobile-prayer-template='heritage-classic'] .today-appbar {
   padding-block: 0.35rem 0.9rem;
   border-block-end: 1px solid rgb(214 173 90 / 25%);
@@ -76,13 +140,13 @@
 }
 
 .mobile-prayer-theme-surface[data-mobile-prayer-template='heritage-classic'] .today-next {
+  position: relative;
   border: 1px solid rgb(214 173 90 / 48%);
+  color: #fffaf0;
   background:
     radial-gradient(circle at 80% 5%, rgb(214 173 90 / 20%), transparent 38%),
     linear-gradient(145deg, rgb(8 35 64 / 98%), rgb(4 21 42 / 98%));
-  box-shadow:
-    0 1.25rem 3rem rgb(0 0 0 / 22%),
-    inset 0 1px 0 rgb(255 244 220 / 8%);
+  box-shadow: 0 1.25rem 3rem rgb(0 0 0 / 22%);
 }
 
 .mobile-prayer-theme-surface[data-mobile-prayer-template='heritage-classic'] .today-next::before {
@@ -92,22 +156,6 @@
   border-radius: inherit;
   content: '';
   pointer-events: none;
-}
-
-.mobile-prayer-theme-surface[data-mobile-prayer-template='heritage-classic'] .today-next,
-.mobile-prayer-theme-surface[data-mobile-prayer-template='heritage-classic'] .today-prayer-table,
-.mobile-prayer-theme-surface[data-mobile-prayer-template='heritage-classic'] .today-jumuah__sessions > div {
-  position: relative;
-}
-
-.mobile-prayer-theme-surface[data-mobile-prayer-template='heritage-classic'] .today-prayer-table {
-  border-color: rgb(214 173 90 / 42%);
-  box-shadow: 0 1rem 2.75rem rgb(0 0 0 / 18%);
-}
-
-.mobile-prayer-theme-surface[data-mobile-prayer-template='heritage-classic'] .today-prayer-row--header {
-  color: var(--mobile-theme-gold-soft);
-  background: #0a2949;
 }
 
 .mobile-prayer-theme-surface[data-mobile-prayer-template='heritage-classic'] .today-prayer-row.is-next {
@@ -120,29 +168,26 @@
   color: #5f4d2d;
 }
 
-/* Minimal Modern — intentionally calm, crisp and architectural. */
+/* Minimal Modern — calm and architectural. */
 .mobile-prayer-theme-surface[data-mobile-prayer-template='minimal-modern'] {
+  --mobile-theme-fg: #10211d;
+  --mobile-theme-secondary: #53635f;
+  --mobile-theme-tertiary: #74817e;
+  --mobile-theme-surface: #ffffff;
+  --mobile-theme-raised: #f7f9f8;
+  --mobile-theme-soft: #e7f4f0;
+  --mobile-theme-border: #d9e0de;
+  --mobile-theme-accent: #0f8a72;
   background:
     linear-gradient(90deg, transparent 0 24px, rgb(15 138 114 / 5%) 24px 25px, transparent 25px),
     #f5f7f6;
 }
 
-.mobile-prayer-theme-surface[data-mobile-prayer-template='minimal-modern'] .today-screen {
-  --salah-fg-primary: #10211d;
-  --salah-fg-secondary: #53635f;
-  --salah-fg-tertiary: #74817e;
-  --salah-bg-surface: #ffffff;
-  --salah-bg-surface-raised: #ffffff;
-  --salah-bg-accent-soft: #e7f4f0;
-  --salah-border-subtle: #d9e0de;
-  --accent: #0f8a72;
-}
-
 .mobile-prayer-theme-surface[data-mobile-prayer-template='minimal-modern'] .today-next {
   border: 0;
   border-radius: 0.75rem;
-  background: #10211d;
   color: #f7fbf9;
+  background: #10211d;
   box-shadow: none;
 }
 
@@ -156,33 +201,20 @@
   border-color: rgb(255 255 255 / 18%);
 }
 
-.mobile-prayer-theme-surface[data-mobile-prayer-template='minimal-modern'] .today-prayer-table {
-  border-radius: 0.7rem;
-  box-shadow: none;
-}
-
-.mobile-prayer-theme-surface[data-mobile-prayer-template='minimal-modern'] .today-prayer-row.is-next {
-  background: #e6f3ef;
-}
-
-/* Bold Countdown Focus — cinematic next-prayer hero with a quieter timetable. */
+/* Bold Countdown Focus — cinematic hero. */
 .mobile-prayer-theme-surface[data-mobile-prayer-template='bold-countdown-focus'] {
+  --mobile-theme-fg: #f8fbff;
+  --mobile-theme-secondary: #b9c6d2;
+  --mobile-theme-tertiary: #8fa0af;
+  --mobile-theme-surface: rgb(8 25 42 / 92%);
+  --mobile-theme-raised: rgb(12 34 55 / 95%);
+  --mobile-theme-soft: rgb(225 179 91 / 14%);
+  --mobile-theme-border: rgb(157 183 204 / 20%);
+  --mobile-theme-accent: #e1b35b;
   color-scheme: dark;
   background:
     radial-gradient(circle at 50% 2%, rgb(83 150 186 / 25%), transparent 36rem),
     linear-gradient(180deg, #031120 0%, #08192a 48%, #040d18 100%);
-}
-
-.mobile-prayer-theme-surface[data-mobile-prayer-template='bold-countdown-focus'] .today-screen {
-  --salah-fg-primary: #f8fbff;
-  --salah-fg-secondary: #b9c6d2;
-  --salah-fg-tertiary: #8fa0af;
-  --salah-bg-surface: rgb(8 25 42 / 92%);
-  --salah-bg-surface-raised: rgb(12 34 55 / 95%);
-  --salah-bg-accent-soft: rgb(225 179 91 / 14%);
-  --salah-border-subtle: rgb(157 183 204 / 20%);
-  --accent: #e1b35b;
-  color: #f8fbff;
 }
 
 .mobile-prayer-theme-surface[data-mobile-prayer-template='bold-countdown-focus'] .today-next {
@@ -190,6 +222,7 @@
   align-content: center;
   overflow: hidden;
   border-color: rgb(225 179 91 / 30%);
+  color: #f8fbff;
   background:
     linear-gradient(180deg, rgb(4 16 30 / 25%), rgb(4 16 30 / 92%)),
     url('/artwork/scenic-spiritual.svg') center 40% / cover no-repeat;
@@ -203,32 +236,21 @@
 }
 
 .mobile-prayer-theme-surface[data-mobile-prayer-template='bold-countdown-focus'] .today-next__countdown strong {
-  font-size: clamp(3.4rem, 14vw, 7rem);
   color: #ffffff;
+  font-size: clamp(3.4rem, 14vw, 7rem);
 }
 
-.mobile-prayer-theme-surface[data-mobile-prayer-template='bold-countdown-focus'] .today-prayer-table {
-  background: rgb(5 20 34 / 88%);
-}
-
-.mobile-prayer-theme-surface[data-mobile-prayer-template='bold-countdown-focus'] .today-prayer-row.is-next {
-  background: rgb(225 179 91 / 15%);
-}
-
-/* Structured Split Board — strong Start/Iqamah columns and tablet-friendly split composition. */
+/* Structured Split Board — strong Start/Iqamah structure. */
 .mobile-prayer-theme-surface[data-mobile-prayer-template='structured-split-board'] {
+  --mobile-theme-fg: #07192e;
+  --mobile-theme-secondary: #465566;
+  --mobile-theme-tertiary: #687687;
+  --mobile-theme-surface: #f5f5f4;
+  --mobile-theme-raised: #ffffff;
+  --mobile-theme-soft: #e8edf4;
+  --mobile-theme-border: #b9c0c8;
+  --mobile-theme-accent: #0a2b4f;
   background: #e7e8ea;
-}
-
-.mobile-prayer-theme-surface[data-mobile-prayer-template='structured-split-board'] .today-screen {
-  --salah-fg-primary: #07192e;
-  --salah-fg-secondary: #465566;
-  --salah-fg-tertiary: #687687;
-  --salah-bg-surface: #f5f5f4;
-  --salah-bg-surface-raised: #ffffff;
-  --salah-bg-accent-soft: #e8edf4;
-  --salah-border-subtle: #b9c0c8;
-  --accent: #0a2b4f;
 }
 
 .mobile-prayer-theme-surface[data-mobile-prayer-template='structured-split-board'] .today-next {
@@ -241,8 +263,8 @@
 .mobile-prayer-theme-surface[data-mobile-prayer-template='structured-split-board'] .today-prayer-table {
   border: 0;
   border-radius: 0;
-  background: #07192e;
   color: #f7f9fb;
+  background: #07192e;
 }
 
 .mobile-prayer-theme-surface[data-mobile-prayer-template='structured-split-board'] .today-prayer-row {
@@ -250,8 +272,8 @@
 }
 
 .mobile-prayer-theme-surface[data-mobile-prayer-template='structured-split-board'] .today-prayer-row:nth-child(odd):not(.today-prayer-row--header) {
-  background: #f1f1f0;
   color: #101820;
+  background: #f1f1f0;
 }
 
 .mobile-prayer-theme-surface[data-mobile-prayer-template='structured-split-board'] .today-prayer-row--header {
@@ -259,34 +281,21 @@
   background: #061427;
 }
 
-.mobile-prayer-theme-surface[data-mobile-prayer-template='structured-split-board'] .today-prayer-row.is-next {
-  box-shadow: inset 0.4rem 0 0 #d2a74f;
-}
-
-.mobile-prayer-theme-surface[data-mobile-prayer-template='structured-split-board'] .today-prayer-row:nth-child(even) .today-prayer-row__iqamah,
-.mobile-prayer-theme-surface[data-mobile-prayer-template='structured-split-board'] .today-prayer-row:nth-child(even) small {
-  color: #c2ccd7;
-}
-
-/* Scenic Spiritual — first-party mosque artwork with strong readability scrims. */
+/* Scenic Spiritual — first-party mosque artwork. */
 .mobile-prayer-theme-surface[data-mobile-prayer-template='scenic-spiritual'] {
+  --mobile-theme-fg: #fffdf7;
+  --mobile-theme-secondary: #d4d8d8;
+  --mobile-theme-tertiary: #a9b4b9;
+  --mobile-theme-surface: rgb(3 19 35 / 82%);
+  --mobile-theme-raised: rgb(5 24 43 / 86%);
+  --mobile-theme-soft: rgb(219 177 90 / 14%);
+  --mobile-theme-border: rgb(231 208 156 / 24%);
+  --mobile-theme-accent: #dcb65f;
   color-scheme: dark;
   background:
     linear-gradient(180deg, rgb(2 14 27 / 48%), #03101f 72%),
     url('/artwork/scenic-spiritual.svg') center top / cover fixed no-repeat,
     #03101f;
-}
-
-.mobile-prayer-theme-surface[data-mobile-prayer-template='scenic-spiritual'] .today-screen {
-  --salah-fg-primary: #fffdf7;
-  --salah-fg-secondary: #d4d8d8;
-  --salah-fg-tertiary: #a9b4b9;
-  --salah-bg-surface: rgb(3 19 35 / 78%);
-  --salah-bg-surface-raised: rgb(5 24 43 / 82%);
-  --salah-bg-accent-soft: rgb(219 177 90 / 14%);
-  --salah-border-subtle: rgb(231 208 156 / 22%);
-  --accent: #dcb65f;
-  color: #fffdf7;
 }
 
 .mobile-prayer-theme-surface[data-mobile-prayer-template='scenic-spiritual'] .today-appbar,
@@ -298,33 +307,27 @@
 
 .mobile-prayer-theme-surface[data-mobile-prayer-template='scenic-spiritual'] .today-next {
   border-color: rgb(220 182 95 / 38%);
+  color: #fffdf7;
   background:
     radial-gradient(circle at 80% 10%, rgb(220 182 95 / 20%), transparent 38%),
     rgb(3 18 34 / 76%);
   box-shadow: 0 1.3rem 3.5rem rgb(0 0 0 / 30%);
 }
 
-.mobile-prayer-theme-surface[data-mobile-prayer-template='scenic-spiritual'] .today-prayer-row.is-next {
-  background: linear-gradient(90deg, rgb(220 182 95 / 18%), rgb(20 55 76 / 75%));
-}
-
-/* Family & Classroom — bright, dignified, highly legible learning treatment. */
+/* Family & Classroom — bright, dignified learning cues. */
 .mobile-prayer-theme-surface[data-mobile-prayer-template='family-classroom'] {
+  --mobile-theme-fg: #183047;
+  --mobile-theme-secondary: #536474;
+  --mobile-theme-tertiary: #6f7c87;
+  --mobile-theme-surface: rgb(255 253 248 / 96%);
+  --mobile-theme-raised: #ffffff;
+  --mobile-theme-soft: #fff0ca;
+  --mobile-theme-border: #d7d3c7;
+  --mobile-theme-accent: #d58a22;
   background:
     radial-gradient(circle at 10% 3%, rgb(250 196 95 / 28%), transparent 18rem),
     radial-gradient(circle at 92% 20%, rgb(95 165 197 / 24%), transparent 22rem),
     #f5f0e5;
-}
-
-.mobile-prayer-theme-surface[data-mobile-prayer-template='family-classroom'] .today-screen {
-  --salah-fg-primary: #183047;
-  --salah-fg-secondary: #536474;
-  --salah-fg-tertiary: #6f7c87;
-  --salah-bg-surface: rgb(255 253 248 / 96%);
-  --salah-bg-surface-raised: #ffffff;
-  --salah-bg-accent-soft: #fff0ca;
-  --salah-border-subtle: #d7d3c7;
-  --accent: #d58a22;
 }
 
 .mobile-prayer-theme-surface[data-mobile-prayer-template='family-classroom'] .today-next {
@@ -341,10 +344,6 @@
 
 .mobile-prayer-theme-surface[data-mobile-prayer-template='family-classroom'] .today-prayer-table {
   border: 2px solid #d9c9a8;
-}
-
-.mobile-prayer-theme-surface[data-mobile-prayer-template='family-classroom'] .today-prayer-row {
-  min-height: 5rem;
 }
 
 .mobile-prayer-theme-surface[data-mobile-prayer-template='family-classroom'] .today-prayer-row:nth-child(2) {
@@ -367,15 +366,7 @@
   border-inline-start: 0.42rem solid #7566a0;
 }
 
-.mobile-prayer-theme-surface[data-mobile-prayer-template='family-classroom'] .today-prayer-row.is-next {
-  background: #fff0c9;
-}
-
-/* Accent presets remain presentation-only but visibly tune decorative colour. */
-.mobile-prayer-theme-surface[data-mobile-prayer-accent='emerald'] {
-  --mobile-theme-gold: #c8ae62;
-}
-
+/* Existing accent presets tune decorative emphasis without altering domain data. */
 .mobile-prayer-theme-surface[data-mobile-prayer-accent='midnight'] {
   --mobile-theme-gold: #d8bd7a;
 }
@@ -388,7 +379,6 @@
   --mobile-theme-gold: #e1b75d;
 }
 
-/* Landscape phones: compact the hero and keep prayer rows readable without clipping. */
 @media (orientation: landscape) and (max-height: 560px) {
   .mobile-prayer-theme-surface .today-screen {
     width: min(100% - 1rem, 1180px);
@@ -418,18 +408,10 @@
     font-size: clamp(2rem, 6vw, 3.6rem);
   }
 
-  .mobile-prayer-theme-surface .today-next__times {
-    grid-column: 1 / -1;
-    padding-block-start: 0.7rem;
-  }
-
-  .mobile-prayer-theme-surface .today-dates {
-    margin-block: 0.7rem;
-  }
-
+  .mobile-prayer-theme-surface .today-dates,
   .mobile-prayer-theme-surface .today-schedule,
   .mobile-prayer-theme-surface .today-jumuah {
-    margin-block-start: 0.9rem;
+    margin-block: 0.7rem 0;
   }
 
   .mobile-prayer-theme-surface[data-mobile-prayer-template='bold-countdown-focus'] .today-next {
@@ -437,7 +419,6 @@
   }
 }
 
-/* Tablet: Structured Split becomes a true two-region board while other themes gain breathing room. */
 @media (min-width: 760px) {
   .mobile-prayer-theme-surface[data-mobile-prayer-template='structured-split-board'] .today-screen {
     display: grid;
@@ -463,10 +444,6 @@
     grid-column: 1;
     grid-row: 2 / span 3;
     margin-block-start: 0;
-  }
-
-  .mobile-prayer-theme-surface[data-mobile-prayer-template='structured-split-board'] .today-dates {
-    margin-block: 0;
   }
 }
 
