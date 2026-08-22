@@ -176,15 +176,53 @@ def assert_mobile_theme(deadline, udid, bundle_id, expected, phase):
           path.write_text(content)
           PY
 
-      - name: Verify Python syntax
-        run: python3 -m py_compile scripts/ios_simulator_acceptance.py
+      - name: Remove legacy privacy-first hero positioning
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          replacements = {
+              Path('src/i18n/translations.ts'): {
+                  "heroCopy: 'Privacy-first prayer times for mobile, Raspberry Pi, TV, and kiosk displays.'":
+                      "heroCopy: 'Prayer times for mobile, Raspberry Pi, TV, and kiosk displays.'",
+                  "heroCopy: 'مواقيت صلاة تراعي الخصوصية للهاتف وراسبيري باي والتلفاز وشاشات العرض.'":
+                      "heroCopy: 'مواقيت الصلاة للهاتف وراسبيري باي والتلفاز وشاشات العرض.'",
+              },
+              Path('src/i18n/additionalTranslations.ts'): {
+                  "heroCopy: 'Mobil, Raspberry Pi, TV ve kiosk ekranları için gizlilik odaklı namaz vakitleri.'":
+                      "heroCopy: 'Mobil, Raspberry Pi, TV ve kiosk ekranları için namaz vakitleri.'",
+                  "heroCopy: 'Waktu salat yang mengutamakan privasi untuk ponsel, Raspberry Pi, TV, dan layar kios.'":
+                      "heroCopy: 'Waktu salat untuk ponsel, Raspberry Pi, TV, dan layar kios.'",
+              },
+          }
+
+          for path, mapping in replacements.items():
+              content = path.read_text()
+              for old, new in mapping.items():
+                  if old not in content:
+                      raise SystemExit(f'Expected product-copy string not found in {path}: {old}')
+                  content = content.replace(old, new, 1)
+              path.write_text(content)
+          PY
+
+      - name: Verify corrected sources
+        run: |
+          python3 -m py_compile scripts/ios_simulator_acceptance.py
+          npm ci --ignore-scripts
+          npx prettier --write scripts/ios_simulator_acceptance.py src/i18n/translations.ts src/i18n/additionalTranslations.ts
+          npm run format:check
+          npm run lint
+          npm run typecheck
 
       - name: Publish correction commit object
         run: |
           set -euo pipefail
           git config user.name privacyOG
           git config user.email '102720550+privacyOG@users.noreply.github.com'
-          git add scripts/ios_simulator_acceptance.py
-          git commit -m 'Verify Phone/Home theme across iOS relaunch'
+          git add \
+            scripts/ios_simulator_acceptance.py \
+            src/i18n/translations.ts \
+            src/i18n/additionalTranslations.ts
+          git commit -m 'Complete native theme persistence acceptance path'
           echo "CORRECTION_SHA=$(git rev-parse HEAD)"
           git push origin HEAD:${GITHUB_HEAD_REF}
