@@ -1,0 +1,65 @@
+name: Format Export
+
+on:
+  push:
+    branches:
+      - 'uiux/mobile-prayer-theme-fix'
+    paths:
+      - '.github/workflows/format-export.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  format-export:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies from lockfile
+        run: npm ci --ignore-scripts
+
+      - name: Format exact Quality Gate files
+        run: |
+          npx prettier --write \
+            scripts/mobile-safe-area.test.mjs \
+            scripts/visual-mobile-prayer-themes-extended.mjs \
+            scripts/visual-mobile-prayer-themes.mjs \
+            scripts/visual-qibla-google.mjs \
+            src/mobile-prayer-theme-settings.css \
+            src/mobile-prayer-themes.css \
+            src/mobile-prayer-theme-geometry.css \
+            src/platform/qiblaGoogleMaps.test.ts \
+            src/qibla-compass-premium.css \
+            src/ui/MobilePrayerThemeSettings.tsx \
+            src/ui/TodayScreen.tsx
+
+      - name: Verify repository formatting
+        run: npm run format:check
+
+      - name: Upload exact formatted files
+        uses: actions/upload-artifact@v4
+        with:
+          name: formatted-pr186-${{ github.sha }}
+          path: |
+            scripts/mobile-safe-area.test.mjs
+            scripts/visual-mobile-prayer-themes-extended.mjs
+            scripts/visual-mobile-prayer-themes.mjs
+            scripts/visual-qibla-google.mjs
+            src/mobile-prayer-theme-settings.css
+            src/mobile-prayer-themes.css
+            src/mobile-prayer-theme-geometry.css
+            src/platform/qiblaGoogleMaps.test.ts
+            src/qibla-compass-premium.css
+            src/ui/MobilePrayerThemeSettings.tsx
+            src/ui/TodayScreen.tsx
+          if-no-files-found: error
+          retention-days: 1

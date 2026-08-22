@@ -1,3 +1,15 @@
 .mobile-prayer-theme-surface {
   overflow-x: clip;
 }
+
+/* Heritage artwork must stay inside the scroll geometry. The decoration is
+ * deliberately anchored at the surface edge instead of using negative inline
+ * offsets, which previously increased scrollWidth by 15rem on every Today
+ * viewport even though the overflow was visually clipped. */
+.mobile-prayer-theme-surface[data-mobile-prayer-template='heritage-classic']::before {
+  inset-inline-end: 0;
+}
+
+.mobile-prayer-theme-surface[data-mobile-prayer-template='heritage-classic']::after {
+  inset-inline-start: 0;
+}
