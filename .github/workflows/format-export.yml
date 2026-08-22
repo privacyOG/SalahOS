@@ -58,7 +58,7 @@ jobs:
       - name: Verify repository formatting
         run: npm run format:check
 
-      - name: Commit exact formatter output
+      - name: Publish exact formatter result
         run: |
           set -euo pipefail
           git config user.name privacyOG
@@ -75,9 +75,8 @@ jobs:
             src/qibla-compass-premium.css \
             src/ui/MobilePrayerThemeSettings.tsx \
             src/ui/TodayScreen.tsx
-          if git diff --cached --quiet; then
-            echo 'Formatter produced no branch changes.'
-            exit 0
+          if ! git diff --cached --quiet; then
+            git commit -m 'Normalize mobile UI correction formatting'
           fi
-          git commit -m 'Normalize mobile UI correction formatting'
-          git push origin HEAD:${GITHUB_HEAD_REF}
+          echo "FORMAT_RESULT_SHA=$(git rev-parse HEAD)"
+          git push --force origin HEAD:refs/heads/tmp-pr186-format-result
