@@ -6,6 +6,7 @@ import type { QiblaFinderCopy } from '../i18n/qiblaFinderTranslations';
 import {
   qiblaGoogleMapsTermsUrl,
   qiblaGoogleSatelliteMapUrl,
+  qiblaGoogleStaticMapPointForViewport,
 } from '../platform/qiblaGoogleMaps';
 import { qiblaMapAttributionUrl, qiblaMapTileUrl } from '../platform/qiblaMapTiles';
 
@@ -44,11 +45,27 @@ export function QiblaMapView({
 
   const dropPin = (event: MouseEvent<HTMLDivElement>) => {
     const rectangle = event.currentTarget.getBoundingClientRect();
+    const point = {
+      x: event.clientX - rectangle.left,
+      y: event.clientY - rectangle.top,
+    };
+    const mapPoint =
+      googleSatelliteUrl === null
+        ? {
+            viewportWidth: rectangle.width,
+            viewportHeight: rectangle.height,
+            point,
+          }
+        : qiblaGoogleStaticMapPointForViewport(rectangle.width, rectangle.height, point);
+
     onDropPin(
-      coordinatesForMapPoint(coordinates, zoom, rectangle.width, rectangle.height, {
-        x: event.clientX - rectangle.left,
-        y: event.clientY - rectangle.top,
-      }),
+      coordinatesForMapPoint(
+        coordinates,
+        zoom,
+        mapPoint.viewportWidth,
+        mapPoint.viewportHeight,
+        mapPoint.point,
+      ),
     );
   };
 
