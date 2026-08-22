@@ -160,6 +160,16 @@ async function assertNoHorizontalOverflow(page, name) {
   }
 }
 
+async function assertPrayerBoardDataBoundary(page, name) {
+  const today = page.locator('main.today-screen');
+  if ((await today.getAttribute('data-prayer-board-data-version')) !== '1') {
+    throw new Error(`${name} did not render through PrayerBoardData v1`);
+  }
+  if ((await today.getAttribute('data-prayer-board-source')) !== 'local-mosque') {
+    throw new Error(`${name} did not preserve the PrayerBoardData source mode`);
+  }
+}
+
 async function validateTheme(browser, scenario) {
   const context = await browser.newContext({
     viewport: { width: scenario.width, height: scenario.height },
@@ -177,6 +187,7 @@ async function validateTheme(browser, scenario) {
     if ((await surface.getAttribute('data-mobile-prayer-template')) !== scenario.templateId) {
       throw new Error(`${scenario.name} did not apply ${scenario.templateId}`);
     }
+    await assertPrayerBoardDataBoundary(page, scenario.name);
     const obligatoryPrayerRows = page.locator(
       '.today-prayer-row:not(.today-prayer-row--header):not(.is-supplementary)',
     );
@@ -192,6 +203,17 @@ async function validateTheme(browser, scenario) {
     await assertNoHorizontalOverflow(page, scenario.name);
     if (errors.length > 0) throw new Error(`${scenario.name} page errors: ${errors.join(' | ')}`);
     await capture(page, scenario.name);
+
+    if (scenario.name === 'mobile-theme-minimal-phone-en') {
+      await context.setOffline(true);
+      await page.evaluate(() => {
+        window.dispatchEvent(new Event('offline'));
+      });
+      await page.locator('.today-screen__offline').waitFor({ state: 'visible' });
+      await assertPrayerBoardDataBoundary(page, `${scenario.name}-offline`);
+      await capture(page, 'mobile-theme-minimal-phone-offline-en');
+    }
+
     return { name: scenario.name, templateId: scenario.templateId };
   } finally {
     await context.close();
@@ -244,6 +266,7 @@ async function validateSelectorFlow(browser) {
     ) {
       throw new Error('Applied Phone/Home selection was not rendered on Today');
     }
+    await assertPrayerBoardDataBoundary(page, 'mobile-theme-selector-applied-today-en');
     await capture(page, 'mobile-theme-selector-applied-today-en');
     return { selectorApplied: stored.templateId };
   } finally {
