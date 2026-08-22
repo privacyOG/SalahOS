@@ -14,7 +14,6 @@ import {
   MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_CHANGE_EVENT,
   saveMobilePrayerBoardDisplayConfig,
 } from '../platform/mobilePrayerBoardDisplayConfig';
-import { loadPrayerBoardDisplayConfig } from '../platform/prayerBoardDisplayConfig';
 import { loadPersistedSettings } from '../platform/settingsStorage';
 import { MobilePrayerThemePreview } from './MobilePrayerThemePreview';
 import { buildPrayerBoardPreviewData } from './prayerBoardPreviewData';
@@ -122,7 +121,7 @@ function initialState(): {
 } {
   const storage = getApplicationStorage();
   const settings = loadPersistedSettings(storage);
-  const existing = loadMobilePrayerBoardDisplayConfig(storage) ?? loadPrayerBoardDisplayConfig(storage);
+  const existing = loadMobilePrayerBoardDisplayConfig(storage);
   return {
     locale: settings.locale,
     config: parsePrayerBoardTemplateConfig({

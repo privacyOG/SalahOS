@@ -3,7 +3,10 @@ import { describe, expect, it } from 'vitest';
 
 import { parsePrayerBoardTemplateConfig } from '../domain/prayerBoardTemplate';
 import { initializeApplicationStorage } from '../platform/applicationStorage';
-import { saveMobilePrayerBoardDisplayConfig } from '../platform/mobilePrayerBoardDisplayConfig';
+import {
+  MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY,
+  saveMobilePrayerBoardDisplayConfig,
+} from '../platform/mobilePrayerBoardDisplayConfig';
 import { savePrayerBoardDisplayConfig } from '../platform/prayerBoardDisplayConfig';
 import type { KeyValueStorage } from '../platform/settingsStorage';
 import { MobilePrayerThemeSurface } from './MobilePrayerThemeSurface';
@@ -33,9 +36,8 @@ function renderToday(): string {
 }
 
 describe('MobilePrayerThemeSurface', () => {
-  it('uses the legacy display selection as an upgrade-compatible Phone/Home fallback', async () => {
+  it('migrates a legacy display selection once and then keeps Phone/Home independent', async () => {
     const storage = new MemoryStorage();
-    await initializeApplicationStorage(storage);
     savePrayerBoardDisplayConfig(
       storage,
       parsePrayerBoardTemplateConfig({
@@ -45,14 +47,24 @@ describe('MobilePrayerThemeSurface', () => {
       }),
     );
 
-    const html = renderToday();
+    await initializeApplicationStorage(storage);
 
-    expect(html).toContain('data-mobile-prayer-template="scenic-spiritual"');
-    expect(html).toContain('data-mobile-prayer-accent="jewel"');
-    expect(html).toContain('data-mobile-prayer-theme-version="1"');
+    expect(renderToday()).toContain('data-mobile-prayer-template="scenic-spiritual"');
+    expect(renderToday()).toContain('data-mobile-prayer-accent="jewel"');
+
+    savePrayerBoardDisplayConfig(
+      storage,
+      parsePrayerBoardTemplateConfig({ version: 1, templateId: 'structured-split-board' }),
+    );
+
+    expect(renderToday()).toContain('data-mobile-prayer-template="scenic-spiritual"');
+    expect(storage.getItem(MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY)).toContain(
+      'scenic-spiritual',
+    );
+    expect(storage.getItem('salahos.prayerBoardDisplayConfig')).toContain('structured-split-board');
   });
 
-  it('prefers the dedicated Phone/Home selection without changing the TV/Kiosk selection', async () => {
+  it('uses the dedicated Phone/Home selection without changing the TV/Kiosk selection', async () => {
     const storage = new MemoryStorage();
     await initializeApplicationStorage(storage);
     savePrayerBoardDisplayConfig(
@@ -75,10 +87,13 @@ describe('MobilePrayerThemeSurface', () => {
     expect(storage.getItem('salahos.prayerBoardDisplayConfig')).toContain('structured-split-board');
   });
 
-  it('falls back to Heritage Classic when no display theme is stored', async () => {
+  it('seeds an independent Heritage Classic Phone/Home default when no legacy theme exists', async () => {
     const storage = new MemoryStorage();
     await initializeApplicationStorage(storage);
 
     expect(renderToday()).toContain('data-mobile-prayer-template="heritage-classic"');
+    expect(storage.getItem(MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY)).toContain(
+      'heritage-classic',
+    );
   });
 });

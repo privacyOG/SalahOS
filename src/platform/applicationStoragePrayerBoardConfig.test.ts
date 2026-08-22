@@ -2,6 +2,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   createNativePreferencesStorage,
+  ensureIndependentMobilePrayerBoardDisplayConfig,
   migrateMissingApplicationStorageKeys,
   PERSISTED_APPLICATION_KEYS,
   type PreferencesStore,
@@ -129,5 +130,42 @@ describe('prayer-board native persistence', () => {
     expect(preferences.values.get(PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY)).toContain(
       'minimal-modern',
     );
+  });
+
+  it('copies a legacy TV/Kiosk selection into Phone/Home only once', () => {
+    const storage = new MemoryStorage();
+    storage.setItem(
+      PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY,
+      JSON.stringify({ version: 1, templateId: 'scenic-spiritual', accentPreset: 'jewel' }),
+    );
+
+    ensureIndependentMobilePrayerBoardDisplayConfig(storage);
+    expect(storage.getItem(MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY)).toContain(
+      'scenic-spiritual',
+    );
+
+    storage.setItem(
+      PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY,
+      JSON.stringify({ version: 1, templateId: 'structured-split-board' }),
+    );
+    ensureIndependentMobilePrayerBoardDisplayConfig(storage);
+
+    expect(storage.getItem(MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY)).toContain(
+      'scenic-spiritual',
+    );
+    expect(storage.getItem(PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY)).toContain(
+      'structured-split-board',
+    );
+  });
+
+  it('creates an independent Heritage Classic Phone/Home default without a legacy display config', () => {
+    const storage = new MemoryStorage();
+
+    ensureIndependentMobilePrayerBoardDisplayConfig(storage);
+
+    expect(storage.getItem(MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY)).toContain(
+      'heritage-classic',
+    );
+    expect(storage.getItem(PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY)).toBeNull();
   });
 });

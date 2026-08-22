@@ -66,7 +66,8 @@ An item must not be marked complete until the exact code head passes the applica
 ## Current correction evidence
 
 - The dedicated Phone/Home prayer-board configuration uses its own `salahos.mobilePrayerBoardDisplayConfig` storage key and does not overwrite the TV/kiosk prayer-board configuration.
-- The real congregation Today route is wrapped by `MobilePrayerThemeSurface` and refreshes on theme-change, focus and foreground visibility events.
+- Legacy shared prayer-board configuration is copied into Phone/Home only once during application-storage initialization; when no legacy selection exists, a dedicated Heritage Classic Phone/Home default is seeded. The mobile runtime no longer reads or listens to later TV/Kiosk configuration changes.
+- The real congregation Today route is wrapped by `MobilePrayerThemeSurface` and refreshes on Phone/Home theme-change, focus and foreground visibility events.
 - The real congregation `Settings > Display Themes` DOM now receives the Phone/Home visual selector while the existing managed-display target remains separately reachable.
 - The permanent mobile visual harness covers all six released Phone/Home theme IDs, includes a 320px minimum-width case, exercises preview-before-apply through the congregation Settings route and verifies five obligatory prayer rows separately from Sunrise.
 - The normal visual build verifies the no-key OpenStreetMap Qiblah fallback. A second visual-only build injects a fixed non-production key and verifies Google satellite request/provider semantics without committing a credential.

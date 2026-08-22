@@ -1,5 +1,10 @@
 import { Capacitor } from '@capacitor/core';
 import { Preferences } from '@capacitor/preferences';
+
+import {
+  defaultPrayerBoardTemplateConfig,
+  parsePrayerBoardTemplateConfig,
+} from '../domain/prayerBoardTemplate';
 import { COMMUNITY_CONTENT_STORAGE_KEY } from './communityContentStorage';
 import { MANAGED_DISPLAY_CONNECTION_STORAGE_KEY } from './managedDisplayConnectionStorage';
 import { MANAGED_PRAYER_BOARD_CACHE_STORAGE_KEY } from './managedPrayerBoardCache';
@@ -95,9 +100,30 @@ export function migrateMissingApplicationStorageKeys(
   }
 }
 
+function normalizedLegacyPrayerBoardConfig(serialized: string | null): string {
+  if (serialized === null) return JSON.stringify(defaultPrayerBoardTemplateConfig);
+
+  try {
+    return JSON.stringify(parsePrayerBoardTemplateConfig(JSON.parse(serialized)));
+  } catch {
+    return JSON.stringify(defaultPrayerBoardTemplateConfig);
+  }
+}
+
+export function ensureIndependentMobilePrayerBoardDisplayConfig(storage: KeyValueStorage): void {
+  if (storage.getItem(MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY) !== null) return;
+
+  const legacyDisplayConfig = storage.getItem(PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY);
+  storage.setItem(
+    MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY,
+    normalizedLegacyPrayerBoardConfig(legacyDisplayConfig),
+  );
+}
+
 export async function initializeApplicationStorage(webStorage: KeyValueStorage): Promise<void> {
   const platform = Capacitor.getPlatform();
   if (platform !== 'android' && platform !== 'ios') {
+    ensureIndependentMobilePrayerBoardDisplayConfig(webStorage);
     activeStorage = webStorage;
     nativeStorage = null;
     return;
@@ -105,6 +131,7 @@ export async function initializeApplicationStorage(webStorage: KeyValueStorage):
 
   const storage = await createNativePreferencesStorage(Preferences);
   migrateMissingApplicationStorageKeys(webStorage, storage);
+  ensureIndependentMobilePrayerBoardDisplayConfig(storage);
   await storage.flush();
   activeStorage = storage;
   nativeStorage = storage;
