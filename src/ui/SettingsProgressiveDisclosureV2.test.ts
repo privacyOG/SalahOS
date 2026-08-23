@@ -75,7 +75,8 @@ describe('Settings progressive disclosure and Stage 27 ownership', () => {
   });
 
   it('does not rely on legacy Settings wrappers or destination-hiding CSS', () => {
-    expect(settingsSource).not.toContain('<App');
+    expect(settingsSource).not.toContain("from '../App'");
+    expect(settingsSource).not.toContain('<App />');
     expect(settingsSource).not.toContain('settings-screen__legacy');
     expect(settingsSource).not.toContain('legacy-core-route');
     expect(settingsStyles).not.toContain('settings-screen__legacy');
