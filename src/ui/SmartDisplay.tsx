@@ -214,13 +214,7 @@ export function SmartDisplay({
                 : [announcementResolution.announcement],
             weather: resolvedConfig.moduleVisibility.weather ? weather : null,
           }),
-    [
-      announcementResolution,
-      dashboard,
-      offline,
-      resolvedConfig.moduleVisibility.weather,
-      weather,
-    ],
+    [announcementResolution, dashboard, offline, resolvedConfig.moduleVisibility.weather, weather],
   );
   const resolvedDisplayTheme =
     storedConfig === null ? displayTheme : displayThemeForPrayerBoardConfig(resolvedConfig);
