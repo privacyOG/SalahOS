@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 
 import {
   buildPrayerBoardAnnouncementScheduleContext,
+  defaultPrayerBoardAnnouncementRotationConfig,
   resolvePrayerBoardAnnouncementRotation,
   type PrayerBoardAnnouncementRotationConfig,
   type PrayerBoardAnnouncementRotationResolution,
@@ -138,11 +139,19 @@ function readPrayerBoardWeather(): PrayerBoardWeatherSnapshot | null {
 }
 
 function readAnnouncementRotation(): PrayerBoardAnnouncementRotationConfig {
-  return loadPrayerBoardAnnouncementRotationConfig(getApplicationStorage());
+  try {
+    return loadPrayerBoardAnnouncementRotationConfig(getApplicationStorage());
+  } catch {
+    return defaultPrayerBoardAnnouncementRotationConfig;
+  }
 }
 
 function readDisplayAnnouncements() {
-  return loadCommunityContentLibrary(getApplicationStorage()).announcements;
+  try {
+    return loadCommunityContentLibrary(getApplicationStorage()).announcements;
+  } catch {
+    return [];
+  }
 }
 
 export function SmartDisplay({
