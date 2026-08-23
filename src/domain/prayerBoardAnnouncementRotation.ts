@@ -1,8 +1,5 @@
 import type { Locale } from '../i18n/translations';
-import {
-  announcementLifecycleAt,
-  type MosqueAnnouncement,
-} from './mosqueAnnouncement';
+import { announcementLifecycleAt, type MosqueAnnouncement } from './mosqueAnnouncement';
 import type { PrayerBoardAnnouncement } from './prayerBoardTemplate';
 import {
   createSignagePlaylist,
@@ -12,10 +9,7 @@ import {
   type SignageScheduleEvaluationContext,
   type SignageScheduleRule,
 } from './signagePlaylist';
-import {
-  createSignageScene,
-  type AnnouncementScene,
-} from './signageScene';
+import { createSignageScene, type AnnouncementScene } from './signageScene';
 import type { SourcedPrayerDashboard } from './sourcedDashboard';
 
 export const PRAYER_BOARD_ANNOUNCEMENT_ROTATION_VERSION = 1 as const;
@@ -106,7 +100,9 @@ export function createPrayerBoardAnnouncementRotationConfig(
   const sceneIds = new Set(scenes.map((scene) => scene.sceneId));
   for (const entry of playlist.scenes) {
     if (!sceneIds.has(entry.sceneId)) {
-      throw new RangeError(`Playlist scene is not configured for announcement rotation: ${entry.sceneId}`);
+      throw new RangeError(
+        `Playlist scene is not configured for announcement rotation: ${entry.sceneId}`,
+      );
     }
   }
   if (scenes.some((scene) => scene.mosqueId !== playlist.mosqueId)) {
@@ -308,30 +304,38 @@ export function resolvePrayerBoardAnnouncementRotation(input: Readonly<{
   });
 }
 
+function localMinutesToClock(localMinutes: number): string {
+  const hours = Math.floor(localMinutes / 60);
+  const minutes = localMinutes % 60;
+  return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+}
+
 export function buildPrayerBoardAnnouncementScheduleContext(
   dashboard: SourcedPrayerDashboard,
 ): SignageScheduleEvaluationContext {
   const civilDate = dashboard.base.civilDate.toISOString().slice(0, 10);
   const clock = dashboard.base.clock;
   const localClock = `${String(clock.hour).padStart(2, '0')}:${String(clock.minute).padStart(2, '0')}`;
-  const prayerTimes: Partial<Record<'fajr' | 'dhuhr' | 'asr' | 'maghrib' | 'isha' | 'jumuah', string>> = {};
+  const prayerTimes: Partial<
+    Record<'fajr' | 'dhuhr' | 'asr' | 'maghrib' | 'isha' | 'jumuah', string>
+  > = {};
   for (const prayer of dashboard.prayers) {
     if (prayer.name === 'sunrise' || prayer.localMinutes === null) continue;
-    const hours = Math.floor(prayer.localMinutes / 60);
-    const minutes = prayer.localMinutes % 60;
-    prayerTimes[prayer.name] = `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
+    prayerTimes[prayer.name] = localMinutesToClock(prayer.localMinutes);
   }
   const firstJumuah = dashboard.jumuahSessions[0];
-  if (firstJumuah !== undefined) prayerTimes.jumuah = firstJumuah.time;
+  if (firstJumuah !== undefined) {
+    prayerTimes.jumuah = localMinutesToClock(firstJumuah.salahLocalMinutes);
+  }
 
   const isRamadan = dashboard.base.hijri.month === 9;
-  const isFriday = dashboard.base.civilDate.getUTCDay() === 5;
+  const weekday = dashboard.base.civilDate.getUTCDay() as 0 | 1 | 2 | 3 | 4 | 5 | 6;
 
   return Object.freeze({
     localDate: civilDate,
-    weekday: dashboard.base.civilDate.getUTCDay() as 0 | 1 | 2 | 3 | 4 | 5 | 6,
+    weekday,
     localClock,
-    context: isRamadan ? 'ramadan' : isFriday ? 'jumuah' : 'normal',
+    context: isRamadan ? 'ramadan' : weekday === 5 ? 'jumuah' : 'normal',
     prayerTimes: Object.freeze(prayerTimes),
   });
 }
