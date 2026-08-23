@@ -342,20 +342,22 @@ The phone Today/home experience must receive the same design quality and templat
 
 ## 24.1 Admin shell
 
-- [ ] Build a dedicated admin shell with persistent navigation on desktop/tablet and appropriate compact navigation on narrow screens.
-- [ ] Provide page titles, breadcrumbs/context and clear primary actions.
-- [ ] Remove display credentials, fleet controls and publication tools from congregation-facing pages.
-- [ ] Keep dangerous/destructive actions visually distinct and confirmation-gated.
+- [x] Build a dedicated admin shell with persistent navigation on desktop/tablet and appropriate compact navigation on narrow screens.
+- [x] Provide page titles, breadcrumbs/context and clear primary actions.
+- [x] Remove display credentials, fleet controls and publication tools from congregation-facing pages.
+- [x] Keep dangerous/destructive actions visually distinct and confirmation-gated.
 
 ## 24.2 Admin overview dashboard
 
-- [ ] Show today's published prayer/Iqamah status.
-- [ ] Show draft versus published timetable state.
-- [ ] Show upcoming Jumu'ah/Ramadan overrides.
-- [ ] Show display online/stale/offline state.
-- [ ] Show upcoming announcements/events and signage schedule.
-- [ ] Surface failed synchronization/configuration issues without making the dashboard noisy.
-- [ ] Make common daily tasks reachable in very few interactions.
+- [x] Show today's published prayer/Iqamah status.
+- [x] Show draft versus published timetable state.
+- [x] Show upcoming Jumu'ah/Ramadan overrides.
+- [x] Show display online/stale/offline state.
+- [x] Show upcoming announcements/events and signage schedule.
+- [x] Surface failed synchronization/configuration issues without making the dashboard noisy.
+- [x] Make common daily tasks reachable in very few interactions.
+
+**Stage 24.1–24.2 verification note (2026-08-23):** PR #188 code-bearing head `a9b23bfeddf490b3e5145dd84295c6c5bc5f255a` passed Quality Gate `32620048449`, Android Build `32620048448`, Visual Regression `32620048450` and iOS Build `32620048456`. Exact Visual artifact `9488130221` (`sha256:af9eb38276f3125c69c53c487519c5787775e258e4d45dc03cefb2e7991b212b`) passed permanent desktop, Arabic/RTL tablet, narrow-phone and destructive-confirmation acceptance and received human visual review after the narrow common-action clipping found during review was corrected. The administration shell now has eight reloadable destinations with responsive navigation, route context/breadcrumbs, congregation-surface isolation and confirmation-gated destructive fleet revocation. The overview exposes local prayer/Iqamah, draft-versus-published fixture state, Jumu'ah/Ramadan context, fleet health, community/signage state, quiet issue reporting and short-path daily tasks without altering prayer calculations. Stage 24.1 and 24.2 are complete; Stage 24.3 remains open.
 
 ## 24.3 Display theme management
 
