@@ -1,17 +1,15 @@
 name: Stage 24 Tracker Update
 
 on:
-  push:
-    branches:
-      - stage-24/admin-shell-overview
-    paths:
-      - .github/workflows/stage24-tracker-update.yml
+  pull_request:
+    types: [synchronize]
 
 permissions:
   contents: write
 
 jobs:
   update-trackers:
+    if: github.event.pull_request.head.ref == 'stage-24/admin-shell-overview'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -73,12 +71,12 @@ jobs:
           git diff --check
           git diff -- TODO.md docs/UI_UX_V2_PLAN.md
 
-      - name: Commit tracker update
+      - name: Commit tracker update and remove updater
         shell: bash
         run: |
           git config user.name privacyOG
-          git config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git config user.email privacyOG@users.noreply.github.com
+          git rm .github/workflows/stage24-tracker-update.yml
           git add TODO.md docs/UI_UX_V2_PLAN.md
-          git diff --cached --quiet && exit 0
-          git commit -m "Mark Stage 24.1 and 24.2 complete"
+          git commit -m "Complete Stage 24.1 and 24.2 trackers"
           git push origin HEAD:stage-24/admin-shell-overview
