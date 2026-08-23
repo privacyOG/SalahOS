@@ -548,13 +548,28 @@ export function AdminOverviewDashboard({ navigate }: AdminOverviewProps) {
           <p>{publicationLabel}</p>
         </div>
         <div className="admin-overview__actions" aria-label={text.quickActions}>
-          <button type="button" onClick={() => navigate('prayer-iqamah')}>
+          <button
+            type="button"
+            onClick={() => {
+              navigate('prayer-iqamah');
+            }}
+          >
             {text.prayerAction}
           </button>
-          <button type="button" onClick={() => navigate('community')}>
+          <button
+            type="button"
+            onClick={() => {
+              navigate('community');
+            }}
+          >
             {text.communityAction}
           </button>
-          <button type="button" onClick={() => navigate('displays')}>
+          <button
+            type="button"
+            onClick={() => {
+              navigate('displays');
+            }}
+          >
             {text.displaysAction}
           </button>
         </div>
