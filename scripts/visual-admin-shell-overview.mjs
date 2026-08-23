@@ -156,8 +156,18 @@ async function assertContained(page, name) {
     width: innerWidth,
     scrollWidth: document.documentElement.scrollWidth,
     right: document.querySelector('.admin-shell')?.getBoundingClientRect().right ?? 0,
+    actionOverflow: Array.from(document.querySelectorAll('.admin-overview__actions button')).some(
+      (button) => {
+        const bounds = button.getBoundingClientRect();
+        return bounds.left < -1 || bounds.right > innerWidth + 1;
+      },
+    ),
   }));
-  if (geometry.scrollWidth > geometry.width || geometry.right > geometry.width + 1) {
+  if (
+    geometry.scrollWidth > geometry.width ||
+    geometry.right > geometry.width + 1 ||
+    geometry.actionOverflow
+  ) {
     throw new Error(`${name} overflowed its viewport: ${JSON.stringify(geometry)}`);
   }
 }
