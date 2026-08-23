@@ -175,9 +175,10 @@ function parseCssColor(value) {
       a: 1,
     };
   }
-  const rgb = /^rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)(?:\s*[,/]\s*([\d.]+%?))?\s*\)$/i.exec(
-    normalized,
-  );
+  const rgb =
+    /^rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)(?:\s*[,/]\s*([\d.]+%?))?\s*\)$/i.exec(
+      normalized,
+    );
   if (!rgb) throw new Error(`Unsupported CSS colour ${value}`);
   const alphaRaw = rgb[4] ?? '1';
   const alpha = alphaRaw.endsWith('%')
@@ -227,15 +228,12 @@ function assertContrast(name, foreground, background, minimum = 4.5) {
 }
 
 async function readVariables(page, selector, names) {
-  return page.locator(selector).evaluate(
-    (element, requestedNames) => {
-      const style = getComputedStyle(element);
-      return Object.fromEntries(
-        requestedNames.map((name) => [name, style.getPropertyValue(name).trim()]),
-      );
-    },
-    names,
-  );
+  return page.locator(selector).evaluate((element, requestedNames) => {
+    const style = getComputedStyle(element);
+    return Object.fromEntries(
+      requestedNames.map((name) => [name, style.getPropertyValue(name).trim()]),
+    );
+  }, names);
 }
 
 async function validateApplicationContrast(browser, theme) {
@@ -338,21 +336,39 @@ async function interactiveNameFailures(page) {
     const visible = (element) => {
       const style = getComputedStyle(element);
       const rect = element.getBoundingClientRect();
-      return style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0;
+      return (
+        style.display !== 'none' &&
+        style.visibility !== 'hidden' &&
+        rect.width > 0 &&
+        rect.height > 0
+      );
     };
     const labelledByText = (element) => {
       const ids = (element.getAttribute('aria-labelledby') ?? '').split(/\s+/).filter(Boolean);
-      return ids.map((id) => document.getElementById(id)?.textContent?.trim() ?? '').join(' ').trim();
+      return ids
+        .map((id) => document.getElementById(id)?.textContent?.trim() ?? '')
+        .join(' ')
+        .trim();
     };
     const associatedLabelText = (element) => {
-      if (!(element instanceof HTMLInputElement || element instanceof HTMLSelectElement || element instanceof HTMLTextAreaElement)) {
+      if (!(
+        element instanceof HTMLInputElement ||
+        element instanceof HTMLSelectElement ||
+        element instanceof HTMLTextAreaElement
+      )) {
         return '';
       }
       const labels = element.labels === null ? [] : [...element.labels];
-      return labels.map((label) => label.textContent?.trim() ?? '').join(' ').trim();
+      return labels
+        .map((label) => label.textContent?.trim() ?? '')
+        .join(' ')
+        .trim();
     };
     return [...document.querySelectorAll('button, a[href], input, select, textarea, summary')]
-      .filter((element) => element instanceof HTMLElement && visible(element) && !element.hasAttribute('disabled'))
+      .filter(
+        (element) =>
+          element instanceof HTMLElement && visible(element) && !element.hasAttribute('disabled'),
+      )
       .map((element) => ({
         tag: element.tagName.toLowerCase(),
         className: typeof element.className === 'string' ? element.className : '',
@@ -402,15 +418,21 @@ async function rtlTypographyFailures(page) {
     const visible = (element) => {
       const style = getComputedStyle(element);
       const rect = element.getBoundingClientRect();
-      return style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0;
+      return (
+        style.display !== 'none' &&
+        style.visibility !== 'hidden' &&
+        rect.width > 0 &&
+        rect.height > 0
+      );
     };
     return [...document.querySelectorAll('body *')]
       .filter((element) => element instanceof HTMLElement && visible(element))
       .map((element) => {
-        const text = element.childElementCount === 0 ? element.textContent?.trim() ?? '' : '';
+        const text = element.childElementCount === 0 ? (element.textContent?.trim() ?? '') : '';
         if (!arabic.test(text)) return null;
         const style = getComputedStyle(element);
-        const letterSpacing = style.letterSpacing === 'normal' ? 0 : Number.parseFloat(style.letterSpacing) || 0;
+        const letterSpacing =
+          style.letterSpacing === 'normal' ? 0 : Number.parseFloat(style.letterSpacing) || 0;
         return {
           tag: element.tagName.toLowerCase(),
           className: typeof element.className === 'string' ? element.className : '',
@@ -447,13 +469,16 @@ async function validateCongregationScenario(browser, scenario) {
       lang: document.documentElement.lang,
       dir: document.documentElement.dir,
       navCount: document.querySelectorAll('nav, [role="navigation"]').length,
-      labelledRegions: document.querySelectorAll('main, section[aria-labelledby], section[aria-label]').length,
+      labelledRegions: document.querySelectorAll(
+        'main, section[aria-labelledby], section[aria-label]',
+      ).length,
       headings: [...document.querySelectorAll('h1, h2')].filter((element) => {
         const rect = element.getBoundingClientRect();
         return rect.width > 0 && rect.height > 0;
       }).length,
       tableRows: document.querySelectorAll('.today-prayer-table [role="row"]').length,
-      currentStateText: document.querySelector('.today-prayer-row.is-current')?.textContent?.trim() ?? '',
+      currentStateText:
+        document.querySelector('.today-prayer-row.is-current')?.textContent?.trim() ?? '',
       nextStateText: document.querySelector('.today-prayer-row.is-next')?.textContent?.trim() ?? '',
       bidiCount: document.querySelectorAll('bdi, [dir="ltr"]').length,
     }));
@@ -462,7 +487,9 @@ async function validateCongregationScenario(browser, scenario) {
       throw new Error(`${scenario.name} locale/direction mismatch: ${JSON.stringify(state)}`);
     }
     if (state.navCount === 0 || state.labelledRegions === 0 || state.headings === 0) {
-      throw new Error(`${scenario.name} semantic landmark/heading structure missing: ${JSON.stringify(state)}`);
+      throw new Error(
+        `${scenario.name} semantic landmark/heading structure missing: ${JSON.stringify(state)}`,
+      );
     }
     if (scenario.view === 'today') {
       if (state.tableRows !== 6) {
@@ -479,11 +506,15 @@ async function validateCongregationScenario(browser, scenario) {
 
     const names = await interactiveNameFailures(page);
     if (names.length > 0) {
-      throw new Error(`${scenario.name} unnamed interactive controls: ${JSON.stringify(names.slice(0, 8))}`);
+      throw new Error(
+        `${scenario.name} unnamed interactive controls: ${JSON.stringify(names.slice(0, 8))}`,
+      );
     }
     const rtlFailures = scenario.locale === 'ar' ? await rtlTypographyFailures(page) : [];
     if (rtlFailures.length > 0) {
-      throw new Error(`${scenario.name} Latin-only RTL typography: ${JSON.stringify(rtlFailures.slice(0, 8))}`);
+      throw new Error(
+        `${scenario.name} Latin-only RTL typography: ${JSON.stringify(rtlFailures.slice(0, 8))}`,
+      );
     }
     const overflow = await horizontalOverflow(page);
     assertNoHorizontalOverflow(scenario.name, overflow);
@@ -519,11 +550,15 @@ async function validateAdminScenario(browser, scenario) {
       headings: document.querySelectorAll('.admin-shell h1, .admin-shell h2').length,
     }));
     if (structure.nav === 0 || structure.main === 0 || structure.headings === 0) {
-      throw new Error(`${scenario.name} admin landmark structure missing: ${JSON.stringify(structure)}`);
+      throw new Error(
+        `${scenario.name} admin landmark structure missing: ${JSON.stringify(structure)}`,
+      );
     }
     const names = await interactiveNameFailures(page);
     if (names.length > 0) {
-      throw new Error(`${scenario.name} unnamed admin controls: ${JSON.stringify(names.slice(0, 8))}`);
+      throw new Error(
+        `${scenario.name} unnamed admin controls: ${JSON.stringify(names.slice(0, 8))}`,
+      );
     }
     const focus = await visibleFocusEvidence(page);
     const overflow = await horizontalOverflow(page);
@@ -602,17 +637,23 @@ async function validateReducedMotionApplication(browser) {
             tag: element.tagName.toLowerCase(),
             className: typeof element.className === 'string' ? element.className : '',
             transitionMs: Math.max(
-              ...style.transitionDuration.split(',').map((value) => Number.parseFloat(value) * (value.includes('ms') ? 1 : 1000)),
+              ...style.transitionDuration
+                .split(',')
+                .map((value) => Number.parseFloat(value) * (value.includes('ms') ? 1 : 1000)),
             ),
             animationMs: Math.max(
-              ...style.animationDuration.split(',').map((value) => Number.parseFloat(value) * (value.includes('ms') ? 1 : 1000)),
+              ...style.animationDuration
+                .split(',')
+                .map((value) => Number.parseFloat(value) * (value.includes('ms') ? 1 : 1000)),
             ),
           };
         })
         .filter((entry) => entry.transitionMs > 1 || entry.animationMs > 1),
     );
     if (offenders.length > 0) {
-      throw new Error(`Reduced-motion application still animates: ${JSON.stringify(offenders.slice(0, 8))}`);
+      throw new Error(
+        `Reduced-motion application still animates: ${JSON.stringify(offenders.slice(0, 8))}`,
+      );
     }
     return { offenders: 0 };
   } finally {
@@ -643,13 +684,20 @@ async function validatePrayerBoardScenario(browser, templateId, width, height) {
       width: innerWidth,
       height: innerHeight,
     }));
-    if (state.lang !== 'ar' || state.dir !== 'rtl' || state.width !== width || state.height !== height) {
+    if (
+      state.lang !== 'ar' ||
+      state.dir !== 'rtl' ||
+      state.width !== width ||
+      state.height !== height
+    ) {
       throw new Error(`${name} RTL/viewport mismatch: ${JSON.stringify(state)}`);
     }
     if (state.bidi === 0) throw new Error(`${name} has no mixed-direction isolation`);
     const rtlFailures = await rtlTypographyFailures(page);
     if (rtlFailures.length > 0) {
-      throw new Error(`${name} Latin-only RTL typography: ${JSON.stringify(rtlFailures.slice(0, 8))}`);
+      throw new Error(
+        `${name} Latin-only RTL typography: ${JSON.stringify(rtlFailures.slice(0, 8))}`,
+      );
     }
     const overflow = await horizontalOverflow(page);
     assertNoHorizontalOverflow(name, overflow);
@@ -722,24 +770,168 @@ try {
 
   const congregation = [];
   const scenarios = [
-    { name: 'stage26-phone-en-light-today', width: 390, height: 844, locale: 'en', theme: 'light', view: 'today', readySelector: '.today-screen' },
-    { name: 'stage26-phone-en-dark-settings', width: 390, height: 844, locale: 'en', theme: 'dark', view: 'settings', readySelector: '.settings-screen' },
-    { name: 'stage26-phone-ar-dark-today', width: 390, height: 844, locale: 'ar', theme: 'dark', view: 'today', readySelector: '.today-screen' },
-    { name: 'stage26-tablet-ar-mosques', width: 1024, height: 1366, locale: 'ar', theme: 'light', view: 'mosques', readySelector: '.mosques-screen' },
-    { name: 'stage26-tablet-ar-qiblah', width: 1024, height: 1366, locale: 'ar', theme: 'dark', view: 'qiblah', readySelector: '.qibla-finder' },
-    { name: 'stage26-tablet-ar-community', width: 1024, height: 1366, locale: 'ar', theme: 'light', view: 'community', readySelector: '.community-screen' },
-    { name: 'stage26-tablet-ar-settings', width: 1024, height: 1366, locale: 'ar', theme: 'dark', view: 'settings', readySelector: '.settings-screen' },
-    { name: 'stage26-tablet-ar-today', width: 1024, height: 1366, locale: 'ar', theme: 'dark', view: 'today', readySelector: '.today-screen' },
-    { name: 'stage26-tablet-en-light-today', width: 1024, height: 1366, locale: 'en', theme: 'light', view: 'today', readySelector: '.today-screen' },
-    { name: 'stage26-desktop-en-today', width: 1440, height: 1000, locale: 'en', theme: 'light', view: 'today', readySelector: '.today-screen' },
-    { name: 'stage26-desktop-en-mosques', width: 1440, height: 1000, locale: 'en', theme: 'dark', view: 'mosques', readySelector: '.mosques-screen' },
-    { name: 'stage26-desktop-en-qiblah', width: 1440, height: 1000, locale: 'en', theme: 'light', view: 'qiblah', readySelector: '.qibla-finder' },
-    { name: 'stage26-desktop-en-community', width: 1440, height: 1000, locale: 'en', theme: 'dark', view: 'community', readySelector: '.community-screen' },
-    { name: 'stage26-desktop-en-settings', width: 1440, height: 1000, locale: 'en', theme: 'light', view: 'settings', readySelector: '.settings-screen' },
-    { name: 'stage26-phone-tr-today', width: 390, height: 844, locale: 'tr', theme: 'light', view: 'today', readySelector: '.today-screen' },
-    { name: 'stage26-phone-tr-settings', width: 390, height: 844, locale: 'tr', theme: 'dark', view: 'settings', readySelector: '.settings-screen' },
-    { name: 'stage26-phone-id-today', width: 390, height: 844, locale: 'id', theme: 'dark', view: 'today', readySelector: '.today-screen' },
-    { name: 'stage26-phone-id-settings', width: 390, height: 844, locale: 'id', theme: 'light', view: 'settings', readySelector: '.settings-screen' },
+    {
+      name: 'stage26-phone-en-light-today',
+      width: 390,
+      height: 844,
+      locale: 'en',
+      theme: 'light',
+      view: 'today',
+      readySelector: '.today-screen',
+    },
+    {
+      name: 'stage26-phone-en-dark-settings',
+      width: 390,
+      height: 844,
+      locale: 'en',
+      theme: 'dark',
+      view: 'settings',
+      readySelector: '.settings-screen',
+    },
+    {
+      name: 'stage26-phone-ar-dark-today',
+      width: 390,
+      height: 844,
+      locale: 'ar',
+      theme: 'dark',
+      view: 'today',
+      readySelector: '.today-screen',
+    },
+    {
+      name: 'stage26-tablet-ar-mosques',
+      width: 1024,
+      height: 1366,
+      locale: 'ar',
+      theme: 'light',
+      view: 'mosques',
+      readySelector: '.mosques-screen',
+    },
+    {
+      name: 'stage26-tablet-ar-qiblah',
+      width: 1024,
+      height: 1366,
+      locale: 'ar',
+      theme: 'dark',
+      view: 'qiblah',
+      readySelector: '.qibla-finder',
+    },
+    {
+      name: 'stage26-tablet-ar-community',
+      width: 1024,
+      height: 1366,
+      locale: 'ar',
+      theme: 'light',
+      view: 'community',
+      readySelector: '.community-screen',
+    },
+    {
+      name: 'stage26-tablet-ar-settings',
+      width: 1024,
+      height: 1366,
+      locale: 'ar',
+      theme: 'dark',
+      view: 'settings',
+      readySelector: '.settings-screen',
+    },
+    {
+      name: 'stage26-tablet-ar-today',
+      width: 1024,
+      height: 1366,
+      locale: 'ar',
+      theme: 'dark',
+      view: 'today',
+      readySelector: '.today-screen',
+    },
+    {
+      name: 'stage26-tablet-en-light-today',
+      width: 1024,
+      height: 1366,
+      locale: 'en',
+      theme: 'light',
+      view: 'today',
+      readySelector: '.today-screen',
+    },
+    {
+      name: 'stage26-desktop-en-today',
+      width: 1440,
+      height: 1000,
+      locale: 'en',
+      theme: 'light',
+      view: 'today',
+      readySelector: '.today-screen',
+    },
+    {
+      name: 'stage26-desktop-en-mosques',
+      width: 1440,
+      height: 1000,
+      locale: 'en',
+      theme: 'dark',
+      view: 'mosques',
+      readySelector: '.mosques-screen',
+    },
+    {
+      name: 'stage26-desktop-en-qiblah',
+      width: 1440,
+      height: 1000,
+      locale: 'en',
+      theme: 'light',
+      view: 'qiblah',
+      readySelector: '.qibla-finder',
+    },
+    {
+      name: 'stage26-desktop-en-community',
+      width: 1440,
+      height: 1000,
+      locale: 'en',
+      theme: 'dark',
+      view: 'community',
+      readySelector: '.community-screen',
+    },
+    {
+      name: 'stage26-desktop-en-settings',
+      width: 1440,
+      height: 1000,
+      locale: 'en',
+      theme: 'light',
+      view: 'settings',
+      readySelector: '.settings-screen',
+    },
+    {
+      name: 'stage26-phone-tr-today',
+      width: 390,
+      height: 844,
+      locale: 'tr',
+      theme: 'light',
+      view: 'today',
+      readySelector: '.today-screen',
+    },
+    {
+      name: 'stage26-phone-tr-settings',
+      width: 390,
+      height: 844,
+      locale: 'tr',
+      theme: 'dark',
+      view: 'settings',
+      readySelector: '.settings-screen',
+    },
+    {
+      name: 'stage26-phone-id-today',
+      width: 390,
+      height: 844,
+      locale: 'id',
+      theme: 'dark',
+      view: 'today',
+      readySelector: '.today-screen',
+    },
+    {
+      name: 'stage26-phone-id-settings',
+      width: 390,
+      height: 844,
+      locale: 'id',
+      theme: 'light',
+      view: 'settings',
+      readySelector: '.settings-screen',
+    },
   ];
   for (const scenario of scenarios) {
     congregation.push(await validateCongregationScenario(browser, scenario));
@@ -747,8 +939,20 @@ try {
 
   const admin = [];
   for (const scenario of [
-    { name: 'stage26-admin-overview-desktop', width: 1440, height: 1000, theme: 'light', adminView: 'overview' },
-    { name: 'stage26-admin-displays-desktop', width: 1440, height: 1000, theme: 'dark', adminView: 'displays' },
+    {
+      name: 'stage26-admin-overview-desktop',
+      width: 1440,
+      height: 1000,
+      theme: 'light',
+      adminView: 'overview',
+    },
+    {
+      name: 'stage26-admin-displays-desktop',
+      width: 1440,
+      height: 1000,
+      theme: 'dark',
+      adminView: 'displays',
+    },
   ]) {
     admin.push(await validateAdminScenario(browser, scenario));
   }
@@ -771,8 +975,22 @@ try {
 
   const touch = [];
   for (const scenario of [
-    { name: 'stage26-touch-portrait-en', size: '5', orientation: 'portrait', locale: 'en', width: 720, height: 1280 },
-    { name: 'stage26-touch-landscape-ar', size: '7', orientation: 'landscape', locale: 'ar', width: 1280, height: 720 },
+    {
+      name: 'stage26-touch-portrait-en',
+      size: '5',
+      orientation: 'portrait',
+      locale: 'en',
+      width: 720,
+      height: 1280,
+    },
+    {
+      name: 'stage26-touch-landscape-ar',
+      size: '7',
+      orientation: 'landscape',
+      locale: 'ar',
+      width: 1280,
+      height: 720,
+    },
   ]) {
     touch.push(await validateTouchCoverage(browser, scenario));
   }
