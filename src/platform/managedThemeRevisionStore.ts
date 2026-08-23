@@ -27,12 +27,10 @@ type StorageLike = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>;
 
 function normalizeTargetId(value: string): string {
   const normalized = value.trim().toLowerCase();
-  if (
-    normalized.length < 2 ||
-    normalized.length > 160 ||
-    !TARGET_ID_PATTERN.test(normalized)
-  ) {
-    throw new RangeError('Managed theme revision target must be a stable lowercase-safe identifier');
+  if (normalized.length < 2 || normalized.length > 160 || !TARGET_ID_PATTERN.test(normalized)) {
+    throw new RangeError(
+      'Managed theme revision target must be a stable lowercase-safe identifier',
+    );
   }
   return normalized;
 }
@@ -107,7 +105,10 @@ function readStore(storage: StorageLike): PersistedManagedThemeRevisionStore {
   }
 }
 
-function writeStore(storage: StorageLike, snapshots: readonly ManagedThemeRevisionSnapshot[]): void {
+function writeStore(
+  storage: StorageLike,
+  snapshots: readonly ManagedThemeRevisionSnapshot[],
+): void {
   if (snapshots.length === 0) {
     storage.removeItem(STORAGE_KEY);
     return;
@@ -129,9 +130,7 @@ export function recordManagedThemeRevision(
       ),
   );
   const sameTarget = current
-    .filter(
-      (entry) => entry.scope === normalized.scope && entry.targetId === normalized.targetId,
-    )
+    .filter((entry) => entry.scope === normalized.scope && entry.targetId === normalized.targetId)
     .sort((left, right) => right.revision - left.revision)
     .slice(0, MAX_REVISIONS_PER_TARGET - 1);
   const otherTargets = current.filter(
@@ -150,8 +149,8 @@ export function listManagedThemeRevisions(
   const normalizedScope = normalizeScope(scope);
   const normalizedTargetId = normalizeTargetId(targetId);
   return Object.freeze(
-    readStore(storage).snapshots
-      .filter(
+    readStore(storage)
+      .snapshots.filter(
         (entry) => entry.scope === normalizedScope && entry.targetId === normalizedTargetId,
       )
       .sort((left, right) => right.revision - left.revision),
