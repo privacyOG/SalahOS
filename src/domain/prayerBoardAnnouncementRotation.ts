@@ -69,10 +69,6 @@ function announcementScene(scene: AnnouncementScene): AnnouncementScene {
 export function createPrayerBoardAnnouncementRotationConfig(
   input: PrayerBoardAnnouncementRotationConfig,
 ): PrayerBoardAnnouncementRotationConfig {
-  if (input.version !== PRAYER_BOARD_ANNOUNCEMENT_ROTATION_VERSION) {
-    throw new RangeError('Unsupported prayer-board announcement rotation version');
-  }
-
   const playlist = input.playlist === null ? null : createSignagePlaylist(input.playlist);
   const rules = Object.freeze(input.rules.map(createSignageScheduleRule));
   const scenes = Object.freeze(input.scenes.map(announcementScene));
