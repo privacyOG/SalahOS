@@ -1,9 +1,5 @@
 export type ProductSurface = 'congregation' | 'admin';
-
 export type CongregationDestination = 'today' | 'mosques' | 'qiblah' | 'community' | 'settings';
-
-export type AdminDestination = 'overview' | 'displays' | 'themes' | 'remote';
-
 export type SettingsCategory =
   | 'prayer'
   | 'location'
@@ -13,6 +9,15 @@ export type SettingsCategory =
   | 'data-privacy'
   | 'display-themes'
   | 'advanced';
+export type AdminDestination =
+  | 'overview'
+  | 'prayer-iqamah'
+  | 'jumuah-ramadan'
+  | 'community'
+  | 'displays'
+  | 'integrations'
+  | 'members'
+  | 'settings';
 
 const congregationDestinations = new Set<CongregationDestination>([
   'today',
@@ -21,8 +26,6 @@ const congregationDestinations = new Set<CongregationDestination>([
   'community',
   'settings',
 ]);
-
-const adminDestinations = new Set<AdminDestination>(['overview', 'displays', 'themes', 'remote']);
 
 const settingsCategories = new Set<SettingsCategory>([
   'prayer',
@@ -35,85 +38,92 @@ const settingsCategories = new Set<SettingsCategory>([
   'advanced',
 ]);
 
-function paramsFromSearch(search: string): URLSearchParams {
-  const value = search.startsWith('?') ? search.slice(1) : search;
-  return new URLSearchParams(value);
-}
+const adminDestinations = new Set<AdminDestination>([
+  'overview',
+  'prayer-iqamah',
+  'jumuah-ramadan',
+  'community',
+  'displays',
+  'integrations',
+  'members',
+  'settings',
+]);
 
-function serialize(params: URLSearchParams): string {
-  const value = params.toString();
-  return value.length === 0 ? '' : `?${value}`;
-}
+const legacyAdminDestinations: Readonly<Record<string, AdminDestination>> = Object.freeze({
+  themes: 'displays',
+  remote: 'displays',
+});
 
 export function readProductSurface(search: string): ProductSurface {
-  const surface = paramsFromSearch(search).get('surface');
-  if (surface === 'admin') return 'admin';
-  return 'congregation';
+  return new URLSearchParams(search).get('surface') === 'admin' ? 'admin' : 'congregation';
 }
 
 export function readCongregationDestination(search: string): CongregationDestination {
-  const candidate = paramsFromSearch(search).get('view');
-  if (candidate === null) return 'today';
-
-  const destination = candidate as CongregationDestination;
-  if (!congregationDestinations.has(destination)) return 'today';
-
-  return destination;
-}
-
-export function readAdminDestination(search: string): AdminDestination {
-  const candidate = paramsFromSearch(search).get('adminView');
-  if (candidate === null) return 'overview';
-
-  const destination = candidate as AdminDestination;
-  if (!adminDestinations.has(destination)) return 'overview';
-
-  return destination;
+  const requested = new URLSearchParams(search).get('view');
+  return requested !== null && congregationDestinations.has(requested as CongregationDestination)
+    ? (requested as CongregationDestination)
+    : 'today';
 }
 
 export function readSettingsCategory(search: string): SettingsCategory | null {
-  const candidate = paramsFromSearch(search).get('settingsView');
-  if (candidate === null) return null;
+  const params = new URLSearchParams(search);
+  if (readProductSurface(search) !== 'congregation' || params.get('view') !== 'settings') {
+    return null;
+  }
+  const requested = params.get('settingsView');
+  return requested !== null && settingsCategories.has(requested as SettingsCategory)
+    ? (requested as SettingsCategory)
+    : null;
+}
 
-  const category = candidate as SettingsCategory;
-  if (!settingsCategories.has(category)) return null;
+export function readAdminDestination(search: string): AdminDestination {
+  const requested = new URLSearchParams(search).get('adminView');
+  if (requested !== null && adminDestinations.has(requested as AdminDestination)) {
+    return requested as AdminDestination;
+  }
+  if (requested !== null && requested in legacyAdminDestinations) {
+    return legacyAdminDestinations[requested] ?? 'overview';
+  }
+  return 'overview';
+}
 
-  return category;
+function preserveUnrelatedParameters(search: string): URLSearchParams {
+  return new URLSearchParams(search);
 }
 
 export function searchForCongregationDestination(
-  search: string,
+  currentSearch: string,
   destination: CongregationDestination,
 ): string {
-  const params = paramsFromSearch(search);
+  const params = preserveUnrelatedParameters(currentSearch);
   params.delete('surface');
   params.delete('adminView');
   params.delete('settingsView');
   params.set('view', destination);
-  return serialize(params);
+  return `?${params.toString()}`;
 }
 
 export function searchForSettingsCategory(
-  search: string,
+  currentSearch: string,
   category: SettingsCategory | null,
 ): string {
-  const params = paramsFromSearch(search);
+  const params = preserveUnrelatedParameters(currentSearch);
   params.delete('surface');
   params.delete('adminView');
   params.set('view', 'settings');
-  if (category === null) {
-    params.delete('settingsView');
-  } else {
-    params.set('settingsView', category);
-  }
-  return serialize(params);
+  if (category === null) params.delete('settingsView');
+  else params.set('settingsView', category);
+  return `?${params.toString()}`;
 }
 
-export function searchForAdminDestination(search: string, destination: AdminDestination): string {
-  const params = paramsFromSearch(search);
+export function searchForAdminDestination(
+  currentSearch: string,
+  destination: AdminDestination,
+): string {
+  const params = preserveUnrelatedParameters(currentSearch);
   params.set('surface', 'admin');
+  params.set('adminView', destination);
   params.delete('view');
   params.delete('settingsView');
-  params.set('adminView', destination);
-  return serialize(params);
+  return `?${params.toString()}`;
 }
