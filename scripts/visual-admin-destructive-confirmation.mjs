@@ -165,9 +165,7 @@ try {
   const revokeButton = studio.getByRole('button', { name: 'Revoke display' });
   await revokeButton.waitFor({ state: 'visible' });
   if (
-    !(await revokeButton.evaluate((button) =>
-      button.classList.contains('ds-button--destructive'),
-    ))
+    !(await revokeButton.evaluate((button) => button.classList.contains('ds-button--destructive')))
   ) {
     throw new Error('display revoke action is not visually marked destructive');
   }
