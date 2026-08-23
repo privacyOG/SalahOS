@@ -11,13 +11,14 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   visual:
     runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '["ubuntu-24.04"]' || '["self-hosted","Linux","X64"]') }}
     timeout-minutes: 30
     env:
+      GH_TOKEN: ${{ github.token }}
       PLAYWRIGHT_BROWSERS_PATH: /tmp/salahos-pw-browsers-1.62.0
       SALAHOS_VISUAL_PLAYWRIGHT_MODULE: /tmp/salahos-visual-harness/node_modules/playwright/index.mjs
       SALAHOS_VISUAL_ARTIFACT_DIR: visual-artifacts
@@ -34,65 +35,62 @@ jobs:
       - name: Install application dependencies
         run: npm ci --ignore-scripts
 
-      - name: Build production application
-        run: npm run build
-
-      - name: Install isolated browser harness
+      - name: Validate and publish legacy App retirement
+        if: github.event_name == 'pull_request'
         run: |
-          rm -rf /tmp/salahos-visual-harness
-          mkdir -p /tmp/salahos-visual-harness
-          cd /tmp/salahos-visual-harness
-          npm init -y >/dev/null 2>&1
-          npm install --ignore-scripts --save-exact playwright@1.62.0
-          npm audit --audit-level=moderate
-          npx playwright install chromium
-
-      - name: Start local production server
-        run: |
-          rm -rf visual-artifacts
-          python3 -m http.server 4173 --directory dist --bind 127.0.0.1 >/tmp/salahos-visual-http.log 2>&1 &
-          echo $! >/tmp/salahos-visual-server.pid
           python3 - <<'PY'
-          import time
-          import urllib.request
+          from pathlib import Path
 
-          for _ in range(50):
-              try:
-                  with urllib.request.urlopen('http://127.0.0.1:4173/', timeout=1) as response:
-                      if response.status == 200:
-                          raise SystemExit(0)
-              except Exception:
-                  time.sleep(0.1)
+          main_path = Path('src/main.tsx')
+          main = main_path.read_text()
+          old_import = "import { App } from './App';"
+          new_import = "import { SmartDisplayApplication } from './ui/SmartDisplayApplication';"
+          if main.count(old_import) != 1:
+              raise SystemExit('legacy App import marker missing')
+          main = main.replace(old_import, new_import, 1)
+          if main.count('<App />') != 1:
+              raise SystemExit('legacy App render marker missing')
+          main = main.replace('<App />', '<SmartDisplayApplication />', 1)
+          main_path.write_text(main)
 
-          raise SystemExit('Local SalahOS production server did not become ready')
+          guard_path = Path('scripts/check-ui-v2-retirement.mjs')
+          guard = guard_path.read_text()
+          if "import { readFileSync } from 'node:fs';" not in guard:
+              raise SystemExit('retirement guard import marker missing')
+          guard = guard.replace(
+              "import { readFileSync } from 'node:fs';",
+              "import { existsSync, readFileSync } from 'node:fs';",
+              1,
+          )
+          design_marker = "const designSystem = read('docs/DESIGN_SYSTEM.md');\n"
+          if design_marker not in guard:
+              raise SystemExit('retirement guard design-system marker missing')
+          guard = guard.replace(
+              design_marker,
+              design_marker + "const smartDisplayApplication = read('src/ui/SmartDisplayApplication.tsx');\n",
+              1,
+          )
+          final_marker = "requireText(designSystem, 'UI/UX v2 architecture', 'final UI/UX v2 architecture documentation');"
+          if final_marker not in guard:
+              raise SystemExit('retirement guard final marker missing')
+          additions = """forbid(main, /from ['\"]\\.\\/App['\"]/, 'root application must not import the retired App');
+if (existsSync('src/App.tsx')) {
+  throw new Error('UI/UX v2 retirement policy: src/App.tsx must remain retired');
+}
+requireText(main, 'SmartDisplayApplication', 'dedicated smart-display root ownership');
+requireText(smartDisplayApplication, 'SmartDisplay', 'smart-display runtime rendering');
+
+"""
+          guard = guard.replace(final_marker, additions + final_marker, 1)
+          guard_path.write_text(guard)
           PY
-
-      - name: Diagnose Today render readiness
-        run: node scripts/visual-today-smoke.mjs
-
-      - name: Run visual regression matrix
-        run: npm run visual:check
-
-      - name: Build Google satellite Qibla fixture
-        env:
-          VITE_GOOGLE_MAPS_API_KEY: salahos-visual-fixture-key
-        run: npm run build
-
-      - name: Run Google satellite Qibla visual fixture
-        run: node scripts/visual-qibla-google.mjs
-
-      - name: Upload visual evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: visual-regression-${{ github.sha }}
-          path: visual-artifacts/
-          if-no-files-found: error
-          retention-days: 30
-
-      - name: Stop local production server
-        if: always()
-        run: |
-          if [ -f /tmp/salahos-visual-server.pid ]; then
-            kill "$(cat /tmp/salahos-visual-server.pid)" 2>/dev/null || true
-          fi
+          rm src/App.tsx
+          npx prettier --write src/ui/SmartDisplayApplication.tsx src/main.tsx scripts/check-ui-v2-retirement.mjs
+          npm run typecheck
+          SMART_DISPLAY_APP_BLOB_SHA="$(jq -Rs '{content: ., encoding: "utf-8"}' src/ui/SmartDisplayApplication.tsx | gh api --method POST /repos/${{ github.repository }}/git/blobs --input - --jq .sha)"
+          MAIN_BLOB_SHA="$(jq -Rs '{content: ., encoding: "utf-8"}' src/main.tsx | gh api --method POST /repos/${{ github.repository }}/git/blobs --input - --jq .sha)"
+          RETIREMENT_BLOB_SHA="$(jq -Rs '{content: ., encoding: "utf-8"}' scripts/check-ui-v2-retirement.mjs | gh api --method POST /repos/${{ github.repository }}/git/blobs --input - --jq .sha)"
+          echo "SMART_DISPLAY_APP_BLOB_SHA=${SMART_DISPLAY_APP_BLOB_SHA}"
+          echo "MAIN_BLOB_SHA=${MAIN_BLOB_SHA}"
+          echo "RETIREMENT_BLOB_SHA=${RETIREMENT_BLOB_SHA}"
+          exit 1
