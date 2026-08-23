@@ -11,7 +11,7 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   visual:
@@ -24,6 +24,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -34,19 +36,18 @@ jobs:
       - name: Install application dependencies
         run: npm ci --ignore-scripts
 
-      - name: Capture canonical Stage 26 formatter output
+      - name: Canonicalize Stage 26 formatter output
+        if: github.event_name == 'pull_request'
         run: |
           npx prettier --write scripts/visual-accessibility-rtl-acceptance.mjs
-          mkdir -p stage26-formatted-source
-          cp scripts/visual-accessibility-rtl-acceptance.mjs stage26-formatted-source/
-
-      - name: Upload canonical Stage 26 formatter output
-        uses: actions/upload-artifact@v4
-        with:
-          name: stage26-formatted-source-${{ github.sha }}
-          path: stage26-formatted-source/
-          if-no-files-found: error
-          retention-days: 1
+          if git diff --quiet -- scripts/visual-accessibility-rtl-acceptance.mjs; then
+            exit 0
+          fi
+          git config user.name privacyOG
+          git config user.email privacyOG@users.noreply.github.com
+          git add scripts/visual-accessibility-rtl-acceptance.mjs
+          git commit -m "Format Stage 26 accessibility acceptance"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
 
       - name: Build production application
         run: npm run build
