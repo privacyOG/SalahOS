@@ -190,8 +190,8 @@ try {
     await dialog.accept();
   });
   await revokeButton.click();
-  await page.waitForFunction(() =>
-    document.querySelector<HTMLButtonElement>('.remote-display-card__actions button')?.disabled,
+  await page.waitForFunction(
+    () => document.querySelector('.remote-display-card__actions button')?.disabled,
   );
   if (revokeRequests !== 1 || !revoked) {
     throw new Error(`accepted destructive confirmation sent ${String(revokeRequests)} requests`);
