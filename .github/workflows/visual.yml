@@ -11,14 +11,16 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   visual:
     runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '["ubuntu-24.04"]' || '["self-hosted","Linux","X64"]') }}
     timeout-minutes: 30
     env:
-      GH_TOKEN: ${{ github.token }}
+      PLAYWRIGHT_BROWSERS_PATH: /tmp/salahos-pw-browsers-1.62.0
+      SALAHOS_VISUAL_PLAYWRIGHT_MODULE: /tmp/salahos-visual-harness/node_modules/playwright/index.mjs
+      SALAHOS_VISUAL_ARTIFACT_DIR: visual-artifacts
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,29 +34,65 @@ jobs:
       - name: Install application dependencies
         run: npm ci --ignore-scripts
 
-      - name: Validate and publish monolith-free smart display build
-        if: github.event_name == 'pull_request'
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
+      - name: Build production application
+        run: npm run build
 
-          path = Path('src/main.tsx')
-          text = path.read_text()
-          old_import = "import { App } from './App';"
-          new_import = "import { SmartDisplayApplication } from './ui/SmartDisplayApplication';"
-          if text.count(old_import) != 1:
-              raise SystemExit('legacy App import marker missing')
-          if text.count('<App />') != 1:
-              raise SystemExit('legacy App render marker missing')
-          text = text.replace(old_import, new_import, 1)
-          text = text.replace('<App />', '<SmartDisplayApplication />', 1)
-          path.write_text(text)
+      - name: Install isolated browser harness
+        run: |
+          rm -rf /tmp/salahos-visual-harness
+          mkdir -p /tmp/salahos-visual-harness
+          cd /tmp/salahos-visual-harness
+          npm init -y >/dev/null 2>&1
+          npm install --ignore-scripts --save-exact playwright@1.62.0
+          npm audit --audit-level=moderate
+          npx playwright install chromium
+
+      - name: Start local production server
+        run: |
+          rm -rf visual-artifacts
+          python3 -m http.server 4173 --directory dist --bind 127.0.0.1 >/tmp/salahos-visual-http.log 2>&1 &
+          echo $! >/tmp/salahos-visual-server.pid
+          python3 - <<'PY'
+          import time
+          import urllib.request
+
+          for _ in range(50):
+              try:
+                  with urllib.request.urlopen('http://127.0.0.1:4173/', timeout=1) as response:
+                      if response.status == 200:
+                          raise SystemExit(0)
+              except Exception:
+                  time.sleep(0.1)
+
+          raise SystemExit('Local SalahOS production server did not become ready')
           PY
-          rm src/App.tsx
-          npx prettier --write src/ui/SmartDisplayApplication.tsx src/main.tsx
-          npm run typecheck
-          SMART_DISPLAY_APP_BLOB_SHA="$(jq -Rs '{content: ., encoding: "utf-8"}' src/ui/SmartDisplayApplication.tsx | gh api --method POST /repos/${{ github.repository }}/git/blobs --input - --jq .sha)"
-          MAIN_BLOB_SHA="$(jq -Rs '{content: ., encoding: "utf-8"}' src/main.tsx | gh api --method POST /repos/${{ github.repository }}/git/blobs --input - --jq .sha)"
-          echo "SMART_DISPLAY_APP_BLOB_SHA=${SMART_DISPLAY_APP_BLOB_SHA}"
-          echo "MAIN_BLOB_SHA=${MAIN_BLOB_SHA}"
-          exit 1
+
+      - name: Diagnose Today render readiness
+        run: node scripts/visual-today-smoke.mjs
+
+      - name: Run visual regression matrix
+        run: npm run visual:check
+
+      - name: Build Google satellite Qibla fixture
+        env:
+          VITE_GOOGLE_MAPS_API_KEY: salahos-visual-fixture-key
+        run: npm run build
+
+      - name: Run Google satellite Qibla visual fixture
+        run: node scripts/visual-qibla-google.mjs
+
+      - name: Upload visual evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-regression-${{ github.sha }}
+          path: visual-artifacts/
+          if-no-files-found: error
+          retention-days: 30
+
+      - name: Stop local production server
+        if: always()
+        run: |
+          if [ -f /tmp/salahos-visual-server.pid ]; then
+            kill "$(cat /tmp/salahos-visual-server.pid)" 2>/dev/null || true
+          fi

@@ -1,7 +1,7 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
-import { App } from './App';
+import { SmartDisplayApplication } from './ui/SmartDisplayApplication';
 import {
   flushApplicationStorage,
   initializeApplicationStorage,
@@ -220,7 +220,7 @@ function RootApplication() {
     return (
       <>
         <ManagedDisplayRemoteController />
-        <App />
+        <SmartDisplayApplication />
       </>
     );
   }

@@ -1,4 +1,4 @@
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 
 function read(path) {
   return readFileSync(path, 'utf8');
@@ -21,6 +21,7 @@ const settingsStyles = read('src/settings-screen.css');
 const congregationStyles = read('src/congregation-shell.css');
 const main = read('src/main.tsx');
 const designSystem = read('docs/DESIGN_SYSTEM.md');
+const smartDisplayApplication = read('src/ui/SmartDisplayApplication.tsx');
 
 forbid(settingsScreen, /from ['"]\.\.\/App['"]/, 'SettingsScreen must not import the legacy App');
 forbid(settingsScreen, /<App\b/, 'SettingsScreen must not mount the legacy App');
@@ -49,7 +50,13 @@ forbid(
   /settings-display-entry__phone-home/,
   'Settings display controls must not be injected from the root application',
 );
+forbid(main, /from ['"]\.\/App['"]/, 'root application must not import the retired App');
+if (existsSync('src/App.tsx')) {
+  throw new Error('UI/UX v2 retirement policy: src/App.tsx must remain retired');
+}
 
+requireText(main, 'SmartDisplayApplication', 'dedicated smart-display root ownership');
+requireText(smartDisplayApplication, 'SmartDisplay', 'smart-display runtime rendering');
 requireText(
   settingsScreen,
   'MobilePrayerThemeSettings',

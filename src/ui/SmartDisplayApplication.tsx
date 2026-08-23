@@ -22,9 +22,7 @@ import { createSystemSleepWakeDetector } from '../platform/systemSleepWake';
 import { readSystemTime, systemTimeFromMilliseconds } from '../platform/systemTime';
 import { smartDisplayExitPath } from '../platform/smartDisplayNavigation';
 import { installThemePreference } from '../platform/themePreference';
-import {
-  ANDROID_EXACT_ALARM_CAPABILITY_CHANGE_EVENT,
-} from './AndroidExactAlarmNotice';
+import { ANDROID_EXACT_ALARM_CAPABILITY_CHANGE_EVENT } from './AndroidExactAlarmNotice';
 import { SmartDisplay } from './SmartDisplay';
 
 function initialSettings(): PersistedSettings {
