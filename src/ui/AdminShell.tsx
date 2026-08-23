@@ -52,7 +52,7 @@ const copy: Readonly<Record<Locale, AdminCopy>> = {
       },
       'jumuah-ramadan': {
         label: "Jumu'ah & Ramadan",
-        description: "Manage Friday sessions, Ramadan presentation and Taraweeh context.",
+        description: 'Manage Friday sessions, Ramadan presentation and Taraweeh context.',
       },
       community: {
         label: 'Community content',
@@ -68,11 +68,13 @@ const copy: Readonly<Record<Locale, AdminCopy>> = {
       },
       members: {
         label: 'Members & permissions',
-        description: 'Keep administrative access and responsibility separate from congregation use.',
+        description:
+          'Keep administrative access and responsibility separate from congregation use.',
       },
       settings: {
         label: 'Administration settings',
-        description: 'Configure administration-specific defaults without changing personal settings.',
+        description:
+          'Configure administration-specific defaults without changing personal settings.',
       },
     },
   },
@@ -130,7 +132,8 @@ const copy: Readonly<Record<Locale, AdminCopy>> = {
       },
       'prayer-iqamah': {
         label: 'Namaz ve ikamet',
-        description: 'Cami namaz başlangıçlarını, ikamet kurallarını ve yayın durumunu gözden geçirin.',
+        description:
+          'Cami namaz başlangıçlarını, ikamet kurallarını ve yayın durumunu gözden geçirin.',
       },
       'jumuah-ramadan': {
         label: 'Cuma ve Ramazan',
@@ -142,11 +145,13 @@ const copy: Readonly<Record<Locale, AdminCopy>> = {
       },
       displays: {
         label: 'Ekranlar',
-        description: 'Filo bağlantılarını, namaz panosu yapılandırmasını ve uzaktan işlemleri yönetin.',
+        description:
+          'Filo bağlantılarını, namaz panosu yapılandırmasını ve uzaktan işlemleri yönetin.',
       },
       integrations: {
         label: 'Entegrasyonlar',
-        description: 'İsteğe bağlı takvim, akıllı ev ve yönetim hizmeti bağlantılarını gözden geçirin.',
+        description:
+          'İsteğe bağlı takvim, akıllı ev ve yönetim hizmeti bağlantılarını gözden geçirin.',
       },
       members: {
         label: 'Üyeler ve izinler',
@@ -167,7 +172,8 @@ const copy: Readonly<Record<Locale, AdminCopy>> = {
     pages: {
       overview: {
         label: 'Ringkasan',
-        description: 'Status operasional hari ini, pekerjaan mendatang, dan masalah yang perlu ditangani.',
+        description:
+          'Status operasional hari ini, pekerjaan mendatang, dan masalah yang perlu ditangani.',
       },
       'prayer-iqamah': {
         label: 'Salat & Iqamah',
