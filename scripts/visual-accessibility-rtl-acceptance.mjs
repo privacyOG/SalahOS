@@ -175,6 +175,22 @@ function parseCssColor(value) {
       a: 1,
     };
   }
+  const shortAlphaHex = /^#([0-9a-f]{4})$/i.exec(normalized);
+  if (shortAlphaHex) {
+    const [r, g, b, a] = shortAlphaHex[1]
+      .split('')
+      .map((digit) => Number.parseInt(`${digit}${digit}`, 16));
+    return { r, g, b, a: a / 255 };
+  }
+  const longAlphaHex = /^#([0-9a-f]{8})$/i.exec(normalized);
+  if (longAlphaHex) {
+    return {
+      r: Number.parseInt(longAlphaHex[1].slice(0, 2), 16),
+      g: Number.parseInt(longAlphaHex[1].slice(2, 4), 16),
+      b: Number.parseInt(longAlphaHex[1].slice(4, 6), 16),
+      a: Number.parseInt(longAlphaHex[1].slice(6, 8), 16) / 255,
+    };
+  }
   const rgb =
     /^rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)(?:\s*[,/]\s*([\d.]+%?))?\s*\)$/i.exec(
       normalized,
