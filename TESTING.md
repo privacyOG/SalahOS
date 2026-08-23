@@ -827,3 +827,7 @@ Runs `31941296351`, `31941790069`, `31941980679`, and `31942088604` validate the
 - iOS Build `32061495534`: **PASS**, including repository quality, production build/Capacitor sync, Xcode Simulator compilation, fresh iPhone/iPad install, launch, explicit terminate/relaunch and retained evidence.
 - Published GitHub release: non-draft and non-prerelease, targeting the exact tagged commit.
 - Release evidence does **not** claim physical iPhone/iPad, Android OEM, Raspberry Pi Touch Display 2, TV/panel, real notification/audio timing, network-isolated iOS cold start or store-distribution acceptance; those remain explicit follow-up items in `TODO.md` and `docs/PLATFORM_STATUS.md`.
+
+## UI/UX v2 retirement acceptance
+
+Stage 27 adds two permanent checks. `npm run ui:v2-retirement` statically rejects the retired `src/App.tsx` monolith, legacy Settings destination-hiding wrappers, root settings portal injection and root compatibility-token declarations. The Visual Regression matrix also runs `scripts/visual-ui-v2-retirement.mjs`, which opens the production build at the migrated Location, Mosque & Iqamah, Notifications & Adhan, Advanced and Display themes categories plus smart-display mode, verifies the expected route owner is present with no legacy wrapper, checks horizontal containment, and writes Stage 27 screenshots/results into the normal visual artifact.

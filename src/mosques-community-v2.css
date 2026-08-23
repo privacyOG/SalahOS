@@ -42,14 +42,14 @@
 .community-screen__header > div > p:last-child,
 .mosque-profile-v2__header > div > p:last-child {
   margin-top: 0.45rem;
-  color: var(--text-muted, var(--muted));
+  color: var(--text-muted, var(--salah-fg-secondary));
   line-height: 1.55;
 }
 
 .mosques-screen__eyebrow,
 .community-screen__eyebrow,
 .mosque-profile-v2__header > div > p:first-child {
-  color: var(--text-muted, var(--muted));
+  color: var(--text-muted, var(--salah-fg-secondary));
   font-size: 0.76rem;
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -66,9 +66,9 @@
 .mosques-browser,
 .mosque-profile-v2,
 .community-screen__content {
-  border: 1px solid var(--border-subtle, var(--card-border));
+  border: 1px solid var(--border-subtle, var(--salah-border-subtle));
   border-radius: var(--radius-xl, 1.5rem);
-  background: var(--surface-elevated, var(--card));
+  background: var(--surface-elevated, var(--salah-bg-surface));
 }
 
 .mosques-browser {
@@ -91,7 +91,7 @@
   gap: 0.4rem;
   padding: 0.25rem;
   border-radius: 999px;
-  background: var(--surface-soft, var(--next-card));
+  background: var(--surface-soft, var(--salah-bg-accent-soft));
 }
 
 .mosques-browser__tabs button,
@@ -111,8 +111,8 @@
 
 .mosques-browser__tabs button[aria-selected='true'],
 .community-screen__tabs button[aria-selected='true'] {
-  background: var(--surface-elevated, var(--card));
-  box-shadow: 0 0 0 1px var(--border-subtle, var(--card-border));
+  background: var(--surface-elevated, var(--salah-bg-surface));
+  box-shadow: 0 0 0 1px var(--border-subtle, var(--salah-border-subtle));
 }
 
 .mosques-browser__tabs span,
@@ -120,7 +120,7 @@
   min-width: 1.45rem;
   padding: 0.1rem 0.38rem;
   border-radius: 999px;
-  background: var(--surface-soft, var(--next-card));
+  background: var(--surface-soft, var(--salah-bg-accent-soft));
   font-size: 0.76rem;
   font-variant-numeric: tabular-nums;
 }
@@ -128,7 +128,7 @@
 .mosques-browser__search {
   display: grid;
   gap: 0.35rem;
-  color: var(--text-muted, var(--muted));
+  color: var(--text-muted, var(--salah-fg-secondary));
   font-size: 0.82rem;
   font-weight: 700;
 }
@@ -145,8 +145,8 @@
   gap: 0.75rem;
   padding: 1rem;
   border-radius: var(--radius-lg, 1rem);
-  background: var(--surface-soft, var(--next-card));
-  color: var(--text-muted, var(--muted));
+  background: var(--surface-soft, var(--salah-bg-accent-soft));
+  color: var(--text-muted, var(--salah-fg-secondary));
 }
 
 .mosques-nearby-gate p,
@@ -161,7 +161,7 @@
 
 .mosques-nearby-status {
   margin: 0 0 0.9rem;
-  color: var(--text-muted, var(--muted));
+  color: var(--text-muted, var(--salah-fg-secondary));
   font-size: 0.9rem;
 }
 
@@ -176,9 +176,9 @@
 .community-preview-card {
   min-width: 0;
   overflow: hidden;
-  border: 1px solid var(--border-subtle, var(--card-border));
+  border: 1px solid var(--border-subtle, var(--salah-border-subtle));
   border-radius: var(--radius-lg, 1rem);
-  background: var(--surface-base, var(--page));
+  background: var(--surface-base, var(--salah-bg-canvas));
 }
 
 .mosque-summary-card {
@@ -202,7 +202,7 @@
 
 .mosque-summary-card__identity p,
 .mosque-summary-card__identity span {
-  color: var(--text-muted, var(--muted));
+  color: var(--text-muted, var(--salah-fg-secondary));
   font-size: 0.88rem;
   line-height: 1.4;
 }
@@ -234,7 +234,7 @@
   flex: 0 0 auto;
   padding: 0.35rem 0.65rem;
   border-radius: 999px;
-  background: var(--surface-soft, var(--next-card));
+  background: var(--surface-soft, var(--salah-bg-accent-soft));
   font-size: 0.78rem;
   font-weight: 800;
 }
@@ -252,13 +252,13 @@
   gap: 0.25rem;
   padding: 1rem;
   border-radius: var(--radius-lg, 1rem);
-  background: var(--surface-soft, var(--next-card));
+  background: var(--surface-soft, var(--salah-bg-accent-soft));
 }
 
 .mosque-profile-next > span,
 .mosque-profile-source > span,
 .mosque-profile-source small {
-  color: var(--text-muted, var(--muted));
+  color: var(--text-muted, var(--salah-fg-secondary));
 }
 
 .mosque-profile-next strong {
@@ -287,7 +287,7 @@
   min-width: 0;
   padding: 0.75rem;
   border-radius: var(--radius-md, 0.8rem);
-  background: var(--surface-soft, var(--next-card));
+  background: var(--surface-soft, var(--salah-bg-accent-soft));
 }
 
 .mosque-profile-prayer-row[data-next='true'] {
@@ -301,7 +301,7 @@
 }
 
 .mosque-profile-prayer-row small {
-  color: var(--text-muted, var(--muted));
+  color: var(--text-muted, var(--salah-fg-secondary));
   font-variant-numeric: tabular-nums;
 }
 
@@ -315,13 +315,13 @@
 .mosque-profile-v2__secondary-grid > section {
   min-width: 0;
   padding: 1rem;
-  border: 1px solid var(--border-subtle, var(--card-border));
+  border: 1px solid var(--border-subtle, var(--salah-border-subtle));
   border-radius: var(--radius-lg, 1rem);
 }
 
 .mosque-profile-v2__secondary-grid > section > p {
   margin-bottom: 0;
-  color: var(--text-muted, var(--muted));
+  color: var(--text-muted, var(--salah-fg-secondary));
 }
 
 .mosque-profile-list {
@@ -338,7 +338,7 @@
 }
 
 .mosque-profile-list span {
-  color: var(--text-muted, var(--muted));
+  color: var(--text-muted, var(--salah-fg-secondary));
   font-size: 0.9rem;
 }
 
@@ -355,7 +355,7 @@
 }
 
 .mosque-profile-meta dt {
-  color: var(--text-muted, var(--muted));
+  color: var(--text-muted, var(--salah-fg-secondary));
 }
 
 .mosque-profile-meta dd {
@@ -401,7 +401,7 @@
 .community-preview-card__status span {
   padding: 0.22rem 0.5rem;
   border-radius: 999px;
-  background: var(--surface-soft, var(--next-card));
+  background: var(--surface-soft, var(--salah-bg-accent-soft));
   font-size: 0.72rem;
   font-weight: 800;
 }
@@ -411,7 +411,7 @@
 }
 
 .community-preview-card__body > p {
-  color: var(--text-muted, var(--muted));
+  color: var(--text-muted, var(--salah-fg-secondary));
   line-height: 1.5;
 }
 
@@ -428,7 +428,7 @@
 }
 
 .community-preview-card dt {
-  color: var(--text-muted, var(--muted));
+  color: var(--text-muted, var(--salah-fg-secondary));
 }
 
 .community-preview-card dd {

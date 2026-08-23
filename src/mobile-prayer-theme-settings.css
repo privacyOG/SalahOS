@@ -22,7 +22,7 @@
 }
 
 .mobile-prayer-theme-settings__header p {
-  color: var(--accent);
+  color: var(--salah-fg-accent);
   font-size: var(--salah-text-xs);
   font-weight: 800;
   letter-spacing: 0.08em;
@@ -75,8 +75,8 @@
 }
 
 .mobile-theme-choice[aria-pressed='true'] {
-  border-color: color-mix(in srgb, var(--accent) 65%, var(--salah-border-subtle));
-  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 22%, transparent);
+  border-color: color-mix(in srgb, var(--salah-fg-accent) 65%, var(--salah-border-subtle));
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--salah-fg-accent) 22%, transparent);
 }
 
 .mobile-theme-choice__thumb {

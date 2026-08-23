@@ -2,7 +2,10 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 const settingsSource = readFileSync(new URL('./SettingsScreen.tsx', import.meta.url), 'utf8');
-const migrationSource = readFileSync(new URL('./SettingsMigrationPanels.tsx', import.meta.url), 'utf8');
+const migrationSource = readFileSync(
+  new URL('./SettingsMigrationPanels.tsx', import.meta.url),
+  'utf8',
+);
 const settingsStyles = readFileSync(new URL('../settings-screen.css', import.meta.url), 'utf8');
 
 function sourceBetween(source: string, startMarker: string, endMarker: string): string {

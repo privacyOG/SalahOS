@@ -20,6 +20,8 @@
   --salah-bg-surface-raised: rgba(27, 40, 30, 0.94);
   --salah-bg-control: #17231a;
   --salah-bg-accent-soft: #213628;
+  --salah-bg-canvas-glow: rgba(114, 158, 105, 0.16);
+  --salah-bg-warning-soft: rgba(111, 72, 36, 0.28);
 
   /* Semantic content */
   --salah-fg-primary: #f5f8f3;
@@ -59,6 +61,7 @@
   --salah-shadow-sm: 0 0.45rem 1.2rem rgba(0, 0, 0, 0.14);
   --salah-shadow-md: 0 1.4rem 3.8rem rgba(0, 0, 0, 0.22);
   --salah-shadow-hero: 0 2rem 5rem rgba(0, 0, 0, 0.25);
+  --salah-shadow-color: rgba(0, 0, 0, 0.2);
 
   /* Typography */
   --salah-text-xs: clamp(0.78rem, 0.74rem + 0.12vw, 0.86rem);
@@ -74,24 +77,6 @@
   --salah-motion-fast: 120ms;
   --salah-motion-standard: 180ms;
   --salah-ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
-
-  /* Compatibility aliases during the incremental Stage 22 migration. */
-  --page: var(--salah-bg-canvas);
-  --page-glow: rgba(114, 158, 105, 0.16);
-  --text: var(--salah-fg-primary);
-  --muted: var(--salah-fg-secondary);
-  --label: var(--salah-fg-tertiary);
-  --card: var(--salah-bg-surface);
-  --control: var(--salah-bg-control);
-  --control-border: var(--salah-border-default);
-  --card-border: var(--salah-border-subtle);
-  --divider: var(--salah-border-subtle);
-  --accent: var(--salah-fg-accent);
-  --next-card: var(--salah-bg-accent-soft);
-  --warning: var(--salah-fg-warning);
-  --warning-bg: rgba(111, 72, 36, 0.28);
-  --provenance: var(--salah-fg-provenance);
-  --shadow: rgba(0, 0, 0, 0.2);
 }
 
 :root[data-theme='light'] {
@@ -115,8 +100,9 @@
   --salah-shadow-sm: 0 0.45rem 1.2rem rgba(35, 49, 38, 0.08);
   --salah-shadow-md: 0 1.4rem 3.8rem rgba(35, 49, 38, 0.1);
   --salah-shadow-hero: 0 2rem 5rem rgba(35, 49, 38, 0.12);
-  --page-glow: rgba(67, 112, 65, 0.1);
-  --warning-bg: rgba(196, 145, 93, 0.14);
+  --salah-shadow-color: rgba(35, 49, 38, 0.1);
+  --salah-bg-canvas-glow: rgba(67, 112, 65, 0.1);
+  --salah-bg-warning-soft: rgba(196, 145, 93, 0.14);
 }
 
 :root[data-theme='dark'] {
@@ -145,8 +131,8 @@
     --salah-shadow-sm: 0 0.45rem 1.2rem rgba(35, 49, 38, 0.08);
     --salah-shadow-md: 0 1.4rem 3.8rem rgba(35, 49, 38, 0.1);
     --salah-shadow-hero: 0 2rem 5rem rgba(35, 49, 38, 0.12);
-    --page-glow: rgba(67, 112, 65, 0.1);
-    --warning-bg: rgba(196, 145, 93, 0.14);
+    --salah-bg-canvas-glow: rgba(67, 112, 65, 0.1);
+    --salah-bg-warning-soft: rgba(196, 145, 93, 0.14);
   }
 }
 
@@ -160,7 +146,7 @@ body {
   min-height: 100vh;
   color: var(--salah-fg-primary);
   background:
-    radial-gradient(circle at top right, var(--page-glow), transparent 34rem),
+    radial-gradient(circle at top right, var(--salah-bg-canvas-glow), transparent 34rem),
     var(--salah-bg-canvas);
 }
 
@@ -522,7 +508,7 @@ summary:focus-visible {
   border: 1px solid color-mix(in srgb, var(--salah-fg-warning) 35%, transparent);
   border-radius: var(--salah-radius-md);
   color: var(--salah-fg-warning);
-  background: var(--warning-bg);
+  background: var(--salah-bg-warning-soft);
   box-shadow: var(--salah-shadow-sm);
 }
 
@@ -737,9 +723,8 @@ summary:focus-visible {
     --salah-border-default: ButtonText;
     --salah-border-strong: CanvasText;
     --salah-focus-ring: Highlight;
-    --page-glow: transparent;
-    --warning-bg: Canvas;
-    --shadow: transparent;
+    --salah-bg-canvas-glow: transparent;
+    --salah-bg-warning-soft: Canvas;
   }
 
   .hero,

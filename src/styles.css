@@ -11,7 +11,7 @@
 .settings-transfer label {
   display: grid;
   gap: 0.35rem;
-  color: var(--muted);
+  color: var(--salah-fg-secondary);
   font-size: 0.9rem;
   line-height: 1.4;
 }
@@ -19,7 +19,7 @@
 .manual-mosque-fieldset {
   margin-block: 1.25rem;
   padding: 1rem;
-  border: 1px solid var(--card-border);
+  border: 1px solid var(--salah-border-subtle);
   border-radius: 0.9rem;
 }
 
@@ -48,7 +48,7 @@
 .manual-mosque-prayer label {
   display: grid;
   gap: 0.35rem;
-  color: var(--muted);
+  color: var(--salah-fg-secondary);
   font-size: 0.9rem;
   line-height: 1.4;
 }
@@ -57,7 +57,7 @@
   display: grid;
   gap: 0.6rem;
   padding: 0.75rem;
-  border: 1px solid var(--card-border);
+  border: 1px solid var(--salah-border-subtle);
   border-radius: 0.75rem;
 }
 
@@ -67,7 +67,7 @@
 
 .offsets-fieldset {
   margin-block: 1.25rem;
-  border: 1px solid var(--card-border);
+  border: 1px solid var(--salah-border-subtle);
   border-radius: 0.9rem;
 }
 
@@ -102,7 +102,7 @@
 .manual-location label {
   display: grid;
   gap: 0.35rem;
-  color: var(--muted);
+  color: var(--salah-fg-secondary);
   font-size: 0.9rem;
   line-height: 1.4;
 }
@@ -120,14 +120,14 @@
 .location-search > label {
   display: grid;
   gap: 0.35rem;
-  color: var(--muted);
+  color: var(--salah-fg-secondary);
   font-size: 0.9rem;
   line-height: 1.4;
 }
 
 .location-search-help {
   margin: 0;
-  color: var(--muted);
+  color: var(--salah-fg-secondary);
   font-size: 0.85rem;
   line-height: 1.5;
 }
@@ -154,13 +154,13 @@
 }
 
 .location-search-result small {
-  color: var(--muted);
+  color: var(--salah-fg-secondary);
   font-weight: 500;
 }
 
 .inline-message {
   margin: 0.9rem 0 0;
-  color: var(--warning);
+  color: var(--salah-fg-warning);
 }
 
 .date-strip {
@@ -169,7 +169,7 @@
   gap: 1rem;
   margin-block-end: 1.5rem;
   padding-block-end: 1.25rem;
-  border-block-end: 1px solid var(--divider);
+  border-block-end: 1px solid var(--salah-border-subtle);
 }
 
 .date-strip > div {
@@ -187,7 +187,7 @@
   flex-wrap: wrap;
   gap: 0.65rem;
   margin-block-start: 1rem;
-  color: var(--provenance);
+  color: var(--salah-fg-provenance);
   font-size: 0.9rem;
 }
 
@@ -252,13 +252,13 @@
 }
 
 .iqamah-time {
-  color: var(--accent);
+  color: var(--salah-fg-accent);
 }
 
 .jumuah-panel {
   margin-block-start: 1.25rem;
   padding-block-start: 1.25rem;
-  border-block-start: 1px solid var(--divider);
+  border-block-start: 1px solid var(--salah-border-subtle);
 }
 
 .jumuah-panel h3 {
@@ -277,7 +277,7 @@
   gap: 0.35rem;
   padding: 0.9rem;
   border-radius: 0.85rem;
-  background: color-mix(in srgb, var(--accent) 7%, transparent);
+  background: color-mix(in srgb, var(--salah-fg-accent) 7%, transparent);
 }
 
 .saved-location-controls {
@@ -291,7 +291,7 @@
 .saved-location-controls label {
   display: grid;
   gap: 0.35rem;
-  color: var(--muted);
+  color: var(--salah-fg-secondary);
   font-size: 0.9rem;
   line-height: 1.4;
 }
@@ -307,9 +307,9 @@
   gap: 0.85rem;
   margin-block: 1rem;
   padding: 1rem;
-  border: 1px solid var(--card-border);
+  border: 1px solid var(--salah-border-subtle);
   border-radius: 0.9rem;
-  background: color-mix(in srgb, var(--text) 2.5%, transparent);
+  background: color-mix(in srgb, var(--salah-fg-primary) 2.5%, transparent);
 }
 
 .mosque-library-row,
@@ -327,7 +327,7 @@
 .mosque-library-controls label {
   display: grid;
   gap: 0.35rem;
-  color: var(--muted);
+  color: var(--salah-fg-secondary);
   font-size: 0.9rem;
   line-height: 1.4;
 }
@@ -347,7 +347,7 @@
 .notification-fieldset {
   margin-block: 1rem;
   padding: 1rem;
-  border: 1px solid var(--card-border);
+  border: 1px solid var(--salah-border-subtle);
   border-radius: 0.9rem;
 }
 
@@ -362,7 +362,7 @@
   gap: 0.7rem;
   padding: 0.9rem;
   border-radius: 0.8rem;
-  background: color-mix(in srgb, var(--text) 2.5%, transparent);
+  background: color-mix(in srgb, var(--salah-fg-primary) 2.5%, transparent);
 }
 
 .notification-card h3 {
@@ -389,7 +389,7 @@
 
 .settings-note {
   margin-block-end: 0;
-  color: var(--muted);
+  color: var(--salah-fg-secondary);
   font-size: 0.9rem;
   line-height: 1.55;
 }
@@ -437,16 +437,16 @@
   align-items: center;
   min-block-size: 1.75rem;
   padding-inline: 0.55rem;
-  border: 1px solid var(--warning);
+  border: 1px solid var(--salah-fg-warning);
   border-radius: 999px;
-  color: var(--warning) !important;
+  color: var(--salah-fg-warning) !important;
   font-size: 0.72rem;
   font-weight: 800;
   line-height: 1.2;
 }
 
 .setting-help {
-  color: var(--muted);
+  color: var(--salah-fg-secondary);
   font-size: 0.75rem;
   line-height: 1.45;
 }

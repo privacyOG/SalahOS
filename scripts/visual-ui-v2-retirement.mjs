@@ -126,12 +126,11 @@ function assertRetired(name, state) {
     throw new Error(`${name} still exposes retired Settings composition: ${JSON.stringify(state)}`);
   }
   if (state.rootLegacyTokens.length !== 0) {
-    throw new Error(`${name} still resolves root compatibility tokens: ${state.rootLegacyTokens.join(', ')}`);
+    throw new Error(
+      `${name} still resolves root compatibility tokens: ${state.rootLegacyTokens.join(', ')}`,
+    );
   }
-  if (
-    state.bodyWidth > state.viewportWidth + 2 ||
-    state.documentWidth > state.viewportWidth + 2
-  ) {
+  if (state.bodyWidth > state.viewportWidth + 2 || state.documentWidth > state.viewportWidth + 2) {
     throw new Error(`${name} horizontal overflow: ${JSON.stringify(state)}`);
   }
 }

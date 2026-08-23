@@ -5,9 +5,9 @@
   gap: 1rem;
   margin: 1rem 0;
   padding: 1rem;
-  border: 1px solid var(--card-border);
+  border: 1px solid var(--salah-border-subtle);
   border-radius: 1rem;
-  background: var(--next-card);
+  background: var(--salah-bg-accent-soft);
 }
 
 .remote-display-admin-panel__assignment-draft > div {
@@ -18,7 +18,7 @@
 
 .remote-display-admin-panel__assignment-draft span {
   max-width: 54rem;
-  color: var(--muted);
+  color: var(--salah-fg-secondary);
   font-size: 0.8rem;
   line-height: 1.45;
 }
@@ -26,9 +26,9 @@
 .remote-display-admin-panel__assignment-draft b {
   flex: 0 0 auto;
   padding: 0.45rem 0.7rem;
-  border: 1px solid var(--card-border);
+  border: 1px solid var(--salah-border-subtle);
   border-radius: 999px;
-  background: var(--card);
+  background: var(--salah-bg-surface);
   font-size: 0.78rem;
 }
 
@@ -38,7 +38,7 @@
   margin: 0;
   padding: 0.65rem 0.75rem;
   border-radius: 0.8rem;
-  background: var(--next-card);
+  background: var(--salah-bg-accent-soft);
   font-size: 0.76rem;
 }
 
@@ -47,7 +47,7 @@
 }
 
 .remote-display-card__compatibility span {
-  color: var(--muted);
+  color: var(--salah-fg-secondary);
   line-height: 1.4;
 }
 
@@ -65,7 +65,7 @@
 
 .remote-display-card__assignment-note {
   grid-column: 1 / -1;
-  color: var(--muted);
+  color: var(--salah-fg-secondary);
   font-size: 0.72rem;
   line-height: 1.4;
 }

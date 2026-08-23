@@ -36,17 +36,17 @@
 .admin-theme-preview-requirement,
 .admin-theme-history > p,
 .admin-theme-display-card > p {
-  color: var(--salah-text-muted, var(--muted));
+  color: var(--salah-text-muted, var(--salah-fg-secondary));
   line-height: 1.55;
 }
 
 .admin-display-theme-studio__header > span {
   max-width: 24rem;
   padding: 0.65rem 0.8rem;
-  border: 1px solid var(--salah-border-subtle, var(--card-border));
+  border: 1px solid var(--salah-border-subtle, var(--salah-border-subtle));
   border-radius: var(--salah-radius-md, 0.8rem);
-  background: var(--salah-surface-muted, var(--page));
-  color: var(--salah-text-muted, var(--muted));
+  background: var(--salah-surface-muted, var(--salah-bg-canvas));
+  color: var(--salah-text-muted, var(--salah-fg-secondary));
   font-size: 0.86rem;
   line-height: 1.4;
 }
@@ -60,9 +60,9 @@
 .admin-theme-enrollment {
   min-width: 0;
   padding: clamp(1rem, 2vw, 1.5rem);
-  border: 1px solid var(--salah-border-subtle, var(--card-border));
+  border: 1px solid var(--salah-border-subtle, var(--salah-border-subtle));
   border-radius: var(--salah-radius-xl, 1.25rem);
-  background: var(--salah-surface, var(--card));
+  background: var(--salah-surface, var(--salah-bg-surface));
 }
 
 .admin-theme-connection {
@@ -98,7 +98,7 @@
 .admin-theme-enrollment label > span,
 .admin-theme-history label > span,
 .admin-theme-mosque-picker > span {
-  color: var(--salah-text-muted, var(--muted));
+  color: var(--salah-text-muted, var(--salah-fg-secondary));
   font-size: 0.78rem;
   font-weight: 700;
 }
@@ -108,10 +108,10 @@
   width: 100%;
   min-width: 0;
   min-height: 2.75rem;
-  border: 1px solid var(--salah-border-strong, var(--card-border));
+  border: 1px solid var(--salah-border-strong, var(--salah-border-subtle));
   border-radius: var(--salah-radius-md, 0.75rem);
-  background: var(--salah-surface, var(--card));
-  color: var(--salah-text, var(--text));
+  background: var(--salah-surface, var(--salah-bg-surface));
+  color: var(--salah-text, var(--salah-fg-primary));
   padding: 0.62rem 0.72rem;
 }
 
@@ -123,9 +123,9 @@
 
 .admin-theme-feedback {
   padding: 0.8rem 1rem;
-  border: 1px solid var(--salah-success-border, var(--card-border));
+  border: 1px solid var(--salah-success-border, var(--salah-border-subtle));
   border-radius: var(--salah-radius-md, 0.8rem);
-  background: var(--salah-success-surface, var(--next-card));
+  background: var(--salah-success-surface, var(--salah-bg-accent-soft));
   line-height: 1.45;
 }
 
@@ -168,7 +168,7 @@
 .admin-theme-modules {
   margin: 0;
   padding: 0.9rem;
-  border: 1px solid var(--salah-border-subtle, var(--card-border));
+  border: 1px solid var(--salah-border-subtle, var(--salah-border-subtle));
   border-radius: var(--salah-radius-lg, 1rem);
 }
 
@@ -202,7 +202,7 @@
 .admin-theme-live-preview {
   min-width: 0;
   overflow: hidden;
-  border: 1px solid var(--salah-border-strong, var(--card-border));
+  border: 1px solid var(--salah-border-strong, var(--salah-border-subtle));
   border-radius: var(--salah-radius-lg, 1rem);
   background: #07111f;
 }
@@ -243,7 +243,7 @@
   flex: 0 0 auto;
   padding: 0.4rem 0.65rem;
   border-radius: 999px;
-  background: var(--salah-warning-surface, var(--warning-bg));
+  background: var(--salah-warning-surface, var(--salah-bg-warning-soft));
   color: var(--salah-warning-text, var(--warning-text));
   font-weight: 800;
   font-size: 0.78rem;
@@ -256,7 +256,7 @@
 }
 
 .admin-theme-mosque-picker small {
-  color: var(--salah-text-muted, var(--muted));
+  color: var(--salah-text-muted, var(--salah-fg-secondary));
 }
 
 .admin-theme-display-grid {
@@ -270,9 +270,9 @@
   gap: 0.8rem;
   min-width: 0;
   padding: 1rem;
-  border: 1px solid var(--salah-border-subtle, var(--card-border));
+  border: 1px solid var(--salah-border-subtle, var(--salah-border-subtle));
   border-radius: var(--salah-radius-lg, 1rem);
-  background: var(--salah-surface-muted, var(--page));
+  background: var(--salah-surface-muted, var(--salah-bg-canvas));
 }
 
 .admin-theme-display-card[data-compatible='false'] {
@@ -302,13 +302,13 @@
   flex: 0 0 auto;
   padding: 0.3rem 0.55rem;
   border-radius: 999px;
-  background: var(--salah-surface, var(--card));
+  background: var(--salah-surface, var(--salah-bg-surface));
   font-size: 0.75rem;
   font-weight: 800;
 }
 
 .admin-theme-display-card[data-compatible='true'] header > span {
-  background: var(--salah-success-surface, var(--next-card));
+  background: var(--salah-success-surface, var(--salah-bg-accent-soft));
 }
 
 .admin-theme-display-card dl {
@@ -325,7 +325,7 @@
 }
 
 .admin-theme-display-card dt {
-  color: var(--salah-text-muted, var(--muted));
+  color: var(--salah-text-muted, var(--salah-fg-secondary));
   font-size: 0.72rem;
   font-weight: 700;
 }
@@ -349,11 +349,11 @@
   align-items: center;
   flex-wrap: wrap;
   padding: 0.8rem;
-  border: 1px solid var(--salah-border-strong, var(--card-border));
+  border: 1px solid var(--salah-border-strong, var(--salah-border-subtle));
   border-radius: var(--salah-radius-lg, 1rem);
-  background: color-mix(in srgb, var(--salah-surface, var(--card)) 94%, transparent);
+  background: color-mix(in srgb, var(--salah-surface, var(--salah-bg-surface)) 94%, transparent);
   backdrop-filter: blur(12px);
-  box-shadow: 0 0.8rem 2rem var(--shadow);
+  box-shadow: 0 0.8rem 2rem var(--salah-shadow-color);
 }
 
 .admin-theme-publication-bar > button,
@@ -384,9 +384,9 @@
   justify-content: space-between;
   gap: 1rem;
   padding: 0.75rem 0.85rem;
-  border: 1px solid var(--salah-border-subtle, var(--card-border));
+  border: 1px solid var(--salah-border-subtle, var(--salah-border-subtle));
   border-radius: var(--salah-radius-md, 0.8rem);
-  background: var(--salah-surface-muted, var(--page));
+  background: var(--salah-surface-muted, var(--salah-bg-canvas));
 }
 
 .admin-theme-history__list article > div {
@@ -396,7 +396,7 @@
 }
 
 .admin-theme-history__list article span {
-  color: var(--salah-text-muted, var(--muted));
+  color: var(--salah-text-muted, var(--salah-fg-secondary));
   font-size: 0.8rem;
 }
 
@@ -417,7 +417,7 @@
   padding: 0.8rem;
   border: 1px solid var(--salah-warning-text, var(--warning-text));
   border-radius: var(--salah-radius-md, 0.8rem);
-  background: var(--salah-warning-surface, var(--warning-bg));
+  background: var(--salah-warning-surface, var(--salah-bg-warning-soft));
 }
 
 .admin-theme-credential code {

@@ -90,12 +90,12 @@
   gap: clamp(1rem, 3vw, 2rem);
   align-items: end;
   padding: clamp(1.25rem, 3.5vw, 2.25rem);
-  border: 1px solid color-mix(in srgb, var(--accent) 20%, var(--salah-border-subtle));
+  border: 1px solid color-mix(in srgb, var(--salah-fg-accent) 20%, var(--salah-border-subtle));
   border-radius: clamp(var(--salah-radius-lg), 2vw, 1.5rem);
   background:
     radial-gradient(
       circle at top right,
-      color-mix(in srgb, var(--accent) 14%, transparent),
+      color-mix(in srgb, var(--salah-fg-accent) 14%, transparent),
       transparent 46%
     ),
     var(--salah-bg-surface-raised);
@@ -105,7 +105,7 @@
   background:
     radial-gradient(
       circle at top left,
-      color-mix(in srgb, var(--accent) 14%, transparent),
+      color-mix(in srgb, var(--salah-fg-accent) 14%, transparent),
       transparent 46%
     ),
     var(--salah-bg-surface-raised);
@@ -269,15 +269,15 @@
 }
 
 .today-prayer-row.is-current {
-  box-shadow: inset 0.22rem 0 0 var(--accent);
+  box-shadow: inset 0.22rem 0 0 var(--salah-fg-accent);
 }
 
 [dir='rtl'] .today-prayer-row.is-current {
-  box-shadow: inset -0.22rem 0 0 var(--accent);
+  box-shadow: inset -0.22rem 0 0 var(--salah-fg-accent);
 }
 
 .today-prayer-row.is-next {
-  background: color-mix(in srgb, var(--accent) 7%, var(--salah-bg-surface));
+  background: color-mix(in srgb, var(--salah-fg-accent) 7%, var(--salah-bg-surface));
 }
 
 .today-prayer-row.is-supplementary {
@@ -299,7 +299,7 @@
 .today-prayer-row__name > span {
   display: inline-flex;
   padding: 0.25rem 0.55rem;
-  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  border: 1px solid color-mix(in srgb, var(--salah-fg-accent) 25%, transparent);
   border-radius: 999px;
   color: var(--salah-fg-primary);
   background: var(--salah-bg-accent-soft);

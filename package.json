@@ -11,7 +11,7 @@
     "managed-admin:serve": "node managed-service/server.mjs",
     "local-api:serve": "node local-api/server.mjs",
     "verify:web-build": "node scripts/verify-web-build.mjs",
-    "visual:check": "node scripts/visual-regression.mjs && node scripts/visual-today-context.mjs && node scripts/visual-heritage-classic.mjs && node scripts/visual-minimal-modern.mjs && node scripts/visual-bold-countdown-focus.mjs && node scripts/visual-structured-split-board.mjs && node scripts/visual-scenic-spiritual.mjs && node scripts/visual-family-classroom.mjs && node scripts/visual-family-classroom-scale.mjs && node scripts/visual-prayer-board-config.mjs && node scripts/visual-managed-display-assignment.mjs && node scripts/visual-mobile-prayer-themes.mjs && node scripts/visual-mobile-prayer-themes-extended.mjs && node scripts/visual-prayer-board-weather.mjs && node scripts/visual-mobile-prayer-board-weather.mjs && node scripts/visual-prayer-board-announcements.mjs && node scripts/visual-admin-shell-overview.mjs && node scripts/visual-admin-destructive-confirmation.mjs && node scripts/visual-admin-display-theme-management.mjs && node scripts/visual-device-ux-refinement.mjs && node scripts/visual-display-device-refinement.mjs && node scripts/visual-accessibility-rtl-acceptance.mjs",
+    "visual:check": "node scripts/visual-regression.mjs && node scripts/visual-today-context.mjs && node scripts/visual-heritage-classic.mjs && node scripts/visual-minimal-modern.mjs && node scripts/visual-bold-countdown-focus.mjs && node scripts/visual-structured-split-board.mjs && node scripts/visual-scenic-spiritual.mjs && node scripts/visual-family-classroom.mjs && node scripts/visual-family-classroom-scale.mjs && node scripts/visual-prayer-board-config.mjs && node scripts/visual-managed-display-assignment.mjs && node scripts/visual-mobile-prayer-themes.mjs && node scripts/visual-mobile-prayer-themes-extended.mjs && node scripts/visual-prayer-board-weather.mjs && node scripts/visual-mobile-prayer-board-weather.mjs && node scripts/visual-prayer-board-announcements.mjs && node scripts/visual-admin-shell-overview.mjs && node scripts/visual-admin-destructive-confirmation.mjs && node scripts/visual-admin-display-theme-management.mjs && node scripts/visual-device-ux-refinement.mjs && node scripts/visual-display-device-refinement.mjs && node scripts/visual-accessibility-rtl-acceptance.mjs && node scripts/visual-ui-v2-retirement.mjs",
     "ui:design-system-ownership": "node scripts/check-design-system-ownership.mjs",
     "typecheck": "tsc -b --pretty false",
     "test": "vitest run",
@@ -25,12 +25,13 @@
     "security:remote-network": "node scripts/check-remote-network-policy.mjs",
     "security:audit": "npm audit --audit-level=moderate",
     "security:licenses": "node scripts/check-dependency-licenses.mjs",
-    "check": "npm run security:sensitive-files && npm run security:native-permissions && npm run security:remote-network && npm run security:audit && npm run security:licenses && npm run docs:links && npm run ui:design-system-ownership && npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build && npm run verify:web-build",
+    "check": "npm run security:sensitive-files && npm run security:native-permissions && npm run security:remote-network && npm run security:audit && npm run security:licenses && npm run docs:links && npm run ui:design-system-ownership && npm run ui:v2-retirement && npm run format:check && npm run lint && npm run typecheck && npm run test && npm run build && npm run verify:web-build",
     "android:sync": "npm run build && cap sync android",
     "android:build": "npm run android:sync && cd android && ./gradlew assembleDebug && cd .. && npm run verify:android-reboot",
     "android:release-check": "node scripts/build-android-release.mjs",
     "android:release-unsigned-check": "npm run android:sync && cd android && ./gradlew assembleRelease",
-    "verify:android-reboot": "node scripts/verify-android-notification-reboot.mjs"
+    "verify:android-reboot": "node scripts/verify-android-notification-reboot.mjs",
+    "ui:v2-retirement": "node scripts/check-ui-v2-retirement.mjs"
   },
   "dependencies": {
     "@capacitor/android": "8.4.2",

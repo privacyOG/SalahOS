@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This document defines the Stage 22 visual and interaction foundation for SalahOS. It applies to the congregation application, managed-masjid administration, Raspberry Pi Touch Display 2 surfaces, and TV/kiosk presentation where the shared web UI is used.
+This document defines the completed UI/UX v2 visual and interaction foundation for SalahOS. It applies to the congregation application, managed-masjid administration, Raspberry Pi Touch Display 2 surfaces, and TV/kiosk presentation where the shared web UI is used.
 
 The design system exists to keep the product modern, restrained, readable and consistent without coupling visual decisions to prayer-domain logic.
 
@@ -35,6 +35,8 @@ The Quality Gate runs `scripts/check-design-system-ownership.mjs` so token leaka
 - `--salah-bg-surface-raised`: dialog, menu or intentionally elevated surface.
 - `--salah-bg-control`: form/control surface.
 - `--salah-bg-accent-soft`: selected/current/next emphasis surface.
+- `--salah-bg-canvas-glow`: restrained canvas-level decorative glow.
+- `--salah-bg-warning-soft`: warning-state background that remains subordinate to readable content.
 
 ### Foreground content
 
@@ -50,10 +52,10 @@ The Quality Gate runs `scripts/check-design-system-ownership.mjs` so token leaka
 - Borders: `--salah-border-subtle`, `--salah-border-default`, `--salah-border-strong`.
 - Focus: `--salah-focus-ring`.
 - Radius scale: `--salah-radius-xs` through `--salah-radius-xl`, plus `--salah-radius-pill`.
-- Elevation: `--salah-shadow-sm`, `--salah-shadow-md`, `--salah-shadow-hero`.
+- Elevation: `--salah-shadow-sm`, `--salah-shadow-md`, `--salah-shadow-hero`, plus `--salah-shadow-color` for composed shadows that cannot use a preset elevation.
 - Motion: `--salah-motion-fast`, `--salah-motion-standard`, `--salah-ease-standard`.
 
-The existing `--page`, `--text`, `--card`, `--control` and related variables remain compatibility aliases for legacy workflows during later extraction stages. New UI must use `--salah-*` tokens directly.
+Stage 27 retired the root `--page`, `--text`, `--card`, `--control` and related compatibility aliases. Application and administration UI must use `--salah-*` semantic tokens directly. Prayer-board and Touch Display palettes may keep locally scoped template variables when they are declared on the display surface itself and cannot leak into congregation or administration pages.
 
 ## Spacing and page geometry
 
@@ -210,6 +212,12 @@ Automated clipping/overflow and screenshot gates remain required, but major UI m
 - 1080p/4K long-distance readability for display templates;
 - no decorative animation that conflicts with reduced-motion or long-running kiosk use.
 
-## Stage 22 migration rule
+## UI/UX v2 architecture
 
-Stage 22 is an incremental UI refactor. A visual change must not alter prayer calculations, timetable semantics, location persistence, notification scheduling or offline guarantees merely to simplify component code. Domain behaviour remains covered by the existing test suite and quality gates.
+Stage 27 is the final ownership boundary for the v2 application. Congregation navigation is owned by `CongregationShell`; each destination mounts its own screen directly. `SettingsScreen` owns explicit category panels for Location, Mosque & Iqamah, Notifications & Adhan, Advanced prayer tools, appearance/data controls and personal display themes. It must never mount the retired single-page application and hide unrelated sections with CSS.
+
+TV/kiosk mode is isolated in `SmartDisplayApplication`, which owns clock recovery, prayer calculation/source application, notification resynchronisation, theme/locale application and keyboard exit before rendering `SmartDisplay`. The retired `src/App.tsx` monolith must not return. Administration remains isolated under `AdminShell`; fleet credentials and managed-display controls do not mount inside congregation settings.
+
+`scripts/check-ui-v2-retirement.mjs` is a permanent Quality Gate policy. It rejects the retired monolith, legacy destination-hiding wrappers, root portal/MutationObserver settings injection and root compatibility-token declarations. `scripts/visual-ui-v2-retirement.mjs` is the matching runtime acceptance check and captures final Stage 27 evidence for migrated settings and smart-display ownership.
+
+Prayer calculations, timetable semantics, location persistence, notification scheduling and offline guarantees remain domain-owned and must not change merely to simplify UI composition.
