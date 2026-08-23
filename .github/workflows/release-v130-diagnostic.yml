@@ -28,7 +28,7 @@ jobs:
         run: |
           set -euo pipefail
           HEAD_SHA="$(git rev-parse HEAD)"
-          [[ "$HEAD_SHA" == '8a50e7f09a474a39c6454e243efb6832def441db' ]]
+          [[ "$HEAD_SHA" == '056bb689005276b7b92cc5dd8a4953a4fca9f1b6' ]]
           [[ "$(node -p "require('./package.json').version")" == '1.3.0' ]]
 
       - name: Setup Node.js
