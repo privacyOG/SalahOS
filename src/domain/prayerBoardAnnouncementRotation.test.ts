@@ -314,4 +314,20 @@ describe('prayer-board announcement rotation', () => {
     expect(context.context).toBe('normal');
     expect(context.prayerTimes.dhuhr).toBe('12:00');
   });
+
+  it('projects Jumuah prayer-relative scheduling from salah time, not khutbah time', () => {
+    const base = dashboard();
+    const context = buildPrayerBoardAnnouncementScheduleContext({
+      ...base,
+      jumuahSessions: [
+        {
+          label: 'First Jumuah',
+          khutbahLocalMinutes: 765,
+          salahLocalMinutes: 795,
+        },
+      ],
+    });
+
+    expect(context.prayerTimes.jumuah).toBe('13:15');
+  });
 });
