@@ -25,7 +25,7 @@ describe('applicationRoute', () => {
 
   it('creates congregation links while preserving unrelated query state', () => {
     const search = searchForCongregationDestination(
-      '?surface=admin&adminView=remote&settingsView=prayer&debug=1',
+      '?surface=admin&adminView=displays&settingsView=prayer&debug=1',
       'qiblah',
     );
     const params = new URLSearchParams(search);
@@ -55,7 +55,7 @@ describe('applicationRoute', () => {
     }
 
     const fromAdmin = searchForSettingsCategory(
-      '?surface=admin&adminView=remote&debug=1',
+      '?surface=admin&adminView=displays&debug=1',
       'appearance',
     );
     const adminParams = new URLSearchParams(fromAdmin);
@@ -76,18 +76,34 @@ describe('applicationRoute', () => {
     expect(readSettingsCategory('?view=settings&settingsView=unknown')).toBeNull();
   });
 
-  it('creates and reads managed-administration deep links', () => {
-    const search = searchForAdminDestination(
-      '?view=settings&settingsView=appearance&debug=1',
-      'themes',
-    );
-    const params = new URLSearchParams(search);
+  it('creates and reads every Stage 24 administration destination', () => {
+    for (const destination of [
+      'overview',
+      'prayer-iqamah',
+      'jumuah-ramadan',
+      'community',
+      'displays',
+      'integrations',
+      'members',
+      'settings',
+    ] as const) {
+      const search = searchForAdminDestination(
+        '?view=settings&settingsView=appearance&debug=1',
+        destination,
+      );
+      const params = new URLSearchParams(search);
 
-    expect(readProductSurface(search)).toBe('admin');
-    expect(readAdminDestination(search)).toBe('themes');
-    expect(params.get('debug')).toBe('1');
-    expect(params.has('view')).toBe(false);
-    expect(params.has('settingsView')).toBe(false);
+      expect(readProductSurface(search)).toBe('admin');
+      expect(readAdminDestination(search)).toBe(destination);
+      expect(params.get('debug')).toBe('1');
+      expect(params.has('view')).toBe(false);
+      expect(params.has('settingsView')).toBe(false);
+    }
+  });
+
+  it('migrates legacy theme and remote administration deep links to Displays', () => {
+    expect(readAdminDestination('?surface=admin&adminView=themes')).toBe('displays');
+    expect(readAdminDestination('?surface=admin&adminView=remote')).toBe('displays');
   });
 
   it('defaults unknown administration destinations to Overview', () => {
