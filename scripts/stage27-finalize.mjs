@@ -88,7 +88,12 @@ designSystem = designSystem.replace(
   "  --salah-shadow-hero: 0 2rem 5rem rgba(35, 49, 38, 0.12);\n  --salah-bg-canvas-glow:",
   "  --salah-shadow-hero: 0 2rem 5rem rgba(35, 49, 38, 0.12);\n  --salah-shadow-color: rgba(35, 49, 38, 0.1);\n  --salah-bg-canvas-glow:",
 );
-designSystem = designSystem.replaceAll('var(--page-glow)', 'var(--salah-bg-canvas-glow)');
+for (const [alias, semantic] of aliases) {
+  const declaration = new RegExp(`^\\s*${escapeRegExp(alias)}\\s*:[^\\n]*\\n?`, 'gm');
+  const reference = new RegExp(`var\\(\\s*${escapeRegExp(alias)}(?=\\s*[,\\)])`, 'g');
+  designSystem = designSystem.replace(declaration, '');
+  designSystem = designSystem.replace(reference, `var(${semantic}`);
+}
 write('src/design-system.css', designSystem);
 
 let designDoc = read('docs/DESIGN_SYSTEM.md');
