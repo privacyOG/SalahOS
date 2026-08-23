@@ -221,8 +221,48 @@ jobs:
           test -s "$AAB"
           APKSIGNER="$(find "${ANDROID_HOME:-$ANDROID_SDK_ROOT}/build-tools" -type f -name apksigner -perm -u+x | sort -V | tail -1)"
           test -x "$APKSIGNER"
-          "$APKSIGNER" verify --verbose --print-certs "$APK"
-          jarsigner -verify -strict -certs "$AAB"
+
+          normalize_fingerprint() {
+            tr '[:lower:]' '[:upper:]' | tr -d ':[:space:]'
+          }
+
+          EXPECTED_SIGNER_SHA256="$(
+            LC_ALL=C keytool -list -v \
+              -keystore "$SALAHOS_ANDROID_KEYSTORE_PATH" \
+              -storepass "$SALAHOS_ANDROID_KEYSTORE_PASSWORD" \
+              -alias "$SALAHOS_ANDROID_KEY_ALIAS" \
+              | awk '/SHA256:/{print $2; exit}' \
+              | normalize_fingerprint
+          )"
+          [[ -n "$EXPECTED_SIGNER_SHA256" ]] || {
+            echo 'Unable to resolve Android release signing certificate SHA-256 fingerprint' >&2
+            exit 1
+          }
+
+          APK_VERIFY_OUTPUT="$("$APKSIGNER" verify --verbose --print-certs "$APK")"
+          printf '%s\n' "$APK_VERIFY_OUTPUT"
+          APK_SIGNER_SHA256="$(
+            sed -n 's/^Signer #1 certificate SHA-256 digest: //p' <<< "$APK_VERIFY_OUTPUT" \
+              | head -1 \
+              | normalize_fingerprint
+          )"
+
+          jarsigner -verify -certs "$AAB"
+          AAB_SIGNER_SHA256="$(
+            LC_ALL=C keytool -printcert -jarfile "$AAB" \
+              | awk '/SHA256:/{print $2; exit}' \
+              | normalize_fingerprint
+          )"
+
+          [[ "$APK_SIGNER_SHA256" == "$EXPECTED_SIGNER_SHA256" ]] || {
+            echo 'Signed APK certificate does not match the configured Android release key' >&2
+            exit 1
+          }
+          [[ "$AAB_SIGNER_SHA256" == "$EXPECTED_SIGNER_SHA256" ]] || {
+            echo 'Signed AAB certificate does not match the configured Android release key' >&2
+            exit 1
+          }
+
           mkdir -p release
           cp "$APK" "release/SalahOS-v${VERSION}-android.apk"
           cp "$AAB" "release/SalahOS-v${VERSION}-android.aab"
