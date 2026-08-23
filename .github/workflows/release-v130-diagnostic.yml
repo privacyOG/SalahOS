@@ -17,21 +17,18 @@ jobs:
       SALAHOS_ANDROID_KEY_PASSWORD: ${{ secrets.SALAHOS_ANDROID_KEY_PASSWORD }}
       SALAHOS_ANDROID_REQUIRE_SIGNING: 'true'
     steps:
-      - name: Checkout exact current main
+      - name: Checkout exact signer-parser candidate
         uses: actions/checkout@v4
         with:
-          ref: main
+          ref: release/fix-v1.3.0-signer-parsing
           fetch-depth: 0
 
-      - name: Require exact release revision
+      - name: Require exact release candidate revision
         shell: bash
         run: |
           set -euo pipefail
-          git fetch origin main --no-tags
           HEAD_SHA="$(git rev-parse HEAD)"
-          MAIN_SHA="$(git rev-parse origin/main)"
-          [[ "$HEAD_SHA" == "$MAIN_SHA" ]]
-          [[ "$HEAD_SHA" == '09493c35ab39e0bc9d6b12e15486313db0fa2476' ]]
+          [[ "$HEAD_SHA" == '443a4d23389f7236eec76fd31ff9f59bedac870c' ]]
           [[ "$(node -p "require('./package.json').version")" == '1.3.0' ]]
 
       - name: Setup Node.js
@@ -104,15 +101,22 @@ jobs:
               | awk '/SHA256:/{print $2; exit}' \
               | normalize_fingerprint
           )"
-          [[ -n "$EXPECTED_SIGNER_SHA256" ]]
+          [[ -n "$EXPECTED_SIGNER_SHA256" ]] || {
+            echo 'Unable to resolve Android release signing certificate SHA-256 fingerprint' >&2
+            exit 1
+          }
 
-          APK_VERIFY_OUTPUT="$("$APKSIGNER" verify --verbose --print-certs "$APK")"
+          APK_VERIFY_OUTPUT="$("$APKSIGNER" verify --verbose --print-certs "$APK" 2>&1)"
           printf '%s\n' "$APK_VERIFY_OUTPUT"
           APK_SIGNER_SHA256="$(
-            sed -n 's/^Signer #1 certificate SHA-256 digest: //p' <<< "$APK_VERIFY_OUTPUT" \
-              | head -1 \
+            printf '%s\n' "$APK_VERIFY_OUTPUT" \
+              | awk '/certificate SHA-256 digest:/ { sub(/^.*certificate SHA-256 digest:[[:space:]]*/, ""); print; exit }' \
               | normalize_fingerprint
           )"
+          [[ -n "$APK_SIGNER_SHA256" ]] || {
+            echo 'Unable to resolve signed APK certificate SHA-256 fingerprint' >&2
+            exit 1
+          }
 
           jarsigner -verify -certs "$AAB"
           AAB_SIGNER_SHA256="$(
@@ -120,6 +124,10 @@ jobs:
               | awk '/SHA256:/{print $2; exit}' \
               | normalize_fingerprint
           )"
+          [[ -n "$AAB_SIGNER_SHA256" ]] || {
+            echo 'Unable to resolve signed AAB certificate SHA-256 fingerprint' >&2
+            exit 1
+          }
 
           [[ "$APK_SIGNER_SHA256" == "$EXPECTED_SIGNER_SHA256" ]]
           [[ "$AAB_SIGNER_SHA256" == "$EXPECTED_SIGNER_SHA256" ]]
