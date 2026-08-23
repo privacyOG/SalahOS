@@ -13,11 +13,10 @@
 }
 
 /* Stage 26: Latin casing/tracking conventions must not be imposed on Arabic labels. */
-[dir='rtl'] .today-next__identity p,
-[dir='rtl'] .today-next__countdown span,
-[dir='rtl'] .today-section-heading p,
-[dir='rtl'] .today-dates span,
-[dir='rtl'] .today-next__times dt {
+[dir='rtl'] .today-screen p,
+[dir='rtl'] .today-screen span,
+[dir='rtl'] .today-screen dt,
+[dir='rtl'] .today-screen small {
   letter-spacing: 0;
   text-transform: none;
 }
