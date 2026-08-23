@@ -58,11 +58,14 @@ forbid(
   /Compatibility aliases during the incremental Stage 22 migration/,
   'the Stage 22 root compatibility token block must stay retired',
 );
-forbid(
-  designSystemStyles,
-  /^\s*--(?:page|page-glow|text|muted|label|card|control|control-border|card-border|divider|accent|next-card|warning|warning-bg|provenance|shadow)\s*:/m,
-  'legacy root design-system token declarations must stay retired',
-);
+const legacyRootTokenPattern =
+  /^\s*--(?:page|page-glow|text|muted|label|card|control|control-border|card-border|divider|accent|next-card|warning|warning-bg|provenance|shadow)\s*:/m;
+const legacyRootTokenMatch = designSystemStyles.match(legacyRootTokenPattern);
+if (legacyRootTokenMatch !== null) {
+  throw new Error(
+    `UI/UX v2 retirement policy: legacy root design-system token declarations must stay retired: ${legacyRootTokenMatch[0].trim()}`,
+  );
+}
 
 if (existsSync('src/App.tsx')) {
   throw new Error('UI/UX v2 retirement policy: src/App.tsx must remain retired');
