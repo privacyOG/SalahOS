@@ -157,16 +157,16 @@ async function validatePhone(browser, scenario) {
     await page.locator('.today-prayer-table').waitFor({ state: 'visible' });
     if ((scenario.fontScale ?? 1) !== 1) {
       const expectedScale = scenario.fontScale ?? 1;
+      const expectedRootFontSize = 16 * expectedScale;
       await page.evaluate(
         (fontSize) => {
           document.documentElement.style.setProperty('font-size', fontSize, 'important');
         },
-        `${String(expectedScale * 100)}%`,
+        `${String(expectedRootFontSize)}px`,
       );
       const rootFontSize = await page.evaluate(() =>
         Number.parseFloat(getComputedStyle(document.documentElement).fontSize),
       );
-      const expectedRootFontSize = 16 * expectedScale;
       if (Math.abs(rootFontSize - expectedRootFontSize) > 0.5) {
         throw new Error(
           `${scenario.name} enlarged-text fixture inactive: expected ${String(expectedRootFontSize)}px root, got ${String(rootFontSize)}px`,
