@@ -12,9 +12,9 @@ const files = [
 ];
 
 await mkdir(artifactDirectory, { recursive: true });
-const config = (await prettier.resolveConfig(process.cwd())) ?? {};
 for (const file of files) {
   const source = await readFile(file, 'utf8');
+  const config = (await prettier.resolveConfig(file)) ?? {};
   const formatted = await prettier.format(source, { ...config, filepath: file });
   await writeFile(path.join(artifactDirectory, `prettier-${path.basename(file)}`), formatted);
 }
