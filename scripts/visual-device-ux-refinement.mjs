@@ -152,27 +152,14 @@ async function validatePhone(browser, scenario) {
   const errors = [];
   page.on('pageerror', (error) => errors.push(error.message));
   try {
+    const fontScale = scenario.fontScale ?? 1;
+    if (fontScale !== 1) {
+      const cdp = await context.newCDPSession(page);
+      await cdp.send('Emulation.setEmulatedOSTextScale', { scale: fontScale });
+    }
     await seed(page, scenario.locale, scenario.theme);
     await page.goto(baseUrl, { waitUntil: 'networkidle' });
     await page.locator('.today-prayer-table').waitFor({ state: 'visible' });
-    if ((scenario.fontScale ?? 1) !== 1) {
-      const expectedScale = scenario.fontScale ?? 1;
-      const expectedRootFontSize = 16 * expectedScale;
-      await page.evaluate(
-        (fontSize) => {
-          document.documentElement.style.setProperty('font-size', fontSize, 'important');
-        },
-        `${String(expectedRootFontSize)}px`,
-      );
-      const rootFontSize = await page.evaluate(() =>
-        Number.parseFloat(getComputedStyle(document.documentElement).fontSize),
-      );
-      if (Math.abs(rootFontSize - expectedRootFontSize) > 0.5) {
-        throw new Error(
-          `${scenario.name} enlarged-text fixture inactive: expected ${String(expectedRootFontSize)}px root, got ${String(rootFontSize)}px`,
-        );
-      }
-    }
     assertNoHorizontalOverflow(scenario.name, await horizontalOverflow(page));
     const metrics = await phoneMetrics(page);
     assertPhoneMetrics(scenario.name, metrics);
@@ -182,7 +169,7 @@ async function validatePhone(browser, scenario) {
       fullPage: true,
       animations: 'disabled',
     });
-    return { name: scenario.name, ...metrics };
+    return { name: scenario.name, fontScale, ...metrics };
   } finally {
     await context.close();
   }
