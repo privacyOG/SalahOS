@@ -836,8 +836,10 @@
 ## 24. Managed-masjid admin UX redesign
 
 - [~] Continue the dedicated managed-masjid administration surface introduced in Stage 22
-- [ ] Complete the administration information architecture and overview dashboard
+- [x] Complete the administration information architecture and overview dashboard
 - [ ] Complete display-theme management, assignment, publication and rollback UX
+
+**Stage 24.1–24.2 verification note (2026-08-23):** PR #188 code-bearing head `a9b23bfeddf490b3e5145dd84295c6c5bc5f255a` passed Quality Gate `32620048449`, Android Build `32620048448`, Visual Regression `32620048450` and iOS Build `32620048456`. The dedicated administration shell now provides eight reloadable destinations, route-specific titles/context/breadcrumbs, compact narrow navigation, congregation-surface isolation and confirmation-gated destructive fleet revocation. The overview presents local prayer/Iqamah, draft-versus-published fixture state, Jumu'ah/Ramadan context, display health, upcoming community content, signage state, quiet failure reporting and short-path common tasks without changing prayer calculations. Exact Visual artifact `9488130221` (`sha256:af9eb38276f3125c69c53c487519c5787775e258e4d45dc03cefb2e7991b212b`) passed permanent desktop, Arabic/RTL tablet, narrow-phone and destructive-confirmation checks and received human review after correcting the narrow common-action clipping found during review. Stage 24.1 and 24.2 are complete; Stage 24.3 display-theme publication/rollback remains open.
 
 ---
 

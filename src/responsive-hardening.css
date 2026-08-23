@@ -94,4 +94,13 @@
     margin-inline: 0;
     padding-inline: min(1rem, 3vw);
   }
+
+  .admin-overview__actions {
+    grid-template-columns: minmax(0, 1fr);
+    overflow: visible;
+  }
+
+  .admin-overview__actions button {
+    width: 100%;
+  }
 }
