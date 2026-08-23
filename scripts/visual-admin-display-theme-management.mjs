@@ -235,9 +235,12 @@ async function installFixtureRoutes(page, state) {
 }
 
 async function seed(page, locale) {
-  await page.addInitScript((serializedSettings) => {
-    localStorage.setItem('salahos.settings', serializedSettings);
-  }, JSON.stringify(settings(locale)));
+  await page.addInitScript(
+    (serializedSettings) => {
+      localStorage.setItem('salahos.settings', serializedSettings);
+    },
+    JSON.stringify(settings(locale)),
+  );
 }
 
 async function assertContained(page, name) {
@@ -273,7 +276,9 @@ async function previewCompatibleTargets(page) {
     const width = await preview.getAttribute('data-target-width');
     const expected = index === 0 ? '1920' : '3840';
     if (width !== expected) {
-      throw new Error(`exact target preview ${String(index)} resolved ${String(width)}, expected ${expected}`);
+      throw new Error(
+        `exact target preview ${String(index)} resolved ${String(width)}, expected ${expected}`,
+      );
     }
     await closeTargetPreview(page);
   }
@@ -319,14 +324,13 @@ async function captureDesktop(browser) {
     await page.getByLabel('Built-in background').selectOption('geometric-heritage');
     await page.locator('.admin-theme-branding input').first().fill('Stage 24 Preview Masjid');
     if (
-      (await page.locator('.admin-theme-live-preview [data-prayer-board-template="minimal-modern"]').count()) !==
-      1
+      (await page
+        .locator('.admin-theme-live-preview [data-prayer-board-template="minimal-modern"]')
+        .count()) !== 1
     ) {
       throw new Error('live preview did not update to Minimal Modern');
     }
-    if (
-      (await page.getByLabel('Built-in background').inputValue()) !== 'geometric-heritage'
-    ) {
+    if ((await page.getByLabel('Built-in background').inputValue()) !== 'geometric-heritage') {
       throw new Error('first-party built-in background selection did not persist in the draft');
     }
 
@@ -350,7 +354,9 @@ async function captureDesktop(browser) {
     await publishBulk.click();
     await page.getByText('Theme revision published.').waitFor({ state: 'visible' });
     if (state.displayPublications.length !== 2) {
-      throw new Error(`bulk assignment published ${String(state.displayPublications.length)} displays`);
+      throw new Error(
+        `bulk assignment published ${String(state.displayPublications.length)} displays`,
+      );
     }
     for (const publication of state.displayPublications) {
       if (
@@ -369,7 +375,9 @@ async function captureDesktop(browser) {
     await publishMosque.click();
     await page.getByText('Theme revision published.').waitFor({ state: 'visible' });
     if (state.mosqueDefault.revision !== 4) {
-      throw new Error(`mosque default did not advance 3 → 4: ${String(state.mosqueDefault.revision)}`);
+      throw new Error(
+        `mosque default did not advance 3 → 4: ${String(state.mosqueDefault.revision)}`,
+      );
     }
 
     const historySelect = page.locator('.admin-theme-history select');
@@ -377,7 +385,11 @@ async function captureDesktop(browser) {
     await page.locator('.admin-theme-history__list article').nth(1).waitFor({ state: 'visible' });
     await page.getByRole('button', { name: 'Load as rollback draft' }).click();
     await page.getByText(/Rollback draft loaded/u).waitFor({ state: 'visible' });
-    if ((await page.locator('[data-template-card="heritage-classic"]').getAttribute('aria-pressed')) !== 'true') {
+    if (
+      (await page
+        .locator('[data-template-card="heritage-classic"]')
+        .getAttribute('aria-pressed')) !== 'true'
+    ) {
       throw new Error('rollback did not restore the earlier Heritage Classic draft');
     }
     if (!(await publishMosque.isDisabled())) {
@@ -391,7 +403,9 @@ async function captureDesktop(browser) {
       state.mosqueDefault.revision !== 5 ||
       state.mosqueDefault.prayerBoardConfig.templateId !== 'heritage-classic'
     ) {
-      throw new Error(`rollback was not republished monotonically as revision 5: ${JSON.stringify(state.mosqueDefault)}`);
+      throw new Error(
+        `rollback was not republished monotonically as revision 5: ${JSON.stringify(state.mosqueDefault)}`,
+      );
     }
 
     await page.screenshot({
