@@ -13,6 +13,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -30,6 +32,7 @@ jobs:
           set -euo pipefail
           python3 scripts/prepare-v130-release.py
           npx prettier --write package.json package-lock.json RELEASE_NOTES.md CHANGELOG.md docs/RELEASE_ASSETS.md scripts/release-packaging.test.mjs .github/workflows/release-assets.yml scripts/build-android-release.mjs
+          git show HEAD^1:.github/workflows/ci.yml > .github/workflows/ci.yml
           npm run check
           for file in package.json package-lock.json android/app/build.gradle ios/App/App.xcodeproj/project.pbxproj scripts/build-android-release.mjs .github/workflows/release-assets.yml RELEASE_NOTES.md CHANGELOG.md docs/RELEASE_ASSETS.md scripts/release-packaging.test.mjs; do
             blob_sha="$(jq -Rs '{content: ., encoding: "utf-8"}' "$file" | gh api --method POST /repos/${{ github.repository }}/git/blobs --input - --jq .sha)"
