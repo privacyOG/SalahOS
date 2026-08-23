@@ -239,13 +239,17 @@ jobs:
             exit 1
           }
 
-          APK_VERIFY_OUTPUT="$("$APKSIGNER" verify --verbose --print-certs "$APK")"
+          APK_VERIFY_OUTPUT="$("$APKSIGNER" verify --verbose --print-certs "$APK" 2>&1)"
           printf '%s\n' "$APK_VERIFY_OUTPUT"
           APK_SIGNER_SHA256="$(
-            sed -n 's/^Signer #1 certificate SHA-256 digest: //p' <<< "$APK_VERIFY_OUTPUT" \
-              | head -1 \
+            printf '%s\n' "$APK_VERIFY_OUTPUT" \
+              | awk '/certificate SHA-256 digest:/ { sub(/^.*certificate SHA-256 digest:[[:space:]]*/, ""); print; exit }' \
               | normalize_fingerprint
           )"
+          [[ -n "$APK_SIGNER_SHA256" ]] || {
+            echo 'Unable to resolve signed APK certificate SHA-256 fingerprint' >&2
+            exit 1
+          }
 
           jarsigner -verify -certs "$AAB"
           AAB_SIGNER_SHA256="$(
@@ -253,6 +257,10 @@ jobs:
               | awk '/SHA256:/{print $2; exit}' \
               | normalize_fingerprint
           )"
+          [[ -n "$AAB_SIGNER_SHA256" ]] || {
+            echo 'Unable to resolve signed AAB certificate SHA-256 fingerprint' >&2
+            exit 1
+          }
 
           [[ "$APK_SIGNER_SHA256" == "$EXPECTED_SIGNER_SHA256" ]] || {
             echo 'Signed APK certificate does not match the configured Android release key' >&2
