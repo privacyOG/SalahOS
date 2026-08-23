@@ -74,11 +74,11 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
     dataDescription: 'Export, import or reset locally stored SalahOS settings.',
     displayTitle: 'Display themes',
     displayDescription:
-      'Open managed-display theme configuration without mixing it into daily settings.',
+      'Open managed-display configuration without mixing credentials or fleet controls into daily settings.',
     advancedTitle: 'Advanced',
     advancedDescription:
       'Legacy import, adjustment and uncommon configuration tools during the v2 migration.',
-    displayAction: 'Open display themes',
+    displayAction: 'Open managed displays',
     exportHelp: 'Settings data stays local unless you explicitly copy or export it.',
     imported: 'Settings imported successfully.',
     importError: 'Settings data is invalid or unsupported.',
@@ -104,11 +104,11 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
     dataTitle: 'البيانات والخصوصية',
     dataDescription: 'تصدير إعدادات صلاح أو إس المحلية أو استيرادها أو إعادة ضبطها.',
     displayTitle: 'سمات شاشات العرض',
-    displayDescription: 'افتح إعدادات سمات الشاشات المُدارة بعيداً عن الإعدادات اليومية.',
+    displayDescription: 'افتح إدارة الشاشات من دون إظهار بيانات الدخول أو الأسطول في الإعدادات اليومية.',
     advancedTitle: 'متقدم',
     advancedDescription:
       'أدوات الاستيراد والتعديلات والإعدادات غير الشائعة خلال انتقال الواجهة الجديدة.',
-    displayAction: 'افتح سمات العرض',
+    displayAction: 'افتح الشاشات المُدارة',
     exportHelp: 'تبقى بيانات الإعدادات محلية ما لم تنسخها أو تصدرها صراحةً.',
     imported: 'تم استيراد الإعدادات بنجاح.',
     importError: 'بيانات الإعدادات غير صالحة أو غير مدعومة.',
@@ -134,11 +134,12 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
     dataTitle: 'Veri ve gizlilik',
     dataDescription: 'Yerel SalahOS ayarlarını dışa aktarın, içe aktarın veya sıfırlayın.',
     displayTitle: 'Ekran temaları',
-    displayDescription: 'Günlük ayarlara karıştırmadan yönetilen ekran temalarını açın.',
+    displayDescription:
+      'Kimlik bilgilerini veya filo kontrollerini günlük ayarlara karıştırmadan yönetilen ekranları açın.',
     advancedTitle: 'Gelişmiş',
     advancedDescription:
       'v2 geçişi sırasında eski içe aktarma, ayarlama ve seyrek kullanılan araçlar.',
-    displayAction: 'Ekran temalarını aç',
+    displayAction: 'Yönetilen ekranları aç',
     exportHelp: 'Ayar verileri, siz açıkça kopyalamadıkça veya dışa aktarmadıkça yerel kalır.',
     imported: 'Ayarlar başarıyla içe aktarıldı.',
     importError: 'Ayar verileri geçersiz veya desteklenmiyor.',
@@ -165,10 +166,10 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
     dataDescription: 'Ekspor, impor, atau atur ulang pengaturan SalahOS yang tersimpan lokal.',
     displayTitle: 'Tema layar',
     displayDescription:
-      'Buka konfigurasi tema layar terkelola tanpa mencampurnya dengan pengaturan harian.',
+      'Buka layar terkelola tanpa mencampur kredensial atau kontrol armada ke pengaturan harian.',
     advancedTitle: 'Lanjutan',
     advancedDescription: 'Alat impor, penyesuaian, dan konfigurasi tidak umum selama migrasi v2.',
-    displayAction: 'Buka tema layar',
+    displayAction: 'Buka layar terkelola',
     exportHelp:
       'Data pengaturan tetap lokal kecuali Anda secara eksplisit menyalin atau mengekspornya.',
     imported: 'Pengaturan berhasil diimpor.',
@@ -230,8 +231,8 @@ function categorySearch(category: SettingsCategory | null): string {
   return searchForSettingsCategory(window.location.search, category);
 }
 
-function administrationThemesHref(): string {
-  const search = searchForAdminDestination(window.location.search, 'themes');
+function administrationDisplaysHref(): string {
+  const search = searchForAdminDestination(window.location.search, 'displays');
   return `${window.location.pathname}${search}${window.location.hash}`;
 }
 
@@ -262,8 +263,7 @@ function PrayerSettingsForm({
             {translate(locale, 'sourceCalculatedAdjustments')}
           </option>
           <option value="local-mosque" disabled={settings.mosqueTimetable === null}>
-            {translate(locale, 'sourceLocalMosque')}
-          </option>
+            {translate(locale, 'sourceLocalMosque')}</option>
         </select>
       </label>
 
@@ -599,7 +599,7 @@ export function SettingsScreen() {
           className="settings-focus-panel settings-display-entry"
           aria-label={copy.displayTitle}
         >
-          <a className="surface-entry-card__action" href={administrationThemesHref()}>
+          <a className="surface-entry-card__action" href={administrationDisplaysHref()}>
             {copy.displayAction}
           </a>
         </section>
