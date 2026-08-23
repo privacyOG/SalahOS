@@ -80,9 +80,7 @@ describe('prayer-board announcement rotation storage', () => {
       ...config(),
       rules: [{ ...config().rules[0], context: 'invalid-context' }],
     });
-    expect(() => parsePrayerBoardAnnouncementRotationConfig(raw)).toThrow(
-      /unsupported value/u,
-    );
+    expect(() => parsePrayerBoardAnnouncementRotationConfig(raw)).toThrow(/unsupported value/u);
   });
 
   it('fails closed to disabled rotation when persisted data is corrupt', () => {
