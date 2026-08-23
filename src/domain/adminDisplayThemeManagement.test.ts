@@ -22,7 +22,11 @@ function config() {
   });
 }
 
-function display(displayId: string, orientation: 'landscape' | 'portrait', resolutionProfile: string) {
+function display(
+  displayId: string,
+  orientation: 'landscape' | 'portrait',
+  resolutionProfile: string,
+) {
   return createManagedDisplayRemoteStatus({
     identity: {
       displayId,
@@ -96,7 +100,7 @@ describe('admin display theme management model', () => {
       en: 'Old Name',
       ar: 'مسجد الاختبار',
     });
-    expect(branded.logo).toBeUndefined();
+    expect(branded.branding.logo).toBeNull();
   });
 
   it('maps presentation accents onto the legacy display-theme bridge deterministically', () => {
