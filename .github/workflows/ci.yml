@@ -31,6 +31,28 @@ jobs:
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
 
+      - name: Canonically format Stage 24 worktree
+        run: |
+          npx prettier --write \
+            scripts/check-remote-network-policy.mjs \
+            src/domain/adminDisplayThemeManagement.test.ts \
+            src/domain/adminDisplayThemeManagement.ts \
+            src/platform/managedThemeRevisionStore.ts \
+            src/ui/AdminDisplayThemeManagement.tsx
+
+      - name: Upload canonical Stage 24 formatting
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage24-theme-format
+          path: |
+            scripts/check-remote-network-policy.mjs
+            src/domain/adminDisplayThemeManagement.test.ts
+            src/domain/adminDisplayThemeManagement.ts
+            src/platform/managedThemeRevisionStore.ts
+            src/ui/AdminDisplayThemeManagement.tsx
+          if-no-files-found: error
+          retention-days: 1
+
       - name: Sensitive-file policy
         run: npm run security:sensitive-files
 
