@@ -11,6 +11,7 @@ import {
 } from '../platform/managedDisplayConnectionStorage';
 import { loadPersistedSettings } from '../platform/settingsStorage';
 import { smartDisplayModeRequested } from './SmartDisplay';
+import { useAdminDestructiveActionSafety } from './useAdminDestructiveActionSafety';
 
 const copy = managedDisplayConnectionCopy;
 
@@ -24,6 +25,7 @@ function readLocale(): Locale {
 
 export function ManagedDisplayConnectionSettings() {
   const locale = readLocale();
+  useAdminDestructiveActionSafety(locale);
   const text = copy[locale];
   const initial = (() => {
     try {
