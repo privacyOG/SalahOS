@@ -1,0 +1,8 @@
+/* Stage 26: Arabic UI must not inherit Latin tracking or casing conventions. */
+[dir='rtl'] .congregation-shell *,
+[dir='rtl'] .admin-shell *,
+.smart-display[dir='rtl'] *,
+.touch-display-fixture[dir='rtl'] * {
+  letter-spacing: 0;
+  text-transform: none;
+}
