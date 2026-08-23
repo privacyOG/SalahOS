@@ -1,20 +1,26 @@
 name: Quality Gate
 
 on:
+  push:
+    branches:
+      - main
+      - 'agent/**'
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   quality:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '["ubuntu-24.04"]' || '["self-hosted","Linux","X64"]') }}
+    timeout-minutes: 15
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -25,17 +31,47 @@ jobs:
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
 
-      - name: Prepare and validate v1.3.0
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          set -euo pipefail
-          python3 scripts/prepare-v130-release.py
-          npx prettier --write package.json package-lock.json RELEASE_NOTES.md CHANGELOG.md docs/RELEASE_ASSETS.md scripts/release-packaging.test.mjs .github/workflows/release-assets.yml scripts/build-android-release.mjs
-          git show HEAD^1:.github/workflows/ci.yml > .github/workflows/ci.yml
-          npm run check
-          for file in package.json package-lock.json android/app/build.gradle ios/App/App.xcodeproj/project.pbxproj scripts/build-android-release.mjs .github/workflows/release-assets.yml RELEASE_NOTES.md CHANGELOG.md docs/RELEASE_ASSETS.md scripts/release-packaging.test.mjs; do
-            blob_sha="$(jq -Rs '{content: ., encoding: "utf-8"}' "$file" | gh api --method POST /repos/${{ github.repository }}/git/blobs --input - --jq .sha)"
-            echo "V130_BLOB $file $blob_sha"
-          done
-          exit 1
+      - name: Sensitive-file policy
+        run: npm run security:sensitive-files
+
+      - name: Native permission policy
+        run: npm run security:native-permissions
+
+      - name: Remote network policy
+        run: npm run security:remote-network
+
+      - name: Dependency vulnerability audit
+        run: npm run security:audit
+
+      - name: Dependency license policy
+        run: npm run security:licenses
+
+      - name: Documentation link verification
+        run: npm run docs:links
+
+      - name: PWA raster icon reproducibility
+        run: python3 scripts/generate_pwa_icons.py --check
+
+      - name: Design-system ownership policy
+        run: npm run ui:design-system-ownership
+
+      - name: UI/UX v2 retirement policy
+        run: npm run ui:v2-retirement
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm run test
+
+      - name: Production build
+        run: npm run build
+
+      - name: Verify deployable web artifact
+        run: npm run verify:web-build

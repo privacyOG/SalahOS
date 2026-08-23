@@ -4,6 +4,22 @@ All notable SalahOS changes are recorded here.
 
 ## Unreleased
 
+## 1.3.0 — 2026-08-23
+
+### UI/UX v2 completion
+
+- Complete the UI/UX v2 programme through Stage 27 across congregation, managed administration, Phone/Home, Raspberry Pi Touch Display and TV/kiosk surfaces.
+- Complete six original prayer-board templates, Phone/Home variants, optional weather, announcement rotation and managed display-theme configuration.
+- Complete device-specific UX refinement, WCAG-oriented accessibility, Arabic/RTL acceptance, text-expansion coverage and major-surface human visual review.
+- Retire the legacy single-page application/Settings composition, destination-hiding CSS and root compatibility tokens in favour of direct v2 screen and smart-display ownership.
+
+### Release packaging
+
+- Synchronise npm, package-lock, Android and iOS versions at 1.3.0 and advance native build numbers to 5.
+- Add signed Android App Bundle (`.aab`) publication alongside the signed release APK.
+- Tighten exact-main release preflight with package-lock version and Android/iOS build-number parity checks.
+- Preserve Web/PWA ZIP, Raspberry Pi kiosk tarball and portable SHA-256 manifest publication with exact-file preflight.
+
 ## 1.2.0 — 2026-08-20
 
 ### Managed masjid and congregation experience

@@ -1,68 +1,58 @@
-# SalahOS v1.2.1 release notes
+# SalahOS v1.3.0 release notes
 
-SalahOS v1.2.1 is the first packaged release to include the completed UI/UX v2 work through Stage 23.10. It keeps the local-first prayer engine and privacy boundaries of v1.2.0 while substantially improving congregation navigation, prayer-board presentation, Qiblah usability and managed-display assignment.
+SalahOS v1.3.0 completes the UI/UX v2 programme through Stage 27 and packages the current release-ready SalahOS targets from one exact, validated `main` revision. It preserves the local-first prayer engine, explicit privacy boundaries and prayer-source semantics while completing the redesigned congregation, administration, phone/tablet and smart-display experiences.
 
-## UI/UX v2
+## UI/UX v2 completion
 
-- Dedicated congregation destinations for Today, Mosques, Qiblah, Community and Settings.
-- Responsive phone bottom navigation, tablet navigation rail and desktop navigation with RTL-aware ordering/alignment.
-- Prayer-first Today hierarchy with conditional Ramadan, Jumu'ah and community context.
-- Category-based Settings with progressive disclosure for advanced timetable/import/calculation workflows.
-- Consolidated SalahOS Design System v2 with semantic tokens, reusable layout/control/state primitives and accessibility contracts.
-- Dedicated Mosques and Community reading experiences separated from administration workflows.
+- Completes the six original SalahOS prayer-board designs across managed TV/kiosk displays and validated Phone/Home Today variants.
+- Adds optional fail-soft prayer-board weather plus scheduled announcement/display rotation without making remote content authoritative for prayer times.
+- Completes the managed-masjid administration redesign with dedicated overview, prayer/Iqamah, Jumu'ah/Ramadan, community, display, integration, member and administration destinations.
+- Completes phone, tablet, desktop, Raspberry Pi Touch Display and 1080p/4K TV/kiosk refinement.
+- Completes accessibility, Arabic/RTL and visual acceptance coverage, including forced-colours, reduced-motion, text expansion and representative human review.
+- Retires the legacy single-page application composition, destination-hiding CSS and root compatibility colour aliases. Dedicated v2 Settings panels and `SmartDisplayApplication` now own their surfaces directly.
+- Keeps administrator-only fleet, credentials and publishing controls isolated from ordinary congregation workflows.
 
-## Daily Prayer Display Theme Library
+## Congregation and display experience
 
-- Shared versioned prayer-board data/template contract that preserves calculation, source, Iqamah and next-prayer semantics.
-- Six original SalahOS display templates:
-  - Heritage Classic
-  - Minimal Modern
-  - Bold Countdown Focus
-  - Structured Split Board
-  - Scenic Spiritual
-  - Family & Classroom
-- Full-screen preview/configuration workflow with supported module visibility, branding, locale, time-format and accent controls.
-- Permanent 1080p/4K English and Arabic/RTL visual-regression coverage for the completed display templates.
+- Prayer-first Today presentation with clear Start/Athan, Iqamah/Jama'ah, current/next prayer, countdown, Jumu'ah and Ramadan context.
+- Dedicated Today, Mosques, Qiblah, Community and Settings destinations with responsive phone bottom navigation, tablet rail and desktop navigation.
+- Category-based Settings for Prayer, Location, Mosque & Iqamah, Notifications & Adhan, Appearance & Language, Data & Privacy, Display Themes and Advanced controls.
+- Direct Phone/Home theme selection and optional weather configuration remain available after legacy UI retirement.
+- Six independently usable prayer-board templates: Heritage Classic, Minimal Modern, Bold Countdown Focus, Structured Split Board, Scenic Spiritual and Family & Classroom.
+- Smart-display runtime remains isolated from congregation navigation and administration forms and continues to use authoritative local prayer data when optional remote content is unavailable.
 
-## Managed display assignment
+## Release and integrity improvements
 
-- Mosque-level default prayer-board configuration with per-display override/inheritance.
-- Revisioned managed-display prayer-board configuration and applied-template heartbeat reporting.
-- Exact 1920×1080 and 3840×2160 landscape preview before publication; unsupported portrait/unvalidated targets are blocked.
-- Last-known-good managed prayer-board cache with native persistence.
-- Reconnect reconciliation that keeps local prayer calculation authoritative and uninterrupted.
-- Fail-soft managed display operation when remote configuration/media synchronization is unavailable.
-- Safe managed-service state migration and deterministic handling of device-local branding/background assets.
+- Synchronises npm, package-lock, Android and iOS marketing versions at `1.3.0`.
+- Advances Android `versionCode` and iOS `CURRENT_PROJECT_VERSION` together to build `5`.
+- Tightens exact-main release preflight to verify lockfile-version consistency and Android/iOS build-number parity.
+- Produces both a persistently signed Android APK and signed Android App Bundle (AAB).
+- Verifies the APK with Android `apksigner`, verifies the AAB JAR signature, verifies Web/PWA and Raspberry Pi archive integrity and publishes a portable SHA-256 manifest for every packaged artifact.
+- Fails closed if persistent Android release signing is unavailable or if the final package contains missing or unexpected files.
 
-## Qiblah and congregation refinements
+## Downloadable v1.3.0 assets
 
-- Dedicated Qiblah experience with dominant compass/bearing hierarchy and secondary saved/offline/manual location workflows.
-- Local/offline bearing remains authoritative; optional map networking stays explicit and privacy-gated.
-- Improved mosque discovery/profile and community announcement/event presentation with provenance/freshness states.
+A successful v1.3.0 publication includes:
 
-## Downloadable v1.2.1 assets
+- `SalahOS-v1.3.0-android.apk` — persistently signed Android release APK for direct installation;
+- `SalahOS-v1.3.0-android.aab` — persistently signed Android App Bundle for Google Play/distribution workflows;
+- `SalahOS-v1.3.0-web-pwa.zip` — complete production Web/PWA package;
+- `SalahOS-v1.3.0-raspberry-pi-kiosk.tar.gz` — production Web/PWA files plus Raspberry Pi/Linux Chromium kiosk launch and autostart helpers;
+- `SHA256SUMS.txt` — SHA-256 hashes for all packaged release assets.
 
-A successful v1.2.1 release publishes:
-
-- `SalahOS-v1.2.1-android.apk` — persistently signed Android release APK, verified with Android `apksigner`;
-- `SalahOS-v1.2.1-web-pwa.zip` — production Web/PWA package;
-- `SalahOS-v1.2.1-raspberry-pi-kiosk.tar.gz` — production Web/PWA files plus Raspberry Pi/Linux Chromium kiosk launch and autostart helpers;
-- `SHA256SUMS.txt` — portable SHA-256 hashes for all published packages.
-
-The workflow fails closed if Android release signing is unavailable and verifies archive integrity, checksums and the exact final asset set before publication.
+GitHub also exposes the standard source-code ZIP and tarball for the release tag.
 
 ## Distribution boundaries
 
-- A consumer iOS/iPadOS `.ipa` is not published until Apple distribution signing/provisioning is configured and validated.
-- No native macOS `.dmg` is published because SalahOS does not yet contain a native macOS application target.
-- Physical Raspberry Pi, TV/panel, iPhone/iPad and broad Android OEM acceptance remains separate from CI packaging evidence.
-- Stage 23.11 optional weather, Stage 23.12 announcement/display rotation, Stage 23.13 mobile Today/home prayer-board variants and later Stage 24–27 work remain separate roadmap items and are not claimed complete by this release.
+- A consumer iOS/iPadOS `.ipa` is not published until Apple distribution signing/provisioning is configured and a distribution archive can be validated. The existing iPhone/iPad Simulator acceptance is test evidence, not a consumer installer.
+- No native macOS `.dmg` is published because SalahOS does not contain a native macOS application target.
+- Physical Raspberry Pi, TV/panel, iPhone/iPad and broad Android OEM acceptance remains separate from automated browser/emulator/Simulator and packaging evidence.
 
 ## Release gates
 
-The v1.2.1 release revision must be the exact current `main` commit and pass the permanent Quality, Android, Visual Regression and iOS workflows. The release-asset workflow reruns the full repository quality gate for Web/PWA/kiosk packaging, verifies persistent Android signing and `apksigner`, verifies portable checksums and the exact four-file package, and only then creates/uploads the GitHub release.
+The v1.3.0 release revision must be the exact current `main` commit and pass the permanent Quality, Android, Visual Regression and iOS workflows. The release-asset workflow then reruns the complete repository quality gate, verifies persistent Android signing, builds and verifies APK/AAB packages, validates Web/PWA and Raspberry Pi archives, checks the exact final file set and SHA-256 manifest, and only then creates or updates the GitHub release.
 
-See `docs/RELEASE_ASSETS.md`, `TESTING.md`, `TODO.md` and `docs/PLATFORM_STATUS.md` for exact distribution and validation boundaries.
+See `docs/RELEASE_ASSETS.md`, `TESTING.md`, `TODO.md`, `docs/PLATFORM_STATUS.md` and `docs/UI_UX_V2_PLAN.md` for exact implementation, validation and distribution boundaries.
 
 ## Author
 
