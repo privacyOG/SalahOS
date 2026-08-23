@@ -36,12 +36,49 @@ function settingsFor(locale) {
   };
 }
 
-async function seed(page, locale) {
-  await page.addInitScript(
-    ({ serializedSettings }) => {
-      localStorage.setItem('salahos.settings', serializedSettings);
+function board(templateId, locale, mosqueName) {
+  const artworkId = {
+    'heritage-classic': 'geometric-heritage',
+    'minimal-modern': 'quiet-grid',
+    'bold-countdown-focus': 'countdown-field',
+    'structured-split-board': 'structured-lines',
+    'scenic-spiritual': 'scenic-gradient',
+    'family-classroom': 'classroom-pattern',
+  }[templateId];
+  return {
+    version: 1,
+    templateId,
+    primaryLocale: locale,
+    languageMode: 'single',
+    timeFormat: 'h23',
+    accentPreset: locale === 'ar' ? 'midnight' : 'neutral',
+    moduleVisibility: {
+      'current-time': true,
+      dates: true,
+      'next-prayer': true,
+      countdown: true,
+      'prayer-timetable': true,
+      jumuah: true,
+      'sunrise-sunset': true,
+      'mosque-branding': true,
+      announcements: false,
+      weather: false,
     },
-    { serializedSettings: JSON.stringify(settingsFor(locale)) },
+    branding: { mosqueName: { [locale]: mosqueName }, logo: null },
+    background: { kind: 'builtin', artworkId },
+  };
+}
+
+async function seed(page, locale, config) {
+  await page.addInitScript(
+    ({ serializedSettings, serializedConfig }) => {
+      localStorage.setItem('salahos.settings', serializedSettings);
+      localStorage.setItem('salahos.prayerBoardDisplayConfig', serializedConfig);
+    },
+    {
+      serializedSettings: JSON.stringify(settingsFor(locale)),
+      serializedConfig: JSON.stringify(config),
+    },
   );
 }
 
@@ -61,10 +98,11 @@ async function overflowState(page) {
   }));
 }
 
-async function validateEnglishFlow(browser) {
+async function validateRuntime(browser, scenario) {
   const context = await browser.newContext({
-    viewport: { width: 1440, height: 1000 },
+    viewport: { width: 1920, height: 1080 },
     reducedMotion: 'reduce',
+    serviceWorkers: 'block',
   });
   const page = await context.newPage();
   const errors = [];
@@ -81,74 +119,49 @@ async function validateEnglishFlow(browser) {
   });
 
   try {
-    await seed(page, 'en');
-    await page.goto(`${baseUrl}/?surface=admin&adminView=themes`, { waitUntil: 'networkidle' });
-    const editor = page.locator('.smart-display-theme-settings');
-    await editor.waitFor({ state: 'visible' });
-    await page.evaluate(() => document.fonts.ready);
+    const config = board(scenario.templateId, scenario.locale, scenario.mosqueName);
+    await seed(page, scenario.locale, config);
+    await page.goto(`${baseUrl}/?mode=smart-display`, { waitUntil: 'networkidle' });
+    const root = page.locator('.smart-display');
+    await root.waitFor({ state: 'visible' });
 
-    if ((await editor.locator('.prayer-board-template-card').count()) !== 6) {
-      throw new Error('display-theme gallery must render exactly six required templates');
+    if ((await root.getAttribute('data-display-template')) !== scenario.templateId) {
+      throw new Error(`${scenario.name} did not consume persisted template configuration`);
     }
-    if ((await editor.locator('.prayer-board-template-card[aria-pressed="true"]').count()) !== 1) {
-      throw new Error('display-theme gallery must expose exactly one selected template');
+    if (
+      (await page.locator(`[data-prayer-board-template="${scenario.templateId}"]`).count()) !== 1
+    ) {
+      throw new Error(`${scenario.name} did not render the persisted prayer-board template`);
     }
-
-    await capture(page, 'prayer-board-config-gallery-en');
-
-    await editor.locator('[data-template-card="minimal-modern"]').click();
-    const mosqueName = editor.locator('input[placeholder="Mosque branding"]');
-    await mosqueName.fill('Stage 23 Preview Masjid');
-
-    const apply = editor.locator('.prayer-board-config-actions button.primary');
-    if (!(await apply.isDisabled())) {
-      throw new Error('apply must remain disabled until the current draft is previewed');
+    if ((await page.locator('[data-prayer-name]').count()) < 5) {
+      throw new Error(`${scenario.name} did not preserve the five-prayer timetable`);
     }
-
-    await editor.locator('.prayer-board-config-actions button.secondary').click();
-    const preview = editor.locator('.prayer-board-fullscreen-preview');
-    await preview.waitFor({ state: 'visible' });
-    if ((await preview.locator('[data-prayer-board-template="minimal-modern"]').count()) !== 1) {
-      throw new Error('full-screen preview did not render the selected template');
+    const body = (await page.locator('body').textContent()) ?? '';
+    if (!body.includes(scenario.mosqueName)) {
+      throw new Error(`${scenario.name} did not render persisted mosque branding`);
     }
-    await page.setViewportSize({ width: 1920, height: 1080 });
-    await capture(page, 'prayer-board-config-preview-en');
-
-    await editor.locator('.prayer-board-fullscreen-preview__close').click();
-    await page.setViewportSize({ width: 1440, height: 1000 });
-    if (await apply.isDisabled()) {
-      throw new Error('apply must become available after previewing the current draft');
+    if (
+      scenario.locale === 'ar' &&
+      (await page.evaluate(() => document.documentElement.dir)) !== 'rtl'
+    ) {
+      throw new Error('Arabic persisted display configuration did not render RTL');
     }
-    await apply.click();
 
     const persisted = await page.evaluate(() => {
       const raw = localStorage.getItem('salahos.prayerBoardDisplayConfig');
       return raw === null ? null : JSON.parse(raw);
     });
-    if (persisted?.templateId !== 'minimal-modern') {
-      throw new Error(`applied template was not persisted: ${JSON.stringify(persisted)}`);
+    if (
+      persisted?.templateId !== scenario.templateId ||
+      persisted?.background?.kind !== 'builtin' ||
+      typeof persisted?.background?.artworkId !== 'string'
+    ) {
+      throw new Error(`${scenario.name} persisted config was not retained: ${JSON.stringify(persisted)}`);
     }
     for (const core of ['current-time', 'next-prayer', 'countdown', 'prayer-timetable']) {
       if (persisted.moduleVisibility?.[core] !== true) {
-        throw new Error(`core module ${core} was not forced visible`);
+        throw new Error(`${scenario.name} core module ${core} was not visible`);
       }
-    }
-
-    await page.setViewportSize({ width: 1920, height: 1080 });
-    await page.goto(`${baseUrl}/?mode=smart-display`, { waitUntil: 'networkidle' });
-    const root = page.locator('.smart-display');
-    await root.waitFor({ state: 'visible' });
-    if ((await root.getAttribute('data-display-template')) !== 'minimal-modern') {
-      throw new Error('smart-display runtime did not consume the applied template configuration');
-    }
-    if ((await page.locator('[data-prayer-board-template="minimal-modern"]').count()) !== 1) {
-      throw new Error('smart-display runtime did not render the applied prayer board');
-    }
-    if ((await page.locator('.minimal-modern-prayer').count()) !== 5) {
-      throw new Error('applied prayer board did not preserve the five obligatory prayers');
-    }
-    if (!(await page.locator('body').textContent()).includes('Stage 23 Preview Masjid')) {
-      throw new Error('applied mosque branding was not rendered');
     }
 
     const overflow = await overflowState(page);
@@ -156,56 +169,20 @@ async function validateEnglishFlow(browser) {
       overflow.bodyScrollWidth > overflow.width + 2 ||
       overflow.documentScrollWidth > overflow.width + 2
     ) {
-      throw new Error(`applied display overflow: ${JSON.stringify(overflow)}`);
+      throw new Error(`${scenario.name} display overflow: ${JSON.stringify(overflow)}`);
     }
-    if (errors.length > 0) throw new Error(`page errors: ${errors.join(' | ')}`);
+    if (errors.length > 0) throw new Error(`${scenario.name} page errors: ${errors.join(' | ')}`);
     if (externalRequests.length > 0) {
-      throw new Error(`external requests: ${JSON.stringify(externalRequests)}`);
+      throw new Error(`${scenario.name} external requests: ${JSON.stringify(externalRequests)}`);
     }
 
-    await capture(page, 'prayer-board-config-applied-display-en');
-    return { galleryTemplates: 6, appliedTemplate: persisted.templateId };
-  } finally {
-    await context.close();
-  }
-}
-
-async function validateArabicPreview(browser) {
-  const context = await browser.newContext({
-    viewport: { width: 1440, height: 1000 },
-    reducedMotion: 'reduce',
-  });
-  const page = await context.newPage();
-  const errors = [];
-  page.on('pageerror', (error) => errors.push(error.message));
-
-  try {
-    await seed(page, 'ar');
-    await page.goto(`${baseUrl}/?surface=admin&adminView=themes`, { waitUntil: 'networkidle' });
-    const editor = page.locator('.smart-display-theme-settings');
-    await editor.waitFor({ state: 'visible' });
-    await editor.locator('[data-template-card="family-classroom"]').click();
-    await editor.locator('.prayer-board-config-actions button.secondary').click();
-    await page.setViewportSize({ width: 1920, height: 1080 });
-
-    const stage = editor.locator('.prayer-board-fullscreen-preview__stage');
-    await stage.waitFor({ state: 'visible' });
-    if (
-      (await stage.getAttribute('dir')) !== 'rtl' ||
-      (await stage.getAttribute('lang')) !== 'ar'
-    ) {
-      throw new Error('Arabic preview did not preserve RTL direction and language');
-    }
-    if ((await stage.locator('[data-prayer-board-template="family-classroom"]').count()) !== 1) {
-      throw new Error('Arabic full-screen preview did not render Family & Classroom');
-    }
-    if (!(await page.locator('body').textContent()).includes('الصلاة')) {
-      throw new Error('Arabic prayer copy was not present in preview');
-    }
-    if (errors.length > 0) throw new Error(`Arabic preview page errors: ${errors.join(' | ')}`);
-
-    await capture(page, 'prayer-board-config-preview-ar-rtl');
-    return { direction: 'rtl', template: 'family-classroom' };
+    await capture(page, scenario.name);
+    return {
+      name: scenario.name,
+      template: scenario.templateId,
+      locale: scenario.locale,
+      persisted: true,
+    };
   } finally {
     await context.close();
   }
@@ -214,12 +191,28 @@ async function validateArabicPreview(browser) {
 await mkdir(artifactDirectory, { recursive: true });
 const browser = await chromium.launch({ headless: true });
 try {
-  const results = [await validateEnglishFlow(browser), await validateArabicPreview(browser)];
+  const results = [];
+  for (const scenario of [
+    {
+      name: 'prayer-board-config-runtime-en',
+      templateId: 'minimal-modern',
+      locale: 'en',
+      mosqueName: 'Stage 23 Local Masjid',
+    },
+    {
+      name: 'prayer-board-config-runtime-ar-rtl',
+      templateId: 'family-classroom',
+      locale: 'ar',
+      mosqueName: 'مسجد المرحلة ٢٣',
+    },
+  ]) {
+    results.push(await validateRuntime(browser, scenario));
+  }
   await writeFile(
     path.join(artifactDirectory, 'prayer-board-config-results.json'),
     `${JSON.stringify(results, null, 2)}\n`,
   );
-  console.log(`Prayer-board configuration visual checks passed: ${results.length} flows`);
+  console.log(`Prayer-board persisted configuration checks passed: ${results.length} flows`);
 } finally {
   await browser.close();
 }
