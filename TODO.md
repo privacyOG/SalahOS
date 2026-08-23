@@ -835,11 +835,13 @@
 
 ## 24. Managed-masjid admin UX redesign
 
-- [~] Continue the dedicated managed-masjid administration surface introduced in Stage 22
+- [x] Continue the dedicated managed-masjid administration surface introduced in Stage 22
 - [x] Complete the administration information architecture and overview dashboard
-- [ ] Complete display-theme management, assignment, publication and rollback UX
+- [x] Complete display-theme management, assignment, publication and rollback UX
 
 **Stage 24.1–24.2 verification note (2026-08-23):** PR #188 code-bearing head `a9b23bfeddf490b3e5145dd84295c6c5bc5f255a` passed Quality Gate `32620048449`, Android Build `32620048448`, Visual Regression `32620048450` and iOS Build `32620048456`. The dedicated administration shell now provides eight reloadable destinations, route-specific titles/context/breadcrumbs, compact narrow navigation, congregation-surface isolation and confirmation-gated destructive fleet revocation. The overview presents local prayer/Iqamah, draft-versus-published fixture state, Jumu'ah/Ramadan context, display health, upcoming community content, signage state, quiet failure reporting and short-path common tasks without changing prayer calculations. Exact Visual artifact `9488130221` (`sha256:af9eb38276f3125c69c53c487519c5787775e258e4d45dc03cefb2e7991b212b`) passed permanent desktop, Arabic/RTL tablet, narrow-phone and destructive-confirmation checks and received human review after correcting the narrow common-action clipping found during review. Stage 24.1 and 24.2 are complete; Stage 24.3 display-theme publication/rollback remains open.
+
+**Stage 24.3 verification note (2026-08-23):** PR #189 code-bearing head `ac021b9597023bc677711cb6f5f2815171798875` passed Quality Gate `32626280463`, Android Build `32626280429`, Visual Regression `32626280436` and iOS Build `32626280453`. Exact Visual artifact `9489797523` (`sha256:f23991b33a70701a5fe0a1028db814dc1b952f1b2b4e9fce4a2fbd396082cd2c`) passed the complete permanent visual matrix and received human review across the desktop theme studio, rollback-published state, Arabic/RTL tablet, 390px narrow phone and destructive-confirmation evidence. The administration Displays studio now exposes all six display themes, branding and first-party built-in background configuration with live preview, exact 1920x1080/3840x2160 target preview, per-display and bulk assignment, mosque-default publication, monotonic revision history/rollback, and fail-closed blocking of unsupported orientation/resolution targets. Managed built-in backgrounds persist through the service/runtime boundary while device-local images are not uploaded; administrator credentials remain memory-only; post-publication fleet refreshes preserve the active draft; and prayer calculation/source/Iqamah semantics remain unchanged. Stage 24.3 and Stage 24 are complete.
 
 ---
 

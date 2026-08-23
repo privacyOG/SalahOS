@@ -175,16 +175,17 @@ export function createManagedPrayerBoardAssignmentConfig(
 ): PrayerBoardTemplateConfig {
   const normalized = parsePrayerBoardTemplateConfig(input);
   const fallbackArtworkId = getPrayerBoardTemplate(normalized.templateId).fallbackArtworkId;
+  const managedBackground =
+    normalized.background.kind === 'builtin'
+      ? normalized.background
+      : { kind: 'builtin' as const, artworkId: fallbackArtworkId };
   return parsePrayerBoardTemplateConfig({
     ...normalized,
     branding: {
       mosqueName: normalized.branding.mosqueName,
       logo: null,
     },
-    background: {
-      kind: 'builtin',
-      artworkId: fallbackArtworkId,
-    },
+    background: managedBackground,
   });
 }
 

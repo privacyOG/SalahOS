@@ -156,19 +156,19 @@ await page.route('**/v1/**', async (route) => {
 
 try {
   await page.goto(`${baseUrl}/?surface=admin&adminView=displays`, { waitUntil: 'networkidle' });
-  const adminPanel = page.locator('.remote-display-admin-panel');
-  await adminPanel.waitFor({ state: 'visible' });
-  await adminPanel.getByLabel('Managed service URL').fill(applicationOrigin);
-  await adminPanel.getByLabel('Admin token').fill(adminToken);
-  await adminPanel.getByRole('button', { name: 'Connect / refresh fleet' }).click();
+  const studio = page.locator('.admin-display-theme-studio');
+  await studio.waitFor({ state: 'visible' });
+  await studio.getByLabel('Service URL').fill(applicationOrigin);
+  await studio.getByLabel('Administrator token').fill(adminToken);
+  await studio.getByRole('button', { name: 'Connect & load fleet' }).click();
 
-  const revokeButton = adminPanel.getByRole('button', { name: 'Revoke' });
+  const revokeButton = studio.getByRole('button', { name: 'Revoke display' });
   await revokeButton.waitFor({ state: 'visible' });
-  await page.waitForFunction(() =>
-    document
-      .querySelector('.remote-display-card__actions button')
-      ?.classList.contains('ds-button--destructive'),
-  );
+  if (
+    !(await revokeButton.evaluate((button) => button.classList.contains('ds-button--destructive')))
+  ) {
+    throw new Error('display revoke action is not visually marked destructive');
+  }
 
   page.once('dialog', async (dialog) => {
     dismissedConfirmation = dialog.message();
@@ -188,7 +188,9 @@ try {
   });
   await revokeButton.click();
   await page.waitForFunction(
-    () => document.querySelector('.remote-display-card__actions button')?.disabled,
+    () =>
+      document.querySelector('.admin-theme-display-card__actions .ds-button--destructive')
+        ?.disabled,
   );
   if (revokeRequests !== 1 || !revoked) {
     throw new Error(`accepted destructive confirmation sent ${String(revokeRequests)} requests`);

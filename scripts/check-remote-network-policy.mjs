@@ -11,6 +11,9 @@ const reviewedRemoteNetworkFiles = new Map([
   ['src/platform/qiblaMapTiles.ts', 'Qiblah OpenStreetMap fallback tiles'],
   ['src/platform/qiblaGoogleMaps.ts', 'Qiblah Google Maps satellite imagery'],
 ]);
+const nonRoutableFixtureLiteralFiles = new Set(['src/ui/AdminDisplayThemeManagement.tsx']);
+const REMOTE_LITERAL_PATTERN = /["'`]https?:\/\/[^"'`\s]+/gu;
+const NON_ROUTABLE_FIXTURE_PATTERN = /^https?:\/\/[A-Za-z0-9.-]+\.invalid(?:[/:?#]|$)/u;
 
 async function collectFiles(directory) {
   const entries = await readdir(directory, { withFileTypes: true });
@@ -40,6 +43,14 @@ const prohibitedPatterns = [
   { label: 'remote HTTP URL literal', pattern: /["'`]https?:\/\// },
 ];
 
+function containsOnlyNonRoutableFixtureUrls(repositoryPath, content) {
+  if (!nonRoutableFixtureLiteralFiles.has(repositoryPath)) return false;
+  const literals = [...content.matchAll(REMOTE_LITERAL_PATTERN)].map((match) => match[0].slice(1));
+  return (
+    literals.length > 0 && literals.every((literal) => NON_ROUTABLE_FIXTURE_PATTERN.test(literal))
+  );
+}
+
 const violations = [];
 const reviewedCapabilities = [];
 for (const file of applicationFiles) {
@@ -47,6 +58,13 @@ for (const file of applicationFiles) {
   const content = await readFile(file, 'utf8');
   for (const { label, pattern } of prohibitedPatterns) {
     if (!pattern.test(content)) continue;
+    if (
+      label === 'remote HTTP URL literal' &&
+      containsOnlyNonRoutableFixtureUrls(repositoryPath, content)
+    ) {
+      reviewedCapabilities.push(`${repositoryPath}: non-routable .invalid visual fixture literal`);
+      continue;
+    }
     if (reviewedRemoteNetworkFiles.has(repositoryPath)) {
       reviewedCapabilities.push(
         `${repositoryPath}: ${label} (${reviewedRemoteNetworkFiles.get(repositoryPath)})`,

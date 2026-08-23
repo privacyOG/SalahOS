@@ -49,14 +49,14 @@ The daily prayer display surface must also become a first-class configurable pro
 
 ### Managed-masjid administration information architecture
 
-- [ ] Overview.
-- [ ] Prayer & Iqamah.
-- [ ] Jumu'ah & Ramadan.
-- [ ] Community content.
-- [ ] Displays.
-- [ ] Integrations.
-- [ ] Members & permissions.
-- [ ] Administration settings.
+- [x] Overview.
+- [x] Prayer & Iqamah.
+- [x] Jumu'ah & Ramadan.
+- [x] Community content.
+- [x] Displays.
+- [x] Integrations.
+- [x] Members & permissions.
+- [x] Administration settings.
 
 ### Responsive navigation
 
@@ -361,11 +361,13 @@ The phone Today/home experience must receive the same design quality and templat
 
 ## 24.3 Display theme management
 
-- [ ] Add display-theme gallery inside the admin console.
-- [ ] Add branding/background configuration with live preview.
-- [ ] Add per-display assignment and bulk assignment flows.
-- [ ] Add publish/rollback workflow for template configuration revisions.
-- [ ] Prevent unsupported template/orientation/resolution combinations.
+- [x] Add display-theme gallery inside the admin console.
+- [x] Add branding/background configuration with live preview.
+- [x] Add per-display assignment and bulk assignment flows.
+- [x] Add publish/rollback workflow for template configuration revisions.
+- [x] Prevent unsupported template/orientation/resolution combinations.
+
+**Stage 24.3 verification note (2026-08-23):** PR #189 code-bearing head `ac021b9597023bc677711cb6f5f2815171798875` passed Quality Gate `32626280463`, Android Build `32626280429`, Visual Regression `32626280436` and iOS Build `32626280453`. Exact Visual artifact `9489797523` (`sha256:f23991b33a70701a5fe0a1028db814dc1b952f1b2b4e9fce4a2fbd396082cd2c`) passed the complete browser matrix and received human review across desktop, rollback, Arabic/RTL tablet, narrow-phone and destructive-action evidence. The admin Displays studio consolidates all six themes, branding, first-party built-in backgrounds and live preview; requires exact supported-target preview before publication; supports per-display/bulk overrides and mosque defaults; records bounded revision history and republishes rollback drafts as a new higher revision; blocks unsupported orientation/resolution combinations; preserves the administrator draft across ordinary fleet refreshes; and keeps managed credentials memory-only. Managed publication preserves validated built-in artwork but never transports device-local image assets, and all theme choices remain presentation-only with local prayer calculation authoritative. Stage 24.3 and the Stage 24 admin-console redesign are complete.
 
 ---
 
