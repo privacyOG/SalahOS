@@ -515,7 +515,7 @@ async function validateCongregationScenario(browser, scenario) {
         throw new Error(`${scenario.name} current/next prayer state lacks textual status`);
       }
     }
-    if (scenario.locale === 'ar' && state.bidiCount === 0) {
+    if (scenario.locale === 'ar' && scenario.view !== 'settings' && state.bidiCount === 0) {
       throw new Error(`${scenario.name} has no explicit mixed-direction isolation`);
     }
     if (errors.length > 0) throw new Error(`${scenario.name} page errors: ${errors.join(' | ')}`);

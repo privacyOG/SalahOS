@@ -12,14 +12,12 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   quality:
     runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '["ubuntu-24.04"]' || '["self-hosted","Linux","X64"]') }}
     timeout-minutes: 15
-    env:
-      GH_TOKEN: ${{ github.token }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,25 +30,6 @@ jobs:
 
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
-
-      - name: Publish corrected Stage 26 bidi harness blob
-        if: github.event_name == 'pull_request'
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-
-          path = Path('scripts/visual-accessibility-rtl-acceptance.mjs')
-          text = path.read_text()
-          old = """    if (scenario.locale === 'ar' && state.bidiCount === 0) {\n      throw new Error(`${scenario.name} has no explicit mixed-direction isolation`);\n    }\n"""
-          new = """    if (\n      scenario.locale === 'ar' &&\n      scenario.view !== 'settings' &&\n      state.bidiCount === 0\n    ) {\n      throw new Error(`${scenario.name} has no explicit mixed-direction isolation`);\n    }\n"""
-          if text.count(old) != 1:
-              raise SystemExit('legacy bidi assertion not found exactly once')
-          path.write_text(text.replace(old, new, 1))
-          PY
-          npx prettier --write scripts/visual-accessibility-rtl-acceptance.mjs
-          FORMATTED_BLOB_SHA="$(jq -Rs '{content: ., encoding: "utf-8"}' scripts/visual-accessibility-rtl-acceptance.mjs | gh api --method POST /repos/${{ github.repository }}/git/blobs --input - --jq .sha)"
-          echo "STAGE26_BIDI_BLOB_SHA=${FORMATTED_BLOB_SHA}"
-          exit 1
 
       - name: Sensitive-file policy
         run: npm run security:sensitive-files
