@@ -289,11 +289,13 @@ The daily prayer display surface must also become a first-class configurable pro
 
 ## 23.11 Optional weather module
 
-- [ ] Treat weather as an optional module, disabled unless explicitly configured.
-- [ ] Document the network/privacy implications of any weather provider.
-- [ ] Do not transmit precise device location merely to decorate the prayer board without explicit configuration.
-- [ ] Cache/fail-soft so weather failure never affects prayer information.
-- [ ] Hide stale/failed weather cleanly rather than showing broken placeholders.
+- [x] Treat weather as an optional module, disabled unless explicitly configured.
+- [x] Document the network/privacy implications of any weather provider.
+- [x] Do not transmit precise device location merely to decorate the prayer board without explicit configuration.
+- [x] Cache/fail-soft so weather failure never affects prayer information.
+- [x] Hide stale/failed weather cleanly rather than showing broken placeholders.
+
+**Stage 23.11 verification note (2026-08-23):** PR #185 code-bearing head `53b9f04ee6f160eb9d71a7440e44a6d50f5744d5` passed Quality Gate `32604176420`, Android Build `32604176462`, Visual Regression `32604176399` and iOS Build `32604176432`. Weather remains disabled by default and requires both the target presentation module and a separately enabled fixed-location feed with explicit coordinates. The adapter never reads browser/native GPS or reuses the prayer-calculation location; the documented privacy boundary discloses that configured coordinates are sent to the reviewed Open-Meteo endpoint together with normal HTTPS request metadata. Successful snapshots are cached as last-known-good data for at most two hours; provider/network failure may reuse only a still-fresh cache and expired/unavailable weather renders nothing, so prayer calculation, source, Iqamah and next-prayer presentation remain independent. Exact Visual artifact `9483707774` (SHA-256 `5b6f00dab07141f6ddaa5c1199d413ac4c19f88c3add0a5718791fc48debc941`) received human review across TV/Kiosk ready, provider-failure/cache and expired-hidden states plus Phone/Home settings and ready rendering. The five obligatory prayer rows remained intact, weather never produced a broken placeholder, the mobile bottom navigation remained unobstructed and the fixed-location privacy controls/copy were readable. Stage 23.11 is complete.
 
 ---
 
@@ -330,7 +332,7 @@ The phone Today/home experience must receive the same design quality and templat
 - [x] Add permanent visual-regression screenshots for each released phone/home template in representative light/dark and English/Arabic states.
 - [x] Perform human visual review of every released mobile-home template for prayer hierarchy, Athan/Iqamah clarity, bottom-navigation usability, density and originality before marking it complete.
 
-**Stage 23.13 verification note (2026-08-23):** PR #186 code-bearing head `17ba7535282144ffc64b525f7dc24cdc1745843b` passed Quality Gate `32597468392`, Android Build `32597468390`, Visual Regression `32597468393` and iOS Build `32597468388`. The congregation Today route consumes shared `PrayerBoardData` v1 through six original Phone/Home template treatments with a dedicated native-persisted configuration key, target isolation from TV/Kiosk configuration, preview-before-apply Settings UX, required five-prayer information, configurable supported optional modules and offline built-in fallbacks. Permanent visual coverage spans 320px, representative phones, compact landscape, large phone, tablet, English, Arabic/RTL, Turkish and Indonesian; exact Visual artifact `9481966738` received human review after correcting sibling-collision, preview-stacking, solar-preview and navigation word-break defects. Android and iOS lifecycle evidence proves the selected Phone/Home configuration survives real emulator/Simulator relaunch boundaries. Stage 23.11 optional weather remains separate.
+**Stage 23.13 verification note (2026-08-23):** PR #186 code-bearing head `17ba7535282144ffc64b525f7dc24cdc1745843b` passed Quality Gate `32597468392`, Android Build `32597468390`, Visual Regression `32597468393` and iOS Build `32597468388`. The congregation Today route consumes shared `PrayerBoardData` v1 through six original Phone/Home template treatments with a dedicated native-persisted configuration key, target isolation from TV/Kiosk configuration, preview-before-apply Settings UX, required five-prayer information, configurable supported optional modules and offline built-in fallbacks. Permanent visual coverage spans 320px, representative phones, compact landscape, large phone, tablet, English, Arabic/RTL, Turkish and Indonesian; exact Visual artifact `9481966738` received human review after correcting sibling-collision, preview-stacking, solar-preview and navigation word-break defects. Android and iOS lifecycle evidence proves the selected Phone/Home configuration survives real emulator/Simulator relaunch boundaries. Stage 23.11 optional weather is completed separately by PR #185; Stage 23.12 announcement/display rotation remains open.
 
 ---
 
