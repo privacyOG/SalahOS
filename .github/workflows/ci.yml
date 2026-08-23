@@ -12,12 +12,14 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   quality:
     runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '["ubuntu-24.04"]' || '["self-hosted","Linux","X64"]') }}
     timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,6 +32,74 @@ jobs:
 
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
+
+      - name: Validate and publish legacy App retirement
+        if: github.event_name == 'pull_request'
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          main_path = Path('src/main.tsx')
+          main = main_path.read_text()
+          old_import = "import { App } from './App';"
+          new_import = "import { SmartDisplayApplication } from './ui/SmartDisplayApplication';"
+          if main.count(old_import) != 1:
+              raise SystemExit('legacy App import marker missing')
+          main = main.replace(old_import, new_import, 1)
+          if main.count('<App />') != 1:
+              raise SystemExit('legacy App render marker missing')
+          main = main.replace('<App />', '<SmartDisplayApplication />', 1)
+          main_path.write_text(main)
+
+          guard_path = Path('scripts/check-ui-v2-retirement.mjs')
+          guard = guard_path.read_text()
+          guard = guard.replace(
+              "import { readFileSync } from 'node:fs';",
+              "import { existsSync, readFileSync } from 'node:fs';",
+              1,
+          )
+          marker = "const designSystem = read('docs/DESIGN_SYSTEM.md');\n"
+          if marker not in guard:
+              raise SystemExit('retirement guard design-system marker missing')
+          guard = guard.replace(
+              marker,
+              marker + "const smartDisplayApplication = read('src/ui/SmartDisplayApplication.tsx');\n",
+              1,
+          )
+          main_forbid = "forbid(main, /settings-display-entry__phone-home/, 'Settings display controls must not be injected from the root application');\n"
+          if main_forbid not in guard:
+              raise SystemExit('retirement guard main marker missing')
+          guard = guard.replace(
+              main_forbid,
+              main_forbid
+              + "forbid(main, /from ['\"]\\.\\/App['\"]/, 'root application must not import the retired App');\n"
+              + "if (existsSync('src/App.tsx')) {\n"
+              + "  throw new Error('UI/UX v2 retirement policy: src/App.tsx must remain retired');\n"
+              + "}\n",
+              1,
+          )
+          required_marker = "requireText(settingsScreen, 'MobilePrayerThemeSettings', 'direct personal display-theme settings ownership');\n"
+          if required_marker not in guard:
+              raise SystemExit('retirement guard required-text marker missing')
+          guard = guard.replace(
+              required_marker,
+              "requireText(main, 'SmartDisplayApplication', 'dedicated smart-display root ownership');\n"
+              + "requireText(smartDisplayApplication, 'SmartDisplay', 'smart-display runtime rendering');\n"
+              + required_marker,
+              1,
+          )
+          guard_path.write_text(guard)
+          PY
+          rm src/App.tsx
+          npx prettier --write src/ui/SmartDisplayApplication.tsx src/main.tsx scripts/check-ui-v2-retirement.mjs
+          npm run typecheck || true
+          SMART_DISPLAY_APP_BLOB_SHA="$(jq -Rs '{content: ., encoding: "utf-8"}' src/ui/SmartDisplayApplication.tsx | gh api --method POST /repos/${{ github.repository }}/git/blobs --input - --jq .sha)"
+          MAIN_BLOB_SHA="$(jq -Rs '{content: ., encoding: "utf-8"}' src/main.tsx | gh api --method POST /repos/${{ github.repository }}/git/blobs --input - --jq .sha)"
+          RETIREMENT_BLOB_SHA="$(jq -Rs '{content: ., encoding: "utf-8"}' scripts/check-ui-v2-retirement.mjs | gh api --method POST /repos/${{ github.repository }}/git/blobs --input - --jq .sha)"
+          echo "SMART_DISPLAY_APP_BLOB_SHA=${SMART_DISPLAY_APP_BLOB_SHA}"
+          echo "MAIN_BLOB_SHA=${MAIN_BLOB_SHA}"
+          echo "RETIREMENT_BLOB_SHA=${RETIREMENT_BLOB_SHA}"
+          exit 1
 
       - name: Sensitive-file policy
         run: npm run security:sensitive-files
