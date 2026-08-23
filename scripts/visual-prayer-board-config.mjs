@@ -156,7 +156,9 @@ async function validateRuntime(browser, scenario) {
       persisted?.background?.kind !== 'builtin' ||
       typeof persisted?.background?.artworkId !== 'string'
     ) {
-      throw new Error(`${scenario.name} persisted config was not retained: ${JSON.stringify(persisted)}`);
+      throw new Error(
+        `${scenario.name} persisted config was not retained: ${JSON.stringify(persisted)}`,
+      );
     }
     for (const core of ['current-time', 'next-prayer', 'countdown', 'prayer-timetable']) {
       if (persisted.moduleVisibility?.[core] !== true) {
