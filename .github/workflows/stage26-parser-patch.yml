@@ -1,0 +1,45 @@
+name: Stage 26 parser patch
+
+on:
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-24.04
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout PR branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Patch and publish canonical parser blob
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('scripts/visual-accessibility-rtl-acceptance.mjs')
+          text = path.read_text()
+          needle = """  const longHex = /^#([0-9a-f]{6})$/i.exec(normalized);\n  if (longHex) {\n    return {\n      r: Number.parseInt(longHex[1].slice(0, 2), 16),\n      g: Number.parseInt(longHex[1].slice(2, 4), 16),\n      b: Number.parseInt(longHex[1].slice(4, 6), 16),\n      a: 1,\n    };\n  }\n"""
+          replacement = needle + """  const shortAlphaHex = /^#([0-9a-f]{4})$/i.exec(normalized);\n  if (shortAlphaHex) {\n    const [r, g, b, a] = shortAlphaHex[1]\n      .split('')\n      .map((digit) => Number.parseInt(`${digit}${digit}`, 16));\n    return { r, g, b, a: a / 255 };\n  }\n  const longAlphaHex = /^#([0-9a-f]{8})$/i.exec(normalized);\n  if (longAlphaHex) {\n    return {\n      r: Number.parseInt(longAlphaHex[1].slice(0, 2), 16),\n      g: Number.parseInt(longAlphaHex[1].slice(2, 4), 16),\n      b: Number.parseInt(longAlphaHex[1].slice(4, 6), 16),\n      a: Number.parseInt(longAlphaHex[1].slice(6, 8), 16) / 255,\n    };\n  }\n"""
+          if text.count(needle) != 1:
+              raise SystemExit('Expected parseCssColor long-hex block exactly once')
+          path.write_text(text.replace(needle, replacement))
+          PY
+          npx prettier --write scripts/visual-accessibility-rtl-acceptance.mjs
+          FORMATTED_BLOB_SHA="$(jq -Rs '{content: ., encoding: "utf-8"}' scripts/visual-accessibility-rtl-acceptance.mjs | gh api --method POST /repos/${{ github.repository }}/git/blobs --input - --jq .sha)"
+          echo "STAGE26_PARSER_BLOB_SHA=${FORMATTED_BLOB_SHA}"
+          exit 1
