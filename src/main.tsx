@@ -7,6 +7,7 @@ import {
   flushApplicationStorage,
   initializeApplicationStorage,
 } from './platform/applicationStorage';
+import { AdminDisplayThemeManagement } from './ui/AdminDisplayThemeManagement';
 import { AdminOverviewDashboard } from './ui/AdminOverviewDashboard';
 import { AdminShell } from './ui/AdminShell';
 import { CommunityScreen } from './ui/CommunityScreen';
@@ -21,10 +22,8 @@ import { PrayerBoardAnnouncementSettings } from './ui/PrayerBoardAnnouncementSet
 import { PrayerBoardWeatherSettings } from './ui/PrayerBoardWeatherSettings';
 import { QiblaFinder } from './ui/QiblaFinder';
 import { RamadanModePanel } from './ui/RamadanModePanel';
-import { RemoteDisplayAdminPanel } from './ui/RemoteDisplayAdminPanel';
 import { SettingsScreen } from './ui/SettingsScreen';
 import { smartDisplayModeRequested } from './ui/SmartDisplay';
-import { SmartDisplayThemeSettings } from './ui/SmartDisplayThemeSettings';
 import { TaraweehPanel } from './ui/TaraweehPanel';
 import { TodayScreen } from './ui/TodayScreen';
 import { readTouchDisplayFixtureConfig, TouchDisplayFixture } from './ui/TouchDisplayFixture';
@@ -38,6 +37,7 @@ import './design-system.css';
 import './design-system-primitives.css';
 import './congregation-shell.css';
 import './admin-shell.css';
+import './admin-display-theme-management.css';
 import './today-screen.css';
 import './settings-screen.css';
 import './responsive-hardening.css';
@@ -195,13 +195,11 @@ function AdministrationRoute({
     case 'displays':
       return (
         <div className="admin-section-stack admin-section-stack--displays">
+          <AdminDisplayThemeManagement />
           <ManagedDisplayConnectionSettings />
-          <MobilePrayerThemeSettings />
-          <SmartDisplayThemeSettings />
           <PrayerBoardWeatherSettings />
           <PrayerBoardAnnouncementSettings />
           <ManagedDisplayRemoteController />
-          <RemoteDisplayAdminPanel />
         </div>
       );
     case 'integrations':
