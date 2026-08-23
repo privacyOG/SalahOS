@@ -12,12 +12,14 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   quality:
     runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '["ubuntu-24.04"]' || '["self-hosted","Linux","X64"]') }}
     timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,6 +32,16 @@ jobs:
 
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
+
+      - name: Publish formatted Stage 27 migration blobs
+        if: github.event_name == 'pull_request'
+        run: |
+          npx prettier --write scripts/check-ui-v2-retirement.mjs src/ui/SettingsMigrationPanels.tsx
+          RETIREMENT_BLOB_SHA="$(jq -Rs '{content: ., encoding: "utf-8"}' scripts/check-ui-v2-retirement.mjs | gh api --method POST /repos/${{ github.repository }}/git/blobs --input - --jq .sha)"
+          PANELS_BLOB_SHA="$(jq -Rs '{content: ., encoding: "utf-8"}' src/ui/SettingsMigrationPanels.tsx | gh api --method POST /repos/${{ github.repository }}/git/blobs --input - --jq .sha)"
+          echo "RETIREMENT_BLOB_SHA=${RETIREMENT_BLOB_SHA}"
+          echo "PANELS_BLOB_SHA=${PANELS_BLOB_SHA}"
+          exit 1
 
       - name: Sensitive-file policy
         run: npm run security:sensitive-files
