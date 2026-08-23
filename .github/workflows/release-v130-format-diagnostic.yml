@@ -1,33 +1,46 @@
-name: v1.3.0 Format Diagnostic
+name: v1.3.0 Publisher Observer
 
 on:
   pull_request:
 
 permissions:
+  actions: read
   contents: read
 
 jobs:
-  format:
+  observe:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
-      - name: Checkout exact candidate
-        uses: actions/checkout@v4
-        with:
-          ref: release/fix-v1.3.0-signer-parsing
-
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-
-      - name: Install dependencies
-        run: npm ci --ignore-scripts
-
-      - name: Print canonical Prettier diff
+      - name: Report exact v1.3.0 publisher run
+        env:
+          GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
-          npx prettier --write scripts/release-packaging.test.mjs
-          git diff -- scripts/release-packaging.test.mjs
+          gh run list \
+            --repo privacyOG/SalahOS \
+            --workflow 'Release Assets' \
+            --branch 'release/v1.3.0' \
+            --event push \
+            --limit 5 \
+            --json databaseId,status,conclusion,headSha,createdAt,updatedAt,url,workflowName
+
+          RUN_JSON="$(gh run list \
+            --repo privacyOG/SalahOS \
+            --workflow 'Release Assets' \
+            --branch 'release/v1.3.0' \
+            --event push \
+            --limit 1 \
+            --json databaseId,status,conclusion,headSha,url)"
+          RUN_SHA="$(jq -r '.[0].headSha // empty' <<< "$RUN_JSON")"
+          RUN_ID="$(jq -r '.[0].databaseId // empty' <<< "$RUN_JSON")"
+          [[ -n "$RUN_ID" ]] || {
+            echo 'No v1.3.0 release publisher run found.' >&2
+            exit 1
+          }
+          [[ "$RUN_SHA" == '617cb4551e80bc1def088c0062f79efe0a573e31' ]] || {
+            echo "Newest publisher run targets unexpected SHA: $RUN_SHA" >&2
+            exit 1
+          }
+          echo "Exact publisher run ID: $RUN_ID"
