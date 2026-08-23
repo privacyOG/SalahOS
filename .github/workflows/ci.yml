@@ -33,125 +33,24 @@ jobs:
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
 
-      - name: Publish Stage 27 route migration blobs
+      - name: Publish type-safe Stage 27 settings panel blob
         if: github.event_name == 'pull_request'
         run: |
           python3 - <<'PY'
           from pathlib import Path
 
-          settings_path = Path('src/ui/SettingsScreen.tsx')
-          settings = settings_path.read_text()
-          settings = settings.replace(
-              "import { useEffect, useMemo, useRef, useState } from 'react';\n\nimport { App } from '../App';",
-              "import { useEffect, useMemo, useState } from 'react';",
-              1,
-          )
-          settings = settings.replace(
-              "import { installThemePreference } from '../platform/themePreference';\nimport { RamadanModePanel } from './RamadanModePanel';",
-              "import { installThemePreference } from '../platform/themePreference';\nimport { MobilePrayerThemeSettings } from './MobilePrayerThemeSettings';\nimport { RamadanModePanel } from './RamadanModePanel';\nimport {\n  AdvancedPrayerSettingsPanel,\n  LocationSettingsPanel,\n  MosqueIqamahSettingsPanel,\n  NotificationAdhanSettingsPanel,\n  useSettingsNotificationSynchronization,\n} from './SettingsMigrationPanels';",
-              1,
-          )
-          copy_updates = {
-              "'Legacy import, adjustment and uncommon configuration tools during the v2 migration.'": "'Manual timetable import, prayer offsets and less common prayer configuration.'",
-              "'أدوات الاستيراد والتعديلات والإعدادات غير الشائعة خلال انتقال الواجهة الجديدة.'": "'استيراد الجداول يدوياً وتعديلات أوقات الصلاة والإعدادات الأقل استخداماً.'",
-              "'v2 geçişi sırasında eski içe aktarma, ayarlama ve seyrek kullanılan araçlar.'": "'Elle vakit içe aktarma, namaz vakti düzeltmeleri ve daha seyrek kullanılan ayarlar.'",
-              "'Alat impor, penyesuaian, dan konfigurasi tidak umum selama migrasi v2.'": "'Impor jadwal manual, penyesuaian waktu salat, dan pengaturan yang lebih jarang digunakan.'",
-          }
-          for old, new in copy_updates.items():
-              if old not in settings:
-                  raise SystemExit(f'Settings copy marker missing: {old}')
-              settings = settings.replace(old, new, 1)
-          settings = settings.replace("  const legacyRef = useRef<HTMLDivElement>(null);\n", '', 1)
-          selected_marker = "  const selectedDefinition = useMemo(\n    () => categories.find((definition) => definition.id === category) ?? null,\n    [category],\n  );\n"
-          if selected_marker not in settings:
-              raise SystemExit('selectedDefinition marker missing')
-          settings = settings.replace(
-              selected_marker,
-              selected_marker + "  const notificationRuntime = useSettingsNotificationSynchronization(settings);\n",
-              1,
-          )
-          legacy_effect = """  useEffect(() => {\n    if (category !== 'mosque' && category !== 'notifications' && category !== 'advanced') return;\n    const panel = legacyRef.current?.querySelector<HTMLDetailsElement>('.settings-panel');\n    if (panel !== undefined && panel !== null) panel.open = true;\n  }, [category]);\n\n"""
-          if legacy_effect not in settings:
-              raise SystemExit('legacy settings-panel effect missing')
-          settings = settings.replace(legacy_effect, '', 1)
-          display_old = """      {category === 'display-themes' && (\n        <section\n          className=\"settings-focus-panel settings-display-entry\"\n          aria-label={copy.displayTitle}\n        >\n          <a className=\"surface-entry-card__action\" href={administrationDisplaysHref()}>\n            {copy.displayAction}\n          </a>\n        </section>\n      )}\n\n"""
-          display_new = """      {category === 'display-themes' && (\n        <section\n          className=\"settings-focus-panel settings-display-entry\"\n          aria-label={copy.displayTitle}\n        >\n          <MobilePrayerThemeSettings />\n          <a className=\"surface-entry-card__action\" href={administrationDisplaysHref()}>\n            {copy.displayAction}\n          </a>\n        </section>\n      )}\n\n"""
-          if display_old not in settings:
-              raise SystemExit('display settings block missing')
-          settings = settings.replace(display_old, display_new, 1)
-          legacy_render = """      {(category === 'location' ||\n        category === 'mosque' ||\n        category === 'notifications' ||\n        category === 'advanced') && (\n        <div\n          ref={legacyRef}\n          className=\"settings-screen__legacy legacy-core-route legacy-core-route--settings\"\n          data-settings-category={category}\n        >\n          <App />\n        </div>\n      )}\n\n"""
-          migrated_render = """      {category === 'location' && (\n        <LocationSettingsPanel settings={settings} updateSettings={updateSettings} />\n      )}\n\n      {category === 'mosque' && (\n        <MosqueIqamahSettingsPanel settings={settings} updateSettings={updateSettings} />\n      )}\n\n      {category === 'notifications' && (\n        <NotificationAdhanSettingsPanel\n          settings={settings}\n          updateSettings={updateSettings}\n          runtime={notificationRuntime}\n        />\n      )}\n\n      {category === 'advanced' && (\n        <AdvancedPrayerSettingsPanel settings={settings} updateSettings={updateSettings} />\n      )}\n\n"""
-          if legacy_render not in settings:
-              raise SystemExit('legacy Settings App render missing')
-          settings = settings.replace(legacy_render, migrated_render, 1)
-          settings_path.write_text(settings)
-
-          main_path = Path('src/main.tsx')
-          main = main_path.read_text()
-          main = main.replace(
-              "import { StrictMode, useEffect, useState } from 'react';\nimport { createPortal } from 'react-dom';",
-              "import { StrictMode } from 'react';",
-              1,
-          )
-          main = main.replace("import { MobilePrayerThemeSettings } from './ui/MobilePrayerThemeSettings';\n", '', 1)
-          portal_start = main.find('function CongregationDisplayThemeEditor() {')
-          app_start = main.find('function CongregationApplication() {')
-          if portal_start < 0 or app_start < 0 or portal_start >= app_start:
-              raise SystemExit('CongregationDisplayThemeEditor markers missing')
-          main = main[:portal_start] + main[app_start:]
-          congregation_old = """function CongregationApplication() {\n  return (\n    <>\n      <CongregationShell>\n        {(destination) => <CongregationRoute destination={destination} />}\n      </CongregationShell>\n      <CongregationDisplayThemeEditor />\n    </>\n  );\n}\n"""
-          congregation_new = """function CongregationApplication() {\n  return (\n    <CongregationShell>\n      {(destination) => <CongregationRoute destination={destination} />}\n    </CongregationShell>\n  );\n}\n"""
-          if congregation_old not in main:
-              raise SystemExit('CongregationApplication legacy composition missing')
-          main = main.replace(congregation_old, congregation_new, 1)
-          main_path.write_text(main)
-
-          settings_css_path = Path('src/settings-screen.css')
-          settings_css = settings_css_path.read_text()
-          settings_css = settings_css.replace(
-              '.settings-focus-panel {\n',
-              '.settings-focus-panel,\n.settings-feature-panel {\n',
-              1,
-          )
-          panel_marker = "  background: var(--salah-bg-surface);\n}\n\n.settings-focus-grid {"
-          if panel_marker not in settings_css:
-              raise SystemExit('settings focus panel marker missing')
-          settings_css = settings_css.replace(
-              panel_marker,
-              "  background: var(--salah-bg-surface);\n}\n\n.settings-feature-panel {\n  display: grid;\n  min-width: 0;\n  gap: var(--salah-space-5);\n  margin: 0;\n}\n\n.settings-subpanel {\n  min-width: 0;\n}\n\n.settings-focus-grid {",
-              1,
-          )
-          legacy_css_start = settings_css.find('.settings-screen__legacy .app-shell {')
-          seasonal_start = settings_css.find('.settings-screen__seasonal {')
-          if legacy_css_start < 0 or seasonal_start < 0 or legacy_css_start >= seasonal_start:
-              raise SystemExit('legacy Settings CSS block markers missing')
-          settings_css = settings_css[:legacy_css_start] + settings_css[seasonal_start:]
-          settings_css = settings_css.replace(
-              '  .settings-category-card,\n  .settings-focus-panel {',
-              '  .settings-category-card,\n  .settings-focus-panel,\n  .settings-feature-panel {',
-              1,
-          )
-          settings_css_path.write_text(settings_css)
-
-          congregation_css_path = Path('src/congregation-shell.css')
-          congregation_css = congregation_css_path.read_text()
-          legacy_comment_start = congregation_css.find('/*\n * Settings still uses the legacy configuration core')
-          surface_start = congregation_css.find('.surface-entry-card {')
-          if legacy_comment_start < 0 or surface_start < 0 or legacy_comment_start >= surface_start:
-              raise SystemExit('legacy congregation CSS block markers missing')
-          congregation_css = congregation_css[:legacy_comment_start] + congregation_css[surface_start:]
-          congregation_css_path.write_text(congregation_css)
+          path = Path('src/ui/SettingsMigrationPanels.tsx')
+          text = path.read_text()
+          old = """  const selectedSavedLocationId =\n    settings.location !== null &&\n    savedLocations.some(\n      (location) => location.id === savedLocationId(settings.location?.coordinates),\n    )\n      ? savedLocationId(settings.location.coordinates)\n      : '';\n"""
+          new = """  const currentCoordinates = settings.location?.coordinates ?? null;\n  const selectedSavedLocationId =\n    currentCoordinates !== null &&\n    savedLocations.some((location) => location.id === savedLocationId(currentCoordinates))\n      ? savedLocationId(currentCoordinates)\n      : '';\n"""
+          if text.count(old) != 1:
+              raise SystemExit('saved-location narrowing marker missing')
+          path.write_text(text.replace(old, new, 1))
           PY
-          npx prettier --write src/ui/SettingsScreen.tsx src/main.tsx src/settings-screen.css src/congregation-shell.css
+          npx prettier --write src/ui/SettingsMigrationPanels.tsx
           npm run typecheck || true
-          SETTINGS_BLOB_SHA="$(jq -Rs '{content: ., encoding: "utf-8"}' src/ui/SettingsScreen.tsx | gh api --method POST /repos/${{ github.repository }}/git/blobs --input - --jq .sha)"
-          MAIN_BLOB_SHA="$(jq -Rs '{content: ., encoding: "utf-8"}' src/main.tsx | gh api --method POST /repos/${{ github.repository }}/git/blobs --input - --jq .sha)"
-          SETTINGS_CSS_BLOB_SHA="$(jq -Rs '{content: ., encoding: "utf-8"}' src/settings-screen.css | gh api --method POST /repos/${{ github.repository }}/git/blobs --input - --jq .sha)"
-          CONGREGATION_CSS_BLOB_SHA="$(jq -Rs '{content: ., encoding: "utf-8"}' src/congregation-shell.css | gh api --method POST /repos/${{ github.repository }}/git/blobs --input - --jq .sha)"
-          echo "SETTINGS_BLOB_SHA=${SETTINGS_BLOB_SHA}"
-          echo "MAIN_BLOB_SHA=${MAIN_BLOB_SHA}"
-          echo "SETTINGS_CSS_BLOB_SHA=${SETTINGS_CSS_BLOB_SHA}"
-          echo "CONGREGATION_CSS_BLOB_SHA=${CONGREGATION_CSS_BLOB_SHA}"
+          PANELS_BLOB_SHA="$(jq -Rs '{content: ., encoding: "utf-8"}' src/ui/SettingsMigrationPanels.tsx | gh api --method POST /repos/${{ github.repository }}/git/blobs --input - --jq .sha)"
+          echo "PANELS_BLOB_SHA=${PANELS_BLOB_SHA}"
           exit 1
 
       - name: Sensitive-file policy
