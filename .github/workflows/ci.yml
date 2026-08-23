@@ -12,12 +12,14 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   quality:
     runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '["ubuntu-24.04"]' || '["self-hosted","Linux","X64"]') }}
-    timeout-minutes: 15
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -30,6 +32,25 @@ jobs:
 
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
+
+      - name: Finalize Stage 27 migration and publish blobs
+        run: |
+          node scripts/stage27-finalize.mjs
+          npx prettier --write .
+          npm run lint
+          npm run typecheck
+          npm run test
+          npm run build
+          npm run verify:web-build
+          npm run ui:v2-retirement
+          while IFS= read -r file; do
+            if [ -z "$file" ]; then
+              continue
+            fi
+            blob_sha="$(jq -Rs '{content: ., encoding: "utf-8"}' "$file" | gh api --method POST /repos/privacyOG/SalahOS/git/blobs --input - --jq .sha)"
+            echo "STAGE27_BLOB $file $blob_sha"
+          done < stage27-files.txt
+          exit 1
 
       - name: Sensitive-file policy
         run: npm run security:sensitive-files
