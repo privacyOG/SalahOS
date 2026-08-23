@@ -198,7 +198,10 @@ async function captureScenario(browser, scenario) {
         throw new Error(`${scenario.name} is missing overview evidence: ${expected}`);
       }
     }
-    if (scenario.locale === 'ar' && (await page.locator('.admin-shell').getAttribute('dir')) !== 'rtl') {
+    if (
+      scenario.locale === 'ar' &&
+      (await page.locator('.admin-shell').getAttribute('dir')) !== 'rtl'
+    ) {
       throw new Error(`${scenario.name} did not render the administration shell RTL`);
     }
 
