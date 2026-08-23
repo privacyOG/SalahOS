@@ -36,7 +36,7 @@ function settings(locale, theme = 'light') {
   };
 }
 
-async function seed(page, locale, theme, fontScale = 1) {
+async function seed(page, locale, theme) {
   await page.addInitScript(
     ({ persistedSettings, now }) => {
       localStorage.setItem('salahos.settings', persistedSettings);
@@ -55,9 +55,6 @@ async function seed(page, locale, theme, fontScale = 1) {
     },
     { persistedSettings: JSON.stringify(settings(locale, theme)), now: fixedNow },
   );
-  if (fontScale !== 1) {
-    await page.addStyleTag({ content: `html { font-size: ${String(fontScale * 100)}% !important; }` });
-  }
 }
 
 async function horizontalOverflow(page) {
@@ -100,7 +97,9 @@ async function phoneMetrics(page) {
       const rect = element.getBoundingClientRect();
       return { width: rect.width, height: rect.height, label: element.textContent?.trim() ?? '' };
     });
-    const prayerRows = prayerTable.querySelectorAll('.today-prayer-row:not(.today-prayer-row--header)');
+    const prayerRows = prayerTable.querySelectorAll(
+      '.today-prayer-row:not(.today-prayer-row--header)',
+    );
 
     return {
       navPosition: navStyle.position,
@@ -153,9 +152,24 @@ async function validatePhone(browser, scenario) {
   const errors = [];
   page.on('pageerror', (error) => errors.push(error.message));
   try {
-    await seed(page, scenario.locale, scenario.theme, scenario.fontScale ?? 1);
+    await seed(page, scenario.locale, scenario.theme);
     await page.goto(baseUrl, { waitUntil: 'networkidle' });
     await page.locator('.today-prayer-table').waitFor({ state: 'visible' });
+    if ((scenario.fontScale ?? 1) !== 1) {
+      const expectedScale = scenario.fontScale ?? 1;
+      await page.addStyleTag({
+        content: `html { font-size: ${String(expectedScale * 100)}% !important; }`,
+      });
+      const rootFontSize = await page.evaluate(() =>
+        Number.parseFloat(getComputedStyle(document.documentElement).fontSize),
+      );
+      const expectedRootFontSize = 16 * expectedScale;
+      if (Math.abs(rootFontSize - expectedRootFontSize) > 0.5) {
+        throw new Error(
+          `${scenario.name} enlarged-text fixture inactive: expected ${String(expectedRootFontSize)}px root, got ${String(rootFontSize)}px`,
+        );
+      }
+    }
     assertNoHorizontalOverflow(scenario.name, await horizontalOverflow(page));
     const metrics = await phoneMetrics(page);
     assertPhoneMetrics(scenario.name, metrics);
@@ -187,7 +201,11 @@ async function validateWide(browser, scenario) {
       const shell = document.querySelector('.congregation-shell');
       const nav = document.querySelector('.congregation-nav');
       const content = document.querySelector('.congregation-shell-content');
-      if (!(shell instanceof HTMLElement) || !(nav instanceof HTMLElement) || !(content instanceof HTMLElement)) {
+      if (
+        !(shell instanceof HTMLElement) ||
+        !(nav instanceof HTMLElement) ||
+        !(content instanceof HTMLElement)
+      ) {
         throw new Error('wide congregation shell missing');
       }
       const shellColumns = getComputedStyle(shell).gridTemplateColumns;
@@ -205,13 +223,17 @@ async function validateWide(browser, scenario) {
       };
     });
     if (metrics.navPosition !== 'sticky') {
-      throw new Error(`${scenario.name} expected a sticky rail/sidebar, got ${metrics.navPosition}`);
+      throw new Error(
+        `${scenario.name} expected a sticky rail/sidebar, got ${metrics.navPosition}`,
+      );
     }
     if (!metrics.shellColumns.includes('px') || metrics.contentWidth >= metrics.viewportWidth) {
       throw new Error(`${scenario.name} did not reserve deliberate navigation/content columns`);
     }
     if (metrics.widestParagraph > 900) {
-      throw new Error(`${scenario.name} paragraph line length stretched excessively: ${metrics.widestParagraph}px`);
+      throw new Error(
+        `${scenario.name} paragraph line length stretched excessively: ${metrics.widestParagraph}px`,
+      );
     }
     await page.screenshot({
       path: path.join(artifactDirectory, `${scenario.name}.png`),
@@ -278,7 +300,9 @@ try {
     path.join(artifactDirectory, 'stage25-device-ux-results.json'),
     `${JSON.stringify({ phones, wide }, null, 2)}\n`,
   );
-  console.log(`Stage 25 phone/tablet/desktop device UX acceptance passed: ${String(phones.length + wide.length)} scenarios.`);
+  console.log(
+    `Stage 25 phone/tablet/desktop device UX acceptance passed: ${String(phones.length + wide.length)} scenarios.`,
+  );
 } finally {
   await browser.close();
 }
