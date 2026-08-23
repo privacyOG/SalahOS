@@ -18,7 +18,10 @@ import {
 import { buildNotificationIntents } from '../domain/notificationSchedule';
 import { resolveNotificationScheduleInstants } from '../domain/notificationInstant';
 import { buildNotificationPrayerInputs } from '../domain/notificationPrayerInputs';
-import { hasManualPrayerAdjustments, resetManualPrayerAdjustments } from '../domain/prayerAdjustments';
+import {
+  hasManualPrayerAdjustments,
+  resetManualPrayerAdjustments,
+} from '../domain/prayerAdjustments';
 import type { PrayerName } from '../domain/prayerEngine';
 import { applyPrayerSourceToDashboard } from '../domain/sourcedDashboard';
 import { translate } from '../i18n/i18n';
@@ -113,7 +116,8 @@ function initialMosqueLibrary(): readonly MosqueLibraryEntry[] {
 }
 
 function useSavedLocationsState() {
-  const [savedLocations, setSavedLocations] = useState<readonly SavedLocation[]>(initialSavedLocations);
+  const [savedLocations, setSavedLocations] =
+    useState<readonly SavedLocation[]>(initialSavedLocations);
 
   useEffect(() => {
     try {
@@ -231,9 +235,7 @@ export function LocationSettingsPanel({ settings, updateSettings }: SharedSettin
   const selectSavedLocation = (id: string) => {
     const selected = savedLocations.find((location) => location.id === id);
     if (selected === undefined) return;
-    setLocation(
-      resolveLocation(settings, selected.coordinates, selected.timeZone ?? undefined),
-    );
+    setLocation(resolveLocation(settings, selected.coordinates, selected.timeZone ?? undefined));
     setLatitude(String(selected.coordinates.latitude));
     setLongitude(String(selected.coordinates.longitude));
     setLocationMessage(null);
@@ -272,7 +274,10 @@ export function LocationSettingsPanel({ settings, updateSettings }: SharedSettin
       : '';
 
   return (
-    <section className="settings-feature-panel settings-location-panel" aria-label={translate(locale, 'currentLocation')}>
+    <section
+      className="settings-feature-panel settings-location-panel"
+      aria-label={translate(locale, 'currentLocation')}
+    >
       <div className="location-actions">
         <button
           type="button"
@@ -481,7 +486,10 @@ export function MosqueIqamahSettingsPanel({ settings, updateSettings }: SharedSe
   );
 }
 
-export function AdvancedPrayerSettingsPanel({ settings, updateSettings }: SharedSettingsPanelProps) {
+export function AdvancedPrayerSettingsPanel({
+  settings,
+  updateSettings,
+}: SharedSettingsPanelProps) {
   const locale = settings.locale;
   const [mosqueLibrary, setMosqueLibrary] = useMosqueLibraryState();
   const [manualMosqueName, setManualMosqueName] = useState(
@@ -553,9 +561,8 @@ export function AdvancedPrayerSettingsPanel({ settings, updateSettings }: Shared
 
   const importMosqueTimetable = async () => {
     try {
-      const { parseMosqueTimetableCsv, parseMosqueTimetableJson } = await import(
-        '../domain/timetableImport'
-      );
+      const { parseMosqueTimetableCsv, parseMosqueTimetableJson } =
+        await import('../domain/timetableImport');
       const timetable =
         mosqueImportFormat === 'json'
           ? parseMosqueTimetableJson(mosqueImportPayload)
