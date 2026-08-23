@@ -157,9 +157,9 @@ async function validatePhone(browser, scenario) {
     await page.locator('.today-prayer-table').waitFor({ state: 'visible' });
     if ((scenario.fontScale ?? 1) !== 1) {
       const expectedScale = scenario.fontScale ?? 1;
-      await page.addStyleTag({
-        content: `html { font-size: ${String(expectedScale * 100)}% !important; }`,
-      });
+      await page.evaluate((fontSize) => {
+        document.documentElement.style.setProperty('font-size', fontSize, 'important');
+      }, `${String(expectedScale * 100)}%`);
       const rootFontSize = await page.evaluate(() =>
         Number.parseFloat(getComputedStyle(document.documentElement).fontSize),
       );
