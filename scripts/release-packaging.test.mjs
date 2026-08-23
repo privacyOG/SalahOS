@@ -73,7 +73,9 @@ describe('release asset workflow', () => {
     expect(workflow).toContain('AAB_SIGNER_SHA256');
     expect(workflow).toContain('verify --verbose --print-certs "$APK" 2>&1');
     expect(workflow).toContain("awk '/certificate SHA-256 digest:/");
-    expect(workflow).not.toContain("sed -n 's/^Signer #1 certificate SHA-256 digest:");
+    expect(workflow).not.toContain(
+      "sed -n 's/^Signer #1 certificate SHA-256 digest:",
+    );
     expect(workflow).toContain(
       'Unable to resolve signed APK certificate SHA-256 fingerprint',
     );
