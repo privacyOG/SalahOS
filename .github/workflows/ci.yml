@@ -12,14 +12,12 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   quality:
     runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '["ubuntu-24.04"]' || '["self-hosted","Linux","X64"]') }}
     timeout-minutes: 15
-    env:
-      GH_TOKEN: ${{ github.token }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,26 +30,6 @@ jobs:
 
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
-
-      - name: Publish type-safe Stage 27 settings panel blob
-        if: github.event_name == 'pull_request'
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-
-          path = Path('src/ui/SettingsMigrationPanels.tsx')
-          text = path.read_text()
-          old = """  const selectedSavedLocationId =\n    settings.location !== null &&\n    savedLocations.some(\n      (location) => location.id === savedLocationId(settings.location?.coordinates),\n    )\n      ? savedLocationId(settings.location.coordinates)\n      : '';\n"""
-          new = """  const currentCoordinates = settings.location?.coordinates ?? null;\n  const selectedSavedLocationId =\n    currentCoordinates !== null &&\n    savedLocations.some((location) => location.id === savedLocationId(currentCoordinates))\n      ? savedLocationId(currentCoordinates)\n      : '';\n"""
-          if text.count(old) != 1:
-              raise SystemExit('saved-location narrowing marker missing')
-          path.write_text(text.replace(old, new, 1))
-          PY
-          npx prettier --write src/ui/SettingsMigrationPanels.tsx
-          npm run typecheck || true
-          PANELS_BLOB_SHA="$(jq -Rs '{content: ., encoding: "utf-8"}' src/ui/SettingsMigrationPanels.tsx | gh api --method POST /repos/${{ github.repository }}/git/blobs --input - --jq .sha)"
-          echo "PANELS_BLOB_SHA=${PANELS_BLOB_SHA}"
-          exit 1
 
       - name: Sensitive-file policy
         run: npm run security:sensitive-files

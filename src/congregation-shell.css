@@ -22,22 +22,6 @@
   padding-inline-end: env(safe-area-inset-right);
 }
 
-/*
- * Settings still uses the legacy configuration core during the staged v2
- * migration. Its prayer presentation is intentionally suppressed because
- * the dedicated Today screen now owns congregation prayer presentation.
- */
-.legacy-core-route--settings .hero,
-.legacy-core-route--settings .prayer-panel,
-.legacy-core-route--settings .status-card {
-  display: none;
-}
-
-.legacy-core-route--settings .location-panel,
-.legacy-core-route--settings .settings-panel {
-  box-shadow: var(--salah-shadow-sm);
-}
-
 .surface-entry-card {
   width: min(1180px, calc(100% - 2rem));
   margin: 1.25rem auto;

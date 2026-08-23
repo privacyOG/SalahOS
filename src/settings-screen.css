@@ -113,11 +113,23 @@
   transform: scaleX(-1);
 }
 
-.settings-focus-panel {
+.settings-focus-panel,
+.settings-feature-panel {
   padding: clamp(1rem, 2.2vw, 1.6rem);
   border: 1px solid var(--salah-border-subtle);
   border-radius: var(--salah-radius-lg);
   background: var(--salah-bg-surface);
+}
+
+.settings-feature-panel {
+  display: grid;
+  min-width: 0;
+  gap: var(--salah-space-5);
+  margin: 0;
+}
+
+.settings-subpanel {
+  min-width: 0;
 }
 
 .settings-focus-grid {
@@ -177,80 +189,6 @@
   gap: var(--salah-space-4);
 }
 
-.settings-screen__legacy .app-shell {
-  width: 100%;
-  max-width: none;
-  margin: 0;
-  padding: 0;
-}
-
-.settings-screen__legacy .offline-banner {
-  margin-block-end: var(--salah-space-4);
-}
-
-.settings-screen__legacy[data-settings-category='location'] .settings-panel {
-  display: none;
-}
-
-.settings-screen__legacy[data-settings-category='mosque'] .location-panel,
-.settings-screen__legacy[data-settings-category='notifications'] .location-panel,
-.settings-screen__legacy[data-settings-category='advanced'] .location-panel {
-  display: none;
-}
-
-.settings-screen__legacy[data-settings-category='mosque'] .settings-panel > summary,
-.settings-screen__legacy[data-settings-category='notifications'] .settings-panel > summary,
-.settings-screen__legacy[data-settings-category='advanced'] .settings-panel > summary {
-  display: none;
-}
-
-.settings-screen__legacy[data-settings-category='mosque'] .settings-grid,
-.settings-screen__legacy[data-settings-category='mosque'] .offsets-fieldset,
-.settings-screen__legacy[data-settings-category='mosque'] .notification-fieldset,
-.settings-screen__legacy[data-settings-category='mosque'] .settings-transfer,
-.settings-screen__legacy[data-settings-category='mosque'] .settings-panel > .inline-message,
-.settings-screen__legacy[data-settings-category='mosque'] .manual-mosque-fieldset,
-.settings-screen__legacy[data-settings-category='mosque'] .mosque-import-grid,
-.settings-screen__legacy[data-settings-category='mosque'] .mosque-import-payload,
-.settings-screen__legacy[data-settings-category='mosque'] .mosque-library-controls > button,
-.settings-screen__legacy[data-settings-category='mosque']
-  .mosque-library-controls
-  > .inline-message {
-  display: none;
-}
-
-.settings-screen__legacy[data-settings-category='notifications'] .settings-grid,
-.settings-screen__legacy[data-settings-category='notifications'] .mosque-library-controls,
-.settings-screen__legacy[data-settings-category='notifications'] .offsets-fieldset,
-.settings-screen__legacy[data-settings-category='notifications'] .settings-transfer,
-.settings-screen__legacy[data-settings-category='notifications'] .settings-panel > .inline-message {
-  display: none;
-}
-
-.settings-screen__legacy[data-settings-category='advanced'] .settings-grid,
-.settings-screen__legacy[data-settings-category='advanced'] .mosque-library-row,
-.settings-screen__legacy[data-settings-category='advanced'] .notification-fieldset,
-.settings-screen__legacy[data-settings-category='advanced'] .settings-transfer,
-.settings-screen__legacy[data-settings-category='advanced'] .settings-panel > .inline-message {
-  display: none;
-}
-
-.settings-screen__legacy[data-settings-category='mosque'] .settings-panel,
-.settings-screen__legacy[data-settings-category='notifications'] .settings-panel,
-.settings-screen__legacy[data-settings-category='advanced'] .settings-panel {
-  padding: clamp(1rem, 2vw, 1.5rem);
-}
-
-.settings-screen__legacy[data-settings-category='mosque'] .mosque-library-controls,
-.settings-screen__legacy[data-settings-category='notifications'] .notification-fieldset,
-.settings-screen__legacy[data-settings-category='advanced'] .mosque-library-controls {
-  margin: 0;
-}
-
-.settings-screen__legacy[data-settings-category='advanced'] .offsets-fieldset {
-  margin-block-start: var(--salah-space-5);
-}
-
 .settings-screen__seasonal {
   display: grid;
   gap: var(--salah-space-4);
@@ -287,7 +225,8 @@
 
 @media (forced-colors: active) {
   .settings-category-card,
-  .settings-focus-panel {
+  .settings-focus-panel,
+  .settings-feature-panel {
     border-color: CanvasText;
     background: Canvas;
   }

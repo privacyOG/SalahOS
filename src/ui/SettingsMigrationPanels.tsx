@@ -265,12 +265,11 @@ export function LocationSettingsPanel({ settings, updateSettings }: SharedSettin
     setLocationMessage('savedLocationRemoved');
   };
 
+  const currentCoordinates = settings.location?.coordinates ?? null;
   const selectedSavedLocationId =
-    settings.location !== null &&
-    savedLocations.some(
-      (location) => location.id === savedLocationId(settings.location?.coordinates),
-    )
-      ? savedLocationId(settings.location.coordinates)
+    currentCoordinates !== null &&
+    savedLocations.some((location) => location.id === savedLocationId(currentCoordinates))
+      ? savedLocationId(currentCoordinates)
       : '';
 
   return (
