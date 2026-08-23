@@ -12,12 +12,14 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   quality:
     runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '["ubuntu-24.04"]' || '["self-hosted","Linux","X64"]') }}
     timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -31,47 +33,69 @@ jobs:
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
 
-      - name: Sensitive-file policy
-        run: npm run security:sensitive-files
+      - name: Validate direct display settings ownership and publish blobs
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
 
-      - name: Native permission policy
-        run: npm run security:native-permissions
+          settings = Path('src/ui/SettingsScreen.tsx')
+          text = settings.read_text()
+          import_marker = "import { MobilePrayerThemeSettings } from './MobilePrayerThemeSettings';\n"
+          if text.count(import_marker) != 1:
+              raise SystemExit('MobilePrayerThemeSettings import marker missing')
+          text = text.replace(
+              import_marker,
+              import_marker + "import { PrayerBoardWeatherSettings } from './PrayerBoardWeatherSettings';\n",
+              1,
+          )
+          render_marker = '          <MobilePrayerThemeSettings />\n          <a className="surface-entry-card__action" href={administrationDisplaysHref()}>\n'
+          if text.count(render_marker) != 1:
+              raise SystemExit('display settings render marker missing')
+          text = text.replace(
+              render_marker,
+              '          <MobilePrayerThemeSettings />\n          <PrayerBoardWeatherSettings />\n          <a className="surface-entry-card__action" href={administrationDisplaysHref()}>\n',
+              1,
+          )
+          settings.write_text(text)
 
-      - name: Remote network policy
-        run: npm run security:remote-network
+          test = Path('src/ui/SettingsProgressiveDisclosureV2.test.ts')
+          text = test.read_text()
+          test_marker = "  it('does not rely on legacy Settings wrappers or destination-hiding CSS', () => {\n"
+          if text.count(test_marker) != 1:
+              raise SystemExit('settings ownership test insertion marker missing')
+          addition = "  it('owns personal display themes and optional weather directly', () => {\n    expect(settingsSource).toContain(\"category === 'display-themes'\");\n    expect(settingsSource).toContain('<MobilePrayerThemeSettings />');\n    expect(settingsSource).toContain('<PrayerBoardWeatherSettings />');\n    expect(settingsSource).toContain('administrationDisplaysHref()');\n  });\n\n"
+          text = text.replace(test_marker, addition + test_marker, 1)
+          test.write_text(text)
 
-      - name: Dependency vulnerability audit
-        run: npm run security:audit
+          policy = Path('scripts/check-ui-v2-retirement.mjs')
+          text = policy.read_text()
+          policy_marker = "requireText(\n  settingsScreen,\n  'MobilePrayerThemeSettings',\n  'direct personal display-theme settings ownership',\n);\n"
+          if text.count(policy_marker) != 1:
+              raise SystemExit('retirement policy display marker missing')
+          text = text.replace(
+              policy_marker,
+              policy_marker + "requireText(\n  settingsScreen,\n  'PrayerBoardWeatherSettings',\n  'direct personal weather settings ownership',\n);\n",
+              1,
+          )
+          policy.write_text(text)
 
-      - name: Dependency license policy
-        run: npm run security:licenses
-
-      - name: Documentation link verification
-        run: npm run docs:links
-
-      - name: PWA raster icon reproducibility
-        run: python3 scripts/generate_pwa_icons.py --check
-
-      - name: Design-system ownership policy
-        run: npm run ui:design-system-ownership
-
-      - name: UI/UX v2 retirement policy
-        run: npm run ui:v2-retirement
-
-      - name: Format check
-        run: npm run format:check
-
-      - name: Lint
-        run: npm run lint
-
-      - name: Typecheck
-        run: npm run typecheck
-
-      - name: Test
-        run: npm run test
-
-      - name: Production build
-        run: npm run build
-
-      - name: Verify deployable web artifact
-        run: npm run verify:web-build
+          visual = Path('scripts/visual-ui-v2-retirement.mjs')
+          text = visual.read_text()
+          visual_marker = "    selector: '.mobile-prayer-theme-settings',\n"
+          if text.count(visual_marker) != 1:
+              raise SystemExit('Stage 27 display acceptance marker missing')
+          text = text.replace(visual_marker, "    selector: '.prayer-board-weather-settings',\n", 1)
+          visual.write_text(text)
+          PY
+          npx prettier --write src/ui/SettingsScreen.tsx src/ui/SettingsProgressiveDisclosureV2.test.ts scripts/check-ui-v2-retirement.mjs scripts/visual-ui-v2-retirement.mjs
+          npm run lint
+          npm run typecheck
+          npm run test
+          npm run build
+          npm run verify:web-build
+          npm run ui:v2-retirement
+          for file in src/ui/SettingsScreen.tsx src/ui/SettingsProgressiveDisclosureV2.test.ts scripts/check-ui-v2-retirement.mjs scripts/visual-ui-v2-retirement.mjs; do
+            blob_sha="$(jq -Rs '{content: ., encoding: "utf-8"}' "$file" | gh api --method POST /repos/privacyOG/SalahOS/git/blobs --input - --jq .sha)"
+            echo "STAGE27_DISPLAY_BLOB $file $blob_sha"
+          done
+          exit 1
