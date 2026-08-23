@@ -53,41 +53,33 @@ jobs:
 
           guard_path = Path('scripts/check-ui-v2-retirement.mjs')
           guard = guard_path.read_text()
+          if "import { readFileSync } from 'node:fs';" not in guard:
+              raise SystemExit('retirement guard import marker missing')
           guard = guard.replace(
               "import { readFileSync } from 'node:fs';",
               "import { existsSync, readFileSync } from 'node:fs';",
               1,
           )
-          marker = "const designSystem = read('docs/DESIGN_SYSTEM.md');\n"
-          if marker not in guard:
+          design_marker = "const designSystem = read('docs/DESIGN_SYSTEM.md');\n"
+          if design_marker not in guard:
               raise SystemExit('retirement guard design-system marker missing')
           guard = guard.replace(
-              marker,
-              marker + "const smartDisplayApplication = read('src/ui/SmartDisplayApplication.tsx');\n",
+              design_marker,
+              design_marker + "const smartDisplayApplication = read('src/ui/SmartDisplayApplication.tsx');\n",
               1,
           )
-          main_forbid = "forbid(main, /settings-display-entry__phone-home/, 'Settings display controls must not be injected from the root application');\n"
-          if main_forbid not in guard:
-              raise SystemExit('retirement guard main marker missing')
-          guard = guard.replace(
-              main_forbid,
-              main_forbid
-              + "forbid(main, /from ['\"]\\.\\/App['\"]/, 'root application must not import the retired App');\n"
-              + "if (existsSync('src/App.tsx')) {\n"
-              + "  throw new Error('UI/UX v2 retirement policy: src/App.tsx must remain retired');\n"
-              + "}\n",
-              1,
-          )
-          required_marker = "requireText(settingsScreen, 'MobilePrayerThemeSettings', 'direct personal display-theme settings ownership');\n"
-          if required_marker not in guard:
-              raise SystemExit('retirement guard required-text marker missing')
-          guard = guard.replace(
-              required_marker,
-              "requireText(main, 'SmartDisplayApplication', 'dedicated smart-display root ownership');\n"
-              + "requireText(smartDisplayApplication, 'SmartDisplay', 'smart-display runtime rendering');\n"
-              + required_marker,
-              1,
-          )
+          final_marker = "requireText(designSystem, 'UI/UX v2 architecture', 'final UI/UX v2 architecture documentation');"
+          if final_marker not in guard:
+              raise SystemExit('retirement guard final marker missing')
+          additions = """forbid(main, /from ['\"]\\.\\/App['\"]/, 'root application must not import the retired App');
+if (existsSync('src/App.tsx')) {
+  throw new Error('UI/UX v2 retirement policy: src/App.tsx must remain retired');
+}
+requireText(main, 'SmartDisplayApplication', 'dedicated smart-display root ownership');
+requireText(smartDisplayApplication, 'SmartDisplay', 'smart-display runtime rendering');
+
+"""
+          guard = guard.replace(final_marker, additions + final_marker, 1)
           guard_path.write_text(guard)
           PY
           rm src/App.tsx
