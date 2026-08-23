@@ -82,7 +82,8 @@ const copy: Readonly<Record<Locale, Copy>> = {
     enabled: 'Aktifkan rotasi pengumuman terjadwal',
     mosque: 'Masjid pengumuman',
     dwell: 'Detik per pengumuman',
-    dwellHelp: 'Setiap pengumuman yang memenuhi syarat tampil 5–120 detik sebelum adegan berikutnya.',
+    dwellHelp:
+      'Setiap pengumuman yang memenuhi syarat tampil 5–120 detik sebelum adegan berikutnya.',
     moduleHelp:
       'Modul Pengumuman per layar tetap menjadi sakelar terakhir. Matikan untuk layar khusus papan salat tanpa menghapus jadwal ini.',
     save: 'Simpan rotasi pengumuman',
@@ -102,8 +103,8 @@ function readLocale(): Locale {
 
 function displayAnnouncements(): readonly MosqueAnnouncement[] {
   try {
-    return loadCommunityContentLibrary(getApplicationStorage()).announcements.filter((announcement) =>
-      announcement.surfaces.includes('display'),
+    return loadCommunityContentLibrary(getApplicationStorage()).announcements.filter(
+      (announcement) => announcement.surfaces.includes('display'),
     );
   } catch {
     return [];
@@ -126,9 +127,7 @@ export function PrayerBoardAnnouncementSettings() {
   );
   const [enabled, setEnabled] = useState(current.enabled);
   const [mosqueId, setMosqueId] = useState(current.playlist?.mosqueId ?? mosqueIds[0] ?? '');
-  const [dwellSeconds, setDwellSeconds] = useState(
-    current.playlist?.scenes[0]?.dwellSeconds ?? 12,
-  );
+  const [dwellSeconds, setDwellSeconds] = useState(current.playlist?.scenes[0]?.dwellSeconds ?? 12);
   const [status, setStatus] = useState<string | null>(null);
   const eligible = announcements.filter((announcement) => announcement.mosqueId === mosqueId);
 
