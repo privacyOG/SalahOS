@@ -1,0 +1,27 @@
+name: Stage 24 Confirmation Format Export
+
+on:
+  pull_request:
+    paths:
+      - .github/workflows/stage24-confirm-format.yml
+
+permissions:
+  contents: read
+
+jobs:
+  format:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Format destructive confirmation acceptance
+        run: npx prettier --write scripts/visual-admin-destructive-confirmation.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stage24-confirmation-format-${{ github.event.pull_request.head.sha }}
+          path: scripts/visual-admin-destructive-confirmation.mjs
+          retention-days: 1
