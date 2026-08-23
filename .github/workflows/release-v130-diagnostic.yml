@@ -1,0 +1,179 @@
+name: v1.3.0 Release Diagnostic
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  package:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      SALAHOS_ANDROID_KEYSTORE_BASE64: ${{ secrets.SALAHOS_ANDROID_KEYSTORE_BASE64 }}
+      SALAHOS_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.SALAHOS_ANDROID_KEYSTORE_PASSWORD }}
+      SALAHOS_ANDROID_KEY_ALIAS: ${{ secrets.SALAHOS_ANDROID_KEY_ALIAS }}
+      SALAHOS_ANDROID_KEY_PASSWORD: ${{ secrets.SALAHOS_ANDROID_KEY_PASSWORD }}
+      SALAHOS_ANDROID_REQUIRE_SIGNING: 'true'
+    steps:
+      - name: Checkout exact current main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Require exact release revision
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main --no-tags
+          HEAD_SHA="$(git rev-parse HEAD)"
+          MAIN_SHA="$(git rev-parse origin/main)"
+          [[ "$HEAD_SHA" == "$MAIN_SHA" ]]
+          [[ "$HEAD_SHA" == '09493c35ab39e0bc9d6b12e15486313db0fa2476' ]]
+          [[ "$(node -p "require('./package.json').version")" == '1.3.0' ]]
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK packages
+        run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
+
+      - name: Require persistent Android release signing
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in \
+            SALAHOS_ANDROID_KEYSTORE_BASE64 \
+            SALAHOS_ANDROID_KEYSTORE_PASSWORD \
+            SALAHOS_ANDROID_KEY_ALIAS \
+            SALAHOS_ANDROID_KEY_PASSWORD; do
+            [[ -n "${!name:-}" ]] || {
+              echo "Required Android release signing secret is not configured: ${name}" >&2
+              exit 1
+            }
+          done
+          KEYSTORE="$RUNNER_TEMP/salahos-release.jks"
+          printf '%s' "$SALAHOS_ANDROID_KEYSTORE_BASE64" | base64 --decode > "$KEYSTORE"
+          chmod 600 "$KEYSTORE"
+          test -s "$KEYSTORE"
+          echo "SALAHOS_ANDROID_KEYSTORE_PATH=$KEYSTORE" >> "$GITHUB_ENV"
+
+      - name: Install dependencies from lockfile
+        run: npm ci --ignore-scripts
+
+      - name: Repository quality gate
+        run: npm run check
+
+      - name: Build signed Android release packages
+        run: npm run android:release-check
+
+      - name: Verify persistent Android signer identity
+        shell: bash
+        run: |
+          set -euo pipefail
+          APK='android/app/build/outputs/apk/release/app-release.apk'
+          AAB='android/app/build/outputs/bundle/release/app-release.aab'
+          test -s "$APK"
+          test -s "$AAB"
+          APKSIGNER="$(find "${ANDROID_HOME:-$ANDROID_SDK_ROOT}/build-tools" -type f -name apksigner -perm -u+x | sort -V | tail -1)"
+          test -x "$APKSIGNER"
+
+          normalize_fingerprint() {
+            tr '[:lower:]' '[:upper:]' | tr -d ':[:space:]'
+          }
+
+          EXPECTED_SIGNER_SHA256="$(
+            LC_ALL=C keytool -list -v \
+              -keystore "$SALAHOS_ANDROID_KEYSTORE_PATH" \
+              -storepass "$SALAHOS_ANDROID_KEYSTORE_PASSWORD" \
+              -alias "$SALAHOS_ANDROID_KEY_ALIAS" \
+              | awk '/SHA256:/{print $2; exit}' \
+              | normalize_fingerprint
+          )"
+          [[ -n "$EXPECTED_SIGNER_SHA256" ]]
+
+          APK_VERIFY_OUTPUT="$("$APKSIGNER" verify --verbose --print-certs "$APK")"
+          printf '%s\n' "$APK_VERIFY_OUTPUT"
+          APK_SIGNER_SHA256="$(
+            sed -n 's/^Signer #1 certificate SHA-256 digest: //p' <<< "$APK_VERIFY_OUTPUT" \
+              | head -1 \
+              | normalize_fingerprint
+          )"
+
+          jarsigner -verify -certs "$AAB"
+          AAB_SIGNER_SHA256="$(
+            LC_ALL=C keytool -printcert -jarfile "$AAB" \
+              | awk '/SHA256:/{print $2; exit}' \
+              | normalize_fingerprint
+          )"
+
+          [[ "$APK_SIGNER_SHA256" == "$EXPECTED_SIGNER_SHA256" ]]
+          [[ "$AAB_SIGNER_SHA256" == "$EXPECTED_SIGNER_SHA256" ]]
+          echo "APK/AAB signer identity matches the configured persistent release key."
+
+      - name: Package and verify complete v1.3.0 asset set
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION='1.3.0'
+          mkdir -p release/web release/pi/SalahOS
+          cp -a dist/. release/web/
+          cp -a dist release/pi/SalahOS/dist
+          mkdir -p release/pi/SalahOS/scripts/kiosk
+          cp scripts/kiosk/run-salahos-kiosk.sh scripts/kiosk/install-labwc-autostart.sh release/pi/SalahOS/scripts/kiosk/
+          cp docs/RELEASE_ASSETS.md release/pi/SalahOS/INSTALL.md
+          chmod +x release/pi/SalahOS/scripts/kiosk/*.sh
+          (cd release/web && zip -qr "../SalahOS-v${VERSION}-web-pwa.zip" .)
+          tar -C release/pi -czf "release/SalahOS-v${VERSION}-raspberry-pi-kiosk.tar.gz" SalahOS
+          cp android/app/build/outputs/apk/release/app-release.apk "release/SalahOS-v${VERSION}-android.apk"
+          cp android/app/build/outputs/bundle/release/app-release.aab "release/SalahOS-v${VERSION}-android.aab"
+          rm -rf release/web release/pi
+          (
+            cd release
+            sha256sum \
+              "SalahOS-v${VERSION}-web-pwa.zip" \
+              "SalahOS-v${VERSION}-raspberry-pi-kiosk.tar.gz" \
+              "SalahOS-v${VERSION}-android.apk" \
+              "SalahOS-v${VERSION}-android.aab" \
+              > SHA256SUMS.txt
+            sha256sum --check SHA256SUMS.txt
+            unzip -t "SalahOS-v${VERSION}-web-pwa.zip"
+            PI_CONTENTS="$(tar -tzf "SalahOS-v${VERSION}-raspberry-pi-kiosk.tar.gz")"
+            grep -Fxq 'SalahOS/INSTALL.md' <<< "$PI_CONTENTS"
+            grep -Fxq 'SalahOS/dist/index.html' <<< "$PI_CONTENTS"
+            EXPECTED="$(printf '%s\n' \
+              "SalahOS-v${VERSION}-web-pwa.zip" \
+              "SalahOS-v${VERSION}-raspberry-pi-kiosk.tar.gz" \
+              "SalahOS-v${VERSION}-android.apk" \
+              "SalahOS-v${VERSION}-android.aab" \
+              SHA256SUMS.txt | sort)"
+            ACTUAL="$(find . -maxdepth 1 -type f -printf '%f\n' | sort)"
+            [[ "$ACTUAL" == "$EXPECTED" ]]
+          )
+
+      - name: Upload verified diagnostic package
+        uses: actions/upload-artifact@v4
+        with:
+          name: v1.3.0-release-diagnostic
+          path: |
+            release/SalahOS-v1.3.0-android.apk
+            release/SalahOS-v1.3.0-android.aab
+            release/SalahOS-v1.3.0-web-pwa.zip
+            release/SalahOS-v1.3.0-raspberry-pi-kiosk.tar.gz
+            release/SHA256SUMS.txt
+          if-no-files-found: error
+          retention-days: 2
