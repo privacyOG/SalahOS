@@ -1,0 +1,5 @@
+@media (prefers-reduced-motion: reduce) {
+  .smart-display[data-burn-in-shift] .prayer-board-configured-surface {
+    transform: none;
+  }
+}
