@@ -1,0 +1,33 @@
+name: v1.3.0 Format Diagnostic
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  format:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout exact candidate
+        uses: actions/checkout@v4
+        with:
+          ref: release/fix-v1.3.0-signer-parsing
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Print canonical Prettier diff
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx prettier --write scripts/release-packaging.test.mjs
+          git diff -- scripts/release-packaging.test.mjs
