@@ -2,10 +2,10 @@
   width: min(1180px, calc(100% - 2rem));
   margin: 1.25rem auto;
   padding: clamp(1rem, 2vw, 1.5rem);
-  border: 1px solid var(--card-border);
+  border: 1px solid var(--salah-border-subtle);
   border-radius: 1.5rem;
-  background: var(--card);
-  box-shadow: 0 1.2rem 3rem var(--shadow);
+  background: var(--salah-bg-surface);
+  box-shadow: 0 1.2rem 3rem var(--salah-shadow-color);
 }
 
 .mosque-profiles-panel__heading {
@@ -19,7 +19,7 @@
 .mosque-profiles-panel__heading > p {
   max-width: 44rem;
   margin: 0;
-  color: var(--muted);
+  color: var(--salah-fg-secondary);
 }
 
 .mosque-profiles-panel__eyebrow {
@@ -28,7 +28,7 @@
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--salah-fg-secondary);
 }
 
 .mosque-profiles-panel h2,
@@ -45,10 +45,10 @@
 .mosque-profile-choice {
   min-height: 5rem;
   padding: 0.85rem;
-  border: 1px solid var(--card-border);
+  border: 1px solid var(--salah-border-subtle);
   border-radius: 1rem;
-  background: var(--page);
-  color: var(--text);
+  background: var(--salah-bg-canvas);
+  color: var(--salah-fg-primary);
   text-align: start;
 }
 
@@ -69,7 +69,7 @@
 }
 
 .mosque-profile-choice small {
-  color: var(--muted);
+  color: var(--salah-fg-secondary);
 }
 
 .mosque-profile-choice__actions,
@@ -89,14 +89,14 @@
   gap: 1rem;
   margin-top: 1rem;
   padding: 1rem;
-  border: 1px solid var(--card-border);
+  border: 1px solid var(--salah-border-subtle);
   border-radius: 1rem;
-  background: var(--next-card);
+  background: var(--salah-bg-accent-soft);
 }
 
 .mosque-profile-details p {
   margin-bottom: 0;
-  color: var(--muted);
+  color: var(--salah-fg-secondary);
 }
 
 .mosque-profile-details dl {
@@ -112,7 +112,7 @@
 }
 
 .mosque-profile-details dt {
-  color: var(--muted);
+  color: var(--salah-fg-secondary);
 }
 
 .mosque-profile-details dd {
@@ -123,14 +123,14 @@
   margin: 1rem 0 0;
   padding: 1rem;
   border-radius: 1rem;
-  background: var(--next-card);
-  color: var(--muted);
+  background: var(--salah-bg-accent-soft);
+  color: var(--salah-fg-secondary);
 }
 
 .mosque-profiles-panel__manage {
   margin-top: 1.25rem;
   padding-top: 1rem;
-  border-top: 1px solid var(--card-border);
+  border-top: 1px solid var(--salah-border-subtle);
 }
 
 .mosque-profiles-panel__manage summary {
@@ -158,7 +158,7 @@
 
 .mosque-profiles-panel__message {
   margin-bottom: 0;
-  color: var(--muted);
+  color: var(--salah-fg-secondary);
 }
 
 @media (max-width: 720px) {

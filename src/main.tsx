@@ -1,8 +1,7 @@
-import { StrictMode, useEffect, useState } from 'react';
-import { createPortal } from 'react-dom';
+import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 
-import { App } from './App';
+import { SmartDisplayApplication } from './ui/SmartDisplayApplication';
 import {
   flushApplicationStorage,
   initializeApplicationStorage,
@@ -15,7 +14,6 @@ import { CommunityUpdatesPanel } from './ui/CommunityUpdatesPanel';
 import { CongregationShell } from './ui/CongregationShell';
 import { ManagedDisplayConnectionSettings } from './ui/ManagedDisplayConnectionSettings';
 import { ManagedDisplayRemoteController } from './ui/ManagedDisplayRemoteController';
-import { MobilePrayerThemeSettings } from './ui/MobilePrayerThemeSettings';
 import { MobilePrayerThemeSurface } from './ui/MobilePrayerThemeSurface';
 import { MosquesScreen } from './ui/MosquesScreen';
 import { PrayerBoardAnnouncementSettings } from './ui/PrayerBoardAnnouncementSettings';
@@ -97,44 +95,11 @@ function CongregationRoute({ destination }: Readonly<{ destination: Congregation
   }
 }
 
-function CongregationDisplayThemeEditor() {
-  const [mountTarget, setMountTarget] = useState<HTMLElement | null>(null);
-
-  useEffect(() => {
-    const updateMountTarget = () => {
-      setMountTarget(document.querySelector<HTMLElement>('.settings-display-entry'));
-    };
-
-    updateMountTarget();
-    const observer = new MutationObserver(updateMountTarget);
-    observer.observe(document.getElementById('root') ?? document.body, {
-      childList: true,
-      subtree: true,
-    });
-    return () => {
-      observer.disconnect();
-    };
-  }, []);
-
-  if (mountTarget === null) return null;
-
-  return createPortal(
-    <div className="settings-display-entry__phone-home">
-      <MobilePrayerThemeSettings />
-      <PrayerBoardWeatherSettings />
-    </div>,
-    mountTarget,
-  );
-}
-
 function CongregationApplication() {
   return (
-    <>
-      <CongregationShell>
-        {(destination) => <CongregationRoute destination={destination} />}
-      </CongregationShell>
-      <CongregationDisplayThemeEditor />
-    </>
+    <CongregationShell>
+      {(destination) => <CongregationRoute destination={destination} />}
+    </CongregationShell>
   );
 }
 
@@ -255,7 +220,7 @@ function RootApplication() {
     return (
       <>
         <ManagedDisplayRemoteController />
-        <App />
+        <SmartDisplayApplication />
       </>
     );
   }

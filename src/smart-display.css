@@ -1,9 +1,10 @@
 .smart-display {
   min-height: 100vh;
   padding: clamp(1rem, 2.5vw, 2.25rem);
-  color: var(--text);
+  color: var(--salah-fg-primary);
   background:
-    radial-gradient(circle at top right, var(--page-glow), transparent 38rem), var(--page);
+    radial-gradient(circle at top right, var(--salah-bg-canvas-glow), transparent 38rem),
+    var(--salah-bg-canvas);
 }
 
 .smart-display-header {
@@ -19,10 +20,10 @@
 .smart-display-prayers,
 .smart-display-jumuah,
 .smart-display-empty {
-  border: 1px solid var(--card-border);
+  border: 1px solid var(--salah-border-subtle);
   border-radius: 1.4rem;
-  background: var(--card);
-  box-shadow: 0 1.4rem 4rem var(--shadow);
+  background: var(--salah-bg-surface);
+  box-shadow: 0 1.4rem 4rem var(--salah-shadow-color);
 }
 
 .smart-display-clock-block {
@@ -45,7 +46,7 @@
   flex-wrap: wrap;
   gap: 0.5rem 1.5rem;
   margin-block-start: 1rem;
-  color: var(--muted);
+  color: var(--salah-fg-secondary);
   font-size: clamp(1rem, 2vw, 1.5rem);
 }
 
@@ -53,7 +54,7 @@
   display: grid;
   align-content: center;
   padding: clamp(1.2rem, 3vw, 2.4rem);
-  background: var(--next-card);
+  background: var(--salah-bg-accent-soft);
 }
 
 .smart-display .next-prayer-block strong {
@@ -69,7 +70,7 @@
   margin: 0 0 1rem;
   padding: 0.75rem 1rem;
   border-radius: 1rem;
-  background: var(--warning-bg);
+  background: var(--salah-bg-warning-soft);
   color: var(--warning-text);
   font-weight: 700;
   text-align: center;
@@ -114,9 +115,9 @@
   display: grid;
   gap: 0.35rem;
   padding: 0.9rem 1rem;
-  border: 1px solid var(--card-border);
+  border: 1px solid var(--salah-border-subtle);
   border-radius: 1rem;
-  background: var(--next-card);
+  background: var(--salah-bg-accent-soft);
 }
 
 .smart-display-jumuah-sessions strong {
@@ -137,7 +138,7 @@
 }
 
 .smart-display-empty span {
-  color: var(--muted);
+  color: var(--salah-fg-secondary);
   font-size: clamp(1.1rem, 2vw, 1.6rem);
 }
 
@@ -147,7 +148,7 @@
   justify-content: center;
   gap: 0.55rem 1.5rem;
   margin-block-start: 1rem;
-  color: var(--muted);
+  color: var(--salah-fg-secondary);
   font-size: clamp(0.85rem, 1.4vw, 1.05rem);
   text-align: center;
 }

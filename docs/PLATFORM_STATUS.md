@@ -84,3 +84,9 @@ Remote-control behavior varies by browser and hardware. The application recognis
 The v1.0.0 production repository/source release requires one exact revision with fresh passing Quality Gate, Android Build, Visual Regression and iOS Build/Simulator acceptance results. Physical target-notification, target-audio, target-display, signing and store-distribution acceptance remains open where identified above and is not inferred from automated, emulator, Simulator or browser execution.
 
 Shipping v1.0.0 does not change any **Physical acceptance open** entry to verified. Those items remain follow-up validation and must be recorded separately when target hardware becomes available.
+
+## UI/UX v2 runtime ownership
+
+The congregation application now mounts destination-specific v2 screens directly. Settings categories no longer embed the retired single-page renderer or rely on CSS destination hiding. TV/kiosk mode runs through the dedicated `SmartDisplayApplication`, while administration remains isolated under `AdminShell`. Root compatibility colour aliases were retired; application and administration surfaces consume `--salah-*` semantic tokens, with template-specific palette variables limited to their locally scoped display surfaces.
+
+Quality Gate enforcement is provided by `npm run ui:v2-retirement`. Visual Regression includes the Stage 27 runtime ownership matrix so migrated Settings routes and smart-display mode are validated on the production build.

@@ -22,22 +22,6 @@
   padding-inline-end: env(safe-area-inset-right);
 }
 
-/*
- * Settings still uses the legacy configuration core during the staged v2
- * migration. Its prayer presentation is intentionally suppressed because
- * the dedicated Today screen now owns congregation prayer presentation.
- */
-.legacy-core-route--settings .hero,
-.legacy-core-route--settings .prayer-panel,
-.legacy-core-route--settings .status-card {
-  display: none;
-}
-
-.legacy-core-route--settings .location-panel,
-.legacy-core-route--settings .settings-panel {
-  box-shadow: var(--salah-shadow-sm);
-}
-
 .surface-entry-card {
   width: min(1180px, calc(100% - 2rem));
   margin: 1.25rem auto;
@@ -92,7 +76,7 @@
     max(var(--salah-space-2), env(safe-area-inset-left));
   border-block-start: 1px solid var(--salah-border-subtle);
   background: color-mix(in srgb, var(--salah-bg-surface-raised) 94%, transparent);
-  box-shadow: 0 -0.75rem 2rem color-mix(in srgb, var(--shadow) 35%, transparent);
+  box-shadow: 0 -0.75rem 2rem color-mix(in srgb, var(--salah-shadow-color) 35%, transparent);
   backdrop-filter: blur(18px);
 }
 
@@ -133,13 +117,13 @@
 }
 
 .congregation-nav-item[aria-current='page'] {
-  border-color: color-mix(in srgb, var(--accent) 22%, transparent);
+  border-color: color-mix(in srgb, var(--salah-fg-accent) 22%, transparent);
   color: var(--salah-fg-primary);
-  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  background: color-mix(in srgb, var(--salah-fg-accent) 10%, transparent);
 }
 
 .congregation-nav-item:hover:not(:disabled) {
-  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  background: color-mix(in srgb, var(--salah-fg-accent) 8%, transparent);
 }
 
 @media (min-width: 800px) {

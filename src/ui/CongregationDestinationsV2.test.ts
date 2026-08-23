@@ -13,17 +13,19 @@ function sourceBetween(source: string, startMarker: string, endMarker: string): 
   return source.slice(start, end);
 }
 
-describe('Stage 22.5 congregation destinations', () => {
+describe('Congregation destination ownership', () => {
   it('routes Mosques and Community to dedicated congregation reader screens', () => {
     const congregationRoutes = sourceBetween(
       mainSource,
       'function CongregationRoute',
-      'function CongregationDisplayThemeEditor',
+      'function CongregationApplication',
     );
 
     expect(mainSource).toContain("import { MosquesScreen } from './ui/MosquesScreen';");
     expect(mainSource).toContain("import { CommunityScreen } from './ui/CommunityScreen';");
+    expect(congregationRoutes).toContain("case 'mosques'");
     expect(congregationRoutes).toContain('<MosquesScreen />');
+    expect(congregationRoutes).toContain("case 'community'");
     expect(congregationRoutes).toContain('<CommunityScreen />');
     expect(congregationRoutes).not.toContain('<MosqueProfilesPanel />');
     expect(congregationRoutes).not.toContain('<CommunityUpdatesPanel />');

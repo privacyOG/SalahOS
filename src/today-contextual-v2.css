@@ -31,7 +31,7 @@
 }
 
 .today-context-state[data-state='offline-managed'] {
-  border-color: color-mix(in srgb, var(--accent) 28%, var(--salah-border-subtle));
+  border-color: color-mix(in srgb, var(--salah-fg-accent) 28%, var(--salah-border-subtle));
 }
 
 .today-context-state strong,
@@ -57,12 +57,12 @@
 
 .today-seasonal {
   overflow: hidden;
-  border: 1px solid color-mix(in srgb, var(--accent) 24%, var(--salah-border-subtle));
+  border: 1px solid color-mix(in srgb, var(--salah-fg-accent) 24%, var(--salah-border-subtle));
   border-radius: var(--salah-radius-lg);
   background:
     radial-gradient(
       circle at top right,
-      color-mix(in srgb, var(--accent) 12%, transparent),
+      color-mix(in srgb, var(--salah-fg-accent) 12%, transparent),
       transparent 46%
     ),
     var(--salah-bg-surface-raised);
@@ -72,7 +72,7 @@
   background:
     radial-gradient(
       circle at top left,
-      color-mix(in srgb, var(--accent) 12%, transparent),
+      color-mix(in srgb, var(--salah-fg-accent) 12%, transparent),
       transparent 46%
     ),
     var(--salah-bg-surface-raised);

@@ -55,6 +55,9 @@ jobs:
       - name: Design-system ownership policy
         run: npm run ui:design-system-ownership
 
+      - name: UI/UX v2 retirement policy
+        run: npm run ui:v2-retirement
+
       - name: Format check
         run: npm run format:check
 

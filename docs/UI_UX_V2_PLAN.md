@@ -461,15 +461,17 @@ The phone Today/home experience must receive the same design quality and templat
 
 # Stage 27 — Legacy UI retirement and migration completion
 
-- [ ] Remove obsolete single-page destination-hiding logic after real screen navigation is complete.
-- [ ] Remove legacy CSS overrides superseded by Design System v2.
-- [ ] Remove unused visual tokens and compatibility aliases only after all consumers have migrated.
-- [ ] Remove duplicated feature-panel framing styles.
-- [ ] Ensure no congregation workflow still depends on administrator-only components being mounted in the same page tree.
-- [ ] Run full prayer-domain, notification, offline, managed-masjid, visual, Android and iOS regression suites after the migration.
-- [ ] Update `docs/DESIGN_SYSTEM.md` to describe the v2 architecture and component rules.
-- [ ] Update platform documentation/screenshots to the new navigation and prayer-board templates.
-- [ ] Mark UI/UX v2 complete only after implementation, automated regression coverage and human visual acceptance are all complete.
+- [x] Remove obsolete single-page destination-hiding logic after real screen navigation is complete.
+- [x] Remove legacy CSS overrides superseded by Design System v2.
+- [x] Remove unused visual tokens and compatibility aliases only after all consumers have migrated.
+- [x] Remove duplicated feature-panel framing styles.
+- [x] Ensure no congregation workflow still depends on administrator-only components being mounted in the same page tree.
+- [x] Run full prayer-domain, notification, offline, managed-masjid, visual, Android and iOS regression suites after the migration.
+- [x] Update `docs/DESIGN_SYSTEM.md` to describe the v2 architecture and component rules.
+- [x] Update platform documentation/screenshots to the new navigation and prayer-board templates.
+- [x] Mark UI/UX v2 complete only after implementation, automated regression coverage and human visual acceptance are all complete.
+
+**Stage 27 verification note (2026-08-23):** PR #191 code-bearing head `bfef1935402d17ffec88310259ba111d59f763ab` passed Quality Gate `32642038448`, Visual Regression `32642038440`, Android Build `32642038441` and iOS Build `32642038443`. Exact Visual artifact `9493898944` (`sha256:4a13035ba455d9ca6d7f9f873b64abb3b80437673aadee90bb4e7df85d840189`) passed the complete prayer-board, congregation, administration, Touch Display, accessibility/RTL and Stage 27 retirement matrix. Human acceptance confirmed coherent direct v2 Settings ownership, including Phone/Home theme and optional weather configuration, isolated smart-display runtime and no observed visual regression from legacy CSS/token retirement. The UI/UX v2 completion boundary is satisfied.
 
 ---
 

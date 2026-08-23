@@ -1,6 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
-
-import { App } from '../App';
+import { useEffect, useMemo, useState } from 'react';
 import { calculationMethods } from '../domain/methods';
 import { applyDocumentLocale, translate } from '../i18n/i18n';
 import type { Locale } from '../i18n/translations';
@@ -15,7 +13,16 @@ import {
   type PersistedSettings,
 } from '../platform/settingsStorage';
 import { installThemePreference } from '../platform/themePreference';
+import { MobilePrayerThemeSettings } from './MobilePrayerThemeSettings';
+import { PrayerBoardWeatherSettings } from './PrayerBoardWeatherSettings';
 import { RamadanModePanel } from './RamadanModePanel';
+import {
+  AdvancedPrayerSettingsPanel,
+  LocationSettingsPanel,
+  MosqueIqamahSettingsPanel,
+  NotificationAdhanSettingsPanel,
+  useSettingsNotificationSynchronization,
+} from './SettingsMigrationPanels';
 import { TaraweehPanel } from './TaraweehPanel';
 import {
   readSettingsCategory,
@@ -77,7 +84,7 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
       'Open managed-display configuration without mixing credentials or fleet controls into daily settings.',
     advancedTitle: 'Advanced',
     advancedDescription:
-      'Legacy import, adjustment and uncommon configuration tools during the v2 migration.',
+      'Manual timetable import, prayer offsets and less common prayer configuration.',
     displayAction: 'Open managed displays',
     exportHelp: 'Settings data stays local unless you explicitly copy or export it.',
     imported: 'Settings imported successfully.',
@@ -107,8 +114,7 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
     displayDescription:
       'افتح إدارة الشاشات من دون إظهار بيانات الدخول أو الأسطول في الإعدادات اليومية.',
     advancedTitle: 'متقدم',
-    advancedDescription:
-      'أدوات الاستيراد والتعديلات والإعدادات غير الشائعة خلال انتقال الواجهة الجديدة.',
+    advancedDescription: 'استيراد الجداول يدوياً وتعديلات أوقات الصلاة والإعدادات الأقل استخداماً.',
     displayAction: 'افتح الشاشات المُدارة',
     exportHelp: 'تبقى بيانات الإعدادات محلية ما لم تنسخها أو تصدرها صراحةً.',
     imported: 'تم استيراد الإعدادات بنجاح.',
@@ -139,7 +145,7 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
       'Kimlik bilgilerini veya filo kontrollerini günlük ayarlara karıştırmadan yönetilen ekranları açın.',
     advancedTitle: 'Gelişmiş',
     advancedDescription:
-      'v2 geçişi sırasında eski içe aktarma, ayarlama ve seyrek kullanılan araçlar.',
+      'Elle vakit içe aktarma, namaz vakti düzeltmeleri ve daha seyrek kullanılan ayarlar.',
     displayAction: 'Yönetilen ekranları aç',
     exportHelp: 'Ayar verileri, siz açıkça kopyalamadıkça veya dışa aktarmadıkça yerel kalır.',
     imported: 'Ayarlar başarıyla içe aktarıldı.',
@@ -169,7 +175,8 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
     displayDescription:
       'Buka layar terkelola tanpa mencampur kredensial atau kontrol armada ke pengaturan harian.',
     advancedTitle: 'Lanjutan',
-    advancedDescription: 'Alat impor, penyesuaian, dan konfigurasi tidak umum selama migrasi v2.',
+    advancedDescription:
+      'Impor jadwal manual, penyesuaian waktu salat, dan pengaturan yang lebih jarang digunakan.',
     displayAction: 'Buka layar terkelola',
     exportHelp:
       'Data pengaturan tetap lokal kecuali Anda secara eksplisit menyalin atau mengekspornya.',
@@ -413,12 +420,12 @@ export function SettingsScreen() {
   );
   const [settingsPayload, setSettingsPayload] = useState('');
   const [dataMessage, setDataMessage] = useState<'imported' | 'importError' | 'reset' | null>(null);
-  const legacyRef = useRef<HTMLDivElement>(null);
   const copy = settingsCopy[settings.locale];
   const selectedDefinition = useMemo(
     () => categories.find((definition) => definition.id === category) ?? null,
     [category],
   );
+  const notificationRuntime = useSettingsNotificationSynchronization(settings);
 
   useEffect(() => {
     applyDocumentLocale(document.documentElement, settings.locale);
@@ -449,12 +456,6 @@ export function SettingsScreen() {
     } catch {
       // Keep the current in-memory settings if storage cannot be read.
     }
-  }, [category]);
-
-  useEffect(() => {
-    if (category !== 'mosque' && category !== 'notifications' && category !== 'advanced') return;
-    const panel = legacyRef.current?.querySelector<HTMLDetailsElement>('.settings-panel');
-    if (panel !== undefined && panel !== null) panel.open = true;
   }, [category]);
 
   const updateSettings = (update: (current: PersistedSettings) => PersistedSettings) => {
@@ -601,23 +602,32 @@ export function SettingsScreen() {
           className="settings-focus-panel settings-display-entry"
           aria-label={copy.displayTitle}
         >
+          <MobilePrayerThemeSettings />
+          <PrayerBoardWeatherSettings />
           <a className="surface-entry-card__action" href={administrationDisplaysHref()}>
             {copy.displayAction}
           </a>
         </section>
       )}
 
-      {(category === 'location' ||
-        category === 'mosque' ||
-        category === 'notifications' ||
-        category === 'advanced') && (
-        <div
-          ref={legacyRef}
-          className="settings-screen__legacy legacy-core-route legacy-core-route--settings"
-          data-settings-category={category}
-        >
-          <App />
-        </div>
+      {category === 'location' && (
+        <LocationSettingsPanel settings={settings} updateSettings={updateSettings} />
+      )}
+
+      {category === 'mosque' && (
+        <MosqueIqamahSettingsPanel settings={settings} updateSettings={updateSettings} />
+      )}
+
+      {category === 'notifications' && (
+        <NotificationAdhanSettingsPanel
+          settings={settings}
+          updateSettings={updateSettings}
+          runtime={notificationRuntime}
+        />
+      )}
+
+      {category === 'advanced' && (
+        <AdvancedPrayerSettingsPanel settings={settings} updateSettings={updateSettings} />
       )}
 
       {category === 'mosque' && (
