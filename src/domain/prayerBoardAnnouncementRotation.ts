@@ -91,7 +91,9 @@ export function createPrayerBoardAnnouncementRotationConfig(
     throw new RangeError('Enabled announcement rotation requires a signage playlist');
   }
   if (rules.length === 0) {
-    throw new RangeError('Enabled announcement rotation requires at least one signage schedule rule');
+    throw new RangeError(
+      'Enabled announcement rotation requires at least one signage schedule rule',
+    );
   }
   if (scenes.length === 0) {
     throw new RangeError('Enabled announcement rotation requires at least one announcement scene');
@@ -223,15 +225,17 @@ function selectByAbsoluteDwell(
   return null;
 }
 
-export function resolvePrayerBoardAnnouncementRotation(input: Readonly<{
-  config: PrayerBoardAnnouncementRotationConfig;
-  announcements: readonly MosqueAnnouncement[];
-  locale: Locale;
-  moduleVisible: boolean;
-  dashboard: SourcedPrayerDashboard;
-  scheduleContext: SignageScheduleEvaluationContext;
-  nowIso: string;
-}>): PrayerBoardAnnouncementRotationResolution {
+export function resolvePrayerBoardAnnouncementRotation(
+  input: Readonly<{
+    config: PrayerBoardAnnouncementRotationConfig;
+    announcements: readonly MosqueAnnouncement[];
+    locale: Locale;
+    moduleVisible: boolean;
+    dashboard: SourcedPrayerDashboard;
+    scheduleContext: SignageScheduleEvaluationContext;
+    nowIso: string;
+  }>,
+): PrayerBoardAnnouncementRotationResolution {
   const nowIso = assertIsoTimestamp(input.nowIso, 'Announcement rotation time');
   const normalized = createPrayerBoardAnnouncementRotationConfig(input.config);
 
