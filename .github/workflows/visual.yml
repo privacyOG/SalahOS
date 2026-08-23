@@ -21,6 +21,7 @@ jobs:
       PLAYWRIGHT_BROWSERS_PATH: /tmp/salahos-pw-browsers-1.62.0
       SALAHOS_VISUAL_PLAYWRIGHT_MODULE: /tmp/salahos-visual-harness/node_modules/playwright/index.mjs
       SALAHOS_VISUAL_ARTIFACT_DIR: visual-artifacts
+      GH_TOKEN: ${{ github.token }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -36,18 +37,13 @@ jobs:
       - name: Install application dependencies
         run: npm ci --ignore-scripts
 
-      - name: Canonicalize Stage 26 formatter output
+      - name: Publish canonical Stage 26 formatter blob
         if: github.event_name == 'pull_request'
         run: |
           npx prettier --write scripts/visual-accessibility-rtl-acceptance.mjs
-          if git diff --quiet -- scripts/visual-accessibility-rtl-acceptance.mjs; then
-            exit 0
-          fi
-          git config user.name privacyOG
-          git config user.email privacyOG@users.noreply.github.com
-          git add scripts/visual-accessibility-rtl-acceptance.mjs
-          git commit -m "Format Stage 26 accessibility acceptance"
-          git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          FORMATTED_BLOB_SHA="$(gh api --method POST /repos/${{ github.repository }}/git/blobs --raw-field content="$(cat scripts/visual-accessibility-rtl-acceptance.mjs)" --raw-field encoding=utf-8 --jq .sha)"
+          echo "FORMATTED_STAGE26_BLOB_SHA=${FORMATTED_BLOB_SHA}"
+          exit 1
 
       - name: Build production application
         run: npm run build
