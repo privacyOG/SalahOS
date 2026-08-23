@@ -5,13 +5,14 @@ GitHub releases are intended to provide ready-to-use artifacts for nontechnical 
 ## Which file should I download?
 
 - **Android:** `SalahOS-vX.Y.Z-android.apk` — a cryptographically signed Android release APK. Android may ask you to permit installation from the browser or file manager used to open the APK.
+- **Android App Bundle:** `SalahOS-vX.Y.Z-android.aab` — the persistently signed bundle intended for Google Play/distribution workflows; it is not a sideload installer.
 - **Web/PWA:** `SalahOS-vX.Y.Z-web-pwa.zip` — the complete production Web/PWA build for static hosting.
 - **Raspberry Pi / kiosk / TV-style Chromium display:** `SalahOS-vX.Y.Z-raspberry-pi-kiosk.tar.gz` — the production Web/PWA build plus the SalahOS Chromium kiosk launch/autostart helpers.
 - **Checksums:** `SHA256SUMS.txt` — SHA-256 hashes for the published release assets.
 
 ## Android release signing
 
-A consumer Android APK is published only when the repository has a persistent release signing identity configured. The release workflow requires these GitHub Actions secrets:
+Consumer Android APK and AAB packages are published only when the repository has a persistent release signing identity configured. The release workflow requires these GitHub Actions secrets:
 
 - `SALAHOS_ANDROID_KEYSTORE_BASE64`
 - `SALAHOS_ANDROID_KEYSTORE_PASSWORD`
@@ -20,7 +21,7 @@ A consumer Android APK is published only when the repository has a persistent re
 
 `SALAHOS_ANDROID_KEYSTORE_BASE64` is the base64 representation of the persistent Android release keystore. The keystore itself and its passwords must never be committed to this repository. Keep a secure offline backup: future Android updates must be signed with the same key.
 
-The release workflow fails rather than publishing an unsigned or debug APK when signing is unavailable, and verifies the release APK with Android `apksigner` before publication.
+The release workflow fails rather than publishing unsigned or debug Android packages when signing is unavailable, verifies the release APK with Android `apksigner`, and verifies the AAB signature before publication.
 
 ## Raspberry Pi / kiosk bundle
 

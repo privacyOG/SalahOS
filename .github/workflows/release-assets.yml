@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
     inputs:
       build_android:
-        description: Build the signed Android release APK
+        description: Build the signed Android release APK and AAB
         required: false
         default: false
         type: boolean
@@ -56,14 +56,26 @@ jobs:
         run: |
           set -euo pipefail
           PACKAGE_VERSION="$(node -p "require('./package.json').version")"
+          LOCK_VERSION="$(node -p "require('./package-lock.json').version")"
+          LOCK_ROOT_VERSION="$(node -p "require('./package-lock.json').packages[''].version")"
           ANDROID_VERSION="$(sed -n 's/^[[:space:]]*versionName[[:space:]]*"\([^"]*\)".*/\1/p' android/app/build.gradle | head -1)"
+          ANDROID_VERSION_CODE="$(sed -n 's/^[[:space:]]*versionCode[[:space:]]*\([0-9][0-9]*\).*/\1/p' android/app/build.gradle | head -1)"
           IOS_VERSION="$(sed -n 's/^[[:space:]]*MARKETING_VERSION = \([^;]*\);/\1/p' ios/App/App.xcodeproj/project.pbxproj | sort -u)"
+          IOS_BUILD_NUMBER="$(sed -n 's/^[[:space:]]*CURRENT_PROJECT_VERSION = \([^;]*\);/\1/p' ios/App/App.xcodeproj/project.pbxproj | sort -u)"
           [[ -n "$PACKAGE_VERSION" && "$ANDROID_VERSION" == "$PACKAGE_VERSION" ]] || {
             echo "Package version ${PACKAGE_VERSION} and Android version ${ANDROID_VERSION} do not match" >&2
             exit 1
           }
           [[ "$IOS_VERSION" == "$PACKAGE_VERSION" ]] || {
             echo "Package version ${PACKAGE_VERSION} and iOS marketing version ${IOS_VERSION} do not match" >&2
+            exit 1
+          }
+          [[ "$LOCK_VERSION" == "$PACKAGE_VERSION" && "$LOCK_ROOT_VERSION" == "$PACKAGE_VERSION" ]] || {
+            echo "Package-lock version ${LOCK_VERSION}/${LOCK_ROOT_VERSION} does not match package version ${PACKAGE_VERSION}" >&2
+            exit 1
+          }
+          [[ "$ANDROID_VERSION_CODE" =~ ^[1-9][0-9]*$ && "$ANDROID_VERSION_CODE" == "$IOS_BUILD_NUMBER" ]] || {
+            echo "Android versionCode ${ANDROID_VERSION_CODE} and iOS build number ${IOS_BUILD_NUMBER} do not match" >&2
             exit 1
           }
           if [[ "${GITHUB_REF_TYPE:-}" == "tag" ]]; then
@@ -138,7 +150,7 @@ jobs:
           retention-days: 14
 
   android:
-    name: Signed Android APK
+    name: Signed Android APK and AAB
     if: github.event_name == 'push' || inputs.build_android == true
     needs: preflight
     runs-on: ubuntu-24.04
@@ -195,33 +207,41 @@ jobs:
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
 
-      - name: Build signed Android release APK
+      - name: Build signed Android release packages
         run: npm run android:release-check
 
-      - name: Verify and package signed APK
+      - name: Verify and package signed Android artifacts
         shell: bash
         run: |
           set -euo pipefail
           VERSION='${{ needs.preflight.outputs.version }}'
           APK='android/app/build/outputs/apk/release/app-release.apk'
+          AAB='android/app/build/outputs/bundle/release/app-release.aab'
           test -s "$APK"
+          test -s "$AAB"
           APKSIGNER="$(find "${ANDROID_HOME:-$ANDROID_SDK_ROOT}/build-tools" -type f -name apksigner -perm -u+x | sort -V | tail -1)"
           test -x "$APKSIGNER"
           "$APKSIGNER" verify --verbose --print-certs "$APK"
+          jarsigner -verify -strict -certs "$AAB"
           mkdir -p release
           cp "$APK" "release/SalahOS-v${VERSION}-android.apk"
+          cp "$AAB" "release/SalahOS-v${VERSION}-android.aab"
           (
             cd release
-            sha256sum "SalahOS-v${VERSION}-android.apk" > SHA256SUMS-android.txt
+            sha256sum \
+              "SalahOS-v${VERSION}-android.apk" \
+              "SalahOS-v${VERSION}-android.aab" \
+              > SHA256SUMS-android.txt
             sha256sum --check SHA256SUMS-android.txt
           )
 
-      - name: Upload signed Android artifact
+      - name: Upload signed Android artifacts
         uses: actions/upload-artifact@v4
         with:
           name: release-android
           path: |
             release/SalahOS-v*-android.apk
+            release/SalahOS-v*-android.aab
             release/SHA256SUMS-android.txt
           if-no-files-found: error
           retention-days: 14
@@ -257,7 +277,8 @@ jobs:
           WEB="SalahOS-v${VERSION}-web-pwa.zip"
           PI="SalahOS-v${VERSION}-raspberry-pi-kiosk.tar.gz"
           ANDROID="SalahOS-v${VERSION}-android.apk"
-          for file in "$WEB" "$PI" "$ANDROID" SHA256SUMS-web-kiosk.txt SHA256SUMS-android.txt; do
+          ANDROID_BUNDLE="SalahOS-v${VERSION}-android.aab"
+          for file in "$WEB" "$PI" "$ANDROID" "$ANDROID_BUNDLE" SHA256SUMS-web-kiosk.txt SHA256SUMS-android.txt; do
             test -s "release/$file"
           done
           unzip -t "release/$WEB"
@@ -269,7 +290,7 @@ jobs:
           (
             cd release
             sha256sum --check SHA256SUMS.txt
-            EXPECTED="$(printf '%s\n' "$WEB" "$PI" "$ANDROID" SHA256SUMS.txt | sort)"
+            EXPECTED="$(printf '%s\n' "$WEB" "$PI" "$ANDROID" "$ANDROID_BUNDLE" SHA256SUMS.txt | sort)"
             ACTUAL="$(find . -maxdepth 1 -type f -printf '%f\n' | sort)"
             [[ "$ACTUAL" == "$EXPECTED" ]] || {
               echo 'Final release package contains missing or unexpected files' >&2

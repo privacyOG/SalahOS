@@ -26,6 +26,12 @@ describe('release asset workflow', () => {
     );
     expect(workflow).toContain('does not match package version v${PACKAGE_VERSION}');
     expect(workflow).toContain('iOS marketing version ${IOS_VERSION} do not match');
+    expect(workflow).toContain(
+      'Package-lock version ${LOCK_VERSION}/${LOCK_ROOT_VERSION} does not match package version ${PACKAGE_VERSION}',
+    );
+    expect(workflow).toContain(
+      'Android versionCode ${ANDROID_VERSION_CODE} and iOS build number ${IOS_BUILD_NUMBER} do not match',
+    );
   });
 
   it('publishes versioned Web/PWA and Raspberry Pi bundles', () => {
@@ -41,11 +47,14 @@ describe('release asset workflow', () => {
     expect(workflow).toMatch(
       /cd release[\s\S]*sha256sum[\s\S]*SalahOS-v\$\{VERSION\}-android\.apk/,
     );
+    expect(workflow).toMatch(
+      /cd release[\s\S]*sha256sum[\s\S]*SalahOS-v\$\{VERSION\}-android\.aab/,
+    );
     expect(workflow).toMatch(/cd release[\s\S]*sha256sum --check SHA256SUMS\.txt/);
     expect(workflow).not.toMatch(/sha256sum\s+"release\/SalahOS-v\$\{VERSION\}/);
   });
 
-  it('requires persistent Android signing before creating a release APK', () => {
+  it('requires persistent Android signing before creating release APK and AAB packages', () => {
     expect(workflow).toContain('SALAHOS_ANDROID_KEYSTORE_BASE64');
     expect(workflow).toContain('SALAHOS_ANDROID_KEYSTORE_PASSWORD');
     expect(workflow).toContain('SALAHOS_ANDROID_KEY_ALIAS');
@@ -55,6 +64,9 @@ describe('release asset workflow', () => {
     expect(workflow).toContain("sdkmanager 'platforms;android-36' 'build-tools;36.0.0'");
     expect(workflow).toContain('apksigner');
     expect(workflow).toContain('app-release.apk');
+    expect(workflow).toContain('app-release.aab');
+    expect(workflow).toContain('jarsigner -verify -strict -certs');
+    expect(androidBuild).toContain('bundleRelease');
     expect(workflow).not.toContain('app-debug.apk');
     expect(workflow).not.toMatch(/SalahOS-v[^\n]*-android-debug\.apk/);
   });
@@ -76,6 +88,7 @@ describe('release asset workflow', () => {
     expect(workflow).toContain('name: release-final');
     expect(workflow).toContain('unzip -t "release/$WEB"');
     expect(workflow).toContain('tar -tzf "release/$PI"');
+    expect(workflow).toContain('SalahOS-v${VERSION}-android.aab');
     expect(workflow).toContain("find . -maxdepth 1 -type f -printf '%f\\n'");
     expect(workflow).toContain('Reverify checksums immediately before publication');
   });

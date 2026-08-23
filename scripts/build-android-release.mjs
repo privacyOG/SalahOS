@@ -34,7 +34,7 @@ const npmCommand = process.platform === 'win32' ? 'npm.cmd' : 'npm';
 run(npmCommand, ['run', 'android:sync']);
 
 const gradleCommand = process.platform === 'win32' ? 'gradlew.bat' : './gradlew';
-run(gradleCommand, ['assembleRelease'], {
+run(gradleCommand, ['assembleRelease', 'bundleRelease'], {
   cwd: new URL('../android/', import.meta.url),
   env: {
     ...process.env,
