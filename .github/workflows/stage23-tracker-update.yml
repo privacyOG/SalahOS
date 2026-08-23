@@ -1,0 +1,75 @@
+name: Stage 23.12 tracker update
+
+on:
+  pull_request:
+    types: [synchronize]
+
+permissions:
+  contents: write
+
+jobs:
+  update-trackers:
+    if: github.event.pull_request.head.ref == 'stage-23/announcement-display-rotation'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: stage-23/announcement-display-rotation
+          fetch-depth: 0
+
+      - name: Mark Stage 23.12 complete with verification provenance
+        shell: python
+        run: |
+          from pathlib import Path
+
+          plan = Path('docs/UI_UX_V2_PLAN.md')
+          plan_text = plan.read_text()
+          old_plan = '''## 23.12 Announcements and display rotation
+
+          - [ ] Support a restrained announcement ticker/card region where compatible with the selected prayer-board template.
+          - [ ] Ensure urgent/prayer-state information takes priority over decorative/community content.
+          - [ ] Allow administrators to disable announcement rotation for prayer-board-only displays.
+          - [ ] Integrate with existing signage scene/playlist scheduling rather than creating a second conflicting scheduler.
+          - [ ] Define safe transitions that respect reduced-motion and long-running kiosk use.
+          '''
+          new_plan = '''## 23.12 Announcements and display rotation
+
+          - [x] Support a restrained announcement ticker/card region where compatible with the selected prayer-board template.
+          - [x] Ensure urgent/prayer-state information takes priority over decorative/community content.
+          - [x] Allow administrators to disable announcement rotation for prayer-board-only displays.
+          - [x] Integrate with existing signage scene/playlist scheduling rather than creating a second conflicting scheduler.
+          - [x] Define safe transitions that respect reduced-motion and long-running kiosk use.
+
+          **Stage 23.12 verification note (2026-08-23):** PR #187 code-bearing head `7e80667a8ebb1d4f1efb01c5236faf9876f7037a` passed Quality Gate `32609795622`, Android Build `32609795623`, Visual Regression `32609795645` and iOS Build `32609795632`, including Android lifecycle acceptance and fresh iPhone/iPad Simulator install, launch and relaunch acceptance. The implementation reuses the existing signage scene/playlist/schedule engine, filters only published display-targeted announcements for the configured mosque, preserves prayer information as authoritative, suppresses community content during the ten-minute pre-prayer guard and Athan-to-Iqamah window, supports a per-display Announcements module switch, and uses deterministic dwell selection with reduced-motion-safe presentation. Exact Visual artifact `9485197306` (`sha256:0556438217de9dd8c1ba173be6ec947b24fe46f3534f77dd85ba7d7464681d64`) received human review: English and Arabic/RTL active announcement boards retained all five prayer rows without obstruction, module-disabled mode remained clean, and the administrator rotation panel clearly exposed enablement, mosque, dwell and prayer-board-only guidance. Stage 23.12 is complete.
+          '''
+          if old_plan not in plan_text:
+              raise SystemExit('Stage 23.12 plan block did not match exactly')
+          plan.write_text(plan_text.replace(old_plan, new_plan, 1))
+
+          todo = Path('TODO.md')
+          todo_text = todo.read_text()
+          old_line = '- [ ] Add announcement/display rotation integration (Stage 23.12)'
+          new_line = '- [x] Add announcement/display rotation integration (Stage 23.12)'
+          if todo_text.count(old_line) != 1:
+              raise SystemExit('Stage 23.12 TODO line did not match exactly once')
+          todo_text = todo_text.replace(old_line, new_line, 1)
+
+          stage24 = '\n---\n\n## 24. Managed-masjid admin UX redesign'
+          if stage24 not in todo_text:
+              raise SystemExit('Stage 24 boundary not found')
+          note = '''
+
+          **Stage 23.12 verification note (2026-08-23):** PR #187 code-bearing head `7e80667a8ebb1d4f1efb01c5236faf9876f7037a` passed Quality Gate `32609795622`, Android Build `32609795623`, Visual Regression `32609795645` and iOS Build `32609795632`. Quality passed formatting, lint, typecheck, all 662 tests, production build and deployable-web verification; Android passed APK and lifecycle acceptance; iOS passed fresh iPhone/iPad Simulator install, launch and relaunch acceptance. Announcement rotation reuses the existing signage scheduler, remains optional per display, filters only eligible published display content, gives imminent-prayer and Athan-to-Iqamah states priority, and fails closed without affecting local prayer calculation. Exact Visual artifact `9485197306` (`sha256:0556438217de9dd8c1ba173be6ec947b24fe46f3534f77dd85ba7d7464681d64`) received human review across English, Arabic/RTL, module-disabled and administrator states; all five prayer rows remained visible and the admin controls were clear. Stage 23.12 is complete.
+          '''
+          todo.write_text(todo_text.replace(stage24, note + stage24, 1))
+
+      - name: Commit tracker completion and remove updater
+        shell: bash
+        run: |
+          git config user.name privacyOG
+          git config user.email privacyOG@users.noreply.github.com
+          git rm .github/workflows/stage23-tracker-update.yml
+          git add TODO.md docs/UI_UX_V2_PLAN.md
+          git commit -m "Complete Stage 23.12 trackers"
+          git push origin HEAD:stage-23/announcement-display-rotation
