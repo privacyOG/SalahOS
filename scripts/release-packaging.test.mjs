@@ -65,7 +65,18 @@ describe('release asset workflow', () => {
     expect(workflow).toContain('apksigner');
     expect(workflow).toContain('app-release.apk');
     expect(workflow).toContain('app-release.aab');
-    expect(workflow).toContain('jarsigner -verify -strict -certs');
+    expect(workflow).toContain('jarsigner -verify -certs "$AAB"');
+    expect(workflow).not.toContain('jarsigner -verify -strict');
+    expect(workflow).toContain('keytool -printcert -jarfile "$AAB"');
+    expect(workflow).toContain('EXPECTED_SIGNER_SHA256');
+    expect(workflow).toContain('APK_SIGNER_SHA256');
+    expect(workflow).toContain('AAB_SIGNER_SHA256');
+    expect(workflow).toContain(
+      'Signed APK certificate does not match the configured Android release key',
+    );
+    expect(workflow).toContain(
+      'Signed AAB certificate does not match the configured Android release key',
+    );
     expect(androidBuild).toContain('bundleRelease');
     expect(workflow).not.toContain('app-debug.apk');
     expect(workflow).not.toMatch(/SalahOS-v[^\n]*-android-debug\.apk/);
