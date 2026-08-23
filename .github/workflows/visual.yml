@@ -34,6 +34,20 @@ jobs:
       - name: Install application dependencies
         run: npm ci --ignore-scripts
 
+      - name: Capture canonical Stage 26 formatter output
+        run: |
+          npx prettier --write scripts/visual-accessibility-rtl-acceptance.mjs
+          mkdir -p stage26-formatted-source
+          cp scripts/visual-accessibility-rtl-acceptance.mjs stage26-formatted-source/
+
+      - name: Upload canonical Stage 26 formatter output
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage26-formatted-source-${{ github.sha }}
+          path: stage26-formatted-source/
+          if-no-files-found: error
+          retention-days: 1
+
       - name: Build production application
         run: npm run build
 
