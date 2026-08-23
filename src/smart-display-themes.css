@@ -54,6 +54,17 @@
   display: contents;
 }
 
+.smart-display .prayer-board-configured-surface {
+  display: block;
+  animation: smart-display-pixel-shift 60min steps(1, end) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .smart-display .prayer-board-configured-surface {
+    animation: none;
+  }
+}
+
 .prayer-board-configured-surface[data-module-dates='off'] .heritage-classic-board__dates,
 .prayer-board-configured-surface[data-module-dates='off'] .minimal-modern-board__dates,
 .prayer-board-configured-surface[data-module-dates='off'] .bold-countdown-board__dates,

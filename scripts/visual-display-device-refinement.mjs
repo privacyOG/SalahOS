@@ -165,18 +165,24 @@ async function validatePrayerBoard(browser, templateId, selector, width, height)
     await root.waitFor({ state: 'visible' });
     await assertNoHorizontalOverflow(page, name);
 
-    const metrics = await root.evaluate((element) => {
+    const geometry = await root.evaluate((element) => {
       const rect = element.getBoundingClientRect();
-      const style = getComputedStyle(element);
       return {
         left: rect.left,
         top: rect.top,
         right: rect.right,
         bottom: rect.bottom,
+      };
+    });
+    const burnInFrame = page.locator('.prayer-board-configured-surface');
+    const animation = await burnInFrame.evaluate((element) => {
+      const style = getComputedStyle(element);
+      return {
         animationName: style.animationName,
         animationDuration: style.animationDuration,
       };
     });
+    const metrics = { ...geometry, ...animation };
     const safeInset = 32;
     if (
       metrics.left < safeInset ||
@@ -226,9 +232,11 @@ async function validateReducedMotion(browser) {
     await page.goto(`${baseUrl}/?mode=smart-display&template=minimal-modern`, {
       waitUntil: 'networkidle',
     });
-    const root = page.locator('.minimal-modern-board');
-    await root.waitFor({ state: 'visible' });
-    const animationName = await root.evaluate((element) => getComputedStyle(element).animationName);
+    await page.locator('.minimal-modern-board').waitFor({ state: 'visible' });
+    const burnInFrame = page.locator('.prayer-board-configured-surface');
+    const animationName = await burnInFrame.evaluate(
+      (element) => getComputedStyle(element).animationName,
+    );
     if (animationName !== 'none') {
       throw new Error(`Reduced-motion display still animates: ${animationName}`);
     }
