@@ -8,10 +8,7 @@ import {
 } from './prayerBoardAnnouncementRotation';
 import type { SourcedPrayerDashboard } from './sourcedDashboard';
 
-function announcement(
-  id: string,
-  overrides: Partial<MosqueAnnouncement> = {},
-): MosqueAnnouncement {
+function announcement(id: string, overrides: Partial<MosqueAnnouncement> = {}): MosqueAnnouncement {
   return {
     announcementId: id,
     mosqueId: 'stage-23-masjid',
@@ -30,7 +27,9 @@ function announcement(
   };
 }
 
-function dashboard(options: Readonly<{ nextSeconds?: number | null; localMinutes?: number }> = {}): SourcedPrayerDashboard {
+function dashboard(
+  options: Readonly<{ nextSeconds?: number | null; localMinutes?: number }> = {},
+): SourcedPrayerDashboard {
   const localMinutes = options.localMinutes ?? 600;
   return {
     base: {
