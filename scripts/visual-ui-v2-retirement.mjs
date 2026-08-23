@@ -158,7 +158,8 @@ async function validateSettingsScenario(browser, scenario) {
       return {
         settingsRouteCount: document.querySelectorAll('.congregation-route--settings').length,
         settingsScreenCount: document.querySelectorAll('.settings-screen').length,
-        featurePanelCount: document.querySelectorAll('.settings-feature-panel').length,
+        ownedPanelCount: document.querySelectorAll('.settings-feature-panel, .settings-focus-panel')
+          .length,
         categoryInUrl: new URLSearchParams(location.search).get('settingsView'),
         routeVisible: route instanceof HTMLElement && route.getBoundingClientRect().height > 0,
         screenVisible: screen instanceof HTMLElement && screen.getBoundingClientRect().height > 0,
@@ -168,7 +169,7 @@ async function validateSettingsScenario(browser, scenario) {
     if (
       routeState.settingsRouteCount !== 1 ||
       routeState.settingsScreenCount !== 1 ||
-      routeState.featurePanelCount < 1 ||
+      routeState.ownedPanelCount < 1 ||
       routeState.categoryInUrl !== scenario.category ||
       !routeState.routeVisible ||
       !routeState.screenVisible
