@@ -26,198 +26,21 @@ jobs:
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
 
-      - name: Fix managed built-in artwork preservation and restore read-only Quality workflow
+      - name: Apply and validate managed artwork fix
         shell: bash
         run: |
           set -euo pipefail
-          python3 - <<'PY'
-          from pathlib import Path
-
-          template_path = Path('src/domain/prayerBoardTemplate.ts')
-          template = template_path.read_text()
-          old = "const LOCALES = new Set<Locale>(PRAYER_BOARD_LOCALES);"
-          new = """const LOCALES = new Set<Locale>(PRAYER_BOARD_LOCALES);
-const BUILTIN_ARTWORK_IDS = new Set<PrayerBoardArtworkId>(
-  prayerBoardTemplateRegistry.map((template) => template.fallbackArtworkId),
-);"""
-          if old not in template:
-              raise SystemExit('missing artwork allowlist insertion point')
-          template = template.replace(old, new, 1)
-
-          old = """function normalizeBackground(
-  value: unknown,
-  templateId: PrayerBoardTemplateId,
-): PrayerBoardBackground {
-  if (!isRecord(value) || value.kind !== 'local-image') return builtinBackground(templateId);
-  const asset = normalizeAsset(value.asset);
-  if (asset === null) return builtinBackground(templateId);
-  const focalPoint = isRecord(value.focalPoint) ? value.focalPoint : {};
-  return Object.freeze({
-    kind: 'local-image',
-    asset,
-    crop: 'cover',
-    focalPoint: Object.freeze({
-      x: normalizeFocalCoordinate(focalPoint.x, 0.5),
-      y: normalizeFocalCoordinate(focalPoint.y, 0.5),
-    }),
-    contrastScrim: 'auto',
-  });
-}"""
-          new = """function normalizeBackground(
-  value: unknown,
-  templateId: PrayerBoardTemplateId,
-): PrayerBoardBackground {
-  if (!isRecord(value)) return builtinBackground(templateId);
-  if (value.kind === 'builtin') {
-    const artworkId = value.artworkId;
-    return typeof artworkId === 'string' && BUILTIN_ARTWORK_IDS.has(artworkId as PrayerBoardArtworkId)
-      ? Object.freeze({ kind: 'builtin', artworkId: artworkId as PrayerBoardArtworkId })
-      : builtinBackground(templateId);
-  }
-  if (value.kind !== 'local-image') return builtinBackground(templateId);
-  const asset = normalizeAsset(value.asset);
-  if (asset === null) return builtinBackground(templateId);
-  const focalPoint = isRecord(value.focalPoint) ? value.focalPoint : {};
-  return Object.freeze({
-    kind: 'local-image',
-    asset,
-    crop: 'cover',
-    focalPoint: Object.freeze({
-      x: normalizeFocalCoordinate(focalPoint.x, 0.5),
-      y: normalizeFocalCoordinate(focalPoint.y, 0.5),
-    }),
-    contrastScrim: 'auto',
-  });
-}"""
-          if old not in template:
-              raise SystemExit('missing normalizeBackground block')
-          template_path.write_text(template.replace(old, new, 1))
-
-          protocol_path = Path('src/domain/managedAdminProtocol.ts')
-          protocol = protocol_path.read_text()
-          old = """export function createManagedPrayerBoardAssignmentConfig(
-  input: PrayerBoardTemplateConfig,
-): PrayerBoardTemplateConfig {
-  const normalized = parsePrayerBoardTemplateConfig(input);
-  const fallbackArtworkId = getPrayerBoardTemplate(normalized.templateId).fallbackArtworkId;
-  return parsePrayerBoardTemplateConfig({
-    ...normalized,
-    branding: {
-      mosqueName: normalized.branding.mosqueName,
-      logo: null,
-    },
-    background: {
-      kind: 'builtin',
-      artworkId: fallbackArtworkId,
-    },
-  });
-}"""
-          new = """export function createManagedPrayerBoardAssignmentConfig(
-  input: PrayerBoardTemplateConfig,
-): PrayerBoardTemplateConfig {
-  const normalized = parsePrayerBoardTemplateConfig(input);
-  const fallbackArtworkId = getPrayerBoardTemplate(normalized.templateId).fallbackArtworkId;
-  const managedBackground =
-    normalized.background.kind === 'builtin'
-      ? normalized.background
-      : { kind: 'builtin' as const, artworkId: fallbackArtworkId };
-  return parsePrayerBoardTemplateConfig({
-    ...normalized,
-    branding: {
-      mosqueName: normalized.branding.mosqueName,
-      logo: null,
-    },
-    background: managedBackground,
-  });
-}"""
-          if old not in protocol:
-              raise SystemExit('missing managed assignment block')
-          protocol_path.write_text(protocol.replace(old, new, 1))
-
-          test_path = Path('src/domain/prayerBoardTemplate.test.ts')
-          test = test_path.read_text()
-          marker = """  it('rejects remote-looking image identifiers from imported configuration', () => {"""
-          addition = """  it('preserves allowlisted built-in artwork and rejects unknown built-in artwork', () => {
-    const selected = parsePrayerBoardTemplateConfig({
-      version: 1,
-      templateId: 'scenic-spiritual',
-      background: { kind: 'builtin', artworkId: 'geometric-heritage' },
-    });
-    expect(selected.background).toEqual({ kind: 'builtin', artworkId: 'geometric-heritage' });
-
-    const unknown = parsePrayerBoardTemplateConfig({
-      version: 1,
-      templateId: 'scenic-spiritual',
-      background: { kind: 'builtin', artworkId: 'remote-artwork' },
-    });
-    expect(unknown.background).toEqual({ kind: 'builtin', artworkId: 'scenic-gradient' });
-  });
-
-"""
-          if marker not in test:
-              raise SystemExit('missing template test insertion point')
-          test_path.write_text(test.replace(marker, addition + marker, 1))
-
-          Path('src/domain/managedAdminProtocol.stage24.test.ts').write_text("""import { describe, expect, it } from 'vitest';
-
-import { createManagedPrayerBoardAssignmentConfig } from './managedAdminProtocol';
-import { parsePrayerBoardTemplateConfig } from './prayerBoardTemplate';
-
-describe('managed prayer-board presentation media', () => {
-  it('preserves allowlisted built-in artwork while removing device-local logo media', () => {
-    const config = parsePrayerBoardTemplateConfig({
-      version: 1,
-      templateId: 'scenic-spiritual',
-      background: { kind: 'builtin', artworkId: 'geometric-heritage' },
-      branding: {
-        mosqueName: { en: 'Example Masjid' },
-        logo: {
-          assetId: 'logo-1',
-          mimeType: 'image/png',
-          byteSize: 4096,
-          width: 256,
-          height: 256,
-        },
-      },
-    });
-
-    const managed = createManagedPrayerBoardAssignmentConfig(config);
-    expect(managed.background).toEqual({ kind: 'builtin', artworkId: 'geometric-heritage' });
-    expect(managed.branding).toEqual({ mosqueName: { en: 'Example Masjid' }, logo: null });
-  });
-
-  it('replaces device-local background media with the selected template fallback', () => {
-    const config = parsePrayerBoardTemplateConfig({
-      version: 1,
-      templateId: 'scenic-spiritual',
-      background: {
-        kind: 'local-image',
-        asset: {
-          assetId: 'background-1',
-          mimeType: 'image/webp',
-          byteSize: 200000,
-          width: 1920,
-          height: 1080,
-        },
-        focalPoint: { x: 0.5, y: 0.5 },
-      },
-    });
-
-    const managed = createManagedPrayerBoardAssignmentConfig(config);
-    expect(managed.background).toEqual({ kind: 'builtin', artworkId: 'scenic-gradient' });
-  });
-});
-""")
-          PY
+          python3 scripts/stage24-managed-artwork-fix.py
           npx prettier --write src/domain/prayerBoardTemplate.ts src/domain/managedAdminProtocol.ts src/domain/prayerBoardTemplate.test.ts src/domain/managedAdminProtocol.stage24.test.ts
           npm run lint
           npm run typecheck
-          npm run test -- --run src/domain/adminDisplayThemeManagement.test.ts src/domain/prayerBoardTemplate.test.ts src/domain/managedAdminProtocol.stage24.test.ts
+          npx vitest run src/domain/adminDisplayThemeManagement.test.ts src/domain/prayerBoardTemplate.test.ts src/domain/managedAdminProtocol.stage24.test.ts
           git fetch origin main --no-tags
           git show origin/main:.github/workflows/ci.yml > .github/workflows/ci.yml
+          rm scripts/stage24-managed-artwork-fix.py
           git config user.name privacyOG
           git config user.email privacyOG@users.noreply.github.com
-          git add src/domain/prayerBoardTemplate.ts src/domain/managedAdminProtocol.ts src/domain/prayerBoardTemplate.test.ts src/domain/managedAdminProtocol.stage24.test.ts .github/workflows/ci.yml
+          git add src/domain/prayerBoardTemplate.ts src/domain/managedAdminProtocol.ts src/domain/prayerBoardTemplate.test.ts src/domain/managedAdminProtocol.stage24.test.ts .github/workflows/ci.yml scripts/stage24-managed-artwork-fix.py
           git diff --cached --check
           git commit -m "Preserve managed built-in display artwork"
           git push origin HEAD:stage-24/display-theme-management
