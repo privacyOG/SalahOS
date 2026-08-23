@@ -689,8 +689,9 @@ export function AdminDisplayThemeManagement() {
           ? selectedMosqueId
           : ([...new Set(nextDisplays.map((display) => display.identity.mosqueId))].sort()[0] ??
             '');
+      const shouldLoadMosqueDefault = nextMosque !== '' && nextMosque !== selectedMosqueId;
       setSelectedMosqueId(nextMosque);
-      if (nextMosque !== '') {
+      if (shouldLoadMosqueDefault) {
         const currentDefault = nextDefaults.find((entry) => entry.mosqueId === nextMosque);
         if (currentDefault !== undefined) setDraft(currentDefault.prayerBoardConfig);
       }
