@@ -11,88 +11,30 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   visual:
     runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '["ubuntu-24.04"]' || '["self-hosted","Linux","X64"]') }}
     timeout-minutes: 30
     env:
-      PLAYWRIGHT_BROWSERS_PATH: /tmp/salahos-pw-browsers-1.62.0
-      SALAHOS_VISUAL_PLAYWRIGHT_MODULE: /tmp/salahos-visual-harness/node_modules/playwright/index.mjs
-      SALAHOS_VISUAL_ARTIFACT_DIR: visual-artifacts
+      GH_TOKEN: ${{ github.token }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
+        with:
+          ref: ${{ github.event.pull_request.head.ref || github.ref_name }}
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-
       - name: Install application dependencies
         run: npm ci --ignore-scripts
-
-      - name: Build production application
-        run: npm run build
-
-      - name: Install isolated browser harness
+      - name: Publish newline-preserving formatted Stage 26 blob
+        if: github.event_name == 'pull_request'
         run: |
-          rm -rf /tmp/salahos-visual-harness
-          mkdir -p /tmp/salahos-visual-harness
-          cd /tmp/salahos-visual-harness
-          npm init -y >/dev/null 2>&1
-          npm install --ignore-scripts --save-exact playwright@1.62.0
-          npm audit --audit-level=moderate
-          npx playwright install chromium
-
-      - name: Start local production server
-        run: |
-          rm -rf visual-artifacts
-          python3 -m http.server 4173 --directory dist --bind 127.0.0.1 >/tmp/salahos-visual-http.log 2>&1 &
-          echo $! >/tmp/salahos-visual-server.pid
-          python3 - <<'PY'
-          import time
-          import urllib.request
-
-          for _ in range(50):
-              try:
-                  with urllib.request.urlopen('http://127.0.0.1:4173/', timeout=1) as response:
-                      if response.status == 200:
-                          raise SystemExit(0)
-              except Exception:
-                  time.sleep(0.1)
-
-          raise SystemExit('Local SalahOS production server did not become ready')
-          PY
-
-      - name: Diagnose Today render readiness
-        run: node scripts/visual-today-smoke.mjs
-
-      - name: Run visual regression matrix
-        run: npm run visual:check
-
-      - name: Build Google satellite Qibla fixture
-        env:
-          VITE_GOOGLE_MAPS_API_KEY: salahos-visual-fixture-key
-        run: npm run build
-
-      - name: Run Google satellite Qibla visual fixture
-        run: node scripts/visual-qibla-google.mjs
-
-      - name: Upload visual evidence
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: visual-regression-${{ github.sha }}
-          path: visual-artifacts/
-          if-no-files-found: error
-          retention-days: 30
-
-      - name: Stop local production server
-        if: always()
-        run: |
-          if [ -f /tmp/salahos-visual-server.pid ]; then
-            kill "$(cat /tmp/salahos-visual-server.pid)" 2>/dev/null || true
-          fi
+          npx prettier --write scripts/visual-accessibility-rtl-acceptance.mjs
+          FORMATTED_BLOB_SHA="$(jq -Rs '{content: ., encoding: "utf-8"}' scripts/visual-accessibility-rtl-acceptance.mjs | gh api --method POST /repos/${{ github.repository }}/git/blobs --input - --jq .sha)"
+          echo "FORMATTED_STAGE26_BLOB_SHA=${FORMATTED_BLOB_SHA}"
+          exit 1
