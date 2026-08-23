@@ -133,7 +133,7 @@ async function validateRuntime(browser, scenario) {
     ) {
       throw new Error(`${scenario.name} did not render the persisted prayer-board template`);
     }
-    if ((await page.locator('[data-prayer-name]').count()) < 5) {
+    if ((await page.locator('[data-prayer]').count()) < 5) {
       throw new Error(`${scenario.name} did not preserve the five-prayer timetable`);
     }
     const body = (await page.locator('body').textContent()) ?? '';
