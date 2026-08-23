@@ -137,8 +137,12 @@ export function SmartDisplayApplication() {
   }, [errorLogger]);
 
   useEffect(() => {
-    const markOnline = () => setOnline(true);
-    const markOffline = () => setOnline(false);
+    const markOnline = () => {
+      setOnline(true);
+    };
+    const markOffline = () => {
+      setOnline(false);
+    };
     window.addEventListener('online', markOnline);
     window.addEventListener('offline', markOffline);
     return () => {
