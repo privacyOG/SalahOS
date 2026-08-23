@@ -45,10 +45,10 @@ const prohibitedPatterns = [
 
 function containsOnlyNonRoutableFixtureUrls(repositoryPath, content) {
   if (!nonRoutableFixtureLiteralFiles.has(repositoryPath)) return false;
-  const literals = [...content.matchAll(REMOTE_LITERAL_PATTERN)].map((match) =>
-    match[0].slice(1),
+  const literals = [...content.matchAll(REMOTE_LITERAL_PATTERN)].map((match) => match[0].slice(1));
+  return (
+    literals.length > 0 && literals.every((literal) => NON_ROUTABLE_FIXTURE_PATTERN.test(literal))
   );
-  return literals.length > 0 && literals.every((literal) => NON_ROUTABLE_FIXTURE_PATTERN.test(literal));
 }
 
 const violations = [];
