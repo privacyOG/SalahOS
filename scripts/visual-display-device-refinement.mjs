@@ -107,6 +107,32 @@ async function validateTouchDisplay(browser, scenario) {
       }
       const recoveryRect = recovery.getBoundingClientRect();
       const recoveryStyle = getComputedStyle(recovery);
+      const prayerContentOverflow = [...prayerGrid.querySelectorAll('.prayer-card')].flatMap(
+        (card, cardIndex) => {
+          const cardRect = card.getBoundingClientRect();
+          return [...card.querySelectorAll('span, strong')]
+            .filter((element) => {
+              const rect = element.getBoundingClientRect();
+              return (
+                rect.left < cardRect.left - 2 ||
+                rect.right > cardRect.right + 2 ||
+                rect.top < cardRect.top - 2 ||
+                rect.bottom > cardRect.bottom + 2
+              );
+            })
+            .map((element) => {
+              const rect = element.getBoundingClientRect();
+              return {
+                cardIndex,
+                text: element.textContent?.trim() ?? '',
+                left: Math.round(rect.left),
+                right: Math.round(rect.right),
+                top: Math.round(rect.top),
+                bottom: Math.round(rect.bottom),
+              };
+            });
+        },
+      );
       return {
         viewport: rootElement.dataset.viewport ?? '',
         size: rootElement.dataset.displaySize ?? '',
@@ -115,6 +141,7 @@ async function validateTouchDisplay(browser, scenario) {
         recoveryHeight: recoveryRect.height,
         recoveryOpacity: Number.parseFloat(recoveryStyle.opacity),
         prayerColumns: getComputedStyle(prayerGrid).gridTemplateColumns.split(' ').length,
+        prayerContentOverflow,
       };
     });
 
@@ -126,6 +153,11 @@ async function validateTouchDisplay(browser, scenario) {
     }
     if (metrics.recoveryOpacity > 0.6) {
       throw new Error(`${scenario.name} recovery affordance is too visually dominant`);
+    }
+    if (metrics.prayerContentOverflow.length > 0) {
+      throw new Error(
+        `${scenario.name} prayer-card content escaped its card: ${JSON.stringify(metrics.prayerContentOverflow)}`,
+      );
     }
 
     await page.screenshot({
@@ -174,7 +206,6 @@ async function validatePrayerBoard(browser, templateId, selector, width, height)
         bottom: rect.bottom,
       };
     });
-    const burnInFrame = page.locator('.prayer-board-configured-surface');
     const burnIn = await page.locator('.smart-display').evaluate((display) => {
       const frame = display.querySelector('.prayer-board-configured-surface');
       if (!(frame instanceof HTMLElement)) throw new Error('Configured display frame missing');
