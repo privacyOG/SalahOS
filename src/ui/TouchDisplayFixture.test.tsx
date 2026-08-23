@@ -41,7 +41,7 @@ describe('TouchDisplayFixture', () => {
     expect(touchDisplayFixtureDimensions('10', 'landscape')).toEqual({ width: 1920, height: 1200 });
   });
 
-  it('renders deterministic production prayer components for the target profile', () => {
+  it('renders deterministic production prayer components and a local recovery escape', () => {
     const html = renderToStaticMarkup(
       <TouchDisplayFixture size="7" orientation="portrait" locale="en" />,
     );
@@ -55,6 +55,9 @@ describe('TouchDisplayFixture', () => {
     expect(html).toContain('Fajr');
     expect(html).toContain('Maghrib');
     expect(html).toContain('Australia/Sydney');
+    expect(html).toContain('class="touch-display-fixture-recovery"');
+    expect(html).toContain('href="/?view=today"');
+    expect(html).toContain('Exit display');
   });
 
   it('renders the same fixture in Arabic RTL without changing the viewport contract', () => {
@@ -67,5 +70,6 @@ describe('TouchDisplayFixture', () => {
     expect(html).toContain('data-viewport="1920x1200"');
     expect(html).toContain('الفجر');
     expect(html).toContain('المغرب');
+    expect(html).toContain('خروج من العرض');
   });
 });
