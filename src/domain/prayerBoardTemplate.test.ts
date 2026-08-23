@@ -112,6 +112,22 @@ describe('prayer-board template engine', () => {
     });
   });
 
+  it('preserves allowlisted built-in artwork and rejects unknown built-in artwork', () => {
+    const selected = parsePrayerBoardTemplateConfig({
+      version: 1,
+      templateId: 'scenic-spiritual',
+      background: { kind: 'builtin', artworkId: 'geometric-heritage' },
+    });
+    expect(selected.background).toEqual({ kind: 'builtin', artworkId: 'geometric-heritage' });
+
+    const unknown = parsePrayerBoardTemplateConfig({
+      version: 1,
+      templateId: 'scenic-spiritual',
+      background: { kind: 'builtin', artworkId: 'remote-artwork' },
+    });
+    expect(unknown.background).toEqual({ kind: 'builtin', artworkId: 'scenic-gradient' });
+  });
+
   it('rejects remote-looking image identifiers from imported configuration', () => {
     const remoteAssetId = ['https:', '', 'example.invalid', 'background.webp'].join('/');
     const config = parsePrayerBoardTemplateConfig({

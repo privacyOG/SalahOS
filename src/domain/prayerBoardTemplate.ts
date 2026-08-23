@@ -122,6 +122,9 @@ const ACCENT_PRESETS = new Set<PrayerBoardAccentPreset>([
   'jewel',
 ]);
 const LOCALES = new Set<Locale>(PRAYER_BOARD_LOCALES);
+const BUILTIN_ARTWORK_IDS = new Set<PrayerBoardArtworkId>(
+  prayerBoardTemplateRegistry.map((template) => template.fallbackArtworkId),
+);
 
 export interface PrayerBoardImageAsset {
   readonly assetId: string;
@@ -264,7 +267,15 @@ function normalizeBackground(
   value: unknown,
   templateId: PrayerBoardTemplateId,
 ): PrayerBoardBackground {
-  if (!isRecord(value) || value.kind !== 'local-image') return builtinBackground(templateId);
+  if (!isRecord(value)) return builtinBackground(templateId);
+  if (value.kind === 'builtin') {
+    const artworkId = value.artworkId;
+    return typeof artworkId === 'string' &&
+      BUILTIN_ARTWORK_IDS.has(artworkId as PrayerBoardArtworkId)
+      ? Object.freeze({ kind: 'builtin', artworkId: artworkId as PrayerBoardArtworkId })
+      : builtinBackground(templateId);
+  }
+  if (value.kind !== 'local-image') return builtinBackground(templateId);
   const asset = normalizeAsset(value.asset);
   if (asset === null) return builtinBackground(templateId);
   const focalPoint = isRecord(value.focalPoint) ? value.focalPoint : {};
