@@ -9,6 +9,7 @@ import { BoldCountdownFocusPrayerBoard } from './BoldCountdownFocusPrayerBoard';
 import { FamilyClassroomPrayerBoard } from './FamilyClassroomPrayerBoard';
 import { HeritageClassicPrayerBoard } from './HeritageClassicPrayerBoard';
 import { MinimalModernPrayerBoard, type MinimalModernVariant } from './MinimalModernPrayerBoard';
+import { PrayerBoardAnnouncementModule } from './PrayerBoardAnnouncementModule';
 import { PrayerBoardWeatherModule } from './PrayerBoardWeatherModule';
 import { ScenicSpiritualPrayerBoard } from './ScenicSpiritualPrayerBoard';
 import { StructuredSplitBoard } from './StructuredSplitBoard';
@@ -130,6 +131,12 @@ export function PrayerBoardRenderer({
       data-module-weather={normalized.moduleVisibility.weather ? 'on' : 'off'}
     >
       {board}
+      {normalized.moduleVisibility.announcements && (
+        <PrayerBoardAnnouncementModule
+          announcement={renderedData.announcements[0] ?? null}
+          locale={locale}
+        />
+      )}
       {normalized.moduleVisibility.weather && (
         <PrayerBoardWeatherModule weather={renderedData.weather} locale={locale} />
       )}
