@@ -1,23 +1,15 @@
 name: Quality Gate
 
 on:
-  push:
-    branches:
-      - main
-      - 'agent/**'
   pull_request:
 
-concurrency:
-  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
-  cancel-in-progress: true
-
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   quality:
-    runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '["ubuntu-24.04"]' || '["self-hosted","Linux","X64"]') }}
-    timeout-minutes: 15
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -28,50 +20,282 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Install dependencies from lockfile
-        run: npm ci --ignore-scripts
+      - name: Prepare v1.3.0 files and publish blobs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          npm version 1.3.0 --no-git-tag-version --ignore-scripts
 
-      - name: Sensitive-file policy
-        run: npm run security:sensitive-files
+          python3 - <<'PY'
+          from pathlib import Path
 
-      - name: Native permission policy
-        run: npm run security:native-permissions
+          gradle = Path('android/app/build.gradle')
+          text = gradle.read_text()
+          if text.count('versionCode 4') != 1 or text.count('versionName "1.2.1"') != 1:
+              raise SystemExit('Android version markers do not match expected v1.2.1 state')
+          text = text.replace('versionCode 4', 'versionCode 5', 1)
+          text = text.replace('versionName "1.2.1"', 'versionName "1.3.0"', 1)
+          gradle.write_text(text)
 
-      - name: Remote network policy
-        run: npm run security:remote-network
+          pbx = Path('ios/App/App.xcodeproj/project.pbxproj')
+          text = pbx.read_text()
+          if text.count('CURRENT_PROJECT_VERSION = 4;') != 2 or text.count('MARKETING_VERSION = 1.2.1;') != 2:
+              raise SystemExit('iOS version markers do not match expected v1.2.1 state')
+          text = text.replace('CURRENT_PROJECT_VERSION = 4;', 'CURRENT_PROJECT_VERSION = 5;')
+          text = text.replace('MARKETING_VERSION = 1.2.1;', 'MARKETING_VERSION = 1.3.0;')
+          pbx.write_text(text)
 
-      - name: Dependency vulnerability audit
-        run: npm run security:audit
+          build = Path('scripts/build-android-release.mjs')
+          text = build.read_text()
+          marker = "run(gradleCommand, ['assembleRelease'], {"
+          if text.count(marker) != 1:
+              raise SystemExit('Android release build marker not found')
+          build.write_text(text.replace(marker, "run(gradleCommand, ['assembleRelease', 'bundleRelease'], {", 1))
 
-      - name: Dependency license policy
-        run: npm run security:licenses
+          workflow = Path('.github/workflows/release-assets.yml')
+          text = workflow.read_text()
+          text = text.replace(
+              'description: Build the signed Android release APK',
+              'description: Build the signed Android release APK and AAB',
+              1,
+          )
+          old = '''          PACKAGE_VERSION="$(node -p "require('./package.json').version")"
+          ANDROID_VERSION="$(sed -n 's/^[[:space:]]*versionName[[:space:]]*"\\([^"]*\\)".*/\\1/p' android/app/build.gradle | head -1)"
+          IOS_VERSION="$(sed -n 's/^[[:space:]]*MARKETING_VERSION = \\([^;]*\\);/\\1/p' ios/App/App.xcodeproj/project.pbxproj | sort -u)"
+          [[ -n "$PACKAGE_VERSION" && "$ANDROID_VERSION" == "$PACKAGE_VERSION" ]] || {
+            echo "Package version ${PACKAGE_VERSION} and Android version ${ANDROID_VERSION} do not match" >&2
+            exit 1
+          }
+          [[ "$IOS_VERSION" == "$PACKAGE_VERSION" ]] || {
+            echo "Package version ${PACKAGE_VERSION} and iOS marketing version ${IOS_VERSION} do not match" >&2
+            exit 1
+          }'''
+          new = '''          PACKAGE_VERSION="$(node -p "require('./package.json').version")"
+          LOCK_VERSION="$(node -p "require('./package-lock.json').version")"
+          LOCK_ROOT_VERSION="$(node -p "require('./package-lock.json').packages[''].version")"
+          ANDROID_VERSION="$(sed -n 's/^[[:space:]]*versionName[[:space:]]*"\\([^"]*\\)".*/\\1/p' android/app/build.gradle | head -1)"
+          ANDROID_VERSION_CODE="$(sed -n 's/^[[:space:]]*versionCode[[:space:]]*\\([0-9][0-9]*\\).*/\\1/p' android/app/build.gradle | head -1)"
+          IOS_VERSION="$(sed -n 's/^[[:space:]]*MARKETING_VERSION = \\([^;]*\\);/\\1/p' ios/App/App.xcodeproj/project.pbxproj | sort -u)"
+          IOS_BUILD_NUMBER="$(sed -n 's/^[[:space:]]*CURRENT_PROJECT_VERSION = \\([^;]*\\);/\\1/p' ios/App/App.xcodeproj/project.pbxproj | sort -u)"
+          [[ -n "$PACKAGE_VERSION" && "$ANDROID_VERSION" == "$PACKAGE_VERSION" ]] || {
+            echo "Package version ${PACKAGE_VERSION} and Android version ${ANDROID_VERSION} do not match" >&2
+            exit 1
+          }
+          [[ "$IOS_VERSION" == "$PACKAGE_VERSION" ]] || {
+            echo "Package version ${PACKAGE_VERSION} and iOS marketing version ${IOS_VERSION} do not match" >&2
+            exit 1
+          }
+          [[ "$LOCK_VERSION" == "$PACKAGE_VERSION" && "$LOCK_ROOT_VERSION" == "$PACKAGE_VERSION" ]] || {
+            echo "Package-lock version ${LOCK_VERSION}/${LOCK_ROOT_VERSION} does not match package version ${PACKAGE_VERSION}" >&2
+            exit 1
+          }
+          [[ "$ANDROID_VERSION_CODE" =~ ^[1-9][0-9]*$ && "$ANDROID_VERSION_CODE" == "$IOS_BUILD_NUMBER" ]] || {
+            echo "Android versionCode ${ANDROID_VERSION_CODE} and iOS build number ${IOS_BUILD_NUMBER} do not match" >&2
+            exit 1
+          }'''
+          if old not in text:
+              raise SystemExit('Release version preflight marker not found')
+          text = text.replace(old, new, 1)
+          text = text.replace('name: Signed Android APK\n', 'name: Signed Android APK and AAB\n', 1)
+          text = text.replace('name: Build signed Android release APK\n', 'name: Build signed Android release packages\n', 1)
+          text = text.replace('name: Verify and package signed APK\n', 'name: Verify and package signed Android artifacts\n', 1)
+          old = '''          APK='android/app/build/outputs/apk/release/app-release.apk'
+          test -s "$APK"
+          APKSIGNER="$(find "${ANDROID_HOME:-$ANDROID_SDK_ROOT}/build-tools" -type f -name apksigner -perm -u+x | sort -V | tail -1)"
+          test -x "$APKSIGNER"
+          "$APKSIGNER" verify --verbose --print-certs "$APK"
+          mkdir -p release
+          cp "$APK" "release/SalahOS-v${VERSION}-android.apk"
+          (
+            cd release
+            sha256sum "SalahOS-v${VERSION}-android.apk" > SHA256SUMS-android.txt
+            sha256sum --check SHA256SUMS-android.txt
+          )'''
+          new = '''          APK='android/app/build/outputs/apk/release/app-release.apk'
+          AAB='android/app/build/outputs/bundle/release/app-release.aab'
+          test -s "$APK"
+          test -s "$AAB"
+          APKSIGNER="$(find "${ANDROID_HOME:-$ANDROID_SDK_ROOT}/build-tools" -type f -name apksigner -perm -u+x | sort -V | tail -1)"
+          test -x "$APKSIGNER"
+          "$APKSIGNER" verify --verbose --print-certs "$APK"
+          jarsigner -verify -strict -certs "$AAB"
+          mkdir -p release
+          cp "$APK" "release/SalahOS-v${VERSION}-android.apk"
+          cp "$AAB" "release/SalahOS-v${VERSION}-android.aab"
+          (
+            cd release
+            sha256sum \\
+              "SalahOS-v${VERSION}-android.apk" \\
+              "SalahOS-v${VERSION}-android.aab" \\
+              > SHA256SUMS-android.txt
+            sha256sum --check SHA256SUMS-android.txt
+          )'''
+          if old not in text:
+              raise SystemExit('Android packaging marker not found')
+          text = text.replace(old, new, 1)
+          text = text.replace('name: Upload signed Android artifact\n', 'name: Upload signed Android artifacts\n', 1)
+          text = text.replace(
+              '            release/SalahOS-v*-android.apk\n            release/SHA256SUMS-android.txt',
+              '            release/SalahOS-v*-android.apk\n            release/SalahOS-v*-android.aab\n            release/SHA256SUMS-android.txt',
+              1,
+          )
+          old = '''          ANDROID="SalahOS-v${VERSION}-android.apk"
+          for file in "$WEB" "$PI" "$ANDROID" SHA256SUMS-web-kiosk.txt SHA256SUMS-android.txt; do'''
+          new = '''          ANDROID="SalahOS-v${VERSION}-android.apk"
+          ANDROID_BUNDLE="SalahOS-v${VERSION}-android.aab"
+          for file in "$WEB" "$PI" "$ANDROID" "$ANDROID_BUNDLE" SHA256SUMS-web-kiosk.txt SHA256SUMS-android.txt; do'''
+          if old not in text:
+              raise SystemExit('Final package Android marker not found')
+          text = text.replace(old, new, 1)
+          text = text.replace(
+              'EXPECTED="$(printf \'%s\\n\' "$WEB" "$PI" "$ANDROID" SHA256SUMS.txt | sort)"',
+              'EXPECTED="$(printf \'%s\\n\' "$WEB" "$PI" "$ANDROID" "$ANDROID_BUNDLE" SHA256SUMS.txt | sort)"',
+              1,
+          )
+          workflow.write_text(text)
 
-      - name: Documentation link verification
-        run: npm run docs:links
+          notes = Path('RELEASE_NOTES.md')
+          notes.write_text('''# SalahOS v1.3.0 release notes
 
-      - name: PWA raster icon reproducibility
-        run: python3 scripts/generate_pwa_icons.py --check
+SalahOS v1.3.0 completes the UI/UX v2 programme through Stage 27 and packages the current release-ready SalahOS targets from one exact, validated `main` revision. It preserves the local-first prayer engine, explicit privacy boundaries and prayer-source semantics while completing the redesigned congregation, administration, phone/tablet and smart-display experiences.
 
-      - name: Design-system ownership policy
-        run: npm run ui:design-system-ownership
+## UI/UX v2 completion
 
-      - name: UI/UX v2 retirement policy
-        run: npm run ui:v2-retirement
+- Completes the six original SalahOS prayer-board designs across managed TV/kiosk displays and validated Phone/Home Today variants.
+- Adds optional fail-soft prayer-board weather plus scheduled announcement/display rotation without making remote content authoritative for prayer times.
+- Completes the managed-masjid administration redesign with dedicated overview, prayer/Iqamah, Jumu'ah/Ramadan, community, display, integration, member and administration destinations.
+- Completes phone, tablet, desktop, Raspberry Pi Touch Display and 1080p/4K TV/kiosk refinement.
+- Completes accessibility, Arabic/RTL and visual acceptance coverage, including forced-colours, reduced-motion, text expansion and representative human review.
+- Retires the legacy single-page application composition, destination-hiding CSS and root compatibility colour aliases. Dedicated v2 Settings panels and `SmartDisplayApplication` now own their surfaces directly.
+- Keeps administrator-only fleet, credentials and publishing controls isolated from ordinary congregation workflows.
 
-      - name: Format check
-        run: npm run format:check
+## Congregation and display experience
 
-      - name: Lint
-        run: npm run lint
+- Prayer-first Today presentation with clear Start/Athan, Iqamah/Jama'ah, current/next prayer, countdown, Jumu'ah and Ramadan context.
+- Dedicated Today, Mosques, Qiblah, Community and Settings destinations with responsive phone bottom navigation, tablet rail and desktop navigation.
+- Category-based Settings for Prayer, Location, Mosque & Iqamah, Notifications & Adhan, Appearance & Language, Data & Privacy, Display Themes and Advanced controls.
+- Direct Phone/Home theme selection and optional weather configuration remain available after legacy UI retirement.
+- Six independently usable prayer-board templates: Heritage Classic, Minimal Modern, Bold Countdown Focus, Structured Split Board, Scenic Spiritual and Family & Classroom.
+- Smart-display runtime remains isolated from congregation navigation and administration forms and continues to use authoritative local prayer data when optional remote content is unavailable.
 
-      - name: Typecheck
-        run: npm run typecheck
+## Release and integrity improvements
 
-      - name: Test
-        run: npm run test
+- Synchronises npm, package-lock, Android and iOS marketing versions at `1.3.0`.
+- Advances Android `versionCode` and iOS `CURRENT_PROJECT_VERSION` together to build `5`.
+- Tightens exact-main release preflight to verify lockfile-version consistency and Android/iOS build-number parity.
+- Produces both a persistently signed Android APK and signed Android App Bundle (AAB).
+- Verifies the APK with Android `apksigner`, verifies the AAB JAR signature, verifies Web/PWA and Raspberry Pi archive integrity and publishes a portable SHA-256 manifest for every packaged artifact.
+- Fails closed if persistent Android release signing is unavailable or if the final package contains missing or unexpected files.
 
-      - name: Production build
-        run: npm run build
+## Downloadable v1.3.0 assets
 
-      - name: Verify deployable web artifact
-        run: npm run verify:web-build
+A successful v1.3.0 publication includes:
+
+- `SalahOS-v1.3.0-android.apk` — persistently signed Android release APK for direct installation;
+- `SalahOS-v1.3.0-android.aab` — persistently signed Android App Bundle for Google Play/distribution workflows;
+- `SalahOS-v1.3.0-web-pwa.zip` — complete production Web/PWA package;
+- `SalahOS-v1.3.0-raspberry-pi-kiosk.tar.gz` — production Web/PWA files plus Raspberry Pi/Linux Chromium kiosk launch and autostart helpers;
+- `SHA256SUMS.txt` — SHA-256 hashes for all packaged release assets.
+
+GitHub also exposes the standard source-code ZIP and tarball for the release tag.
+
+## Distribution boundaries
+
+- A consumer iOS/iPadOS `.ipa` is not published until Apple distribution signing/provisioning is configured and a distribution archive can be validated. The existing iPhone/iPad Simulator acceptance is test evidence, not a consumer installer.
+- No native macOS `.dmg` is published because SalahOS does not contain a native macOS application target.
+- Physical Raspberry Pi, TV/panel, iPhone/iPad and broad Android OEM acceptance remains separate from automated browser/emulator/Simulator and packaging evidence.
+
+## Release gates
+
+The v1.3.0 release revision must be the exact current `main` commit and pass the permanent Quality, Android, Visual Regression and iOS workflows. The release-asset workflow then reruns the complete repository quality gate, verifies persistent Android signing, builds and verifies APK/AAB packages, validates Web/PWA and Raspberry Pi archives, checks the exact final file set and SHA-256 manifest, and only then creates or updates the GitHub release.
+
+See `docs/RELEASE_ASSETS.md`, `TESTING.md`, `TODO.md`, `docs/PLATFORM_STATUS.md` and `docs/UI_UX_V2_PLAN.md` for exact implementation, validation and distribution boundaries.
+
+## Author
+
+privacyOG
+''')
+
+          changelog = Path('CHANGELOG.md')
+          text = changelog.read_text()
+          marker = '## Unreleased\n\n'
+          if text.count(marker) != 1:
+              raise SystemExit('Changelog Unreleased marker not found')
+          section = '''## 1.3.0 — 2026-08-23
+
+### UI/UX v2 completion
+
+- Complete the UI/UX v2 programme through Stage 27 across congregation, managed administration, Phone/Home, Raspberry Pi Touch Display and TV/kiosk surfaces.
+- Complete six original prayer-board templates, Phone/Home variants, optional weather, announcement rotation and managed display-theme configuration.
+- Complete device-specific UX refinement, WCAG-oriented accessibility, Arabic/RTL acceptance, text-expansion coverage and major-surface human visual review.
+- Retire the legacy single-page application/Settings composition, destination-hiding CSS and root compatibility tokens in favour of direct v2 screen and smart-display ownership.
+
+### Release packaging
+
+- Synchronise npm, package-lock, Android and iOS versions at 1.3.0 and advance native build numbers to 5.
+- Add signed Android App Bundle (`.aab`) publication alongside the signed release APK.
+- Tighten exact-main release preflight with package-lock version and Android/iOS build-number parity checks.
+- Preserve Web/PWA ZIP, Raspberry Pi kiosk tarball and portable SHA-256 manifest publication with exact-file preflight.
+
+'''
+          changelog.write_text(text.replace(marker, marker + section, 1))
+
+          docs = Path('docs/RELEASE_ASSETS.md')
+          text = docs.read_text()
+          old = '- **Android:** `SalahOS-vX.Y.Z-android.apk` — a cryptographically signed Android release APK. Android may ask you to permit installation from the browser or file manager used to open the APK.\n'
+          new = old + '- **Android App Bundle:** `SalahOS-vX.Y.Z-android.aab` — the persistently signed bundle intended for Google Play/distribution workflows; it is not a sideload installer.\n'
+          if old not in text:
+              raise SystemExit('Release asset Android download marker not found')
+          text = text.replace(old, new, 1)
+          text = text.replace(
+              'A consumer Android APK is published only when the repository has a persistent release signing identity configured.',
+              'Consumer Android APK and AAB packages are published only when the repository has a persistent release signing identity configured.',
+              1,
+          )
+          text = text.replace(
+              'The release workflow fails rather than publishing an unsigned or debug APK when signing is unavailable, and verifies the release APK with Android `apksigner` before publication.',
+              'The release workflow fails rather than publishing unsigned or debug Android packages when signing is unavailable, verifies the release APK with Android `apksigner`, and verifies the AAB signature before publication.',
+              1,
+          )
+          docs.write_text(text)
+
+          tests = Path('scripts/release-packaging.test.mjs')
+          text = tests.read_text()
+          marker = "    expect(workflow).toContain('iOS marketing version ${IOS_VERSION} do not match');\n"
+          addition = "    expect(workflow).toContain('Package-lock version ${LOCK_VERSION}/${LOCK_ROOT_VERSION} does not match package version ${PACKAGE_VERSION}');\n    expect(workflow).toContain('Android versionCode ${ANDROID_VERSION_CODE} and iOS build number ${IOS_BUILD_NUMBER} do not match');\n"
+          if text.count(marker) != 1:
+              raise SystemExit('Release packaging preflight test marker not found')
+          text = text.replace(marker, marker + addition, 1)
+          marker = "    expect(workflow).toMatch(\n      /cd release[\\s\\S]*sha256sum[\\s\\S]*SalahOS-v\\$\\{VERSION\\}-android\\.apk/,\n    );\n"
+          addition = "    expect(workflow).toMatch(\n      /cd release[\\s\\S]*sha256sum[\\s\\S]*SalahOS-v\\$\\{VERSION\\}-android\\.aab/,\n    );\n"
+          if text.count(marker) != 1:
+              raise SystemExit('Release checksum test marker not found')
+          text = text.replace(marker, marker + addition, 1)
+          text = text.replace(
+              "  it('requires persistent Android signing before creating a release APK', () => {",
+              "  it('requires persistent Android signing before creating release APK and AAB packages', () => {",
+              1,
+          )
+          marker = "    expect(workflow).toContain('app-release.apk');\n"
+          addition = "    expect(workflow).toContain('app-release.aab');\n    expect(workflow).toContain('jarsigner -verify -strict -certs');\n    expect(androidBuild).toContain('bundleRelease');\n"
+          if text.count(marker) != 1:
+              raise SystemExit('Android signing test marker not found')
+          text = text.replace(marker, marker + addition, 1)
+          marker = "    expect(workflow).toContain('tar -tzf \"release/$PI\"');\n"
+          addition = "    expect(workflow).toContain('SalahOS-v${VERSION}-android.aab');\n"
+          if text.count(marker) != 1:
+              raise SystemExit('Final package test marker not found')
+          text = text.replace(marker, marker + addition, 1)
+          tests.write_text(text)
+          PY
+
+          npx prettier --write package.json package-lock.json RELEASE_NOTES.md CHANGELOG.md docs/RELEASE_ASSETS.md scripts/release-packaging.test.mjs .github/workflows/release-assets.yml scripts/build-android-release.mjs
+          npm ci --ignore-scripts
+          npm run check
+
+          for file in package.json package-lock.json android/app/build.gradle ios/App/App.xcodeproj/project.pbxproj scripts/build-android-release.mjs .github/workflows/release-assets.yml RELEASE_NOTES.md CHANGELOG.md docs/RELEASE_ASSETS.md scripts/release-packaging.test.mjs; do
+            blob_sha="$(jq -Rs '{content: ., encoding: "utf-8"}' "$file" | gh api --method POST /repos/${{ github.repository }}/git/blobs --input - --jq .sha)"
+            echo "V130_BLOB $file $blob_sha"
+          done
+          exit 1
