@@ -7,6 +7,11 @@
   display: block;
 }
 
+/* Stage 26: Sandstone secondary text must remain AA-readable at normal text sizes. */
+.smart-display[data-display-theme='sandstone'] {
+  --muted: #726357;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .smart-display[data-burn-in-shift] .prayer-board-configured-surface {
     transform: none;
