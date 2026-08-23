@@ -1,15 +1,15 @@
 import type { ManagedDisplayRemoteStatus } from './managedAdminProtocol';
-import { resolveManagedPrayerBoardTarget, type ManagedPrayerBoardTarget } from './managedPrayerBoardTarget';
+import {
+  resolveManagedPrayerBoardTarget,
+  type ManagedPrayerBoardTarget,
+} from './managedPrayerBoardTarget';
 import type {
   PrayerBoardAccentPreset,
   PrayerBoardArtworkId,
   PrayerBoardTemplateConfig,
   PrayerBoardTemplateId,
 } from './prayerBoardTemplate';
-import {
-  getPrayerBoardTemplate,
-  parsePrayerBoardTemplateConfig,
-} from './prayerBoardTemplate';
+import { getPrayerBoardTemplate, parsePrayerBoardTemplateConfig } from './prayerBoardTemplate';
 import type { SmartDisplayThemeId } from '../platform/smartDisplayTheme';
 
 export interface ManagedDisplayBulkAssignmentPlan {
