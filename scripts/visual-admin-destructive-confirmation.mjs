@@ -164,7 +164,11 @@ try {
 
   const revokeButton = studio.getByRole('button', { name: 'Revoke display' });
   await revokeButton.waitFor({ state: 'visible' });
-  if (!(await revokeButton.evaluate((button) => button.classList.contains('ds-button--destructive')))) {
+  if (
+    !(await revokeButton.evaluate((button) =>
+      button.classList.contains('ds-button--destructive'),
+    ))
+  ) {
     throw new Error('display revoke action is not visually marked destructive');
   }
 
@@ -186,7 +190,9 @@ try {
   });
   await revokeButton.click();
   await page.waitForFunction(
-    () => document.querySelector('.admin-theme-display-card__actions .ds-button--destructive')?.disabled,
+    () =>
+      document.querySelector('.admin-theme-display-card__actions .ds-button--destructive')
+        ?.disabled,
   );
   if (revokeRequests !== 1 || !revoked) {
     throw new Error(`accepted destructive confirmation sent ${String(revokeRequests)} requests`);
