@@ -1,9 +1,9 @@
 name: Stage 24 Maintenance
 
 on:
-  push:
+  pull_request:
     branches:
-      - stage-24/admin-shell-overview
+      - main
     paths:
       - .github/workflows/stage24-maintenance.yml
 
