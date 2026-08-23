@@ -198,6 +198,7 @@ async function validateActiveAnnouncement(browser, locale) {
     serviceWorkers: 'block',
   });
   const page = await context.newPage();
+  await page.clock.install({ time: new Date('2026-08-23T00:42:55.000Z') });
   try {
     await seed(page, locale, true);
     await page.goto(`${baseUrl}/?mode=smart-display`, { waitUntil: 'networkidle' });
@@ -214,7 +215,8 @@ async function validateActiveAnnouncement(browser, locale) {
     const text = (await announcement.textContent()) ?? '';
     if (locale === 'ar') {
       if (!text.includes('إعلان')) throw new Error('Arabic announcement copy did not render');
-      if ((await display.getAttribute('dir')) !== 'rtl') throw new Error('Arabic display is not RTL');
+      if ((await display.getAttribute('dir')) !== 'rtl')
+        throw new Error('Arabic display is not RTL');
     } else if (!text.includes('announcement') && !text.includes('Announcement')) {
       throw new Error('English announcement label did not render');
     }
@@ -238,6 +240,7 @@ async function validateModuleDisabled(browser) {
     serviceWorkers: 'block',
   });
   const page = await context.newPage();
+  await page.clock.install({ time: new Date('2026-08-23T00:42:55.000Z') });
   try {
     await seed(page, 'en', false);
     await page.goto(`${baseUrl}/?mode=smart-display`, { waitUntil: 'networkidle' });
@@ -277,6 +280,8 @@ async function validateAdminControls(browser) {
     if (!(await panel.textContent()).includes('2 display announcements available')) {
       throw new Error('administration panel did not discover display-targeted announcements');
     }
+    await panel.scrollIntoViewIfNeeded();
+    await page.waitForTimeout(100);
     await capture(page, 'prayer-board-announcement-admin-en');
     return { adminControls: true, availableAnnouncements: 2 };
   } finally {
