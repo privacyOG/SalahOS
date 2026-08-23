@@ -535,7 +535,9 @@ function LivePreview({
   useEffect(() => {
     const node = host.current;
     if (node === null) return;
-    const resize = () => setScale(Math.max(0.08, node.clientWidth / 1920));
+    const resize = () => {
+      setScale(Math.max(0.08, node.clientWidth / 1920));
+    };
     resize();
     const observer = typeof ResizeObserver === 'undefined' ? null : new ResizeObserver(resize);
     observer?.observe(node);
@@ -939,7 +941,9 @@ export function AdminDisplayThemeManagement() {
               value={baseUrl}
               autoComplete="off"
               spellCheck={false}
-              onChange={(event) => setBaseUrl(event.target.value)}
+              onChange={(event) => {
+                setBaseUrl(event.target.value);
+              }}
             />
           </label>
           <label>
@@ -949,7 +953,9 @@ export function AdminDisplayThemeManagement() {
               value={adminToken}
               autoComplete="off"
               spellCheck={false}
-              onChange={(event) => setAdminToken(event.target.value)}
+              onChange={(event) => {
+                setAdminToken(event.target.value);
+              }}
             />
           </label>
         </div>
@@ -1001,7 +1007,9 @@ export function AdminDisplayThemeManagement() {
               className="prayer-board-template-card"
               data-template-card={template.id}
               aria-pressed={draft.templateId === template.id}
-              onClick={() => replaceDraft(changeManagedThemeTemplate(draft, template.id))}
+              onClick={() => {
+                replaceDraft(changeManagedThemeTemplate(draft, template.id));
+              }}
             >
               <TemplateThumbnail templateId={template.id} />
               <span className="prayer-board-template-card__copy">
@@ -1021,7 +1029,9 @@ export function AdminDisplayThemeManagement() {
               <span>{text.primaryLanguage}</span>
               <select
                 value={draft.primaryLocale}
-                onChange={(event) => replaceDraft({ ...draft, primaryLocale: event.target.value })}
+                onChange={(event) => {
+                  replaceDraft({ ...draft, primaryLocale: event.target.value });
+                }}
               >
                 <option value="en">English</option>
                 <option value="ar">العربية</option>
@@ -1033,7 +1043,9 @@ export function AdminDisplayThemeManagement() {
               <span>{text.clock}</span>
               <select
                 value={draft.timeFormat}
-                onChange={(event) => replaceDraft({ ...draft, timeFormat: event.target.value })}
+                onChange={(event) => {
+                  replaceDraft({ ...draft, timeFormat: event.target.value });
+                }}
               >
                 <option value="h23">24-hour</option>
                 <option value="h12">12-hour</option>
@@ -1043,7 +1055,9 @@ export function AdminDisplayThemeManagement() {
               <span>{text.accent}</span>
               <select
                 value={draft.accentPreset}
-                onChange={(event) => replaceDraft({ ...draft, accentPreset: event.target.value })}
+                onChange={(event) => {
+                  replaceDraft({ ...draft, accentPreset: event.target.value });
+                }}
               >
                 {ACCENTS.map((accent) => (
                   <option value={accent} key={accent}>
@@ -1060,11 +1074,11 @@ export function AdminDisplayThemeManagement() {
                     ? draft.background.artworkId
                     : getPrayerBoardTemplate(draft.templateId).fallbackArtworkId
                 }
-                onChange={(event) =>
+                onChange={(event) => {
                   replaceDraft(
                     changeManagedThemeArtwork(draft, event.target.value as PrayerBoardArtworkId),
-                  )
-                }
+                  );
+                }}
               >
                 {ARTWORK_OPTIONS.map((artwork) => (
                   <option value={artwork.id} key={artwork.id}>
@@ -1084,11 +1098,11 @@ export function AdminDisplayThemeManagement() {
                   <input
                     dir={language === 'ar' ? 'rtl' : 'auto'}
                     value={draft.branding.mosqueName?.[language] ?? ''}
-                    onChange={(event) =>
+                    onChange={(event) => {
                       replaceDraft(
                         changeManagedThemeMosqueName(draft, language, event.target.value),
-                      )
-                    }
+                      );
+                    }}
                   />
                 </label>
               ))}
@@ -1102,7 +1116,9 @@ export function AdminDisplayThemeManagement() {
                   <input
                     type="checkbox"
                     checked={draft.moduleVisibility[moduleId]}
-                    onChange={(event) => setModule(moduleId, event.target.checked)}
+                    onChange={(event) => {
+                      setModule(moduleId, event.target.checked);
+                    }}
                   />
                   <span>{moduleLabels[locale][moduleId]}</span>
                 </label>
@@ -1126,18 +1142,20 @@ export function AdminDisplayThemeManagement() {
             <button
               type="button"
               disabled={compatibleDisplays.length === 0}
-              onClick={() =>
+              onClick={() => {
                 setSelectedDisplayIds(
                   new Set(compatibleDisplays.map((display) => display.identity.displayId)),
-                )
-              }
+                );
+              }}
             >
               {text.selectCompatible}
             </button>
             <button
               type="button"
               disabled={selectedDisplayIds.size === 0}
-              onClick={() => setSelectedDisplayIds(new Set())}
+              onClick={() => {
+                setSelectedDisplayIds(new Set());
+              }}
             >
               {text.clearSelection}
             </button>
@@ -1192,14 +1210,14 @@ export function AdminDisplayThemeManagement() {
                         type="checkbox"
                         disabled={!selectable}
                         checked={checked}
-                        onChange={(event) =>
+                        onChange={(event) => {
                           setSelectedDisplayIds((current) => {
                             const next = new Set(current);
                             if (event.target.checked) next.add(display.identity.displayId);
                             else next.delete(display.identity.displayId);
                             return next;
-                          })
-                        }
+                          });
+                        }}
                       />
                       <strong dir="ltr">{display.identity.displayId}</strong>
                     </label>
@@ -1238,7 +1256,9 @@ export function AdminDisplayThemeManagement() {
                     <button
                       type="button"
                       disabled={!selectable}
-                      onClick={() => previewTarget(display)}
+                      onClick={() => {
+                        previewTarget(display);
+                      }}
                     >
                       {text.exactPreview}
                     </button>
@@ -1359,7 +1379,9 @@ export function AdminDisplayThemeManagement() {
                 ) : (
                   <button
                     type="button"
-                    onClick={() => loadRollback(entry.scope, entry.targetId, entry.revision)}
+                    onClick={() => {
+                      loadRollback(entry.scope, entry.targetId, entry.revision);
+                    }}
                   >
                     {text.loadRevision}
                   </button>
@@ -1377,39 +1399,45 @@ export function AdminDisplayThemeManagement() {
             <span>{text.displayId}</span>
             <input
               value={enrollment.displayId}
-              onChange={(event) => setEnrollment({ ...enrollment, displayId: event.target.value })}
+              onChange={(event) => {
+                setEnrollment({ ...enrollment, displayId: event.target.value });
+              }}
             />
           </label>
           <label>
             <span>{text.organizationId}</span>
             <input
               value={enrollment.organizationId}
-              onChange={(event) =>
-                setEnrollment({ ...enrollment, organizationId: event.target.value })
-              }
+              onChange={(event) => {
+                setEnrollment({ ...enrollment, organizationId: event.target.value });
+              }}
             />
           </label>
           <label>
             <span>{text.mosqueId}</span>
             <input
               value={enrollment.mosqueId}
-              onChange={(event) => setEnrollment({ ...enrollment, mosqueId: event.target.value })}
+              onChange={(event) => {
+                setEnrollment({ ...enrollment, mosqueId: event.target.value });
+              }}
             />
           </label>
           <label>
             <span>{text.locationId}</span>
             <input
               value={enrollment.locationId}
-              onChange={(event) => setEnrollment({ ...enrollment, locationId: event.target.value })}
+              onChange={(event) => {
+                setEnrollment({ ...enrollment, locationId: event.target.value });
+              }}
             />
           </label>
           <label>
             <span>{text.orientation}</span>
             <select
               value={enrollment.orientation}
-              onChange={(event) =>
-                setEnrollment({ ...enrollment, orientation: event.target.value as 'landscape' })
-              }
+              onChange={(event) => {
+                setEnrollment({ ...enrollment, orientation: event.target.value as 'landscape' });
+              }}
             >
               <option value="landscape">landscape</option>
               <option value="portrait">portrait</option>
@@ -1419,16 +1447,18 @@ export function AdminDisplayThemeManagement() {
             <span>{text.profile}</span>
             <input
               value={enrollment.resolutionProfile}
-              onChange={(event) =>
-                setEnrollment({ ...enrollment, resolutionProfile: event.target.value })
-              }
+              onChange={(event) => {
+                setEnrollment({ ...enrollment, resolutionProfile: event.target.value });
+              }}
             />
           </label>
           <label>
             <span>{text.playlist}</span>
             <input
               value={enrollment.playlistId}
-              onChange={(event) => setEnrollment({ ...enrollment, playlistId: event.target.value })}
+              onChange={(event) => {
+                setEnrollment({ ...enrollment, playlistId: event.target.value });
+              }}
             />
           </label>
         </div>
@@ -1453,7 +1483,9 @@ export function AdminDisplayThemeManagement() {
           identity={targetPreview.identity}
           config={targetPreview.config}
           locale={locale}
-          onClose={() => setTargetPreview(null)}
+          onClose={() => {
+            setTargetPreview(null);
+          }}
         />
       )}
     </section>
