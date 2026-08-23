@@ -1,3 +1,12 @@
+.touch-display-fixture .prayer-times > div {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.touch-display-fixture .prayer-time-label {
+  display: block;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .smart-display[data-burn-in-shift] .prayer-board-configured-surface {
     transform: none;
