@@ -62,7 +62,7 @@ const settingsScenarios = [
     name: 'stage27-settings-display-themes-desktop',
     category: 'display-themes',
     viewport: { width: 1440, height: 1000 },
-    selector: '.mobile-prayer-theme-settings',
+    selector: '.prayer-board-weather-settings',
   },
 ];
 

@@ -77,6 +77,13 @@ describe('Settings progressive disclosure and Stage 27 ownership', () => {
     expect(migrationSource).toContain('notification-fieldset');
   });
 
+  it('owns personal display themes and optional weather directly', () => {
+    expect(settingsSource).toContain("category === 'display-themes'");
+    expect(settingsSource).toContain('<MobilePrayerThemeSettings />');
+    expect(settingsSource).toContain('<PrayerBoardWeatherSettings />');
+    expect(settingsSource).toContain('administrationDisplaysHref()');
+  });
+
   it('does not rely on legacy Settings wrappers or destination-hiding CSS', () => {
     expect(settingsSource).not.toContain("from '../App'");
     expect(settingsSource).not.toContain('<App />');

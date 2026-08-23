@@ -78,6 +78,11 @@ requireText(
   'MobilePrayerThemeSettings',
   'direct personal display-theme settings ownership',
 );
+requireText(
+  settingsScreen,
+  'PrayerBoardWeatherSettings',
+  'direct personal weather settings ownership',
+);
 requireText(settingsScreen, 'LocationSettingsPanel', 'dedicated location settings route');
 requireText(
   settingsScreen,

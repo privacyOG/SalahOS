@@ -14,6 +14,7 @@ import {
 } from '../platform/settingsStorage';
 import { installThemePreference } from '../platform/themePreference';
 import { MobilePrayerThemeSettings } from './MobilePrayerThemeSettings';
+import { PrayerBoardWeatherSettings } from './PrayerBoardWeatherSettings';
 import { RamadanModePanel } from './RamadanModePanel';
 import {
   AdvancedPrayerSettingsPanel,
@@ -602,6 +603,7 @@ export function SettingsScreen() {
           aria-label={copy.displayTitle}
         >
           <MobilePrayerThemeSettings />
+          <PrayerBoardWeatherSettings />
           <a className="surface-entry-card__action" href={administrationDisplaysHref()}>
             {copy.displayAction}
           </a>
