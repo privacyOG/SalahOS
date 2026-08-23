@@ -97,7 +97,7 @@ export function ManagedDisplayConnectionSettings() {
           <span>{text.endpoint}</span>
           <input
             type="url"
-            aria-label="Display device managed service URL"
+            aria-label="Display device endpoint"
             value={baseUrl}
             autoComplete="off"
             spellCheck={false}
