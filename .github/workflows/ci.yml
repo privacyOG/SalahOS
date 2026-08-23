@@ -12,14 +12,12 @@ concurrency:
   cancel-in-progress: true
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   quality:
     runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '["ubuntu-24.04"]' || '["self-hosted","Linux","X64"]') }}
     timeout-minutes: 15
-    env:
-      GH_TOKEN: ${{ github.token }}
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -32,73 +30,6 @@ jobs:
 
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
-
-      - name: Publish Stage 25 and 26 tracker blobs
-        if: github.event_name == 'pull_request'
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-
-          code_head = '10c5c0d9a7416241c2616104fb24a82ebda98d14'
-          quality_run = '32635064665'
-          visual_run = '32635064617'
-          android_run = '32635064630'
-          ios_run = '32635064637'
-          artifact = '9492111118'
-          digest = 'sha256:12cd2fd855545a3ab9f35d8bc76e0544349dd10dc7aa34548cfea4d699a029e4'
-
-          todo_path = Path('TODO.md')
-          todo = todo_path.read_text()
-          start = todo.index('## 25. Device-specific UX refinement')
-          end = todo.index('## 27. Legacy UI retirement and migration completion', start)
-          block = todo[start:end]
-          block = block.replace('- [~] Continue phone, tablet and desktop responsive refinement', '- [x] Continue phone, tablet and desktop responsive refinement')
-          block = block.replace('- [ ] Complete Raspberry Pi Touch Display 2 close-range UX refinement', '- [x] Complete Raspberry Pi Touch Display 2 close-range UX refinement')
-          block = block.replace('- [ ] Complete 1080p/4K TV and kiosk refinement for all required prayer-board templates', '- [x] Complete 1080p/4K TV and kiosk refinement for all required prayer-board templates')
-          block = block.replace('- [~] Continue accessibility, RTL and human visual acceptance across redesigned surfaces', '- [x] Continue accessibility, RTL and human visual acceptance across redesigned surfaces')
-          block = block.replace('- [ ] Complete the full Stage 26 accessibility and internationalisation matrix', '- [x] Complete the full Stage 26 accessibility and internationalisation matrix')
-          block = block.replace('- [ ] Complete screenshot and golden-state coverage for all redesigned application/display surfaces', '- [x] Complete screenshot and golden-state coverage for all redesigned application/display surfaces')
-
-          stage25_note = f'''\n**Stage 25 verification note (2026-08-23):** PR #190 code-bearing head `{code_head}` passed Quality Gate `{quality_run}`, Visual Regression `{visual_run}`, Android Build `{android_run}` and iOS Build `{ios_run}`. Exact Visual artifact `{artifact}` (`{digest}`) passed permanent phone acceptance at 320/390/430px including Arabic OS text scaling 1.25 and Turkish/Indonesian expansion, tablet/desktop hierarchy and controlled line lengths, 5/7/10-inch Touch Display close-range profiles with 44px recovery controls, all six TV templates at 1080p/4K safe regions, burn-in/reduced-motion and keyboard recovery. Human review confirmed prayer-card containment, scannable five-prayer tables, unobscured fixed navigation and long-distance TV readability. Stage 25 is complete.\n'''
-          stage26_note = f'''\n**Stage 26 verification note (2026-08-23):** PR #190 code-bearing head `{code_head}` passed Quality Gate `{quality_run}`, Visual Regression `{visual_run}`, Android Build `{android_run}` and iOS Build `{ios_run}`. Exact Visual artifact `{artifact}` (`{digest}`) passed WCAG AA application/display contrast including Sandstone muted text at 4.62:1, semantic landmarks/headings, accessible names, visible keyboard focus, textual current/next prayer state, reduced-motion, forced-colours, Arabic/RTL across all redesigned congregation destinations and all six prayer-board templates at 1080p/4K, mixed-direction isolation, Turkish/Indonesian expansion, administration pages, Touch Display portrait/landscape and golden current/next, unavailable/stale, Jumu'ah and Ramadan fixtures. Human review covered light/dark congregation surfaces, Arabic/RTL, administration, forced-colours, Touch Display, responsive phone cases and all 12 Arabic prayer-board renders; hierarchy and readability were clean and no template appeared to be a direct third-party visual copy. Stage 26 is complete.\n'''
-
-          marker25 = '\n---\n\n## 26. Accessibility, RTL and visual acceptance'
-          if marker25 not in block:
-              raise SystemExit('TODO Stage 25/26 boundary missing')
-          block = block.replace(marker25, stage25_note + '\n---\n\n## 26. Accessibility, RTL and visual acceptance', 1)
-          marker26 = '\n---\n\n'
-          idx = block.rfind(marker26)
-          if idx < 0:
-              raise SystemExit('TODO Stage 26 closing boundary missing')
-          block = block[:idx] + stage26_note + block[idx:]
-          todo_path.write_text(todo[:start] + block + todo[end:])
-
-          plan_path = Path('docs/UI_UX_V2_PLAN.md')
-          plan = plan_path.read_text()
-          start = plan.index('# Stage 25 — Device-specific UX refinement')
-          end = plan.index('# Stage 27 — Legacy UI retirement and migration completion', start)
-          block = plan[start:end]
-          block = block.replace('- [ ]', '- [x]')
-
-          detailed25_note = f'''\n**Stage 25 verification note (2026-08-23):** PR #190 code-bearing head `{code_head}` passed Quality Gate `{quality_run}`, Visual Regression `{visual_run}`, Android Build `{android_run}` and iOS Build `{ios_run}`. Exact Visual artifact `{artifact}` (`{digest}`) validates 320–430px phone widths, genuine OS text scaling, long Arabic/Turkish/Indonesian content, fixed-navigation reserve, 44px common targets, deliberate tablet/desktop hierarchy, 5/7/10-inch Touch Display profiles and administrator recovery, plus every required prayer-board template at 1920x1080 and 3840x2160 with safe regions, burn-in mitigation, reduced-motion and keyboard recovery. Human review confirmed prayer information remains scannable at close range and long viewing distance. Stage 25 is complete.\n'''
-          detailed26_note = f'''\n**Stage 26 verification note (2026-08-23):** PR #190 code-bearing head `{code_head}` passed Quality Gate `{quality_run}`, Visual Regression `{visual_run}`, Android Build `{android_run}` and iOS Build `{ios_run}`. Exact Visual artifact `{artifact}` (`{digest}`) validates WCAG AA contrast, non-colour current/next state, visible focus, semantic landmarks/headings, accessible interactive names, reduced-motion and forced-colours; Arabic/RTL across every redesigned congregation destination and all six prayer-board templates at 1080p/4K; safe mixed-direction content; Turkish/Indonesian expansion; phone/tablet/desktop/admin/Touch screenshot coverage; and golden current/next, unavailable/stale, Jumu'ah and Ramadan states. Required human review covered light/dark surfaces, Arabic composition, administration, forced-colours, Touch Display and all 12 Arabic board renders and found the prayer hierarchy, Start/Athan versus Iqamah/Jama'ah distinction, navigation, whitespace, imagery and viewing-distance readability acceptable with no direct third-party visual copy. Stage 26 is complete.\n'''
-
-          marker25 = '\n---\n\n# Stage 26 — Accessibility, RTL and visual acceptance'
-          if marker25 not in block:
-              raise SystemExit('Detailed Stage 25/26 boundary missing')
-          block = block.replace(marker25, detailed25_note + '\n---\n\n# Stage 26 — Accessibility, RTL and visual acceptance', 1)
-          idx = block.rfind('\n---\n\n')
-          if idx < 0:
-              raise SystemExit('Detailed Stage 26 closing boundary missing')
-          block = block[:idx] + detailed26_note + block[idx:]
-          plan_path.write_text(plan[:start] + block + plan[end:])
-          PY
-          npx prettier --write TODO.md docs/UI_UX_V2_PLAN.md
-          TODO_BLOB_SHA="$(jq -Rs '{content: ., encoding: "utf-8"}' TODO.md | gh api --method POST /repos/${{ github.repository }}/git/blobs --input - --jq .sha)"
-          PLAN_BLOB_SHA="$(jq -Rs '{content: ., encoding: "utf-8"}' docs/UI_UX_V2_PLAN.md | gh api --method POST /repos/${{ github.repository }}/git/blobs --input - --jq .sha)"
-          echo "TODO_BLOB_SHA=${TODO_BLOB_SHA}"
-          echo "PLAN_BLOB_SHA=${PLAN_BLOB_SHA}"
-          exit 1
 
       - name: Sensitive-file policy
         run: npm run security:sensitive-files

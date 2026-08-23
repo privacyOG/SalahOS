@@ -375,33 +375,35 @@ The phone Today/home experience must receive the same design quality and templat
 
 ## 25.1 Phone
 
-- [ ] Validate 320px minimum width through modern large-phone widths.
-- [ ] Keep primary bottom navigation fixed without obscuring content or safe-area regions.
-- [ ] Ensure prayer timetable can be scanned without excessive card stacking.
-- [ ] Ensure all common actions meet touch-target requirements.
-- [ ] Validate enlarged text and long translations.
+- [x] Validate 320px minimum width through modern large-phone widths.
+- [x] Keep primary bottom navigation fixed without obscuring content or safe-area regions.
+- [x] Ensure prayer timetable can be scanned without excessive card stacking.
+- [x] Ensure all common actions meet touch-target requirements.
+- [x] Validate enlarged text and long translations.
 
 ## 25.2 Tablet and desktop
 
-- [ ] Use space to improve hierarchy, not simply stretch phone layouts.
-- [ ] Use two-column layouts where they reduce scrolling and preserve reading order.
-- [ ] Keep line lengths controlled.
-- [ ] Avoid oversized empty navigation rails or excessive unused whitespace.
+- [x] Use space to improve hierarchy, not simply stretch phone layouts.
+- [x] Use two-column layouts where they reduce scrolling and preserve reading order.
+- [x] Keep line lengths controlled.
+- [x] Avoid oversized empty navigation rails or excessive unused whitespace.
 
 ## 25.3 Raspberry Pi Touch Display 2
 
-- [ ] Create close-range touch layouts distinct from television viewing-distance layouts.
-- [ ] Validate 5-inch, 7-inch and 10-inch fixture profiles where currently supported by the test harness.
-- [ ] Preserve recovery/admin escape affordances without cluttering normal display mode.
+- [x] Create close-range touch layouts distinct from television viewing-distance layouts.
+- [x] Validate 5-inch, 7-inch and 10-inch fixture profiles where currently supported by the test harness.
+- [x] Preserve recovery/admin escape affordances without cluttering normal display mode.
 
 ## 25.4 TV/kiosk
 
-- [ ] Validate all six required prayer-board templates at 1920x1080.
-- [ ] Validate all six required prayer-board templates at 3840x2160.
-- [ ] Validate long-distance readability for clock, prayer names, Athan/start times and Iqamah/Jama'ah.
-- [ ] Validate overscan/safe-region assumptions where relevant.
-- [ ] Preserve burn-in mitigation without causing layout instability.
-- [ ] Ensure remote/keyboard recovery controls remain available to administrators.
+- [x] Validate all six required prayer-board templates at 1920x1080.
+- [x] Validate all six required prayer-board templates at 3840x2160.
+- [x] Validate long-distance readability for clock, prayer names, Athan/start times and Iqamah/Jama'ah.
+- [x] Validate overscan/safe-region assumptions where relevant.
+- [x] Preserve burn-in mitigation without causing layout instability.
+- [x] Ensure remote/keyboard recovery controls remain available to administrators.
+
+**Stage 25 verification note (2026-08-23):** PR #190 code-bearing head `10c5c0d9a7416241c2616104fb24a82ebda98d14` passed Quality Gate `32635064665`, Visual Regression `32635064617`, Android Build `32635064630` and iOS Build `32635064637`. Exact Visual artifact `9492111118` (`sha256:12cd2fd855545a3ab9f35d8bc76e0544349dd10dc7aa34548cfea4d699a029e4`) validates 320–430px phone widths, genuine OS text scaling, long Arabic/Turkish/Indonesian content, fixed-navigation reserve, 44px common targets, deliberate tablet/desktop hierarchy, 5/7/10-inch Touch Display profiles and administrator recovery, plus every required prayer-board template at 1920x1080 and 3840x2160 with safe regions, burn-in mitigation, reduced-motion and keyboard recovery. Human review confirmed prayer information remains scannable at close range and long viewing distance. Stage 25 is complete.
 
 ---
 
@@ -409,49 +411,51 @@ The phone Today/home experience must receive the same design quality and templat
 
 ## 26.1 Accessibility
 
-- [ ] Meet WCAG AA contrast for core application and prayer-board text.
-- [ ] Ensure current/next prayer state is not communicated only by colour.
-- [ ] Preserve visible keyboard focus.
-- [ ] Preserve semantic heading and landmark structure.
-- [ ] Validate screen-reader labels for prayer names, times, countdown and navigation.
-- [ ] Respect reduced-motion preferences.
-- [ ] Preserve forced-colours/high-contrast operation on interactive application surfaces.
+- [x] Meet WCAG AA contrast for core application and prayer-board text.
+- [x] Ensure current/next prayer state is not communicated only by colour.
+- [x] Preserve visible keyboard focus.
+- [x] Preserve semantic heading and landmark structure.
+- [x] Validate screen-reader labels for prayer names, times, countdown and navigation.
+- [x] Respect reduced-motion preferences.
+- [x] Preserve forced-colours/high-contrast operation on interactive application surfaces.
 
 ## 26.2 Arabic/RTL and internationalisation
 
-- [ ] Review every redesigned congregation destination in Arabic/RTL.
-- [ ] Review every required prayer-board template in Arabic/RTL.
-- [ ] Avoid Latin-only letter spacing, uppercase and punctuation assumptions in RTL layouts.
-- [ ] Isolate mixed-direction numbers, URLs, coordinates and administrator identifiers safely.
-- [ ] Validate Turkish and Indonesian text expansion on major redesigned screens.
+- [x] Review every redesigned congregation destination in Arabic/RTL.
+- [x] Review every required prayer-board template in Arabic/RTL.
+- [x] Avoid Latin-only letter spacing, uppercase and punctuation assumptions in RTL layouts.
+- [x] Isolate mixed-direction numbers, URLs, coordinates and administrator identifiers safely.
+- [x] Validate Turkish and Indonesian text expansion on major redesigned screens.
 
 ## 26.3 Visual acceptance matrix
 
-- [ ] Add screenshot coverage for phone English light.
-- [ ] Add screenshot coverage for phone English dark.
-- [ ] Add screenshot coverage for phone Arabic/RTL.
-- [ ] Add screenshot coverage for tablet English light/dark as appropriate.
-- [ ] Add screenshot coverage for tablet Arabic/RTL.
-- [ ] Add screenshot coverage for desktop congregation destinations.
-- [ ] Add screenshot coverage for admin shell/pages.
-- [ ] Add screenshot coverage for all six prayer-board templates at 1080p.
-- [ ] Add representative 4K geometry/readability coverage for all six prayer-board templates.
-- [ ] Add Touch Display portrait and landscape coverage.
-- [ ] Define golden-state fixtures for next prayer, current prayer, unavailable event, Jumu'ah and Ramadan where relevant.
-- [ ] Add human visual review as a required major-UI acceptance step in addition to overflow/clipping automation.
+- [x] Add screenshot coverage for phone English light.
+- [x] Add screenshot coverage for phone English dark.
+- [x] Add screenshot coverage for phone Arabic/RTL.
+- [x] Add screenshot coverage for tablet English light/dark as appropriate.
+- [x] Add screenshot coverage for tablet Arabic/RTL.
+- [x] Add screenshot coverage for desktop congregation destinations.
+- [x] Add screenshot coverage for admin shell/pages.
+- [x] Add screenshot coverage for all six prayer-board templates at 1080p.
+- [x] Add representative 4K geometry/readability coverage for all six prayer-board templates.
+- [x] Add Touch Display portrait and landscape coverage.
+- [x] Define golden-state fixtures for next prayer, current prayer, unavailable event, Jumu'ah and Ramadan where relevant.
+- [x] Add human visual review as a required major-UI acceptance step in addition to overflow/clipping automation.
 
 ### Human review criteria
 
-- [ ] A first-time user can identify the next prayer immediately.
-- [ ] Athan/start and Iqamah/Jama'ah are never visually ambiguous.
-- [ ] The ordinary congregation view contains no unnecessary administrator controls.
-- [ ] Navigation labels and destinations match user expectations.
-- [ ] Whitespace and hierarchy remain balanced rather than merely sparse.
-- [ ] Light and dark themes both look intentionally designed.
-- [ ] Arabic/RTL layouts look composed rather than mechanically mirrored.
-- [ ] Prayer-board themes remain readable from expected viewing distance.
-- [ ] Custom imagery never reduces core prayer readability.
-- [ ] No template appears to be a direct visual copy of a third-party product.
+- [x] A first-time user can identify the next prayer immediately.
+- [x] Athan/start and Iqamah/Jama'ah are never visually ambiguous.
+- [x] The ordinary congregation view contains no unnecessary administrator controls.
+- [x] Navigation labels and destinations match user expectations.
+- [x] Whitespace and hierarchy remain balanced rather than merely sparse.
+- [x] Light and dark themes both look intentionally designed.
+- [x] Arabic/RTL layouts look composed rather than mechanically mirrored.
+- [x] Prayer-board themes remain readable from expected viewing distance.
+- [x] Custom imagery never reduces core prayer readability.
+- [x] No template appears to be a direct visual copy of a third-party product.
+
+**Stage 26 verification note (2026-08-23):** PR #190 code-bearing head `10c5c0d9a7416241c2616104fb24a82ebda98d14` passed Quality Gate `32635064665`, Visual Regression `32635064617`, Android Build `32635064630` and iOS Build `32635064637`. Exact Visual artifact `9492111118` (`sha256:12cd2fd855545a3ab9f35d8bc76e0544349dd10dc7aa34548cfea4d699a029e4`) validates WCAG AA contrast, non-colour current/next state, visible focus, semantic landmarks/headings, accessible interactive names, reduced-motion and forced-colours; Arabic/RTL across every redesigned congregation destination and all six prayer-board templates at 1080p/4K; safe mixed-direction content; Turkish/Indonesian expansion; phone/tablet/desktop/admin/Touch screenshot coverage; and golden current/next, unavailable/stale, Jumu'ah and Ramadan states. Required human review covered light/dark surfaces, Arabic composition, administration, forced-colours, Touch Display and all 12 Arabic board renders and found the prayer hierarchy, Start/Athan versus Iqamah/Jama'ah distinction, navigation, whitespace, imagery and viewing-distance readability acceptable with no direct third-party visual copy. Stage 26 is complete.
 
 ---
 
