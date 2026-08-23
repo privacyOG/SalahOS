@@ -193,7 +193,7 @@ async function captureScenario(browser, scenario) {
       throw new Error(`${scenario.name} did not render online/stale/offline fleet counts`);
     }
     const body = (await page.locator('body').textContent()) ?? '';
-    for (const expected of ['rev-024', 'rev-025', 'Friday parking notice', 'Family dinner']) {
+    for (const expected of ['rev-024', 'rev-025', 'Friday parking notice', 'Community dinner']) {
       if (scenario.locale === 'en' && !body.includes(expected)) {
         throw new Error(`${scenario.name} is missing overview evidence: ${expected}`);
       }
