@@ -54,6 +54,29 @@
   display: contents;
 }
 
+.smart-display .prayer-board-configured-surface {
+  display: block;
+  transform: translate3d(0, 0, 0);
+}
+
+.smart-display[data-burn-in-shift='1'] .prayer-board-configured-surface {
+  transform: translate3d(4px, -3px, 0);
+}
+
+.smart-display[data-burn-in-shift='2'] .prayer-board-configured-surface {
+  transform: translate3d(-3px, -4px, 0);
+}
+
+.smart-display[data-burn-in-shift='3'] .prayer-board-configured-surface {
+  transform: translate3d(-4px, 3px, 0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .smart-display .prayer-board-configured-surface {
+    transform: none;
+  }
+}
+
 .prayer-board-configured-surface[data-module-dates='off'] .heritage-classic-board__dates,
 .prayer-board-configured-surface[data-module-dates='off'] .minimal-modern-board__dates,
 .prayer-board-configured-surface[data-module-dates='off'] .bold-countdown-board__dates,

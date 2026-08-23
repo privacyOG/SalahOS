@@ -1,9 +1,36 @@
 .touch-display-fixture {
+  position: relative;
   min-height: 100vh;
   padding: clamp(1rem, 2.5vw, 2rem);
   color: var(--text);
   background:
     radial-gradient(circle at top right, var(--page-glow), transparent 34rem), var(--page);
+}
+
+.touch-display-fixture-recovery {
+  position: absolute;
+  z-index: 2;
+  inset-block-end: max(0.65rem, env(safe-area-inset-bottom));
+  inset-inline-end: max(0.65rem, env(safe-area-inset-right));
+  display: inline-flex;
+  min-width: 2.75rem;
+  min-height: 2.75rem;
+  align-items: center;
+  justify-content: center;
+  padding-inline: 0.85rem;
+  border: 1px solid color-mix(in srgb, var(--text) 22%, transparent);
+  border-radius: 999px;
+  color: var(--text);
+  background: color-mix(in srgb, var(--card) 88%, transparent);
+  font-size: 0.78rem;
+  font-weight: 750;
+  text-decoration: none;
+  opacity: 0.42;
+  backdrop-filter: blur(12px);
+}
+
+.touch-display-fixture-recovery:is(:hover, :focus-visible) {
+  opacity: 1;
 }
 
 .touch-display-fixture-header {

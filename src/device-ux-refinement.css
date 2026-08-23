@@ -1,0 +1,28 @@
+.touch-display-fixture .prayer-times > div {
+  display: grid;
+  gap: 0.15rem;
+}
+
+.touch-display-fixture .prayer-time-label {
+  display: block;
+}
+
+/* Stage 26: Sandstone secondary text must remain AA-readable at normal text sizes. */
+.smart-display[data-display-theme='sandstone'] {
+  --muted: #726357;
+}
+
+/* Stage 26: Latin casing/tracking conventions must not be imposed on Arabic labels. */
+[dir='rtl'] .today-screen p,
+[dir='rtl'] .today-screen span,
+[dir='rtl'] .today-screen dt,
+[dir='rtl'] .today-screen small {
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .smart-display[data-burn-in-shift] .prayer-board-configured-surface {
+    transform: none;
+  }
+}

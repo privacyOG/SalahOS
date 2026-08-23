@@ -44,6 +44,7 @@ import './responsive-hardening.css';
 import './touch-display-fixture.css';
 import './smart-display.css';
 import './smart-display-themes.css';
+import './device-ux-refinement.css';
 import './family-classroom-4k.css';
 import './managed-display-remote.css';
 import './remote-display-admin.css';
@@ -54,6 +55,7 @@ import './qibla-compass.css';
 import './qibla-compass-premium.css';
 import './qiblah-v2.css';
 import './mosques-community-v2.css';
+import './accessibility-rtl-refinement.css';
 
 function CongregationRoute({ destination }: Readonly<{ destination: CongregationDestination }>) {
   switch (destination) {

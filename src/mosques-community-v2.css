@@ -56,6 +56,13 @@
   text-transform: uppercase;
 }
 
+[dir='rtl'] .mosques-screen__eyebrow,
+[dir='rtl'] .community-screen__eyebrow,
+[dir='rtl'] .mosque-profile-v2__header > div > p:first-child {
+  letter-spacing: 0;
+  text-transform: none;
+}
+
 .mosques-browser,
 .mosque-profile-v2,
 .community-screen__content {
