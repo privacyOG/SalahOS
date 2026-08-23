@@ -4,8 +4,14 @@ import {
   PRAYER_BOARD_ANNOUNCEMENT_ROTATION_VERSION,
   type PrayerBoardAnnouncementRotationConfig,
 } from '../domain/prayerBoardAnnouncementRotation';
-import type { AnnouncementScene } from '../domain/signageScene';
-import type { SignagePlaylist, SignageScheduleRule } from '../domain/signagePlaylist';
+import type {
+  PrayerScheduleKey,
+  SignagePlaylist,
+  SignageScheduleContext,
+  SignageScheduleRule,
+  Weekday,
+} from '../domain/signagePlaylist';
+import type { AnnouncementScene, SignageOfflineFallback } from '../domain/signageScene';
 import type { KeyValueStorage } from './settingsStorage';
 
 export const PRAYER_BOARD_ANNOUNCEMENT_ROTATION_STORAGE_KEY =
@@ -15,8 +21,52 @@ export const PRAYER_BOARD_ANNOUNCEMENT_ROTATION_CHANGE_EVENT =
 
 type JsonRecord = Record<string, unknown>;
 
+const SCHEDULE_CONTEXTS: readonly SignageScheduleContext[] = [
+  'all',
+  'normal',
+  'jumuah',
+  'ramadan',
+];
+const PRAYER_KEYS: readonly PrayerScheduleKey[] = [
+  'fajr',
+  'dhuhr',
+  'asr',
+  'maghrib',
+  'isha',
+  'jumuah',
+];
+const OFFLINE_FALLBACKS: readonly SignageOfflineFallback[] = [
+  'retain-last-good',
+  'prayer-board',
+  'hide-scene',
+];
+
 function isRecord(value: unknown): value is JsonRecord {
   return typeof value === 'object' && value !== null && !Array.isArray(value);
+}
+
+function requiredString(value: unknown, label: string): string {
+  if (typeof value !== 'string') throw new TypeError(`${label} must be a string`);
+  return value;
+}
+
+function requiredNumber(value: unknown, label: string): number {
+  if (typeof value !== 'number' || !Number.isFinite(value)) {
+    throw new TypeError(`${label} must be a finite number`);
+  }
+  return value;
+}
+
+function nullableString(value: unknown, label: string): string | null {
+  if (value === null) return null;
+  return requiredString(value, label);
+}
+
+function stringEnum<T extends string>(value: unknown, allowed: readonly T[], label: string): T {
+  if (typeof value !== 'string' || !allowed.includes(value as T)) {
+    throw new TypeError(`${label} contains an unsupported value`);
+  }
+  return value as T;
 }
 
 function parsePlaylist(value: unknown): SignagePlaylist | null {
@@ -25,28 +75,36 @@ function parsePlaylist(value: unknown): SignagePlaylist | null {
     throw new TypeError('Announcement rotation playlist is invalid');
   }
   return {
-    playlistId: String(value.playlistId ?? ''),
-    mosqueId: String(value.mosqueId ?? ''),
-    title: String(value.title ?? ''),
-    revision: Number(value.revision),
+    playlistId: requiredString(value.playlistId, 'Announcement playlist ID'),
+    mosqueId: requiredString(value.mosqueId, 'Announcement playlist mosque ID'),
+    title: requiredString(value.title, 'Announcement playlist title'),
+    revision: requiredNumber(value.revision, 'Announcement playlist revision'),
     scenes: value.scenes.map((entry) => {
       if (!isRecord(entry)) throw new TypeError('Announcement playlist entry is invalid');
       return {
-        sceneId: String(entry.sceneId ?? ''),
-        dwellSeconds: Number(entry.dwellSeconds),
+        sceneId: requiredString(entry.sceneId, 'Announcement scene ID'),
+        dwellSeconds: requiredNumber(entry.dwellSeconds, 'Announcement dwell seconds'),
       };
     }),
   };
 }
 
+function parseWeekday(value: unknown): Weekday {
+  if (typeof value !== 'number' || !Number.isInteger(value) || value < 0 || value > 6) {
+    throw new TypeError('Announcement schedule weekday must be an integer from 0 through 6');
+  }
+  return value as Weekday;
+}
+
 function parseRule(value: unknown): SignageScheduleRule {
   if (!isRecord(value)) throw new TypeError('Announcement schedule rule is invalid');
   const base = {
-    ruleId: String(value.ruleId ?? ''),
-    playlistId: String(value.playlistId ?? ''),
-    priority: Number(value.priority),
-    context: String(value.context ?? '') as SignageScheduleRule['context'],
+    ruleId: requiredString(value.ruleId, 'Announcement schedule rule ID'),
+    playlistId: requiredString(value.playlistId, 'Announcement schedule playlist ID'),
+    priority: requiredNumber(value.priority, 'Announcement schedule priority'),
+    context: stringEnum(value.context, SCHEDULE_CONTEXTS, 'Announcement schedule context'),
   };
+
   if (value.kind === 'time-window') {
     if (!Array.isArray(value.weekdays)) {
       throw new TypeError('Announcement time-window weekdays are invalid');
@@ -54,22 +112,27 @@ function parseRule(value: unknown): SignageScheduleRule {
     return {
       ...base,
       kind: 'time-window',
-      startDate: value.startDate === null ? null : String(value.startDate ?? ''),
-      endDate: value.endDate === null ? null : String(value.endDate ?? ''),
-      weekdays: value.weekdays.map(Number) as (0 | 1 | 2 | 3 | 4 | 5 | 6)[],
-      startsAt: String(value.startsAt ?? ''),
-      endsAt: String(value.endsAt ?? ''),
+      startDate: nullableString(value.startDate, 'Announcement schedule start date'),
+      endDate: nullableString(value.endDate, 'Announcement schedule end date'),
+      weekdays: value.weekdays.map(parseWeekday),
+      startsAt: requiredString(value.startsAt, 'Announcement schedule start clock'),
+      endsAt: requiredString(value.endsAt, 'Announcement schedule end clock'),
     };
   }
+
   if (value.kind === 'prayer-relative') {
     return {
       ...base,
       kind: 'prayer-relative',
-      prayer: String(value.prayer ?? '') as SignageScheduleRule & never,
-      offsetMinutes: Number(value.offsetMinutes),
-      durationMinutes: Number(value.durationMinutes),
-    } as SignageScheduleRule;
+      prayer: stringEnum(value.prayer, PRAYER_KEYS, 'Announcement schedule prayer'),
+      offsetMinutes: requiredNumber(value.offsetMinutes, 'Announcement prayer-relative offset'),
+      durationMinutes: requiredNumber(
+        value.durationMinutes,
+        'Announcement prayer-relative duration',
+      ),
+    };
   }
+
   throw new TypeError('Announcement schedule rule kind is invalid');
 }
 
@@ -78,12 +141,16 @@ function parseScene(value: unknown): AnnouncementScene {
     throw new TypeError('Announcement rotation scene is invalid');
   }
   return {
-    sceneId: String(value.sceneId ?? ''),
-    mosqueId: String(value.mosqueId ?? ''),
+    sceneId: requiredString(value.sceneId, 'Announcement scene ID'),
+    mosqueId: requiredString(value.mosqueId, 'Announcement scene mosque ID'),
     kind: 'announcement',
-    title: String(value.title ?? ''),
-    offlineFallback: String(value.offlineFallback ?? '') as AnnouncementScene['offlineFallback'],
-    announcementId: String(value.announcementId ?? ''),
+    title: requiredString(value.title, 'Announcement scene title'),
+    offlineFallback: stringEnum(
+      value.offlineFallback,
+      OFFLINE_FALLBACKS,
+      'Announcement offline fallback',
+    ),
+    announcementId: requiredString(value.announcementId, 'Announcement ID'),
   };
 }
 
@@ -94,7 +161,11 @@ export function parsePrayerBoardAnnouncementRotationConfig(
   if (!isRecord(value) || value.version !== PRAYER_BOARD_ANNOUNCEMENT_ROTATION_VERSION) {
     throw new RangeError('Unsupported prayer-board announcement rotation schema version');
   }
-  if (typeof value.enabled !== 'boolean' || !Array.isArray(value.rules) || !Array.isArray(value.scenes)) {
+  if (
+    typeof value.enabled !== 'boolean' ||
+    !Array.isArray(value.rules) ||
+    !Array.isArray(value.scenes)
+  ) {
     throw new TypeError('Prayer-board announcement rotation payload is invalid');
   }
   return createPrayerBoardAnnouncementRotationConfig({
