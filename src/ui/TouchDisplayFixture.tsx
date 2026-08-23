@@ -77,6 +77,10 @@ const prayerFixtures: readonly {
 
 const fixtureDate = new Date(Date.UTC(2026, 7, 16));
 const fixtureInstant = new Date('2026-08-16T05:20:00.000Z');
+const recoveryCopy: Readonly<Record<'en' | 'ar', string>> = {
+  en: 'Exit display',
+  ar: 'خروج من العرض',
+};
 
 function isSize(value: string | null): value is TouchDisplayFixtureSize {
   return value === '5' || value === '7' || value === '10';
@@ -129,6 +133,7 @@ export function TouchDisplayFixture({ size, orientation, locale }: TouchDisplayF
   const viewport = `${String(dimensions.width)}x${String(dimensions.height)}`;
   const currentPrayerIndex = 3;
   const nextPrayerIndex = 4;
+  const recoveryLabel = recoveryCopy[locale === 'ar' ? 'ar' : 'en'];
 
   return (
     <main
@@ -139,6 +144,10 @@ export function TouchDisplayFixture({ size, orientation, locale }: TouchDisplayF
       dir={direction}
       lang={locale}
     >
+      <a className="touch-display-fixture-recovery" href="/?view=today" aria-label={recoveryLabel}>
+        {recoveryLabel}
+      </a>
+
       <header className="touch-display-fixture-header">
         <div>
           <p className="eyebrow">{translate(locale, 'appName')}</p>
