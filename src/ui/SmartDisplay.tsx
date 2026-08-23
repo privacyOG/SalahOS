@@ -17,7 +17,10 @@ import type { SourcedPrayerDashboard } from '../domain/sourcedDashboard';
 import { localeDirection, translate } from '../i18n/i18n';
 import type { Locale } from '../i18n/translations';
 import { getApplicationStorage } from '../platform/applicationStorage';
-import { loadCommunityContentLibrary } from '../platform/communityContentStorage';
+import {
+  COMMUNITY_CONTENT_CHANGE_EVENT,
+  loadCommunityContentLibrary,
+} from '../platform/communityContentStorage';
 import {
   loadManagedDisplayConnection,
   MANAGED_DISPLAY_CONNECTION_CHANGE_EVENT,
@@ -256,6 +259,7 @@ export function SmartDisplay({
     window.addEventListener(MANAGED_PRAYER_BOARD_CACHE_CHANGE_EVENT, refreshManagedDisplayConfig);
     window.addEventListener(MANAGED_DISPLAY_CONNECTION_CHANGE_EVENT, refreshManagedDisplayConfig);
     window.addEventListener(PRAYER_BOARD_ANNOUNCEMENT_ROTATION_CHANGE_EVENT, refreshAnnouncements);
+    window.addEventListener(COMMUNITY_CONTENT_CHANGE_EVENT, refreshAnnouncements);
     window.addEventListener('focus', refreshAnnouncements);
     document.addEventListener('visibilitychange', refreshAnnouncementsWhenVisible);
     return () => {
@@ -273,6 +277,7 @@ export function SmartDisplay({
         PRAYER_BOARD_ANNOUNCEMENT_ROTATION_CHANGE_EVENT,
         refreshAnnouncements,
       );
+      window.removeEventListener(COMMUNITY_CONTENT_CHANGE_EVENT, refreshAnnouncements);
       window.removeEventListener('focus', refreshAnnouncements);
       document.removeEventListener('visibilitychange', refreshAnnouncementsWhenVisible);
     };
