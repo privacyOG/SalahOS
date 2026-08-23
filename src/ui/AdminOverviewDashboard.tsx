@@ -220,7 +220,8 @@ const copy: Readonly<Record<Locale, OverviewCopy>> = {
     signageEnabled: 'Rotasi pengumuman telah dikonfigurasi',
     signageDisabled: 'Rotasi pengumuman dinonaktifkan',
     fleet: 'Armada layar',
-    fleetDisconnected: 'Hubungkan layanan terkelola di Layar untuk memuat kesehatan armada langsung.',
+    fleetDisconnected:
+      'Hubungkan layanan terkelola di Layar untuk memuat kesehatan armada langsung.',
     online: 'Daring',
     stale: 'Usang',
     offline: 'Luring',
@@ -258,7 +259,8 @@ function localizedAnnouncementTitle(
   announcement: ReturnType<typeof loadCommunityContentLibrary>['announcements'][number],
   locale: Locale,
 ): string {
-  if (locale === 'ar') return announcement.arabic?.title ?? announcement.english?.title ?? announcement.announcementId;
+  if (locale === 'ar')
+    return announcement.arabic?.title ?? announcement.english?.title ?? announcement.announcementId;
   return announcement.english?.title ?? announcement.arabic?.title ?? announcement.announcementId;
 }
 
@@ -311,7 +313,10 @@ function managedDisplaysFromConnection(
     );
 }
 
-function prayerSummary(settings: PersistedSettings, now: Date): {
+function prayerSummary(
+  settings: PersistedSettings,
+  now: Date,
+): {
   readonly date: string | null;
   readonly rows: readonly PrayerSummaryRow[];
   readonly seasonal: SeasonalSummary;
@@ -509,7 +514,8 @@ export function AdminOverviewDashboard({ navigate }: AdminOverviewProps) {
     draftRevisionId: null,
     publishedAt: null,
   };
-  const scheduledItems = fixtureItems(window.location.search, now) ?? scheduledCommunityItems(locale);
+  const scheduledItems =
+    fixtureItems(window.location.search, now) ?? scheduledCommunityItems(locale);
   const resolvedDisplays = fixtureDisplays(window.location.search, now) ?? displays;
   const errors = fleetError === null ? [] : [fleetError];
   const dashboard = createAdminDashboardStatus({
@@ -558,7 +564,9 @@ export function AdminOverviewDashboard({ navigate }: AdminOverviewProps) {
         <section className="admin-overview-card" aria-labelledby="admin-publication-title">
           <div className="admin-overview-card__heading">
             <h3 id="admin-publication-title">{text.publication}</h3>
-            <span data-state={dashboard.prayerPublication.state}>{dashboard.prayerPublication.state}</span>
+            <span data-state={dashboard.prayerPublication.state}>
+              {dashboard.prayerPublication.state}
+            </span>
           </div>
           <strong>{publicationLabel}</strong>
           {dashboard.prayerPublication.publishedRevisionId !== null && (
@@ -573,7 +581,10 @@ export function AdminOverviewDashboard({ navigate }: AdminOverviewProps) {
           )}
         </section>
 
-        <section className="admin-overview-card admin-overview-card--fleet" aria-labelledby="admin-fleet-title">
+        <section
+          className="admin-overview-card admin-overview-card--fleet"
+          aria-labelledby="admin-fleet-title"
+        >
           <div className="admin-overview-card__heading">
             <h3 id="admin-fleet-title">{text.fleet}</h3>
             {fleetLoading && <span role="status">{text.loading}</span>}
@@ -598,7 +609,10 @@ export function AdminOverviewDashboard({ navigate }: AdminOverviewProps) {
           )}
         </section>
 
-        <section className="admin-overview-card admin-overview-card--prayers" aria-labelledby="admin-prayers-title">
+        <section
+          className="admin-overview-card admin-overview-card--prayers"
+          aria-labelledby="admin-prayers-title"
+        >
           <div className="admin-overview-card__heading">
             <h3 id="admin-prayers-title">{text.prayerToday}</h3>
             {prayer.date !== null && <span>{prayer.date}</span>}
@@ -614,7 +628,9 @@ export function AdminOverviewDashboard({ navigate }: AdminOverviewProps) {
               </div>
               {prayer.rows.map((row) => (
                 <div className="admin-prayer-table__row" role="row" key={row.prayer}>
-                  <strong role="rowheader">{translate(locale, prayerTranslationKeys[row.prayer])}</strong>
+                  <strong role="rowheader">
+                    {translate(locale, prayerTranslationKeys[row.prayer])}
+                  </strong>
                   <span role="cell">{row.start}</span>
                   <span role="cell">{row.iqamah}</span>
                   {(row.isCurrent || row.isNext) && (
@@ -642,7 +658,9 @@ export function AdminOverviewDashboard({ navigate }: AdminOverviewProps) {
                 <li key={item.id}>
                   <span>{item.kind}</span>
                   <strong>{item.title}</strong>
-                  <time dateTime={item.startsAt}>{formatScheduledInstant(item.startsAt, locale)}</time>
+                  <time dateTime={item.startsAt}>
+                    {formatScheduledInstant(item.startsAt, locale)}
+                  </time>
                 </li>
               ))}
             </ul>

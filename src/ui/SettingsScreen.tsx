@@ -104,7 +104,8 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
     dataTitle: 'البيانات والخصوصية',
     dataDescription: 'تصدير إعدادات صلاح أو إس المحلية أو استيرادها أو إعادة ضبطها.',
     displayTitle: 'سمات شاشات العرض',
-    displayDescription: 'افتح إدارة الشاشات من دون إظهار بيانات الدخول أو الأسطول في الإعدادات اليومية.',
+    displayDescription:
+      'افتح إدارة الشاشات من دون إظهار بيانات الدخول أو الأسطول في الإعدادات اليومية.',
     advancedTitle: 'متقدم',
     advancedDescription:
       'أدوات الاستيراد والتعديلات والإعدادات غير الشائعة خلال انتقال الواجهة الجديدة.',
@@ -263,7 +264,8 @@ function PrayerSettingsForm({
             {translate(locale, 'sourceCalculatedAdjustments')}
           </option>
           <option value="local-mosque" disabled={settings.mosqueTimetable === null}>
-            {translate(locale, 'sourceLocalMosque')}</option>
+            {translate(locale, 'sourceLocalMosque')}
+          </option>
         </select>
       </label>
 
