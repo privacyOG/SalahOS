@@ -145,10 +145,7 @@ await page.route('**/v1/**', async (route) => {
     await fulfillJson(route, { defaults: [] });
     return;
   }
-  if (
-    url.pathname === '/v1/admin/displays/display%3Alobby/revoke' &&
-    request.method() === 'POST'
-  ) {
+  if (url.pathname === '/v1/admin/displays/display%3Alobby/revoke' && request.method() === 'POST') {
     revokeRequests += 1;
     revoked = true;
     await fulfillJson(route, displayStatus(true));
