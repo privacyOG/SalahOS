@@ -14,7 +14,7 @@ if (!playwrightModule) {
 
 const { chromium } = await import(pathToFileURL(playwrightModule).href);
 const applicationOrigin = new URL(baseUrl).origin;
-const fixtureOrigin = 'https://stage24-themes.fixture.invalid';
+const fixtureOrigin = applicationOrigin;
 const fixtureToken = 'stage24-theme-fixture-token'.padEnd(48, 'x');
 
 function settings(locale) {
@@ -167,7 +167,7 @@ async function fulfillJson(route, body, status = 200) {
 }
 
 async function installFixtureRoutes(page, state) {
-  await page.route(`${fixtureOrigin}/**`, async (route) => {
+  await page.route(`${fixtureOrigin}/v1/**`, async (route) => {
     const request = route.request();
     if (request.method() === 'OPTIONS') {
       await route.fulfill({ status: 204, headers: corsHeaders(), body: '' });
@@ -243,6 +243,16 @@ async function seed(page, locale) {
   );
 }
 
+async function connectFixture(page) {
+  const studio = page.locator('.admin-display-theme-studio');
+  await studio.waitFor({ state: 'visible' });
+  const connection = studio.locator('.admin-theme-connection');
+  await connection.locator('input[type="url"]').fill(fixtureOrigin);
+  await connection.locator('input[type="password"]').fill(fixtureToken);
+  await connection.locator('.admin-theme-actions button').first().click();
+  await studio.locator('.admin-theme-display-card').first().waitFor({ state: 'visible' });
+}
+
 async function assertContained(page, name) {
   const geometry = await page.evaluate(() => {
     const buttons = Array.from(document.querySelectorAll('.admin-display-theme-studio button'));
@@ -298,10 +308,10 @@ async function captureDesktop(browser) {
   await seed(page, 'en');
 
   try {
-    await page.goto(`${baseUrl}/?surface=admin&adminView=displays&adminFixture=stage24themes`, {
+    await page.goto(`${baseUrl}/?surface=admin&adminView=displays`, {
       waitUntil: 'networkidle',
     });
-    await page.locator('.admin-display-theme-studio').waitFor({ state: 'visible' });
+    await connectFixture(page);
     await page.getByText('Managed fleet loaded.').waitFor({ state: 'visible' });
 
     if ((await page.locator('[data-template-card]').count()) !== 6) {
@@ -440,11 +450,10 @@ async function captureResponsive(browser, scenario) {
   await seed(page, scenario.locale);
 
   try {
-    await page.goto(`${baseUrl}/?surface=admin&adminView=displays&adminFixture=stage24themes`, {
+    await page.goto(`${baseUrl}/?surface=admin&adminView=displays`, {
       waitUntil: 'networkidle',
     });
-    await page.locator('.admin-display-theme-studio').waitFor({ state: 'visible' });
-    await page.locator('.admin-theme-display-card').first().waitFor({ state: 'visible' });
+    await connectFixture(page);
     if ((await page.locator('[data-template-card]').count()) !== 6) {
       throw new Error(`${scenario.name} lost theme gallery entries`);
     }
