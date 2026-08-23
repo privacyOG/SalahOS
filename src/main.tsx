@@ -15,6 +15,7 @@ import { ManagedDisplayRemoteController } from './ui/ManagedDisplayRemoteControl
 import { MobilePrayerThemeSettings } from './ui/MobilePrayerThemeSettings';
 import { MobilePrayerThemeSurface } from './ui/MobilePrayerThemeSurface';
 import { MosquesScreen } from './ui/MosquesScreen';
+import { PrayerBoardAnnouncementSettings } from './ui/PrayerBoardAnnouncementSettings';
 import { PrayerBoardWeatherSettings } from './ui/PrayerBoardWeatherSettings';
 import { QiblaFinder } from './ui/QiblaFinder';
 import { RemoteDisplayAdminPanel } from './ui/RemoteDisplayAdminPanel';
@@ -190,6 +191,7 @@ function AdministrationRoute({
           <MobilePrayerThemeSettings />
           <SmartDisplayThemeSettings />
           <PrayerBoardWeatherSettings />
+          <PrayerBoardAnnouncementSettings />
         </>
       );
     case 'remote':
