@@ -21,12 +21,7 @@ export const PRAYER_BOARD_ANNOUNCEMENT_ROTATION_CHANGE_EVENT =
 
 type JsonRecord = Record<string, unknown>;
 
-const SCHEDULE_CONTEXTS: readonly SignageScheduleContext[] = [
-  'all',
-  'normal',
-  'jumuah',
-  'ramadan',
-];
+const SCHEDULE_CONTEXTS: readonly SignageScheduleContext[] = ['all', 'normal', 'jumuah', 'ramadan'];
 const PRAYER_KEYS: readonly PrayerScheduleKey[] = [
   'fajr',
   'dhuhr',
