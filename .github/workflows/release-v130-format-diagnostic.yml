@@ -1,4 +1,4 @@
-name: v1.3.0 Publisher Observer
+name: v1.3.0 Published Release Observer
 
 on:
   pull_request:
@@ -8,39 +8,52 @@ permissions:
   contents: read
 
 jobs:
-  observe:
+  verify:
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
-      - name: Report exact v1.3.0 publisher run
+      - name: Verify published release metadata and assets
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
-          gh run list \
+          RELEASE_JSON="$(gh release view v1.3.0 \
             --repo privacyOG/SalahOS \
-            --workflow 'Release Assets' \
-            --branch 'release/v1.3.0' \
-            --event push \
-            --limit 5 \
-            --json databaseId,status,conclusion,headSha,createdAt,updatedAt,url,workflowName
+            --json tagName,targetCommitish,name,isDraft,isPrerelease,publishedAt,url,assets)"
+          printf '%s\n' "$RELEASE_JSON" | jq .
 
-          RUN_JSON="$(gh run list \
+          [[ "$(jq -r '.tagName' <<< "$RELEASE_JSON")" == 'v1.3.0' ]]
+          [[ "$(jq -r '.targetCommitish' <<< "$RELEASE_JSON")" == '617cb4551e80bc1def088c0062f79efe0a573e31' ]]
+          [[ "$(jq -r '.isDraft' <<< "$RELEASE_JSON")" == 'false' ]]
+          [[ "$(jq -r '.isPrerelease' <<< "$RELEASE_JSON")" == 'false' ]]
+
+          EXPECTED="$(printf '%s\n' \
+            'SalahOS-v1.3.0-android.aab' \
+            'SalahOS-v1.3.0-android.apk' \
+            'SalahOS-v1.3.0-raspberry-pi-kiosk.tar.gz' \
+            'SalahOS-v1.3.0-web-pwa.zip' \
+            'SHA256SUMS.txt' | sort)"
+          ACTUAL="$(jq -r '.assets[].name' <<< "$RELEASE_JSON" | sort)"
+          [[ "$ACTUAL" == "$EXPECTED" ]] || {
+            echo 'Published release asset set is not exact.' >&2
+            diff -u <(printf '%s\n' "$EXPECTED") <(printf '%s\n' "$ACTUAL") || true
+            exit 1
+          }
+
+          mkdir release-v1.3.0
+          cd release-v1.3.0
+          gh release download v1.3.0 \
             --repo privacyOG/SalahOS \
-            --workflow 'Release Assets' \
-            --branch 'release/v1.3.0' \
-            --event push \
-            --limit 1 \
-            --json databaseId,status,conclusion,headSha,url)"
-          RUN_SHA="$(jq -r '.[0].headSha // empty' <<< "$RUN_JSON")"
-          RUN_ID="$(jq -r '.[0].databaseId // empty' <<< "$RUN_JSON")"
-          [[ -n "$RUN_ID" ]] || {
-            echo 'No v1.3.0 release publisher run found.' >&2
+            --pattern 'SalahOS-v1.3.0-*' \
+            --pattern 'SHA256SUMS.txt'
+          sha256sum --check SHA256SUMS.txt
+
+          DOWNLOADED="$(find . -maxdepth 1 -type f -printf '%f\n' | sort)"
+          [[ "$DOWNLOADED" == "$EXPECTED" ]] || {
+            echo 'Downloaded published release asset set is not exact.' >&2
+            diff -u <(printf '%s\n' "$EXPECTED") <(printf '%s\n' "$DOWNLOADED") || true
             exit 1
           }
-          [[ "$RUN_SHA" == '617cb4551e80bc1def088c0062f79efe0a573e31' ]] || {
-            echo "Newest publisher run targets unexpected SHA: $RUN_SHA" >&2
-            exit 1
-          }
-          echo "Exact publisher run ID: $RUN_ID"
+          echo 'Published v1.3.0 assets and checksums verified.'
+          sha256sum SalahOS-v1.3.0-* SHA256SUMS.txt
