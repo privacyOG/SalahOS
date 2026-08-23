@@ -205,7 +205,7 @@ const applicationScenarios = [
     locale: 'en',
     theme: 'light',
     url: '?view=settings&settingsView=mosque',
-    readySelector: ".settings-screen__legacy[data-settings-category='mosque']",
+    readySelector: '.mosque-library-row',
     visibleSelectors: ['.mosque-library-row'],
     hiddenSelectors: [
       '.manual-mosque-fieldset',
@@ -214,7 +214,6 @@ const applicationScenarios = [
       '.offsets-fieldset',
       '.notification-fieldset',
       '.settings-transfer',
-      ".settings-screen__legacy[data-settings-category='mosque'] .settings-panel > .inline-message",
     ],
   },
   {
@@ -224,7 +223,7 @@ const applicationScenarios = [
     locale: 'ar',
     theme: 'dark',
     url: '?view=settings&settingsView=advanced',
-    readySelector: ".settings-screen__legacy[data-settings-category='advanced']",
+    readySelector: '.offsets-fieldset',
     visibleSelectors: [
       '.manual-mosque-fieldset',
       '.mosque-import-grid',
