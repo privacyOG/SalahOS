@@ -44,6 +44,7 @@ import {
   refreshPrayerBoardWeather,
 } from '../platform/prayerBoardWeather';
 import type { PersistedSettings } from '../platform/settingsStorage';
+import { smartDisplayBurnInShiftIndex } from '../platform/smartDisplayBurnIn';
 import {
   loadSmartDisplayTheme,
   SMART_DISPLAY_THEME_CHANGE_EVENT,
@@ -322,6 +323,8 @@ export function SmartDisplay({
     };
   }, [resolvedConfig.moduleVisibility.weather]);
 
+  const burnInShiftIndex = smartDisplayBurnInShiftIndex(new Date());
+
   const announcementState =
     announcementResolution === null
       ? 'unavailable'
@@ -333,6 +336,7 @@ export function SmartDisplay({
     <main
       className="smart-display"
       data-mode="smart-display"
+      data-burn-in-shift={String(burnInShiftIndex)}
       data-display-theme={resolvedDisplayTheme}
       data-display-template={resolvedTemplateId}
       data-managed-prayer-board={managedDisplayConfig === null ? 'off' : 'on'}

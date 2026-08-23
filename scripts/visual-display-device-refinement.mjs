@@ -175,14 +175,15 @@ async function validatePrayerBoard(browser, templateId, selector, width, height)
       };
     });
     const burnInFrame = page.locator('.prayer-board-configured-surface');
-    const animation = await burnInFrame.evaluate((element) => {
-      const style = getComputedStyle(element);
+    const burnIn = await page.locator('.smart-display').evaluate((display) => {
+      const frame = display.querySelector('.prayer-board-configured-surface');
+      if (!(frame instanceof HTMLElement)) throw new Error('Configured display frame missing');
       return {
-        animationName: style.animationName,
-        animationDuration: style.animationDuration,
+        shiftIndex: display.dataset.burnInShift ?? '',
+        transform: getComputedStyle(frame).transform,
       };
     });
-    const metrics = { ...geometry, ...animation };
+    const metrics = { ...geometry, ...burnIn };
     const safeInset = 32;
     if (
       metrics.left < safeInset ||
@@ -192,10 +193,7 @@ async function validatePrayerBoard(browser, templateId, selector, width, height)
     ) {
       throw new Error(`${name} escaped the validated safe frame: ${JSON.stringify(metrics)}`);
     }
-    if (
-      !metrics.animationName.includes('smart-display-pixel-shift') ||
-      !metrics.animationDuration.includes('3600s')
-    ) {
+    if (metrics.shiftIndex === '0' || metrics.transform === 'none') {
       throw new Error(`${name} burn-in mitigation is not active: ${JSON.stringify(metrics)}`);
     }
 
@@ -234,13 +232,11 @@ async function validateReducedMotion(browser) {
     });
     await page.locator('.minimal-modern-board').waitFor({ state: 'visible' });
     const burnInFrame = page.locator('.prayer-board-configured-surface');
-    const animationName = await burnInFrame.evaluate(
-      (element) => getComputedStyle(element).animationName,
-    );
-    if (animationName !== 'none') {
-      throw new Error(`Reduced-motion display still animates: ${animationName}`);
+    const transform = await burnInFrame.evaluate((element) => getComputedStyle(element).transform);
+    if (transform !== 'none') {
+      throw new Error(`Reduced-motion display still shifts: ${transform}`);
     }
-    return animationName;
+    return transform;
   } finally {
     await context.close();
   }

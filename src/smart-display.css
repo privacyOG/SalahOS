@@ -218,13 +218,7 @@
 .smart-display-prayers,
 .smart-display-jumuah,
 .smart-display-footer,
-.smart-display-empty,
-.smart-display .heritage-classic-board,
-.smart-display .minimal-modern-board,
-.smart-display .bold-countdown-board,
-.smart-display .structured-split-board,
-.smart-display .scenic-spiritual-board,
-.smart-display .family-classroom-board {
+.smart-display-empty {
   animation: smart-display-pixel-shift 60min steps(1, end) infinite;
 }
 

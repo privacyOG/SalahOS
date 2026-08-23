@@ -56,12 +56,24 @@
 
 .smart-display .prayer-board-configured-surface {
   display: block;
-  animation: smart-display-pixel-shift 60min steps(1, end) infinite;
+  transform: translate3d(0, 0, 0);
+}
+
+.smart-display[data-burn-in-shift='1'] .prayer-board-configured-surface {
+  transform: translate3d(4px, -3px, 0);
+}
+
+.smart-display[data-burn-in-shift='2'] .prayer-board-configured-surface {
+  transform: translate3d(-3px, -4px, 0);
+}
+
+.smart-display[data-burn-in-shift='3'] .prayer-board-configured-surface {
+  transform: translate3d(-4px, 3px, 0);
 }
 
 @media (prefers-reduced-motion: reduce) {
   .smart-display .prayer-board-configured-surface {
-    animation: none;
+    transform: none;
   }
 }
 
