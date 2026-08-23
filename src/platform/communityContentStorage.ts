@@ -17,6 +17,7 @@ import type { KeyValueStorage } from './settingsStorage';
 
 export const COMMUNITY_CONTENT_STORAGE_KEY = 'salahos.communityContent';
 export const COMMUNITY_CONTENT_SCHEMA_VERSION = 1;
+export const COMMUNITY_CONTENT_CHANGE_EVENT = 'salahos:community-content-change';
 
 export interface CommunityContentLibrary {
   readonly announcements: readonly MosqueAnnouncement[];
@@ -210,4 +211,7 @@ export function saveCommunityContentLibrary(
   library: CommunityContentLibrary,
 ): void {
   storage.setItem(COMMUNITY_CONTENT_STORAGE_KEY, serializeCommunityContentLibrary(library));
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new Event(COMMUNITY_CONTENT_CHANGE_EVENT));
+  }
 }

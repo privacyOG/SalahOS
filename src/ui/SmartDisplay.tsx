@@ -1,6 +1,13 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import {
+  buildPrayerBoardAnnouncementScheduleContext,
+  defaultPrayerBoardAnnouncementRotationConfig,
+  resolvePrayerBoardAnnouncementRotation,
+  type PrayerBoardAnnouncementRotationConfig,
+  type PrayerBoardAnnouncementRotationResolution,
+} from '../domain/prayerBoardAnnouncementRotation';
+import {
   buildPrayerBoardData,
   parsePrayerBoardTemplateConfig,
   type PrayerBoardTemplateConfig,
@@ -12,6 +19,10 @@ import { localeDirection, translate } from '../i18n/i18n';
 import type { Locale } from '../i18n/translations';
 import { getApplicationStorage } from '../platform/applicationStorage';
 import {
+  COMMUNITY_CONTENT_CHANGE_EVENT,
+  loadCommunityContentLibrary,
+} from '../platform/communityContentStorage';
+import {
   loadManagedDisplayConnection,
   MANAGED_DISPLAY_CONNECTION_CHANGE_EVENT,
 } from '../platform/managedDisplayConnectionStorage';
@@ -19,6 +30,10 @@ import {
   loadManagedPrayerBoardCache,
   MANAGED_PRAYER_BOARD_CACHE_CHANGE_EVENT,
 } from '../platform/managedPrayerBoardCache';
+import {
+  loadPrayerBoardAnnouncementRotationConfig,
+  PRAYER_BOARD_ANNOUNCEMENT_ROTATION_CHANGE_EVENT,
+} from '../platform/prayerBoardAnnouncementRotation';
 import {
   loadPrayerBoardDisplayConfig,
   PRAYER_BOARD_DISPLAY_CONFIG_CHANGE_EVENT,
@@ -123,6 +138,22 @@ function readPrayerBoardWeather(): PrayerBoardWeatherSnapshot | null {
   }
 }
 
+function readAnnouncementRotation(): PrayerBoardAnnouncementRotationConfig {
+  try {
+    return loadPrayerBoardAnnouncementRotationConfig(getApplicationStorage());
+  } catch {
+    return defaultPrayerBoardAnnouncementRotationConfig;
+  }
+}
+
+function readDisplayAnnouncements() {
+  try {
+    return loadCommunityContentLibrary(getApplicationStorage()).announcements;
+  } catch {
+    return [];
+  }
+}
+
 export function SmartDisplay({
   locale,
   currentClock,
@@ -143,6 +174,9 @@ export function SmartDisplay({
   const [managedDisplayConfig, setManagedDisplayConfig] =
     useState<PrayerBoardTemplateConfig | null>(readManagedPrayerBoardDisplayConfig);
   const [weather, setWeather] = useState<PrayerBoardWeatherSnapshot | null>(readPrayerBoardWeather);
+  const [announcementRotation, setAnnouncementRotation] =
+    useState<PrayerBoardAnnouncementRotationConfig>(readAnnouncementRotation);
+  const [displayAnnouncements, setDisplayAnnouncements] = useState(readDisplayAnnouncements);
   const queryTemplate =
     typeof window === 'undefined' ? null : smartDisplayTemplateOverride(window.location.search);
   const storedConfig = managedDisplayConfig ?? displayConfig;
@@ -159,6 +193,25 @@ export function SmartDisplay({
       }),
     [locale, resolvedTemplateId, storedConfig, timeFormat],
   );
+  const resolvedLocale = resolvedConfig.primaryLocale;
+  const announcementResolution = useMemo<PrayerBoardAnnouncementRotationResolution | null>(() => {
+    if (dashboard === null) return null;
+    return resolvePrayerBoardAnnouncementRotation({
+      config: announcementRotation,
+      announcements: displayAnnouncements,
+      locale: resolvedLocale,
+      moduleVisible: resolvedConfig.moduleVisibility.announcements,
+      dashboard,
+      scheduleContext: buildPrayerBoardAnnouncementScheduleContext(dashboard),
+      nowIso: dashboard.base.generatedAt.toISOString(),
+    });
+  }, [
+    announcementRotation,
+    dashboard,
+    displayAnnouncements,
+    resolvedConfig.moduleVisibility.announcements,
+    resolvedLocale,
+  ]);
   const boardData = useMemo(
     () =>
       dashboard === null
@@ -166,11 +219,15 @@ export function SmartDisplay({
         : buildPrayerBoardData({
             dashboard,
             offline,
+            announcements:
+              announcementResolution?.announcement === null ||
+              announcementResolution?.announcement === undefined
+                ? []
+                : [announcementResolution.announcement],
             weather: resolvedConfig.moduleVisibility.weather ? weather : null,
           }),
-    [dashboard, offline, resolvedConfig.moduleVisibility.weather, weather],
+    [announcementResolution, dashboard, offline, resolvedConfig.moduleVisibility.weather, weather],
   );
-  const resolvedLocale = resolvedConfig.primaryLocale;
   const resolvedDisplayTheme =
     storedConfig === null ? displayTheme : displayThemeForPrayerBoardConfig(resolvedConfig);
   const resolvedScenicArtworkEnabled =
@@ -199,10 +256,21 @@ export function SmartDisplay({
     const refreshManagedDisplayConfig = () => {
       setManagedDisplayConfig(readManagedPrayerBoardDisplayConfig());
     };
+    const refreshAnnouncements = () => {
+      setAnnouncementRotation(readAnnouncementRotation());
+      setDisplayAnnouncements(readDisplayAnnouncements());
+    };
+    const refreshAnnouncementsWhenVisible = () => {
+      if (document.visibilityState === 'visible') refreshAnnouncements();
+    };
     window.addEventListener(SMART_DISPLAY_THEME_CHANGE_EVENT, refreshTheme);
     window.addEventListener(PRAYER_BOARD_DISPLAY_CONFIG_CHANGE_EVENT, refreshDisplayConfig);
     window.addEventListener(MANAGED_PRAYER_BOARD_CACHE_CHANGE_EVENT, refreshManagedDisplayConfig);
     window.addEventListener(MANAGED_DISPLAY_CONNECTION_CHANGE_EVENT, refreshManagedDisplayConfig);
+    window.addEventListener(PRAYER_BOARD_ANNOUNCEMENT_ROTATION_CHANGE_EVENT, refreshAnnouncements);
+    window.addEventListener(COMMUNITY_CONTENT_CHANGE_EVENT, refreshAnnouncements);
+    window.addEventListener('focus', refreshAnnouncements);
+    document.addEventListener('visibilitychange', refreshAnnouncementsWhenVisible);
     return () => {
       window.removeEventListener(SMART_DISPLAY_THEME_CHANGE_EVENT, refreshTheme);
       window.removeEventListener(PRAYER_BOARD_DISPLAY_CONFIG_CHANGE_EVENT, refreshDisplayConfig);
@@ -214,6 +282,13 @@ export function SmartDisplay({
         MANAGED_DISPLAY_CONNECTION_CHANGE_EVENT,
         refreshManagedDisplayConfig,
       );
+      window.removeEventListener(
+        PRAYER_BOARD_ANNOUNCEMENT_ROTATION_CHANGE_EVENT,
+        refreshAnnouncements,
+      );
+      window.removeEventListener(COMMUNITY_CONTENT_CHANGE_EVENT, refreshAnnouncements);
+      window.removeEventListener('focus', refreshAnnouncements);
+      document.removeEventListener('visibilitychange', refreshAnnouncementsWhenVisible);
     };
   }, []);
 
@@ -247,6 +322,13 @@ export function SmartDisplay({
     };
   }, [resolvedConfig.moduleVisibility.weather]);
 
+  const announcementState =
+    announcementResolution === null
+      ? 'unavailable'
+      : announcementResolution.announcement !== null
+        ? 'active'
+        : (announcementResolution.suppressionReason ?? 'inactive');
+
   return (
     <main
       className="smart-display"
@@ -254,6 +336,7 @@ export function SmartDisplay({
       data-display-theme={resolvedDisplayTheme}
       data-display-template={resolvedTemplateId}
       data-managed-prayer-board={managedDisplayConfig === null ? 'off' : 'on'}
+      data-announcement-state={announcementState}
       dir={localeDirection(resolvedLocale)}
       lang={resolvedLocale}
     >

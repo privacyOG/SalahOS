@@ -301,11 +301,13 @@ The daily prayer display surface must also become a first-class configurable pro
 
 ## 23.12 Announcements and display rotation
 
-- [ ] Support a restrained announcement ticker/card region where compatible with the selected prayer-board template.
-- [ ] Ensure urgent/prayer-state information takes priority over decorative/community content.
-- [ ] Allow administrators to disable announcement rotation for prayer-board-only displays.
-- [ ] Integrate with existing signage scene/playlist scheduling rather than creating a second conflicting scheduler.
-- [ ] Define safe transitions that respect reduced-motion and long-running kiosk use.
+- [x] Support a restrained announcement ticker/card region where compatible with the selected prayer-board template.
+- [x] Ensure urgent/prayer-state information takes priority over decorative/community content.
+- [x] Allow administrators to disable announcement rotation for prayer-board-only displays.
+- [x] Integrate with existing signage scene/playlist scheduling rather than creating a second conflicting scheduler.
+- [x] Define safe transitions that respect reduced-motion and long-running kiosk use.
+
+**Stage 23.12 verification note (2026-08-23):** PR #187 code-bearing head `7e80667a8ebb1d4f1efb01c5236faf9876f7037a` passed Quality Gate `32609795622`, Android Build `32609795623`, Visual Regression `32609795645` and iOS Build `32609795632`, including Android lifecycle acceptance and fresh iPhone/iPad Simulator install, launch and relaunch acceptance. The implementation reuses the existing signage scene/playlist/schedule engine, filters only published display-targeted announcements for the configured mosque, preserves prayer information as authoritative, suppresses community content during the ten-minute pre-prayer guard and Athan-to-Iqamah window, supports a per-display Announcements module switch, and uses deterministic dwell selection with reduced-motion-safe presentation. Exact Visual artifact `9485197306` (`sha256:0556438217de9dd8c1ba173be6ec947b24fe46f3534f77dd85ba7d7464681d64`) received human review: English and Arabic/RTL active announcement boards retained all five prayer rows without obstruction, module-disabled mode remained clean, and the administrator rotation panel clearly exposed enablement, mosque, dwell and prayer-board-only guidance. Stage 23.12 is complete.
 
 ---
 
@@ -332,7 +334,7 @@ The phone Today/home experience must receive the same design quality and templat
 - [x] Add permanent visual-regression screenshots for each released phone/home template in representative light/dark and English/Arabic states.
 - [x] Perform human visual review of every released mobile-home template for prayer hierarchy, Athan/Iqamah clarity, bottom-navigation usability, density and originality before marking it complete.
 
-**Stage 23.13 verification note (2026-08-23):** PR #186 code-bearing head `17ba7535282144ffc64b525f7dc24cdc1745843b` passed Quality Gate `32597468392`, Android Build `32597468390`, Visual Regression `32597468393` and iOS Build `32597468388`. The congregation Today route consumes shared `PrayerBoardData` v1 through six original Phone/Home template treatments with a dedicated native-persisted configuration key, target isolation from TV/Kiosk configuration, preview-before-apply Settings UX, required five-prayer information, configurable supported optional modules and offline built-in fallbacks. Permanent visual coverage spans 320px, representative phones, compact landscape, large phone, tablet, English, Arabic/RTL, Turkish and Indonesian; exact Visual artifact `9481966738` received human review after correcting sibling-collision, preview-stacking, solar-preview and navigation word-break defects. Android and iOS lifecycle evidence proves the selected Phone/Home configuration survives real emulator/Simulator relaunch boundaries. Stage 23.11 optional weather is completed separately by PR #185; Stage 23.12 announcement/display rotation remains open.
+**Stage 23.13 verification note (2026-08-23):** PR #186 code-bearing head `17ba7535282144ffc64b525f7dc24cdc1745843b` passed Quality Gate `32597468392`, Android Build `32597468390`, Visual Regression `32597468393` and iOS Build `32597468388`. The congregation Today route consumes shared `PrayerBoardData` v1 through six original Phone/Home template treatments with a dedicated native-persisted configuration key, target isolation from TV/Kiosk configuration, preview-before-apply Settings UX, required five-prayer information, configurable supported optional modules and offline built-in fallbacks. Permanent visual coverage spans 320px, representative phones, compact landscape, large phone, tablet, English, Arabic/RTL, Turkish and Indonesian; exact Visual artifact `9481966738` received human review after correcting sibling-collision, preview-stacking, solar-preview and navigation word-break defects. Android and iOS lifecycle evidence proves the selected Phone/Home configuration survives real emulator/Simulator relaunch boundaries. Stage 23.11 optional weather is completed separately by PR #185; Stage 23.12 announcement/display rotation is completed separately by PR #187.
 
 ---
 
