@@ -55,6 +55,7 @@ import './qibla-compass.css';
 import './qibla-compass-premium.css';
 import './qiblah-v2.css';
 import './mosques-community-v2.css';
+import './accessibility-rtl-refinement.css';
 
 function CongregationRoute({ destination }: Readonly<{ destination: CongregationDestination }>) {
   switch (destination) {
