@@ -52,10 +52,10 @@ export function planManagedDisplayBulkAssignment(
 ): ManagedDisplayBulkAssignmentPlan {
   const selected = displays.filter((display) => selectedDisplayIds.has(display.identity.displayId));
   const supported: ManagedDisplayRemoteStatus[] = [];
-  const unsupported: Array<{
+  const unsupported: {
     display: ManagedDisplayRemoteStatus;
     target: ManagedPrayerBoardTarget;
-  }> = [];
+  }[] = [];
 
   for (const display of selected) {
     const target = resolveManagedPrayerBoardTarget(display.identity);
@@ -100,10 +100,12 @@ export function changeManagedThemeMosqueName(
   locale: 'en' | 'ar' | 'tr' | 'id',
   mosqueName: string,
 ): PrayerBoardTemplateConfig {
-  const names = { ...(config.branding.mosqueName ?? {}) };
   const normalized = mosqueName.trim().replace(/\s+/gu, ' ');
-  if (normalized === '') delete names[locale];
-  else names[locale] = normalized;
+  const namesWithoutLocale = Object.fromEntries(
+    Object.entries(config.branding.mosqueName ?? {}).filter(([language]) => language !== locale),
+  );
+  const names =
+    normalized === '' ? namesWithoutLocale : { ...namesWithoutLocale, [locale]: normalized };
   return parsePrayerBoardTemplateConfig({
     ...config,
     branding: {
