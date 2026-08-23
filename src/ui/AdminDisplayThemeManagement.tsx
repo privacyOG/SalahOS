@@ -501,7 +501,7 @@ function targetFingerprint(
   config: PrayerBoardTemplateConfig,
 ): string {
   const target = resolveManagedPrayerBoardTarget(display.identity);
-  return `${target.width}x${target.height}:${JSON.stringify(config)}`;
+  return `${String(target.width)}x${String(target.height)}:${JSON.stringify(config)}`;
 }
 
 function TemplateThumbnail({ templateId }: Readonly<{ templateId: PrayerBoardTemplateId }>) {
@@ -599,7 +599,6 @@ export function AdminDisplayThemeManagement() {
     resolutionProfile: '1920x1080',
     playlistId: '',
   });
-  const fingerprint = JSON.stringify(draft);
   const storage = getApplicationStorage();
 
   const mosqueIds = useMemo(
@@ -722,7 +721,6 @@ export function AdminDisplayThemeManagement() {
     if (startingConnection === null) return;
     void connect();
     // The initial connection is intentionally consumed once on mount.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const replaceDraft = (value: unknown) => {
@@ -1228,7 +1226,7 @@ export function AdminDisplayThemeManagement() {
                       <dt>{text.target}</dt>
                       <dd dir="ltr">
                         {target.width > 0
-                          ? `${target.width}×${target.height}`
+                          ? `${String(target.width)}×${String(target.height)}`
                           : display.identity.resolutionProfile}{' '}
                         · {display.identity.orientation}
                       </dd>
@@ -1361,7 +1359,7 @@ export function AdminDisplayThemeManagement() {
         ) : (
           <div className="admin-theme-history__list">
             {history.map((entry, index) => (
-              <article key={`${entry.scope}-${entry.targetId}-${entry.revision}`}>
+              <article key={`${entry.scope}-${entry.targetId}-${String(entry.revision)}`}>
                 <div>
                   <strong>
                     {text.revision} {entry.revision}
