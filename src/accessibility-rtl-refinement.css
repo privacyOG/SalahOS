@@ -3,6 +3,6 @@
 [dir='rtl'] .admin-shell *,
 .smart-display[dir='rtl'] *,
 .touch-display-fixture[dir='rtl'] * {
-  letter-spacing: 0;
-  text-transform: none;
+  letter-spacing: 0 !important;
+  text-transform: none !important;
 }
