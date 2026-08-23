@@ -32,6 +32,7 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
+          import re
 
           css_path = Path('src/smart-display-themes.css')
           css = css_path.read_text()
@@ -57,20 +58,11 @@ jobs:
 
           visual_path = Path('scripts/visual-display-device-refinement.mjs')
           visual = visual_path.read_text()
-          old = """    const metrics = await root.evaluate((element) => {
-              const rect = element.getBoundingClientRect();
-              const style = getComputedStyle(element);
-              return {
-                left: rect.left,
-                top: rect.top,
-                right: rect.right,
-                bottom: rect.bottom,
-                animationName: style.animationName,
-                animationDuration: style.animationDuration,
-              };
-            });
-          """
-          new = """    const geometry = await root.evaluate((element) => {
+          metrics_pattern = re.compile(
+              r"    const metrics = await root\.evaluate\(\(element\) => \{.*?\n    \}\);\n    const safeInset = 32;",
+              re.S,
+          )
+          metrics_replacement = """    const geometry = await root.evaluate((element) => {
               const rect = element.getBoundingClientRect();
               return {
                 left: rect.left,
@@ -88,24 +80,25 @@ jobs:
               };
             });
             const metrics = { ...geometry, ...animation };
-          """
-          if old not in visual:
-            raise SystemExit('TV metrics block not found')
-          visual = visual.replace(old, new, 1)
+            const safeInset = 32;"""
+          visual, count = metrics_pattern.subn(metrics_replacement, visual, count=1)
+          if count != 1:
+            raise SystemExit(f'TV metrics block replacements: {count}')
 
-          old = """    const root = page.locator('.minimal-modern-board');
-            await root.waitFor({ state: 'visible' });
-            const animationName = await root.evaluate((element) => getComputedStyle(element).animationName);
-          """
-          new = """    await page.locator('.minimal-modern-board').waitFor({ state: 'visible' });
+          reduced_pattern = re.compile(
+              r"    const root = page\.locator\('\.minimal-modern-board'\);\n    await root\.waitFor\(\{ state: 'visible' \}\);\n    const animationName = await root\.evaluate\(.*?\);\n",
+              re.S,
+          )
+          reduced_replacement = """    await page.locator('.minimal-modern-board').waitFor({ state: 'visible' });
             const burnInFrame = page.locator('.prayer-board-configured-surface');
             const animationName = await burnInFrame.evaluate(
               (element) => getComputedStyle(element).animationName,
             );
           """
-          if old not in visual:
-            raise SystemExit('reduced-motion metrics block not found')
-          visual_path.write_text(visual.replace(old, new, 1))
+          visual, count = reduced_pattern.subn(reduced_replacement, visual, count=1)
+          if count != 1:
+            raise SystemExit(f'reduced-motion block replacements: {count}')
+          visual_path.write_text(visual)
           PY
           npx prettier --write src/smart-display-themes.css scripts/visual-display-device-refinement.mjs
           npx prettier --check src/smart-display-themes.css scripts/visual-display-device-refinement.mjs
