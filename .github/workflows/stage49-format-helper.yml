@@ -1,0 +1,61 @@
+name: Stage 49 Format Helper
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/stage49-format-helper.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    if: github.event.pull_request.head.ref == 'stage-49/v1.4-adhan-audio-library'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact Stage 49 head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Format Stage 49 authored files and create commit object
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          FILES=(
+            docs/ADHAN_AUDIO_LIBRARY.md
+            scripts/check-adhan-audio-assets.mjs
+            scripts/service-worker-validation.test.mjs
+            scripts/visual-adhan-audio-library.mjs
+            src/domain/adhanAudioLibrary.test.ts
+            src/domain/adhanAudioLibrary.ts
+            src/ui/LocalAdhanAudioSettings.tsx
+          )
+
+          npx prettier --write "${FILES[@]}"
+          npx prettier --check "${FILES[@]}"
+
+          BASE_TREE="$(gh api "repos/${REPOSITORY}/git/commits/${HEAD_SHA}" --jq '.tree.sha')"
+          TREE_ENTRIES='[]'
+          for file in "${FILES[@]}"; do
+            blob="$(jq -Rs '{content: ., encoding: "utf-8"}' < "$file" | gh api --method POST "repos/${REPOSITORY}/git/blobs" --input - --jq '.sha')"
+            TREE_ENTRIES="$(jq --arg path "$file" --arg sha "$blob" '. + [{path:$path, mode:"100644", type:"blob", sha:$sha}]' <<< "$TREE_ENTRIES")"
+          done
+
+          TREE_SHA="$(jq -n --arg base_tree "$BASE_TREE" --argjson tree "$TREE_ENTRIES" '{base_tree:$base_tree, tree:$tree}' | gh api --method POST "repos/${REPOSITORY}/git/trees" --input - --jq '.sha')"
+          GENERATED_COMMIT="$(jq -n --arg message 'Stage 49: apply canonical formatting' --arg tree "$TREE_SHA" --arg parent "$HEAD_SHA" '{message:$message, tree:$tree, parents:[$parent]}' | gh api --method POST "repos/${REPOSITORY}/git/commits" --input - --jq '.sha')"
+
+          echo "STAGE49_FORMATTED_COMMIT=${GENERATED_COMMIT}"
