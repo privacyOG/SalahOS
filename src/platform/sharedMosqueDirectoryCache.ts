@@ -25,7 +25,9 @@ function parseArray(value: unknown): readonly unknown[] {
   return Array.isArray(value) ? value : [];
 }
 
-export function loadSharedMosqueDirectoryCache(storage: Storage): SharedMosqueDirectoryCache | null {
+export function loadSharedMosqueDirectoryCache(
+  storage: Storage,
+): SharedMosqueDirectoryCache | null {
   const raw = storage.getItem(SHARED_MOSQUE_DIRECTORY_CACHE_KEY);
   if (raw === null) return null;
   try {
@@ -39,7 +41,11 @@ export function loadSharedMosqueDirectoryCache(storage: Storage): SharedMosqueDi
     const records = parseArray(parsed.records)
       .map((value) => validateSharedMosqueRecord(value as SharedMosqueRecord))
       .slice(0, CACHE_LIMIT);
-    return Object.freeze({ version: 1, cachedAt: parsed.cachedAt, records: Object.freeze(records) });
+    return Object.freeze({
+      version: 1,
+      cachedAt: parsed.cachedAt,
+      records: Object.freeze(records),
+    });
   } catch {
     return null;
   }
