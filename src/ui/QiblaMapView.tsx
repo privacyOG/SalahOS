@@ -326,6 +326,7 @@ export function QiblaMapView({
 }
 
 function documentLocale(): 'en' | 'ar' | 'tr' | 'id' {
+  if (typeof document === 'undefined') return 'en';
   const locale = document.documentElement.lang.toLowerCase().split('-')[0];
   return locale === 'ar' || locale === 'tr' || locale === 'id' ? locale : 'en';
 }
