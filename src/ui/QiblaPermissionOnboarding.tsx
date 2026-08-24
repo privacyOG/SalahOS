@@ -5,7 +5,7 @@ import { getApplicationStorage } from '../platform/applicationStorage';
 import { requestCompassPermission } from '../platform/deviceCompass';
 import {
   completeQiblaPermissionOnboarding,
-  loadQiblaPermissionOnboarding,
+  qiblaPermissionOnboardingRequired,
 } from '../platform/qiblaPermissionOnboarding';
 import { requestQiblaLocation } from '../platform/qiblaLocation';
 import { loadPersistedSettings } from '../platform/settingsStorage';
@@ -66,7 +66,7 @@ function initialState(): { locale: Locale; visible: boolean } {
   const storage = getApplicationStorage();
   return {
     locale: loadPersistedSettings(storage).locale,
-    visible: !loadQiblaPermissionOnboarding(storage).completed,
+    visible: qiblaPermissionOnboardingRequired(storage),
   };
 }
 
