@@ -1,7 +1,10 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
-const modulesCss = readFileSync(new URL('../src/mobile-prayer-modules.css', import.meta.url), 'utf8');
+const modulesCss = readFileSync(
+  new URL('../src/mobile-prayer-modules.css', import.meta.url),
+  'utf8',
+);
 
 function rgb(hex) {
   const value = hex.replace('#', '');
@@ -38,12 +41,15 @@ describe('mobile prayer theme contrast hardening', () => {
     ['minimal-modern', '#65736f', '#ffffff'],
     ['structured-split-board', '#5d6a79', '#f5f5f4'],
     ['family-classroom', '#5c6974', '#fffdf8'],
-  ])('%s keeps tertiary metadata at WCAG AA contrast', (template, foreground, background) => {
-    const rule = templateRule(template);
-    expect(rule).toBeDefined();
-    expect(rule).toContain(`--mobile-theme-tertiary: ${foreground}`);
-    expect(contrast(foreground, background)).toBeGreaterThanOrEqual(4.5);
-  });
+  ])(
+    '%s keeps tertiary metadata at WCAG AA contrast',
+    (template, foreground, background) => {
+      const rule = templateRule(template);
+      expect(rule).toBeDefined();
+      expect(rule).toContain(`--mobile-theme-tertiary: ${foreground}`);
+      expect(contrast(foreground, background)).toBeGreaterThanOrEqual(4.5);
+    },
+  );
 
   it('uses mobile theme surfaces and content colours for contextual cards', () => {
     expect(modulesCss).toMatch(
