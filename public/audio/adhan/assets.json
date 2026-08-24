@@ -1,0 +1,37 @@
+{
+  "schemaVersion": 1,
+  "assets": [
+    {
+      "id": "beautiful-adhan",
+      "file": "beautiful-adhan.mp3",
+      "bytes": 1848972,
+      "sha256": "1ab728372deb9a9fa25ac7b0bacba4e4c6f224230e0299875a9da47d03d5ce70",
+      "durationSeconds": 154.044,
+      "codec": "mp3",
+      "sampleRateHz": 44100,
+      "channels": 1,
+      "bitRate": 96000,
+      "normalization": {
+        "filter": "loudnorm=I=-16:TP=-1.5:LRA=11",
+        "targetLufs": -16,
+        "targetTruePeakDb": -1.5
+      }
+    },
+    {
+      "id": "fajr-malmo",
+      "file": "fajr-malmo.mp3",
+      "bytes": 2971551,
+      "sha256": "5de2d9efae530fb55424e5ec244d812784f9b8d6f259f8315534478c9b2813b4",
+      "durationSeconds": 247.589,
+      "codec": "mp3",
+      "sampleRateHz": 44100,
+      "channels": 1,
+      "bitRate": 96000,
+      "normalization": {
+        "filter": "loudnorm=I=-16:TP=-1.5:LRA=11",
+        "targetLufs": -16,
+        "targetTruePeakDb": -1.5
+      }
+    }
+  ]
+}
