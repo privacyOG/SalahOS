@@ -123,14 +123,19 @@ async function phoneMetrics(page) {
 
 function assertPhoneMetrics(name, metrics) {
   if (metrics.navPosition !== 'relative') {
-    throw new Error(`${name} primary navigation does not participate in shell layout: ${metrics.navPosition}`);
+    throw new Error(
+      `${name} primary navigation does not participate in shell layout: ${metrics.navPosition}`,
+    );
   }
   if (Math.abs(metrics.navBottom - metrics.viewportHeight) > 1) {
     throw new Error(`${name} primary navigation is not pinned to the viewport bottom`);
   }
   if (Math.abs(metrics.contentBottom - metrics.navTop) > 1) {
     throw new Error(
-      `${name} content/nav boundary is not contiguous: ${JSON.stringify({ contentBottom: metrics.contentBottom, navTop: metrics.navTop })}`,
+      `${name} content/nav boundary is not contiguous: ${JSON.stringify({
+        contentBottom: metrics.contentBottom,
+        navTop: metrics.navTop,
+      })}`,
     );
   }
   if (!['auto', 'scroll'].includes(metrics.contentOverflowY)) {
@@ -157,7 +162,9 @@ function assertPhoneMetrics(name, metrics) {
 async function reachableAboveNavigation(page, selector) {
   const target = page.locator(selector).last();
   await target.scrollIntoViewIfNeeded();
-  await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => resolve(undefined))));
+  await page.evaluate(
+    () => new Promise((resolve) => requestAnimationFrame(() => resolve(undefined))),
+  );
   return target.evaluate((element) => {
     const nav = document.querySelector('.congregation-nav');
     const content = document.querySelector('.congregation-shell-content');
@@ -177,8 +184,13 @@ async function reachableAboveNavigation(page, selector) {
 }
 
 function assertReachable(name, label, metrics) {
-  if (metrics.top < metrics.visibleTop - 1 || metrics.bottom > metrics.visibleBottom + 1) {
-    throw new Error(`${name} ${label} cannot be fully reached above navigation: ${JSON.stringify(metrics)}`);
+  if (
+    metrics.top < metrics.visibleTop - 1 ||
+    metrics.bottom > metrics.visibleBottom + 1
+  ) {
+    throw new Error(
+      `${name} ${label} cannot be fully reached above navigation: ${JSON.stringify(metrics)}`,
+    );
   }
 }
 
@@ -221,7 +233,13 @@ async function validatePhone(browser, scenario) {
       fullPage: true,
       animations: 'disabled',
     });
-    return { name: scenario.name, fontScale, ...metrics, ishaReachability, footerReachability };
+    return {
+      name: scenario.name,
+      fontScale,
+      ...metrics,
+      ishaReachability,
+      footerReachability,
+    };
   } finally {
     await context.close();
   }
