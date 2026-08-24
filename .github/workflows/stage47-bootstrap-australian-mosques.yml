@@ -7,6 +7,12 @@ on:
     paths:
       - scripts/generate-australian-mosque-directory.mjs
       - .github/workflows/stage47-bootstrap-australian-mosques.yml
+  pull_request:
+    branches:
+      - main
+    paths:
+      - scripts/generate-australian-mosque-directory.mjs
+      - .github/workflows/stage47-bootstrap-australian-mosques.yml
 
 permissions:
   contents: write
@@ -27,13 +33,18 @@ jobs:
           node-version: 22
 
       - name: Fetch and generate Australian mosque directory
-        run: node scripts/generate-australian-mosque-directory.mjs --fetch
+        run: |
+          if [ -f data/osm/australian-muslim-places-of-worship.overpass.json ] && [ -f src/data/australian-mosques.json ]; then
+            echo "Australian mosque bootstrap data already exists."
+            exit 0
+          fi
+          node scripts/generate-australian-mosque-directory.mjs --fetch
 
       - name: Commit source snapshot and generated directory
         run: |
-          git add data/osm/australian-muslim-places-of-worship.overpass.json src/data/australian-mosques.json
+          git add data/osm/australian-muslim-places-of-worship.overpass.json src/data/australian-mosques.json 2>/dev/null || true
           if git diff --cached --quiet; then
-            echo "Australian mosque data is already current."
+            echo "Australian mosque data is already present."
             exit 0
           fi
           git config user.name "privacyOG"
