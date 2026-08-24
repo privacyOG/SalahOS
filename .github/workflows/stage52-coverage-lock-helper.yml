@@ -1,0 +1,48 @@
+name: Stage 52 Coverage Lock Helper
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/stage52-coverage-lock-helper.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  lock:
+    if: github.event.pull_request.head.ref == 'stage-52/v1.4-verification-upgrades'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact Stage 52 head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Add pinned coverage provider and create commit object
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm ci --ignore-scripts
+          npm install --save-dev --save-exact --ignore-scripts @vitest/coverage-v8@4.1.10
+          npm audit --audit-level=moderate
+
+          BASE_TREE="$(gh api "repos/${REPOSITORY}/git/commits/${HEAD_SHA}" --jq '.tree.sha')"
+          TREE_ENTRIES='[]'
+          for file in package.json package-lock.json; do
+            blob="$(jq -Rs '{content: ., encoding: "utf-8"}' < "$file" | gh api --method POST "repos/${REPOSITORY}/git/blobs" --input - --jq '.sha')"
+            TREE_ENTRIES="$(jq --arg path "$file" --arg sha "$blob" '. + [{path:$path, mode:"100644", type:"blob", sha:$sha}]' <<< "$TREE_ENTRIES")"
+          done
+
+          TREE_SHA="$(jq -n --arg base_tree "$BASE_TREE" --argjson tree "$TREE_ENTRIES" '{base_tree:$base_tree, tree:$tree}' | gh api --method POST "repos/${REPOSITORY}/git/trees" --input - --jq '.sha')"
+          GENERATED_COMMIT="$(jq -n --arg message 'Stage 52: pin coverage provider in lockfile' --arg tree "$TREE_SHA" --arg parent "$HEAD_SHA" '{message:$message, tree:$tree, parents:[$parent]}' | gh api --method POST "repos/${REPOSITORY}/git/commits" --input - --jq '.sha')"
+          echo "STAGE52_COVERAGE_LOCK_COMMIT=${GENERATED_COMMIT}"
