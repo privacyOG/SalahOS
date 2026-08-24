@@ -44,6 +44,9 @@ export interface TrueHeadingSession {
 
 type PermissionRequester = (() => Promise<'granted' | 'denied'>) | undefined;
 type HeadingCoordinatesSource = Coordinates | (() => Coordinates);
+type PrimedCompassPermission = Extract<CompassPermissionState, 'granted' | 'not-required'>;
+
+let primedBrowserCompassPermission: PrimedCompassPermission | null = null;
 
 function normalizeHeading(degrees: number): number {
   return ((degrees % 360) + 360) % 360;
@@ -77,15 +80,23 @@ export function compassHeadingFromOrientation(
 export async function requestCompassPermission(
   requester: PermissionRequester = defaultPermissionRequester(),
 ): Promise<CompassPermissionState> {
+  if (Capacitor.isNativePlatform()) {
+    return 'not-required';
+  }
   if (typeof DeviceOrientationEvent === 'undefined') {
     return 'unsupported';
   }
   if (requester === undefined) {
+    primedBrowserCompassPermission = 'not-required';
     return 'not-required';
   }
 
   try {
-    return (await requester()) === 'granted' ? 'granted' : 'denied';
+    const permission = (await requester()) === 'granted' ? 'granted' : 'denied';
+    if (permission === 'granted') {
+      primedBrowserCompassPermission = permission;
+    }
+    return permission;
   } catch {
     return 'denied';
   }
@@ -233,7 +244,7 @@ async function startBrowserHeadingUpdates(
   coordinates: HeadingCoordinatesSource,
   onHeading: (sample: TrueHeadingSample) => void,
 ): Promise<TrueHeadingSession> {
-  const permission = await requestCompassPermission();
+  const permission = primedBrowserCompassPermission ?? (await requestCompassPermission());
   if (permission === 'denied') return stoppedSession('denied');
   if (permission === 'unsupported') return stoppedSession('unsupported');
 

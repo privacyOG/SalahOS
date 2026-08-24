@@ -34,6 +34,10 @@
   margin-top: 0;
 }
 
+.qibla-finder--v2 .qibla-warning p {
+  max-width: 72ch;
+}
+
 .qibla-primary-workspace {
   display: grid;
   gap: 1rem;

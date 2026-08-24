@@ -14,9 +14,11 @@ This tracker is intentionally compact. A stage is marked complete only after imp
 
 ## Stage 2 — Automatic live Qiblah
 
-- [ ] Auto-acquire best available OS location when Qiblah opens.
-- [ ] Auto-start true-heading updates and retain saved/manual fallback.
-- [ ] Move required permission education/request into first-run onboarding at the earliest OS-valid point.
+- [x] Auto-acquire best available OS location when Qiblah opens.
+- [x] Auto-start true-heading updates and retain saved/manual fallback.
+- [x] Move required permission education/request into first-run onboarding at the earliest OS-valid point.
+
+**Stage 2 verification (2026-08-24):** implementation head `abe9d3eb121010c57c8ae5e97e78ef5a1482336f` passed Quality Gate `32690874466` (#2084), Visual Regression `32690874460` (#934), Android Build `32690874465` (#1090), and iOS Build `32690874463` (#999). Android verification includes a successful debug build and emulator lifecycle acceptance. iOS verification includes a successful Simulator build plus install, launch and relaunch acceptance on fresh iPhone and iPad Simulators. The visual gate includes the dedicated Stage 44 automatic live-location/heading, saved-location fallback, and first-run permission-to-live-Qiblah flows. This completion commit changes tracker documentation only and remains subject to the same exact-head PR gates before merge.
 
 ## Stage 3 — Compass recalibration
 

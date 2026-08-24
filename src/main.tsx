@@ -19,6 +19,7 @@ import { MosquesScreen } from './ui/MosquesScreen';
 import { PrayerBoardAnnouncementSettings } from './ui/PrayerBoardAnnouncementSettings';
 import { PrayerBoardWeatherSettings } from './ui/PrayerBoardWeatherSettings';
 import { QiblaFinder } from './ui/QiblaFinder';
+import { QiblaPermissionOnboarding } from './ui/QiblaPermissionOnboarding';
 import { RamadanModePanel } from './ui/RamadanModePanel';
 import { SettingsScreen } from './ui/SettingsScreen';
 import { smartDisplayModeRequested } from './ui/SmartDisplay';
@@ -52,6 +53,7 @@ import './taraweeh-panel.css';
 import './qibla-compass.css';
 import './qibla-compass-premium.css';
 import './qiblah-v2.css';
+import './qibla-permission-onboarding.css';
 import './mosques-community-v2.css';
 import './accessibility-rtl-refinement.css';
 
@@ -97,9 +99,12 @@ function CongregationRoute({ destination }: Readonly<{ destination: Congregation
 
 function CongregationApplication() {
   return (
-    <CongregationShell>
-      {(destination) => <CongregationRoute destination={destination} />}
-    </CongregationShell>
+    <>
+      <QiblaPermissionOnboarding />
+      <CongregationShell>
+        {(destination) => <CongregationRoute destination={destination} />}
+      </CongregationShell>
+    </>
   );
 }
 
