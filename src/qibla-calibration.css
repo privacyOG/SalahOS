@@ -46,7 +46,8 @@
   line-height: 1.15;
 }
 
-.qibla-calibration-dialog__content > p:not(.qibla-calibration-dialog__eyebrow):not(.qibla-calibration-dialog__accuracy) {
+.qibla-calibration-dialog__content
+  > p:not(.qibla-calibration-dialog__eyebrow):not(.qibla-calibration-dialog__accuracy) {
   max-width: 58ch;
   line-height: 1.55;
 }
