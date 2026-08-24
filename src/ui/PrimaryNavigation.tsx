@@ -2,7 +2,7 @@ import { SalahIcon, type SalahIconName } from './SalahIcon';
 
 export type PrimaryNavigationIcon = Extract<
   SalahIconName,
-  'today' | 'mosques' | 'qiblah' | 'community' | 'settings'
+  'today' | 'mosques' | 'qiblah' | 'knowledge' | 'community' | 'settings'
 >;
 
 export type PrimaryNavigationItem = Readonly<{
