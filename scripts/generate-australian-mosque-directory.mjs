@@ -4,9 +4,11 @@ import path from 'node:path';
 const DEFAULT_INPUT = 'data/osm/australian-muslim-places-of-worship.overpass.json';
 const DEFAULT_OUTPUT = 'src/data/australian-mosques.json';
 const OVERPASS_ENDPOINTS = [
+  'https://overpass.private.coffee/api/interpreter',
+  'https://maps.mail.ru/osm/tools/overpass/api/interpreter',
   'https://overpass-api.de/api/interpreter',
-  'https://overpass.kumi.systems/api/interpreter',
 ];
+const OVERPASS_USER_AGENT = 'SalahOS/1.4 (+https://github.com/privacyOG/SalahOS)';
 
 export const AUSTRALIAN_MOSQUE_REGION_CODES = Object.freeze([
   'AU-ACT',
@@ -300,7 +302,10 @@ export function buildAustralianMosqueDirectory(raw) {
 async function requestRegion(regionCode, endpoint) {
   const response = await fetch(endpoint, {
     method: 'POST',
-    headers: { 'content-type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded;charset=UTF-8',
+      'user-agent': OVERPASS_USER_AGENT,
+    },
     body: new URLSearchParams({ data: queryForRegion(regionCode) }),
     signal: AbortSignal.timeout(100_000),
   });
