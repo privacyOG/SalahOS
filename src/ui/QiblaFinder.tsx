@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import type { Coordinates } from '../domain/coordinates';
 import { searchLocations, type LocationSearchResult } from '../domain/locationSearch';
@@ -15,6 +15,7 @@ import {
   type TrueHeadingSample,
   type TrueHeadingSession,
 } from '../platform/deviceCompass';
+import { loadQiblaPermissionOnboarding } from '../platform/qiblaPermissionOnboarding';
 import {
   requestQiblaLocation,
   startQiblaLocationWatch,
@@ -43,6 +44,7 @@ function readInitialState(): {
   readonly locale: Locale;
   readonly location: FinderLocation | null;
   readonly savedLocations: readonly SavedLocation[];
+  readonly permissionOnboardingCompleted: boolean;
 } {
   const storage = getApplicationStorage();
   const settings = loadPersistedSettings(storage);
@@ -57,6 +59,7 @@ function readInitialState(): {
             label: null,
           },
     savedLocations: loadSavedLocations(storage),
+    permissionOnboardingCompleted: loadQiblaPermissionOnboarding(storage).completed,
   };
 }
 
@@ -65,6 +68,9 @@ export function QiblaFinder() {
   const [locale, setLocale] = useState(initial.locale);
   const [location, setLocation] = useState<FinderLocation | null>(initial.location);
   const [savedLocations, setSavedLocations] = useState(initial.savedLocations);
+  const [permissionOnboardingCompleted, setPermissionOnboardingCompleted] = useState(
+    initial.permissionOnboardingCompleted,
+  );
   const [view, setView] = useState<FinderView>('compass');
   const [locationState, setLocationState] = useState<LocationState>('idle');
   const [locationError, setLocationError] = useState<QiblaLocationFailureReason | null>(null);
@@ -79,7 +85,13 @@ export function QiblaFinder() {
   const receivedHeadingRef = useRef(false);
   const alignedRef = useRef(false);
   const locationRef = useRef<FinderLocation | null>(location);
+  const locationRequestGenerationRef = useRef(0);
+  const autoLocationRequestedRef = useRef(false);
+  const autoCompassSuppressedRef = useRef(false);
+  const compassStartInFlightRef = useRef(false);
+  const disposedRef = useRef(false);
   locationRef.current = location;
+
   const text = qiblaFinderCopy[locale];
   const qiblaCoordinates = location?.coordinates ?? null;
   const qibla = qiblaCoordinates === null ? null : calculateQiblaBearing(qiblaCoordinates);
@@ -95,6 +107,120 @@ export function QiblaFinder() {
     () => searchLocations(searchQuery, { locale: localeTag(locale), limit: 6 }),
     [locale, searchQuery],
   );
+
+  const stopCompass = useCallback(async () => {
+    autoCompassSuppressedRef.current = true;
+    clearHeadingTimer(headingTimerRef);
+    await compassSessionRef.current?.stop();
+    compassSessionRef.current = null;
+    receivedHeadingRef.current = false;
+    setHeading(null);
+    setCompassState('idle');
+    alignedRef.current = false;
+  }, []);
+
+  const startCompass = useCallback(async () => {
+    const activeLocation = locationRef.current;
+    if (activeLocation === null || compassStartInFlightRef.current) return;
+
+    autoCompassSuppressedRef.current = false;
+    compassStartInFlightRef.current = true;
+    clearHeadingTimer(headingTimerRef);
+    await compassSessionRef.current?.stop();
+    compassSessionRef.current = null;
+    receivedHeadingRef.current = false;
+    setHeading(null);
+    setCompassState('starting');
+    alignedRef.current = false;
+
+    const startingCoordinates = activeLocation.coordinates;
+    const session = await startTrueHeadingUpdates(
+      () => locationRef.current?.coordinates ?? startingCoordinates,
+      (sample) => {
+        if (disposedRef.current) return;
+        receivedHeadingRef.current = true;
+        clearHeadingTimer(headingTimerRef);
+        setHeading(sample);
+        setCompassState('active');
+      },
+    );
+    compassStartInFlightRef.current = false;
+
+    if (disposedRef.current) {
+      await session.stop();
+      return;
+    }
+
+    compassSessionRef.current = session;
+    if (session.state !== 'active') {
+      setCompassState(session.state);
+      return;
+    }
+
+    setCompassState('active');
+    headingTimerRef.current = window.setTimeout(() => {
+      if (!receivedHeadingRef.current) {
+        setCompassState('unsupported');
+        void session.stop();
+        compassSessionRef.current = null;
+      }
+    }, 4_000);
+  }, []);
+
+  const stopLiveLocation = useCallback(async () => {
+    await locationWatchRef.current?.stop();
+    locationWatchRef.current = null;
+    setLocationState('idle');
+  }, []);
+
+  const useCurrentPosition = useCallback(async () => {
+    const requestGeneration = ++locationRequestGenerationRef.current;
+    await stopLiveLocation();
+    if (disposedRef.current || requestGeneration !== locationRequestGenerationRef.current) return;
+
+    setLocationState('locating');
+    setLocationError(null);
+    const result = await requestQiblaLocation();
+    if (disposedRef.current || requestGeneration !== locationRequestGenerationRef.current) return;
+
+    if (!result.ok) {
+      setLocationError(result.reason);
+      setLocationState('error');
+      return;
+    }
+
+    setLocation({
+      coordinates: result.location.coordinates,
+      source: 'live',
+      label: null,
+    });
+    setLocationState('live');
+    const watch = await startQiblaLocationWatch(
+      (fix) => {
+        if (disposedRef.current || requestGeneration !== locationRequestGenerationRef.current) return;
+        setLocation((previous) => {
+          if (previous !== null && !shouldRecalculateQibla(previous.coordinates, fix.coordinates)) {
+            return previous;
+          }
+          return {
+            coordinates: fix.coordinates,
+            source: 'live',
+            label: null,
+          };
+        });
+      },
+      (reason) => {
+        if (disposedRef.current || requestGeneration !== locationRequestGenerationRef.current) return;
+        setLocationError(reason);
+      },
+    );
+
+    if (disposedRef.current || requestGeneration !== locationRequestGenerationRef.current) {
+      await watch.stop();
+      return;
+    }
+    locationWatchRef.current = watch;
+  }, [stopLiveLocation]);
 
   useEffect(() => {
     if (aligned && !alignedRef.current) {
@@ -123,108 +249,50 @@ export function QiblaFinder() {
     };
   }, [location?.label, location?.source]);
 
-  useEffect(
-    () => () => {
+  useEffect(() => {
+    const markCompleted = () => {
+      setPermissionOnboardingCompleted(true);
+    };
+    window.addEventListener('salahos:qibla-permission-onboarding-complete', markCompleted);
+    return () => {
+      window.removeEventListener('salahos:qibla-permission-onboarding-complete', markCompleted);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!permissionOnboardingCompleted || autoLocationRequestedRef.current) return;
+    autoLocationRequestedRef.current = true;
+    void useCurrentPosition();
+  }, [permissionOnboardingCompleted, useCurrentPosition]);
+
+  useEffect(() => {
+    if (
+      view !== 'compass' ||
+      location === null ||
+      compassState !== 'idle' ||
+      autoCompassSuppressedRef.current
+    ) {
+      return;
+    }
+    void startCompass();
+  }, [compassState, location, startCompass, view]);
+
+  useEffect(() => {
+    disposedRef.current = false;
+    return () => {
+      disposedRef.current = true;
       clearHeadingTimer(headingTimerRef);
       void compassSessionRef.current?.stop();
       void locationWatchRef.current?.stop();
-    },
-    [],
-  );
+    };
+  }, []);
 
   if (smartDisplayModeRequested(window.location.search)) {
     return null;
   }
 
-  const stopCompass = async () => {
-    clearHeadingTimer(headingTimerRef);
-    await compassSessionRef.current?.stop();
-    compassSessionRef.current = null;
-    receivedHeadingRef.current = false;
-    setHeading(null);
-    setCompassState('idle');
-    alignedRef.current = false;
-  };
-
-  const startCompass = async () => {
-    if (location === null) return;
-    clearHeadingTimer(headingTimerRef);
-    await compassSessionRef.current?.stop();
-    compassSessionRef.current = null;
-    receivedHeadingRef.current = false;
-    setHeading(null);
-    setCompassState('starting');
-    alignedRef.current = false;
-
-    const startingCoordinates = location.coordinates;
-    const session = await startTrueHeadingUpdates(
-      () => locationRef.current?.coordinates ?? startingCoordinates,
-      (sample) => {
-        receivedHeadingRef.current = true;
-        clearHeadingTimer(headingTimerRef);
-        setHeading(sample);
-        setCompassState('active');
-      },
-    );
-    compassSessionRef.current = session;
-    if (session.state !== 'active') {
-      setCompassState(session.state);
-      return;
-    }
-
-    setCompassState('active');
-    headingTimerRef.current = window.setTimeout(() => {
-      if (!receivedHeadingRef.current) {
-        setCompassState('unsupported');
-        void session.stop();
-        compassSessionRef.current = null;
-      }
-    }, 4_000);
-  };
-
-  const stopLiveLocation = async () => {
-    await locationWatchRef.current?.stop();
-    locationWatchRef.current = null;
-    setLocationState('idle');
-  };
-
-  const useCurrentPosition = async () => {
-    await stopLiveLocation();
-    setLocationState('locating');
-    setLocationError(null);
-    const result = await requestQiblaLocation();
-    if (!result.ok) {
-      setLocationError(result.reason);
-      setLocationState('error');
-      return;
-    }
-
-    setLocation({
-      coordinates: result.location.coordinates,
-      source: 'live',
-      label: null,
-    });
-    setLocationState('live');
-    locationWatchRef.current = await startQiblaLocationWatch(
-      (fix) => {
-        setLocation((previous) => {
-          if (previous !== null && !shouldRecalculateQibla(previous.coordinates, fix.coordinates)) {
-            return previous;
-          }
-          return {
-            coordinates: fix.coordinates,
-            source: 'live',
-            label: null,
-          };
-        });
-      },
-      (reason) => {
-        setLocationError(reason);
-      },
-    );
-  };
-
   const useCity = async (result: LocationSearchResult) => {
+    locationRequestGenerationRef.current += 1;
     await stopLiveLocation();
     setLocation({
       coordinates: result.coordinates,
@@ -236,6 +304,7 @@ export function QiblaFinder() {
   };
 
   const useSavedLocation = async (savedLocation: SavedLocation) => {
+    locationRequestGenerationRef.current += 1;
     await stopLiveLocation();
     setLocation({
       coordinates: savedLocation.coordinates,
@@ -246,6 +315,7 @@ export function QiblaFinder() {
   };
 
   const useMapPin = async (coordinates: Coordinates) => {
+    locationRequestGenerationRef.current += 1;
     await stopLiveLocation();
     setLocation({ coordinates, source: 'pin', label: null });
     setLocationError(null);
@@ -265,6 +335,8 @@ export function QiblaFinder() {
       className="qibla-finder qibla-finder--v2"
       aria-labelledby="qibla-finder-title"
       dir={localeDirection(locale)}
+      data-location-state={locationState}
+      data-compass-state={compassState}
     >
       <header className="qibla-finder-header">
         <div>
