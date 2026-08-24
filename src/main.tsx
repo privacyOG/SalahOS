@@ -25,7 +25,6 @@ import './touch-display-fixture.css';
 import './smart-display.css';
 import './smart-display-themes.css';
 import './device-ux-refinement.css';
-import './family-classroom-4k.css';
 import './managed-display-remote.css';
 import './remote-display-admin.css';
 import './managed-display-assignment.css';
