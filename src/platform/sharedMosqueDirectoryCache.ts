@@ -2,6 +2,7 @@ import {
   validateSharedMosqueRecord,
   type SharedMosqueRecord,
 } from '../domain/sharedMosqueDirectory';
+import type { KeyValueStorage } from './settingsStorage';
 
 export const SHARED_MOSQUE_DIRECTORY_CACHE_KEY = 'salahos.sharedMosqueDirectoryCache.v1';
 export const SHARED_MOSQUE_DIRECTORY_OUTBOX_KEY = 'salahos.sharedMosqueDirectoryOutbox.v1';
@@ -26,7 +27,7 @@ function parseArray(value: unknown): readonly unknown[] {
 }
 
 export function loadSharedMosqueDirectoryCache(
-  storage: Storage,
+  storage: KeyValueStorage,
 ): SharedMosqueDirectoryCache | null {
   const raw = storage.getItem(SHARED_MOSQUE_DIRECTORY_CACHE_KEY);
   if (raw === null) return null;
@@ -52,7 +53,7 @@ export function loadSharedMosqueDirectoryCache(
 }
 
 export function saveSharedMosqueDirectoryCache(
-  storage: Storage,
+  storage: KeyValueStorage,
   records: readonly SharedMosqueRecord[],
   cachedAt = new Date().toISOString(),
 ): SharedMosqueDirectoryCache {
@@ -72,7 +73,7 @@ export function saveSharedMosqueDirectoryCache(
 }
 
 export function mergeSharedMosqueDirectoryCache(
-  storage: Storage,
+  storage: KeyValueStorage,
   records: readonly SharedMosqueRecord[],
   priorityIds: readonly string[] = [],
 ): SharedMosqueDirectoryCache {
@@ -93,7 +94,7 @@ export function mergeSharedMosqueDirectoryCache(
 }
 
 export function loadSharedMosqueDirectoryOutbox(
-  storage: Storage,
+  storage: KeyValueStorage,
 ): readonly SharedMosqueDirectoryOutboxItem[] {
   const raw = storage.getItem(SHARED_MOSQUE_DIRECTORY_OUTBOX_KEY);
   if (raw === null) return [];
@@ -117,7 +118,7 @@ export function loadSharedMosqueDirectoryOutbox(
 }
 
 export function queueSharedMosqueDirectoryOutbox(
-  storage: Storage,
+  storage: KeyValueStorage,
   item: SharedMosqueDirectoryOutboxItem,
 ): readonly SharedMosqueDirectoryOutboxItem[] {
   const current = loadSharedMosqueDirectoryOutbox(storage).filter((entry) => entry.id !== item.id);
@@ -126,7 +127,7 @@ export function queueSharedMosqueDirectoryOutbox(
   return Object.freeze(next);
 }
 
-export function clearSharedMosqueDirectoryOutboxItem(storage: Storage, id: string): void {
+export function clearSharedMosqueDirectoryOutboxItem(storage: KeyValueStorage, id: string): void {
   const next = loadSharedMosqueDirectoryOutbox(storage).filter((item) => item.id !== id);
   storage.setItem(SHARED_MOSQUE_DIRECTORY_OUTBOX_KEY, JSON.stringify(next));
 }
