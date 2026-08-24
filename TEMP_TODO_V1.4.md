@@ -22,9 +22,11 @@ This tracker is intentionally compact. A stage is marked complete only after imp
 
 ## Stage 3 — Compass recalibration
 
-- [ ] Add manual Recalibrate Compass action.
-- [ ] Detect poor heading accuracy and offer guided recalibration.
-- [ ] Reassess heading accuracy and test denied/unsupported/calibration flows.
+- [x] Add manual Recalibrate Compass action.
+- [x] Detect poor heading accuracy and offer guided recalibration.
+- [x] Reassess heading accuracy and test denied/unsupported/calibration flows.
+
+**Stage 3 verification (2026-08-24):** implementation head `20e63058c5367e03279cf41a0afc0859584d3f54` passed Quality Gate `32692797784` (#2093), Visual Regression `32692797757` (#943), Android Build `32692797790` (#1099), and iOS Build `32692797768` (#1008). Android verification includes the successful debug build and emulator lifecycle acceptance. iOS verification includes the successful Simulator build plus install, launch and relaunch acceptance on fresh iPhone and iPad Simulators. The visual gate includes dedicated Stage 45 poor-accuracy prompting, guided and manual recalibration success, denied-permission and unsupported-device fallback flows. This completion commit changes tracker documentation only and remains subject to the same exact-head PR gates before merge.
 
 ## Stage 4 — Google Maps Qiblah
 
