@@ -164,9 +164,9 @@ export function searchSharedMosques(
     .map((candidate) => validateSharedMosqueRecord(candidate))
     .filter((candidate) => {
       if (needle === '') return true;
-      return normalize([candidate.name, candidate.nameAr ?? '', candidate.address].join(' ')).includes(
-        needle,
-      );
+      return normalize(
+        [candidate.name, candidate.nameAr ?? '', candidate.address].join(' '),
+      ).includes(needle);
     })
     .map((mosque) => ({
       mosque,
@@ -204,7 +204,9 @@ export function findPotentialSharedMosqueDuplicate(
       );
       const nameMatches = normalize(mosque.name) === candidateName;
       const addressMatches = normalize(mosque.address) === candidateAddress;
-      return (nameMatches && distance <= 1) || (addressMatches && distance <= 0.25) || distance <= 0.08;
+      return (
+        (nameMatches && distance <= 1) || (addressMatches && distance <= 0.25) || distance <= 0.08
+      );
     }) ?? null
   );
 }
