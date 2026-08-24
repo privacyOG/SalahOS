@@ -109,7 +109,7 @@ async function runLifecycleListener(listener) {
 }
 
 describe('production service worker', () => {
-  it('pre-caches the app shell during install', async () => {
+  it('pre-caches the app shell and packaged Adhan recordings during install', async () => {
     const caches = createCacheStorage();
     const worker = await loadServiceWorker({
       caches,
@@ -118,14 +118,17 @@ describe('production service worker', () => {
 
     await runLifecycleListener(worker.listeners.get('install'));
 
-    expect([...caches.stores.keys()]).toEqual(['salahos-shell-v3']);
-    const shell = caches.stores.get('salahos-shell-v3');
+    expect([...caches.stores.keys()]).toEqual(['salahos-shell-v4']);
+    const shell = caches.stores.get('salahos-shell-v4');
     expect(await shell.match('/')).toBeInstanceOf(Response);
     expect(await shell.match('/manifest.webmanifest')).toBeInstanceOf(Response);
     expect(await shell.match('/icons/salahos-192.png')).toBeInstanceOf(Response);
     expect(await shell.match('/icons/salahos-512.png')).toBeInstanceOf(Response);
     expect(await shell.match('/icons/salahos-maskable-192.png')).toBeInstanceOf(Response);
     expect(await shell.match('/icons/salahos-maskable-512.png')).toBeInstanceOf(Response);
+    expect(await shell.match('/audio/adhan/assets.json')).toBeInstanceOf(Response);
+    expect(await shell.match('/audio/adhan/beautiful-adhan.mp3')).toBeInstanceOf(Response);
+    expect(await shell.match('/audio/adhan/fajr-malmo.mp3')).toBeInstanceOf(Response);
     expect(worker.skippedWaiting()).toBe(true);
   });
 
@@ -135,7 +138,7 @@ describe('production service worker', () => {
       headers: { 'content-type': 'text/html' },
     });
     const caches = createCacheStorage({
-      'salahos-shell-v3': [['/', cachedShell]],
+      'salahos-shell-v4': [['/', cachedShell]],
     });
     const worker = await loadServiceWorker({
       caches,
@@ -168,6 +171,7 @@ describe('production service worker', () => {
       'salahos-shell-v1': [],
       'salahos-shell-v2': [],
       'salahos-shell-v3': [],
+      'salahos-shell-v4': [],
       'unrelated-app-cache': [],
     });
     const worker = await loadServiceWorker({
@@ -177,9 +181,13 @@ describe('production service worker', () => {
 
     await runLifecycleListener(worker.listeners.get('activate'));
 
-    expect(caches.deleted).toEqual(['salahos-shell-v1', 'salahos-shell-v2']);
+    expect(caches.deleted).toEqual([
+      'salahos-shell-v1',
+      'salahos-shell-v2',
+      'salahos-shell-v3',
+    ]);
     expect([...caches.stores.keys()].sort()).toEqual(
-      ['salahos-shell-v3', 'unrelated-app-cache'].sort(),
+      ['salahos-shell-v4', 'unrelated-app-cache'].sort(),
     );
     expect(worker.wasClaimed()).toBe(true);
   });

@@ -19,6 +19,10 @@
 .notification-card > *,
 .local-adhan-audio > *,
 .local-adhan-audio-selection > *,
+.adhan-audio-library > *,
+.adhan-audio-library__catalog > *,
+.adhan-audio-library__configuration > *,
+.adhan-audio-library__prayer-grid > *,
 .prayer-grid > *,
 .prayer-times > * {
   min-width: 0;
@@ -32,7 +36,10 @@
 .notification-grid,
 .notification-card,
 .local-adhan-audio,
-.local-adhan-audio-selection {
+.local-adhan-audio-selection,
+.adhan-audio-library,
+.adhan-audio-library__configuration,
+.adhan-audio-library__prayer-fieldset {
   min-inline-size: 0;
   max-inline-size: 100%;
 }
@@ -55,13 +62,17 @@
 .notification-card textarea,
 .local-adhan-audio input,
 .local-adhan-audio select,
-.local-adhan-audio textarea {
+.local-adhan-audio textarea,
+.adhan-audio-library input,
+.adhan-audio-library select,
+.adhan-audio-library textarea {
   width: 100%;
   max-width: 100%;
   min-width: 0;
 }
 
-.local-adhan-audio input[type='file'] {
+.local-adhan-audio input[type='file'],
+.adhan-audio-library input[type='file'] {
   inline-size: 100%;
   max-inline-size: 100%;
   min-inline-size: 0;
@@ -74,11 +85,151 @@
 .manual-mosque-prayer label,
 .notification-card label,
 .local-adhan-audio label,
+.adhan-audio-library label,
 .notification-card span,
 .local-adhan-audio p,
-.local-adhan-audio strong {
+.local-adhan-audio strong,
+.adhan-audio-library p,
+.adhan-audio-library span,
+.adhan-audio-library strong {
   min-width: 0;
   overflow-wrap: anywhere;
+}
+
+.adhan-audio-library {
+  display: grid;
+  gap: 1rem;
+  margin-block-start: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: 0.9rem;
+  background: color-mix(in srgb, var(--salah-fg-primary) 2.5%, transparent);
+}
+
+.adhan-audio-library__header h3,
+.adhan-audio-library h4,
+.adhan-audio-library h5 {
+  margin: 0;
+}
+
+.adhan-audio-library__header p,
+.adhan-audio-library__recording p {
+  margin-block: 0.35rem 0;
+}
+
+.adhan-audio-library__catalog {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(16rem, 100%), 1fr));
+  gap: 0.75rem;
+  margin-block-start: 0.65rem;
+}
+
+.adhan-audio-library__recording {
+  display: grid;
+  align-content: start;
+  gap: 0.65rem;
+  padding: 0.85rem;
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: 0.8rem;
+  background: color-mix(in srgb, var(--salah-bg-canvas) 72%, transparent);
+}
+
+.adhan-audio-library__recording-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem 0.7rem;
+  color: var(--salah-fg-secondary);
+  font-size: 0.78rem;
+}
+
+.adhan-audio-library__badge {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 1.7rem;
+  padding-inline: 0.55rem;
+  border: 1px solid currentColor;
+  border-radius: 999px;
+  color: var(--salah-fg-accent);
+  font-weight: 700;
+}
+
+.adhan-audio-library__configuration {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+.adhan-audio-library__configuration > label,
+.adhan-audio-library__prayer-grid label,
+.adhan-audio-library__local > label {
+  display: grid;
+  align-content: start;
+  gap: 0.35rem;
+  color: var(--salah-fg-secondary);
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.adhan-audio-library__volume-control {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.adhan-audio-library__volume-control output {
+  min-inline-size: 3.5rem;
+  text-align: end;
+  color: var(--salah-fg-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.adhan-audio-library__notification-only {
+  grid-column: 1 / -1;
+  grid-template-columns: auto minmax(0, 1fr) !important;
+  align-items: start;
+}
+
+.adhan-audio-library__notification-only input {
+  inline-size: 1.15rem;
+  block-size: 1.15rem;
+  margin-block-start: 0.15rem;
+}
+
+.adhan-audio-library__notification-only span {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.adhan-audio-library__prayer-fieldset {
+  grid-column: 1 / -1;
+  margin: 0;
+  padding: 0.85rem;
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: 0.8rem;
+}
+
+.adhan-audio-library__prayer-fieldset legend {
+  padding-inline: 0.35rem;
+  font-weight: 700;
+}
+
+.adhan-audio-library__prayer-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(12rem, 100%), 1fr));
+  gap: 0.65rem;
+}
+
+.adhan-audio-library__local {
+  display: grid;
+  gap: 0.65rem;
+  padding-block-start: 0.9rem;
+  border-block-start: 1px solid var(--salah-border-subtle);
+}
+
+.adhan-audio-library__delivery {
+  margin: 0;
 }
 
 @media (max-width: 760px) {
@@ -86,13 +237,23 @@
   .offset-grid,
   .manual-mosque-header,
   .manual-mosque-prayer-grid,
-  .notification-grid {
+  .notification-grid,
+  .adhan-audio-library__configuration {
     grid-template-columns: minmax(0, 1fr);
   }
 
   .notification-fieldset {
     margin-inline: 0;
     padding-inline: min(1rem, 3vw);
+  }
+
+  .adhan-audio-library {
+    padding-inline: min(0.85rem, 3vw);
+  }
+
+  .adhan-audio-library__notification-only,
+  .adhan-audio-library__prayer-fieldset {
+    grid-column: auto;
   }
 
   .admin-overview__actions {
@@ -102,5 +263,19 @@
 
   .admin-overview__actions button {
     width: 100%;
+  }
+}
+
+@media (prefers-contrast: more) {
+  .adhan-audio-library,
+  .adhan-audio-library__recording,
+  .adhan-audio-library__prayer-fieldset {
+    border-width: 2px;
+  }
+}
+
+@media (forced-colors: active) {
+  .adhan-audio-library__badge {
+    forced-color-adjust: auto;
   }
 }

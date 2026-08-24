@@ -5,6 +5,7 @@ import {
   defaultPrayerBoardTemplateConfig,
   parsePrayerBoardTemplateConfig,
 } from '../domain/prayerBoardTemplate';
+import { ADHAN_AUDIO_PREFERENCES_STORAGE_KEY } from './adhanAudioPreferences';
 import { COMMUNITY_CONTENT_STORAGE_KEY } from './communityContentStorage';
 import { MANAGED_DISPLAY_CONNECTION_STORAGE_KEY } from './managedDisplayConnectionStorage';
 import { MANAGED_PRAYER_BOARD_CACHE_STORAGE_KEY } from './managedPrayerBoardCache';
@@ -34,6 +35,7 @@ export const PERSISTED_APPLICATION_KEYS = Object.freeze([
   PRAYER_BOARD_WEATHER_STORAGE_KEY,
   PRAYER_BOARD_ANNOUNCEMENT_ROTATION_STORAGE_KEY,
   QIBLA_PERMISSION_ONBOARDING_STORAGE_KEY,
+  ADHAN_AUDIO_PREFERENCES_STORAGE_KEY,
 ] as const);
 
 export interface PreferencesStore {

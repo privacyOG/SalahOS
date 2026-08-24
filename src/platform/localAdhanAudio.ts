@@ -1,4 +1,7 @@
-import type { NotificationPreferences } from '../domain/notificationPreferences';
+import type {
+  NotificationPrayerName,
+  NotificationPreferences,
+} from '../domain/notificationPreferences';
 import type { PrayerName } from '../domain/prayerEngine';
 
 const DATABASE_NAME = 'salahos-local-media';
@@ -18,6 +21,11 @@ export interface LocalAdhanAudioRecord {
 export interface LocalAdhanPrayerRow {
   readonly name: PrayerName;
   readonly localMinutes: number | null;
+}
+
+export interface ForegroundAdhanPlaybackEvent {
+  readonly key: string;
+  readonly prayer: NotificationPrayerName;
 }
 
 function isAudioMimeType(type: string): boolean {
@@ -146,12 +154,12 @@ export async function removeLocalAdhanAudio(): Promise<void> {
   await transactionRequest<undefined>('readwrite', (store) => store.delete(SELECTED_AUDIO_KEY));
 }
 
-export function foregroundAdhanPlaybackKey(input: {
+export function foregroundAdhanPlaybackEvent(input: {
   readonly date: string;
   readonly localMinutes: number;
   readonly prayers: readonly LocalAdhanPrayerRow[];
   readonly notifications: NotificationPreferences;
-}): string | null {
+}): ForegroundAdhanPlaybackEvent | null {
   if (!Number.isFinite(input.localMinutes)) {
     return null;
   }
@@ -161,10 +169,23 @@ export function foregroundAdhanPlaybackKey(input: {
     if (prayer.name === 'sunrise' || prayer.localMinutes === null) {
       continue;
     }
-    const preference = input.notifications[prayer.name];
+    const prayerName: NotificationPrayerName = prayer.name;
+    const preference = input.notifications[prayerName];
     if (preference.adhanEnabled && Math.floor(prayer.localMinutes) === currentMinute) {
-      return `${input.date}:${prayer.name}:local-adhan`;
+      return {
+        key: `${input.date}:${prayerName}:local-adhan`,
+        prayer: prayerName,
+      };
     }
   }
   return null;
+}
+
+export function foregroundAdhanPlaybackKey(input: {
+  readonly date: string;
+  readonly localMinutes: number;
+  readonly prayers: readonly LocalAdhanPrayerRow[];
+  readonly notifications: NotificationPreferences;
+}): string | null {
+  return foregroundAdhanPlaybackEvent(input)?.key ?? null;
 }
