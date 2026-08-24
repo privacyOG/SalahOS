@@ -289,5 +289,5 @@ export function australianMosqueToProfile(record: AustralianMosqueRecord): Mosqu
   });
 }
 
-export const australianMosqueDirectory = parseDirectory(rawDirectory as unknown);
+export const australianMosqueDirectory = parseDirectory(rawDirectory);
 export const australianMosques = australianMosqueDirectory.records;
