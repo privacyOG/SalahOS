@@ -212,7 +212,11 @@ export function QiblaMapView({
                 selectMapType(type);
               }}
             >
-              {type === 'roadmap' ? copy.roadmap : type === 'satellite' ? copy.satellite : copy.hybrid}
+              {type === 'roadmap'
+                ? copy.roadmap
+                : type === 'satellite'
+                  ? copy.satellite
+                  : copy.hybrid}
             </button>
           ))}
         </div>
@@ -289,7 +293,9 @@ export function QiblaMapView({
               ◼
             </div>
             <div className="qibla-google-map-status qibla-google-map-status--fallback">
-              <strong>{providerState === 'unconfigured' ? copy.unconfigured : text.mapUnavailable}</strong>
+              <strong>
+                {providerState === 'unconfigured' ? copy.unconfigured : text.mapUnavailable}
+              </strong>
               <span>{copy.fallback}</span>
               {providerState === 'error' && (
                 <button
