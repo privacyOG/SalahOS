@@ -242,7 +242,7 @@ try {
       'Qiblah route contrast halo is missing',
     );
 
-    await page.getByRole('button', { name: 'Map', exact: true }).click();
+    await map.getByRole('button', { name: 'Map', exact: true }).click();
     await page.waitForFunction(
       () =>
         document.querySelector('.qibla-map-shell')?.getAttribute('data-map-provider') ===
@@ -255,7 +255,7 @@ try {
     );
     assert(roadmapColor === '#1267d6', 'Roadmap Qiblah route did not switch to high-contrast blue');
 
-    await page.getByRole('button', { name: 'Hybrid', exact: true }).click();
+    await map.getByRole('button', { name: 'Hybrid', exact: true }).click();
     await page.waitForFunction(
       () =>
         document.querySelector('.qibla-map-shell')?.getAttribute('data-map-provider') ===
@@ -271,7 +271,7 @@ try {
       'Hybrid Qiblah route did not switch back to imagery-safe red',
     );
 
-    await page.getByRole('button', { name: 'Show full Qiblah route' }).click();
+    await map.getByRole('button', { name: 'Show full Qiblah route' }).click();
     const refitCount = await page.evaluate(() => globalThis.__salahosGoogleMap?.fitCount ?? 0);
     assert(refitCount >= 2, 'Full-route control did not refit the user-to-Kaaba path');
 
