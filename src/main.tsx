@@ -23,6 +23,7 @@ import { QiblaFinder } from './ui/QiblaFinder';
 import { QiblaPermissionOnboarding } from './ui/QiblaPermissionOnboarding';
 import { RamadanModePanel } from './ui/RamadanModePanel';
 import { SettingsScreen } from './ui/SettingsScreen';
+import { SharedMosqueDirectoryPanel } from './ui/SharedMosqueDirectoryPanel';
 import { smartDisplayModeRequested } from './ui/SmartDisplay';
 import { TaraweehPanel } from './ui/TaraweehPanel';
 import { TodayScreen } from './ui/TodayScreen';
@@ -56,6 +57,7 @@ import './qibla-compass-premium.css';
 import './qiblah-v2.css';
 import './qibla-permission-onboarding.css';
 import './mosques-community-v2.css';
+import './shared-mosque-directory.css';
 import './accessibility-rtl-refinement.css';
 
 function CongregationRoute({ destination }: Readonly<{ destination: CongregationDestination }>) {
@@ -65,6 +67,7 @@ function CongregationRoute({ destination }: Readonly<{ destination: Congregation
         <div className="congregation-route congregation-route--mosques">
           <MosquesScreen />
           <AustralianMosqueDirectoryPanel />
+          <SharedMosqueDirectoryPanel />
         </div>
       );
     case 'qiblah':
