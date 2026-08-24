@@ -3,23 +3,45 @@ import { useEffect, useMemo, useState } from 'react';
 import {
   australianMosqueDirectory,
   australianMosques,
+  australianMosqueToProfile,
   searchAustralianMosques,
   sortAustralianMosquesByDistance,
   type AustralianMosqueRecord,
 } from '../domain/australianMosqueDirectory';
-import type { Coordinates } from '../domain/coordinates';
 import { localeTag } from '../i18n/i18n';
 import { australianMosqueDirectoryCopy } from '../i18n/australianMosqueDirectoryTranslations';
 import type { Locale } from '../i18n/translations';
+import { getApplicationStorage } from '../platform/applicationStorage';
+import { MOSQUE_PROFILE_LIBRARY_CHANGE_EVENT } from '../platform/mosqueProfileEvents';
+import {
+  loadMosqueProfileLibrary,
+  saveMosqueProfileLibrary,
+  selectMosqueProfile,
+  upsertMosqueProfile,
+  type MosqueProfileLibraryState,
+} from '../platform/mosqueProfileLibrary';
+import {
+  defaultPersistedSettings,
+  loadPersistedSettings,
+  type PersistedSettings,
+} from '../platform/settingsStorage';
 
 const COLLAPSED_RESULT_LIMIT = 24;
 
-interface AustralianMosqueDirectoryPanelProps {
-  readonly locale: Locale;
-  readonly savedCoordinates: Coordinates | null;
-  readonly selectedProfileId: string | null;
-  readonly followedProfileIds: readonly string[];
-  readonly onUseMosque: (mosque: AustralianMosqueRecord) => void;
+function readSettings(): PersistedSettings {
+  try {
+    return loadPersistedSettings(getApplicationStorage());
+  } catch {
+    return defaultPersistedSettings;
+  }
+}
+
+function readMosques(): MosqueProfileLibraryState {
+  try {
+    return loadMosqueProfileLibrary(getApplicationStorage());
+  } catch {
+    return { profiles: [], selectedProfileId: null };
+  }
 }
 
 function formatDistance(value: number, locale: Locale): string {
@@ -32,18 +54,32 @@ function localizedDirectoryName(mosque: AustralianMosqueRecord, locale: Locale):
   return locale === 'ar' ? (mosque.nameAr ?? mosque.name) : mosque.name;
 }
 
-export function AustralianMosqueDirectoryPanel({
-  locale,
-  savedCoordinates,
-  selectedProfileId,
-  followedProfileIds,
-  onUseMosque,
-}: AustralianMosqueDirectoryPanelProps) {
+export function AustralianMosqueDirectoryPanel() {
+  const [settings, setSettings] = useState<PersistedSettings>(readSettings);
+  const [library, setLibrary] = useState<MosqueProfileLibraryState>(readMosques);
   const [query, setQuery] = useState('');
   const [sortByDistance, setSortByDistance] = useState(false);
   const [expanded, setExpanded] = useState(false);
+  const locale = settings.locale;
   const text = australianMosqueDirectoryCopy[locale];
-  const followedIds = useMemo(() => new Set(followedProfileIds), [followedProfileIds]);
+  const savedCoordinates = settings.location?.coordinates ?? null;
+  const followedIds = useMemo(
+    () => new Set(library.profiles.map((profile) => profile.id)),
+    [library.profiles],
+  );
+
+  useEffect(() => {
+    const refresh = () => {
+      setSettings(readSettings());
+      setLibrary(readMosques());
+    };
+    window.addEventListener('focus', refresh);
+    window.addEventListener(MOSQUE_PROFILE_LIBRARY_CHANGE_EVENT, refresh);
+    return () => {
+      window.removeEventListener('focus', refresh);
+      window.removeEventListener(MOSQUE_PROFILE_LIBRARY_CHANGE_EVENT, refresh);
+    };
+  }, []);
 
   useEffect(() => {
     setExpanded(false);
@@ -63,10 +99,20 @@ export function AustralianMosqueDirectoryPanel({
     ? rankedMosques
     : rankedMosques.slice(0, COLLAPSED_RESULT_LIMIT);
 
+  const useMosque = (mosque: AustralianMosqueRecord) => {
+    const profile = australianMosqueToProfile(mosque);
+    const withProfile = upsertMosqueProfile(library, profile);
+    const next = selectMosqueProfile(withProfile, profile.id);
+    saveMosqueProfileLibrary(getApplicationStorage(), next);
+    setLibrary(next);
+    window.dispatchEvent(new Event(MOSQUE_PROFILE_LIBRARY_CHANGE_EVENT));
+  };
+
   return (
     <section
       className="australian-mosque-directory"
       aria-labelledby="australian-mosque-directory-title"
+      dir={locale === 'ar' ? 'rtl' : 'ltr'}
       data-directory-record-count={australianMosqueDirectory.source.recordCount}
     >
       <header className="australian-mosque-directory__header">
@@ -135,7 +181,7 @@ export function AustralianMosqueDirectoryPanel({
       ) : (
         <div className="mosque-summary-grid australian-mosque-directory__grid">
           {visibleMosques.map(({ mosque, distanceKm }) => {
-            const selected = mosque.id === selectedProfileId;
+            const selected = mosque.id === library.selectedProfileId;
             const followed = followedIds.has(mosque.id);
             return (
               <article
@@ -162,7 +208,7 @@ export function AustralianMosqueDirectoryPanel({
                     data-followed={followed}
                     disabled={selected}
                     onClick={() => {
-                      onUseMosque(mosque);
+                      useMosque(mosque);
                     }}
                   >
                     {selected ? text.selected : text.useMosque}
