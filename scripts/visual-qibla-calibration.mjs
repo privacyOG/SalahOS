@@ -46,13 +46,16 @@ async function seedExistingInstall(page) {
 }
 
 async function installOrientationMock(page, permissionResult = null) {
-  await page.addInitScript(({ result }) => {
-    class MockDeviceOrientationEvent extends Event {}
-    if (result !== null) {
-      MockDeviceOrientationEvent.requestPermission = () => Promise.resolve(result);
-    }
-    globalThis.DeviceOrientationEvent = MockDeviceOrientationEvent;
-  }, { result: permissionResult });
+  await page.addInitScript(
+    ({ result }) => {
+      class MockDeviceOrientationEvent extends Event {}
+      if (result !== null) {
+        MockDeviceOrientationEvent.requestPermission = () => Promise.resolve(result);
+      }
+      globalThis.DeviceOrientationEvent = MockDeviceOrientationEvent;
+    },
+    { result: permissionResult },
+  );
 }
 
 async function emitHeading(page, accuracyDegrees) {
@@ -118,11 +121,16 @@ try {
     await emitHeading(page, 8);
     await page.getByRole('heading', { name: 'Compass accuracy improved' }).waitFor();
 
-    const success = await page.locator('[data-qibla-calibration-state="success"]').evaluate((element) => ({
-      needed: element.getAttribute('data-qibla-calibration-needed'),
-      text: element.textContent ?? '',
-    }));
-    assert(success.needed === 'false', 'Fresh accurate heading did not clear calibration-needed state');
+    const success = await page
+      .locator('[data-qibla-calibration-state="success"]')
+      .evaluate((element) => ({
+        needed: element.getAttribute('data-qibla-calibration-needed'),
+        text: element.textContent ?? '',
+      }));
+    assert(
+      success.needed === 'false',
+      'Fresh accurate heading did not clear calibration-needed state',
+    );
     assert(success.text.includes('±8°'), 'Recalibration success did not report the fresh accuracy');
 
     await page.screenshot({
@@ -157,10 +165,17 @@ try {
 
     const denied = await page.locator('.qibla-guidance-column').evaluate((element) => ({
       text: element.textContent ?? '',
-      recalibrateDisabled: element.querySelector('.qibla-recalibration-control button')?.disabled ?? false,
+      recalibrateDisabled:
+        element.querySelector('.qibla-recalibration-control button')?.disabled ?? false,
     }));
-    assert(denied.recalibrateDisabled, 'Recalibration remained enabled after compass permission denial');
-    assert(denied.text.includes('Compass access was denied'), 'Denied compass fallback was not visible');
+    assert(
+      denied.recalibrateDisabled,
+      'Recalibration remained enabled after compass permission denial',
+    );
+    assert(
+      denied.text.includes('Compass access was denied'),
+      'Denied compass fallback was not visible',
+    );
     results.push({ name: 'denied-compass-fallback', ...denied });
     await context.close();
   }
@@ -183,13 +198,17 @@ try {
 
     const unsupported = await page.locator('.qibla-guidance-column').evaluate((element) => ({
       text: element.textContent ?? '',
-      recalibrateDisabled: element.querySelector('.qibla-recalibration-control button')?.disabled ?? false,
+      recalibrateDisabled:
+        element.querySelector('.qibla-recalibration-control button')?.disabled ?? false,
     }));
     assert(
       unsupported.recalibrateDisabled,
       'Recalibration remained enabled on a device without compass support',
     );
-    assert(unsupported.text.includes('no usable compass sensor'), 'Unsupported compass fallback was not visible');
+    assert(
+      unsupported.text.includes('no usable compass sensor'),
+      'Unsupported compass fallback was not visible',
+    );
     results.push({ name: 'unsupported-compass-fallback', ...unsupported });
     await context.close();
   }
@@ -198,7 +217,9 @@ try {
     path.join(artifactDirectory, 'stage45-qiblah-calibration-results.json'),
     `${JSON.stringify(results, null, 2)}\n`,
   );
-  console.log(`Stage 45 Qiblah compass recalibration acceptance passed: ${String(results.length)} flows.`);
+  console.log(
+    `Stage 45 Qiblah compass recalibration acceptance passed: ${String(results.length)} flows.`,
+  );
 } finally {
   await browser.close();
 }
