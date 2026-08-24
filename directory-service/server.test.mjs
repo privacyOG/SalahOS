@@ -129,11 +129,14 @@ try {
     body: JSON.stringify({ decision: 'approved' }),
   });
 
-  const claim = await request(`/api/v1/shared-mosques/${encodeURIComponent(createdRecord.id)}/claims`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ contact: 'admin@example.invalid' }),
-  });
+  const claim = await request(
+    `/api/v1/shared-mosques/${encodeURIComponent(createdRecord.id)}/claims`,
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contact: 'admin@example.invalid' }),
+    },
+  );
   assert.equal(claim.response.status, 202);
   assert.equal(claim.body.kind, 'claim');
   await request(`/api/v1/shared-mosques/moderation/${encodeURIComponent(claim.body.id)}`, {
