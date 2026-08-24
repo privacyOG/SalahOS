@@ -1,4 +1,4 @@
-import type { KeyValueStorage } from './settingsStorage';
+import { SETTINGS_STORAGE_KEY, type KeyValueStorage } from './settingsStorage';
 
 export const QIBLA_PERMISSION_ONBOARDING_STORAGE_KEY = 'salahos.qibla-permission-onboarding';
 
@@ -25,6 +25,11 @@ export function loadQiblaPermissionOnboarding(
   } catch {
     return defaultState;
   }
+}
+
+export function qiblaPermissionOnboardingRequired(storage: KeyValueStorage): boolean {
+  if (loadQiblaPermissionOnboarding(storage).completed) return false;
+  return storage.getItem(SETTINGS_STORAGE_KEY) === null;
 }
 
 export function completeQiblaPermissionOnboarding(storage: KeyValueStorage): void {
