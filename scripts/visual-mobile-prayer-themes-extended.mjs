@@ -179,7 +179,9 @@ async function validateQiblaLayout(browser, scenario) {
       );
     }
     if ((await map.getAttribute('data-google-map-state')) !== 'unconfigured') {
-      throw new Error(`${scenario.name} must report Google Maps as unconfigured in the no-key build`);
+      throw new Error(
+        `${scenario.name} must report Google Maps as unconfigured in the no-key build`,
+      );
     }
     if ((await page.locator('[data-qibla-map-fallback]').count()) !== 1) {
       throw new Error(`${scenario.name} is missing the local manual-pin Qiblah fallback`);
