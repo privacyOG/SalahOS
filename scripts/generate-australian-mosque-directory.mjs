@@ -277,7 +277,8 @@ export function buildAustralianMosqueDirectory(raw) {
       .filter((record) => record !== null),
   );
   const records = deduplicate(converted);
-  if (records.length === 0) throw new RangeError('Australian mosque directory generation produced no records');
+  if (records.length === 0)
+    throw new RangeError('Australian mosque directory generation produced no records');
   const rawElementCount = regions.reduce((total, region) => total + region.elements.length, 0);
   const timestamps = regions.map((region) => region.osmBaseTimestamp).sort();
 
@@ -325,7 +326,8 @@ async function requestRegion(regionCode, endpoint) {
 async function fetchRegion(regionCode, preferredEndpointIndex) {
   let lastError = null;
   for (let offset = 0; offset < OVERPASS_ENDPOINTS.length; offset += 1) {
-    const endpoint = OVERPASS_ENDPOINTS[(preferredEndpointIndex + offset) % OVERPASS_ENDPOINTS.length];
+    const endpoint =
+      OVERPASS_ENDPOINTS[(preferredEndpointIndex + offset) % OVERPASS_ENDPOINTS.length];
     if (endpoint === undefined) continue;
     for (let attempt = 1; attempt <= 2; attempt += 1) {
       try {
