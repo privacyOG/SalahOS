@@ -21,9 +21,9 @@ describe('Australian mosque directory', () => {
   });
 
   it('searches names, addresses, states and Arabic text on device', () => {
-    expect(searchAustralianMosques(australianMosques, 'Tempe').map((mosque) => mosque.name)).toContain(
-      'Al Hijrah Mosque',
-    );
+    expect(
+      searchAustralianMosques(australianMosques, 'Tempe').map((mosque) => mosque.name),
+    ).toContain('Al Hijrah Mosque');
     expect(
       searchAustralianMosques(australianMosques, 'Auburn NSW').map((mosque) => mosque.name),
     ).toContain('Auburn Gallipoli Mosque');
