@@ -62,11 +62,17 @@ for (const [engineName, engine] of engines) {
 
     await page.goto(`${baseUrl}/?view=today`, { waitUntil: 'networkidle' });
     await page.locator('.today-screen').waitFor({ state: 'visible' });
-    assert((await page.locator('.congregation-nav-item').count()) === 6, `${engineName}: nav mismatch`);
+    assert(
+      (await page.locator('.congregation-nav-item').count()) === 6,
+      `${engineName}: nav mismatch`,
+    );
 
     await page.getByRole('button', { name: 'Knowledge', exact: true }).click();
     await page.locator('[data-knowledge-screen]').waitFor({ state: 'visible' });
-    assert(new URL(page.url()).searchParams.get('view') === 'knowledge', `${engineName}: route failed`);
+    assert(
+      new URL(page.url()).searchParams.get('view') === 'knowledge',
+      `${engineName}: route failed`,
+    );
 
     await page.goto(`${baseUrl}/?surface=admin&adminView=overview`, { waitUntil: 'networkidle' });
     await page.locator('.admin-shell').waitFor({ state: 'visible' });
@@ -88,4 +94,6 @@ await writeFile(
   path.join(artifactDirectory, 'cross-browser-smoke-results.json'),
   `${JSON.stringify(results, null, 2)}\n`,
 );
-console.log(`Cross-browser smoke passed Chromium, Firefox and WebKit (${String(results.length)} engines).`);
+console.log(
+  `Cross-browser smoke passed Chromium, Firefox and WebKit (${String(results.length)} engines).`,
+);

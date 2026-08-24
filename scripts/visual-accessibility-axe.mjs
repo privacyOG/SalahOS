@@ -40,9 +40,12 @@ function settings(locale = 'en', theme = 'light') {
 }
 
 async function seed(page, locale, theme) {
-  await page.addInitScript((persisted) => {
-    localStorage.setItem('salahos.settings', JSON.stringify(persisted));
-  }, settings(locale, theme));
+  await page.addInitScript(
+    (persisted) => {
+      localStorage.setItem('salahos.settings', JSON.stringify(persisted));
+    },
+    settings(locale, theme),
+  );
 }
 
 async function runAxe(page, scenario) {
@@ -109,7 +112,13 @@ async function assertViewportContainment(page, scenario) {
 }
 
 const scenarios = [
-  { name: 'axe-today-en', url: '/?view=today', ready: '.today-screen', locale: 'en', theme: 'light' },
+  {
+    name: 'axe-today-en',
+    url: '/?view=today',
+    ready: '.today-screen',
+    locale: 'en',
+    theme: 'light',
+  },
   {
     name: 'axe-knowledge-ar',
     url: '/?view=knowledge',
