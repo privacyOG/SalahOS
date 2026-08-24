@@ -1,5 +1,11 @@
 export type ProductSurface = 'congregation' | 'admin';
-export type CongregationDestination = 'today' | 'mosques' | 'qiblah' | 'community' | 'settings';
+export type CongregationDestination =
+  | 'today'
+  | 'mosques'
+  | 'qiblah'
+  | 'knowledge'
+  | 'community'
+  | 'settings';
 export type SettingsCategory =
   | 'prayer'
   | 'location'
@@ -23,6 +29,7 @@ const congregationDestinations = new Set<CongregationDestination>([
   'today',
   'mosques',
   'qiblah',
+  'knowledge',
   'community',
   'settings',
 ]);
