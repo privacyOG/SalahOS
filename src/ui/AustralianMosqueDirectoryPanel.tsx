@@ -86,19 +86,14 @@ export function AustralianMosqueDirectoryPanel() {
     setExpanded(false);
   }, [query, sortByDistance]);
 
-  const matchingMosques = useMemo(
-    () => searchAustralianMosques(australianMosques, query),
-    [query],
-  );
+  const matchingMosques = useMemo(() => searchAustralianMosques(australianMosques, query), [query]);
   const rankedMosques = useMemo(() => {
     if (!sortByDistance || savedCoordinates === null) {
       return matchingMosques.map((mosque) => ({ mosque, distanceKm: null }));
     }
     return sortAustralianMosquesByDistance(matchingMosques, savedCoordinates);
   }, [matchingMosques, savedCoordinates, sortByDistance]);
-  const visibleMosques = expanded
-    ? rankedMosques
-    : rankedMosques.slice(0, COLLAPSED_RESULT_LIMIT);
+  const visibleMosques = expanded ? rankedMosques : rankedMosques.slice(0, COLLAPSED_RESULT_LIMIT);
 
   const useMosque = (mosque: AustralianMosqueRecord) => {
     const profile = australianMosqueToProfile(mosque);
