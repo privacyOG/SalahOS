@@ -18,6 +18,11 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.sha }}
 
+      - name: Install audio normalization tooling
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes ffmpeg
+
       - name: Fetch, normalize and import packaged Adhan assets
         env:
           GH_TOKEN: ${{ github.token }}
