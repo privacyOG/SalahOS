@@ -1,7 +1,4 @@
-import {
-  NOTIFICATION_PRAYERS,
-  type NotificationPrayerName,
-} from './notificationPreferences';
+import { NOTIFICATION_PRAYERS, type NotificationPrayerName } from './notificationPreferences';
 
 export const PACKAGED_ADHAN_AUDIO_IDS = ['beautiful-adhan', 'fajr-malmo'] as const;
 export type PackagedAdhanAudioId = (typeof PACKAGED_ADHAN_AUDIO_IDS)[number];
@@ -74,9 +71,7 @@ export const packagedAdhanRecordings = Object.freeze([
 export interface AdhanAudioPreferences {
   readonly version: 1;
   readonly defaultSourceId: AdhanAudioSourceId;
-  readonly prayerSelections: Readonly<
-    Record<NotificationPrayerName, AdhanAudioPrayerSelection>
-  >;
+  readonly prayerSelections: Readonly<Record<NotificationPrayerName, AdhanAudioPrayerSelection>>;
   readonly volumePercent: number;
   readonly notificationOnly: boolean;
 }
@@ -102,14 +97,10 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 export function isAdhanAudioSourceId(value: unknown): value is AdhanAudioSourceId {
-  return (
-    value === 'beautiful-adhan' || value === 'fajr-malmo' || value === 'local-upload'
-  );
+  return value === 'beautiful-adhan' || value === 'fajr-malmo' || value === 'local-upload';
 }
 
-export function isAdhanAudioPrayerSelection(
-  value: unknown,
-): value is AdhanAudioPrayerSelection {
+export function isAdhanAudioPrayerSelection(value: unknown): value is AdhanAudioPrayerSelection {
   return value === 'default' || isAdhanAudioSourceId(value);
 }
 
@@ -125,17 +116,13 @@ export function parseAdhanAudioPreferences(value: unknown): AdhanAudioPreference
     return defaultAdhanAudioPreferences;
   }
 
-  const prayerSelectionsValue = isRecord(value.prayerSelections)
-    ? value.prayerSelections
-    : {};
+  const prayerSelectionsValue = isRecord(value.prayerSelections) ? value.prayerSelections : {};
   const prayerSelections: Record<NotificationPrayerName, AdhanAudioPrayerSelection> = {
     ...defaultPrayerSelections,
   };
   for (const prayer of NOTIFICATION_PRAYERS) {
     const selection = prayerSelectionsValue[prayer];
-    prayerSelections[prayer] = isAdhanAudioPrayerSelection(selection)
-      ? selection
-      : 'default';
+    prayerSelections[prayer] = isAdhanAudioPrayerSelection(selection) ? selection : 'default';
   }
 
   return {

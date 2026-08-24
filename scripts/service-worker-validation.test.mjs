@@ -181,11 +181,7 @@ describe('production service worker', () => {
 
     await runLifecycleListener(worker.listeners.get('activate'));
 
-    expect(caches.deleted).toEqual([
-      'salahos-shell-v1',
-      'salahos-shell-v2',
-      'salahos-shell-v3',
-    ]);
+    expect(caches.deleted).toEqual(['salahos-shell-v1', 'salahos-shell-v2', 'salahos-shell-v3']);
     expect([...caches.stores.keys()].sort()).toEqual(
       ['salahos-shell-v4', 'unrelated-app-cache'].sort(),
     );

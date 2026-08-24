@@ -169,7 +169,8 @@ const copy: Readonly<Record<Locale, LibraryCopy>> = {
     license: 'Lisensi',
     preview: 'Pratinjau',
     defaultAudio: 'Adzan default',
-    defaultHelp: 'Dipakai untuk setiap salat dengan Adzan aktif kecuali ada pilihan khusus per salat.',
+    defaultHelp:
+      'Dipakai untuk setiap salat dengan Adzan aktif kecuali ada pilihan khusus per salat.',
     perPrayer: 'Audio per salat',
     inheritDefault: 'Gunakan Adzan default',
     volume: 'Volume pemutaran',
@@ -186,7 +187,8 @@ const copy: Readonly<Record<Locale, LibraryCopy>> = {
     deliveryHelp:
       'Pemutaran Adzan penuh dikelola aplikasi dan hanya dapat mulai otomatis saat SalahOS terbuka dan terlihat. Di latar belakang atau setelah aplikasi ditutup, pengiriman tetap berupa notifikasi sistem operasi; rekaman penuh tidak dijanjikan sebagai audio notifikasi latar belakang tanpa batas.',
     invalid: 'Pilih berkas audio yang tidak kosong hingga 25 MB.',
-    unavailable: 'Pengaturan audio Adzan atau penyimpanan media lokal tidak tersedia di perangkat ini.',
+    unavailable:
+      'Pengaturan audio Adzan atau penyimpanan media lokal tidak tersedia di perangkat ini.',
     blocked:
       'Pemutaran diblokir perangkat. Gunakan Pratinjau sekali saat aplikasi terbuka, lalu biarkan SalahOS terlihat untuk Adzan di latar depan.',
     localMissing:
@@ -316,15 +318,7 @@ export function LocalAdhanAudioSettings({
 
     lastAutomaticPlaybackKey.current = playback.key;
     playSource(resolveAdhanAudioSourceForPrayer(preferences, playback.prayer, record !== null));
-  }, [
-    date,
-    localMinutes,
-    notifications,
-    playSource,
-    prayers,
-    preferences,
-    record,
-  ]);
+  }, [date, localMinutes, notifications, playSource, prayers, preferences, record]);
 
   const persistPreferences = (next: AdhanAudioPreferences) => {
     setPreferences(next);

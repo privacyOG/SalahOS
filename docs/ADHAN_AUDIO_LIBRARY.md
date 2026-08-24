@@ -6,10 +6,10 @@ Stage 49 adds an offline-capable Adhan audio library without changing SalahOS's 
 
 SalahOS ships two full recordings in `public/audio/adhan/`:
 
-| ID | Recording | Rights | Author / attribution |
-| --- | --- | --- | --- |
-| `beautiful-adhan` | Beautiful Adhan | CC0 1.0 | Adam-synagda; attribution retained voluntarily |
-| `fajr-malmo` | Fajr Adhan — Malmö Mosque | CC BY 3.0 | Islamic Center Malmö; source, license and modifications retained in `ATTRIBUTION.md` |
+| ID                | Recording                 | Rights    | Author / attribution                                                                 |
+| ----------------- | ------------------------- | --------- | ------------------------------------------------------------------------------------ |
+| `beautiful-adhan` | Beautiful Adhan           | CC0 1.0   | Adam-synagda; attribution retained voluntarily                                       |
+| `fajr-malmo`      | Fajr Adhan — Malmö Mosque | CC BY 3.0 | Islamic Center Malmö; source, license and modifications retained in `ATTRIBUTION.md` |
 
 The import source is pinned to `wali1984/Darul-Irfan` commit `f4a0bd42b475a0a7a452a6e662a1cd9566e9f5de`. The pinned source documents the original Wikimedia Commons works and licenses. SalahOS does not fetch those repositories or Commons at runtime.
 

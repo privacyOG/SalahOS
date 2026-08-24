@@ -53,10 +53,7 @@ for (const asset of manifest.assets) {
   assert(asset.channels === 1, `${asset.id} channel count changed`);
   assert(asset.bitRate === 96000, `${asset.id} bit rate changed`);
   assert(asset.normalization?.targetLufs === -16, `${asset.id} LUFS target changed`);
-  assert(
-    asset.normalization?.targetTruePeakDb === -1.5,
-    `${asset.id} true-peak target changed`,
-  );
+  assert(asset.normalization?.targetTruePeakDb === -1.5, `${asset.id} true-peak target changed`);
   assert(asset.rights?.license === canonical.license, `${asset.id} license metadata changed`);
   assert(asset.rights?.author === canonical.author, `${asset.id} author metadata changed`);
   assert(

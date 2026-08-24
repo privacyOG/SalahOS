@@ -69,11 +69,7 @@ describe('Adhan audio library', () => {
 
     expect(resolveAdhanAudioSourceForPrayer(preferences, 'fajr', false)).toBe('fajr-malmo');
     expect(resolveAdhanAudioSourceForPrayer(preferences, 'dhuhr', true)).toBe('local-upload');
-    expect(resolveAdhanAudioSourceForPrayer(preferences, 'dhuhr', false)).toBe(
-      'beautiful-adhan',
-    );
-    expect(resolveAdhanAudioSourceForPrayer(preferences, 'isha', false)).toBe(
-      'beautiful-adhan',
-    );
+    expect(resolveAdhanAudioSourceForPrayer(preferences, 'dhuhr', false)).toBe('beautiful-adhan');
+    expect(resolveAdhanAudioSourceForPrayer(preferences, 'isha', false)).toBe('beautiful-adhan');
   });
 });

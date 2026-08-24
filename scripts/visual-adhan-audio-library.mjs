@@ -77,9 +77,7 @@ try {
     await library.getByText('CC0-1.0').waitFor();
     await library.getByText('CC-BY-3.0').waitFor();
 
-    await library
-      .getByRole('button', { name: 'Preview: Fajr Adhan — Malmö Mosque' })
-      .click();
+    await library.getByRole('button', { name: 'Preview: Fajr Adhan — Malmö Mosque' }).click();
     const preview = await page.evaluate(() => window.__stage49Playbacks.at(-1) ?? null);
     assert(
       preview?.src.endsWith('/audio/adhan/fajr-malmo.mp3') === true,
