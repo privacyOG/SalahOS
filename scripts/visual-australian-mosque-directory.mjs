@@ -73,13 +73,16 @@ try {
       'Australian mosque directory did not expose the expected 106-record snapshot',
     );
     await panel.getByRole('button', { name: 'Nearest first' }).click();
-    await panel.getByText('Distance is calculated privately on this device from your saved location.').waitFor();
+    await panel
+      .getByText('Distance is calculated privately on this device from your saved location.')
+      .waitFor();
 
     const cardText = await panel.locator('.australian-mosque-directory__card').allTextContents();
-    const distances = cardText
-      .map(parseDistance)
-      .filter((value) => value !== null);
-    assert(distances.length >= 3, 'Nearest-first directory did not render multiple distance values');
+    const distances = cardText.map(parseDistance).filter((value) => value !== null);
+    assert(
+      distances.length >= 3,
+      'Nearest-first directory did not render multiple distance values',
+    );
     assert(
       distances.every((value, index) => index === 0 || value >= distances[index - 1] - 0.05),
       'Australian mosque directory distances are not ordered nearest-first',
@@ -100,7 +103,10 @@ try {
       const raw = localStorage.getItem('salahos.mosqueProfileLibrary');
       return raw === null ? null : JSON.parse(raw);
     });
-    assert(stored !== null, 'Selecting an Australian directory mosque did not persist the mosque library');
+    assert(
+      stored !== null,
+      'Selecting an Australian directory mosque did not persist the mosque library',
+    );
     assert(
       stored.selectedProfileId === 'osm-node-3318094580',
       'Selected Australian directory mosque ID was not persisted',
@@ -117,9 +123,8 @@ try {
     const metrics = await page.evaluate(() => ({
       innerWidth: window.innerWidth,
       scrollWidth: document.documentElement.scrollWidth,
-      selectedProfileId: JSON.parse(
-        localStorage.getItem('salahos.mosqueProfileLibrary') ?? '{}',
-      ).selectedProfileId,
+      selectedProfileId: JSON.parse(localStorage.getItem('salahos.mosqueProfileLibrary') ?? '{}')
+        .selectedProfileId,
     }));
     assert(
       metrics.scrollWidth <= metrics.innerWidth + 1,
@@ -152,7 +157,9 @@ try {
     const panel = page.locator('.australian-mosque-directory');
     await panel.waitFor({ state: 'visible' });
     await panel.locator('input[type="search"]').fill('Auburn');
-    await panel.locator('[data-directory-mosque-id="osm-way-156808623"]').waitFor({ state: 'visible' });
+    await panel
+      .locator('[data-directory-mosque-id="osm-way-156808623"]')
+      .waitFor({ state: 'visible' });
 
     const metrics = await page.evaluate(() => {
       const panelElement = document.querySelector('.australian-mosque-directory');
@@ -170,7 +177,10 @@ try {
         cardRight: cardRect?.right ?? -1,
       };
     });
-    assert(metrics.htmlDir === 'rtl', 'Arabic Stage 47 fixture did not apply RTL document direction');
+    assert(
+      metrics.htmlDir === 'rtl',
+      'Arabic Stage 47 fixture did not apply RTL document direction',
+    );
     assert(metrics.panelDir === 'rtl', 'Australian mosque directory did not retain RTL direction');
     assert(
       metrics.scrollWidth <= metrics.innerWidth + 1,
@@ -198,7 +208,9 @@ try {
     path.join(artifactDirectory, 'stage47-australian-mosque-directory-results.json'),
     `${JSON.stringify(results, null, 2)}\n`,
   );
-  console.log(`Stage 47 Australian mosque directory acceptance passed: ${String(results.length)} flows.`);
+  console.log(
+    `Stage 47 Australian mosque directory acceptance passed: ${String(results.length)} flows.`,
+  );
 } finally {
   await browser.close();
 }
