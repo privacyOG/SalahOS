@@ -1,0 +1,173 @@
+.australian-mosque-directory {
+  width: min(76rem, calc(100% - 2rem));
+  margin: 1rem auto 0;
+  padding: clamp(1rem, 2vw, 1.5rem);
+  border: 1px solid var(--border-subtle, var(--salah-border-subtle));
+  border-radius: var(--radius-xl, 1.5rem);
+  background: var(--surface-elevated, var(--salah-bg-surface));
+}
+
+.australian-mosque-directory__header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.australian-mosque-directory__header > div {
+  min-width: 0;
+  max-width: 52rem;
+}
+
+.australian-mosque-directory__header p,
+.australian-mosque-directory__source p,
+.australian-mosque-directory__privacy-note,
+.australian-mosque-directory__result-count {
+  margin: 0;
+}
+
+.australian-mosque-directory__header > div > p {
+  margin-top: 0.45rem;
+  color: var(--text-muted, var(--salah-fg-secondary));
+  line-height: 1.55;
+}
+
+.australian-mosque-directory__header > strong {
+  flex: 0 0 auto;
+  min-width: 3rem;
+  padding: 0.45rem 0.7rem;
+  border-radius: 999px;
+  background: var(--surface-soft, var(--salah-bg-accent-soft));
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+}
+
+.australian-mosque-directory__title-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.australian-mosque-directory__title-row h2 {
+  margin: 0;
+  font-size: clamp(1.35rem, 2.5vw, 1.8rem);
+}
+
+.australian-mosque-directory__title-row span {
+  padding: 0.22rem 0.55rem;
+  border-radius: 999px;
+  background: var(--surface-soft, var(--salah-bg-accent-soft));
+  font-size: 0.76rem;
+  font-weight: 800;
+}
+
+.australian-mosque-directory__controls {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: 0.85rem;
+}
+
+.australian-mosque-directory__sort {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  padding: 0.25rem;
+  border-radius: 999px;
+  background: var(--surface-soft, var(--salah-bg-accent-soft));
+}
+
+.australian-mosque-directory__sort button {
+  min-height: 2.75rem;
+  padding: 0.5rem 0.8rem;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font-weight: 750;
+}
+
+.australian-mosque-directory__sort button[aria-pressed='true'] {
+  background: var(--surface-elevated, var(--salah-bg-surface));
+  box-shadow: 0 0 0 1px var(--border-subtle, var(--salah-border-subtle));
+}
+
+.australian-mosque-directory__sort button:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+.australian-mosque-directory__privacy-note,
+.australian-mosque-directory__result-count {
+  margin-top: 0.8rem;
+  color: var(--text-muted, var(--salah-fg-secondary));
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
+.australian-mosque-directory__grid {
+  margin-top: 0.8rem;
+}
+
+.australian-mosque-directory__card .mosque-summary-card__actions button {
+  width: 100%;
+}
+
+.australian-mosque-directory__expand {
+  margin-top: 1rem;
+}
+
+.australian-mosque-directory__source {
+  display: grid;
+  gap: 0.35rem;
+  margin-top: 1rem;
+  padding-top: 0.85rem;
+  border-top: 1px solid var(--border-subtle, var(--salah-border-subtle));
+  color: var(--text-muted, var(--salah-fg-secondary));
+  font-size: 0.78rem;
+  line-height: 1.45;
+}
+
+.australian-mosque-directory__source > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.australian-mosque-directory__source a {
+  color: inherit;
+  font-weight: 750;
+}
+
+@media (max-width: 48rem) {
+  .australian-mosque-directory__header,
+  .australian-mosque-directory__controls {
+    grid-template-columns: 1fr;
+  }
+
+  .australian-mosque-directory__header {
+    display: grid;
+  }
+
+  .australian-mosque-directory__header > strong {
+    width: fit-content;
+  }
+
+  .australian-mosque-directory__sort {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 24rem) {
+  .australian-mosque-directory {
+    width: min(100% - 1rem, 76rem);
+  }
+
+  .australian-mosque-directory__sort {
+    grid-template-columns: 1fr;
+    border-radius: var(--radius-lg, 1rem);
+  }
+}
