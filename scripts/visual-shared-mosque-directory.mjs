@@ -129,7 +129,8 @@ function distanceFromCard(text) {
 async function waitForResultCount(page, expected) {
   await page.waitForFunction(
     (count) =>
-      document.querySelectorAll('.shared-mosque-directory [data-shared-mosque-id]').length === count,
+      document.querySelectorAll('.shared-mosque-directory [data-shared-mosque-id]').length ===
+      count,
     expected,
   );
 }
