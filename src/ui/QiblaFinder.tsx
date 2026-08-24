@@ -197,7 +197,8 @@ export function QiblaFinder() {
     setLocationState('live');
     const watch = await startQiblaLocationWatch(
       (fix) => {
-        if (disposedRef.current || requestGeneration !== locationRequestGenerationRef.current) return;
+        if (disposedRef.current || requestGeneration !== locationRequestGenerationRef.current)
+          return;
         setLocation((previous) => {
           if (previous !== null && !shouldRecalculateQibla(previous.coordinates, fix.coordinates)) {
             return previous;
@@ -210,7 +211,8 @@ export function QiblaFinder() {
         });
       },
       (reason) => {
-        if (disposedRef.current || requestGeneration !== locationRequestGenerationRef.current) return;
+        if (disposedRef.current || requestGeneration !== locationRequestGenerationRef.current)
+          return;
         setLocationError(reason);
       },
     );
