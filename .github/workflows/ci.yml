@@ -49,6 +49,9 @@ jobs:
       - name: Documentation link verification
         run: npm run docs:links
 
+      - name: Australian mosque directory reproducibility
+        run: npm run mosques:australia:check
+
       - name: PWA raster icon reproducibility
         run: python3 scripts/generate_pwa_icons.py --check
 
