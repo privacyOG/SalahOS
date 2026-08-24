@@ -103,11 +103,12 @@ export function loadSharedMosqueDirectoryOutbox(
     if (!Array.isArray(parsed)) return [];
     return parsed.filter((item): item is SharedMosqueDirectoryOutboxItem => {
       if (typeof item !== 'object' || item === null) return false;
-      const candidate = item as Partial<SharedMosqueDirectoryOutboxItem>;
+      const candidate = item as Record<string, unknown>;
       return (
         typeof candidate.id === 'string' &&
         typeof candidate.createdAt === 'string' &&
-        ['submission', 'edit-suggestion', 'claim'].includes(candidate.kind ?? '') &&
+        typeof candidate.kind === 'string' &&
+        ['submission', 'edit-suggestion', 'claim'].includes(candidate.kind) &&
         typeof candidate.payload === 'object' &&
         candidate.payload !== null
       );
