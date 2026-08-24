@@ -9,7 +9,10 @@ import {
   type SharedMosqueSubmissionInput,
 } from '../domain/sharedMosqueDirectory';
 import { localeTag } from '../i18n/i18n';
-import { sharedMosqueDirectoryCopy } from '../i18n/sharedMosqueDirectoryTranslations';
+import {
+  sharedMosqueDirectoryCopy,
+  type SharedMosqueDirectoryCopy,
+} from '../i18n/sharedMosqueDirectoryTranslations';
 import type { Locale } from '../i18n/translations';
 import { getApplicationStorage } from '../platform/applicationStorage';
 import { MOSQUE_PROFILE_LIBRARY_CHANGE_EVENT } from '../platform/mosqueProfileEvents';
@@ -67,10 +70,7 @@ function formatDistance(value: number, locale: Locale): string {
   }).format(value)} km`;
 }
 
-function verificationLabel(
-  record: SharedMosqueRecord,
-  copy: ReturnType<typeof sharedMosqueDirectoryCopy[Locale]>,
-): string {
+function verificationLabel(record: SharedMosqueRecord, copy: SharedMosqueDirectoryCopy): string {
   switch (record.verification.state) {
     case 'claimed':
       return copy.claimed;
@@ -226,7 +226,14 @@ export function SharedMosqueDirectoryPanel() {
         setFeedback(text.duplicate);
         return;
       }
-      queueContribution('submission', input as unknown as Record<string, string | number | null>);
+      queueContribution('submission', {
+        name: input.name,
+        address: input.address,
+        countryCode: input.countryCode,
+        latitude: input.latitude,
+        longitude: input.longitude,
+        timeZone: input.timeZone,
+      });
     }
   };
 
@@ -294,7 +301,11 @@ export function SharedMosqueDirectoryPanel() {
             dir="auto"
           />
         </label>
-        <button type="button" onClick={() => void search(nearby)} disabled={connection === 'loading'}>
+        <button
+          type="button"
+          onClick={() => void search(nearby)}
+          disabled={connection === 'loading'}
+        >
           {text.searchAction}
         </button>
         <button
@@ -331,14 +342,20 @@ export function SharedMosqueDirectoryPanel() {
               >
                 <div className="mosque-summary-card__identity">
                   <div className="shared-mosque-directory__name-row">
-                    <h3><bdi>{localizedName(mosque, locale)}</bdi></h3>
-                    <span className={`shared-mosque-directory__badge shared-mosque-directory__badge--${mosque.verification.state}`}>
+                    <h3>
+                      <bdi>{localizedName(mosque, locale)}</bdi>
+                    </h3>
+                    <span
+                      className={`shared-mosque-directory__badge shared-mosque-directory__badge--${mosque.verification.state}`}
+                    >
                       {verificationLabel(mosque, text)}
                     </span>
                   </div>
                   <p>{mosque.address}</p>
                   {distanceKm !== null && (
-                    <span>{text.distance}: {formatDistance(distanceKm, locale)}</span>
+                    <span>
+                      {text.distance}: {formatDistance(distanceKm, locale)}
+                    </span>
                   )}
                 </div>
                 <div className="mosque-summary-card__actions shared-mosque-directory__actions">
@@ -369,7 +386,10 @@ export function SharedMosqueDirectoryPanel() {
                 </div>
 
                 {active && contributionMode === 'edit' && (
-                  <div className="shared-mosque-directory__inline-form" data-shared-edit-form="true">
+                  <div
+                    className="shared-mosque-directory__inline-form"
+                    data-shared-edit-form="true"
+                  >
                     <label>
                       <span>{text.suggestionPlaceholder}</span>
                       <input
@@ -379,16 +399,27 @@ export function SharedMosqueDirectoryPanel() {
                         dir="auto"
                       />
                     </label>
-                    <button type="button" onClick={() => void sendEditSuggestion(mosque)}>{text.send}</button>
+                    <button type="button" onClick={() => void sendEditSuggestion(mosque)}>
+                      {text.send}
+                    </button>
                   </div>
                 )}
                 {active && contributionMode === 'claim' && (
-                  <div className="shared-mosque-directory__inline-form" data-shared-claim-form="true">
+                  <div
+                    className="shared-mosque-directory__inline-form"
+                    data-shared-claim-form="true"
+                  >
                     <label>
                       <span>{text.claimContact}</span>
-                      <input value={claimContact} onChange={(event) => setClaimContact(event.target.value)} dir="auto" />
+                      <input
+                        value={claimContact}
+                        onChange={(event) => setClaimContact(event.target.value)}
+                        dir="auto"
+                      />
                     </label>
-                    <button type="button" onClick={() => void sendClaim(mosque)}>{text.send}</button>
+                    <button type="button" onClick={() => void sendClaim(mosque)}>
+                      {text.send}
+                    </button>
                   </div>
                 )}
               </article>
@@ -420,20 +451,72 @@ export function SharedMosqueDirectoryPanel() {
         {contributionMode === 'submission' && (
           <div className="shared-mosque-directory__submission" data-shared-submission-form="true">
             <h3>{text.submitMosque}</h3>
-            <label><span>{text.name}</span><input value={submission.name} onChange={(event) => setSubmission((value) => ({ ...value, name: event.target.value }))} dir="auto" /></label>
-            <label><span>{text.address}</span><input value={submission.address} onChange={(event) => setSubmission((value) => ({ ...value, address: event.target.value }))} dir="auto" /></label>
+            <label>
+              <span>{text.name}</span>
+              <input
+                value={submission.name}
+                onChange={(event) =>
+                  setSubmission((value) => ({ ...value, name: event.target.value }))
+                }
+                dir="auto"
+              />
+            </label>
+            <label>
+              <span>{text.address}</span>
+              <input
+                value={submission.address}
+                onChange={(event) =>
+                  setSubmission((value) => ({ ...value, address: event.target.value }))
+                }
+                dir="auto"
+              />
+            </label>
             <div className="shared-mosque-directory__coordinate-row">
-              <label><span>{text.latitude}</span><input inputMode="decimal" value={submission.latitude} onChange={(event) => setSubmission((value) => ({ ...value, latitude: event.target.value }))} /></label>
-              <label><span>{text.longitude}</span><input inputMode="decimal" value={submission.longitude} onChange={(event) => setSubmission((value) => ({ ...value, longitude: event.target.value }))} /></label>
+              <label>
+                <span>{text.latitude}</span>
+                <input
+                  inputMode="decimal"
+                  value={submission.latitude}
+                  onChange={(event) =>
+                    setSubmission((value) => ({ ...value, latitude: event.target.value }))
+                  }
+                />
+              </label>
+              <label>
+                <span>{text.longitude}</span>
+                <input
+                  inputMode="decimal"
+                  value={submission.longitude}
+                  onChange={(event) =>
+                    setSubmission((value) => ({ ...value, longitude: event.target.value }))
+                  }
+                />
+              </label>
             </div>
-            <label><span>{text.timeZone}</span><input value={submission.timeZone} onChange={(event) => setSubmission((value) => ({ ...value, timeZone: event.target.value }))} /></label>
-            <button type="button" onClick={() => void sendSubmission()}>{text.submit}</button>
+            <label>
+              <span>{text.timeZone}</span>
+              <input
+                value={submission.timeZone}
+                onChange={(event) =>
+                  setSubmission((value) => ({ ...value, timeZone: event.target.value }))
+                }
+              />
+            </label>
+            <button type="button" onClick={() => void sendSubmission()}>
+              {text.submit}
+            </button>
           </div>
         )}
       </div>
 
-      {feedback !== null && <p className="shared-mosque-directory__feedback" role="status">{feedback}</p>}
-      <footer className="shared-mosque-directory__footer"><p>{text.privacy}</p></footer>
+      {feedback !== null && (
+        <p className="shared-mosque-directory__feedback" role="status">
+          {feedback}
+        </p>
+      )}
+      <footer className="shared-mosque-directory__footer">
+        <p>{text.privacy}</p>
+      </footer>
     </section>
   );
 }
