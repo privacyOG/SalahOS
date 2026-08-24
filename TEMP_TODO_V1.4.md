@@ -30,9 +30,11 @@ This tracker is intentionally compact. A stage is marked complete only after imp
 
 ## Stage 4 — Google Maps Qiblah
 
-- [ ] Make Google Maps the primary interactive provider with Map/Satellite/Hybrid modes.
-- [ ] Keep user/Kaaba markers, manual pin fallback and provider-error handling.
-- [ ] Increase Qiblah-line visibility with accessible theme-aware styling.
+- [x] Make Google Maps the primary interactive provider with Map/Satellite/Hybrid modes.
+- [x] Keep user/Kaaba markers, manual pin fallback and provider-error handling.
+- [x] Increase Qiblah-line visibility with accessible theme-aware styling.
+
+**Stage 4 verification (2026-08-24):** implementation head `f8a5cafe2bac7b93665cd39c15e70a4f18280084` passed Quality Gate `32711968565` (#2113), Visual Regression `32711968399` (#963), Android Build `32711968478` (#1119), and iOS Build `32711968476` (#1028). The visual gate passed the complete regression matrix plus two dedicated interactive Google Qiblah flows covering Satellite-default Map/Satellite/Hybrid switching, current-location and Kaaba markers, geodesic route/contrast styling, full-route refit, click-to-pin selection, provider-error retry and the network-free manual-pin fallback. Android verification includes debug build and emulator lifecycle acceptance; iOS verification includes Simulator build plus successful install, launch and relaunch on fresh iPhone and iPad Simulators. This completion commit changes tracker documentation only and remains subject to the same exact-head PR gates before merge.
 
 ## Stage 5 — Preloaded Australian mosque directory
 
