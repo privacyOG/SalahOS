@@ -339,13 +339,19 @@ try {
       'Google provider failure has no retry action',
     );
 
-    const before = await page.locator('.qibla-location-bar').textContent();
+    const locationBar = page.locator('.qibla-location-bar');
+    const before = await locationBar.textContent();
     const fallback = page.locator('[data-qibla-map-fallback]');
     const box = await fallback.boundingBox();
     if (box === null) throw new Error('Local Qiblah fallback has no measurable viewport');
-    await page.mouse.click(box.x + box.width * 0.72, box.y + box.height * 0.42);
-    await page.waitForTimeout(50);
-    const after = await page.locator('.qibla-location-bar').textContent();
+    await fallback.click({
+      position: { x: box.width * 0.72, y: box.height * 0.42 },
+    });
+    await page.waitForFunction(
+      (previous) => document.querySelector('.qibla-location-bar')?.textContent !== previous,
+      before,
+    );
+    const after = await locationBar.textContent();
     assert(after !== before, 'Local provider-error fallback did not retain manual pin selection');
 
     results.push({
