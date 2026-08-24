@@ -1,0 +1,111 @@
+name: Stage 48 Canonicalizer
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  canonicalize:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: stage-48/v1.4-shared-mosque-directory
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Apply Stage 48 semantic corrections
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          panel = Path('src/ui/SharedMosqueDirectoryPanel.tsx')
+          text = panel.read_text()
+          text = text.replace(
+              "import { sharedMosqueDirectoryCopy } from '../i18n/sharedMosqueDirectoryTranslations';",
+              "import {\n  sharedMosqueDirectoryCopy,\n  type SharedMosqueDirectoryCopy,\n} from '../i18n/sharedMosqueDirectoryTranslations';",
+          )
+          text = text.replace(
+              "copy: ReturnType<typeof sharedMosqueDirectoryCopy[Locale]>,",
+              "copy: SharedMosqueDirectoryCopy,",
+          )
+          text = text.replace(
+              "queueContribution('submission', input as unknown as Record<string, string | number | null>);",
+              "queueContribution('submission', {\n        name: input.name,\n        address: input.address,\n        countryCode: input.countryCode,\n        latitude: input.latitude,\n        longitude: input.longitude,\n        timeZone: input.timeZone,\n      });",
+          )
+          panel.write_text(text)
+
+          visual = Path('scripts/visual-shared-mosque-directory.mjs')
+          text = visual.read_text()
+          text = text.replace(
+              "state: 'claimed',\n      verifiedAt: '2026-08-20T00:00:00Z',\n      claimedAt: '2026-08-21T00:00:00Z',",
+              "state: 'verified',\n      verifiedAt: '2026-08-20T00:00:00Z',\n      claimedAt: null,",
+              1,
+          )
+          text = text.replace(
+              "state: 'unverified',\n      verifiedAt: null,\n      claimedAt: null,",
+              "state: 'claimed',\n      verifiedAt: '2026-08-20T00:00:00Z',\n      claimedAt: '2026-08-21T00:00:00Z',",
+              1,
+          )
+          text = text.replace(
+              "=== 'claimed', 'Claim state badge is missing'",
+              "=== 'verified', 'Verified state badge is missing'",
+          )
+          marker = "assert(\n      distances.every((value, index) => index === 0 || value >= distances[index - 1] - 0.05),\n      'Nearby shared results are not ordered by distance',\n    );"
+          replacement = marker + "\n    assert(\n      (await panel.locator('[data-verification-state=\"claimed\"]').count()) >= 1,\n      'Claimed verification state is not represented in shared results',\n    );"
+          text = text.replace(marker, replacement)
+          visual.write_text(text)
+          PY
+
+      - name: Canonicalize Stage 48 files
+        run: >-
+          npx prettier --write
+          directory-service/server.mjs
+          directory-service/server.test.mjs
+          scripts/visual-shared-mosque-directory.mjs
+          src/domain/sharedMosqueDirectory.test.ts
+          src/domain/sharedMosqueDirectory.ts
+          src/i18n/sharedMosqueDirectoryTranslations.ts
+          src/platform/sharedMosqueDirectoryCache.ts
+          src/platform/sharedMosqueDirectoryTransport.ts
+          src/ui/SharedMosqueDirectoryPanel.tsx
+          src/shared-mosque-directory.css
+          src/main.tsx
+          scripts/check-remote-network-policy.mjs
+          package.json
+          .github/workflows/ci.yml
+          docs/SHARED_MOSQUE_DIRECTORY.md
+
+      - name: Upload canonical files
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage48-canonical-files
+          path: |
+            directory-service/server.mjs
+            directory-service/server.test.mjs
+            scripts/visual-shared-mosque-directory.mjs
+            src/domain/sharedMosqueDirectory.test.ts
+            src/domain/sharedMosqueDirectory.ts
+            src/i18n/sharedMosqueDirectoryTranslations.ts
+            src/platform/sharedMosqueDirectoryCache.ts
+            src/platform/sharedMosqueDirectoryTransport.ts
+            src/ui/SharedMosqueDirectoryPanel.tsx
+            src/shared-mosque-directory.css
+            src/main.tsx
+            scripts/check-remote-network-policy.mjs
+            package.json
+            .github/workflows/ci.yml
+            docs/SHARED_MOSQUE_DIRECTORY.md
+          if-no-files-found: error
+          retention-days: 1
