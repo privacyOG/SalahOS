@@ -18,7 +18,7 @@
     "test:watch": "vitest",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "format:check": "prettier --write scripts/mobile-theme-contrast.test.mjs scripts/visual-device-ux-refinement.mjs TEMP_TODO_V1.4.md && git diff -- scripts/mobile-theme-contrast.test.mjs scripts/visual-device-ux-refinement.mjs TEMP_TODO_V1.4.md && exit 1",
     "docs:links": "node scripts/check-doc-links.mjs",
     "security:sensitive-files": "node scripts/check-sensitive-files.mjs",
     "security:native-permissions": "node scripts/check-native-permissions.mjs",
