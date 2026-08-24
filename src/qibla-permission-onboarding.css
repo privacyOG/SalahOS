@@ -2,11 +2,11 @@
   width: min(34rem, calc(100vw - 2rem));
   max-width: none;
   padding: 0;
-  border: 1px solid color-mix(in srgb, var(--border, #d7ddd9) 88%, transparent);
-  border-radius: 1.25rem;
-  background: var(--surface, #ffffff);
-  color: var(--text, #14201d);
-  box-shadow: 0 1.5rem 4rem rgb(0 0 0 / 0.24);
+  border: 1px solid var(--salah-border-default);
+  border-radius: var(--salah-radius-lg);
+  background: var(--salah-bg-surface-raised);
+  color: var(--salah-fg-primary);
+  box-shadow: var(--salah-shadow-hero);
 }
 
 .qibla-permission-onboarding::backdrop {
@@ -16,7 +16,7 @@
 
 .qibla-permission-onboarding__content {
   display: grid;
-  gap: 1rem;
+  gap: var(--salah-space-4);
   padding: clamp(1.25rem, 5vw, 2rem);
 }
 
@@ -31,17 +31,18 @@
 }
 
 .qibla-permission-onboarding__eyebrow {
-  font-size: 0.75rem;
+  font-size: var(--salah-text-xs);
   font-weight: 800;
   letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--accent, #0f766e);
+  color: var(--salah-fg-accent);
 }
 
 .qibla-permission-onboarding__privacy {
   padding: 0.85rem 1rem;
-  border-radius: 0.85rem;
-  background: color-mix(in srgb, var(--accent, #0f766e) 9%, var(--surface, #ffffff));
+  border-radius: var(--salah-radius-sm);
+  background: var(--salah-bg-accent-soft);
+  color: var(--salah-fg-secondary);
   font-size: 0.9rem;
   line-height: 1.5;
 }
@@ -49,17 +50,17 @@
 .qibla-permission-onboarding__actions {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 0.75rem;
+  gap: var(--salah-space-3);
   align-items: stretch;
 }
 
 .qibla-permission-onboarding__actions button {
   min-height: 3rem;
   padding: 0.75rem 1rem;
-  border: 1px solid var(--border, #c9d2ce);
-  border-radius: 0.85rem;
-  background: var(--surface, #ffffff);
-  color: inherit;
+  border: 1px solid var(--salah-border-default);
+  border-radius: var(--salah-radius-sm);
+  background: var(--salah-bg-control);
+  color: var(--salah-fg-primary);
   font: inherit;
   font-weight: 700;
   cursor: pointer;
@@ -71,9 +72,14 @@
 }
 
 .qibla-permission-onboarding__actions .qibla-permission-onboarding__primary {
-  border-color: var(--accent, #0f766e);
-  background: var(--accent, #0f766e);
-  color: #ffffff;
+  border-color: var(--salah-focus-ring);
+  background: var(--salah-fg-accent);
+  color: var(--salah-bg-canvas);
+}
+
+.qibla-permission-onboarding__actions button:focus-visible {
+  outline: 3px solid var(--salah-focus-ring);
+  outline-offset: 2px;
 }
 
 @media (max-width: 30rem) {
