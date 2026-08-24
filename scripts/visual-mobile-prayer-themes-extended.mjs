@@ -14,10 +14,6 @@ if (!playwrightModule) {
 
 const { chromium } = await import(pathToFileURL(playwrightModule).href);
 const fixedNow = Date.parse('2026-08-21T03:00:00.000Z');
-const transparentPixel = Buffer.from(
-  'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
-  'base64',
-);
 
 const mosqueNames = {
   en: 'SalahOS Community Masjid and Learning Centre for Families and Visitors',
@@ -149,9 +145,6 @@ async function validateQiblaLayout(browser, scenario) {
     reducedMotion: 'reduce',
   });
   const page = await context.newPage();
-  await page.route('https://tile.openstreetmap.org/**', (route) =>
-    route.fulfill({ status: 200, contentType: 'image/png', body: transparentPixel }),
-  );
 
   try {
     await seed(page, scenario.locale);
@@ -180,10 +173,18 @@ async function validateQiblaLayout(browser, scenario) {
     await page.locator('.qibla-view-switch button').nth(1).click();
     const map = page.locator('.qibla-map-shell');
     await map.waitFor({ state: 'visible' });
-    if ((await map.getAttribute('data-map-provider')) !== 'openstreetmap') {
+    if ((await map.getAttribute('data-map-provider')) !== 'local-fallback') {
       throw new Error(
-        `${scenario.name} must use the no-key fallback provider in the normal visual build`,
+        `${scenario.name} must use the network-free no-key fallback provider in the normal visual build`,
       );
+    }
+    if ((await map.getAttribute('data-google-map-state')) !== 'unconfigured') {
+      throw new Error(
+        `${scenario.name} must report Google Maps as unconfigured in the no-key build`,
+      );
+    }
+    if ((await page.locator('[data-qibla-map-fallback]').count()) !== 1) {
+      throw new Error(`${scenario.name} is missing the local manual-pin Qiblah fallback`);
     }
     await assertNoHorizontalOverflow(page, `${scenario.name}-map`);
     await capture(page, `${scenario.name}-map`);

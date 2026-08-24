@@ -359,13 +359,6 @@ async function validateModuleFlow(browser) {
 async function validateQibla(browser) {
   const context = await browser.newContext({ viewport: { width: 430, height: 932 } });
   const page = await context.newPage();
-  const transparentPixel = Buffer.from(
-    'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNk+A8AAQUBAScY42YAAAAASUVORK5CYII=',
-    'base64',
-  );
-  await page.route('https://tile.openstreetmap.org/**', (route) =>
-    route.fulfill({ status: 200, contentType: 'image/png', body: transparentPixel }),
-  );
 
   try {
     await seed(page, scenarios[1]);
@@ -393,12 +386,18 @@ async function validateQibla(browser) {
     await page.locator('.qibla-view-switch button').nth(1).click();
     const map = page.locator('.qibla-map-shell');
     await map.waitFor({ state: 'visible' });
-    if ((await map.getAttribute('data-map-provider')) !== 'openstreetmap') {
-      throw new Error('No-key visual build must retain the OpenStreetMap Qibla map fallback');
+    if ((await map.getAttribute('data-map-provider')) !== 'local-fallback') {
+      throw new Error('No-key visual build must retain the network-free local Qiblah fallback');
+    }
+    if ((await map.getAttribute('data-google-map-state')) !== 'unconfigured') {
+      throw new Error('No-key visual build must identify Google Maps as unconfigured');
+    }
+    if ((await page.locator('[data-qibla-map-fallback]').count()) !== 1) {
+      throw new Error('No-key visual build is missing the local manual-pin Qiblah fallback');
     }
     await assertNoHorizontalOverflow(page, 'qibla-premium-map-phone-en');
     await capture(page, 'qibla-premium-map-phone-en');
-    return { degreeLabels: 12, ticks: 72, provider: 'openstreetmap' };
+    return { degreeLabels: 12, ticks: 72, provider: 'local-fallback' };
   } finally {
     await context.close();
   }

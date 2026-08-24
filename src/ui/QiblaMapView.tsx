@@ -1,14 +1,16 @@
-import { useMemo, useState, type MouseEvent } from 'react';
+import { useEffect, useRef, useState, type MouseEvent } from 'react';
 
 import type { Coordinates } from '../domain/coordinates';
-import { coordinatesForMapPoint, qiblaBearingRayEndpoint, qiblaMapTiles } from '../domain/qiblaMap';
+import { coordinatesForMapPoint, qiblaBearingRayEndpoint } from '../domain/qiblaMap';
 import type { QiblaFinderCopy } from '../i18n/qiblaFinderTranslations';
 import {
+  createQiblaGoogleMapSession,
   qiblaGoogleMapsTermsUrl,
-  qiblaGoogleSatelliteMapUrl,
-  qiblaGoogleStaticMapPointForViewport,
+  type QiblaGoogleMapSession,
+  type QiblaGoogleMapType,
 } from '../platform/qiblaGoogleMaps';
-import { qiblaMapAttributionUrl, qiblaMapTileUrl } from '../platform/qiblaMapTiles';
+
+import '../qibla-google-map.css';
 
 interface QiblaMapViewProps {
   readonly coordinates: Coordinates;
@@ -21,6 +23,62 @@ interface QiblaMapViewProps {
   readonly onEnableTiles: () => void;
   readonly onDropPin: (coordinates: Coordinates) => void;
 }
+
+type ProviderState = 'loading' | 'ready' | 'unconfigured' | 'error';
+
+interface QiblaMapLocalCopy {
+  readonly roadmap: string;
+  readonly satellite: string;
+  readonly hybrid: string;
+  readonly fitRoute: string;
+  readonly loading: string;
+  readonly unconfigured: string;
+  readonly retry: string;
+  readonly fallback: string;
+}
+
+const localCopy: Readonly<Record<'en' | 'ar' | 'tr' | 'id', QiblaMapLocalCopy>> = {
+  en: {
+    roadmap: 'Map',
+    satellite: 'Satellite',
+    hybrid: 'Hybrid',
+    fitRoute: 'Show full Qiblah route',
+    loading: 'Loading Google Maps…',
+    unconfigured: 'Google Maps is not configured for this build.',
+    retry: 'Retry Google Maps',
+    fallback: 'The local bearing view remains available without sending map requests.',
+  },
+  ar: {
+    roadmap: 'الخريطة',
+    satellite: 'القمر الصناعي',
+    hybrid: 'هجين',
+    fitRoute: 'إظهار مسار القبلة كاملاً',
+    loading: 'جارٍ تحميل خرائط Google…',
+    unconfigured: 'خرائط Google غير مهيأة في هذا الإصدار.',
+    retry: 'إعادة محاولة خرائط Google',
+    fallback: 'يبقى عرض الاتجاه المحلي متاحاً من دون إرسال طلبات خرائط.',
+  },
+  tr: {
+    roadmap: 'Harita',
+    satellite: 'Uydu',
+    hybrid: 'Hibrit',
+    fitRoute: 'Tam Kıble rotasını göster',
+    loading: 'Google Haritalar yükleniyor…',
+    unconfigured: 'Google Haritalar bu derleme için yapılandırılmamış.',
+    retry: 'Google Haritaları yeniden dene',
+    fallback: 'Yerel yön görünümü harita isteği göndermeden kullanılabilir.',
+  },
+  id: {
+    roadmap: 'Peta',
+    satellite: 'Satelit',
+    hybrid: 'Hibrida',
+    fitRoute: 'Tampilkan rute Kiblat penuh',
+    loading: 'Memuat Google Maps…',
+    unconfigured: 'Google Maps belum dikonfigurasi untuk build ini.',
+    retry: 'Coba Google Maps lagi',
+    fallback: 'Tampilan arah lokal tetap tersedia tanpa mengirim permintaan peta.',
+  },
+};
 
 function googleMapsApiKey(): string | null {
   const value: unknown = import.meta.env.VITE_GOOGLE_MAPS_API_KEY;
@@ -36,140 +94,239 @@ export function QiblaMapView({
   onZoomChange,
   onDropPin,
 }: QiblaMapViewProps) {
-  const [tileError, setTileError] = useState(false);
-  const tiles = useMemo(() => qiblaMapTiles(coordinates, zoom), [coordinates, zoom]);
-  const endpoint = qiblaBearingRayEndpoint(bearingDegrees, 100, 100);
   const googleKey = googleMapsApiKey();
-  const googleSatelliteUrl =
-    googleKey === null ? null : qiblaGoogleSatelliteMapUrl(coordinates, zoom, googleKey);
+  const copy = localCopy[documentLocale()];
+  const [mapType, setMapType] = useState<QiblaGoogleMapType>('satellite');
+  const [providerState, setProviderState] = useState<ProviderState>(
+    googleKey === null ? 'unconfigured' : 'loading',
+  );
+  const [retryGeneration, setRetryGeneration] = useState(0);
+  const mapElementRef = useRef<HTMLDivElement>(null);
+  const sessionRef = useRef<QiblaGoogleMapSession | null>(null);
+  const sessionGenerationRef = useRef(0);
+  const onDropPinRef = useRef(onDropPin);
+  const onZoomChangeRef = useRef(onZoomChange);
+  onDropPinRef.current = onDropPin;
+  onZoomChangeRef.current = onZoomChange;
 
-  const dropPin = (event: MouseEvent<HTMLDivElement>) => {
-    const rectangle = event.currentTarget.getBoundingClientRect();
-    const point = {
-      x: event.clientX - rectangle.left,
-      y: event.clientY - rectangle.top,
+  useEffect(() => {
+    const element = mapElementRef.current;
+    if (googleKey === null || element === null) {
+      setProviderState('unconfigured');
+      return;
+    }
+
+    const generation = ++sessionGenerationRef.current;
+    setProviderState('loading');
+    sessionRef.current?.stop();
+    sessionRef.current = null;
+
+    void createQiblaGoogleMapSession({
+      element,
+      apiKey: googleKey,
+      coordinates,
+      zoom,
+      mapType,
+      aligned,
+      onDropPin: (nextCoordinates) => {
+        onDropPinRef.current(nextCoordinates);
+      },
+      onZoomChange: (nextZoom) => {
+        onZoomChangeRef.current(nextZoom);
+      },
+    })
+      .then((session) => {
+        if (generation !== sessionGenerationRef.current) {
+          session.stop();
+          return;
+        }
+        sessionRef.current = session;
+        setProviderState('ready');
+      })
+      .catch(() => {
+        if (generation === sessionGenerationRef.current) {
+          sessionRef.current = null;
+          setProviderState('error');
+        }
+      });
+
+    return () => {
+      if (generation === sessionGenerationRef.current) {
+        sessionGenerationRef.current += 1;
+      }
+      sessionRef.current?.stop();
+      sessionRef.current = null;
     };
-    const mapPoint =
-      googleSatelliteUrl === null
-        ? {
-            viewportWidth: rectangle.width,
-            viewportHeight: rectangle.height,
-            point,
-          }
-        : qiblaGoogleStaticMapPointForViewport(rectangle.width, rectangle.height, point);
+  }, [googleKey, retryGeneration]);
 
+  useEffect(() => {
+    sessionRef.current?.setCoordinates(coordinates);
+  }, [coordinates]);
+
+  useEffect(() => {
+    sessionRef.current?.setZoom(zoom);
+  }, [zoom]);
+
+  useEffect(() => {
+    sessionRef.current?.setMapType(mapType);
+  }, [mapType]);
+
+  useEffect(() => {
+    sessionRef.current?.setAligned(aligned);
+  }, [aligned]);
+
+  const fallbackEndpoint = qiblaBearingRayEndpoint(bearingDegrees, 100, 100);
+  const fallbackVisible = providerState === 'unconfigured' || providerState === 'error';
+
+  const dropFallbackPin = (event: MouseEvent<HTMLDivElement>) => {
+    const rectangle = event.currentTarget.getBoundingClientRect();
     onDropPin(
-      coordinatesForMapPoint(
-        coordinates,
-        zoom,
-        mapPoint.viewportWidth,
-        mapPoint.viewportHeight,
-        mapPoint.point,
-      ),
+      coordinatesForMapPoint(coordinates, zoom, rectangle.width, rectangle.height, {
+        x: event.clientX - rectangle.left,
+        y: event.clientY - rectangle.top,
+      }),
     );
+  };
+
+  const selectMapType = (nextMapType: QiblaGoogleMapType) => {
+    setMapType(nextMapType);
+    sessionRef.current?.setMapType(nextMapType);
   };
 
   return (
     <div
-      className="qibla-map-shell"
-      data-map-provider={googleSatelliteUrl === null ? 'openstreetmap' : 'google-satellite'}
+      className="qibla-map-shell qibla-google-map-shell"
+      data-map-provider={providerState === 'ready' ? `google-${mapType}` : 'local-fallback'}
+      data-google-map-state={providerState}
+      data-google-map-type={mapType}
     >
       <div className="qibla-map-toolbar" aria-label={text.mapView}>
-        <div className="qibla-map-zoom">
+        <div className="qibla-google-map-types" role="group" aria-label={text.mapView}>
+          {(['roadmap', 'satellite', 'hybrid'] as const).map((type) => (
+            <button
+              type="button"
+              key={type}
+              aria-pressed={mapType === type}
+              disabled={googleKey === null}
+              onClick={() => {
+                selectMapType(type);
+              }}
+            >
+              {type === 'roadmap'
+                ? copy.roadmap
+                : type === 'satellite'
+                  ? copy.satellite
+                  : copy.hybrid}
+            </button>
+          ))}
+        </div>
+        <div className="qibla-google-map-actions">
           <button
             type="button"
-            aria-label={text.zoomOut}
+            disabled={providerState !== 'ready'}
             onClick={() => {
-              setTileError(false);
-              onZoomChange(zoom - 1);
+              sessionRef.current?.fitRoute();
             }}
           >
-            −
+            {copy.fitRoute}
           </button>
-          <span aria-hidden="true">{zoom}</span>
-          <button
-            type="button"
-            aria-label={text.zoomIn}
-            onClick={() => {
-              setTileError(false);
-              onZoomChange(zoom + 1);
-            }}
-          >
-            +
-          </button>
+          <div className="qibla-map-zoom">
+            <button
+              type="button"
+              aria-label={text.zoomOut}
+              onClick={() => {
+                onZoomChange(zoom - 1);
+              }}
+            >
+              −
+            </button>
+            <span aria-hidden="true">{zoom}</span>
+            <button
+              type="button"
+              aria-label={text.zoomIn}
+              onClick={() => {
+                onZoomChange(zoom + 1);
+              }}
+            >
+              +
+            </button>
+          </div>
         </div>
       </div>
 
       <div
-        className={`qibla-map-viewport${aligned ? ' is-aligned' : ''}`}
-        onClick={dropPin}
+        className={`qibla-map-viewport qibla-google-map-viewport${aligned ? ' is-aligned' : ''}`}
         role="group"
         aria-label={text.dropPin}
       >
-        {googleSatelliteUrl === null ? (
-          <div className="qibla-map-tiles" aria-hidden="true">
-            {tiles.map((tile) => (
-              <img
-                key={tile.key}
-                className="qibla-map-tile"
-                src={qiblaMapTileUrl(tile.zoom, tile.x, tile.y)}
-                alt=""
-                draggable={false}
-                style={{
-                  left: `calc(50% + ${String(tile.offsetX)}px)`,
-                  top: `calc(50% + ${String(tile.offsetY)}px)`,
-                }}
-                onError={() => {
-                  setTileError(true);
-                }}
-              />
-            ))}
+        <div
+          ref={mapElementRef}
+          className="qibla-google-map-canvas"
+          aria-hidden={providerState !== 'ready'}
+        />
+
+        {providerState === 'loading' && (
+          <div className="qibla-google-map-status" role="status">
+            <strong>{copy.loading}</strong>
           </div>
-        ) : (
-          <img
-            className="qibla-map-google-satellite"
-            src={googleSatelliteUrl}
-            alt=""
-            draggable={false}
-            onError={() => {
-              setTileError(true);
-            }}
-          />
         )}
 
-        <svg
-          className="qibla-map-bearing-overlay"
-          viewBox="0 0 100 100"
-          preserveAspectRatio="none"
-          aria-hidden="true"
-        >
-          <line x1="50" y1="50" x2={endpoint.x} y2={endpoint.y} />
-        </svg>
-        <div className="qibla-map-user-marker" aria-hidden="true">
-          <span className="qibla-map-marker-dot" />
-        </div>
-        <div className="qibla-map-kaaba-chip" aria-hidden="true">
-          ◼
-        </div>
+        {fallbackVisible && (
+          <div
+            className="qibla-google-map-fallback"
+            onClick={dropFallbackPin}
+            role="presentation"
+            data-qibla-map-fallback
+          >
+            <svg
+              className="qibla-map-bearing-overlay qibla-map-bearing-overlay--fallback"
+              viewBox="0 0 100 100"
+              preserveAspectRatio="none"
+              aria-hidden="true"
+            >
+              <line x1="50" y1="50" x2={fallbackEndpoint.x} y2={fallbackEndpoint.y} />
+            </svg>
+            <div className="qibla-map-user-marker" aria-hidden="true">
+              <span className="qibla-map-marker-dot" />
+            </div>
+            <div className="qibla-map-kaaba-chip" aria-hidden="true">
+              ◼
+            </div>
+            <div className="qibla-google-map-status qibla-google-map-status--fallback">
+              <strong>
+                {providerState === 'unconfigured' ? copy.unconfigured : text.mapUnavailable}
+              </strong>
+              <span>{copy.fallback}</span>
+              {providerState === 'error' && (
+                <button
+                  type="button"
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    setRetryGeneration((value) => value + 1);
+                  }}
+                >
+                  {copy.retry}
+                </button>
+              )}
+            </div>
+          </div>
+        )}
       </div>
 
       <p className="qibla-map-drop-help">{text.dropPin}</p>
-      {tileError && (
-        <p className="inline-message" role="status">
-          {text.mapUnavailable}
-        </p>
-      )}
-      <p className="qibla-map-attribution">
-        {googleSatelliteUrl === null ? (
-          <a href={qiblaMapAttributionUrl()} target="_blank" rel="noopener noreferrer">
-            {text.mapAttributionStandard}
-          </a>
-        ) : (
+      {googleKey !== null && (
+        <p className="qibla-map-attribution">
           <a href={qiblaGoogleMapsTermsUrl()} target="_blank" rel="noopener noreferrer">
             Google Maps
           </a>
-        )}
-      </p>
+        </p>
+      )}
     </div>
   );
+}
+
+function documentLocale(): 'en' | 'ar' | 'tr' | 'id' {
+  if (typeof document === 'undefined') return 'en';
+  const locale = document.documentElement.lang.toLowerCase().split('-')[0];
+  return locale === 'ar' || locale === 'tr' || locale === 'id' ? locale : 'en';
 }
