@@ -8,8 +8,7 @@ const executableExtensions = new Set(['.ts', '.tsx', '.js', '.jsx', '.mjs']);
 const reviewedRemoteNetworkFiles = new Map([
   ['src/platform/managedAdminTransport.ts', 'managed display administration'],
   ['src/platform/prayerBoardWeather.ts', 'explicitly configured prayer-board weather'],
-  ['src/platform/qiblaMapTiles.ts', 'Qiblah OpenStreetMap fallback tiles'],
-  ['src/platform/qiblaGoogleMaps.ts', 'Qiblah Google Maps satellite imagery'],
+  ['src/platform/qiblaGoogleMaps.ts', 'interactive Qiblah Google Maps provider'],
 ]);
 const nonRoutableFixtureLiteralFiles = new Set(['src/ui/AdminDisplayThemeManagement.tsx']);
 const REMOTE_LITERAL_PATTERN = /["'`]https?:\/\/[^"'`\s]+/gu;
