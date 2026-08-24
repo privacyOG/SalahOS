@@ -71,7 +71,11 @@
     linear-gradient(90deg, rgba(127, 127, 127, 0.08) 1px, transparent 1px),
     radial-gradient(circle at 50% 50%, rgba(18, 103, 214, 0.16), transparent 14%),
     var(--surface, rgba(127, 127, 127, 0.06));
-  background-size: 32px 32px, 32px 32px, auto, auto;
+  background-size:
+    32px 32px,
+    32px 32px,
+    auto,
+    auto;
 }
 
 .qibla-google-map-status {
@@ -130,9 +134,7 @@
   stroke: #e53e30;
   stroke-width: 5;
   vector-effect: non-scaling-stroke;
-  filter:
-    drop-shadow(0 0 1px #fff)
-    drop-shadow(0 0 3px #fff)
+  filter: drop-shadow(0 0 1px #fff) drop-shadow(0 0 3px #fff)
     drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
 }
 
