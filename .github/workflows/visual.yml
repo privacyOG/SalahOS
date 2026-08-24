@@ -16,10 +16,11 @@ permissions:
 jobs:
   visual:
     runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '["ubuntu-24.04"]' || '["self-hosted","Linux","X64"]') }}
-    timeout-minutes: 30
+    timeout-minutes: 40
     env:
       PLAYWRIGHT_BROWSERS_PATH: /tmp/salahos-pw-browsers-1.62.0
       SALAHOS_VISUAL_PLAYWRIGHT_MODULE: /tmp/salahos-visual-harness/node_modules/playwright/index.mjs
+      SALAHOS_VISUAL_HARNESS_ROOT: /tmp/salahos-visual-harness
       SALAHOS_VISUAL_ARTIFACT_DIR: visual-artifacts
     steps:
       - name: Checkout
@@ -43,9 +44,13 @@ jobs:
           mkdir -p /tmp/salahos-visual-harness
           cd /tmp/salahos-visual-harness
           npm init -y >/dev/null 2>&1
-          npm install --ignore-scripts --save-exact playwright@1.62.0
+          npm install --ignore-scripts --save-exact \
+            playwright@1.62.0 \
+            axe-core@4.10.3 \
+            pngjs@7.0.0 \
+            pixelmatch@7.1.0
           npm audit --audit-level=moderate
-          npx playwright install chromium
+          npx playwright install chromium firefox webkit
 
       - name: Start local production server
         run: |
