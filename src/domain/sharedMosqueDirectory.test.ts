@@ -72,7 +72,9 @@ describe('shared mosque directory', () => {
   });
 
   it('converts a shared record into the existing mosque profile domain', () => {
-    const profile = sharedMosqueToProfile(records[0]!);
+    const mosque = records[0];
+    if (mosque === undefined) throw new Error('Shared mosque fixture is missing');
+    const profile = sharedMosqueToProfile(mosque);
     expect(profile.id).toBe('shared-lakemba-example');
     expect(profile.name.en).toBe('Lakemba Community Mosque');
     expect(profile.contact.links[0]?.url).toBe('https://example.org/');
