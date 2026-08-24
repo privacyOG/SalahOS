@@ -79,9 +79,6 @@ jobs:
       - name: Test
         run: npm run test
 
-      - name: Install isolated coverage provider
-        run: npm install --no-save --package-lock=false --ignore-scripts @vitest/coverage-v8@4.1.10
-
       - name: Core coverage thresholds
         run: npm run test:coverage
 
