@@ -89,6 +89,7 @@ export function QiblaPermissionOnboarding() {
     completeQiblaPermissionOnboarding(getApplicationStorage());
     dialogRef.current?.close();
     setVisible(false);
+    window.dispatchEvent(new Event('salahos:qibla-permission-onboarding-complete'));
   };
 
   const requestPermissions = async () => {
