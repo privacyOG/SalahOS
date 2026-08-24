@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useRef, useState, type ReactNode } from 'react';
 
 import { applyDocumentLocale } from '../i18n/i18n';
 import type { Locale } from '../i18n/translations';
@@ -76,12 +76,18 @@ function persistedLocale(): Locale {
   }
 }
 
-function scrollToTop(): void {
+function scrollToTop(target: HTMLElement | null): void {
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  window.scrollTo({ top: 0, behavior: reducedMotion ? 'auto' : 'smooth' });
+  const behavior: ScrollBehavior = reducedMotion ? 'auto' : 'smooth';
+  if (target !== null) {
+    target.scrollTo({ top: 0, behavior });
+    return;
+  }
+  window.scrollTo({ top: 0, behavior });
 }
 
 export function CongregationShell({ children }: CongregationShellProps) {
+  const contentRef = useRef<HTMLDivElement>(null);
   const [locale, setLocale] = useState<Locale>(persistedLocale);
   const [destination, setDestination] = useState<CongregationDestination>(() =>
     readCongregationDestination(window.location.search),
@@ -117,6 +123,9 @@ export function CongregationShell({ children }: CongregationShellProps) {
   useEffect(() => {
     const handlePopState = () => {
       setDestination(readCongregationDestination(window.location.search));
+      window.requestAnimationFrame(() => {
+        scrollToTop(contentRef.current);
+      });
     };
     window.addEventListener('popstate', handlePopState);
     return () => {
@@ -133,14 +142,16 @@ export function CongregationShell({ children }: CongregationShellProps) {
       `${window.location.pathname}${search}${window.location.hash}`,
     );
     setDestination(nextDestination);
-    window.requestAnimationFrame(scrollToTop);
+    window.requestAnimationFrame(() => {
+      scrollToTop(contentRef.current);
+    });
   };
 
   const labels = navigationCopy[locale];
 
   return (
     <div className="congregation-shell" data-destination={destination}>
-      <div className="congregation-shell-content" data-route={destination}>
+      <div ref={contentRef} className="congregation-shell-content" data-route={destination}>
         {children(destination)}
       </div>
       <PrimaryNavigation
