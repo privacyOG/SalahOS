@@ -62,14 +62,18 @@ This tracker is intentionally compact. A stage is marked complete only after imp
 
 ## Stage 8 — Islamic Knowledge
 
-- [ ] Add Knowledge navigation and Qur'an, Hadith and Q&A modules.
-- [ ] Preserve source/grading/scholar attribution and offline-friendly reading where practical.
+- [x] Add Knowledge navigation and Qur'an, Hadith and Q&A modules.
+- [x] Preserve source/grading/scholar attribution and offline-friendly reading where practical.
+
+**Stage 8 verification (2026-08-25):** implementation head `90a475de0104c8f3393ad80a35715bb9d1c7820c` passed Quality Gate `32783118745` (#2195), Visual Regression `32783118768` (#1045), Android Build `32783118765` (#1201), and iOS Build `32783118821` (#1110). The Knowledge destination provides a bundled offline-first Qur'an, Hadith and Q&A starter library with local search/filtering, explicit Qur'an references/source labels, Hadith collection/reference/grade/grading authority, Q&A scholar/source attribution and juristic-variation notes where appropriate. Navigation and shell copy cover English, Arabic, Turkish and Indonesian; dedicated browser acceptance covers module filtering, source metadata, six-item primary navigation, Arabic RTL and mobile overflow. Android verification includes a successful debug build and emulator lifecycle acceptance; iOS verification includes a successful Simulator build plus install, launch and relaunch on fresh iPhone and iPad Simulators. This completion commit changes tracker documentation only and remains subject to the same exact-head PR gates before merge.
 
 ## Stage 9 — Performance architecture
 
-- [ ] Fix timetable import static-edge/lazy-load issue.
-- [ ] Route/surface-level code splitting, especially Admin/smart-display code.
-- [ ] Add bundle-size CI budget.
+- [x] Fix timetable import static-edge/lazy-load issue.
+- [x] Route/surface-level code splitting, especially Admin/smart-display code.
+- [x] Add bundle-size CI budget.
+
+**Stage 9 verification (2026-08-25):** implementation head `76df627f9a33f3bb77b495f72c7d17e351357eab`, validated against merged Stage 8 `main`, passed Quality Gate `32785245506` (#2214), Visual Regression `32785245504` (#1064), Android Build `32785245374` (#1220), and iOS Build `32785245480` (#1129). Quality verification confirms the UI/UX v2 retirement policy remains enforced after lazy smart-display ownership moved behind `SmartDisplayRoot`, all 704 tests passed, the timetable import/export module now emits as its own lazy chunk without the previous ineffective-dynamic-import warning, and the permanent bundle budget passed with 21 JavaScript chunks, largest chunk 469,196 bytes and 898,871 total JavaScript bytes. The startup path keeps Today eager while Admin, smart-display, Mosques, Qiblah, Knowledge, Community and Settings are route/surface-level lazy loads. Android and iOS exact-head native gates also passed; iOS includes fresh iPhone and iPad Simulator runtime acceptance. This completion commit updates tracker documentation from the merged Stage 8 baseline and remains subject to the same four exact-head gates before merge.
 
 ## Stage 10 — Verification upgrades
 
