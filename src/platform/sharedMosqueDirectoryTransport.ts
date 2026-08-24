@@ -21,7 +21,9 @@ export class SharedMosqueDirectoryTransportError extends Error {
 
 function endpoint(): string {
   const configured = import.meta.env.VITE_SHARED_MOSQUE_DIRECTORY_URL?.trim();
-  return configured === undefined || configured === '' ? DEFAULT_ENDPOINT : configured.replace(/\/$/u, '');
+  return configured === undefined || configured === ''
+    ? DEFAULT_ENDPOINT
+    : configured.replace(/\/$/u, '');
 }
 
 async function requestJson(path: string, init?: RequestInit): Promise<unknown> {
@@ -40,7 +42,10 @@ async function requestJson(path: string, init?: RequestInit): Promise<unknown> {
     const body = (await response.json().catch(() => null)) as unknown;
     if (!response.ok) {
       const message =
-        typeof body === 'object' && body !== null && 'error' in body && typeof body.error === 'string'
+        typeof body === 'object' &&
+        body !== null &&
+        'error' in body &&
+        typeof body.error === 'string'
           ? body.error
           : `Shared mosque directory request failed (${String(response.status)})`;
       throw new SharedMosqueDirectoryTransportError(message, response.status);
@@ -71,7 +76,8 @@ export async function fetchSharedMosques(input: {
   }
   parameters.set('limit', String(input.limit ?? 50));
   const raw = await requestJson(`?${parameters.toString()}`);
-  if (!Array.isArray(raw)) throw new SharedMosqueDirectoryTransportError('Directory response is invalid');
+  if (!Array.isArray(raw))
+    throw new SharedMosqueDirectoryTransportError('Directory response is invalid');
   return Object.freeze(raw.map((value) => validateSharedMosqueRecord(value as SharedMosqueRecord)));
 }
 
