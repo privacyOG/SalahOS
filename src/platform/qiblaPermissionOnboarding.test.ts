@@ -18,6 +18,10 @@ class MemoryStorage {
   setItem(key: string, value: string): void {
     this.values.set(key, value);
   }
+
+  removeItem(key: string): void {
+    this.values.delete(key);
+  }
 }
 
 describe('Qiblah permission onboarding persistence', () => {
@@ -33,6 +37,7 @@ describe('Qiblah permission onboarding persistence', () => {
   it('does not interrupt existing configured installations during upgrade', () => {
     const storage = new MemoryStorage();
     storage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify({ version: 2 }));
+    expect(loadQiblaPermissionOnboarding(storage)).toEqual({ version: 1, completed: true });
     expect(qiblaPermissionOnboardingRequired(storage)).toBe(false);
   });
 
