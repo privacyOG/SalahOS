@@ -38,9 +38,11 @@ This tracker is intentionally compact. A stage is marked complete only after imp
 
 ## Stage 5 — Preloaded Australian mosque directory
 
-- [ ] Build reproducible Australian Muslim place-of-worship import/generation pipeline.
-- [ ] Bundle a compact offline-first Australian mosque catalogue with provenance/licensing.
-- [ ] Add nearby/search/select UX with deduplication and distance ordering.
+- [x] Build reproducible Australian Muslim place-of-worship import/generation pipeline.
+- [x] Bundle a compact offline-first Australian mosque catalogue with provenance/licensing.
+- [x] Add nearby/search/select UX with deduplication and distance ordering.
+
+**Stage 5 verification (2026-08-24):** implementation head `5ff9bcb4d0ca899cfd3aece7d4762fe565833632` passed Quality Gate `32723450853` (#2147), Visual Regression `32723450833` (#997), Android Build `32723450773` (#1153), and iOS Build `32723450804` (#1062). Quality verification includes deterministic offline regeneration of the bundled 106-record catalogue from the committed OpenStreetMap snapshot plus formatting, lint, typecheck, tests and production build. The visual gate includes dedicated Stage 47 search, nearest-ordering, selection/persistence and mobile/RTL acceptance. Android verification includes a successful debug build and emulator lifecycle acceptance; iOS verification includes a successful Simulator build plus install, launch and relaunch acceptance on fresh iPhone and iPad Simulators. The catalogue preserves OpenStreetMap contributor/ODbL 1.0 provenance and normal application/CI validation does not require live Overpass access. This completion commit changes tracker documentation only and remains subject to the same exact-head PR gates before merge.
 
 ## Stage 6 — Shared/community mosque directory
 
