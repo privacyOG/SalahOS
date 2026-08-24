@@ -52,6 +52,9 @@ jobs:
       - name: Australian mosque directory reproducibility
         run: npm run mosques:australia:check
 
+      - name: Packaged Adhan audio integrity
+        run: npm run adhan:audio:check
+
       - name: Shared mosque directory service acceptance
         run: npm run directory:test
 
