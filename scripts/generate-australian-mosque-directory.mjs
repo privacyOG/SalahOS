@@ -8,13 +8,39 @@ const OVERPASS_ENDPOINTS = [
   'https://overpass.kumi.systems/api/interpreter',
 ];
 
-export const AUSTRALIAN_MOSQUE_OVERPASS_QUERY = `[out:json][timeout:180];
-area["ISO3166-1"="AU"]["boundary"="administrative"][admin_level=2]->.country;
+export const AUSTRALIAN_MOSQUE_REGION_CODES = Object.freeze([
+  'AU-ACT',
+  'AU-NSW',
+  'AU-NT',
+  'AU-QLD',
+  'AU-SA',
+  'AU-TAS',
+  'AU-VIC',
+  'AU-WA',
+]);
+
+const REGION_NAMES = Object.freeze({
+  'AU-ACT': 'Australian Capital Territory',
+  'AU-NSW': 'New South Wales',
+  'AU-NT': 'Northern Territory',
+  'AU-QLD': 'Queensland',
+  'AU-SA': 'South Australia',
+  'AU-TAS': 'Tasmania',
+  'AU-VIC': 'Victoria',
+  'AU-WA': 'Western Australia',
+});
+
+export const AUSTRALIAN_MOSQUE_OVERPASS_QUERY_TEMPLATE = `[out:json][timeout:90];
+area["ISO3166-2"="{REGION_CODE}"]["boundary"="administrative"]->.region;
 (
-  nwr["amenity"="place_of_worship"]["religion"="muslim"](area.country);
-  nwr["amenity"="place_of_worship"]["building"="mosque"](area.country);
+  nwr["amenity"="place_of_worship"]["religion"="muslim"](area.region);
+  nwr["amenity"="place_of_worship"]["building"="mosque"](area.region);
 );
 out center tags;`;
+
+function queryForRegion(regionCode) {
+  return AUSTRALIAN_MOSQUE_OVERPASS_QUERY_TEMPLATE.replace('{REGION_CODE}', regionCode);
+}
 
 function parseArguments(argv) {
   const options = {
@@ -86,17 +112,22 @@ function elementCoordinates(element) {
   if (Number.isFinite(element.lat) && Number.isFinite(element.lon)) {
     return { latitude: element.lat, longitude: element.lon };
   }
-  if (isRecord(element.center) && Number.isFinite(element.center.lat) && Number.isFinite(element.center.lon)) {
+  if (
+    isRecord(element.center) &&
+    Number.isFinite(element.center.lat) &&
+    Number.isFinite(element.center.lon)
+  ) {
     return { latitude: element.center.lat, longitude: element.center.lon };
   }
   return null;
 }
 
-function addressFromTags(tags) {
+function addressFromTags(tags, regionCode) {
   const street = firstText(tags, ['addr:street', 'addr:place']);
   const number = cleanText(tags['addr:housenumber']);
   const locality = firstText(tags, ['addr:suburb', 'addr:city', 'addr:town', 'addr:locality']);
-  const state = firstText(tags, ['addr:state', 'is_in:state']);
+  const taggedState = firstText(tags, ['addr:state', 'is_in:state']);
+  const state = taggedState ?? REGION_NAMES[regionCode] ?? null;
   const postcode = cleanText(tags['addr:postcode']);
   const parts = [];
   if (street !== null) parts.push(number === null ? street : `${number} ${street}`);
@@ -144,7 +175,7 @@ function richness(record) {
   );
 }
 
-function recordFromElement(element) {
+function recordFromElement(element, regionCode) {
   if (!isRecord(element) || !['node', 'way', 'relation'].includes(element.type)) return null;
   if (!Number.isSafeInteger(element.id) || !isRecord(element.tags)) return null;
   const coordinates = elementCoordinates(element);
@@ -164,7 +195,8 @@ function recordFromElement(element) {
   const website = httpUrl(firstText(element.tags, ['contact:website', 'website', 'url']));
   const phone = firstText(element.tags, ['contact:phone', 'phone']);
   const email = firstText(element.tags, ['contact:email', 'email']);
-  const state = firstText(element.tags, ['addr:state', 'is_in:state']);
+  const state =
+    firstText(element.tags, ['addr:state', 'is_in:state']) ?? REGION_NAMES[regionCode] ?? null;
 
   return {
     id: `osm-${element.type}-${String(element.id)}`,
@@ -172,7 +204,8 @@ function recordFromElement(element) {
     osmId: element.id,
     name,
     ...(nameAr === null ? {} : { nameAr }),
-    address: addressFromTags(element.tags),
+    address: addressFromTags(element.tags, regionCode),
+    regionCode,
     ...(state === null ? {} : { state }),
     latitude: Number(coordinates.latitude.toFixed(7)),
     longitude: Number(coordinates.longitude.toFixed(7)),
@@ -216,16 +249,35 @@ function deduplicate(records) {
   });
 }
 
-export function buildAustralianMosqueDirectory(raw) {
-  if (!isRecord(raw) || !Array.isArray(raw.elements)) {
-    throw new TypeError('Overpass snapshot must contain an elements array');
+function parseSnapshotRegions(raw) {
+  if (!isRecord(raw) || raw.schemaVersion !== 1 || !Array.isArray(raw.regions)) {
+    throw new TypeError('Overpass snapshot must contain schemaVersion 1 and a regions array');
   }
-  const osmTimestamp = isRecord(raw.osm3s) ? cleanText(raw.osm3s.timestamp_osm_base) : null;
-  if (osmTimestamp === null) throw new TypeError('Overpass snapshot is missing osm3s.timestamp_osm_base');
+  return raw.regions.map((region) => {
+    if (
+      !isRecord(region) ||
+      typeof region.regionCode !== 'string' ||
+      !AUSTRALIAN_MOSQUE_REGION_CODES.includes(region.regionCode) ||
+      typeof region.osmBaseTimestamp !== 'string' ||
+      !Array.isArray(region.elements)
+    ) {
+      throw new TypeError('Overpass snapshot contains an invalid Australian region entry');
+    }
+    return region;
+  });
+}
 
-  const converted = raw.elements.map(recordFromElement).filter((record) => record !== null);
+export function buildAustralianMosqueDirectory(raw) {
+  const regions = parseSnapshotRegions(raw);
+  const converted = regions.flatMap((region) =>
+    region.elements
+      .map((element) => recordFromElement(element, region.regionCode))
+      .filter((record) => record !== null),
+  );
   const records = deduplicate(converted);
   if (records.length === 0) throw new RangeError('Australian mosque directory generation produced no records');
+  const rawElementCount = regions.reduce((total, region) => total + region.elements.length, 0);
+  const timestamps = regions.map((region) => region.osmBaseTimestamp).sort();
 
   return {
     schemaVersion: 1,
@@ -234,40 +286,71 @@ export function buildAustralianMosqueDirectory(raw) {
       licence: 'ODbL-1.0',
       attributionUrl: 'https://www.openstreetmap.org/copyright',
       licenceUrl: 'https://opendatacommons.org/licenses/odbl/1-0/',
-      overpassQuery: AUSTRALIAN_MOSQUE_OVERPASS_QUERY,
-      osmBaseTimestamp: osmTimestamp,
-      rawElementCount: raw.elements.length,
+      overpassQueryTemplate: AUSTRALIAN_MOSQUE_OVERPASS_QUERY_TEMPLATE,
+      regionCodes: AUSTRALIAN_MOSQUE_REGION_CODES,
+      osmBaseTimestamp: timestamps[0],
+      rawElementCount,
       recordCount: records.length,
-      skippedOrDeduplicatedCount: raw.elements.length - records.length,
+      skippedOrDeduplicatedCount: rawElementCount - records.length,
     },
     records,
   };
 }
 
-async function fetchSnapshot() {
+async function requestRegion(regionCode, endpoint) {
+  const response = await fetch(endpoint, {
+    method: 'POST',
+    headers: { 'content-type': 'application/x-www-form-urlencoded;charset=UTF-8' },
+    body: new URLSearchParams({ data: queryForRegion(regionCode) }),
+    signal: AbortSignal.timeout(100_000),
+  });
+  if (!response.ok) throw new Error(`${endpoint} returned HTTP ${String(response.status)}`);
+  const raw = await response.json();
+  const timestamp = isRecord(raw.osm3s) ? cleanText(raw.osm3s.timestamp_osm_base) : null;
+  if (!isRecord(raw) || !Array.isArray(raw.elements) || timestamp === null) {
+    throw new TypeError(`${endpoint} returned an invalid Overpass response for ${regionCode}`);
+  }
+  return {
+    regionCode,
+    osmBaseTimestamp: timestamp,
+    elements: raw.elements,
+  };
+}
+
+async function fetchRegion(regionCode, preferredEndpointIndex) {
   let lastError = null;
-  for (const endpoint of OVERPASS_ENDPOINTS) {
+  for (let offset = 0; offset < OVERPASS_ENDPOINTS.length; offset += 1) {
+    const endpoint = OVERPASS_ENDPOINTS[(preferredEndpointIndex + offset) % OVERPASS_ENDPOINTS.length];
+    if (endpoint === undefined) continue;
     for (let attempt = 1; attempt <= 2; attempt += 1) {
       try {
-        const response = await fetch(endpoint, {
-          method: 'POST',
-          headers: { 'content-type': 'application/x-www-form-urlencoded;charset=UTF-8' },
-          body: new URLSearchParams({ data: AUSTRALIAN_MOSQUE_OVERPASS_QUERY }),
-          signal: AbortSignal.timeout(190_000),
-        });
-        if (!response.ok) throw new Error(`${endpoint} returned HTTP ${String(response.status)}`);
-        const raw = await response.json();
-        if (!isRecord(raw) || !Array.isArray(raw.elements)) {
-          throw new TypeError(`${endpoint} returned an invalid Overpass response`);
-        }
-        return raw;
+        return await requestRegion(regionCode, endpoint);
       } catch (error) {
         lastError = error;
-        if (attempt < 2) await new Promise((resolve) => setTimeout(resolve, 5_000));
+        if (attempt < 2) await new Promise((resolve) => setTimeout(resolve, 4_000));
       }
     }
   }
-  throw lastError ?? new Error('Unable to fetch Australian mosque data from Overpass');
+  throw lastError ?? new Error(`Unable to fetch ${regionCode} mosque data from Overpass`);
+}
+
+async function fetchSnapshot() {
+  const regions = [];
+  for (let index = 0; index < AUSTRALIAN_MOSQUE_REGION_CODES.length; index += 1) {
+    const regionCode = AUSTRALIAN_MOSQUE_REGION_CODES[index];
+    if (regionCode === undefined) continue;
+    const region = await fetchRegion(regionCode, index % OVERPASS_ENDPOINTS.length);
+    regions.push(region);
+    console.log(`Fetched ${regionCode}: ${String(region.elements.length)} OSM elements.`);
+    if (index < AUSTRALIAN_MOSQUE_REGION_CODES.length - 1) {
+      await new Promise((resolve) => setTimeout(resolve, 1_000));
+    }
+  }
+  return {
+    schemaVersion: 1,
+    source: 'OpenStreetMap Overpass API',
+    regions,
+  };
 }
 
 function serialize(value) {
@@ -294,11 +377,11 @@ async function main() {
     const existing = await readFile(outputPath, 'utf8');
     if (existing !== expected) {
       throw new Error(
-        `Australian mosque directory is stale. Run node scripts/generate-australian-mosque-directory.mjs`,
+        'Australian mosque directory is stale. Run node scripts/generate-australian-mosque-directory.mjs',
       );
     }
     console.log(
-      `Australian mosque directory reproducibility passed: ${String(generated.source.recordCount)} records from OSM ${generated.source.osmBaseTimestamp}.`,
+      `Australian mosque directory reproducibility passed: ${String(generated.source.recordCount)} records from OSM ${String(generated.source.osmBaseTimestamp)}.`,
     );
     return;
   }
