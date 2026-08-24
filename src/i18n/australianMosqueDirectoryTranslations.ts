@@ -64,7 +64,8 @@ export const australianMosqueDirectoryCopy = {
   },
   tr: {
     title: 'Avustralya cami dizini',
-    subtitle: 'Avustralya genelinde çevrimdışı kullanılabilen önceden yüklenmiş cami ve mescit konumları.',
+    subtitle:
+      'Avustralya genelinde çevrimdışı kullanılabilen önceden yüklenmiş cami ve mescit konumları.',
     offline: 'Çevrimdışı',
     search: 'Avustralya dizininde ara',
     searchPlaceholder: 'Cami, semt, adres veya eyalet',
@@ -84,7 +85,8 @@ export const australianMosqueDirectoryCopy = {
   },
   id: {
     title: 'Direktori masjid Australia',
-    subtitle: 'Lokasi masjid dan musala yang dimuat sebelumnya dan tersedia luring di seluruh Australia.',
+    subtitle:
+      'Lokasi masjid dan musala yang dimuat sebelumnya dan tersedia luring di seluruh Australia.',
     offline: 'Luring',
     search: 'Cari direktori Australia',
     searchPlaceholder: 'Masjid, kawasan, alamat, atau negara bagian',
