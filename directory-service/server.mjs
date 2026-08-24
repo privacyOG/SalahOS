@@ -7,7 +7,8 @@ import { fileURLToPath } from 'node:url';
 const repositoryRoot = fileURLToPath(new URL('..', import.meta.url));
 const australianCataloguePath = resolve(repositoryRoot, 'src/data/australian-mosques.json');
 const databasePath = resolve(
-  process.env.SALAHOS_DIRECTORY_DB_PATH ?? resolve(repositoryRoot, '.local/shared-mosque-directory.json'),
+  process.env.SALAHOS_DIRECTORY_DB_PATH ??
+    resolve(repositoryRoot, '.local/shared-mosque-directory.json'),
 );
 const moderatorToken = process.env.SALAHOS_DIRECTORY_MODERATOR_TOKEN ?? '';
 const port = Number(process.env.PORT ?? 8788);
@@ -92,9 +93,15 @@ function createContribution(kind, mosqueId, payload) {
 }
 
 function validateSubmission(body) {
-  const name = String(body.name ?? '').trim().replace(/\s+/gu, ' ');
-  const address = String(body.address ?? '').trim().replace(/\s+/gu, ' ');
-  const countryCode = String(body.countryCode ?? '').trim().toUpperCase();
+  const name = String(body.name ?? '')
+    .trim()
+    .replace(/\s+/gu, ' ');
+  const address = String(body.address ?? '')
+    .trim()
+    .replace(/\s+/gu, ' ');
+  const countryCode = String(body.countryCode ?? '')
+    .trim()
+    .toUpperCase();
   const latitude = Number(body.latitude);
   const longitude = Number(body.longitude);
   const timeZone = String(body.timeZone ?? '').trim();
@@ -107,14 +114,16 @@ function validateSubmission(body) {
   } catch {
     throw new Error('Timezone is invalid');
   }
-  const website = body.website == null || String(body.website).trim() === '' ? null : String(body.website).trim();
+  const website =
+    body.website == null || String(body.website).trim() === '' ? null : String(body.website).trim();
   if (website !== null) {
     const parsed = new URL(website);
     if (!['http:', 'https:'].includes(parsed.protocol) || parsed.username || parsed.password) {
       throw new Error('Website is invalid');
     }
   }
-  const phone = body.phone == null || String(body.phone).trim() === '' ? null : String(body.phone).trim();
+  const phone =
+    body.phone == null || String(body.phone).trim() === '' ? null : String(body.phone).trim();
   return { name, address, countryCode, latitude, longitude, timeZone, website, phone };
 }
 
@@ -158,7 +167,11 @@ async function seedDatabase() {
 async function loadDatabase() {
   try {
     const database = JSON.parse(await readFile(databasePath, 'utf8'));
-    if (database.schemaVersion !== 1 || !Array.isArray(database.records) || !Array.isArray(database.contributions)) {
+    if (
+      database.schemaVersion !== 1 ||
+      !Array.isArray(database.records) ||
+      !Array.isArray(database.contributions)
+    ) {
       throw new Error('Directory database schema is invalid');
     }
     return database;
@@ -196,7 +209,9 @@ function searchRecords(records, url) {
   return records
     .filter((record) => {
       if (query === '') return true;
-      return normalize([record.name, record.nameAr ?? '', record.address].join(' ')).includes(query);
+      return normalize([record.name, record.nameAr ?? '', record.address].join(' ')).includes(
+        query,
+      );
     })
     .map((record) => ({
       record,
@@ -204,7 +219,11 @@ function searchRecords(records, url) {
     }))
     .filter((result) => radiusKm === null || result.distance <= radiusKm)
     .sort((left, right) => {
-      if (left.distance !== null && right.distance !== null && Math.abs(left.distance - right.distance) > 0.001) {
+      if (
+        left.distance !== null &&
+        right.distance !== null &&
+        Math.abs(left.distance - right.distance) > 0.001
+      ) {
         return left.distance - right.distance;
       }
       return left.record.name.localeCompare(right.record.name, 'en-AU');
@@ -232,7 +251,9 @@ async function moderate(database, contribution, decision) {
   if (contribution.kind === 'submission') {
     const payload = validateSubmission(contribution.payload);
     const hash = createHash('sha256')
-      .update(`${normalize(payload.name)}|${payload.latitude.toFixed(5)}|${payload.longitude.toFixed(5)}`)
+      .update(
+        `${normalize(payload.name)}|${payload.latitude.toFixed(5)}|${payload.longitude.toFixed(5)}`,
+      )
       .digest('hex')
       .slice(0, 16);
     const now = new Date().toISOString();
@@ -252,7 +273,8 @@ async function moderate(database, contribution, decision) {
   if (!mosque) return;
   if (contribution.kind === 'edit-suggestion') {
     for (const field of ['name', 'address', 'website', 'phone']) {
-      if (typeof contribution.payload[field] === 'string') mosque[field] = contribution.payload[field].trim();
+      if (typeof contribution.payload[field] === 'string')
+        mosque[field] = contribution.payload[field].trim();
     }
     mosque.revision += 1;
     mosque.updatedAt = new Date().toISOString();
@@ -297,7 +319,9 @@ const server = createServer(async (request, response) => {
       return;
     }
 
-    const suggestionMatch = url.pathname.match(/^\/api\/v1\/shared-mosques\/([^/]+)\/suggestions$/u);
+    const suggestionMatch = url.pathname.match(
+      /^\/api\/v1\/shared-mosques\/([^/]+)\/suggestions$/u,
+    );
     const claimMatch = url.pathname.match(/^\/api\/v1\/shared-mosques\/([^/]+)\/claims$/u);
     if (request.method === 'POST' && (suggestionMatch || claimMatch)) {
       const database = await loadDatabase();
@@ -328,7 +352,10 @@ const server = createServer(async (request, response) => {
 
     const moderationMatch = url.pathname.match(/^\/api\/v1\/shared-mosques\/moderation\/([^/]+)$/u);
     if (request.method === 'POST' && moderationMatch) {
-      if (moderatorToken === '' || request.headers['x-salahos-moderator-token'] !== moderatorToken) {
+      if (
+        moderatorToken === '' ||
+        request.headers['x-salahos-moderator-token'] !== moderatorToken
+      ) {
         json(response, 403, { error: 'Moderator authorization required' });
         return;
       }
