@@ -11,12 +11,20 @@ const defaultState: QiblaPermissionOnboardingState = Object.freeze({
   version: 1,
   completed: false,
 });
+const migratedExistingInstallState: QiblaPermissionOnboardingState = Object.freeze({
+  version: 1,
+  completed: true,
+});
 
 export function loadQiblaPermissionOnboarding(
   storage: KeyValueStorage,
 ): QiblaPermissionOnboardingState {
   const serialized = storage.getItem(QIBLA_PERMISSION_ONBOARDING_STORAGE_KEY);
-  if (serialized === null) return defaultState;
+  if (serialized === null) {
+    return storage.getItem(SETTINGS_STORAGE_KEY) === null
+      ? defaultState
+      : migratedExistingInstallState;
+  }
 
   try {
     const parsed = JSON.parse(serialized) as Partial<QiblaPermissionOnboardingState>;
@@ -28,8 +36,7 @@ export function loadQiblaPermissionOnboarding(
 }
 
 export function qiblaPermissionOnboardingRequired(storage: KeyValueStorage): boolean {
-  if (loadQiblaPermissionOnboarding(storage).completed) return false;
-  return storage.getItem(SETTINGS_STORAGE_KEY) === null;
+  return !loadQiblaPermissionOnboarding(storage).completed;
 }
 
 export function completeQiblaPermissionOnboarding(storage: KeyValueStorage): void {
