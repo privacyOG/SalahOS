@@ -79,10 +79,7 @@ function persistedLocale(): Locale {
 function scrollToTop(target: HTMLElement | null): void {
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const behavior: ScrollBehavior = reducedMotion ? 'auto' : 'smooth';
-  if (target !== null) {
-    target.scrollTo({ top: 0, behavior });
-    return;
-  }
+  target?.scrollTo({ top: 0, behavior });
   window.scrollTo({ top: 0, behavior });
 }
 
