@@ -18,7 +18,7 @@
     "test:watch": "vitest",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "format:check": "prettier --write scripts/visual-qibla-auto-live.mjs src/ui/QiblaFinder.tsx src/ui/QiblaPermissionOnboarding.tsx && git diff -- scripts/visual-qibla-auto-live.mjs src/ui/QiblaFinder.tsx src/ui/QiblaPermissionOnboarding.tsx && exit 1",
+    "format:check": "prettier --check .",
     "docs:links": "node scripts/check-doc-links.mjs",
     "security:sensitive-files": "node scripts/check-sensitive-files.mjs",
     "security:native-permissions": "node scripts/check-native-permissions.mjs",
