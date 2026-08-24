@@ -28,9 +28,9 @@ const records = [
     phone: null,
     source: 'community',
     verification: {
-      state: 'claimed',
+      state: 'verified',
       verifiedAt: '2026-08-20T00:00:00Z',
-      claimedAt: '2026-08-21T00:00:00Z',
+      claimedAt: null,
     },
     revision: 3,
     updatedAt: '2026-08-23T00:00:00Z',
@@ -68,9 +68,9 @@ const records = [
     phone: null,
     source: 'community',
     verification: {
-      state: 'unverified',
-      verifiedAt: null,
-      claimedAt: null,
+      state: 'claimed',
+      verifiedAt: '2026-08-20T00:00:00Z',
+      claimedAt: '2026-08-21T00:00:00Z',
     },
     revision: 1,
     updatedAt: '2026-08-21T00:00:00Z',
@@ -138,7 +138,11 @@ async function installMockService(page) {
           .toLocaleLowerCase('en-AU')
           .includes(query),
       );
-      await route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(matches) });
+      await route.fulfill({
+        status: 200,
+        contentType: 'application/json',
+        body: JSON.stringify(matches),
+      });
       return;
     }
     if (url.pathname.endsWith('/submissions')) {
@@ -147,7 +151,10 @@ async function installMockService(page) {
         await route.fulfill({
           status: 409,
           contentType: 'application/json',
-          body: JSON.stringify({ error: 'Potential duplicate mosque', duplicateId: 'stage48-lakemba' }),
+          body: JSON.stringify({
+            error: 'Potential duplicate mosque',
+            duplicateId: 'stage48-lakemba',
+          }),
         });
         return;
       }
@@ -199,8 +206,11 @@ try {
 
     const panel = page.locator('.shared-mosque-directory');
     await panel.waitFor({ state: 'visible' });
-    await page.waitForFunction(() =>
-      document.querySelector('.shared-mosque-directory')?.getAttribute('data-shared-directory-connection') === 'online',
+    await page.waitForFunction(
+      () =>
+        document
+          .querySelector('.shared-mosque-directory')
+          ?.getAttribute('data-shared-directory-connection') === 'online',
     );
 
     const search = panel.locator('input[type="search"]');
@@ -208,13 +218,24 @@ try {
     await panel.getByRole('button', { name: 'Search', exact: true }).click();
     const lakemba = panel.locator('[data-shared-mosque-id="stage48-lakemba"]');
     await lakemba.waitFor({ state: 'visible' });
-    assert((await panel.locator('[data-shared-mosque-id]').count()) === 1, 'Shared search did not narrow results');
-    assert((await lakemba.getAttribute('data-verification-state')) === 'claimed', 'Claim state badge is missing');
+    assert(
+      (await panel.locator('[data-shared-mosque-id]').count()) === 1,
+      'Shared search did not narrow results',
+    );
+    assert(
+      (await lakemba.getAttribute('data-verification-state')) === 'verified',
+      'Verified state badge is missing',
+    );
 
     await lakemba.getByRole('button', { name: 'Use mosque' }).click();
     await lakemba.getByRole('button', { name: 'Selected' }).waitFor();
-    const library = await page.evaluate(() => JSON.parse(localStorage.getItem('salahos.mosqueProfileLibrary') ?? '{}'));
-    assert(library.selectedProfileId === 'shared-stage48-lakemba', 'Shared mosque selection was not persisted');
+    const library = await page.evaluate(() =>
+      JSON.parse(localStorage.getItem('salahos.mosqueProfileLibrary') ?? '{}'),
+    );
+    assert(
+      library.selectedProfileId === 'shared-stage48-lakemba',
+      'Shared mosque selection was not persisted',
+    );
 
     await search.fill('');
     await panel.getByRole('button', { name: 'Search', exact: true }).click();
@@ -225,6 +246,10 @@ try {
     assert(
       distances.every((value, index) => index === 0 || value >= distances[index - 1] - 0.05),
       'Nearby shared results are not ordered by distance',
+    );
+    assert(
+      (await panel.locator('[data-verification-state="claimed"]').count()) >= 1,
+      'Claimed verification state is not represented in shared results',
     );
 
     const lakembaAgain = panel.locator('[data-shared-mosque-id="stage48-lakemba"]');
@@ -259,9 +284,14 @@ try {
     const metrics = await page.evaluate(() => ({
       innerWidth: window.innerWidth,
       scrollWidth: document.documentElement.scrollWidth,
-      cacheCount: JSON.parse(localStorage.getItem('salahos.sharedMosqueDirectoryCache.v1') ?? '{}').records?.length ?? 0,
+      cacheCount:
+        JSON.parse(localStorage.getItem('salahos.sharedMosqueDirectoryCache.v1') ?? '{}').records
+          ?.length ?? 0,
     }));
-    assert(metrics.scrollWidth <= metrics.innerWidth + 1, 'Shared directory caused mobile overflow');
+    assert(
+      metrics.scrollWidth <= metrics.innerWidth + 1,
+      'Shared directory caused mobile overflow',
+    );
     assert(metrics.cacheCount >= 3, 'Shared search results were not cached locally');
     await page.screenshot({
       path: path.join(artifactDirectory, 'stage48-shared-directory-mobile.png'),
@@ -284,12 +314,17 @@ try {
     await page.goto(`${baseUrl}/?view=mosques`, { waitUntil: 'networkidle' });
 
     const panel = page.locator('.shared-mosque-directory');
-    await page.waitForFunction(() =>
-      document.querySelector('.shared-mosque-directory')?.getAttribute('data-shared-directory-connection') === 'offline',
+    await page.waitForFunction(
+      () =>
+        document
+          .querySelector('.shared-mosque-directory')
+          ?.getAttribute('data-shared-directory-connection') === 'offline',
     );
     await panel.locator('input[type="search"]').fill('Bankstown');
     await panel.getByRole('button', { name: 'بحث', exact: true }).click();
-    await panel.locator('[data-shared-mosque-id="stage48-bankstown"]').waitFor({ state: 'visible' });
+    await panel
+      .locator('[data-shared-mosque-id="stage48-bankstown"]')
+      .waitFor({ state: 'visible' });
 
     const metrics = await page.evaluate(() => ({
       htmlDir: document.documentElement.dir,
@@ -297,9 +332,15 @@ try {
       innerWidth: window.innerWidth,
       scrollWidth: document.documentElement.scrollWidth,
     }));
-    assert(metrics.htmlDir === 'rtl', 'Shared directory RTL fixture did not set document direction');
+    assert(
+      metrics.htmlDir === 'rtl',
+      'Shared directory RTL fixture did not set document direction',
+    );
     assert(metrics.panelDir === 'rtl', 'Shared directory did not retain RTL direction');
-    assert(metrics.scrollWidth <= metrics.innerWidth + 1, 'Offline RTL shared directory overflowed viewport');
+    assert(
+      metrics.scrollWidth <= metrics.innerWidth + 1,
+      'Offline RTL shared directory overflowed viewport',
+    );
     await page.screenshot({
       path: path.join(artifactDirectory, 'stage48-shared-directory-offline-rtl.png'),
       fullPage: true,
@@ -313,7 +354,9 @@ try {
     path.join(artifactDirectory, 'stage48-shared-directory-results.json'),
     `${JSON.stringify(results, null, 2)}\n`,
   );
-  console.log(`Stage 48 shared mosque directory acceptance passed: ${String(results.length)} flows.`);
+  console.log(
+    `Stage 48 shared mosque directory acceptance passed: ${String(results.length)} flows.`,
+  );
 } finally {
   await browser.close();
 }
