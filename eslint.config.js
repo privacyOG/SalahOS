@@ -32,7 +32,7 @@ export default tseslint.config(
   },
   {
     ...tseslint.configs.disableTypeChecked,
-    files: ['managed-service/**/*.mjs', 'local-api/**/*.mjs'],
+    files: ['managed-service/**/*.mjs', 'local-api/**/*.mjs', 'directory-service/**/*.mjs'],
     languageOptions: {
       ...tseslint.configs.disableTypeChecked.languageOptions,
       globals: {
