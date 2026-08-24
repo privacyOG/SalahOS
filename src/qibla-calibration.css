@@ -1,0 +1,118 @@
+.qibla-recalibration-control {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+}
+
+.qibla-recalibration-control__accuracy {
+  min-width: 3.8rem;
+  font-size: 0.82rem;
+  font-variant-numeric: tabular-nums;
+  opacity: 0.7;
+}
+
+.qibla-calibration-dialog {
+  width: min(92vw, 520px);
+  max-width: 520px;
+  margin: auto;
+  padding: 0;
+  border: 1px solid color-mix(in srgb, var(--qibla-accent, #0f8a72) 35%, transparent);
+  border-radius: 1.2rem;
+  background: var(--surface-elevated, #fff);
+  color: inherit;
+  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.28);
+}
+
+.qibla-calibration-dialog::backdrop {
+  background: rgba(10, 18, 16, 0.58);
+  backdrop-filter: blur(3px);
+}
+
+.qibla-calibration-dialog__content {
+  display: grid;
+  gap: 0.9rem;
+  padding: clamp(1.1rem, 4vw, 1.6rem);
+}
+
+.qibla-calibration-dialog__content h3,
+.qibla-calibration-dialog__content p {
+  margin: 0;
+}
+
+.qibla-calibration-dialog__content h3 {
+  font-size: clamp(1.35rem, 5vw, 1.8rem);
+  line-height: 1.15;
+}
+
+.qibla-calibration-dialog__content > p:not(.qibla-calibration-dialog__eyebrow):not(.qibla-calibration-dialog__accuracy) {
+  max-width: 58ch;
+  line-height: 1.55;
+}
+
+.qibla-calibration-dialog__eyebrow {
+  color: var(--qibla-accent, #0f8a72);
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.qibla-calibration-figure-eight {
+  display: grid;
+  place-items: center;
+  min-height: 110px;
+  color: var(--qibla-accent, #0f8a72);
+  font-size: clamp(5rem, 20vw, 8rem);
+  font-weight: 700;
+  line-height: 0.8;
+  transform: rotate(-8deg);
+}
+
+.qibla-calibration-dialog__accuracy {
+  justify-self: start;
+  padding: 0.55rem 0.75rem;
+  border-radius: 999px;
+  background: color-mix(in srgb, var(--qibla-accent, #0f8a72) 10%, transparent);
+  font-size: 0.88rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.qibla-calibration-dialog__actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 0.6rem;
+  margin-top: 0.25rem;
+}
+
+.qibla-calibration-dialog__actions button {
+  min-height: 44px;
+  padding-inline: 0.9rem;
+}
+
+.qibla-calibration-dialog__actions .is-primary {
+  border-color: var(--qibla-accent, #0f8a72);
+  background: var(--qibla-accent, #0f8a72);
+  color: #fff;
+}
+
+@media (max-width: 480px) {
+  .qibla-calibration-dialog__actions {
+    display: grid;
+    grid-template-columns: 1fr;
+  }
+
+  .qibla-calibration-dialog__actions button {
+    width: 100%;
+  }
+}
+
+@media (forced-colors: active) {
+  .qibla-calibration-dialog,
+  .qibla-calibration-dialog__accuracy {
+    border: 1px solid CanvasText;
+  }
+}
