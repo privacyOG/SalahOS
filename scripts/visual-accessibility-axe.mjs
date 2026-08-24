@@ -144,6 +144,7 @@ try {
       viewport: { width: 390, height: 844 },
       reducedMotion: 'reduce',
       serviceWorkers: 'block',
+      bypassCSP: true,
     });
     const page = await context.newPage();
     await seed(page, scenario.locale, scenario.theme);
