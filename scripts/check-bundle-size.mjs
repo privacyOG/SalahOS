@@ -13,10 +13,16 @@ function assert(condition, message) {
 
 const files = await readdir(assetsDirectory);
 const jsFiles = files.filter((file) => file.endsWith('.js'));
-assert(jsFiles.length >= MIN_JS_CHUNKS, `expected at least ${String(MIN_JS_CHUNKS)} JavaScript chunks`);
+assert(
+  jsFiles.length >= MIN_JS_CHUNKS,
+  `expected at least ${String(MIN_JS_CHUNKS)} JavaScript chunks`,
+);
 
 const sizes = await Promise.all(
-  jsFiles.map(async (file) => ({ file, bytes: (await stat(path.join(assetsDirectory, file))).size })),
+  jsFiles.map(async (file) => ({
+    file,
+    bytes: (await stat(path.join(assetsDirectory, file))).size,
+  })),
 );
 const totalBytes = sizes.reduce((sum, entry) => sum + entry.bytes, 0);
 const largest = sizes.toSorted((a, b) => b.bytes - a.bytes)[0];
@@ -41,7 +47,10 @@ assert(
   'smart-display surface must remain dynamically imported',
 );
 
-const mosqueLibrarySource = await readFile(path.join(root, 'src', 'platform', 'mosqueLibrary.ts'), 'utf8');
+const mosqueLibrarySource = await readFile(
+  path.join(root, 'src', 'platform', 'mosqueLibrary.ts'),
+  'utf8',
+);
 assert(
   !mosqueLibrarySource.includes('timetableImport'),
   'mosque library must not statically import the timetable import/export module',

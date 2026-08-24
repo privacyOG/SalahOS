@@ -73,7 +73,11 @@ if (existsSync('src/App.tsx')) {
 }
 
 requireText(main, "import('./ui/SmartDisplayRoot')", 'lazy dedicated smart-display root ownership');
-requireText(smartDisplayRoot, 'SmartDisplayApplication', 'dedicated smart-display application ownership');
+requireText(
+  smartDisplayRoot,
+  'SmartDisplayApplication',
+  'dedicated smart-display application ownership',
+);
 requireText(smartDisplayApplication, 'SmartDisplay', 'smart-display runtime rendering');
 requireText(
   settingsScreen,
