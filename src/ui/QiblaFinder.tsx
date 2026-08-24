@@ -25,6 +25,7 @@ import {
 import { triggerQiblaAlignmentHaptic } from '../platform/qiblaHaptics';
 import { loadSavedLocations, type SavedLocation } from '../platform/savedLocations';
 import { loadPersistedSettings } from '../platform/settingsStorage';
+import { QiblaCalibrationControl } from './QiblaCalibrationControl';
 import { QiblaCompassDial } from './QiblaCompassDial';
 import { QiblaMapView } from './QiblaMapView';
 import { smartDisplayModeRequested } from './SmartDisplay';
@@ -326,10 +327,6 @@ export function QiblaFinder() {
   const locationLabel = location?.label ?? null;
   const staticCompass =
     compassState === 'unsupported' || compassState === 'denied' || compassState === 'error';
-  const calibrationNeeded =
-    heading?.accuracyDegrees !== null &&
-    heading?.accuracyDegrees !== undefined &&
-    heading.accuracyDegrees > 20;
 
   return (
     <section
@@ -494,6 +491,15 @@ export function QiblaFinder() {
                   )}
                 </div>
 
+                <QiblaCalibrationControl
+                  locale={locale}
+                  compassState={compassState}
+                  accuracyDegrees={heading?.accuracyDegrees ?? null}
+                  onRecalibrate={() => {
+                    void startCompass();
+                  }}
+                />
+
                 {compassState === 'active' && heading === null && (
                   <p className="inline-message">{text.compassWaiting}</p>
                 )}
@@ -501,12 +507,6 @@ export function QiblaFinder() {
                   <p className="inline-message">
                     {compassState === 'denied' ? text.compassDenied : text.compassUnavailable}
                   </p>
-                )}
-                {calibrationNeeded && (
-                  <div className="qibla-calibration" role="status">
-                    <strong>{text.calibrationTitle}</strong>
-                    <p>{text.calibrationBody}</p>
-                  </div>
                 )}
               </div>
             </div>
