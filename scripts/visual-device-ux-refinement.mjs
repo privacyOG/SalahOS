@@ -144,8 +144,8 @@ function assertPhoneMetrics(name, metrics) {
   if (metrics.contentScrollHeight <= metrics.contentClientHeight) {
     throw new Error(`${name} expected the Today surface to exercise the mobile scroll container`);
   }
-  if (metrics.navigationTargets.length !== 5) {
-    throw new Error(`${name} expected five primary navigation targets`);
+  if (metrics.navigationTargets.length !== 6) {
+    throw new Error(`${name} expected six primary navigation targets`);
   }
   for (const target of [...metrics.navigationTargets, ...metrics.quickTargets]) {
     if (target.width < 44 || target.height < 44) {

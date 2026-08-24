@@ -126,6 +126,15 @@ function distanceFromCard(text) {
   return match ? Number(match[1].replaceAll(',', '')) : null;
 }
 
+async function waitForResultCount(page, expected) {
+  await page.waitForFunction(
+    (count) =>
+      document.querySelectorAll('.shared-mosque-directory [data-shared-mosque-id]').length ===
+      count,
+    expected,
+  );
+}
+
 async function installMockService(page) {
   await page.route('**/api/v1/shared-mosques**', async (route) => {
     const request = route.request();
@@ -216,6 +225,7 @@ try {
     const search = panel.locator('input[type="search"]');
     await search.fill('Lakemba');
     await panel.getByRole('button', { name: 'Search', exact: true }).click();
+    await waitForResultCount(page, 1);
     const lakemba = panel.locator('[data-shared-mosque-id="stage48-lakemba"]');
     await lakemba.waitFor({ state: 'visible' });
     assert(
@@ -239,7 +249,9 @@ try {
 
     await search.fill('');
     await panel.getByRole('button', { name: 'Search', exact: true }).click();
+    await waitForResultCount(page, 3);
     await panel.getByRole('button', { name: 'Near me' }).click();
+    await waitForResultCount(page, 3);
     const cardText = await panel.locator('[data-shared-mosque-id]').allTextContents();
     const distances = cardText.map(distanceFromCard).filter((value) => value !== null);
     assert(distances.length === 3, 'Nearby shared search did not expose distances');
@@ -322,6 +334,7 @@ try {
     );
     await panel.locator('input[type="search"]').fill('Bankstown');
     await panel.getByRole('button', { name: 'بحث', exact: true }).click();
+    await waitForResultCount(page, 1);
     await panel
       .locator('[data-shared-mosque-id="stage48-bankstown"]')
       .waitFor({ state: 'visible' });

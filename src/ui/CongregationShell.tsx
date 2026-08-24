@@ -22,6 +22,7 @@ type NavigationCopy = Readonly<{
   today: string;
   mosques: string;
   qiblah: string;
+  knowledge: string;
   community: string;
   settings: string;
 }>;
@@ -32,6 +33,7 @@ const navigationCopy: Readonly<Record<Locale, NavigationCopy>> = {
     today: 'Today',
     mosques: 'Mosques',
     qiblah: 'Qiblah',
+    knowledge: 'Knowledge',
     community: 'Community',
     settings: 'Settings',
   },
@@ -40,6 +42,7 @@ const navigationCopy: Readonly<Record<Locale, NavigationCopy>> = {
     today: 'اليوم',
     mosques: 'المساجد',
     qiblah: 'القبلة',
+    knowledge: 'المعرفة',
     community: 'المجتمع',
     settings: 'الإعدادات',
   },
@@ -48,6 +51,7 @@ const navigationCopy: Readonly<Record<Locale, NavigationCopy>> = {
     today: 'Bugün',
     mosques: 'Camiler',
     qiblah: 'Kıble',
+    knowledge: 'Bilgi',
     community: 'Topluluk',
     settings: 'Ayarlar',
   },
@@ -56,6 +60,7 @@ const navigationCopy: Readonly<Record<Locale, NavigationCopy>> = {
     today: 'Hari ini',
     mosques: 'Masjid',
     qiblah: 'Kiblat',
+    knowledge: 'Pengetahuan',
     community: 'Komunitas',
     settings: 'Pengaturan',
   },
@@ -179,10 +184,17 @@ export function CongregationShell({ children }: CongregationShellProps) {
             label: labels.qiblah,
             current: destination === 'qiblah',
             onSelect: () => {
-              // Safari requires orientation permission to be requested from a user gesture.
-              // Prime it from the Qiblah navigation gesture, then the finder can start live.
               void requestCompassPermission();
               navigate('qiblah');
+            },
+          },
+          {
+            id: 'knowledge',
+            icon: 'knowledge',
+            label: labels.knowledge,
+            current: destination === 'knowledge',
+            onSelect: () => {
+              navigate('knowledge');
             },
           },
           {

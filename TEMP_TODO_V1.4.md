@@ -62,8 +62,10 @@ This tracker is intentionally compact. A stage is marked complete only after imp
 
 ## Stage 8 — Islamic Knowledge
 
-- [ ] Add Knowledge navigation and Qur'an, Hadith and Q&A modules.
-- [ ] Preserve source/grading/scholar attribution and offline-friendly reading where practical.
+- [x] Add Knowledge navigation and Qur'an, Hadith and Q&A modules.
+- [x] Preserve source/grading/scholar attribution and offline-friendly reading where practical.
+
+**Stage 8 verification (2026-08-25):** implementation head `90a475de0104c8f3393ad80a35715bb9d1c7820c` passed Quality Gate `32783118745` (#2195), Visual Regression `32783118768` (#1045), Android Build `32783118765` (#1201), and iOS Build `32783118821` (#1110). The Knowledge destination provides a bundled offline-first Qur'an, Hadith and Q&A starter library with local search/filtering, explicit Qur'an references/source labels, Hadith collection/reference/grade/grading authority, Q&A scholar/source attribution and juristic-variation notes where appropriate. Navigation and shell copy cover English, Arabic, Turkish and Indonesian; dedicated browser acceptance covers module filtering, source metadata, six-item primary navigation, Arabic RTL and mobile overflow. Android verification includes a successful debug build and emulator lifecycle acceptance; iOS verification includes a successful Simulator build plus install, launch and relaunch on fresh iPhone and iPad Simulators. This completion commit changes tracker documentation only and remains subject to the same exact-head PR gates before merge.
 
 ## Stage 9 — Performance architecture
 

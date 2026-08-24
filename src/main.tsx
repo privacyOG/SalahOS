@@ -13,6 +13,7 @@ import { AustralianMosqueDirectoryPanel } from './ui/AustralianMosqueDirectoryPa
 import { CommunityScreen } from './ui/CommunityScreen';
 import { CommunityUpdatesPanel } from './ui/CommunityUpdatesPanel';
 import { CongregationShell } from './ui/CongregationShell';
+import { KnowledgeScreen } from './ui/KnowledgeScreen';
 import { ManagedDisplayConnectionSettings } from './ui/ManagedDisplayConnectionSettings';
 import { ManagedDisplayRemoteController } from './ui/ManagedDisplayRemoteController';
 import { MobilePrayerThemeSurface } from './ui/MobilePrayerThemeSurface';
@@ -58,6 +59,7 @@ import './qiblah-v2.css';
 import './qibla-permission-onboarding.css';
 import './mosques-community-v2.css';
 import './shared-mosque-directory.css';
+import './islamic-knowledge.css';
 import './accessibility-rtl-refinement.css';
 
 function CongregationRoute({ destination }: Readonly<{ destination: CongregationDestination }>) {
@@ -74,6 +76,12 @@ function CongregationRoute({ destination }: Readonly<{ destination: Congregation
       return (
         <div className="congregation-route congregation-route--qiblah">
           <QiblaFinder />
+        </div>
+      );
+    case 'knowledge':
+      return (
+        <div className="congregation-route congregation-route--knowledge">
+          <KnowledgeScreen />
         </div>
       );
     case 'community':
