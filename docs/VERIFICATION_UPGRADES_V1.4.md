@@ -35,7 +35,7 @@ This is a compatibility smoke gate, not a replacement for the larger Chromium vi
 
 ## Core coverage threshold
 
-The permanent Quality Gate installs the version-matched `@vitest/coverage-v8` provider without changing the lockfile and runs `npm run test:coverage`.
+The version-matched `@vitest/coverage-v8` provider is pinned in `package-lock.json`; the permanent Quality Gate installs it reproducibly through `npm ci` and runs `npm run test:coverage`.
 
 `vitest.config.ts` applies the threshold to the selected core domain/platform modules and requires at least:
 
