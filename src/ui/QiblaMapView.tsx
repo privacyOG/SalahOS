@@ -118,7 +118,7 @@ export function QiblaMapView({
 
     const generation = ++sessionGenerationRef.current;
     setProviderState('loading');
-    void sessionRef.current?.stop();
+    sessionRef.current?.stop();
     sessionRef.current = null;
 
     void createQiblaGoogleMapSession({
