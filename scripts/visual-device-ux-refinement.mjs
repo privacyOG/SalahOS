@@ -89,6 +89,7 @@ async function phoneMetrics(page) {
     const navStyle = getComputedStyle(nav);
     const navRect = nav.getBoundingClientRect();
     const contentStyle = getComputedStyle(content);
+    const contentRect = content.getBoundingClientRect();
     const navigationTargets = [...nav.querySelectorAll('button')].map((element) => {
       const rect = element.getBoundingClientRect();
       return { width: rect.width, height: rect.height, label: element.textContent?.trim() ?? '' };
@@ -103,10 +104,15 @@ async function phoneMetrics(page) {
 
     return {
       navPosition: navStyle.position,
-      navBottom: Math.round(navRect.bottom),
+      navTop: navRect.top,
+      navBottom: navRect.bottom,
       viewportHeight: innerHeight,
       navHeight: navRect.height,
-      contentBottomPadding: Number.parseFloat(contentStyle.paddingBottom),
+      contentTop: contentRect.top,
+      contentBottom: contentRect.bottom,
+      contentOverflowY: contentStyle.overflowY,
+      contentClientHeight: content.clientHeight,
+      contentScrollHeight: content.scrollHeight,
       navigationTargets,
       quickTargets,
       prayerRows: prayerRows.length,
@@ -116,16 +122,27 @@ async function phoneMetrics(page) {
 }
 
 function assertPhoneMetrics(name, metrics) {
-  if (metrics.navPosition !== 'fixed') {
-    throw new Error(`${name} primary navigation is not fixed: ${metrics.navPosition}`);
+  if (metrics.navPosition !== 'relative') {
+    throw new Error(
+      `${name} primary navigation does not participate in shell layout: ${metrics.navPosition}`,
+    );
   }
   if (Math.abs(metrics.navBottom - metrics.viewportHeight) > 1) {
     throw new Error(`${name} primary navigation is not pinned to the viewport bottom`);
   }
-  if (metrics.contentBottomPadding + 1 < metrics.navHeight) {
+  if (Math.abs(metrics.contentBottom - metrics.navTop) > 1) {
     throw new Error(
-      `${name} content reserve ${String(metrics.contentBottomPadding)}px is smaller than nav ${String(metrics.navHeight)}px`,
+      `${name} content/nav boundary is not contiguous: ${JSON.stringify({
+        contentBottom: metrics.contentBottom,
+        navTop: metrics.navTop,
+      })}`,
     );
+  }
+  if (!['auto', 'scroll'].includes(metrics.contentOverflowY)) {
+    throw new Error(`${name} content is not vertically scrollable: ${metrics.contentOverflowY}`);
+  }
+  if (metrics.contentScrollHeight <= metrics.contentClientHeight) {
+    throw new Error(`${name} expected the Today surface to exercise the mobile scroll container`);
   }
   if (metrics.navigationTargets.length !== 5) {
     throw new Error(`${name} expected five primary navigation targets`);
@@ -138,6 +155,38 @@ function assertPhoneMetrics(name, metrics) {
   if (metrics.prayerRows !== 5 || metrics.prayerTableRole !== 'table') {
     throw new Error(
       `${name} prayer schedule is not one scan-friendly five-prayer table: ${JSON.stringify(metrics)}`,
+    );
+  }
+}
+
+async function reachableAboveNavigation(page, selector) {
+  const target = page.locator(selector).last();
+  await target.scrollIntoViewIfNeeded();
+  await page.evaluate(
+    () => new Promise((resolve) => requestAnimationFrame(() => resolve(undefined))),
+  );
+  return target.evaluate((element) => {
+    const nav = document.querySelector('.congregation-nav');
+    const content = document.querySelector('.congregation-shell-content');
+    if (!(nav instanceof HTMLElement) || !(content instanceof HTMLElement)) {
+      throw new Error('congregation shell navigation/content missing');
+    }
+    const rect = element.getBoundingClientRect();
+    const navRect = nav.getBoundingClientRect();
+    const contentRect = content.getBoundingClientRect();
+    return {
+      top: rect.top,
+      bottom: rect.bottom,
+      visibleTop: contentRect.top,
+      visibleBottom: Math.min(contentRect.bottom, navRect.top),
+    };
+  });
+}
+
+function assertReachable(name, label, metrics) {
+  if (metrics.top < metrics.visibleTop - 1 || metrics.bottom > metrics.visibleBottom + 1) {
+    throw new Error(
+      `${name} ${label} cannot be fully reached above navigation: ${JSON.stringify(metrics)}`,
     );
   }
 }
@@ -163,13 +212,31 @@ async function validatePhone(browser, scenario) {
     assertNoHorizontalOverflow(scenario.name, await horizontalOverflow(page));
     const metrics = await phoneMetrics(page);
     assertPhoneMetrics(scenario.name, metrics);
+
+    const ishaReachability = await reachableAboveNavigation(
+      page,
+      '.today-prayer-row:not(.today-prayer-row--header)',
+    );
+    assertReachable(scenario.name, 'Isha row', ishaReachability);
+    const footerReachability = await reachableAboveNavigation(page, '.today-provenance');
+    assertReachable(scenario.name, 'trailing provenance', footerReachability);
+
     if (errors.length > 0) throw new Error(`${scenario.name} page errors: ${errors.join(' | ')}`);
+    await page.locator('.congregation-shell-content').evaluate((element) => {
+      element.scrollTop = 0;
+    });
     await page.screenshot({
       path: path.join(artifactDirectory, `${scenario.name}.png`),
       fullPage: true,
       animations: 'disabled',
     });
-    return { name: scenario.name, fontScale, ...metrics };
+    return {
+      name: scenario.name,
+      fontScale,
+      ...metrics,
+      ishaReachability,
+      footerReachability,
+    };
   } finally {
     await context.close();
   }
@@ -241,15 +308,17 @@ const browser = await chromium.launch({ headless: true });
 try {
   const phones = [];
   for (const scenario of [
-    { name: 'stage25-phone-320-en', width: 320, height: 720, locale: 'en', theme: 'light' },
+    { name: 'stage43-phone-360-en', width: 360, height: 780, locale: 'en', theme: 'light' },
+    { name: 'stage43-phone-390-en', width: 390, height: 844, locale: 'en', theme: 'light' },
     {
-      name: 'stage25-phone-390-ar-large-text',
+      name: 'stage43-phone-390-ar-large-text',
       width: 390,
       height: 844,
       locale: 'ar',
       theme: 'dark',
       fontScale: 1.25,
     },
+    { name: 'stage25-phone-320-en', width: 320, height: 720, locale: 'en', theme: 'light' },
     { name: 'stage25-phone-430-tr', width: 430, height: 932, locale: 'tr', theme: 'light' },
     { name: 'stage25-phone-430-id', width: 430, height: 932, locale: 'id', theme: 'dark' },
   ]) {
@@ -287,11 +356,11 @@ try {
   }
 
   await writeFile(
-    path.join(artifactDirectory, 'stage25-device-ux-results.json'),
+    path.join(artifactDirectory, 'stage43-device-ux-results.json'),
     `${JSON.stringify({ phones, wide }, null, 2)}\n`,
   );
   console.log(
-    `Stage 25 phone/tablet/desktop device UX acceptance passed: ${String(phones.length + wide.length)} scenarios.`,
+    `Stage 43 phone/tablet/desktop device UX acceptance passed: ${String(phones.length + wide.length)} scenarios.`,
   );
 } finally {
   await browser.close();
