@@ -54,9 +54,11 @@ This tracker is intentionally compact. A stage is marked complete only after imp
 
 ## Stage 7 — Adhan audio library
 
-- [ ] Add supplied Adhan recordings as selectable packaged audio, subject to distribution-rights confirmation.
-- [ ] Add preview/default/per-prayer selection, volume and notification-only options.
-- [ ] Normalize playback loudness/metadata and verify offline/native scheduling behaviour.
+- [x] Add supplied Adhan recordings as selectable packaged audio, subject to distribution-rights confirmation.
+- [x] Add preview/default/per-prayer selection, volume and notification-only options.
+- [x] Normalize playback loudness/metadata and verify offline/native scheduling behaviour.
+
+**Stage 7 verification (2026-08-25):** implementation head `314161893461da490f56341d34ad280390910fd8` passed Quality Gate `32746429998` (#2182), Visual Regression `32746429922` (#1032), Android Build `32746429941` (#1188), and iOS Build `32746429883` (#1097). The implementation packages two rights-verified recordings with pinned provenance/attribution and normalized audio metadata, exposes default and per-prayer selection, preview, volume and notification-only controls, and keeps private local uploads device-local. The visual gate includes the dedicated Stage 49 packaged-library journey with selection/persistence, volume, notification-only, RTL and mobile-overflow coverage. Android verification includes a successful debug build, native packaged-audio bundle integrity checking and emulator lifecycle acceptance; iOS verification includes native packaged-audio bundle integrity checking, Simulator build, and successful install, launch and relaunch on fresh iPhone and iPad Simulators. Background/terminated delivery remains the existing operating-system notification path rather than an unsupported claim of unrestricted full-recording playback. This completion commit changes tracker documentation only and remains subject to the same exact-head PR gates before merge.
 
 ## Stage 8 — Islamic Knowledge
 
