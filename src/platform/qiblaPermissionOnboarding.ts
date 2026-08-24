@@ -1,0 +1,35 @@
+import type { KeyValueStorage } from './settingsStorage';
+
+export const QIBLA_PERMISSION_ONBOARDING_STORAGE_KEY = 'salahos.qibla-permission-onboarding';
+
+export interface QiblaPermissionOnboardingState {
+  readonly version: 1;
+  readonly completed: boolean;
+}
+
+const defaultState: QiblaPermissionOnboardingState = Object.freeze({
+  version: 1,
+  completed: false,
+});
+
+export function loadQiblaPermissionOnboarding(
+  storage: KeyValueStorage,
+): QiblaPermissionOnboardingState {
+  const serialized = storage.getItem(QIBLA_PERMISSION_ONBOARDING_STORAGE_KEY);
+  if (serialized === null) return defaultState;
+
+  try {
+    const parsed = JSON.parse(serialized) as Partial<QiblaPermissionOnboardingState>;
+    if (parsed.version !== 1 || typeof parsed.completed !== 'boolean') return defaultState;
+    return Object.freeze({ version: 1, completed: parsed.completed });
+  } catch {
+    return defaultState;
+  }
+}
+
+export function completeQiblaPermissionOnboarding(storage: KeyValueStorage): void {
+  storage.setItem(
+    QIBLA_PERMISSION_ONBOARDING_STORAGE_KEY,
+    JSON.stringify({ version: 1, completed: true } satisfies QiblaPermissionOnboardingState),
+  );
+}
