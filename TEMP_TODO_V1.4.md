@@ -46,9 +46,11 @@ This tracker is intentionally compact. A stage is marked complete only after imp
 
 ## Stage 6 — Shared/community mosque directory
 
-- [ ] Add shared mosque service/database model, search and geographical lookup.
-- [ ] Add mosque submission, duplicate detection, moderation/edit suggestions and verification/claim state.
-- [ ] Cache selected/nearby directory data locally for offline resilience.
+- [x] Add shared mosque service/database model, search and geographical lookup.
+- [x] Add mosque submission, duplicate detection, moderation/edit suggestions and verification/claim state.
+- [x] Cache selected/nearby directory data locally for offline resilience.
+
+**Stage 6 verification (2026-08-25):** implementation head `49dc72bc17ad5b33dfbb0e4f01a27463e29ff4e3` passed Quality Gate `32736822014` (#2172), Visual Regression `32736822011` (#1022), Android Build `32736822032` (#1178), and iOS Build `32736822062` (#1087). Quality verification includes the standalone shared-directory service lifecycle acceptance for seeding, text/geographical lookup, duplicate rejection, moderated submissions, edit suggestions and claim-state transitions, plus formatting, lint, typecheck, unit tests and production build. The visual gate includes dedicated shared-directory online/nearby selection, verification-state, contribution, offline-cache, RTL and mobile-overflow coverage. Android verification includes a successful debug build and emulator lifecycle acceptance; iOS verification includes a successful Simulator build plus install, launch and relaunch acceptance on fresh iPhone and iPad Simulators. This completion commit changes tracker documentation only and remains subject to the same exact-head PR gates before merge.
 
 ## Stage 7 — Adhan audio library
 
