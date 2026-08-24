@@ -22,8 +22,7 @@ type PermissionOnboardingCopy = Readonly<{
 const copy: Readonly<Record<Locale, PermissionOnboardingCopy>> = {
   en: {
     title: 'Enable accurate Qiblah',
-    body:
-      'Allow foreground location and device heading so Qiblah can start live automatically. Your operating system chooses the best available positioning sources, such as GPS, Wi-Fi and cellular positioning.',
+    body: 'Allow foreground location and device heading so Qiblah can start live automatically. Your operating system chooses the best available positioning sources, such as GPS, Wi-Fi and cellular positioning.',
     privacy:
       'SalahOS does not request background location for Qiblah. Manual and saved locations remain available if you decline.',
     enable: 'Enable location & compass',
@@ -32,8 +31,7 @@ const copy: Readonly<Record<Locale, PermissionOnboardingCopy>> = {
   },
   ar: {
     title: 'تفعيل القبلة الدقيقة',
-    body:
-      'اسمح بالموقع أثناء الاستخدام واتجاه الجهاز لكي تبدأ القبلة مباشرة. يختار نظام التشغيل أفضل مصادر تحديد الموقع المتاحة مثل GPS وWi-Fi والشبكة الخلوية.',
+    body: 'اسمح بالموقع أثناء الاستخدام واتجاه الجهاز لكي تبدأ القبلة مباشرة. يختار نظام التشغيل أفضل مصادر تحديد الموقع المتاحة مثل GPS وWi-Fi والشبكة الخلوية.',
     privacy:
       'لا يطلب SalahOS موقع الخلفية للقبلة. تبقى المواقع المحفوظة واليدوية متاحة إذا رفضت الإذن.',
     enable: 'تفعيل الموقع والبوصلة',
@@ -42,8 +40,7 @@ const copy: Readonly<Record<Locale, PermissionOnboardingCopy>> = {
   },
   tr: {
     title: 'Hassas Kıbleyi etkinleştir',
-    body:
-      'Kıblenin otomatik olarak canlı başlaması için ön planda konum ve cihaz yönü izni verin. İşletim sistemi GPS, Wi-Fi ve hücresel konum gibi mevcut en iyi kaynakları seçer.',
+    body: 'Kıblenin otomatik olarak canlı başlaması için ön planda konum ve cihaz yönü izni verin. İşletim sistemi GPS, Wi-Fi ve hücresel konum gibi mevcut en iyi kaynakları seçer.',
     privacy:
       'SalahOS Kıble için arka plan konumu istemez. İzin vermezseniz kayıtlı ve elle seçilen konumlar kullanılabilir.',
     enable: 'Konum ve pusulayı etkinleştir',
@@ -52,8 +49,7 @@ const copy: Readonly<Record<Locale, PermissionOnboardingCopy>> = {
   },
   id: {
     title: 'Aktifkan Kiblat akurat',
-    body:
-      'Izinkan lokasi saat aplikasi digunakan dan arah perangkat agar Kiblat dapat langsung berjalan secara live. Sistem operasi memilih sumber posisi terbaik yang tersedia, seperti GPS, Wi-Fi, dan jaringan seluler.',
+    body: 'Izinkan lokasi saat aplikasi digunakan dan arah perangkat agar Kiblat dapat langsung berjalan secara live. Sistem operasi memilih sumber posisi terbaik yang tersedia, seperti GPS, Wi-Fi, dan jaringan seluler.',
     privacy:
       'SalahOS tidak meminta lokasi latar belakang untuk Kiblat. Lokasi tersimpan dan manual tetap tersedia jika izin ditolak.',
     enable: 'Aktifkan lokasi & kompas',
