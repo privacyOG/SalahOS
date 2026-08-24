@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { applyDocumentLocale } from '../i18n/i18n';
 import type { Locale } from '../i18n/translations';
 import { getApplicationStorage } from '../platform/applicationStorage';
+import { requestCompassPermission } from '../platform/deviceCompass';
 import { loadPersistedSettings } from '../platform/settingsStorage';
 import { installThemePreference } from '../platform/themePreference';
 import { PrimaryNavigation } from './PrimaryNavigation';
@@ -178,6 +179,9 @@ export function CongregationShell({ children }: CongregationShellProps) {
             label: labels.qiblah,
             current: destination === 'qiblah',
             onSelect: () => {
+              // Safari requires orientation permission to be requested from a user gesture.
+              // Prime it from the Qiblah navigation gesture, then the finder can start live.
+              void requestCompassPermission();
               navigate('qiblah');
             },
           },
