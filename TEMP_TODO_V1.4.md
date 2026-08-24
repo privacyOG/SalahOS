@@ -54,9 +54,11 @@ This tracker is intentionally compact. A stage is marked complete only after imp
 
 ## Stage 7 — Adhan audio library
 
-- [ ] Add supplied Adhan recordings as selectable packaged audio, subject to distribution-rights confirmation.
-- [ ] Add preview/default/per-prayer selection, volume and notification-only options.
-- [ ] Normalize playback loudness/metadata and verify offline/native scheduling behaviour.
+- [x] Add supplied Adhan recordings as selectable packaged audio, subject to distribution-rights confirmation.
+- [x] Add preview/default/per-prayer selection, volume and notification-only options.
+- [x] Normalize playback loudness/metadata and verify offline/native scheduling behaviour.
+
+**Stage 7 verification (2026-08-25):** implementation head `e7c992ffd0f744ce814bed37068e4ba4ced707b4` passed Quality Gate `32779612547` (#2185), Visual Regression `32779612588` (#1035), Android Build `32779612558` (#1191), and iOS Build `32779612620` (#1100). The implementation packages two rights-verified recordings with pinned provenance/attribution and normalized audio metadata, exposes default and per-prayer selection, preview, volume and notification-only controls, and keeps private local uploads device-local. The permanent Quality Gate now explicitly enforces packaged Adhan audio integrity, while Android and iOS native bundle checks prove the same recordings, manifest and attribution survive native synchronization. The visual gate includes the dedicated Stage 49 packaged-library journey with selection/persistence, volume, notification-only, RTL and mobile-overflow coverage. Android verification includes a successful debug build and emulator lifecycle acceptance; iOS verification includes successful native-bundle integrity checking, Simulator build, and install, launch and relaunch on fresh iPhone and iPad Simulators. Background/terminated delivery remains the existing operating-system notification path rather than an unsupported claim of unrestricted full-recording playback. The temporary Stage 49 formatting helper has been removed from the final branch. This completion commit changes tracker documentation only and remains subject to the same exact-head PR gates before merge.
 
 ## Stage 8 — Islamic Knowledge
 

@@ -1,0 +1,58 @@
+{
+  "schemaVersion": 1,
+  "sourceImport": {
+    "repository": "wali1984/Darul-Irfan",
+    "commit": "f4a0bd42b475a0a7a452a6e662a1cd9566e9f5de",
+    "normalization": "ffmpeg loudnorm=I=-16:TP=-1.5:LRA=11; 44.1 kHz mono; 96 kbps MP3"
+  },
+  "assets": [
+    {
+      "id": "beautiful-adhan",
+      "title": "Beautiful Adhan",
+      "file": "beautiful-adhan.mp3",
+      "bytes": 1848972,
+      "sha256": "1ab728372deb9a9fa25ac7b0bacba4e4c6f224230e0299875a9da47d03d5ce70",
+      "durationSeconds": 154.044,
+      "codec": "mp3",
+      "sampleRateHz": 44100,
+      "channels": 1,
+      "bitRate": 96000,
+      "normalization": {
+        "filter": "loudnorm=I=-16:TP=-1.5:LRA=11",
+        "targetLufs": -16,
+        "targetTruePeakDb": -1.5
+      },
+      "rights": {
+        "license": "CC0-1.0",
+        "author": "Adam-synagda",
+        "source": "https://commons.wikimedia.org/wiki/File:Beautiful_adhan.ogg",
+        "upstreamPath": "DarulIrfanApp/Resources/Audio/azan-full.mp3",
+        "modifications": "Format conversion in the pinned upstream derivative; SalahOS loudness normalization and mono 96 kbps MP3 re-encode."
+      }
+    },
+    {
+      "id": "fajr-malmo",
+      "title": "Fajr Adhan — Malmö Mosque",
+      "file": "fajr-malmo.mp3",
+      "bytes": 2971551,
+      "sha256": "5de2d9efae530fb55424e5ec244d812784f9b8d6f259f8315534478c9b2813b4",
+      "durationSeconds": 247.589,
+      "codec": "mp3",
+      "sampleRateHz": 44100,
+      "channels": 1,
+      "bitRate": 96000,
+      "normalization": {
+        "filter": "loudnorm=I=-16:TP=-1.5:LRA=11",
+        "targetLufs": -16,
+        "targetTruePeakDb": -1.5
+      },
+      "rights": {
+        "license": "CC-BY-3.0",
+        "author": "Islamic Center Malmö",
+        "source": "https://commons.wikimedia.org/wiki/File:Eid_al-Fitr_Fajr_azan_at_Malm%C3%B6_Mosque_-_19_August_2012.webm",
+        "upstreamPath": "DarulIrfanApp/Resources/Audio/azan-fajr-full.mp3",
+        "modifications": "Audio extraction and conversion in the pinned upstream derivative; SalahOS loudness normalization and mono 96 kbps MP3 re-encode."
+      }
+    }
+  ]
+}

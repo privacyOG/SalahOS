@@ -40,6 +40,9 @@ jobs:
       - name: Synchronize iOS application
         run: npx cap sync ios
 
+      - name: Verify packaged Adhan audio in iOS bundle
+        run: node scripts/check-adhan-audio-native-bundle.mjs ios
+
       - name: Build iOS Simulator application
         env:
           DERIVED_DATA: ${{ runner.temp }}/SalahOSDerivedData

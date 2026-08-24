@@ -11,24 +11,32 @@ const props = {
 };
 
 describe('LocalAdhanAudioSettings', () => {
-  it('renders a local-only audio chooser and lifecycle boundary in English', () => {
+  it('renders packaged, default, per-prayer, volume and local-audio controls in English', () => {
     const markup = renderToStaticMarkup(<LocalAdhanAudioSettings locale="en" {...props} />);
 
-    expect(markup).toContain('Local Adhan audio');
+    expect(markup).toContain('Adhan audio library');
+    expect(markup).toContain('Beautiful Adhan');
+    expect(markup).toContain('Fajr Adhan — Malmö Mosque');
+    expect(markup).toContain('CC0-1.0');
+    expect(markup).toContain('CC-BY-3.0');
+    expect(markup).toContain('data-testid="adhan-default-source"');
+    expect(markup).toContain('data-adhan-prayer="fajr"');
+    expect(markup).toContain('type="range"');
+    expect(markup).toContain('Notification only');
     expect(markup).toContain('type="file"');
-    expect(markup).toContain('accept="audio/*"');
     expect(markup).toContain('No local recording selected.');
-    expect(markup).toContain('stays on this device');
-    expect(markup).toContain('background and terminated delivery');
+    expect(markup).toContain('Background or terminated delivery');
   });
 
-  it('renders the same local-only control and lifecycle boundary in Arabic', () => {
+  it('renders the same library controls and lifecycle boundary in Arabic', () => {
     const markup = renderToStaticMarkup(<LocalAdhanAudioSettings locale="ar" {...props} />);
 
-    expect(markup).toContain('صوت أذان محلي');
+    expect(markup).toContain('مكتبة أصوات الأذان');
+    expect(markup).toContain('التسجيلات المضمّنة');
+    expect(markup).toContain('الأذان الافتراضي');
+    expect(markup).toContain('صوت لكل صلاة');
+    expect(markup).toContain('إشعار فقط');
     expect(markup).toContain('type="file"');
-    expect(markup).toContain('accept="audio/*"');
-    expect(markup).toContain('يبقى التسجيل المختار على هذا الجهاز');
     expect(markup).toContain('في الخلفية');
   });
 });
