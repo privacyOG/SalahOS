@@ -52,7 +52,8 @@ const copy: Readonly<Record<Locale, CalibrationCopy>> = {
     checking: 'Waiting for a fresh accuracy reading…',
     cancel: 'Cancel',
     successTitle: 'Compass accuracy improved',
-    successBody: 'A fresh compass reading is now within the recommended accuracy range for Qiblah guidance.',
+    successBody:
+      'A fresh compass reading is now within the recommended accuracy range for Qiblah guidance.',
     done: 'Done',
     unavailableTitle: 'Compass recalibration is unavailable',
     unavailableBody:
@@ -112,7 +113,8 @@ const copy: Readonly<Record<Locale, CalibrationCopy>> = {
     checking: 'Menunggu pembacaan akurasi baru…',
     cancel: 'Batal',
     successTitle: 'Akurasi kompas membaik',
-    successBody: 'Pembacaan kompas baru kini berada dalam rentang akurasi yang disarankan untuk panduan Kiblat.',
+    successBody:
+      'Pembacaan kompas baru kini berada dalam rentang akurasi yang disarankan untuk panduan Kiblat.',
     done: 'Selesai',
     unavailableTitle: 'Kalibrasi kompas tidak tersedia',
     unavailableBody:
@@ -156,10 +158,7 @@ export function QiblaCalibrationControl({
       freshReadingGapSeenRef.current = true;
       return;
     }
-    if (
-      freshReadingGapSeenRef.current &&
-      qiblaCompassCalibrationPassed(accuracyDegrees)
-    ) {
+    if (freshReadingGapSeenRef.current && qiblaCompassCalibrationPassed(accuracyDegrees)) {
       setState('success');
     }
   }, [accuracyDegrees, compassUnavailable, state]);
