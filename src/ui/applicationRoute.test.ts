@@ -18,7 +18,14 @@ describe('applicationRoute', () => {
   });
 
   it('reads every supported congregation destination from a reloadable URL', () => {
-    for (const destination of ['today', 'mosques', 'qiblah', 'community', 'settings'] as const) {
+    for (const destination of [
+      'today',
+      'mosques',
+      'qiblah',
+      'knowledge',
+      'community',
+      'settings',
+    ] as const) {
       expect(readCongregationDestination(`?view=${destination}`)).toBe(destination);
     }
   });
@@ -26,11 +33,11 @@ describe('applicationRoute', () => {
   it('creates congregation links while preserving unrelated query state', () => {
     const search = searchForCongregationDestination(
       '?surface=admin&adminView=displays&settingsView=prayer&debug=1',
-      'qiblah',
+      'knowledge',
     );
     const params = new URLSearchParams(search);
 
-    expect(params.get('view')).toBe('qiblah');
+    expect(params.get('view')).toBe('knowledge');
     expect(params.get('debug')).toBe('1');
     expect(params.has('surface')).toBe(false);
     expect(params.has('adminView')).toBe(false);
