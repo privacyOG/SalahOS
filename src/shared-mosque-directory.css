@@ -1,0 +1,202 @@
+.shared-mosque-directory {
+  margin: 1rem auto 0;
+  width: min(100% - 2rem, 1120px);
+  padding: clamp(1rem, 2vw, 1.5rem);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-xl);
+  background: var(--surface-raised);
+  box-shadow: var(--shadow-sm);
+}
+
+.shared-mosque-directory__header,
+.shared-mosque-directory__toolbar,
+.shared-mosque-directory__name-row,
+.shared-mosque-directory__actions,
+.shared-mosque-directory__coordinate-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.shared-mosque-directory__header {
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.shared-mosque-directory__header h2,
+.shared-mosque-directory__header p,
+.shared-mosque-directory__name-row h3 {
+  margin: 0;
+}
+
+.shared-mosque-directory__eyebrow {
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.shared-mosque-directory__connection,
+.shared-mosque-directory__badge {
+  display: inline-flex;
+  min-height: 1.8rem;
+  align-items: center;
+  border: 1px solid var(--border-subtle);
+  border-radius: 999px;
+  padding: 0.25rem 0.6rem;
+  background: var(--surface-muted);
+  color: var(--text-muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.shared-mosque-directory__badge--verified,
+.shared-mosque-directory__badge--claimed {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border-subtle));
+  color: var(--text-primary);
+}
+
+.shared-mosque-directory__toolbar {
+  align-items: end;
+  flex-wrap: wrap;
+}
+
+.shared-mosque-directory__toolbar .mosques-browser__search {
+  flex: 1 1 18rem;
+}
+
+.shared-mosque-directory__toolbar button,
+.shared-mosque-directory__actions button,
+.shared-mosque-directory__inline-form button,
+.shared-mosque-directory__submission button,
+.shared-mosque-directory__contribute > button {
+  min-height: 44px;
+}
+
+.shared-mosque-directory__privacy,
+.shared-mosque-directory__footer,
+.shared-mosque-directory__feedback {
+  color: var(--text-muted);
+  font-size: 0.88rem;
+}
+
+.shared-mosque-directory__grid {
+  margin-top: 1rem;
+}
+
+.shared-mosque-directory__card {
+  min-width: 0;
+}
+
+.shared-mosque-directory__name-row {
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.shared-mosque-directory__name-row h3,
+.shared-mosque-directory__card p,
+.shared-mosque-directory__inline-form,
+.shared-mosque-directory__submission {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.shared-mosque-directory__actions {
+  flex-wrap: wrap;
+}
+
+.shared-mosque-directory__inline-form,
+.shared-mosque-directory__submission {
+  display: grid;
+  gap: 0.75rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--border-subtle);
+}
+
+.shared-mosque-directory__inline-form label,
+.shared-mosque-directory__submission label {
+  display: grid;
+  gap: 0.35rem;
+  min-width: 0;
+}
+
+.shared-mosque-directory__inline-form input,
+.shared-mosque-directory__submission input {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+}
+
+.shared-mosque-directory__contribute {
+  margin-top: 1.25rem;
+}
+
+.shared-mosque-directory__submission {
+  max-width: 44rem;
+  padding: 1rem;
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-lg);
+  background: var(--surface-muted);
+}
+
+.shared-mosque-directory__submission h3 {
+  margin: 0;
+}
+
+.shared-mosque-directory__coordinate-row > label {
+  flex: 1 1 10rem;
+}
+
+.shared-mosque-directory__feedback {
+  padding: 0.75rem;
+  border-radius: var(--radius-md);
+  background: var(--surface-muted);
+}
+
+.shared-mosque-directory__footer {
+  margin-top: 1rem;
+  border-top: 1px solid var(--border-subtle);
+  padding-top: 0.75rem;
+}
+
+@media (max-width: 640px) {
+  .shared-mosque-directory {
+    width: min(100% - 1rem, 1120px);
+    padding: 0.875rem;
+  }
+
+  .shared-mosque-directory__header,
+  .shared-mosque-directory__toolbar,
+  .shared-mosque-directory__name-row,
+  .shared-mosque-directory__actions,
+  .shared-mosque-directory__coordinate-row {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .shared-mosque-directory__connection,
+  .shared-mosque-directory__badge {
+    align-self: flex-start;
+  }
+
+  .shared-mosque-directory__toolbar button,
+  .shared-mosque-directory__actions button,
+  .shared-mosque-directory__inline-form button,
+  .shared-mosque-directory__submission button,
+  .shared-mosque-directory__contribute > button {
+    width: 100%;
+  }
+}
+
+@media (forced-colors: active) {
+  .shared-mosque-directory,
+  .shared-mosque-directory__submission,
+  .shared-mosque-directory__connection,
+  .shared-mosque-directory__badge {
+    border-color: CanvasText;
+  }
+}
