@@ -22,6 +22,7 @@ const congregationStyles = read('src/congregation-shell.css');
 const main = read('src/main.tsx');
 const designSystemStyles = read('src/design-system.css');
 const designSystem = read('docs/DESIGN_SYSTEM.md');
+const smartDisplayRoot = read('src/ui/SmartDisplayRoot.tsx');
 const smartDisplayApplication = read('src/ui/SmartDisplayApplication.tsx');
 const packageJson = JSON.parse(read('package.json'));
 
@@ -71,7 +72,8 @@ if (existsSync('src/App.tsx')) {
   throw new Error('UI/UX v2 retirement policy: src/App.tsx must remain retired');
 }
 
-requireText(main, 'SmartDisplayApplication', 'dedicated smart-display root ownership');
+requireText(main, "import('./ui/SmartDisplayRoot')", 'lazy dedicated smart-display root ownership');
+requireText(smartDisplayRoot, 'SmartDisplayApplication', 'dedicated smart-display application ownership');
 requireText(smartDisplayApplication, 'SmartDisplay', 'smart-display runtime rendering');
 requireText(
   settingsScreen,
