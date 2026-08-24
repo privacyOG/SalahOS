@@ -1,0 +1,116 @@
+name: Stage 49 Adhan Asset Import
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/stage49-adhan-asset-import.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  import-assets:
+    if: github.event.pull_request.head.ref == 'stage-49/v1.4-adhan-audio-library'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+
+      - name: Fetch, normalize and import packaged Adhan assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          REPOSITORY: ${{ github.repository }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+          SOURCE_COMMIT: f4a0bd42b475a0a7a452a6e662a1cd9566e9f5de
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/stage49-audio
+
+          curl --fail --location --retry 3 \
+            "https://raw.githubusercontent.com/wali1984/Darul-Irfan/${SOURCE_COMMIT}/DarulIrfanApp/Resources/Audio/azan-full.mp3" \
+            --output /tmp/stage49-audio/beautiful-source.mp3
+          curl --fail --location --retry 3 \
+            "https://raw.githubusercontent.com/wali1984/Darul-Irfan/${SOURCE_COMMIT}/DarulIrfanApp/Resources/Audio/azan-fajr-full.mp3" \
+            --output /tmp/stage49-audio/fajr-source.mp3
+
+          ffmpeg -hide_banner -loglevel error -y -i /tmp/stage49-audio/beautiful-source.mp3 \
+            -af 'loudnorm=I=-16:TP=-1.5:LRA=11' -ar 44100 -ac 1 -c:a libmp3lame -b:a 96k \
+            /tmp/stage49-audio/beautiful-adhan.mp3
+          ffmpeg -hide_banner -loglevel error -y -i /tmp/stage49-audio/fajr-source.mp3 \
+            -af 'loudnorm=I=-16:TP=-1.5:LRA=11' -ar 44100 -ac 1 -c:a libmp3lame -b:a 96k \
+            /tmp/stage49-audio/fajr-malmo.mp3
+
+          python3 - <<'PY'
+          import hashlib, json, os, subprocess
+          root = '/tmp/stage49-audio'
+          records = []
+          for recording_id, filename in [
+              ('beautiful-adhan', 'beautiful-adhan.mp3'),
+              ('fajr-malmo', 'fajr-malmo.mp3'),
+          ]:
+              path = os.path.join(root, filename)
+              probe = json.loads(subprocess.check_output([
+                  'ffprobe', '-v', 'error', '-show_entries',
+                  'format=duration:stream=codec_name,sample_rate,channels,bit_rate',
+                  '-of', 'json', path,
+              ]))
+              stream = probe['streams'][0]
+              with open(path, 'rb') as handle:
+                  digest = hashlib.sha256(handle.read()).hexdigest()
+              records.append({
+                  'id': recording_id,
+                  'file': filename,
+                  'bytes': os.path.getsize(path),
+                  'sha256': digest,
+                  'durationSeconds': round(float(probe['format']['duration']), 3),
+                  'codec': stream.get('codec_name'),
+                  'sampleRateHz': int(stream.get('sample_rate', 0)),
+                  'channels': int(stream.get('channels', 0)),
+                  'bitRate': int(stream.get('bit_rate', 0)),
+                  'normalization': {
+                      'filter': 'loudnorm=I=-16:TP=-1.5:LRA=11',
+                      'targetLufs': -16,
+                      'targetTruePeakDb': -1.5,
+                  },
+              })
+          with open(os.path.join(root, 'assets.json'), 'w', encoding='utf-8') as handle:
+              json.dump({'schemaVersion': 1, 'assets': records}, handle, indent=2)
+              handle.write('\n')
+          PY
+
+          create_blob() {
+            local path="$1"
+            base64 -w0 "$path" | jq -Rs '{content: ., encoding: "base64"}' | \
+              gh api --method POST "repos/${REPOSITORY}/git/blobs" --input - --jq '.sha'
+          }
+
+          BEAUTIFUL_BLOB="$(create_blob /tmp/stage49-audio/beautiful-adhan.mp3)"
+          FAJR_BLOB="$(create_blob /tmp/stage49-audio/fajr-malmo.mp3)"
+          MANIFEST_BLOB="$(create_blob /tmp/stage49-audio/assets.json)"
+          BASE_TREE="$(gh api "repos/${REPOSITORY}/git/commits/${HEAD_SHA}" --jq '.tree.sha')"
+
+          TREE_SHA="$(jq -n \
+            --arg base_tree "$BASE_TREE" \
+            --arg beautiful "$BEAUTIFUL_BLOB" \
+            --arg fajr "$FAJR_BLOB" \
+            --arg manifest "$MANIFEST_BLOB" \
+            '{base_tree: $base_tree, tree: [
+              {path:"public/audio/adhan/beautiful-adhan.mp3", mode:"100644", type:"blob", sha:$beautiful},
+              {path:"public/audio/adhan/fajr-malmo.mp3", mode:"100644", type:"blob", sha:$fajr},
+              {path:"public/audio/adhan/assets.json", mode:"100644", type:"blob", sha:$manifest}
+            ]}' | gh api --method POST "repos/${REPOSITORY}/git/trees" --input - --jq '.sha')"
+
+          GENERATED_COMMIT="$(jq -n \
+            --arg message 'Stage 49: import normalized Adhan recordings' \
+            --arg tree "$TREE_SHA" \
+            --arg parent "$HEAD_SHA" \
+            '{message:$message, tree:$tree, parents:[$parent]}' | \
+            gh api --method POST "repos/${REPOSITORY}/git/commits" --input - --jq '.sha')"
+
+          echo "STAGE49_GENERATED_COMMIT=${GENERATED_COMMIT}"
+          echo "STAGE49_BEAUTIFUL_BLOB=${BEAUTIFUL_BLOB}"
+          echo "STAGE49_FAJR_BLOB=${FAJR_BLOB}"
+          cat /tmp/stage49-audio/assets.json
