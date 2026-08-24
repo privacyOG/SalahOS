@@ -74,8 +74,19 @@ jobs:
           BASE_TREE="$(gh api "repos/${REPOSITORY}/git/commits/${HEAD_SHA}" --jq '.tree.sha')"
           TREE_ENTRIES='[]'
           for file in tests/golden/today-phone-en-light.png tests/golden/knowledge-phone-ar-dark.png; do
-            encoded="$(base64 -w0 "$file")"
-            blob="$(jq -n --arg content "$encoded" '{content:$content,encoding:"base64"}' | gh api --method POST "repos/${REPOSITORY}/git/blobs" --input - --jq '.sha')"
+            blob="$(python3 - "$file" <<'PY' | gh api --method POST "repos/${REPOSITORY}/git/blobs" --input - --jq '.sha'
+          import base64
+          import json
+          import sys
+          from pathlib import Path
+
+          payload = {
+              'content': base64.b64encode(Path(sys.argv[1]).read_bytes()).decode('ascii'),
+              'encoding': 'base64',
+          }
+          json.dump(payload, sys.stdout)
+          PY
+          )"
             TREE_ENTRIES="$(jq --arg path "$file" --arg sha "$blob" '. + [{path:$path,mode:"100644",type:"blob",sha:$sha}]' <<< "$TREE_ENTRIES")"
           done
           TREE_SHA="$(jq -n --arg base_tree "$BASE_TREE" --argjson tree "$TREE_ENTRIES" '{base_tree:$base_tree,tree:$tree}' | gh api --method POST "repos/${REPOSITORY}/git/trees" --input - --jq '.sha')"
