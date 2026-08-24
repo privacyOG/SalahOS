@@ -1,0 +1,69 @@
+name: Stage 51 Format Helper
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/stage51-format-helper.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    if: github.event.pull_request.head.ref == 'stage-51/v1.4-performance-architecture'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact Stage 51 branch
+        uses: actions/checkout@v4
+        with:
+          ref: stage-51/v1.4-performance-architecture
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Apply canonical formatting
+        run: |
+          npm ci --ignore-scripts
+          npx prettier --write \
+            .github/workflows/ci.yml \
+            docs/PERFORMANCE_ARCHITECTURE.md \
+            package.json \
+            scripts/check-bundle-size.mjs \
+            scripts/check-ui-v2-retirement.mjs \
+            src/domain/mosqueTimetablePayload.test.ts \
+            src/domain/mosqueTimetablePayload.ts \
+            src/main.tsx \
+            src/platform/mosqueLibrary.ts \
+            src/ui/AdministrationApplication.tsx \
+            src/ui/MosquesRoute.tsx \
+            src/ui/SmartDisplayRoot.tsx \
+            src/ui/smartDisplayRouting.ts
+          npx prettier --check \
+            .github/workflows/ci.yml \
+            docs/PERFORMANCE_ARCHITECTURE.md \
+            package.json \
+            scripts/check-bundle-size.mjs \
+            scripts/check-ui-v2-retirement.mjs \
+            src/domain/mosqueTimetablePayload.test.ts \
+            src/domain/mosqueTimetablePayload.ts \
+            src/main.tsx \
+            src/platform/mosqueLibrary.ts \
+            src/ui/AdministrationApplication.tsx \
+            src/ui/MosquesRoute.tsx \
+            src/ui/SmartDisplayRoot.tsx \
+            src/ui/smartDisplayRouting.ts
+
+      - name: Commit formatting changes
+        run: |
+          if git diff --quiet; then
+            echo 'No formatting changes required.'
+            exit 0
+          fi
+          git config user.name privacyOG
+          git config user.email privacyOG@users.noreply.github.com
+          git add .
+          git commit -m 'Stage 51: apply canonical formatting'
+          git push origin HEAD:stage-51/v1.4-performance-architecture
