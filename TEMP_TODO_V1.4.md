@@ -4,11 +4,13 @@ This tracker is intentionally compact. A stage is marked complete only after imp
 
 ## Stage 1 — Mobile layout + accessibility hardening
 
-- [~] Fix Today/mobile bottom-navigation overlap at 390×844 and 360×780.
-- [ ] Ensure the final prayer row and trailing content remain reachable above navigation/safe areas.
-- [ ] Correct confirmed low-contrast light/dark/RTL UI text without changing the established visual identity.
-- [ ] Add automated regression assertions for navigation overlap and key accessibility/contrast behaviour.
-- [ ] Run targeted tests, lint/typecheck/build and visual acceptance; record evidence.
+- [x] Fix Today/mobile bottom-navigation overlap at 390×844 and 360×780.
+- [x] Ensure the final prayer row and trailing content remain reachable above navigation/safe areas.
+- [x] Correct confirmed low-contrast light/dark/RTL UI text without changing the established visual identity.
+- [x] Add automated regression assertions for navigation overlap and key accessibility/contrast behaviour.
+- [x] Run targeted tests, lint/typecheck/build and visual acceptance; record evidence.
+
+**Stage 1 verification (2026-08-24):** implementation head `6770f770349f2cf64593a0987a747d41296f1862` passed Quality Gate `32687828393` (#2073), Visual Regression `32687828408` (#923), Android Build `32687828390` (#1079), and iOS Build `32687828384` (#988). The visual matrix includes the 360×780 and 390×844 phone regressions, Isha/trailing-content reachability above primary navigation, RTL/large-text coverage, and mobile-theme contrast assertions. This completion commit changes tracker documentation only and remains subject to the same exact-head PR gates before merge.
 
 ## Stage 2 — Automatic live Qiblah
 
