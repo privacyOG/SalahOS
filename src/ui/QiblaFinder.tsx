@@ -176,12 +176,12 @@ export function QiblaFinder() {
   const useCurrentPosition = useCallback(async () => {
     const requestGeneration = ++locationRequestGenerationRef.current;
     await stopLiveLocation();
-    if (disposedRef.current || requestGeneration !== locationRequestGenerationRef.current) return;
+    if (requestGeneration !== locationRequestGenerationRef.current) return;
 
     setLocationState('locating');
     setLocationError(null);
     const result = await requestQiblaLocation();
-    if (disposedRef.current || requestGeneration !== locationRequestGenerationRef.current) return;
+    if (requestGeneration !== locationRequestGenerationRef.current) return;
 
     if (!result.ok) {
       setLocationError(result.reason);
@@ -197,8 +197,7 @@ export function QiblaFinder() {
     setLocationState('live');
     const watch = await startQiblaLocationWatch(
       (fix) => {
-        if (disposedRef.current || requestGeneration !== locationRequestGenerationRef.current)
-          return;
+        if (requestGeneration !== locationRequestGenerationRef.current) return;
         setLocation((previous) => {
           if (previous !== null && !shouldRecalculateQibla(previous.coordinates, fix.coordinates)) {
             return previous;
@@ -211,13 +210,12 @@ export function QiblaFinder() {
         });
       },
       (reason) => {
-        if (disposedRef.current || requestGeneration !== locationRequestGenerationRef.current)
-          return;
+        if (requestGeneration !== locationRequestGenerationRef.current) return;
         setLocationError(reason);
       },
     );
 
-    if (disposedRef.current || requestGeneration !== locationRequestGenerationRef.current) {
+    if (requestGeneration !== locationRequestGenerationRef.current) {
       await watch.stop();
       return;
     }
@@ -283,6 +281,7 @@ export function QiblaFinder() {
     disposedRef.current = false;
     return () => {
       disposedRef.current = true;
+      locationRequestGenerationRef.current += 1;
       clearHeadingTimer(headingTimerRef);
       void compassSessionRef.current?.stop();
       void locationWatchRef.current?.stop();
