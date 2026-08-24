@@ -23,7 +23,6 @@ export interface PackagedAdhanRecording {
   readonly license: 'CC0-1.0' | 'CC-BY-3.0';
   readonly author: string;
   readonly sourceLabel: string;
-  readonly sourceUrl: string;
   readonly upstreamRepository: string;
   readonly upstreamCommit: string;
   readonly upstreamPath: string;
@@ -47,7 +46,6 @@ export const packagedAdhanRecordings = Object.freeze([
     license: 'CC0-1.0',
     author: 'Adam-synagda',
     sourceLabel: 'Wikimedia Commons — Beautiful adhan',
-    sourceUrl: 'https://commons.wikimedia.org/wiki/File:Beautiful_adhan.ogg',
     upstreamRepository: 'wali1984/Darul-Irfan',
     upstreamCommit: UPSTREAM_COMMIT,
     upstreamPath: 'DarulIrfanApp/Resources/Audio/azan-full.mp3',
@@ -67,8 +65,6 @@ export const packagedAdhanRecordings = Object.freeze([
     license: 'CC-BY-3.0',
     author: 'Islamic Center Malmö',
     sourceLabel: 'Wikimedia Commons — Eid al-Fitr Fajr azan at Malmö Mosque',
-    sourceUrl:
-      'https://commons.wikimedia.org/wiki/File:Eid_al-Fitr_Fajr_azan_at_Malm%C3%B6_Mosque_-_19_August_2012.webm',
     upstreamRepository: 'wali1984/Darul-Irfan',
     upstreamCommit: UPSTREAM_COMMIT,
     upstreamPath: 'DarulIrfanApp/Resources/Audio/azan-fajr-full.mp3',
