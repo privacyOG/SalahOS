@@ -1,10 +1,21 @@
 .congregation-shell {
-  min-height: 100vh;
+  display: flex;
+  height: 100vh;
+  height: 100dvh;
+  min-height: 0;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .congregation-shell-content {
   min-width: 0;
-  padding-block-end: calc(5.5rem + env(safe-area-inset-bottom));
+  min-height: 0;
+  flex: 1 1 auto;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  padding-block-end: var(--salah-space-4);
+  -webkit-overflow-scrolling: touch;
 }
 
 .congregation-route {
@@ -64,12 +75,11 @@
 }
 
 .congregation-nav {
-  position: fixed;
+  position: relative;
   z-index: 20;
-  inset-inline: 0;
-  bottom: 0;
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
+  flex: 0 0 auto;
   gap: var(--salah-space-1);
   padding: var(--salah-space-2) max(var(--salah-space-2), env(safe-area-inset-right))
     max(var(--salah-space-2), env(safe-area-inset-bottom))
@@ -129,11 +139,16 @@
 @media (min-width: 800px) {
   .congregation-shell {
     display: grid;
+    height: auto;
+    min-height: 100vh;
     grid-template-columns: 6.5rem minmax(0, 1fr);
+    overflow: visible;
   }
 
   .congregation-shell-content {
     grid-column: 2;
+    min-height: 0;
+    overflow: visible;
     padding-block-end: 0;
   }
 
