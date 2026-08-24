@@ -52,24 +52,21 @@ describe('QiblaMapView', () => {
     expect(markup).not.toContain('openstreetmap.org/copyright');
   });
 
-  it(
-    'prepares Satellite as the primary Google Maps mode without exposing the client key in markup',
-    () => {
-      vi.stubEnv('VITE_GOOGLE_MAPS_API_KEY', 'test-google-key');
+  it('prepares Satellite as the primary Google Maps mode without exposing the client key in markup', () => {
+    vi.stubEnv('VITE_GOOGLE_MAPS_API_KEY', 'test-google-key');
 
-      const markup = renderMap(false);
+    const markup = renderMap(false);
 
-      expect(markup).toContain('data-google-map-state="loading"');
-      expect(markup).toContain('data-google-map-type="satellite"');
-      expect(markup).toContain('aria-pressed="true">Satellite</button>');
-      expect(markup).toContain('>Map</button>');
-      expect(markup).toContain('>Hybrid</button>');
-      expect(markup).toContain('Show full Qiblah route');
-      expect(markup).toContain('https://www.google.com/help/terms_maps/');
-      expect(markup).toContain('Google Maps');
-      expect(markup).not.toContain('maps/api/staticmap');
-      expect(markup).not.toContain('tile.openstreetmap.org');
-      expect(markup).not.toContain('test-google-key');
-    },
-  );
+    expect(markup).toContain('data-google-map-state="loading"');
+    expect(markup).toContain('data-google-map-type="satellite"');
+    expect(markup).toContain('aria-pressed="true">Satellite</button>');
+    expect(markup).toContain('>Map</button>');
+    expect(markup).toContain('>Hybrid</button>');
+    expect(markup).toContain('Show full Qiblah route');
+    expect(markup).toContain('https://www.google.com/help/terms_maps/');
+    expect(markup).toContain('Google Maps');
+    expect(markup).not.toContain('maps/api/staticmap');
+    expect(markup).not.toContain('tile.openstreetmap.org');
+    expect(markup).not.toContain('test-google-key');
+  });
 });
