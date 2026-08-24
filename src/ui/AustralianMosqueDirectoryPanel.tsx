@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'react';
 
+import '../australian-mosque-directory.css';
 import {
   australianMosqueDirectory,
   australianMosques,
