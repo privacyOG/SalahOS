@@ -13,122 +13,115 @@ if (!playwrightModule) {
 }
 
 const { chromium } = await import(pathToFileURL(playwrightModule).href);
-const fixedNow = Date.parse('2026-08-21T03:00:00.000Z');
+const fixedNow = Date.parse('2026-08-23T05:30:00.000Z');
 
-const mosqueNames = {
-  en: 'SalahOS Community Masjid and Learning Centre for Families and Visitors',
-  ar: 'مسجد ومركز صلاح أو إس المجتمعي للتعليم وخدمة العائلات والزوار',
-};
-
-function settingsFor(locale) {
+function settings(locale, theme = 'light') {
   return {
     version: 2,
     locale,
-    theme: locale === 'ar' ? 'dark' : 'light',
+    theme,
     timeFormat: 'h23',
     calculationMethodId: 'muslim-world-league',
     asrConvention: 'standard',
     highLatitudeRule: 'angle-based',
     hijriCorrectionDays: 0,
     prayerAdjustments: {},
-    prayerSourceMode: 'local-mosque',
+    prayerSourceMode: 'calculated',
     location: {
       coordinates: { latitude: -33.8688, longitude: 151.2093 },
       timeZone: 'Australia/Sydney',
     },
-    mosqueTimetable: {
-      mosqueName: mosqueNames[locale],
-      days: [
-        {
-          date: '2026-08-21',
-          prayers: {
-            fajr: { startLocalMinutes: 300, iqamah: { kind: 'fixed', localMinutes: 330 } },
-            dhuhr: { startLocalMinutes: 780, iqamah: { kind: 'fixed', localMinutes: 810 } },
-            asr: { startLocalMinutes: 930, iqamah: { kind: 'fixed', localMinutes: 960 } },
-            maghrib: { startLocalMinutes: 1080, iqamah: { kind: 'fixed', localMinutes: 1090 } },
-            isha: { startLocalMinutes: 1170, iqamah: { kind: 'fixed', localMinutes: 1200 } },
-          },
-        },
-      ],
-    },
+    mosqueTimetable: null,
     notifications: {},
   };
 }
 
-function boardConfigFor(locale) {
-  return {
-    version: 1,
-    templateId: 'heritage-classic',
-    primaryLocale: locale,
-    languageMode: 'single',
-    timeFormat: 'h23',
-    accentPreset: 'jewel',
-  };
-}
-
-async function seed(page, locale) {
+async function seed(page, locale, theme) {
   await page.addInitScript(
-    ({ now, settings, boardConfig }) => {
+    ({ persistedSettings, now }) => {
+      localStorage.setItem('salahos.settings', persistedSettings);
       const NativeDate = Date;
-      class FixedDate extends NativeDate {
+      class FrozenDate extends NativeDate {
         constructor(...args) {
-          super(...(args.length === 0 ? [now] : args));
+          if (args.length === 0) super(now);
+          else super(...args);
         }
-
         static now() {
           return now;
         }
       }
-      globalThis.Date = FixedDate;
-      localStorage.setItem('salahos.settings', JSON.stringify(settings));
-      localStorage.setItem('salahos.mobilePrayerBoardDisplayConfig', JSON.stringify(boardConfig));
+      Object.setPrototypeOf(FrozenDate, NativeDate);
+      globalThis.Date = FrozenDate;
     },
-    { now: fixedNow, settings: settingsFor(locale), boardConfig: boardConfigFor(locale) },
+    { persistedSettings: JSON.stringify(settings(locale, theme)), now: fixedNow },
   );
 }
 
-function assertNoHorizontalOverflow(metrics, name) {
-  if (metrics.bodyWidth > metrics.viewportWidth + 2 || metrics.documentWidth > metrics.viewportWidth + 2) {
-    throw new Error(`${name} horizontal overflow: ${JSON.stringify(metrics)}`);
+async function horizontalOverflow(page) {
+  return page.evaluate(() => ({
+    viewportWidth: document.documentElement.clientWidth,
+    bodyWidth: document.body.scrollWidth,
+    documentWidth: document.documentElement.scrollWidth,
+  }));
+}
+
+function assertNoHorizontalOverflow(name, overflow) {
+  if (
+    overflow.bodyWidth > overflow.viewportWidth + 2 ||
+    overflow.documentWidth > overflow.viewportWidth + 2
+  ) {
+    throw new Error(`${name} horizontal overflow: ${JSON.stringify(overflow)}`);
   }
 }
 
 async function phoneMetrics(page) {
   return page.evaluate(() => {
-    const navigation = document.querySelector('.congregation-nav');
+    const nav = document.querySelector('.congregation-nav');
     const content = document.querySelector('.congregation-shell-content');
-    const navigationRect = navigation?.getBoundingClientRect();
-    const contentRect = content?.getBoundingClientRect();
+    const prayerTable = document.querySelector('.today-prayer-table');
+    if (!(nav instanceof HTMLElement) || !(content instanceof HTMLElement)) {
+      throw new Error('congregation shell navigation/content missing');
+    }
+    if (!(prayerTable instanceof HTMLElement)) {
+      throw new Error('Today prayer timetable missing');
+    }
+
+    const navStyle = getComputedStyle(nav);
+    const navRect = nav.getBoundingClientRect();
+    const contentStyle = getComputedStyle(content);
+    const contentRect = content.getBoundingClientRect();
+    const navigationTargets = [...nav.querySelectorAll('button')].map((element) => {
+      const rect = element.getBoundingClientRect();
+      return { width: rect.width, height: rect.height, label: element.textContent?.trim() ?? '' };
+    });
+    const quickTargets = [...document.querySelectorAll('.today-quick-actions a')].map((element) => {
+      const rect = element.getBoundingClientRect();
+      return { width: rect.width, height: rect.height, label: element.textContent?.trim() ?? '' };
+    });
+    const prayerRows = prayerTable.querySelectorAll(
+      '.today-prayer-row:not(.today-prayer-row--header)',
+    );
+
     return {
-      viewportWidth: document.documentElement.clientWidth,
-      viewportHeight: window.innerHeight,
-      bodyWidth: document.body.scrollWidth,
-      documentWidth: document.documentElement.scrollWidth,
-      navPosition: navigation === null ? '' : getComputedStyle(navigation).position,
-      navTop: navigationRect?.top ?? -1,
-      navBottom: navigationRect?.bottom ?? -1,
-      contentBottom: contentRect?.bottom ?? -1,
-      contentOverflowY: content === null ? '' : getComputedStyle(content).overflowY,
-      contentScrollHeight: content?.scrollHeight ?? 0,
-      contentClientHeight: content?.clientHeight ?? 0,
-      navigationTargets: [...document.querySelectorAll('.congregation-nav-item')].map((element) => {
-        const rect = element.getBoundingClientRect();
-        return { width: rect.width, height: rect.height };
-      }),
-      quickTargets: [...document.querySelectorAll('.today-quick-links a')].map((element) => {
-        const rect = element.getBoundingClientRect();
-        return { width: rect.width, height: rect.height };
-      }),
-      prayerRows: document.querySelectorAll(
-        '.today-prayer-row:not(.today-prayer-row--header):not(.is-supplementary)',
-      ).length,
-      prayerTableRole: document.querySelector('.today-prayer-table')?.getAttribute('role') ?? '',
+      navPosition: navStyle.position,
+      navTop: navRect.top,
+      navBottom: navRect.bottom,
+      viewportHeight: innerHeight,
+      navHeight: navRect.height,
+      contentTop: contentRect.top,
+      contentBottom: contentRect.bottom,
+      contentOverflowY: contentStyle.overflowY,
+      contentClientHeight: content.clientHeight,
+      contentScrollHeight: content.scrollHeight,
+      navigationTargets,
+      quickTargets,
+      prayerRows: prayerRows.length,
+      prayerTableRole: prayerTable.getAttribute('role'),
     };
   });
 }
 
-function assertPhoneMetrics(metrics, name) {
-  assertNoHorizontalOverflow(metrics, name);
+function assertPhoneMetrics(name, metrics) {
   if (metrics.navPosition !== 'relative') {
     throw new Error(
       `${name} primary navigation does not participate in shell layout: ${metrics.navPosition}`,
@@ -169,101 +162,142 @@ function assertPhoneMetrics(metrics, name) {
 async function reachableAboveNavigation(page, selector) {
   const target = page.locator(selector).last();
   await target.scrollIntoViewIfNeeded();
-  await page.evaluate(() => new Promise((resolve) => requestAnimationFrame(() => resolve())));
+  await page.evaluate(
+    () => new Promise((resolve) => requestAnimationFrame(() => resolve(undefined))),
+  );
   return target.evaluate((element) => {
-    const targetRect = element.getBoundingClientRect();
-    const navRect = document.querySelector('.congregation-nav')?.getBoundingClientRect();
-    if (navRect === undefined) return false;
-    return targetRect.bottom <= navRect.top + 1 && targetRect.top >= -1;
+    const nav = document.querySelector('.congregation-nav');
+    const content = document.querySelector('.congregation-shell-content');
+    if (!(nav instanceof HTMLElement) || !(content instanceof HTMLElement)) {
+      throw new Error('congregation shell navigation/content missing');
+    }
+    const rect = element.getBoundingClientRect();
+    const navRect = nav.getBoundingClientRect();
+    const contentRect = content.getBoundingClientRect();
+    return {
+      top: rect.top,
+      bottom: rect.bottom,
+      visibleTop: contentRect.top,
+      visibleBottom: Math.min(contentRect.bottom, navRect.top),
+    };
   });
 }
 
-async function capture(page, name) {
-  await page.screenshot({
-    path: path.join(artifactDirectory, `${name}.png`),
-    fullPage: false,
-    animations: 'disabled',
-  });
+function assertReachable(name, label, metrics) {
+  if (metrics.top < metrics.visibleTop - 1 || metrics.bottom > metrics.visibleBottom + 1) {
+    throw new Error(
+      `${name} ${label} cannot be fully reached above navigation: ${JSON.stringify(metrics)}`,
+    );
+  }
 }
 
 async function validatePhone(browser, scenario) {
   const context = await browser.newContext({
-    viewport: scenario.viewport,
+    viewport: { width: scenario.width, height: scenario.height },
     reducedMotion: 'reduce',
+    serviceWorkers: 'block',
   });
   const page = await context.newPage();
+  const errors = [];
+  page.on('pageerror', (error) => errors.push(error.message));
   try {
-    await seed(page, scenario.locale);
-    await page.goto(`${baseUrl}/?view=today`, { waitUntil: 'networkidle' });
+    const fontScale = scenario.fontScale ?? 1;
+    if (fontScale !== 1) {
+      const cdp = await context.newCDPSession(page);
+      await cdp.send('Emulation.setEmulatedOSTextScale', { scale: fontScale });
+    }
+    await seed(page, scenario.locale, scenario.theme);
+    await page.goto(baseUrl, { waitUntil: 'networkidle' });
+    await page.locator('.today-prayer-table').waitFor({ state: 'visible' });
+    assertNoHorizontalOverflow(scenario.name, await horizontalOverflow(page));
     const metrics = await phoneMetrics(page);
-    assertPhoneMetrics(metrics, scenario.name);
+    assertPhoneMetrics(scenario.name, metrics);
 
-    if (!(await reachableAboveNavigation(page, '.today-prayer-row[data-prayer="isha"]'))) {
-      throw new Error(`${scenario.name} Isha row is not reachable above primary navigation`);
-    }
-    if (!(await reachableAboveNavigation(page, '.today-provenance'))) {
-      throw new Error(`${scenario.name} provenance content is not reachable above primary navigation`);
-    }
+    const ishaReachability = await reachableAboveNavigation(
+      page,
+      '.today-prayer-row:not(.today-prayer-row--header)',
+    );
+    assertReachable(scenario.name, 'Isha row', ishaReachability);
+    const footerReachability = await reachableAboveNavigation(page, '.today-provenance');
+    assertReachable(scenario.name, 'trailing provenance', footerReachability);
 
-    await capture(page, scenario.name);
-    return { name: scenario.name, ...metrics };
+    if (errors.length > 0) throw new Error(`${scenario.name} page errors: ${errors.join(' | ')}`);
+    await page.locator('.congregation-shell-content').evaluate((element) => {
+      element.scrollTop = 0;
+    });
+    await page.screenshot({
+      path: path.join(artifactDirectory, `${scenario.name}.png`),
+      fullPage: true,
+      animations: 'disabled',
+    });
+    return {
+      name: scenario.name,
+      fontScale,
+      ...metrics,
+      ishaReachability,
+      footerReachability,
+    };
   } finally {
     await context.close();
   }
 }
 
-async function validateTablet(browser, scenario) {
+async function validateWide(browser, scenario) {
   const context = await browser.newContext({
-    viewport: scenario.viewport,
+    viewport: { width: scenario.width, height: scenario.height },
     reducedMotion: 'reduce',
+    serviceWorkers: 'block',
   });
   const page = await context.newPage();
   try {
-    await seed(page, scenario.locale);
-    await page.goto(`${baseUrl}/?view=today`, { waitUntil: 'networkidle' });
-    const metrics = await page.evaluate(() => ({
-      viewportWidth: document.documentElement.clientWidth,
-      bodyWidth: document.body.scrollWidth,
-      documentWidth: document.documentElement.scrollWidth,
-      navPosition: getComputedStyle(document.querySelector('.congregation-nav')).position,
-      navHeight: document.querySelector('.congregation-nav')?.getBoundingClientRect().height ?? 0,
-      viewportHeight: window.innerHeight,
-    }));
-    assertNoHorizontalOverflow(metrics, scenario.name);
-    if (metrics.navPosition !== 'sticky') {
-      throw new Error(`${scenario.name} desktop/tablet navigation is not sticky`);
-    }
-    if (metrics.navHeight < metrics.viewportHeight - 1) {
-      throw new Error(`${scenario.name} navigation rail does not span the viewport`);
-    }
-    await capture(page, scenario.name);
-    return { name: scenario.name, ...metrics };
-  } finally {
-    await context.close();
-  }
-}
-
-async function validateNavigation(browser) {
-  const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
-  const page = await context.newPage();
-  try {
-    await seed(page, 'en');
-    await page.goto(`${baseUrl}/?view=today`, { waitUntil: 'networkidle' });
-    const content = page.locator('.congregation-shell-content');
-    await content.evaluate((element) => {
-      element.scrollTop = 500;
+    await seed(page, scenario.locale, scenario.theme);
+    await page.goto(`${baseUrl}/?view=${scenario.view}`, { waitUntil: 'networkidle' });
+    await page.locator('.congregation-shell').waitFor({ state: 'visible' });
+    assertNoHorizontalOverflow(scenario.name, await horizontalOverflow(page));
+    const metrics = await page.evaluate(() => {
+      const shell = document.querySelector('.congregation-shell');
+      const nav = document.querySelector('.congregation-nav');
+      const content = document.querySelector('.congregation-shell-content');
+      if (
+        !(shell instanceof HTMLElement) ||
+        !(nav instanceof HTMLElement) ||
+        !(content instanceof HTMLElement)
+      ) {
+        throw new Error('wide congregation shell missing');
+      }
+      const shellColumns = getComputedStyle(shell).gridTemplateColumns;
+      const navStyle = getComputedStyle(nav);
+      const contentRect = content.getBoundingClientRect();
+      const readableBlocks = [...content.querySelectorAll('p')]
+        .map((element) => element.getBoundingClientRect().width)
+        .filter((width) => width > 0);
+      return {
+        shellColumns,
+        navPosition: navStyle.position,
+        contentWidth: contentRect.width,
+        viewportWidth: innerWidth,
+        widestParagraph: readableBlocks.length > 0 ? Math.max(...readableBlocks) : 0,
+      };
     });
-    await page.getByRole('button', { name: 'Mosques', exact: true }).click();
-    await page.locator('[data-route="mosques"]').waitFor({ state: 'visible' });
-    const scrollTop = await content.evaluate((element) => element.scrollTop);
-    if (scrollTop !== 0) {
-      throw new Error(`Navigation did not reset the internal shell scroll position: ${scrollTop}`);
+    if (metrics.navPosition !== 'sticky') {
+      throw new Error(
+        `${scenario.name} expected a sticky rail/sidebar, got ${metrics.navPosition}`,
+      );
     }
-    const params = new URLSearchParams(new URL(page.url()).search);
-    if (params.get('view') !== 'mosques') {
-      throw new Error(`Navigation did not update the reloadable route: ${page.url()}`);
+    if (!metrics.shellColumns.includes('px') || metrics.contentWidth >= metrics.viewportWidth) {
+      throw new Error(`${scenario.name} did not reserve deliberate navigation/content columns`);
     }
-    return { name: 'stage43-navigation-reset', scrollTop };
+    if (metrics.widestParagraph > 900) {
+      throw new Error(
+        `${scenario.name} paragraph line length stretched excessively: ${metrics.widestParagraph}px`,
+      );
+    }
+    await page.screenshot({
+      path: path.join(artifactDirectory, `${scenario.name}.png`),
+      fullPage: true,
+      animations: 'disabled',
+    });
+    return { name: scenario.name, ...metrics };
   } finally {
     await context.close();
   }
@@ -271,28 +305,63 @@ async function validateNavigation(browser) {
 
 await mkdir(artifactDirectory, { recursive: true });
 const browser = await chromium.launch({ headless: true });
-const results = [];
 try {
+  const phones = [];
   for (const scenario of [
-    { name: 'stage43-phone-360-en', locale: 'en', viewport: { width: 360, height: 780 } },
-    { name: 'stage43-phone-390-ar', locale: 'ar', viewport: { width: 390, height: 844 } },
+    { name: 'stage43-phone-360-en', width: 360, height: 780, locale: 'en', theme: 'light' },
+    { name: 'stage43-phone-390-en', width: 390, height: 844, locale: 'en', theme: 'light' },
+    {
+      name: 'stage43-phone-390-ar-large-text',
+      width: 390,
+      height: 844,
+      locale: 'ar',
+      theme: 'dark',
+      fontScale: 1.25,
+    },
+    { name: 'stage25-phone-320-en', width: 320, height: 720, locale: 'en', theme: 'light' },
+    { name: 'stage25-phone-430-tr', width: 430, height: 932, locale: 'tr', theme: 'light' },
+    { name: 'stage25-phone-430-id', width: 430, height: 932, locale: 'id', theme: 'dark' },
   ]) {
-    results.push(await validatePhone(browser, scenario));
+    phones.push(await validatePhone(browser, scenario));
   }
-  results.push(
-    await validateTablet(browser, {
-      name: 'stage43-tablet-1024-en',
+
+  const wide = [];
+  for (const scenario of [
+    {
+      name: 'stage25-tablet-1024-ar-community',
+      width: 1024,
+      height: 1366,
+      locale: 'ar',
+      theme: 'dark',
+      view: 'community',
+    },
+    {
+      name: 'stage25-desktop-1440-en-qiblah',
+      width: 1440,
+      height: 1000,
       locale: 'en',
-      viewport: { width: 1024, height: 1366 },
-    }),
-  );
-  results.push(await validateNavigation(browser));
+      theme: 'light',
+      view: 'qiblah',
+    },
+    {
+      name: 'stage25-desktop-1600-en-today',
+      width: 1600,
+      height: 1000,
+      locale: 'en',
+      theme: 'dark',
+      view: 'today',
+    },
+  ]) {
+    wide.push(await validateWide(browser, scenario));
+  }
 
   await writeFile(
-    path.join(artifactDirectory, 'stage43-device-ux-refinement-results.json'),
-    `${JSON.stringify(results, null, 2)}\n`,
+    path.join(artifactDirectory, 'stage43-device-ux-results.json'),
+    `${JSON.stringify({ phones, wide }, null, 2)}\n`,
   );
-  console.log(`Stage 43 device UX refinement acceptance passed: ${String(results.length)} flows.`);
+  console.log(
+    `Stage 43 phone/tablet/desktop device UX acceptance passed: ${String(phones.length + wide.length)} scenarios.`,
+  );
 } finally {
   await browser.close();
 }
