@@ -183,14 +183,29 @@ try {
     const map = page.locator('.qibla-map-shell');
     await map.waitFor({ state: 'visible' });
     await page.waitForFunction(() => {
-      return document.querySelector('.qibla-map-shell')?.getAttribute('data-google-map-state') === 'ready';
+      return (
+        document.querySelector('.qibla-map-shell')?.getAttribute('data-google-map-state') ===
+        'ready'
+      );
     });
 
-    assert((await map.getAttribute('data-map-provider')) === 'google-satellite', 'Google satellite was not the default interactive provider');
-    assert(requestedGoogleMapsUrls.length === 1, `Expected one Google Maps JavaScript request, received ${requestedGoogleMapsUrls.length}`);
+    assert(
+      (await map.getAttribute('data-map-provider')) === 'google-satellite',
+      'Google satellite was not the default interactive provider',
+    );
+    assert(
+      requestedGoogleMapsUrls.length === 1,
+      `Expected one Google Maps JavaScript request, received ${requestedGoogleMapsUrls.length}`,
+    );
     const requestedUrl = new URL(requestedGoogleMapsUrls[0]);
-    assert(requestedUrl.pathname === '/maps/api/js', 'Interactive Google Maps loader used the wrong endpoint');
-    assert(requestedUrl.searchParams.get('key') === 'salahos-visual-fixture-key', 'Visual fixture did not receive the isolated build-time key');
+    assert(
+      requestedUrl.pathname === '/maps/api/js',
+      'Interactive Google Maps loader used the wrong endpoint',
+    );
+    assert(
+      requestedUrl.searchParams.get('key') === 'salahos-visual-fixture-key',
+      'Visual fixture did not receive the isolated build-time key',
+    );
 
     const initial = await page.evaluate(() => ({
       mapType: globalThis.__salahosGoogleMap?.mapTypeId,
@@ -208,22 +223,53 @@ try {
     }));
     assert(initial.mapType === 'satellite', 'Google map did not initialize in Satellite mode');
     assert(initial.fitCount >= 1, 'Google map did not fit the user-to-Kaaba route on first load');
-    assert(initial.markers.some((marker) => marker.title === 'Current location'), 'Current-location marker is missing');
-    assert(initial.markers.some((marker) => marker.title === 'Kaaba, Makkah'), 'Kaaba marker is missing');
+    assert(
+      initial.markers.some((marker) => marker.title === 'Current location'),
+      'Current-location marker is missing',
+    );
+    assert(
+      initial.markers.some((marker) => marker.title === 'Kaaba, Makkah'),
+      'Kaaba marker is missing',
+    );
     const satelliteLine = initial.polylines.find((line) => line.color === '#e53e30');
-    assert(satelliteLine?.weight === 6, 'Satellite Qiblah route is not the expected thick red line');
+    assert(
+      satelliteLine?.weight === 6,
+      'Satellite Qiblah route is not the expected thick red line',
+    );
     assert(satelliteLine?.geodesic === true, 'Qiblah route is not geodesic');
-    assert(initial.polylines.some((line) => line.color === '#ffffff' && line.weight === 10), 'Qiblah route contrast halo is missing');
+    assert(
+      initial.polylines.some((line) => line.color === '#ffffff' && line.weight === 10),
+      'Qiblah route contrast halo is missing',
+    );
 
     await page.getByRole('button', { name: 'Map', exact: true }).click();
-    await page.waitForFunction(() => document.querySelector('.qibla-map-shell')?.getAttribute('data-map-provider') === 'google-roadmap');
-    const roadmapColor = await page.evaluate(() => globalThis.__salahosGooglePolylines?.find((line) => line.options.zIndex === 2)?.options.strokeColor);
+    await page.waitForFunction(
+      () =>
+        document.querySelector('.qibla-map-shell')?.getAttribute('data-map-provider') ===
+        'google-roadmap',
+    );
+    const roadmapColor = await page.evaluate(
+      () =>
+        globalThis.__salahosGooglePolylines?.find((line) => line.options.zIndex === 2)?.options
+          .strokeColor,
+    );
     assert(roadmapColor === '#1267d6', 'Roadmap Qiblah route did not switch to high-contrast blue');
 
     await page.getByRole('button', { name: 'Hybrid', exact: true }).click();
-    await page.waitForFunction(() => document.querySelector('.qibla-map-shell')?.getAttribute('data-map-provider') === 'google-hybrid');
-    const hybridColor = await page.evaluate(() => globalThis.__salahosGooglePolylines?.find((line) => line.options.zIndex === 2)?.options.strokeColor);
-    assert(hybridColor === '#e53e30', 'Hybrid Qiblah route did not switch back to imagery-safe red');
+    await page.waitForFunction(
+      () =>
+        document.querySelector('.qibla-map-shell')?.getAttribute('data-map-provider') ===
+        'google-hybrid',
+    );
+    const hybridColor = await page.evaluate(
+      () =>
+        globalThis.__salahosGooglePolylines?.find((line) => line.options.zIndex === 2)?.options
+          .strokeColor,
+    );
+    assert(
+      hybridColor === '#e53e30',
+      'Hybrid Qiblah route did not switch back to imagery-safe red',
+    );
 
     await page.getByRole('button', { name: 'Show full Qiblah route' }).click();
     const refitCount = await page.evaluate(() => globalThis.__salahosGoogleMap?.fitCount ?? 0);
@@ -234,12 +280,20 @@ try {
         latLng: { lat: () => -33.9, lng: () => 151.1 },
       });
     });
-    await page.waitForFunction(() => document.querySelector('.qibla-location-bar')?.textContent?.includes('-33.90000'));
-    assert((await page.locator('.qibla-location-bar').textContent())?.includes('151.10000'), 'Google map click did not preserve manual pin selection');
+    await page.waitForFunction(() =>
+      document.querySelector('.qibla-location-bar')?.textContent?.includes('-33.90000'),
+    );
+    assert(
+      (await page.locator('.qibla-location-bar').textContent())?.includes('151.10000'),
+      'Google map click did not preserve manual pin selection',
+    );
 
     const width = await page.evaluate(() => document.documentElement.clientWidth);
     const scrollWidth = await page.evaluate(() => document.documentElement.scrollWidth);
-    assert(scrollWidth <= width + 2, `Interactive Google Qiblah map has horizontal overflow: ${scrollWidth}/${width}`);
+    assert(
+      scrollWidth <= width + 2,
+      `Interactive Google Qiblah map has horizontal overflow: ${scrollWidth}/${width}`,
+    );
 
     await page.screenshot({
       path: path.join(artifactDirectory, 'qibla-google-interactive-phone-en.png'),
@@ -265,13 +319,25 @@ try {
     await page.goto(`${baseUrl}/?view=qiblah`, { waitUntil: 'domcontentloaded' });
     await page.locator('.qibla-view-switch button').nth(1).click();
     await page.waitForFunction(() => {
-      return document.querySelector('.qibla-map-shell')?.getAttribute('data-google-map-state') === 'error';
+      return (
+        document.querySelector('.qibla-map-shell')?.getAttribute('data-google-map-state') ===
+        'error'
+      );
     });
 
     const map = page.locator('.qibla-map-shell');
-    assert((await map.getAttribute('data-map-provider')) === 'local-fallback', 'Google provider failure did not activate the local bearing fallback');
-    assert((await page.locator('[data-qibla-map-fallback]').count()) === 1, 'Provider-error local fallback is missing');
-    assert((await page.getByRole('button', { name: 'Retry Google Maps' }).count()) === 1, 'Google provider failure has no retry action');
+    assert(
+      (await map.getAttribute('data-map-provider')) === 'local-fallback',
+      'Google provider failure did not activate the local bearing fallback',
+    );
+    assert(
+      (await page.locator('[data-qibla-map-fallback]').count()) === 1,
+      'Provider-error local fallback is missing',
+    );
+    assert(
+      (await page.getByRole('button', { name: 'Retry Google Maps' }).count()) === 1,
+      'Google provider failure has no retry action',
+    );
 
     const before = await page.locator('.qibla-location-bar').textContent();
     const fallback = page.locator('[data-qibla-map-fallback]');
