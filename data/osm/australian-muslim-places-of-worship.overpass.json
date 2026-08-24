@@ -1,0 +1,2029 @@
+{
+  "schemaVersion": 1,
+  "source": "OpenStreetMap Overpass API",
+  "regions": [
+    {
+      "regionCode": "AU-ACT",
+      "osmBaseTimestamp": "2026-08-24T10:38:06Z",
+      "elements": [
+        {
+          "type": "node",
+          "id": 291548764,
+          "lat": -35.3847749,
+          "lon": 149.0720245,
+          "tags": {
+            "addr:housenumber": "56",
+            "addr:street": "Mannheim Street",
+            "amenity": "place_of_worship",
+            "denomination": "shia",
+            "name": "Imam Hasan Centre Canberra",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "node",
+          "id": 1353702426,
+          "lat": -35.1981058,
+          "lon": 149.0653027,
+          "tags": {
+            "amenity": "place_of_worship",
+            "name": "Spence Musalla",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 233925181,
+          "center": {
+            "lat": -35.304497,
+            "lon": 149.1121374
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "mosque",
+            "name": "Canberra Mosque",
+            "religion": "muslim",
+            "wikidata": "Q136645145"
+          }
+        },
+        {
+          "type": "way",
+          "id": 241379729,
+          "center": {
+            "lat": -35.4221374,
+            "lon": 149.0903073
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "barrier": "fence",
+            "name": "Canberra Islamic Centre",
+            "religion": "muslim",
+            "source": "bing"
+          }
+        },
+        {
+          "type": "way",
+          "id": 376919786,
+          "center": {
+            "lat": -35.1884991,
+            "lon": 149.1371919
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "landuse": "religious",
+            "name": "Gungahlin Mosque",
+            "religion": "muslim",
+            "website": "https://www.gungahlinmosque.org.au/"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1033614308,
+          "center": {
+            "lat": -35.1981443,
+            "lon": 149.0653957
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "religion": "muslim"
+          }
+        }
+      ]
+    },
+    {
+      "regionCode": "AU-NSW",
+      "osmBaseTimestamp": "2026-08-24T10:40:06Z",
+      "elements": [
+        {
+          "type": "node",
+          "id": 256009669,
+          "lat": -33.9164673,
+          "lon": 151.0282113,
+          "tags": {
+            "amenity": "place_of_worship",
+            "name": "Al Amanah",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "node",
+          "id": 353142697,
+          "lat": -32.9039564,
+          "lon": 151.6697681,
+          "tags": {
+            "amenity": "place_of_worship",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "node",
+          "id": 1851026582,
+          "lat": -33.8903628,
+          "lon": 151.2094765,
+          "tags": {
+            "amenity": "place_of_worship",
+            "name": "Redfern Mosque",
+            "religion": "muslim",
+            "source": "local knowledge",
+            "website": "https://ris.org.au/"
+          }
+        },
+        {
+          "type": "node",
+          "id": 2464887186,
+          "lat": -34.0433518,
+          "lon": 150.8484424,
+          "tags": {
+            "addr:housenumber": "44-48",
+            "addr:postcode": "2566",
+            "addr:street": "Westmoreland Road",
+            "addr:suburb": "Minto",
+            "amenity": "place_of_worship",
+            "name": "Minto Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "node",
+          "id": 3162173715,
+          "lat": -33.7008003,
+          "lon": 151.1009452,
+          "tags": {
+            "addr:housenumber": "75",
+            "addr:postcode": "2077",
+            "addr:state": "NSW",
+            "addr:street": "Hunter Street",
+            "addr:suburb": "Hornsby",
+            "amenity": "place_of_worship",
+            "check_date": "2026-07-31",
+            "denomination": "islamic",
+            "name": "Hornsby Dawah Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "node",
+          "id": 3318094580,
+          "lat": -33.9254371,
+          "lon": 151.159321,
+          "tags": {
+            "addr:country": "AU",
+            "addr:housenumber": "45",
+            "addr:postcode": "2044",
+            "addr:state": "NSW",
+            "addr:street": "Station Street",
+            "addr:suburb": "Tempe",
+            "amenity": "place_of_worship",
+            "building": "mosque",
+            "contact:phone": "+61 2 9591 1593",
+            "contact:website": "https://cide.org.au",
+            "facebook": "https://www.facebook.com/alhijrahcidensw/",
+            "instagram": "https://www.instagram.com/cideltd/",
+            "name": "Al Hijrah Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "node",
+          "id": 3735326137,
+          "lat": -36.0418904,
+          "lon": 146.9553193,
+          "tags": {
+            "amenity": "place_of_worship",
+            "name": "Islamic Society of Albury",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "node",
+          "id": 4243973889,
+          "lat": -33.7642272,
+          "lon": 150.9115261,
+          "tags": {
+            "addr:street": "Fourth Avenue",
+            "amenity": "place_of_worship",
+            "denomination": "sunni",
+            "name": "Blacktown Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "node",
+          "id": 4569986330,
+          "lat": -33.7435703,
+          "lon": 151.293536,
+          "tags": {
+            "addr:housenumber": "12",
+            "addr:postcode": "2099",
+            "addr:street": "South Creek Road",
+            "addr:suburb": "Dee Why",
+            "amenity": "place_of_worship",
+            "check_date": "2025-01-11",
+            "facebook": "https://www.facebook.com/DeeWhyMasjid/",
+            "name": "Dee Why Mosque",
+            "operator": "Islamic Society of Manly Warringah (ISMW)",
+            "religion": "muslim",
+            "website": "http://ismw.org.au/"
+          }
+        },
+        {
+          "type": "node",
+          "id": 5585892674,
+          "lat": -33.7592665,
+          "lon": 150.8300893,
+          "tags": {
+            "amenity": "place_of_worship",
+            "name": "Rooty Hill Masjid",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "node",
+          "id": 6642938342,
+          "lat": -33.8118957,
+          "lon": 151.0244608,
+          "tags": {
+            "amenity": "place_of_worship",
+            "name": "Muslim Prayer Rooms",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "node",
+          "id": 7871916571,
+          "lat": -33.9163195,
+          "lon": 151.2261814,
+          "tags": {
+            "addr:street": "Anzac Parade",
+            "amenity": "place_of_worship",
+            "denomination": "sunni",
+            "email": "muslimoffice@unsw.edu.au",
+            "level": "3",
+            "name": "Islamic Society of UNSW",
+            "religion": "muslim",
+            "short_name": "ISOC UNSW",
+            "website": "https://isoc-unsw.org.au/",
+            "wheelchair": "yes"
+          }
+        },
+        {
+          "type": "node",
+          "id": 8460982659,
+          "lat": -33.8139603,
+          "lon": 151.0016741,
+          "tags": {
+            "amenity": "place_of_worship",
+            "name": "Parramatta Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "node",
+          "id": 9678522099,
+          "lat": -33.9230645,
+          "lon": 150.9238299,
+          "tags": {
+            "amenity": "place_of_worship",
+            "check_date": "2024-01-21",
+            "name": "MIA - Liverpool Islamic Centre",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 156808623,
+          "center": {
+            "lat": -33.8522129,
+            "lon": 151.0360336
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "mosque",
+            "building:levels": "2",
+            "check_date": "2026-07-27",
+            "name": "Auburn Gallipoli Mosque",
+            "name:tr": "Auburn Gelibolu Camii",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 232448583,
+          "center": {
+            "lat": -33.7257607,
+            "lon": 150.8427328
+          },
+          "tags": {
+            "addr:housenumber": "45",
+            "addr:postcode": "2765",
+            "addr:state": "NSW",
+            "addr:street": "Hollinsworth Road",
+            "addr:suburb": "Marsden Park",
+            "alt_name": "Baitul Huda;Bait-ul-Huda Mosque;Bait-ul-Huda",
+            "alt_name:ur": "مسجد بیت الہدی;بیت الہدیٰ;بیت الہدی",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "capacity": "700",
+            "denomination": "ahmadiyya",
+            "name": "Baitul Huda Mosque",
+            "name:ur": "مسجد بیت الہدیٰ",
+            "religion": "muslim",
+            "website": "https://www.ahmadiyya.org.au/",
+            "wikidata": "Q549747",
+            "wikipedia": "en:Baitul Huda, Sydney"
+          }
+        },
+        {
+          "type": "way",
+          "id": 302549354,
+          "center": {
+            "lat": -33.884141,
+            "lon": 150.8904675
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "check_date": "2023-12-02",
+            "name": "Bonnyrigg Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 377399186,
+          "center": {
+            "lat": -32.8981752,
+            "lon": 151.7387388
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "name": "Islamic Centre of Newcastle",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 539878161,
+          "center": {
+            "lat": -33.8988506,
+            "lon": 151.1845313
+          },
+          "tags": {
+            "alt_name": "Turkish Islamic Culture & Mosque Association",
+            "amenity": "place_of_worship",
+            "building": "house",
+            "name": "Erskineville Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 548322850,
+          "center": {
+            "lat": -33.9321674,
+            "lon": 151.149087
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "building:levels": "2",
+            "denomination": "shia",
+            "name": "Al Zahra Mosque",
+            "religion": "muslim",
+            "start_date": "1980",
+            "wikidata": "Q4703363",
+            "wikimedia_commons": "File:Arncliffe Mosque.JPG",
+            "wikipedia": "en:Al-Zahra Mosque"
+          }
+        },
+        {
+          "type": "way",
+          "id": 587377328,
+          "center": {
+            "lat": -33.8818779,
+            "lon": 151.210618
+          },
+          "tags": {
+            "alt_name": "Islamic Society Of New South Wales",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "building:levels": "3",
+            "name": "King Faisal Mosque",
+            "religion": "muslim",
+            "website": "https://www.islamicsocietynsw.org.au/"
+          }
+        },
+        {
+          "type": "way",
+          "id": 678140828,
+          "center": {
+            "lat": -33.7645519,
+            "lon": 150.8260315
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 714691036,
+          "center": {
+            "lat": -33.2887267,
+            "lon": 151.4252446
+          },
+          "tags": {
+            "addr:housenumber": "13A",
+            "addr:street": "Howarth Street",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "contact:facebook": "https://www.facebook.com/pg/Central-Coast-Islamic-Cultural-Centre-Wyong-Masjid-798314783621742/about",
+            "fixme": "Likely needs extra tagging from someone knowledgeable about Islamic community.",
+            "name": "Central Coast Islamic Cultural Centre - Wyong Masjid",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 764490647,
+          "center": {
+            "lat": -33.9271839,
+            "lon": 151.0574031
+          },
+          "tags": {
+            "addr:housenumber": "25-33",
+            "addr:postcode": "2196",
+            "addr:state": "NSW",
+            "addr:street": "Matthews Street",
+            "addr:suburb": "Punchbowl",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "facebook": "https://www.facebook.com/punchbowlmosque/",
+            "name": "Punchbowl Mosque",
+            "operator": "the Australian Islamic Mission (NSW)",
+            "religion": "muslim",
+            "website": "https://aim.org.au/",
+            "wikidata": "Q65077552"
+          }
+        },
+        {
+          "type": "way",
+          "id": 772104908,
+          "center": {
+            "lat": -30.4884895,
+            "lon": 151.6453933
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "mosque",
+            "name": "Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 890529416,
+          "center": {
+            "lat": -33.9043322,
+            "lon": 151.2055788
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "facebook": "https://www.facebook.com/ZetlandMosqueAus/",
+            "name": "Zetland Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 916497512,
+          "center": {
+            "lat": -33.8099801,
+            "lon": 151.1868712
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "mosque",
+            "check_date": "2024-08-12",
+            "name": "Artarmon Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 965960404,
+          "center": {
+            "lat": -33.8526185,
+            "lon": 150.9888882
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "denomination": "sunni",
+            "name": "ICMG Guildford",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1126413889,
+          "center": {
+            "lat": -33.9124713,
+            "lon": 151.0741041
+          },
+          "tags": {
+            "addr:housenumber": "65-67",
+            "addr:postcode": "2195",
+            "addr:state": "NSW",
+            "addr:street": "Wangee Road",
+            "addr:suburb": "Lakemba",
+            "amenity": "place_of_worship",
+            "area": "yes",
+            "facebook": "https://www.facebook.com/lakembamosqueofficial/",
+            "name": "Lakemba Mosque",
+            "operator": "the Lebanese Muslim Association (LMA)",
+            "religion": "muslim",
+            "website": "https://www.lma.org.au/",
+            "wikidata": "Q24242",
+            "wikipedia": "en:Lakemba Mosque"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1169764907,
+          "center": {
+            "lat": -33.8347912,
+            "lon": 150.9765443
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "name": "Dar El Arqam",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1190951588,
+          "center": {
+            "lat": -33.8912219,
+            "lon": 151.1251309
+          },
+          "tags": {
+            "addr:housenumber": "27",
+            "addr:postcode": "2131",
+            "addr:state": "NSW",
+            "addr:street": "Holden Street",
+            "addr:suburb": "Ashfield",
+            "amenity": "place_of_worship",
+            "building": "commercial",
+            "name": "Ashfield Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1417983750,
+          "center": {
+            "lat": -31.9377379,
+            "lon": 141.4778769
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "mosque",
+            "name": "Afghan Mosque",
+            "opening_hours": "Su 14:00-16:00",
+            "source": "NSW LPI Base Map",
+            "source:date": "2016-08",
+            "tourism": "museum"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1458020764,
+          "center": {
+            "lat": -33.9368449,
+            "lon": 151.1492871
+          },
+          "tags": {
+            "alt_name": "Islamic Malay Australian Association of NSW",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "facebook": "https://www.facebook.com/masjiddarulimaan/",
+            "name": "Masjid Darul Imaan",
+            "name:en": "Masjid Darul Imaan",
+            "name:ms": "Masjid Darul Imaan",
+            "religion": "muslim",
+            "website": "https://imaan.com.au"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1530953807,
+          "center": {
+            "lat": -33.8549187,
+            "lon": 151.0303249
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "name": "Omar Mosque",
+            "operator": "Australian Islamic Cultural Centre (AICC)",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1530954067,
+          "center": {
+            "lat": -34.412988,
+            "lon": 150.8863459
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "name": "Omar Mosque",
+            "religion": "muslim"
+          }
+        }
+      ]
+    },
+    {
+      "regionCode": "AU-NT",
+      "osmBaseTimestamp": "2026-08-24T10:41:06Z",
+      "elements": [
+        {
+          "type": "way",
+          "id": 395695967,
+          "center": {
+            "lat": -23.6953051,
+            "lon": 133.8333975
+          },
+          "tags": {
+            "addr:country": "AU",
+            "amenity": "place_of_worship",
+            "name": "Afghan Mosque",
+            "operator": "Alice Springs Islamic Society",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 560465468,
+          "center": {
+            "lat": -12.3768346,
+            "lon": 130.8886728
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 598516828,
+          "center": {
+            "lat": -12.5059866,
+            "lon": 130.9696809
+          },
+          "tags": {
+            "addr:housenumber": "104",
+            "addr:street": "Bonson Terrace",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "denomination": "sunni",
+            "description": "The ISLAMIC SOCIETY OF PALMERSTON (ISP) is an incorporated organisation and registered with Northern Territory Government. The society is a not for profit organisation with main objective of serving the local community of Palmerston and its surroundings.",
+            "name": "Islamic Society of Palmerston",
+            "religion": "muslim",
+            "website": "https://isp.org.au/"
+          }
+        }
+      ]
+    },
+    {
+      "regionCode": "AU-QLD",
+      "osmBaseTimestamp": "2026-08-24T10:42:06Z",
+      "elements": [
+        {
+          "type": "node",
+          "id": 667941215,
+          "lat": -27.5272955,
+          "lon": 153.0756712,
+          "tags": {
+            "amenity": "place_of_worship",
+            "name": "Brisbane Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "node",
+          "id": 821679379,
+          "lat": -27.5727204,
+          "lon": 151.9408478,
+          "tags": {
+            "addr:postcode": "4350",
+            "addr:state": "QLD",
+            "addr:street": "West Street",
+            "addr:suburb": "Harristown",
+            "amenity": "place_of_worship",
+            "name": "Toowoomba Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "node",
+          "id": 1732585575,
+          "lat": -21.202774,
+          "lon": 149.1475907,
+          "tags": {
+            "addr:country": "AU",
+            "amenity": "place_of_worship",
+            "name": "Mackay Islamic Society",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "node",
+          "id": 11286742649,
+          "lat": -27.9873871,
+          "lon": 153.4019065,
+          "tags": {
+            "amenity": "place_of_worship",
+            "name": "Southport Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "node",
+          "id": 13895264602,
+          "lat": -27.6386842,
+          "lon": 153.1068301,
+          "tags": {
+            "addr:housenumber": "8",
+            "addr:street": "Blackwood Road",
+            "amenity": "place_of_worship",
+            "check_date": "2026-05-30",
+            "check_date:opening_hours": "2026-05-30",
+            "contact:facebook": "UnitedMuslimsOfBrisbane",
+            "name": "United Muslims of Brisbane (UMB)",
+            "opening_hours": "Mo-Su 09:00-21:00",
+            "phone": "+61 401 972 443",
+            "religion": "muslim",
+            "website": "https://umb.org.au"
+          }
+        },
+        {
+          "type": "way",
+          "id": 31896319,
+          "center": {
+            "lat": -27.5670083,
+            "lon": 152.9705378
+          },
+          "tags": {
+            "addr:city": "Brisbane",
+            "addr:housenumber": "219",
+            "addr:postcode": "4075",
+            "addr:state": "QLD",
+            "addr:street": "Douglas Street",
+            "addr:suburb": "Oxley",
+            "amenity": "place_of_worship",
+            "building": "mosque",
+            "denomination": "sunni",
+            "name": "Islamic Society of Darra",
+            "religion": "muslim",
+            "source": "Brisbane City Council",
+            "source:date": "2018-12-14",
+            "website": "https://www.isd.org.au/"
+          }
+        },
+        {
+          "type": "way",
+          "id": 46419257,
+          "center": {
+            "lat": -27.3300116,
+            "lon": 153.0158627
+          },
+          "tags": {
+            "addr:housenumber": "117",
+            "addr:street": "Telegraph Road",
+            "addr:suburb": "Bald Hills",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "denomination": "sunni",
+            "name": "Masjid Taqwah Bald Hills Brisbane",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 251882571,
+          "center": {
+            "lat": -27.4812877,
+            "lon": 153.0107256
+          },
+          "tags": {
+            "addr:housenumber": "12",
+            "addr:postcode": "4101",
+            "addr:street": "Princhester Street",
+            "addr:suburb": "West End",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "building:levels": "2",
+            "check_date": "2024-03-27",
+            "name": "Islamic Centre, West End Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 262005084,
+          "center": {
+            "lat": -27.5989877,
+            "lon": 153.0360994
+          },
+          "tags": {
+            "addr:city": "Brisbane",
+            "addr:housenumber": "48",
+            "addr:postcode": "4115",
+            "addr:state": "QLD",
+            "addr:street": "Learoyd Road",
+            "addr:suburb": "Algester",
+            "amenity": "place_of_worship",
+            "building": "mosque",
+            "denomination": "sunni",
+            "name": "Algester Mosque",
+            "religion": "muslim",
+            "source": "Brisbane City Council",
+            "source:date": "2018-12-14"
+          }
+        },
+        {
+          "type": "way",
+          "id": 302909764,
+          "center": {
+            "lat": -16.9165082,
+            "lon": 145.7635303
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "name": "Cairns Mosque",
+            "religion": "muslim",
+            "source": "Bing, 2012-7"
+          }
+        },
+        {
+          "type": "way",
+          "id": 422746572,
+          "center": {
+            "lat": -27.4915579,
+            "lon": 153.0667211
+          },
+          "tags": {
+            "addr:housenumber": "456",
+            "addr:postcode": "4152",
+            "addr:state": "QLD",
+            "addr:street": "Old Cleveland Road",
+            "addr:suburb": "Camp Hill",
+            "alt_name": "Masjid Mubarak;Mubarak Masjid",
+            "alt_name:ur": "مبارک مسجد",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "denomination": "ahmadiyya",
+            "name": "Mubarak Mosque",
+            "name:ur": "مسجد مبارک",
+            "religion": "muslim",
+            "wheelchair": "designated"
+          }
+        },
+        {
+          "type": "way",
+          "id": 445140332,
+          "center": {
+            "lat": -27.5865389,
+            "lon": 153.1048508
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 542174073,
+          "center": {
+            "lat": -27.6134184,
+            "lon": 152.9158074
+          },
+          "tags": {
+            "addr:housenumber": "89",
+            "addr:postcode": "4300",
+            "addr:state": "QLD",
+            "addr:street": "Old Logan Road",
+            "addr:suburb": "Camira",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 550404720,
+          "center": {
+            "lat": -27.6057751,
+            "lon": 153.0933994
+          },
+          "tags": {
+            "addr:housenumber": "1408",
+            "addr:postcode": "4112",
+            "addr:state": "QLD",
+            "addr:street": "Beenleigh Road",
+            "addr:suburb": "Kuraby",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "name": "Al Farooq - Mosque ( Masjid )",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 626563838,
+          "center": {
+            "lat": -27.4251088,
+            "lon": 153.0306488
+          },
+          "tags": {
+            "addr:city": "Brisbane",
+            "addr:housenumber": "33",
+            "addr:postcode": "4030",
+            "addr:street": "Fuller Street",
+            "addr:suburb": "Lutwyche",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "name": "Masjid As-Sunnah",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 953265229,
+          "center": {
+            "lat": -27.5335507,
+            "lon": 153.0275142
+          },
+          "tags": {
+            "addr:city": "Brisbane",
+            "addr:housenumber": "51",
+            "addr:postcode": "4105",
+            "addr:state": "QLD",
+            "addr:street": "Mayfield Road",
+            "addr:suburb": "Moorooka",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "name": "Moorooka Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1232805388,
+          "center": {
+            "lat": -27.7901146,
+            "lon": 153.0367831
+          },
+          "tags": {
+            "addr:housenumber": "1",
+            "addr:postcode": "4280",
+            "addr:state": "QLD",
+            "addr:street": "Neville Road",
+            "addr:suburb": "Stockleigh",
+            "alt_name": "Bait-ul-Masroor;Baitul Masroor",
+            "alt_name:ur": "بیت المسرور",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "denomination": "ahmadiyya",
+            "name": "Baitul Masroor Mosque",
+            "name:ur": "مسجد بیت المسرور",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1307412049,
+          "center": {
+            "lat": -27.6494127,
+            "lon": 153.1205534
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "denomination": "sunni",
+            "name": "Australian Centre For Unity",
+            "religion": "muslim",
+            "website": "https://www.slackscreekmosque.org.au/"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1321545741,
+          "center": {
+            "lat": -27.939071,
+            "lon": 153.3868583
+          },
+          "tags": {
+            "addr:housenumber": "144",
+            "addr:postcode": "4214",
+            "addr:state": "QLD",
+            "addr:street": "Allied Drive",
+            "addr:suburb": "Arundel",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "denomination": "sunni",
+            "name": "Islamic Society of Gold Coast",
+            "phone": "+61 7 5594 9097",
+            "religion": "muslim",
+            "website": "http://www.goldcoastmasjid.org.au/"
+          }
+        }
+      ]
+    },
+    {
+      "regionCode": "AU-SA",
+      "osmBaseTimestamp": "2026-08-24T10:42:06Z",
+      "elements": [
+        {
+          "type": "node",
+          "id": 1614034144,
+          "lat": -34.934145,
+          "lon": 138.5917962,
+          "tags": {
+            "amenity": "place_of_worship",
+            "check_date": "2024-07-26",
+            "name": "Adelaide Mosque",
+            "religion": "muslim",
+            "wikidata": "Q5060262"
+          }
+        },
+        {
+          "type": "node",
+          "id": 10806717920,
+          "lat": -34.9449895,
+          "lon": 138.5961579,
+          "tags": {
+            "amenity": "place_of_worship",
+            "name": "Maryam Masjid",
+            "religion": "muslim",
+            "website": "https://maryammasjid.org.au"
+          }
+        },
+        {
+          "type": "node",
+          "id": 13919243601,
+          "lat": -34.8483584,
+          "lon": 138.6616618,
+          "tags": {
+            "addr:housenumber": "52-56",
+            "addr:street": "Wandana Avenue",
+            "alt_name": "Masjid Abu Bakr Assidiq",
+            "amenity": "place_of_worship",
+            "check_date": "2026-06-08",
+            "check_date:opening_hours": "2026-06-08",
+            "contact:facebook": "Islamic.Society.SA",
+            "contact:instagram": "islamicsocietyofsa",
+            "email": "info@islamicsocietysa.org.au",
+            "name": "Wandana Mosque",
+            "opening_hours": "Mo-Su 04:45-21:30",
+            "phone": "+61 8 8374 2280",
+            "religion": "muslim",
+            "website": "https://islamicsocietysa.org.au/mosque/wandana-mosque/"
+          }
+        },
+        {
+          "type": "node",
+          "id": 13969476401,
+          "lat": -34.8492047,
+          "lon": 138.6614944,
+          "tags": {
+            "addr:housenumber": "56",
+            "addr:postcode": "5086",
+            "addr:street": "Wandana Avenue",
+            "alt_name": "Al-Khalid Masjid",
+            "amenity": "place_of_worship",
+            "check_date": "2026-05-30",
+            "check_date:opening_hours": "2026-05-30",
+            "name": "Wandana Mosque",
+            "opening_hours": "Mo-Su 04:45-21:30",
+            "phone": "+61 8 8374 2280",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 217511468,
+          "center": {
+            "lat": -34.8685595,
+            "lon": 138.5380333
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "check_date": "2025-04-26",
+            "name": "Al Khalil Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 552108333,
+          "center": {
+            "lat": -35.1077866,
+            "lon": 138.5226791
+          },
+          "tags": {
+            "addr:housenumber": "28-30",
+            "addr:postcode": "5162",
+            "addr:state": "SA",
+            "addr:street": "Hillier Road",
+            "addr:suburb": "Morphett Vale",
+            "alt_name:ur": "نور مسجد",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "denomination": "ahmadiyya",
+            "name": "Noor Mosque",
+            "name:ur": "مسجد نور",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 875065604,
+          "center": {
+            "lat": -34.8979415,
+            "lon": 138.5446914
+          },
+          "tags": {
+            "addr:housenumber": "6-8",
+            "addr:postcode": "5009",
+            "addr:state": "SA",
+            "addr:street": "Toogood Avenue",
+            "addr:suburb": "Beverley",
+            "alt_name": "Masjid Mahmood;Mehmood Mosque;Masjid Mehmood;Mahmood Masjid;Mehmood Masjid",
+            "alt_name:ur": "محمود مسجد",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "denomination": "ahmadiyya",
+            "name": "Mahmood Mosque",
+            "name:ur": "مسجد محمود",
+            "religion": "muslim",
+            "source": "Bing"
+          }
+        }
+      ]
+    },
+    {
+      "regionCode": "AU-TAS",
+      "osmBaseTimestamp": "2026-08-24T10:42:06Z",
+      "elements": []
+    },
+    {
+      "regionCode": "AU-VIC",
+      "osmBaseTimestamp": "2026-08-24T10:43:11Z",
+      "elements": [
+        {
+          "type": "node",
+          "id": 324210091,
+          "lat": -37.7819232,
+          "lon": 145.1545641,
+          "tags": {
+            "amenity": "place_of_worship",
+            "name": "United Muslims Migrant Association (UMMA)",
+            "religion": "muslim",
+            "source": "www.umma.org.au"
+          }
+        },
+        {
+          "type": "node",
+          "id": 567835687,
+          "lat": -37.7319441,
+          "lon": 145.0313229,
+          "tags": {
+            "amenity": "place_of_worship",
+            "name": "Reservoir Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "node",
+          "id": 748724107,
+          "lat": -37.6338566,
+          "lon": 144.9166015,
+          "tags": {
+            "amenity": "place_of_worship",
+            "name": "Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "node",
+          "id": 774464775,
+          "lat": -37.7049486,
+          "lon": 144.9721818,
+          "tags": {
+            "amenity": "place_of_worship",
+            "name": "Fawkner Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "node",
+          "id": 2397995277,
+          "lat": -37.940523,
+          "lon": 145.137975,
+          "tags": {
+            "addr:housenumber": "130",
+            "addr:street": "Rosebank Avenue",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "check_date": "2024-05-29",
+            "denomination": "sunni",
+            "name": "Westall Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "node",
+          "id": 10542405635,
+          "lat": -37.7619145,
+          "lon": 144.9631497,
+          "tags": {
+            "addr:housenumber": "660",
+            "addr:postcode": "3056",
+            "addr:state": "VIC",
+            "addr:street": "Sydney Road",
+            "addr:suburb": "Brunswick",
+            "amenity": "place_of_worship",
+            "check_date": "2025-12-13",
+            "name": "ICMG Brunswick",
+            "religion": "muslim",
+            "website": "https://www.icmg.org.au/branches/brunswick/"
+          }
+        },
+        {
+          "type": "node",
+          "id": 12701769445,
+          "lat": -36.3969143,
+          "lon": 145.346232,
+          "tags": {
+            "addr:housenumber": "209",
+            "addr:postcode": "3629",
+            "addr:state": "VIC",
+            "addr:street": "McLennan Street",
+            "addr:suburb": "Mooroopna",
+            "amenity": "place_of_worship",
+            "contact:facebook": "https://www.facebook.com/mooroopnamosque/",
+            "name": "G.V. Turkish Islamic Cultural Centre & Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 29416675,
+          "center": {
+            "lat": -37.781946,
+            "lon": 145.1546499
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 181548739,
+          "center": {
+            "lat": -38.1337952,
+            "lon": 144.3338806
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 239315166,
+          "center": {
+            "lat": -37.7551737,
+            "lon": 144.9750617
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "name": "Coburg Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 242562000,
+          "center": {
+            "lat": -37.6519595,
+            "lon": 144.9206129
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "check_date": "2026-01-19",
+            "denomination": "sunni",
+            "name": "Meadow Heights Mosque",
+            "religion": "muslim",
+            "service_times": "Fr"
+          }
+        },
+        {
+          "type": "way",
+          "id": 242710637,
+          "center": {
+            "lat": -37.668516,
+            "lon": 144.9415932
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "name": "Broadmeadows Mosque (Cami)",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 260754035,
+          "center": {
+            "lat": -37.6814806,
+            "lon": 145.0149113
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 266743349,
+          "center": {
+            "lat": -38.1338634,
+            "lon": 144.3339977
+          },
+          "tags": {
+            "addr:housenumber": "47",
+            "addr:street": "Bostock Avenue",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "height": "7.764",
+            "name": "Geelong Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 282486880,
+          "center": {
+            "lat": -37.6979712,
+            "lon": 144.9650032
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "name": "Imam Ali Islamic Centre",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 290774556,
+          "center": {
+            "lat": -37.7715862,
+            "lon": 144.8012514
+          },
+          "tags": {
+            "addr:housenumber": "618",
+            "addr:postcode": "3022",
+            "addr:street": "Ballarat Road",
+            "addr:suburb": "Ardeer",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "operator": "Cyprus Turkish Islamic Community of Victoria",
+            "religion": "muslim",
+            "wikidata": "Q7641539"
+          }
+        },
+        {
+          "type": "way",
+          "id": 303946193,
+          "center": {
+            "lat": -38.1708293,
+            "lon": 145.2118641
+          },
+          "tags": {
+            "addr:housenumber": "6",
+            "addr:street": "Leisureland Drive",
+            "alt_name": "Masjid Bait-us-Salam;Bait-us-Salam Mosque;Baitus Salam;Bait-us-Salaam;Baitus Salaam Mosque;Baitus Salam Mosque;Langwarrin Mosque",
+            "alt_name:ur": "بیت السلام",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "denomination": "ahmadiyya",
+            "name": "Bait-us-Salam",
+            "name:ur": "مسجد بیت السلام",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 437947142,
+          "center": {
+            "lat": -37.9940598,
+            "lon": 145.2085421
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "name": "Albanian Sakie Islamic Centre",
+            "religion": "muslim",
+            "wikipedia": "en:Albanian Mosque (Dandenong)"
+          }
+        },
+        {
+          "type": "way",
+          "id": 438080062,
+          "center": {
+            "lat": -37.8460962,
+            "lon": 144.8615374
+          },
+          "tags": {
+            "alt_name": "Newport Mosque",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "name": "Australian Islamic Centre",
+            "religion": "muslim",
+            "website": "http://australianislamiccentre.com.au/details.html"
+          }
+        },
+        {
+          "type": "way",
+          "id": 438258875,
+          "center": {
+            "lat": -38.0119624,
+            "lon": 145.1777872
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 439374142,
+          "center": {
+            "lat": -37.7390551,
+            "lon": 144.9932136
+          },
+          "tags": {
+            "alt_name": "Preston Mosque",
+            "amenity": "place_of_worship",
+            "building": "mosque",
+            "denomination": "sunni",
+            "name": "Umar bin Al-Khattab Mosque",
+            "religion": "muslim",
+            "website": "http://www.prestonmosque.org/",
+            "wikidata": "Q7241944",
+            "wikipedia": "en:Preston Mosque"
+          }
+        },
+        {
+          "type": "way",
+          "id": 539995719,
+          "center": {
+            "lat": -37.9696978,
+            "lon": 145.1751631
+          },
+          "tags": {
+            "addr:housenumber": "18",
+            "addr:street": "Leonard Avenue",
+            "amenity": "place_of_worship",
+            "name": "Noble Park Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 615193480,
+          "center": {
+            "lat": -37.7878118,
+            "lon": 144.879373
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "house",
+            "name": "Maidstone Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 626179263,
+          "center": {
+            "lat": -37.7069563,
+            "lon": 144.982933
+          },
+          "tags": {
+            "addr:housenumber": "223",
+            "addr:street": "Broadhurst Avenue",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "denomination": "shia",
+            "email": "asgp@live.com",
+            "name": "Ahlulbait Mosque",
+            "opening_hours": "09:00-22:00",
+            "religion": "muslim",
+            "source": "survey",
+            "website": "https://www.shia.com.au",
+            "wheelchair": "yes"
+          }
+        },
+        {
+          "type": "way",
+          "id": 694629037,
+          "center": {
+            "lat": -37.7978144,
+            "lon": 144.8406935
+          },
+          "tags": {
+            "addr:housenumber": "291",
+            "addr:street": "Sunshine Road",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "name": "Australia Light Foundation Mosque and Community Centre",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 759957128,
+          "center": {
+            "lat": -37.854856,
+            "lon": 144.6613737
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "denomination": "sunni",
+            "name": "Melbourne Grand Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1068898804,
+          "center": {
+            "lat": -37.7415837,
+            "lon": 144.7925449
+          },
+          "tags": {
+            "addr:country": "AU",
+            "addr:housenumber": "21-23",
+            "addr:postcode": "3021",
+            "addr:state": "VIC",
+            "addr:street": "Adelaide Street",
+            "addr:suburb": "St Albans",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "name": "Panjtan Centre",
+            "religion": "muslim",
+            "source": "Vicmap Address"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1117561290,
+          "center": {
+            "lat": -37.8043857,
+            "lon": 144.9765529
+          },
+          "tags": {
+            "addr:housenumber": "128-146",
+            "addr:street": "Fitzroy Street",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "name": "Bediuzzaman Said Nursi Cultural Foundation Central Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1170477550,
+          "center": {
+            "lat": -37.7473004,
+            "lon": 144.7780613
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "mosque",
+            "denomination": "sunni",
+            "management": "bosnian",
+            "name": "Deer Park Mosque",
+            "religion": "muslim",
+            "website": "https://abicdp.org/"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1200979609,
+          "center": {
+            "lat": -37.7176564,
+            "lon": 144.9567338
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "name": "Muslim chapel",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1307944489,
+          "center": {
+            "lat": -36.7415833,
+            "lon": 144.3159978
+          },
+          "tags": {
+            "addr:housenumber": "9",
+            "addr:postcode": "3550",
+            "addr:state": "VIC",
+            "addr:street": "Rowena Street",
+            "addr:suburb": "East Bendigo",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "name": "Bendigo Islamic Community Centre",
+            "religion": "muslim",
+            "website": "https://bicc.org.au/"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1308975525,
+          "center": {
+            "lat": -37.9747385,
+            "lon": 145.2160677
+          },
+          "tags": {
+            "addr:housenumber": "139",
+            "addr:postcode": "3175",
+            "addr:state": "VIC",
+            "addr:street": "Cleeland Street",
+            "addr:suburb": "Dandenong",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "name": "Emir Sultan Mosque",
+            "religion": "muslim",
+            "website": "https://www.emirsultanmosque.com/"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1322475017,
+          "center": {
+            "lat": -37.8526668,
+            "lon": 144.7220469
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1324276139,
+          "center": {
+            "lat": -37.8144271,
+            "lon": 144.6402686
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "name": "Hararian Organization Inc. Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1324276152,
+          "center": {
+            "lat": -37.7919775,
+            "lon": 144.6427435
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "name": "Oromo Resource Centre",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1324276313,
+          "center": {
+            "lat": -37.7056108,
+            "lon": 144.5652776
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "name": "Al Imam College Musallah",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1394517464,
+          "center": {
+            "lat": -37.8034178,
+            "lon": 144.6600491
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "name": "Golden Wattle Masjid",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1394519577,
+          "center": {
+            "lat": -37.7866561,
+            "lon": 144.9704041
+          },
+          "tags": {
+            "addr:housenumber": "765-769",
+            "addr:postcode": "3054",
+            "addr:street": "Drummond Street",
+            "addr:suburb": "Carlton North",
+            "alt_name": "Carlton Mosque",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "name": "Albanian Mosque",
+            "name:sq": "Xhami Shqiptare",
+            "religion": "muslim",
+            "wikidata": "Q98429966",
+            "wikipedia": "en:Albanian Mosque, Carlton North"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1394519936,
+          "center": {
+            "lat": -37.7551072,
+            "lon": 144.9750772
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1394521015,
+          "center": {
+            "lat": -37.7442442,
+            "lon": 145.0515747
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "name": "Heidelberg Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1394522710,
+          "center": {
+            "lat": -37.7049231,
+            "lon": 144.9721593
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "name": "Fawkner Mosque",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1433570091,
+          "center": {
+            "lat": -37.672438,
+            "lon": 144.9670767
+          },
+          "tags": {
+            "addr:housenumber": "46-48",
+            "addr:street": "Mason Street",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "name": "Campbellfield Mosque",
+            "religion": "muslim"
+          }
+        }
+      ]
+    },
+    {
+      "regionCode": "AU-WA",
+      "osmBaseTimestamp": "2026-08-24T10:43:11Z",
+      "elements": [
+        {
+          "type": "node",
+          "id": 276369920,
+          "lat": -31.8151705,
+          "lon": 115.7763904,
+          "tags": {
+            "addr:country": "AU",
+            "amenity": "place_of_worship",
+            "name": "Hepburn Heights Mosque (Al-Hidayah)",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "node",
+          "id": 2611047321,
+          "lat": -33.6815729,
+          "lon": 117.5551555,
+          "tags": {
+            "addr:country": "AU",
+            "addr:housenumber": "2",
+            "addr:postcode": "6317",
+            "addr:state": "WA",
+            "addr:street": "Warren Road",
+            "addr:suburb": "Katanning",
+            "amenity": "place_of_worship",
+            "name": "Katanning Mosque",
+            "phone": "+61 8 9821 2627",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "node",
+          "id": 5065163821,
+          "lat": -31.855908,
+          "lon": 115.8685363,
+          "tags": {
+            "addr:postcode": "6061",
+            "addr:street": "Boyare Avenue",
+            "amenity": "place_of_worship",
+            "building": "mosque",
+            "denomination": "sunni",
+            "name": "Masjid Al Taqwa",
+            "name:ar": "مسجد التقوى",
+            "religion": "muslim",
+            "website": "https://altaqwa.org.au/"
+          }
+        },
+        {
+          "type": "way",
+          "id": 150558747,
+          "center": {
+            "lat": -31.9435558,
+            "lon": 115.8623195
+          },
+          "tags": {
+            "addr:country": "AU",
+            "addr:housenumber": "427",
+            "addr:postcode": "6000",
+            "addr:street": "William Street",
+            "addr:suburb": "Perth",
+            "amenity": "place_of_worship",
+            "building": "mosque",
+            "building:levels": "2",
+            "name": "Perth Mosque",
+            "religion": "muslim",
+            "wikidata": "Q7170875",
+            "wikipedia": "en:Perth Mosque"
+          }
+        },
+        {
+          "type": "way",
+          "id": 474497185,
+          "center": {
+            "lat": -32.0096775,
+            "lon": 115.8938871
+          },
+          "tags": {
+            "addr:country": "AU",
+            "addr:housename": "Mushallah (Majid)",
+            "addr:housenumber": "510",
+            "addr:postcode": "6102",
+            "addr:state": "WA",
+            "addr:street": "Curtin University",
+            "addr:suburb": "Bentley",
+            "amenity": "place_of_worship",
+            "building": "mosque",
+            "name": "510 Musalla",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 587515410,
+          "center": {
+            "lat": -32.0930804,
+            "lon": 115.9739853
+          },
+          "tags": {
+            "addr:housenumber": "Lot 1526",
+            "addr:postcode": "6110",
+            "addr:state": "WA",
+            "addr:street": "Leslie Street",
+            "addr:suburb": "Southern River",
+            "amenity": "place_of_worship",
+            "building": "mosque",
+            "check_date": "2026-03-08",
+            "name": "Masjid Ibrahim",
+            "religion": "muslim",
+            "website": "https://www.masjidibrahim.com.au/"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1210949421,
+          "center": {
+            "lat": -28.7604701,
+            "lon": 114.6196627
+          },
+          "tags": {
+            "addr:country": "AU",
+            "addr:housenumber": "172",
+            "addr:state": "WA",
+            "addr:street": "George Road",
+            "addr:suburb": "Beresford",
+            "amenity": "place_of_worship",
+            "building": "mosque",
+            "name": "Geraldton Mosque",
+            "phone": "+61 8 9964 1318",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1321549028,
+          "center": {
+            "lat": -32.1149867,
+            "lon": 115.8145718
+          },
+          "tags": {
+            "addr:housenumber": "239",
+            "addr:postcode": "6163",
+            "addr:state": "WA",
+            "addr:street": "Barrington Street",
+            "addr:suburb": "Bibra Lake",
+            "alt_name": "Masjid Nasir;Nasir Masjid",
+            "alt_name:ur": "ناصر مسجد",
+            "amenity": "place_of_worship",
+            "building": "yes",
+            "denomination": "ahmadiyya",
+            "name": "Nasir Mosque",
+            "name:ur": "مسجد ناصر",
+            "religion": "muslim"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1424722448,
+          "center": {
+            "lat": -32.1208259,
+            "lon": 115.848813
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "building": "mosque",
+            "denomination": "muslim",
+            "name": "Sakina Islamic Centre",
+            "religion": "muslim",
+            "website": "https://sakinahislamiccentre.com.au/"
+          }
+        },
+        {
+          "type": "way",
+          "id": 1474670108,
+          "center": {
+            "lat": -31.9975325,
+            "lon": 115.9479034
+          },
+          "tags": {
+            "amenity": "place_of_worship",
+            "religion": "muslim"
+          }
+        }
+      ]
+    }
+  ]
+}
