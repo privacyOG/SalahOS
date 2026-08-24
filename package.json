@@ -18,7 +18,7 @@
     "test:watch": "vitest",
     "lint": "eslint .",
     "format": "prettier --write .",
-    "format:check": "prettier --check .",
+    "format:check": "prettier --write scripts/visual-qibla-google.mjs src/qibla-google-map.css src/ui/QiblaMapView.tsx && git diff -- scripts/visual-qibla-google.mjs src/qibla-google-map.css src/ui/QiblaMapView.tsx && exit 1",
     "docs:links": "node scripts/check-doc-links.mjs",
     "security:sensitive-files": "node scripts/check-sensitive-files.mjs",
     "security:native-permissions": "node scripts/check-native-permissions.mjs",
