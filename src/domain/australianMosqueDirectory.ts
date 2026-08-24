@@ -4,14 +4,7 @@ import { createMosqueProfile, type MosqueProfile } from './mosqueProfile';
 import { resolveIanaTimeZone } from './timezone';
 
 export type AustralianMosqueRegionCode =
-  | 'AU-ACT'
-  | 'AU-NSW'
-  | 'AU-NT'
-  | 'AU-QLD'
-  | 'AU-SA'
-  | 'AU-TAS'
-  | 'AU-VIC'
-  | 'AU-WA';
+  'AU-ACT' | 'AU-NSW' | 'AU-NT' | 'AU-QLD' | 'AU-SA' | 'AU-TAS' | 'AU-VIC' | 'AU-WA';
 
 export interface AustralianMosqueRecord {
   readonly id: string;
@@ -123,10 +116,7 @@ function parseAustralianMosqueRecord(value: unknown): AustralianMosqueRecord {
   if (osmType !== 'node' && osmType !== 'way' && osmType !== 'relation') {
     throw new TypeError('OSM element type is unsupported');
   }
-  const coordinates = createCoordinates(
-    Number(value.latitude),
-    Number(value.longitude),
-  );
+  const coordinates = createCoordinates(Number(value.latitude), Number(value.longitude));
   const website = optionalString(value, 'website', 'Mosque website');
   const nameAr = optionalString(value, 'nameAr', 'Arabic mosque name');
   const state = optionalString(value, 'state', 'Mosque state');
@@ -159,7 +149,8 @@ function parseDirectory(value: unknown): AustralianMosqueDirectory {
   }
   const records = Object.freeze(value.records.map(parseAustralianMosqueRecord));
   const ids = new Set(records.map((record) => record.id));
-  if (ids.size !== records.length) throw new RangeError('Australian mosque directory IDs must be unique');
+  if (ids.size !== records.length)
+    throw new RangeError('Australian mosque directory IDs must be unique');
 
   const source = value.source;
   if (
@@ -259,7 +250,9 @@ export function sortAustralianMosquesByDistance(
 ): readonly AustralianMosqueDistance[] {
   return Object.freeze(
     records
-      .map((mosque) => Object.freeze({ mosque, distanceKm: australianMosqueDistanceKm(from, mosque) }))
+      .map((mosque) =>
+        Object.freeze({ mosque, distanceKm: australianMosqueDistanceKm(from, mosque) }),
+      )
       .sort((left, right) => {
         const distanceDifference = left.distanceKm - right.distanceKm;
         return distanceDifference !== 0
