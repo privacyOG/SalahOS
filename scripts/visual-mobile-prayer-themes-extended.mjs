@@ -122,8 +122,8 @@ async function validateTranslatedTheme(browser, scenario) {
     if ((await surface.getAttribute('data-mobile-prayer-template')) !== scenario.templateId) {
       throw new Error(`${scenario.name} did not apply ${scenario.templateId}`);
     }
-    if ((await page.locator('.congregation-nav .congregation-nav-item').count()) !== 5) {
-      throw new Error(`${scenario.name} did not preserve the five-item primary navigation`);
+    if ((await page.locator('.congregation-nav .congregation-nav-item').count()) !== 6) {
+      throw new Error(`${scenario.name} did not preserve the six-item primary navigation`);
     }
     if (
       (await page
