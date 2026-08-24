@@ -50,7 +50,7 @@ jobs:
             pngjs@7.0.0 \
             pixelmatch@7.1.0
           npm audit --audit-level=moderate
-          npx playwright install chromium firefox webkit
+          npx playwright install --with-deps chromium firefox webkit
 
       - name: Start local production server
         run: |
