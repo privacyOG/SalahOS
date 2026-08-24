@@ -184,10 +184,7 @@ async function reachableAboveNavigation(page, selector) {
 }
 
 function assertReachable(name, label, metrics) {
-  if (
-    metrics.top < metrics.visibleTop - 1 ||
-    metrics.bottom > metrics.visibleBottom + 1
-  ) {
+  if (metrics.top < metrics.visibleTop - 1 || metrics.bottom > metrics.visibleBottom + 1) {
     throw new Error(
       `${name} ${label} cannot be fully reached above navigation: ${JSON.stringify(metrics)}`,
     );
