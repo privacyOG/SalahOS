@@ -65,7 +65,7 @@ export function AustralianMosqueDirectoryPanel() {
   const text = australianMosqueDirectoryCopy[locale];
   const savedCoordinates = settings.location?.coordinates ?? null;
   const followedIds = useMemo(
-    () => new Set(library.profiles.map((profile) => profile.id)),
+    () => new Set<string>(library.profiles.map((profile) => profile.id)),
     [library.profiles],
   );
 
