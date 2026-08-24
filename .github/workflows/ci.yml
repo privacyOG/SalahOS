@@ -82,5 +82,8 @@ jobs:
       - name: Production build
         run: npm run build
 
+      - name: Bundle architecture budget
+        run: npm run bundle:size
+
       - name: Verify deployable web artifact
         run: npm run verify:web-build
