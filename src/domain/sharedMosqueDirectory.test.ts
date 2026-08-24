@@ -21,7 +21,11 @@ const records: readonly SharedMosqueRecord[] = [
     website: 'https://example.org/',
     phone: '+61 2 9000 0000',
     source: 'community',
-    verification: { state: 'claimed', verifiedAt: '2026-08-01T00:00:00Z', claimedAt: '2026-08-02T00:00:00Z' },
+    verification: {
+      state: 'claimed',
+      verifiedAt: '2026-08-01T00:00:00Z',
+      claimedAt: '2026-08-02T00:00:00Z',
+    },
     revision: 4,
     updatedAt: '2026-08-23T00:00:00Z',
   },
