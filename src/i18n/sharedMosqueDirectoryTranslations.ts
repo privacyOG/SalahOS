@@ -76,7 +76,8 @@ export const sharedMosqueDirectoryCopy: Readonly<Record<Locale, SharedMosqueDire
     send: 'Send for review',
     contributionQueued: 'Saved locally and queued until the shared service is reachable.',
     contributionReceived: 'Received for moderation.',
-    privacy: 'Search and contribution requests use the configured SalahOS directory service. Nearby search sends coordinates only after you choose Near me.',
+    privacy:
+      'Search and contribution requests use the configured SalahOS directory service. Nearby search sends coordinates only after you choose Near me.',
   },
   ar: {
     title: 'دليل المساجد المجتمعي',
@@ -114,7 +115,8 @@ export const sharedMosqueDirectoryCopy: Readonly<Record<Locale, SharedMosqueDire
     send: 'أرسل للمراجعة',
     contributionQueued: 'حُفظ محلياً وسيُرسل عند توفر خدمة الدليل.',
     contributionReceived: 'تم الاستلام للمراجعة.',
-    privacy: 'تستخدم عمليات البحث والمساهمة خدمة دليل صلاحOS المهيأة. لا تُرسل الإحداثيات إلا بعد اختيار بالقرب مني.',
+    privacy:
+      'تستخدم عمليات البحث والمساهمة خدمة دليل صلاحOS المهيأة. لا تُرسل الإحداثيات إلا بعد اختيار بالقرب مني.',
   },
   tr: {
     title: 'Topluluk cami dizini',
@@ -152,7 +154,8 @@ export const sharedMosqueDirectoryCopy: Readonly<Record<Locale, SharedMosqueDire
     send: 'İncelemeye gönder',
     contributionQueued: 'Yerel olarak kaydedildi; hizmet erişilebilir olduğunda gönderilebilir.',
     contributionReceived: 'Moderasyon için alındı.',
-    privacy: 'Arama ve katkılar yapılandırılmış SalahOS dizin hizmetini kullanır. Koordinatlar yalnızca Yakınımda seçildiğinde gönderilir.',
+    privacy:
+      'Arama ve katkılar yapılandırılmış SalahOS dizin hizmetini kullanır. Koordinatlar yalnızca Yakınımda seçildiğinde gönderilir.',
   },
   id: {
     title: 'Direktori masjid komunitas',
@@ -190,6 +193,7 @@ export const sharedMosqueDirectoryCopy: Readonly<Record<Locale, SharedMosqueDire
     send: 'Kirim untuk ditinjau',
     contributionQueued: 'Disimpan lokal dan diantrikan sampai layanan direktori tersedia.',
     contributionReceived: 'Diterima untuk moderasi.',
-    privacy: 'Pencarian dan kontribusi memakai layanan direktori SalahOS yang dikonfigurasi. Koordinat hanya dikirim setelah Anda memilih Di dekat saya.',
+    privacy:
+      'Pencarian dan kontribusi memakai layanan direktori SalahOS yang dikonfigurasi. Koordinat hanya dikirim setelah Anda memilih Di dekat saya.',
   },
 };
