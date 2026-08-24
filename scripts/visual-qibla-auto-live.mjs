@@ -36,17 +36,20 @@ function persistedSettings() {
 }
 
 async function installOrientationMock(page, permissionApi) {
-  await page.addInitScript(({ permissionApiEnabled }) => {
-    globalThis.__salahosOrientationPermissionRequests = 0;
-    class MockDeviceOrientationEvent extends Event {}
-    if (permissionApiEnabled) {
-      MockDeviceOrientationEvent.requestPermission = () => {
-        globalThis.__salahosOrientationPermissionRequests += 1;
-        return Promise.resolve('granted');
-      };
-    }
-    globalThis.DeviceOrientationEvent = MockDeviceOrientationEvent;
-  }, { permissionApiEnabled: permissionApi });
+  await page.addInitScript(
+    ({ permissionApiEnabled }) => {
+      globalThis.__salahosOrientationPermissionRequests = 0;
+      class MockDeviceOrientationEvent extends Event {}
+      if (permissionApiEnabled) {
+        MockDeviceOrientationEvent.requestPermission = () => {
+          globalThis.__salahosOrientationPermissionRequests += 1;
+          return Promise.resolve('granted');
+        };
+      }
+      globalThis.DeviceOrientationEvent = MockDeviceOrientationEvent;
+    },
+    { permissionApiEnabled: permissionApi },
+  );
 }
 
 async function seedExistingInstall(page) {
@@ -172,8 +175,14 @@ try {
       bearingVisible: document.querySelector('.qibla-bearing-summary') !== null,
     }));
     assert(metrics.locationState === 'error', 'Denied location did not enter the fallback state');
-    assert(metrics.compassState === 'active', 'Saved-location compass fallback did not stay active');
-    assert(metrics.bearingVisible, 'Saved-location Qiblah bearing disappeared after location denial');
+    assert(
+      metrics.compassState === 'active',
+      'Saved-location compass fallback did not stay active',
+    );
+    assert(
+      metrics.bearingVisible,
+      'Saved-location Qiblah bearing disappeared after location denial',
+    );
 
     await page.screenshot({
       path: path.join(artifactDirectory, 'stage44-qiblah-saved-fallback.png'),
