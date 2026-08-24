@@ -1,0 +1,184 @@
+.qibla-google-map-shell {
+  display: grid;
+  gap: 0.6rem;
+}
+
+.qibla-google-map-shell .qibla-map-toolbar {
+  flex-wrap: wrap;
+}
+
+.qibla-google-map-types,
+.qibla-google-map-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.qibla-google-map-types {
+  padding: 0.25rem;
+  border: 1px solid var(--border-subtle, rgba(127, 127, 127, 0.28));
+  border-radius: 0.85rem;
+  background: var(--surface, rgba(127, 127, 127, 0.05));
+}
+
+.qibla-google-map-types button {
+  min-height: 40px;
+  padding: 0.45rem 0.75rem;
+  border-color: transparent;
+  border-radius: 0.65rem;
+}
+
+.qibla-google-map-types button[aria-pressed='true'] {
+  border-color: color-mix(in srgb, var(--qibla-accent, #0f8a72) 48%, transparent);
+  background: color-mix(in srgb, var(--qibla-accent, #0f8a72) 14%, transparent);
+  color: var(--qibla-accent-strong, #08624f);
+  font-weight: 750;
+}
+
+.qibla-google-map-viewport {
+  cursor: default;
+  background:
+    linear-gradient(135deg, rgba(18, 103, 214, 0.08), rgba(229, 62, 48, 0.06)),
+    var(--surface, rgba(127, 127, 127, 0.06));
+}
+
+.qibla-google-map-canvas,
+.qibla-google-map-fallback {
+  position: absolute;
+  inset: 0;
+}
+
+.qibla-google-map-canvas {
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.qibla-google-map-shell[data-google-map-state='loading'] .qibla-google-map-canvas,
+.qibla-google-map-shell[data-google-map-state='error'] .qibla-google-map-canvas,
+.qibla-google-map-shell[data-google-map-state='unconfigured'] .qibla-google-map-canvas {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.qibla-google-map-fallback {
+  z-index: 1;
+  overflow: hidden;
+  cursor: crosshair;
+  background:
+    linear-gradient(rgba(127, 127, 127, 0.08) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(127, 127, 127, 0.08) 1px, transparent 1px),
+    radial-gradient(circle at 50% 50%, rgba(18, 103, 214, 0.16), transparent 14%),
+    var(--surface, rgba(127, 127, 127, 0.06));
+  background-size: 32px 32px, 32px 32px, auto, auto;
+}
+
+.qibla-google-map-status {
+  position: absolute;
+  z-index: 5;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 0.55rem;
+  padding: clamp(1rem, 5vw, 2rem);
+  text-align: center;
+  pointer-events: none;
+}
+
+.qibla-google-map-status::before {
+  content: '';
+  position: absolute;
+  inset: 28% 18%;
+  z-index: -1;
+  border-radius: 1.2rem;
+  background: color-mix(in srgb, var(--surface-elevated, #fff) 90%, transparent);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.12);
+}
+
+.qibla-google-map-status span {
+  max-width: 52ch;
+  line-height: 1.45;
+}
+
+.qibla-google-map-status button {
+  pointer-events: auto;
+}
+
+.qibla-google-map-status--fallback {
+  inset: auto 0 0;
+  place-content: end center;
+  padding: 0.9rem;
+  background: linear-gradient(transparent, rgba(0, 0, 0, 0.62));
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+  pointer-events: none;
+}
+
+.qibla-google-map-status--fallback::before {
+  display: none;
+}
+
+.qibla-google-map-status--fallback button {
+  background: #fff;
+  color: #111;
+  text-shadow: none;
+}
+
+.qibla-map-bearing-overlay--fallback line {
+  stroke: #e53e30;
+  stroke-width: 5;
+  vector-effect: non-scaling-stroke;
+  filter:
+    drop-shadow(0 0 1px #fff)
+    drop-shadow(0 0 3px #fff)
+    drop-shadow(0 1px 2px rgba(0, 0, 0, 0.8));
+}
+
+.qibla-google-map-viewport.is-aligned .qibla-map-bearing-overlay--fallback line {
+  stroke: #15803d;
+  stroke-width: 6;
+}
+
+@media (max-width: 620px) {
+  .qibla-google-map-types,
+  .qibla-google-map-actions {
+    width: 100%;
+  }
+
+  .qibla-google-map-types {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .qibla-google-map-types button {
+    min-width: 0;
+    padding-inline: 0.35rem;
+  }
+
+  .qibla-google-map-actions {
+    justify-content: space-between;
+  }
+
+  .qibla-google-map-actions > button {
+    flex: 1 1 12rem;
+  }
+
+  .qibla-google-map-status--fallback {
+    padding: 0.7rem;
+    font-size: 0.86rem;
+  }
+}
+
+@media (forced-colors: active) {
+  .qibla-google-map-types,
+  .qibla-google-map-types button[aria-pressed='true'] {
+    border: 1px solid CanvasText;
+  }
+
+  .qibla-map-bearing-overlay--fallback line {
+    stroke: LinkText;
+    filter: none;
+  }
+}
