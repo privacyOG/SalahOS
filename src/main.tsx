@@ -9,6 +9,7 @@ import {
 import { AdminDisplayThemeManagement } from './ui/AdminDisplayThemeManagement';
 import { AdminOverviewDashboard } from './ui/AdminOverviewDashboard';
 import { AdminShell } from './ui/AdminShell';
+import { AustralianMosqueDirectoryPanel } from './ui/AustralianMosqueDirectoryPanel';
 import { CommunityScreen } from './ui/CommunityScreen';
 import { CommunityUpdatesPanel } from './ui/CommunityUpdatesPanel';
 import { CongregationShell } from './ui/CongregationShell';
@@ -63,6 +64,7 @@ function CongregationRoute({ destination }: Readonly<{ destination: Congregation
       return (
         <div className="congregation-route congregation-route--mosques">
           <MosquesScreen />
+          <AustralianMosqueDirectoryPanel />
         </div>
       );
     case 'qiblah':
