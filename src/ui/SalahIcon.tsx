@@ -4,6 +4,7 @@ export type SalahIconName =
   | 'today'
   | 'mosques'
   | 'qiblah'
+  | 'knowledge'
   | 'community'
   | 'settings'
   | 'prayer'
@@ -47,6 +48,14 @@ function IconPaths({ name }: Readonly<{ name: SalahIconName }>) {
           <circle cx="12" cy="12" r="8.5" />
           <path d="m14.8 9.2-1.9 4.2-4.2 1.9 1.9-4.2 4.2-1.9Z" />
           <path d="M12 3.5V2" />
+        </>
+      );
+    case 'knowledge':
+      return (
+        <>
+          <path d="M4.5 5.5c2.7-.75 5.2-.25 7.5 1.5v12c-2.3-1.75-4.8-2.25-7.5-1.5v-12Z" />
+          <path d="M19.5 5.5c-2.7-.75-5.2-.25-7.5 1.5v12c2.3-1.75 4.8-2.25 7.5-1.5v-12Z" />
+          <path d="M12 7v12" />
         </>
       );
     case 'community':
