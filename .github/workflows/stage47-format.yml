@@ -1,9 +1,9 @@
 name: Stage 47 Formatter
 
 on:
-  push:
+  pull_request:
     branches:
-      - stage-47/v1.4-australian-mosque-directory
+      - main
     paths:
       - .github/workflows/stage47-format.yml
       - scripts/visual-australian-mosque-directory.mjs
