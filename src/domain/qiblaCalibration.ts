@@ -11,18 +11,14 @@ export function qiblaCompassAccuracyKnown(
   );
 }
 
-export function qiblaCompassCalibrationNeeded(
-  accuracyDegrees: number | null | undefined,
-): boolean {
+export function qiblaCompassCalibrationNeeded(accuracyDegrees: number | null | undefined): boolean {
   return (
     qiblaCompassAccuracyKnown(accuracyDegrees) &&
     accuracyDegrees > QIBLA_COMPASS_CALIBRATION_THRESHOLD_DEGREES
   );
 }
 
-export function qiblaCompassCalibrationPassed(
-  accuracyDegrees: number | null | undefined,
-): boolean {
+export function qiblaCompassCalibrationPassed(accuracyDegrees: number | null | undefined): boolean {
   return (
     qiblaCompassAccuracyKnown(accuracyDegrees) &&
     accuracyDegrees <= QIBLA_COMPASS_CALIBRATION_THRESHOLD_DEGREES
