@@ -3,3 +3,5 @@ ios/App/App/public/
 ios/App/App/Assets.xcassets/
 ios/App/App/capacitor.config.json
 ios/DerivedData/
+data/osm/australian-muslim-places-of-worship.overpass.json
+src/data/australian-mosques.json
