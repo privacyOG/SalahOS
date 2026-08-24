@@ -8,8 +8,8 @@ SalahOS is designed around local-first prayer-time functionality.
 
 - Core prayer calculations run locally on the device.
 - No account is required for core prayer-time functionality.
-- Precise location is requested only when the user chooses current-location functionality.
-- Continuous location watching is off by default. The Qiblah Finder starts a foreground live-location watch only after the user chooses current-position guidance, exposes a stop control, and does not persist a location trail.
+- Precise foreground location is requested through first-run permission education so automatic Qiblah/current-location features can operate only after the platform grants access.
+- The Qiblah Finder can start a foreground live-location watch after permission onboarding, exposes a stop control, and does not persist a location trail.
 - Saved coordinates, selected mosque, calculation settings, Hijri adjustment, and timetable data are stored locally by default.
 - Precise location must not be included in routine analytics, diagnostics, or logs.
 - No unnecessary analytics or telemetry is enabled by default.
@@ -19,17 +19,17 @@ SalahOS is designed around local-first prayer-time functionality.
 
 ## Location handling
 
-When current location is used, SalahOS should request the least permission required by the platform. If permission is denied or unavailable, the application must continue to support saved/manual locations without degrading core calculation functionality.
+When current location is enabled, SalahOS requests the least permission required by the platform for the active feature. If permission is denied or unavailable, the application continues to support saved/manual locations without degrading core calculation functionality.
 
 Coordinate-to-timezone resolution should prefer a local/offline strategy where practical. When a remote resolver is explicitly used, the application must clearly disclose that coordinates are transmitted to that service.
 
 ### Qiblah Finder maps
 
-The Qiblah bearing, compass guidance, saved-location path, and bundled city search remain local. Map imagery is optional and is not requested until the user explicitly selects **Load map tiles**.
+The Qiblah bearing, compass guidance, saved/manual-location paths, recalibration guidance, and bundled city search remain local. Google Maps JavaScript API is the primary interactive Qiblah map provider only when the deployment configures a restricted client key and the user opens the Map view.
 
-When map tiles are enabled, OpenStreetMap receives the requested tile coordinates/viewed map area and normal network request metadata such as the device's public IP address. A map centred on a current or manually selected location can therefore reveal that approximate viewed area to OpenStreetMap. SalahOS does not attach stored prayer settings, mosque data, prayer history, or a separate raw-coordinate payload to those tile requests.
+Opening the Google Maps view sends normal map/network requests to Google. Those requests include normal network metadata such as the device's public IP address and can reveal the viewed map area and therefore the approximate current or manually selected location. SalahOS does not attach stored prayer settings, mosque data, prayer history, or unrelated application data to those map requests.
 
-The reviewed Web/PWA image-source policy limits Qiblah map imagery to the documented OpenStreetMap standard-tile host. Core Qiblah direction continues to work without that provider.
+The Google provider is restricted to the documented Qiblah adapter and deployment key policy. OpenStreetMap is not used by the Qiblah map. If Google Maps is unavailable, blocked or unconfigured, SalahOS switches to a local network-free bearing surface that keeps manual pin selection and the locally calculated Qiblah direction available.
 
 ## Telemetry
 
@@ -37,7 +37,7 @@ The default product does not require behavioural analytics. If optional diagnost
 
 ## Network failure
 
-Network loss must not prevent locally calculable prayer schedules, Qiblah bearing calculation, access to previously saved mosque timetables, or previously saved settings. Optional Qiblah map imagery may be unavailable while offline without disabling the local bearing or compass guidance.
+Network loss must not prevent locally calculable prayer schedules, Qiblah bearing calculation, access to previously saved mosque timetables, or previously saved settings. Interactive Google Maps may be unavailable while offline without disabling the local bearing, compass guidance, recalibration or local map fallback.
 
 ## Security baseline
 
