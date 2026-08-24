@@ -1,0 +1,42 @@
+name: Stage 47 Australian Mosque Bootstrap
+
+on:
+  push:
+    branches:
+      - stage-47/v1.4-australian-mosque-directory
+    paths:
+      - scripts/generate-australian-mosque-directory.mjs
+      - .github/workflows/stage47-bootstrap-australian-mosques.yml
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: stage-47/v1.4-australian-mosque-directory
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Fetch and generate Australian mosque directory
+        run: node scripts/generate-australian-mosque-directory.mjs --fetch
+
+      - name: Commit source snapshot and generated directory
+        run: |
+          git add data/osm/australian-muslim-places-of-worship.overpass.json src/data/australian-mosques.json
+          if git diff --cached --quiet; then
+            echo "Australian mosque data is already current."
+            exit 0
+          fi
+          git config user.name "privacyOG"
+          git config user.email "102720550+privacyOG@users.noreply.github.com"
+          git commit -m "Generate Australian mosque directory"
+          git push origin HEAD:stage-47/v1.4-australian-mosque-directory
