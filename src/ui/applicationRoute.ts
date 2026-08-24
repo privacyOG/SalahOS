@@ -1,11 +1,6 @@
 export type ProductSurface = 'congregation' | 'admin';
 export type CongregationDestination =
-  | 'today'
-  | 'mosques'
-  | 'qiblah'
-  | 'knowledge'
-  | 'community'
-  | 'settings';
+  'today' | 'mosques' | 'qiblah' | 'knowledge' | 'community' | 'settings';
 export type SettingsCategory =
   | 'prayer'
   | 'location'

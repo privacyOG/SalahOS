@@ -34,17 +34,15 @@ export interface QaKnowledgeEntry {
   readonly tags: readonly string[];
 }
 
-export type IslamicKnowledgeEntry =
-  | QuranKnowledgeEntry
-  | HadithKnowledgeEntry
-  | QaKnowledgeEntry;
+export type IslamicKnowledgeEntry = QuranKnowledgeEntry | HadithKnowledgeEntry | QaKnowledgeEntry;
 
 export const islamicKnowledgeEntries = Object.freeze([
   {
     id: 'quran-prayer-remembrance',
     module: 'quran',
     title: 'Prayer and remembrance',
-    arabic: 'إِنَّنِي أَنَا اللَّهُ لَا إِلَٰهَ إِلَّا أَنَا فَاعْبُدْنِي وَأَقِمِ الصَّلَاةَ لِذِكْرِي',
+    arabic:
+      'إِنَّنِي أَنَا اللَّهُ لَا إِلَٰهَ إِلَّا أَنَا فَاعْبُدْنِي وَأَقِمِ الصَّلَاةَ لِذِكْرِي',
     translation:
       'Indeed, I am Allah. There is no deity except Me, so worship Me and establish prayer for My remembrance.',
     reference: 'Qur’an 20:14',
@@ -77,8 +75,7 @@ export const islamicKnowledgeEntries = Object.freeze([
     id: 'hadith-intentions',
     module: 'hadith',
     title: 'Actions are judged by intentions',
-    text:
-      'Actions are only by intentions, and every person will have only what they intended.',
+    text: 'Actions are only by intentions, and every person will have only what they intended.',
     collection: 'Sahih al-Bukhari',
     reference: 'Hadith 1',
     grade: 'Sahih',
@@ -100,8 +97,7 @@ export const islamicKnowledgeEntries = Object.freeze([
     id: 'hadith-congregation',
     module: 'hadith',
     title: 'Merit of congregational prayer',
-    text:
-      'Prayer in congregation is superior to prayer performed alone by twenty-seven degrees.',
+    text: 'Prayer in congregation is superior to prayer performed alone by twenty-seven degrees.',
     collection: 'Sahih al-Bukhari',
     reference: 'Hadith 645',
     grade: 'Sahih',
@@ -148,7 +144,14 @@ export const islamicKnowledgeEntries = Object.freeze([
 
 function searchableText(entry: IslamicKnowledgeEntry): string {
   if (entry.module === 'quran') {
-    return [entry.title, entry.arabic, entry.translation, entry.reference, entry.source, ...entry.tags]
+    return [
+      entry.title,
+      entry.arabic,
+      entry.translation,
+      entry.reference,
+      entry.source,
+      ...entry.tags,
+    ]
       .join(' ')
       .toLocaleLowerCase();
   }

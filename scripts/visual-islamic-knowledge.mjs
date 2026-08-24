@@ -62,20 +62,38 @@ try {
 
     const screen = page.locator('[data-knowledge-screen]');
     await screen.waitFor({ state: 'visible' });
-    assert((await screen.locator('.knowledge-card').count()) === 9, 'Expected nine offline entries');
-    assert((await screen.locator('[data-knowledge-module="quran"]').count()) === 3, 'Qur’an module missing');
-    assert((await screen.locator('[data-knowledge-module="hadith"]').count()) === 3, 'Hadith module missing');
-    assert((await screen.locator('[data-knowledge-module="qa"]').count()) === 3, 'Q&A module missing');
+    assert(
+      (await screen.locator('.knowledge-card').count()) === 9,
+      'Expected nine offline entries',
+    );
+    assert(
+      (await screen.locator('[data-knowledge-module="quran"]').count()) === 3,
+      'Qur’an module missing',
+    );
+    assert(
+      (await screen.locator('[data-knowledge-module="hadith"]').count()) === 3,
+      'Hadith module missing',
+    );
+    assert(
+      (await screen.locator('[data-knowledge-module="qa"]').count()) === 3,
+      'Q&A module missing',
+    );
     await screen.getByText('Sahih al-Bukhari').first().waitFor();
     await screen.getByText('Sahih').first().waitFor();
     await screen.getByText('Imam al-Nawawi').first().waitFor();
 
     await screen.locator('[data-knowledge-filter="hadith"]').click();
-    assert((await screen.locator('.knowledge-card').count()) === 3, 'Hadith filter did not isolate entries');
+    assert(
+      (await screen.locator('.knowledge-card').count()) === 3,
+      'Hadith filter did not isolate entries',
+    );
 
     await screen.locator('[data-knowledge-filter="all"]').click();
     await screen.getByRole('searchbox').fill('travel');
-    assert((await screen.locator('.knowledge-card').count()) === 1, 'Search did not narrow to travel Q&A');
+    assert(
+      (await screen.locator('.knowledge-card').count()) === 1,
+      'Search did not narrow to travel Q&A',
+    );
     await screen.getByText('May an obligatory prayer be shortened while travelling?').waitFor();
 
     const metrics = await page.evaluate(() => ({
