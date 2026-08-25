@@ -6,18 +6,20 @@ import {
   validateIslamicKnowledgeGovernance,
 } from './islamicKnowledgeGovernance';
 
+const catalogue: readonly IslamicKnowledgeEntry[] = islamicKnowledgeEntries;
+
 describe('Islamic knowledge source governance', () => {
   it('keeps the complete shipped catalogue on approved, attributed sources', () => {
-    expect(validateIslamicKnowledgeGovernance(islamicKnowledgeEntries)).toEqual([]);
+    expect(validateIslamicKnowledgeGovernance(catalogue)).toEqual([]);
     expect(approvedIslamicKnowledgeSources.length).toBeGreaterThanOrEqual(10);
 
-    for (const entry of islamicKnowledgeEntries) {
+    for (const entry of catalogue) {
       expect(getEntryApprovedSources(entry)).toHaveLength(entry.sourceIds.length);
     }
   });
 
   it('requires named translation provenance for every Qur’an entry', () => {
-    const quranEntries = islamicKnowledgeEntries.filter((entry) => entry.module === 'quran');
+    const quranEntries = catalogue.filter((entry) => entry.module === 'quran');
     for (const entry of quranEntries) {
       const sources = getEntryApprovedSources(entry);
       const translation = sources.find((source) => source.id === entry.translationSourceId);
@@ -29,7 +31,7 @@ describe('Islamic knowledge source governance', () => {
   });
 
   it('keeps hadith collection, number, grade and grading authority attributable', () => {
-    const hadithEntries = islamicKnowledgeEntries.filter((entry) => entry.module === 'hadith');
+    const hadithEntries = catalogue.filter((entry) => entry.module === 'hadith');
     for (const entry of hadithEntries) {
       expect(entry.collection).toMatch(/^Sahih /u);
       expect(entry.reference).toMatch(/^Hadith \d+/u);
@@ -45,7 +47,7 @@ describe('Islamic knowledge source governance', () => {
   });
 
   it('requires all four Sunni madhhab source lanes for current fiqh guidance', () => {
-    const fiqhEntries = islamicKnowledgeEntries.filter(
+    const fiqhEntries = catalogue.filter(
       (entry) => entry.module === 'qa' && entry.contentType === 'fiqh',
     );
     expect(fiqhEntries).toHaveLength(3);
@@ -60,9 +62,9 @@ describe('Islamic knowledge source governance', () => {
   });
 
   it('rejects an unattributed fiqh ruling and incomplete madhhab coverage', () => {
-    const baseline = islamicKnowledgeEntries.find((entry) => entry.id === 'qa-travel-prayer');
+    const baseline = catalogue.find((entry) => entry.id === 'qa-travel-prayer');
     expect(baseline?.module).toBe('qa');
-    if (!baseline || baseline.module !== 'qa') throw new Error('Missing fiqh fixture');
+    if (baseline?.module !== 'qa') throw new Error('Missing fiqh fixture');
 
     const invalid = {
       ...baseline,
@@ -84,12 +86,6 @@ describe('Islamic knowledge source governance', () => {
       'ashari',
       'maturidi',
     ]);
-    expect(
-      creedSources.every((source) =>
-        source.creedTraditions.every(
-          (tradition) => tradition === 'ashari' || tradition === 'maturidi',
-        ),
-      ),
-    ).toBe(true);
+    expect(creedSources.every((source) => source.reviewStatus === 'approved')).toBe(true);
   });
 });
