@@ -9,13 +9,18 @@ function dependencies(
     checkNativePermissions: () => Promise.resolve({ location: 'granted' }),
     requestNativePermissions: () => Promise.resolve({ location: 'granted' }),
     getNativeCurrentPosition: () =>
-      Promise.resolve({ coords: { latitude: -33.8688, longitude: 151.2093 } }),
-    requestBrowser: () =>
+      Promise.resolve({
+        coords: { latitude: -33.8688, longitude: 151.2093, accuracy: 8 },
+        timestamp: Date.parse('2026-08-25T00:00:00.000Z'),
+      }),
+    requestBrowser: (options) =>
       Promise.resolve({
         ok: true,
         location: {
           coordinates: { latitude: 51.5072, longitude: -0.1276 },
-          source: 'browser',
+          source: options.enableHighAccuracy ? 'browser-gps' : 'browser-network-approximate',
+          accuracyMeters: options.enableHighAccuracy ? 15 : 800,
+          capturedAtIso: '2026-08-25T00:00:00.000Z',
         },
       }),
     ...overrides,
@@ -23,13 +28,17 @@ function dependencies(
 }
 
 describe('requestCurrentLocation', () => {
-  it('keeps the existing browser adapter outside native shells', async () => {
-    const requestBrowser = vi.fn(() =>
+  it('prefers a high-accuracy browser fix outside native shells', async () => {
+    const requestBrowser = vi.fn((options: { readonly enableHighAccuracy?: boolean }) =>
       Promise.resolve({
         ok: true as const,
         location: {
           coordinates: { latitude: 51.5072, longitude: -0.1276 },
-          source: 'browser' as const,
+          source: options.enableHighAccuracy
+            ? ('browser-gps' as const)
+            : ('browser-network-approximate' as const),
+          accuracyMeters: 12,
+          capturedAtIso: '2026-08-25T00:00:00.000Z',
         },
       }),
     );
@@ -38,16 +47,52 @@ describe('requestCurrentLocation', () => {
     );
 
     expect(requestBrowser).toHaveBeenCalledOnce();
-    expect(result).toEqual({
+    expect(requestBrowser).toHaveBeenCalledWith({
+      enableHighAccuracy: true,
+      timeoutMilliseconds: 12_000,
+      maximumAgeMilliseconds: 0,
+    });
+    expect(result).toMatchObject({
       ok: true,
       location: {
         coordinates: { latitude: 51.5072, longitude: -0.1276 },
-        source: 'browser',
+        source: 'browser-gps',
+        accuracyMeters: 12,
       },
     });
   });
 
-  it('uses a granted native permission and retains only coordinates', async () => {
+  it('falls back to browser network-assisted positioning after a precise timeout', async () => {
+    const requestBrowser = vi
+      .fn<CurrentLocationDependencies['requestBrowser']>()
+      .mockResolvedValueOnce({ ok: false, reason: 'timeout' })
+      .mockResolvedValueOnce({
+        ok: true,
+        location: {
+          coordinates: { latitude: 51.5, longitude: -0.12 },
+          source: 'browser-network-approximate',
+          accuracyMeters: 1_200,
+          capturedAtIso: '2026-08-25T00:00:00.000Z',
+        },
+      });
+
+    const result = await requestCurrentLocation(
+      dependencies({ isNativePlatform: () => false, requestBrowser }),
+    );
+
+    expect(requestBrowser).toHaveBeenCalledTimes(2);
+    expect(requestBrowser).toHaveBeenLastCalledWith({
+      enableHighAccuracy: false,
+      timeoutMilliseconds: 10_000,
+      maximumAgeMilliseconds: 60_000,
+    });
+    expect(result).toMatchObject({
+      ok: true,
+      location: { source: 'browser-network-approximate', accuracyMeters: 1_200 },
+    });
+  });
+
+  it('uses granted native permission and retains location-quality metadata', async () => {
     const requestNativePermissions = vi.fn(() => Promise.resolve({ location: 'granted' }));
     const getNativeCurrentPosition = vi.fn(() =>
       Promise.resolve({
@@ -55,11 +100,8 @@ describe('requestCurrentLocation', () => {
           latitude: -33.8688,
           longitude: 151.2093,
           accuracy: 4,
-          altitude: 12,
-          heading: 90,
-          speed: 1,
         },
-        timestamp: 123,
+        timestamp: Date.parse('2026-08-25T00:00:00.000Z'),
       }),
     );
     const result = await requestCurrentLocation(
@@ -68,16 +110,41 @@ describe('requestCurrentLocation', () => {
 
     expect(requestNativePermissions).not.toHaveBeenCalled();
     expect(getNativeCurrentPosition).toHaveBeenCalledWith({
-      enableHighAccuracy: false,
-      timeout: 10_000,
-      maximumAge: 300_000,
+      enableHighAccuracy: true,
+      timeout: 12_000,
+      maximumAge: 0,
     });
     expect(result).toEqual({
       ok: true,
       location: {
         coordinates: { latitude: -33.8688, longitude: 151.2093 },
-        source: 'native',
+        source: 'native-gps',
+        accuracyMeters: 4,
+        capturedAtIso: '2026-08-25T00:00:00.000Z',
       },
+    });
+  });
+
+  it('falls back to approximate native positioning after a precise failure', async () => {
+    const getNativeCurrentPosition = vi
+      .fn<CurrentLocationDependencies['getNativeCurrentPosition']>()
+      .mockRejectedValueOnce(new Error('Location request timeout'))
+      .mockResolvedValueOnce({
+        coords: { latitude: -33.86, longitude: 151.2, accuracy: 900 },
+        timestamp: Date.parse('2026-08-25T00:01:00.000Z'),
+      });
+
+    const result = await requestCurrentLocation(dependencies({ getNativeCurrentPosition }));
+
+    expect(getNativeCurrentPosition).toHaveBeenCalledTimes(2);
+    expect(getNativeCurrentPosition).toHaveBeenLastCalledWith({
+      enableHighAccuracy: false,
+      timeout: 10_000,
+      maximumAge: 60_000,
+    });
+    expect(result).toMatchObject({
+      ok: true,
+      location: { source: 'native-network-approximate', accuracyMeters: 900 },
     });
   });
 
@@ -97,15 +164,5 @@ describe('requestCurrentLocation', () => {
     expect(requestNativePermissions).toHaveBeenCalledOnce();
     expect(getNativeCurrentPosition).not.toHaveBeenCalled();
     expect(result).toEqual({ ok: false, reason: 'permission-denied' });
-  });
-
-  it('normalizes native timeout failures', async () => {
-    const result = await requestCurrentLocation(
-      dependencies({
-        getNativeCurrentPosition: () => Promise.reject(new Error('Location request timeout')),
-      }),
-    );
-
-    expect(result).toEqual({ ok: false, reason: 'timeout' });
   });
 });
