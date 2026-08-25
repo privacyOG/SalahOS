@@ -43,6 +43,13 @@ export type QuranPackFetcher = (
   input: string,
 ) => Promise<Readonly<{ ok: boolean; status: number; json(): Promise<unknown> }>>;
 
+type QuranOfflinePackCandidate = Readonly<{
+  schemaVersion?: number;
+  counts?: Readonly<{ surahs?: number; ayahs?: number }>;
+  sources?: QuranOfflinePack['sources'];
+  surahs?: readonly QuranOfflineSurah[];
+}>;
+
 function assertPack(condition: unknown, message: string): asserts condition {
   if (!condition) throw new Error(message);
 }
@@ -62,10 +69,10 @@ export function parseQuranVerseKey(
 
 export function validateQuranOfflinePack(value: unknown): QuranOfflinePack {
   assertPack(typeof value === 'object' && value !== null, 'Offline Qur’an pack is not an object.');
-  const pack = value as Partial<QuranOfflinePack>;
+  const pack = value as QuranOfflinePackCandidate;
   assertPack(pack.schemaVersion === 1, 'Offline Qur’an pack schema version is invalid.');
   assertPack(pack.counts?.surahs === 114, 'Offline Qur’an pack must contain 114 surahs.');
-  assertPack(pack.counts?.ayahs === 6236, 'Offline Qur’an pack must contain 6,236 ayat.');
+  assertPack(pack.counts.ayahs === 6236, 'Offline Qur’an pack must contain 6,236 ayat.');
   assertPack(
     Array.isArray(pack.surahs) && pack.surahs.length === 114,
     'Offline Qur’an surah data is incomplete.',
@@ -85,7 +92,7 @@ export function validateQuranOfflinePack(value: unknown): QuranOfflinePack {
         `Offline Qur’an Arabic text is missing for ${key}.`,
       );
       assertPack(
-        ayah.translations['pickthall-1930']?.trim().length > 0,
+        ayah.translations['pickthall-1930'].trim().length > 0,
         `Offline Qur’an Pickthall translation is missing for ${key}.`,
       );
       verseKeys.add(key);
@@ -96,7 +103,7 @@ export function validateQuranOfflinePack(value: unknown): QuranOfflinePack {
     ayahCount === 6236,
     `Offline Qur’an contains ${String(ayahCount)} ayat instead of 6,236.`,
   );
-  return pack as QuranOfflinePack;
+  return value as QuranOfflinePack;
 }
 
 let cachedPackPromise: Promise<QuranOfflinePack> | null = null;
@@ -106,7 +113,7 @@ export function resetQuranOfflinePackCache(): void {
 }
 
 export async function loadQuranOfflinePack(
-  fetcher: QuranPackFetcher = globalThis.fetch.bind(globalThis) as QuranPackFetcher,
+  fetcher: QuranPackFetcher = globalThis.fetch.bind(globalThis),
 ): Promise<QuranOfflinePack> {
   cachedPackPromise ??= (async () => {
     const response = await fetcher(manifest.packPath);
