@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 import type { Locale } from '../i18n/translations';
 import { getApplicationStorage } from '../platform/applicationStorage';
 import {
   loadQuranReadingPreferences,
+  QURAN_READING_PREFERENCES_CHANGE_EVENT,
   saveQuranReadingPreferences,
   type QuranReadingPreferences,
 } from '../platform/quranReadingPreferences';
@@ -28,6 +29,16 @@ export function KnowledgeExperience() {
   const [quranPreferences, setQuranPreferences] = useState<QuranReadingPreferences>(() =>
     loadQuranReadingPreferences(getApplicationStorage()),
   );
+
+  useEffect(() => {
+    const reload = () => {
+      setQuranPreferences(loadQuranReadingPreferences(getApplicationStorage()));
+    };
+    window.addEventListener(QURAN_READING_PREFERENCES_CHANGE_EVENT, reload);
+    return () => {
+      window.removeEventListener(QURAN_READING_PREFERENCES_CHANGE_EVENT, reload);
+    };
+  }, []);
 
   const persistQuranPreferences = (next: QuranReadingPreferences): void => {
     setQuranPreferences(next);
