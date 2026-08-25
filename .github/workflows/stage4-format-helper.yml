@@ -1,0 +1,43 @@
+name: Stage 4 Format Helper
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  format-stage4:
+    if: github.event.pull_request.head.ref == 'stage-53/v1.5-mosque-directory-enrichment'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Apply exact repository formatting
+        run: |
+          npx prettier --write \
+            scripts/generate-mosque-directory-packs.mjs \
+            scripts/visual-mosque-directory-enrichment.mjs \
+            src/domain/mosqueDirectoryEnrichment.test.ts \
+            src/domain/mosqueDirectoryEnrichment.ts
+          git diff --check
+          if git diff --quiet; then
+            echo "No formatting changes required."
+            exit 0
+          fi
+          git config user.name privacyOG
+          git config user.email "102720550+privacyOG@users.noreply.github.com"
+          git add \
+            scripts/generate-mosque-directory-packs.mjs \
+            scripts/visual-mosque-directory-enrichment.mjs \
+            src/domain/mosqueDirectoryEnrichment.test.ts \
+            src/domain/mosqueDirectoryEnrichment.ts
+          git commit -m "Stage 4: apply repository formatting"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
