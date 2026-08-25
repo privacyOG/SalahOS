@@ -1,0 +1,63 @@
+name: Stage 55 Format Export
+
+on:
+  push:
+    branches:
+      - stage-55/v1.5-quran-expansion
+    paths:
+      - .github/workflows/stage55-format-export.yml
+
+permissions:
+  contents: read
+
+jobs:
+  format-export:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Stage 55 branch
+        uses: actions/checkout@v4
+        with:
+          ref: stage-55/v1.5-quran-expansion
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install repository dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Apply repository Prettier
+        run: |
+          npx prettier --write \
+            scripts/prepare-quran-offline-pack.mjs \
+            scripts/visual-quran-offline-reader.mjs \
+            src/domain/islamicKnowledge.test.ts \
+            src/domain/islamicKnowledgeGovernance.ts \
+            src/domain/quranOfflineLibrary.ts \
+            src/platform/quranReadingPreferences.ts \
+            src/ui/KnowledgeScreen.tsx \
+            src/ui/QuranOfflineReader.tsx \
+            src/ui/KnowledgeExperience.tsx \
+            src/quran-offline-reader.css \
+            src/main.tsx
+
+      - name: Export formatted files
+        uses: actions/upload-artifact@v4
+        with:
+          name: stage55-formatted-files
+          if-no-files-found: error
+          retention-days: 3
+          path: |
+            scripts/prepare-quran-offline-pack.mjs
+            scripts/visual-quran-offline-reader.mjs
+            src/domain/islamicKnowledge.test.ts
+            src/domain/islamicKnowledgeGovernance.ts
+            src/domain/quranOfflineLibrary.ts
+            src/platform/quranReadingPreferences.ts
+            src/ui/KnowledgeScreen.tsx
+            src/ui/QuranOfflineReader.tsx
+            src/ui/KnowledgeExperience.tsx
+            src/quran-offline-reader.css
+            src/main.tsx
