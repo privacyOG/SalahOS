@@ -15,6 +15,7 @@ import {
 import { installThemePreference } from '../platform/themePreference';
 import { MobilePrayerThemeSettings } from './MobilePrayerThemeSettings';
 import { PrayerBoardWeatherSettings } from './PrayerBoardWeatherSettings';
+import { PrivacyDiagnosticsSettings } from './PrivacyDiagnosticsSettings';
 import { RamadanModePanel } from './RamadanModePanel';
 import {
   AdvancedPrayerSettingsPanel,
@@ -78,7 +79,7 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
     appearanceTitle: 'Appearance & language',
     appearanceDescription: 'Language, clock format and light or dark appearance.',
     dataTitle: 'Data & privacy',
-    dataDescription: 'Export, import or reset locally stored SalahOS settings.',
+    dataDescription: 'Manage local data, privacy controls and optional diagnostics.',
     displayTitle: 'Display themes',
     displayDescription:
       'Open managed-display configuration without mixing credentials or fleet controls into daily settings.',
@@ -86,7 +87,8 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
     advancedDescription:
       'Manual timetable import, prayer offsets and less common prayer configuration.',
     displayAction: 'Open managed displays',
-    exportHelp: 'Settings data stays local unless you explicitly copy or export it.',
+    exportHelp:
+      'Import, export or reset device settings here. Optional diagnostics are controlled separately below.',
     imported: 'Settings imported successfully.',
     importError: 'Settings data is invalid or unsupported.',
     reset: 'Settings reset to defaults.',
@@ -109,14 +111,15 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
     appearanceTitle: 'المظهر واللغة',
     appearanceDescription: 'اللغة وتنسيق الساعة والمظهر الفاتح أو الداكن.',
     dataTitle: 'البيانات والخصوصية',
-    dataDescription: 'تصدير إعدادات صلاح أو إس المحلية أو استيرادها أو إعادة ضبطها.',
+    dataDescription: 'إدارة البيانات المحلية وضوابط الخصوصية والتشخيصات الاختيارية.',
     displayTitle: 'سمات شاشات العرض',
     displayDescription:
       'افتح إدارة الشاشات من دون إظهار بيانات الدخول أو الأسطول في الإعدادات اليومية.',
     advancedTitle: 'متقدم',
     advancedDescription: 'استيراد الجداول يدوياً وتعديلات أوقات الصلاة والإعدادات الأقل استخداماً.',
     displayAction: 'افتح الشاشات المُدارة',
-    exportHelp: 'تبقى بيانات الإعدادات محلية ما لم تنسخها أو تصدرها صراحةً.',
+    exportHelp:
+      'استورد إعدادات الجهاز أو صدّرها أو أعد ضبطها هنا. يتم التحكم في التشخيصات الاختيارية بشكل منفصل أدناه.',
     imported: 'تم استيراد الإعدادات بنجاح.',
     importError: 'بيانات الإعدادات غير صالحة أو غير مدعومة.',
     reset: 'تمت إعادة الإعدادات إلى القيم الافتراضية.',
@@ -139,7 +142,7 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
     appearanceTitle: 'Görünüm ve dil',
     appearanceDescription: 'Dil, saat biçimi ve açık veya koyu görünüm.',
     dataTitle: 'Veri ve gizlilik',
-    dataDescription: 'Yerel SalahOS ayarlarını dışa aktarın, içe aktarın veya sıfırlayın.',
+    dataDescription: 'Yerel verileri, gizlilik kontrollerini ve isteğe bağlı tanılamayı yönetin.',
     displayTitle: 'Ekran temaları',
     displayDescription:
       'Kimlik bilgilerini veya filo kontrollerini günlük ayarlara karıştırmadan yönetilen ekranları açın.',
@@ -147,7 +150,8 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
     advancedDescription:
       'Elle vakit içe aktarma, namaz vakti düzeltmeleri ve daha seyrek kullanılan ayarlar.',
     displayAction: 'Yönetilen ekranları aç',
-    exportHelp: 'Ayar verileri, siz açıkça kopyalamadıkça veya dışa aktarmadıkça yerel kalır.',
+    exportHelp:
+      'Cihaz ayarlarını burada içe aktarın, dışa aktarın veya sıfırlayın. İsteğe bağlı tanılama aşağıda ayrıca kontrol edilir.',
     imported: 'Ayarlar başarıyla içe aktarıldı.',
     importError: 'Ayar verileri geçersiz veya desteklenmiyor.',
     reset: 'Ayarlar varsayılanlara sıfırlandı.',
@@ -170,7 +174,7 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
     appearanceTitle: 'Tampilan & bahasa',
     appearanceDescription: 'Bahasa, format jam, serta tampilan terang atau gelap.',
     dataTitle: 'Data & privasi',
-    dataDescription: 'Ekspor, impor, atau atur ulang pengaturan SalahOS yang tersimpan lokal.',
+    dataDescription: 'Kelola data lokal, kontrol privasi, dan diagnostik opsional.',
     displayTitle: 'Tema layar',
     displayDescription:
       'Buka layar terkelola tanpa mencampur kredensial atau kontrol armada ke pengaturan harian.',
@@ -179,7 +183,7 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
       'Impor jadwal manual, penyesuaian waktu salat, dan pengaturan yang lebih jarang digunakan.',
     displayAction: 'Buka layar terkelola',
     exportHelp:
-      'Data pengaturan tetap lokal kecuali Anda secara eksplisit menyalin atau mengekspornya.',
+      'Impor, ekspor, atau atur ulang pengaturan perangkat di sini. Diagnostik opsional dikontrol secara terpisah di bawah.',
     imported: 'Pengaturan berhasil diimpor.',
     importError: 'Data pengaturan tidak valid atau tidak didukung.',
     reset: 'Pengaturan dikembalikan ke default.',
@@ -594,6 +598,7 @@ export function SettingsScreen() {
               {copy[dataMessage]}
             </p>
           )}
+          <PrivacyDiagnosticsSettings />
         </section>
       )}
 
