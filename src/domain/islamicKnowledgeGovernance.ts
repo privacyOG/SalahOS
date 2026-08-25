@@ -2,12 +2,7 @@ import sourceRegistryJson from '../data/islamic-knowledge-source-registry.json';
 import type { IslamicKnowledgeEntry, Madhhab } from './islamicKnowledge';
 
 export type ScholarlySourceKind =
-  | 'quran-text'
-  | 'quran-translation'
-  | 'quran-tafsir'
-  | 'hadith-collection'
-  | 'fiqh'
-  | 'creed';
+  'quran-text' | 'quran-translation' | 'quran-tafsir' | 'hadith-collection' | 'fiqh' | 'creed';
 export type ScholarlySourceReviewStatus = 'approved' | 'pending' | 'rejected';
 export type CreedTradition = 'ashari' | 'maturidi';
 
