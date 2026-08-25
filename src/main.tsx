@@ -3,10 +3,12 @@ import { createRoot } from 'react-dom/client';
 
 import {
   flushApplicationStorage,
+  getApplicationStorage,
   initializeApplicationStorage,
 } from './platform/applicationStorage';
 import { installAutomaticLocationSync } from './platform/automaticLocationSync';
 import { LOCATION_CONTEXT_CHANGE_EVENT } from './platform/bestAvailableLocation';
+import { installPrivacyDiagnostics } from './platform/privacyDiagnostics';
 import { CongregationShell } from './ui/CongregationShell';
 import { MobilePrayerThemeSurface } from './ui/MobilePrayerThemeSurface';
 import { QiblaPermissionOnboarding } from './ui/QiblaPermissionOnboarding';
@@ -187,6 +189,7 @@ async function bootstrap(): Promise<void> {
   }
 
   await initializeApplicationStorage(window.localStorage);
+  installPrivacyDiagnostics(getApplicationStorage());
 
   if ('serviceWorker' in navigator && import.meta.env.PROD) {
     void navigator.serviceWorker.register('/sw.js');
