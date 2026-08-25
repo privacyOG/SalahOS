@@ -45,7 +45,7 @@ export interface MosqueDirectorySocialLink {
 export interface MosqueDirectoryContact {
   readonly phone?: string;
   readonly email?: string;
-  readonly website?: string;
+  readonly website?: string | undefined;
   readonly social: readonly MosqueDirectorySocialLink[];
 }
 
@@ -559,7 +559,12 @@ export function resolveMosqueDirectoryEntities(
   for (const record of records) {
     const duplicateIndex = resolved.findIndex((candidate) => likelySameMosque(candidate, record));
     if (duplicateIndex === -1) resolved.push(record);
-    else resolved[duplicateIndex] = mergeEnrichedMosqueDirectoryRecords(resolved[duplicateIndex], record, now);
+    else
+      resolved[duplicateIndex] = mergeEnrichedMosqueDirectoryRecords(
+        resolved[duplicateIndex]!,
+        record,
+        now,
+      );
   }
   return Object.freeze(resolved);
 }
