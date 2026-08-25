@@ -251,7 +251,7 @@ export function validateIslamicKnowledgeGovernance(
       }
       for (const relatedId of entry.relatedAyahIds) {
         const related = entryById.get(relatedId);
-        if (!related || related.module !== 'quran' || relatedId === entry.id) {
+        if (related?.module !== 'quran' || relatedId === entry.id) {
           pushIssue(
             issues,
             entry.id,
