@@ -2,11 +2,19 @@ import { createCoordinates } from '../domain/coordinates';
 import type { Coordinates } from '../domain/coordinates';
 
 export type BrowserLocationFailureReason =
-  'unsupported' | 'permission-denied' | 'unavailable' | 'timeout' | 'unknown';
+  | 'unsupported'
+  | 'permission-denied'
+  | 'unavailable'
+  | 'timeout'
+  | 'unknown';
+
+export type BrowserLocationSource = 'browser-gps' | 'browser-network-approximate';
 
 export interface BrowserLocationFix {
   readonly coordinates: Coordinates;
-  readonly source: 'browser';
+  readonly source: BrowserLocationSource;
+  readonly accuracyMeters: number | null;
+  readonly capturedAtIso: string;
 }
 
 export type BrowserLocationResult =
@@ -38,11 +46,19 @@ function failureReason(error: GeolocationPositionError): BrowserLocationFailureR
   }
 }
 
+function normalizedAccuracy(value: number): number | null {
+  return Number.isFinite(value) && value >= 0 ? value : null;
+}
+
+function capturedAtIso(timestamp: number): string {
+  const instant = new Date(timestamp);
+  return Number.isFinite(instant.getTime()) ? instant.toISOString() : new Date().toISOString();
+}
+
 /**
- * Request one current browser location fix. The adapter deliberately retains
- * only latitude and longitude required for timezone/prayer calculations. It
- * never starts a continuous watch and does not retain accuracy, altitude,
- * heading, speed or browser timestamp metadata.
+ * Request one current browser location fix. SalahOS keeps only the position
+ * fields needed to choose the best available location: coordinates, horizontal
+ * accuracy and fix time. Altitude, heading and speed remain outside this path.
  */
 export function requestBrowserLocation(
   geolocation: Geolocation | undefined = typeof navigator === 'undefined'
@@ -55,6 +71,9 @@ export function requestBrowserLocation(
   }
 
   const resolvedOptions = { ...defaultOptions, ...options };
+  const source: BrowserLocationSource = resolvedOptions.enableHighAccuracy
+    ? 'browser-gps'
+    : 'browser-network-approximate';
 
   return new Promise((resolve) => {
     geolocation.getCurrentPosition(
@@ -63,7 +82,9 @@ export function requestBrowserLocation(
           ok: true,
           location: {
             coordinates: createCoordinates(position.coords.latitude, position.coords.longitude),
-            source: 'browser',
+            source,
+            accuracyMeters: normalizedAccuracy(position.coords.accuracy),
+            capturedAtIso: capturedAtIso(position.timestamp),
           },
         });
       },
