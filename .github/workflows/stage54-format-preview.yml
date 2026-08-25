@@ -6,7 +6,7 @@ on:
       - 'stage-54/v1.5-knowledge-governance'
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   format-preview:
@@ -25,24 +25,20 @@ jobs:
       - name: Install dependencies
         run: npm ci --ignore-scripts
 
-      - name: Format Stage 54 files
+      - name: Apply canonical formatting and remove helper
         run: |
           ./node_modules/.bin/prettier --write \
             scripts/visual-islamic-knowledge.mjs \
             src/domain/islamicKnowledge.ts \
             src/domain/islamicKnowledgeGovernance.test.ts \
             src/domain/islamicKnowledgeGovernance.ts
-
-      - name: Emit formatted files
-        run: |
-          for file in \
-            scripts/visual-islamic-knowledge.mjs \
+          rm .github/workflows/stage54-format-preview.yml
+          git config user.name privacyOG
+          git config user.email kriptiik@proton.me
+          git add scripts/visual-islamic-knowledge.mjs \
             src/domain/islamicKnowledge.ts \
             src/domain/islamicKnowledgeGovernance.test.ts \
-            src/domain/islamicKnowledgeGovernance.ts
-          do
-            echo "BEGIN_FORMATTED_FILE:${file}"
-            base64 -w0 "${file}"
-            echo
-            echo "END_FORMATTED_FILE:${file}"
-          done
+            src/domain/islamicKnowledgeGovernance.ts \
+            .github/workflows/stage54-format-preview.yml
+          git commit -m "Stage 54: apply canonical formatting"
+          git push origin HEAD:stage-54/v1.5-knowledge-governance
