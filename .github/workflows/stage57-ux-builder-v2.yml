@@ -61,7 +61,7 @@ jobs:
           if appearance_count != 1:
               raise SystemExit(f'Appearance block replacement count={appearance_count}')
           """
-          body, count = brittle.subn(robust, body, count=1)
+          body, count = brittle.subn(lambda _: robust, body, count=1)
           if count != 1:
               raise SystemExit('Unable to harden Appearance block transformation')
 
