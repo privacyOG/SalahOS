@@ -78,9 +78,16 @@ try {
       (await screen.locator('[data-knowledge-module="qa"]').count()) === 3,
       'Q&A module missing',
     );
+
+    await screen.getByText('M. M. Pickthall (1930)', { exact: false }).first().waitFor();
     await screen.getByText('Sahih al-Bukhari').first().waitFor();
     await screen.getByText('Sahih').first().waitFor();
-    await screen.getByText('Imam al-Nawawi').first().waitFor();
+    await screen.getByText('Imam al-Bukhari').first().waitFor();
+    await screen
+      .getByText('Classical Hanafi, Maliki, Shafi‘i and Hanbali sources')
+      .first()
+      .waitFor();
+    await screen.getByText('al-Hidayah', { exact: false }).first().waitFor();
 
     await screen.locator('[data-knowledge-filter="hadith"]').click();
     assert(
@@ -89,6 +96,11 @@ try {
     );
 
     await screen.locator('[data-knowledge-filter="all"]').click();
+    await screen.getByRole('searchbox').fill('madhhab');
+    assert(
+      (await screen.locator('.knowledge-card').count()) === 3,
+      'Madhhab-aware search did not retain all governed fiqh entries',
+    );
     await screen.getByRole('searchbox').fill('travel');
     assert(
       (await screen.locator('.knowledge-card').count()) === 1,
@@ -108,11 +120,11 @@ try {
     );
 
     await page.screenshot({
-      path: path.join(artifactDirectory, 'stage50-islamic-knowledge-mobile.png'),
+      path: path.join(artifactDirectory, 'stage54-islamic-knowledge-governance-mobile.png'),
       fullPage: true,
       animations: 'disabled',
     });
-    results.push({ name: 'knowledge-mobile', ...metrics });
+    results.push({ name: 'knowledge-governance-mobile', ...metrics });
     await context.close();
   }
 
@@ -143,19 +155,21 @@ try {
     );
 
     await page.screenshot({
-      path: path.join(artifactDirectory, 'stage50-islamic-knowledge-rtl.png'),
+      path: path.join(artifactDirectory, 'stage54-islamic-knowledge-governance-rtl.png'),
       fullPage: true,
       animations: 'disabled',
     });
-    results.push({ name: 'knowledge-rtl', ...metrics });
+    results.push({ name: 'knowledge-governance-rtl', ...metrics });
     await context.close();
   }
 
   await writeFile(
-    path.join(artifactDirectory, 'stage50-islamic-knowledge-results.json'),
+    path.join(artifactDirectory, 'stage54-islamic-knowledge-governance-results.json'),
     `${JSON.stringify(results, null, 2)}\n`,
   );
-  console.log(`Stage 50 Islamic Knowledge acceptance passed: ${String(results.length)} flows.`);
+  console.log(
+    `Stage 54 Islamic Knowledge governance acceptance passed: ${String(results.length)} flows.`,
+  );
 } finally {
   await browser.close();
 }

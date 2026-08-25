@@ -49,8 +49,14 @@ jobs:
       - name: Documentation link verification
         run: npm run docs:links
 
+      - name: Islamic Knowledge source governance
+        run: npm run knowledge:content:check
+
       - name: Australian mosque directory reproducibility
         run: npm run mosques:australia:check
+
+      - name: Mosque directory pack reproducibility
+        run: npm run mosques:packs:check
 
       - name: Packaged Adhan audio integrity
         run: npm run adhan:audio:check
