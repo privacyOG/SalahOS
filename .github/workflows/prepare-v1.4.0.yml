@@ -1,0 +1,51 @@
+# Transient release preparation helper; remove after release metadata is prepared.
+name: Prepare v1.4.0
+
+on:
+  push:
+    branches:
+      - 'release-prep/v1.4.0'
+
+permissions:
+  contents: write
+
+jobs:
+  prepare:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: release-prep/v1.4.0
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Synchronize release version and native build numbers
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm version 1.4.0 --no-git-tag-version
+          sed -i -E 's/versionCode[[:space:]]+[0-9]+/versionCode 6/' android/app/build.gradle
+          sed -i -E 's/versionName[[:space:]]+"[^"]+"/versionName "1.4.0"/' android/app/build.gradle
+          sed -i -E 's/CURRENT_PROJECT_VERSION = [^;]+;/CURRENT_PROJECT_VERSION = 6;/g' ios/App/App.xcodeproj/project.pbxproj
+          sed -i -E 's/MARKETING_VERSION = [^;]+;/MARKETING_VERSION = 1.4.0;/g' ios/App/App.xcodeproj/project.pbxproj
+          rm .github/workflows/prepare-v1.4.0.yml
+          node -e "const p=require('./package.json'); const l=require('./package-lock.json'); if(p.version!=='1.4.0'||l.version!=='1.4.0'||l.packages[''].version!=='1.4.0') process.exit(1)"
+          grep -q 'versionCode 6' android/app/build.gradle
+          grep -q 'versionName "1.4.0"' android/app/build.gradle
+          test "$(sed -n 's/^[[:space:]]*MARKETING_VERSION = \([^;]*\);/\1/p' ios/App/App.xcodeproj/project.pbxproj | sort -u)" = '1.4.0'
+          test "$(sed -n 's/^[[:space:]]*CURRENT_PROJECT_VERSION = \([^;]*\);/\1/p' ios/App/App.xcodeproj/project.pbxproj | sort -u)" = '6'
+
+      - name: Commit prepared release metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'privacyOG'
+          git config user.email 'privacyOG@users.noreply.github.com'
+          git add package.json package-lock.json android/app/build.gradle ios/App/App.xcodeproj/project.pbxproj .github/workflows/prepare-v1.4.0.yml
+          git commit -m 'Prepare SalahOS v1.4.0 version metadata'
+          git push origin HEAD:release-prep/v1.4.0
