@@ -37,7 +37,8 @@ describe('Islamic knowledge source governance', () => {
       expect(entry.grader.length).toBeGreaterThan(5);
       expect(
         getEntryApprovedSources(entry).some(
-          (source) => source.id === entry.gradingAuthoritySourceId && source.kind === 'hadith-collection',
+          (source) =>
+            source.id === entry.gradingAuthoritySourceId && source.kind === 'hadith-collection',
         ),
       ).toBe(true);
     }
@@ -53,9 +54,7 @@ describe('Islamic knowledge source governance', () => {
       expect(entry.madhhabs).toEqual(['hanafi', 'maliki', 'shafii', 'hanbali']);
       expect(entry.recognisedDisagreement).toBe(true);
       expect(entry.disagreementNote?.length ?? 0).toBeGreaterThan(20);
-      const covered = new Set(
-        getEntryApprovedSources(entry).flatMap((source) => source.madhhabs),
-      );
+      const covered = new Set(getEntryApprovedSources(entry).flatMap((source) => source.madhhabs));
       expect(covered).toEqual(new Set(['hanafi', 'maliki', 'shafii', 'hanbali']));
     }
   });
@@ -78,7 +77,9 @@ describe('Islamic knowledge source governance', () => {
   });
 
   it('defines creed approval only through Ash’ari and Maturidi registry lanes', () => {
-    const creedSources = approvedIslamicKnowledgeSources.filter((source) => source.kind === 'creed');
+    const creedSources = approvedIslamicKnowledgeSources.filter(
+      (source) => source.kind === 'creed',
+    );
     expect(creedSources.map((source) => source.creedTraditions).flat()).toEqual([
       'ashari',
       'maturidi',
