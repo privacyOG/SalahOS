@@ -64,6 +64,27 @@ function boardConfig() {
   };
 }
 
+function weatherResponse() {
+  return {
+    current: {
+      time: 1787614200,
+      temperature_2m: 18.4,
+      apparent_temperature: 17.2,
+      relative_humidity_2m: 67,
+      weather_code: 2,
+      wind_speed_10m: 11.5,
+    },
+    daily: {
+      temperature_2m_max: [21.3],
+      temperature_2m_min: [12.6],
+      precipitation_probability_max: [35],
+      uv_index_max: [4.2],
+      sunrise: [1787583600],
+      sunset: [1787626800],
+    },
+  };
+}
+
 async function seedBase(page, weatherPayload) {
   await page.addInitScript(
     ({ serializedSettings, serializedBoard, serializedWeather }) => {
@@ -91,7 +112,7 @@ async function capture(page, name) {
   });
 }
 
-async function validateNoImplicitWeatherRequest(browser) {
+async function validateAutomaticWeatherFromAvailableLocation(browser) {
   const context = await browser.newContext({
     viewport: { width: 1920, height: 1080 },
     reducedMotion: 'reduce',
@@ -101,26 +122,34 @@ async function validateNoImplicitWeatherRequest(browser) {
   let providerRequests = 0;
   await page.route(`${weatherEndpoint}**`, async (route) => {
     providerRequests += 1;
-    await route.abort();
+    const requestUrl = route.request().url();
+    if (!requestUrl.includes('latitude=-33.8688') || !requestUrl.includes('longitude=151.2093')) {
+      throw new Error(`automatic weather request did not use the available location: ${requestUrl}`);
+    }
+    await route.fulfill({
+      status: 200,
+      contentType: 'application/json',
+      body: JSON.stringify(weatherResponse()),
+    });
   });
 
   try {
     await seedBase(page, null);
     await page.goto(`${baseUrl}/?mode=smart-display`, { waitUntil: 'networkidle' });
-    await page.locator('.smart-display').waitFor({ state: 'visible' });
-    await page.waitForTimeout(250);
-    if (providerRequests !== 0) {
-      throw new Error(
-        'weather provider was contacted without explicit fixed-location configuration',
-      );
+    const weather = page.locator('.prayer-board-weather');
+    await weather.waitFor({ state: 'visible' });
+    const weatherText = (await weather.textContent()) ?? '';
+    if (!weatherText.includes('18°C') || !weatherText.includes('Partly cloudy')) {
+      throw new Error('automatic weather did not render current conditions');
     }
-    if ((await page.locator('.prayer-board-weather').count()) !== 0) {
-      throw new Error('weather rendered without explicit weather configuration');
+    if (providerRequests < 1) {
+      throw new Error('automatic weather provider was not contacted');
     }
     if ((await page.locator('.minimal-modern-prayer').count()) !== 5) {
-      throw new Error('prayer board did not remain functional with weather unconfigured');
+      throw new Error('automatic weather changed the obligatory prayer table');
     }
-    return { implicitProviderRequests: providerRequests };
+    await capture(page, 'prayer-board-weather-automatic-location-en');
+    return { automaticProviderRequests: providerRequests, rendered: true };
   } finally {
     await context.close();
   }
@@ -139,7 +168,7 @@ async function validateConfiguredWeatherAndFallback(browser) {
     providerRequests += 1;
     const requestUrl = route.request().url();
     if (!requestUrl.includes('latitude=-33.8688') || !requestUrl.includes('longitude=151.2093')) {
-      throw new Error(`weather request did not use configured fixed coordinates: ${requestUrl}`);
+      throw new Error(`weather request did not use resolved coordinates: ${requestUrl}`);
     }
     if (providerFails) {
       await route.abort();
@@ -148,13 +177,7 @@ async function validateConfiguredWeatherAndFallback(browser) {
     await route.fulfill({
       status: 200,
       contentType: 'application/json',
-      body: JSON.stringify({
-        current: {
-          time: '2026-08-22T01:30',
-          temperature_2m: 18.4,
-          weather_code: 2,
-        },
-      }),
+      body: JSON.stringify(weatherResponse()),
     });
   });
 
@@ -177,12 +200,12 @@ async function validateConfiguredWeatherAndFallback(browser) {
     const weather = page.locator('.prayer-board-weather');
     await weather.waitFor({ state: 'visible' });
     if (!(await weather.textContent()).includes('18°C')) {
-      throw new Error('configured weather temperature did not render');
+      throw new Error('resolved-location weather temperature did not render');
     }
     if (!(await weather.textContent()).includes('Partly cloudy')) {
-      throw new Error('configured weather summary did not render');
+      throw new Error('resolved-location weather summary did not render');
     }
-    if (providerRequests < 1) throw new Error('configured weather provider was not contacted');
+    if (providerRequests < 1) throw new Error('weather provider was not contacted');
     if ((await page.locator('.minimal-modern-prayer').count()) !== 5) {
       throw new Error('weather changed the obligatory prayer table');
     }
@@ -227,7 +250,7 @@ await mkdir(artifactDirectory, { recursive: true });
 const browser = await chromium.launch({ headless: true });
 try {
   const results = [
-    await validateNoImplicitWeatherRequest(browser),
+    await validateAutomaticWeatherFromAvailableLocation(browser),
     await validateConfiguredWeatherAndFallback(browser),
   ];
   await writeFile(
