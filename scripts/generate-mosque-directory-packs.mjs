@@ -182,7 +182,10 @@ if (checkOnly) targetRoot = await mkdtemp(path.join(tmpdir(), 'salahos-mosque-pa
 try {
   const manifest = await generate(targetRoot);
   assert(manifest.recordCount > 0, 'Mosque pack manifest must contain records');
-  assert(manifest.countries[0]?.regions.length === 8, 'Australian pack manifest must contain 8 regions');
+  assert(
+    manifest.countries[0]?.regions.length === 8,
+    'Australian pack manifest must contain 8 regions',
+  );
   console.log(
     `${checkOnly ? 'Validated' : 'Generated'} mosque directory packs: ${String(manifest.recordCount)} records, ${String(manifest.countries[0].regions.length)} AU regional packs.`,
   );

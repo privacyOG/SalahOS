@@ -1,6 +1,9 @@
 import { describe, expect, it } from 'vitest';
 
-import type { AustralianMosqueDirectory, AustralianMosqueRecord } from './australianMosqueDirectory';
+import type {
+  AustralianMosqueDirectory,
+  AustralianMosqueRecord,
+} from './australianMosqueDirectory';
 import {
   createEnrichedMosqueDirectoryRecord,
   enrichAustralianMosqueRecord,

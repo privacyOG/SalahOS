@@ -1,4 +1,7 @@
-import type { AustralianMosqueDirectory, AustralianMosqueRecord } from './australianMosqueDirectory';
+import type {
+  AustralianMosqueDirectory,
+  AustralianMosqueRecord,
+} from './australianMosqueDirectory';
 import type { MosqueFacility } from './mosqueProfile';
 import type { SharedMosqueRecord } from './sharedMosqueDirectory';
 
@@ -150,7 +153,8 @@ function normalizeUrl(value: string | undefined): string | undefined {
   if (value === undefined) return undefined;
   try {
     const url = new URL(value);
-    if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password) return undefined;
+    if (!['http:', 'https:'].includes(url.protocol) || url.username || url.password)
+      return undefined;
     return url.toString();
   } catch {
     return undefined;
@@ -184,7 +188,10 @@ function radians(value: number): number {
   return (value * Math.PI) / 180;
 }
 
-function distanceKm(left: EnrichedMosqueDirectoryRecord, right: EnrichedMosqueDirectoryRecord): number {
+function distanceKm(
+  left: EnrichedMosqueDirectoryRecord,
+  right: EnrichedMosqueDirectoryRecord,
+): number {
   const latitudeDelta = radians(right.latitude - left.latitude);
   const longitudeDelta = radians(right.longitude - left.longitude);
   const leftLatitude = radians(left.latitude);
@@ -195,7 +202,10 @@ function distanceKm(left: EnrichedMosqueDirectoryRecord, right: EnrichedMosqueDi
   return 6_371 * 2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
 }
 
-function fieldIsPresent(record: EnrichedMosqueDirectoryInput, field: MosqueDirectoryField): boolean {
+function fieldIsPresent(
+  record: EnrichedMosqueDirectoryInput,
+  field: MosqueDirectoryField,
+): boolean {
   switch (field) {
     case 'name':
       return record.name.trim().length > 0;
@@ -249,7 +259,11 @@ export function calculateMosqueDirectoryQuality(
   }
 
   const verificationWeight =
-    record.verification.state === 'claimed' ? 20 : record.verification.state === 'verified' ? 15 : 0;
+    record.verification.state === 'claimed'
+      ? 20
+      : record.verification.state === 'verified'
+        ? 15
+        : 0;
   const freshnessWeight = freshness === 'fresh' ? 10 : freshness === 'aging' ? 5 : 0;
   const score = Math.max(
     0,
@@ -315,7 +329,10 @@ export function createEnrichedMosqueDirectoryRecord(
       ),
     ),
   });
-  return Object.freeze({ ...normalized, quality: calculateMosqueDirectoryQuality(normalized, now) });
+  return Object.freeze({
+    ...normalized,
+    quality: calculateMosqueDirectoryQuality(normalized, now),
+  });
 }
 
 function australianSourceFields(record: AustralianMosqueRecord): readonly MosqueDirectoryField[] {
@@ -436,7 +453,10 @@ export function mosqueDirectoryEntityMatchScore(
   left: EnrichedMosqueDirectoryRecord,
   right: EnrichedMosqueDirectoryRecord,
 ): number {
-  if (left.id === right.id || left.sourceRecordIds.some((id) => right.sourceRecordIds.includes(id))) {
+  if (
+    left.id === right.id ||
+    left.sourceRecordIds.some((id) => right.sourceRecordIds.includes(id))
+  ) {
     return 1;
   }
 
@@ -451,7 +471,8 @@ export function mosqueDirectoryEntityMatchScore(
   if (leftName === rightName) score += 0.35;
   else if (leftName.includes(rightName) || rightName.includes(leftName)) score += 0.2;
 
-  if (normalizeName(left.address.formatted) === normalizeName(right.address.formatted)) score += 0.25;
+  if (normalizeName(left.address.formatted) === normalizeName(right.address.formatted))
+    score += 0.25;
 
   const leftPhone = normalizedPhone(left.contact.phone);
   const rightPhone = normalizedPhone(right.contact.phone);
@@ -476,7 +497,9 @@ function verificationRank(state: MosqueDirectoryVerificationState): number {
 }
 
 function meaningfulConflict(left: string | undefined, right: string | undefined): number {
-  return left !== undefined && right !== undefined && normalizeName(left) !== normalizeName(right) ? 1 : 0;
+  return left !== undefined && right !== undefined && normalizeName(left) !== normalizeName(right)
+    ? 1
+    : 0;
 }
 
 export function mergeEnrichedMosqueDirectoryRecords(
@@ -502,7 +525,7 @@ export function mergeEnrichedMosqueDirectoryRecords(
       id: primary.id,
       sourceRecordIds: [...left.sourceRecordIds, ...right.sourceRecordIds],
       name: primary.name,
-      ...(primary.nameAr ?? secondary.nameAr
+      ...((primary.nameAr ?? secondary.nameAr)
         ? { nameAr: primary.nameAr ?? secondary.nameAr }
         : {}),
       aliases: [...left.aliases, ...right.aliases, secondary.name],
@@ -512,28 +535,30 @@ export function mergeEnrichedMosqueDirectoryRecords(
       },
       latitude: primary.latitude,
       longitude: primary.longitude,
-      ...(primary.timeZone ?? secondary.timeZone
+      ...((primary.timeZone ?? secondary.timeZone)
         ? { timeZone: primary.timeZone ?? secondary.timeZone }
         : {}),
       contact: {
-        ...(primary.contact.phone ?? secondary.contact.phone
+        ...((primary.contact.phone ?? secondary.contact.phone)
           ? { phone: primary.contact.phone ?? secondary.contact.phone }
           : {}),
-        ...(primary.contact.email ?? secondary.contact.email
+        ...((primary.contact.email ?? secondary.contact.email)
           ? { email: primary.contact.email ?? secondary.contact.email }
           : {}),
-        ...(primary.contact.website ?? secondary.contact.website
+        ...((primary.contact.website ?? secondary.contact.website)
           ? { website: primary.contact.website ?? secondary.contact.website }
           : {}),
         social: [...left.contact.social, ...right.contact.social].filter(
-          (entry, index, all) => all.findIndex((candidate) => candidate.url === entry.url) === index,
+          (entry, index, all) =>
+            all.findIndex((candidate) => candidate.url === entry.url) === index,
         ),
       },
       prayerTimes: primary.prayerTimes ?? secondary.prayerTimes,
       jumuahTimes: [...left.jumuahTimes, ...right.jumuahTimes].filter(
         (entry, index, all) =>
-          all.findIndex((candidate) => candidate.time === entry.time && candidate.label === entry.label) ===
-          index,
+          all.findIndex(
+            (candidate) => candidate.time === entry.time && candidate.label === entry.label,
+          ) === index,
       ),
       facilities: [...left.facilities, ...right.facilities],
       services: [...left.services, ...right.services],

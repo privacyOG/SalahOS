@@ -70,7 +70,10 @@ try {
 
   const quality = Number(await card.getAttribute('data-directory-quality'));
   const freshness = await card.getAttribute('data-directory-freshness');
-  assert(Number.isFinite(quality) && quality > 0, 'enriched mosque card did not expose data quality');
+  assert(
+    Number.isFinite(quality) && quality > 0,
+    'enriched mosque card did not expose data quality',
+  );
   assert(freshness === 'fresh', `expected fresh OSM data, received ${String(freshness)}`);
   await card.locator('[data-directory-verification]').waitFor({ state: 'visible' });
 
@@ -104,7 +107,9 @@ try {
   await page.reload({ waitUntil: 'networkidle' });
   const reloadedCard = page.locator('[data-directory-mosque-id="osm-node-3318094580"]');
   await page.locator('.australian-mosque-directory input[type="search"]').fill('Al Hijrah Mosque');
-  await reloadedCard.getByRole('button', { name: 'Remove favourite' }).waitFor({ state: 'visible' });
+  await reloadedCard
+    .getByRole('button', { name: 'Remove favourite' })
+    .waitFor({ state: 'visible' });
 
   const packs = await page.evaluate(async () => {
     const manifestResponse = await fetch('/mosque-packs/manifest.json');
@@ -120,7 +125,10 @@ try {
   assert(packs.countryStatus === 200, 'Australia mosque pack was not deployable');
   assert(packs.manifest.scope === 'global', 'mosque pack manifest did not use global scope');
   assert(packs.manifest.recordCount === 106, 'mosque pack manifest record count drifted');
-  assert(packs.manifest.countries?.[0]?.regions?.length === 8, 'regional AU pack index is incomplete');
+  assert(
+    packs.manifest.countries?.[0]?.regions?.length === 8,
+    'regional AU pack index is incomplete',
+  );
   assert(packs.country.recordCount === 106, 'Australia mosque pack record count drifted');
   assert(
     packs.country.records?.every((record) => Array.isArray(record.provenance)) === true,
