@@ -36,10 +36,10 @@ Keep this tracker compact. Mark an item `[x]` only after implementation, tests/v
 
 ## Stage 6 — Qur'an expansion
 
-- [ ] Arabic Qur'an text with configurable translations and approved tafsir.
-- [ ] Bookmarks, last-read position, ayah sharing and related ayat.
-- [ ] Arabic font selection, font sizing and search by ayah/text/topic.
-- [ ] Preserve clear source/translation/tafsir attribution and offline-friendly reading where practical.
+- [x] Arabic Qur'an text with configurable translations and approved tafsir.
+- [x] Bookmarks, last-read position, ayah sharing and related ayat.
+- [x] Arabic font selection, font sizing and search by ayah/text/topic.
+- [x] Preserve clear source/translation/tafsir attribution and offline-friendly reading where practical.
 
 ## Stage 7 — Hadith + Fiqh expansion
 

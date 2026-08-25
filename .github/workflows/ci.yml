@@ -49,6 +49,12 @@ jobs:
       - name: Documentation link verification
         run: npm run docs:links
 
+      - name: Prepare pinned offline Qur'an corpus
+        run: npm run quran:offline:prepare
+
+      - name: Offline Qur'an corpus integrity
+        run: npm run quran:offline:check
+
       - name: Islamic Knowledge source governance
         run: npm run knowledge:content:check
 

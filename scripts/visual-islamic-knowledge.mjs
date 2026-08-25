@@ -89,6 +89,68 @@ try {
       .waitFor();
     await screen.getByText('al-Hidayah', { exact: false }).first().waitFor();
 
+    await screen.locator('[data-knowledge-filter="quran"]').click();
+    await screen.locator('[data-quran-reading-controls]').waitFor();
+    assert(
+      (await screen.locator('[data-quran-tafsir]').count()) === 3,
+      'Qur’an tafsir summaries are not visible',
+    );
+    await screen.getByText('Tafsir al-Jalalayn', { exact: true }).first().waitFor();
+
+    await screen.getByRole('searchbox').fill('humility');
+    assert(
+      (await screen.locator('[data-knowledge-module="quran"]').count()) === 1,
+      'Qur’an topic search did not isolate the expected ayah',
+    );
+    await screen.getByRole('searchbox').fill('');
+
+    const firstAyah = screen.locator('[data-quran-ayah-id]').first();
+    await firstAyah.locator('[data-quran-bookmark]').click();
+    assert(
+      (await firstAyah.getAttribute('data-quran-bookmarked')) === 'true',
+      'Qur’an bookmark state did not update',
+    );
+    await firstAyah.locator('[data-quran-last-read]').click();
+
+    await screen.locator('[data-quran-translation-mode]').selectOption('none');
+    assert(
+      (await screen.locator('[data-quran-translation]').count()) === 0,
+      'Arabic-only mode still rendered the translation',
+    );
+    await screen.locator('[data-quran-size-select]').selectOption('xlarge');
+    assert(
+      (await firstAyah.locator('[data-quran-scale]').getAttribute('data-quran-scale')) === 'xlarge',
+      'Qur’an Arabic font scale did not update',
+    );
+
+    const persistedReader = await page.evaluate(() =>
+      JSON.parse(localStorage.getItem('salahos.quran-reading-preferences.v1') ?? '{}'),
+    );
+    assert(
+      persistedReader.bookmarkedAyahIds?.includes('quran-prayer-remembrance'),
+      'Qur’an bookmark did not persist',
+    );
+    assert(
+      persistedReader.lastReadAyahId === 'quran-prayer-remembrance',
+      'Qur’an last-read position did not persist',
+    );
+    assert(persistedReader.translationMode === 'none', 'Qur’an translation mode did not persist');
+    assert(persistedReader.fontScale === 'xlarge', 'Qur’an font scale did not persist');
+
+    await firstAyah.locator('[data-quran-related] button').first().click();
+    assert(
+      (await screen.locator('[data-knowledge-module="quran"]').count()) === 1,
+      'Related ayah navigation did not isolate the selected ayah',
+    );
+    await screen.getByRole('searchbox').fill('');
+
+    await screen.locator('[data-quran-bookmarks-only]').click();
+    assert(
+      (await screen.locator('[data-knowledge-module="quran"]').count()) === 1,
+      'Bookmark-only mode did not isolate bookmarked ayat',
+    );
+    await screen.locator('[data-quran-bookmarks-only]').click();
+
     await screen.locator('[data-knowledge-filter="hadith"]').click();
     assert(
       (await screen.locator('.knowledge-card').count()) === 3,
@@ -120,11 +182,11 @@ try {
     );
 
     await page.screenshot({
-      path: path.join(artifactDirectory, 'stage54-islamic-knowledge-governance-mobile.png'),
+      path: path.join(artifactDirectory, 'stage55-quran-expansion-mobile.png'),
       fullPage: true,
       animations: 'disabled',
     });
-    results.push({ name: 'knowledge-governance-mobile', ...metrics });
+    results.push({ name: 'quran-expansion-mobile', ...metrics });
     await context.close();
   }
 
@@ -141,7 +203,11 @@ try {
     const screen = page.locator('[data-knowledge-screen]');
     await screen.waitFor({ state: 'visible' });
     await screen.getByText('المعرفة الإسلامية').waitFor();
-    await screen.getByText('القرآن', { exact: true }).first().waitFor();
+    await screen.locator('[data-knowledge-filter="quran"]').click();
+    await screen.locator('[data-quran-reading-controls]').waitFor();
+    await screen.getByText('إعدادات قراءة القرآن').waitFor();
+    await screen.locator('[data-quran-font-select]').selectOption('traditional');
+    await screen.locator('[data-quran-size-select]').selectOption('large');
 
     const metrics = await page.evaluate(() => ({
       htmlDir: document.documentElement.dir,
@@ -155,21 +221,19 @@ try {
     );
 
     await page.screenshot({
-      path: path.join(artifactDirectory, 'stage54-islamic-knowledge-governance-rtl.png'),
+      path: path.join(artifactDirectory, 'stage55-quran-expansion-rtl.png'),
       fullPage: true,
       animations: 'disabled',
     });
-    results.push({ name: 'knowledge-governance-rtl', ...metrics });
+    results.push({ name: 'quran-expansion-rtl', ...metrics });
     await context.close();
   }
 
   await writeFile(
-    path.join(artifactDirectory, 'stage54-islamic-knowledge-governance-results.json'),
+    path.join(artifactDirectory, 'stage55-quran-expansion-results.json'),
     `${JSON.stringify(results, null, 2)}\n`,
   );
-  console.log(
-    `Stage 54 Islamic Knowledge governance acceptance passed: ${String(results.length)} flows.`,
-  );
+  console.log(`Stage 55 Quran expansion acceptance passed: ${String(results.length)} flows.`);
 } finally {
   await browser.close();
 }

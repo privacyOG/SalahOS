@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "packPath": "/data/quran/quran-offline-pack.json",
+  "sha256": "fc81a35d049c10cbaa7817ea5546f60a06d10706a75f250c094f79bad73d3070",
+  "surahs": 114,
+  "ayahs": 6236,
+  "translationIds": ["pickthall-1930"],
+  "arabicSource": {
+    "repository": "mjmirza/quran-dataset",
+    "commit": "c0dc86b060b854d03f62848692bf1d2936dba630",
+    "path": "data/quran.json",
+    "license": "CC BY 4.0 at pinned commit",
+    "provenance": "Tanzil Uthmani text with KFQPC verification metadata retained by the pinned dataset"
+  },
+  "translationSource": {
+    "repository": "Kristories/quran",
+    "commit": "3a796d5d7f80c80b83adae5b39affcec2aeb426c",
+    "path": "fixtures/en/pickthall/source.json",
+    "translator": "Mohammed Marmaduke Pickthall",
+    "edition": "1930 English translation"
+  }
+}

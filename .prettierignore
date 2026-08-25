@@ -5,3 +5,4 @@ ios/App/App/capacitor.config.json
 ios/DerivedData/
 data/osm/australian-muslim-places-of-worship.overpass.json
 src/data/australian-mosques.json
+public/data/quran/quran-offline-pack.json

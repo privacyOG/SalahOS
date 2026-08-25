@@ -14,6 +14,10 @@ export interface QuranKnowledgeEntry {
   readonly sourceIds: readonly string[];
   readonly arabicSourceId: string;
   readonly translationSourceId: string;
+  readonly tafsirSourceId: string;
+  readonly tafsirSummary: string;
+  readonly relatedAyahIds: readonly string[];
+  readonly topics: readonly string[];
   readonly tags: readonly string[];
 }
 
@@ -58,6 +62,11 @@ const fourMadhhabSources = Object.freeze([
   'fiqh-shafii-majmu',
   'fiqh-hanbali-mughni',
 ] as const);
+const quranReadingSources = Object.freeze([
+  'quran-uthmani-text',
+  'quran-pickthall-1930',
+  'quran-tafsir-jalalayn',
+] as const);
 
 export const islamicKnowledgeEntries = Object.freeze([
   {
@@ -71,9 +80,14 @@ export const islamicKnowledgeEntries = Object.freeze([
       'Lo! I, even I, am Allah. There is no God save Me. So serve Me and establish worship for My remembrance.',
     reference: 'Qur’an 20:14',
     source: 'Arabic Uthmani text · English translation: M. M. Pickthall (1930)',
-    sourceIds: ['quran-uthmani-text', 'quran-pickthall-1930'],
+    sourceIds: quranReadingSources,
     arabicSourceId: 'quran-uthmani-text',
     translationSourceId: 'quran-pickthall-1930',
+    tafsirSourceId: 'quran-tafsir-jalalayn',
+    tafsirSummary:
+      'Tafsir al-Jalalayn connects the command to establish prayer here directly with remembrance of Allah. This is a concise SalahOS summary, not a quotation.',
+    relatedAyahIds: ['quran-patience-prayer', 'quran-friday-prayer'],
+    topics: ['prayer', 'remembrance', 'worship'],
     tags: ['prayer', 'remembrance', 'worship'],
   },
   {
@@ -86,10 +100,15 @@ export const islamicKnowledgeEntries = Object.freeze([
       'Seek help in patience and prayer; and truly it is hard save for the humble-minded.',
     reference: 'Qur’an 2:45',
     source: 'Arabic Uthmani text · English translation: M. M. Pickthall (1930)',
-    sourceIds: ['quran-uthmani-text', 'quran-pickthall-1930'],
+    sourceIds: quranReadingSources,
     arabicSourceId: 'quran-uthmani-text',
     translationSourceId: 'quran-pickthall-1930',
-    tags: ['prayer', 'patience', 'steadfastness'],
+    tafsirSourceId: 'quran-tafsir-jalalayn',
+    tafsirSummary:
+      'Tafsir al-Jalalayn explains seeking help through patience and prayer in the context of obedience and humility before Allah. This is a concise SalahOS summary, not a quotation.',
+    relatedAyahIds: ['quran-prayer-remembrance', 'quran-friday-prayer'],
+    topics: ['prayer', 'patience', 'humility'],
+    tags: ['prayer', 'patience', 'steadfastness', 'humility'],
   },
   {
     id: 'quran-friday-prayer',
@@ -102,10 +121,15 @@ export const islamicKnowledgeEntries = Object.freeze([
       'O ye who believe! When the call is heard for the prayer of the day of congregation, haste unto remembrance of Allah and leave your trading.',
     reference: 'Qur’an 62:9',
     source: 'Arabic Uthmani text · English translation: M. M. Pickthall (1930)',
-    sourceIds: ['quran-uthmani-text', 'quran-pickthall-1930'],
+    sourceIds: quranReadingSources,
     arabicSourceId: 'quran-uthmani-text',
     translationSourceId: 'quran-pickthall-1930',
-    tags: ['jumuah', 'friday', 'prayer'],
+    tafsirSourceId: 'quran-tafsir-jalalayn',
+    tafsirSummary:
+      'Tafsir al-Jalalayn explains the Friday call as a command to proceed to Allah’s remembrance and leave trade for the prayer. This is a concise SalahOS summary, not a quotation.',
+    relatedAyahIds: ['quran-prayer-remembrance', 'quran-patience-prayer'],
+    topics: ['jumuah', 'friday', 'congregation', 'prayer'],
+    tags: ['jumuah', 'friday', 'prayer', 'congregation'],
   },
   {
     id: 'hadith-intentions',
@@ -211,6 +235,10 @@ export const islamicKnowledgeEntries = Object.freeze([
   },
 ] as const satisfies readonly IslamicKnowledgeEntry[]);
 
+export function getIslamicKnowledgeEntryById(id: string): IslamicKnowledgeEntry | null {
+  return islamicKnowledgeEntries.find((entry) => entry.id === id) ?? null;
+}
+
 function searchableText(entry: IslamicKnowledgeEntry): string {
   if (entry.module === 'quran') {
     return [
@@ -219,6 +247,8 @@ function searchableText(entry: IslamicKnowledgeEntry): string {
       entry.translation,
       entry.reference,
       entry.source,
+      entry.tafsirSummary,
+      ...entry.topics,
       ...entry.sourceIds,
       ...entry.tags,
     ]
