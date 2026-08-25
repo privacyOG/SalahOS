@@ -1,0 +1,156 @@
+name: Stage 57 UX builder v3
+
+on:
+  push:
+    branches:
+      - stage-57/v1.5-product-ux-refinement
+
+permissions:
+  contents: write
+
+jobs:
+  build-stage57:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: stage-57/v1.5-product-ux-refinement
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Apply proven Stage 57 transformation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          import textwrap
+
+          workflow = Path('.github/workflows/stage57-ux-builder-v2.yml').read_text()
+          match = re.search(
+              r"      - name: Apply Stage 57 UX refinement robustly\n        shell: bash\n        run: \|\n(?P<body>.*?)(?=\n      - name: Fix Stage 57 validation issues)",
+              workflow,
+              flags=re.S,
+          )
+          if match is None:
+              raise SystemExit('Unable to extract proven Stage 57 transformation')
+          Path('/tmp/stage57-proven.sh').write_text(textwrap.dedent(match.group('body')))
+          PY
+          bash /tmp/stage57-proven.sh
+
+      - name: Apply structural validation fixes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          today = Path('src/ui/TodayScreen.tsx')
+          text = today.read_text()
+          pattern = re.compile(
+              r"(?m)^\s*const locationAccuracyLabel =\s*\n"
+              r"\s*recentLocation\?\.accuracyMeters === null \|\| recentLocation\?\.accuracyMeters === undefined\s*\n"
+              r"\s*\? null\s*\n"
+              r"\s*: recentLocation\.accuracyMeters < 1_000\s*\n"
+              r"\s*\? `±\$\{String\(Math\.round\(recentLocation\.accuracyMeters\)\)\} m`\s*\n"
+              r"\s*: `±\$\{\(recentLocation\.accuracyMeters / 1_000\)\.toFixed\(1\)\} km`;"
+          )
+          replacement = """  const locationAccuracyMeters =
+            recentLocation === null ? null : recentLocation.accuracyMeters;
+          const locationAccuracyLabel =
+            locationAccuracyMeters === null
+              ? null
+              : locationAccuracyMeters < 1_000
+                ? `±${String(Math.round(locationAccuracyMeters))} m`
+                : `±${(locationAccuracyMeters / 1_000).toFixed(1)} km`;"""
+          text, count = pattern.subn(replacement, text, count=1)
+          if count != 1:
+              raise SystemExit(f'Location accuracy structural fix count={count}')
+          today.write_text(text)
+
+          visual = Path('scripts/visual-product-ux-stage8.mjs')
+          text = visual.read_text()
+          pattern = re.compile(
+              r"(if \(\(await overflowMenu\.getByRole\('menuitem'\)\.count\(\)\) !== 2\) \{\s*"
+              r"throw new Error\('Mobile More menu must expose exactly Community and Settings'\);\s*\})"
+              r"(\s*const hierarchy = await page\.evaluate\(\(\) => \{)",
+              flags=re.S,
+          )
+          text, count = pattern.subn(
+              lambda match: match.group(1)
+              + "\n    await page.locator('.congregation-nav-item--more').click();\n\n    "
+              + match.group(2).lstrip(),
+              text,
+              count=1,
+          )
+          if count != 1:
+              raise SystemExit(f'Mobile More structural fix count={count}')
+          visual.write_text(text)
+          PY
+
+      - name: Format Stage 57 files
+        run: |
+          npx prettier --write \
+            src/ui/applicationRoute.ts \
+            src/ui/applicationRoute.test.ts \
+            src/ui/SettingsScreen.tsx \
+            src/ui/SalahIcon.tsx \
+            src/ui/PrimaryNavigation.tsx \
+            src/ui/CongregationShell.tsx \
+            src/ui/MobilePrayerThemeSurface.tsx \
+            src/ui/TodayScreen.tsx \
+            src/congregation-shell.css \
+            src/today-screen.css \
+            src/ui/prayer-board-weather.css \
+            src/settings-screen.css \
+            scripts/visual-product-ux-stage8.mjs \
+            docs/PRODUCT_UX_V1.5.md \
+            package.json
+
+      - name: Validate Stage 57 source
+        run: |
+          npm run lint
+          npm run typecheck
+          npm run test
+          npm run build
+
+      - name: Publish helper-free Stage 57 commit object
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name privacyOG
+          git config user.email kriptiik@proton.me
+          git rm .github/workflows/stage57-ux-builder.yml
+          git rm .github/workflows/stage57-ux-builder-v2.yml
+          git rm .github/workflows/stage57-ux-builder-v3.yml
+          git add \
+            src/ui/applicationRoute.ts \
+            src/ui/applicationRoute.test.ts \
+            src/ui/SettingsScreen.tsx \
+            src/ui/SalahIcon.tsx \
+            src/ui/PrimaryNavigation.tsx \
+            src/ui/CongregationShell.tsx \
+            src/ui/MobilePrayerThemeSurface.tsx \
+            src/ui/TodayScreen.tsx \
+            src/congregation-shell.css \
+            src/today-screen.css \
+            src/ui/prayer-board-weather.css \
+            src/settings-screen.css \
+            scripts/visual-product-ux-stage8.mjs \
+            docs/PRODUCT_UX_V1.5.md \
+            package.json
+          git commit -m "Stage 57: refine product UX"
+          echo "CLEAN_STAGE57_COMMIT=$(git rev-parse HEAD)"
+          git push origin HEAD:stage-57/v1.5-product-ux-refinement || true
