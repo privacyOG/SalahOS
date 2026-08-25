@@ -1,0 +1,1319 @@
+name: Stage 57 UX builder
+
+on:
+  push:
+    branches:
+      - stage-57/v1.5-product-ux-refinement
+
+permissions:
+  contents: write
+
+jobs:
+  build-stage57:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: stage-57/v1.5-product-ux-refinement
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Apply Stage 57 UX refinement
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          def replace_once(path: str, old: str, new: str) -> None:
+              file = Path(path)
+              text = file.read_text()
+              if old not in text:
+                  raise SystemExit(f"Expected text not found in {path}: {old[:100]!r}")
+              file.write_text(text.replace(old, new, 1))
+
+          # Canonical seven-category Settings route with migration for old deep links.
+          replace_once(
+              'src/ui/applicationRoute.ts',
+              """export type SettingsCategory =
+            | 'prayer'
+            | 'location'
+            | 'mosque'
+            | 'notifications'
+            | 'appearance'
+            | 'data-privacy'
+            | 'display-themes'
+            | 'advanced';""",
+              """export type SettingsCategory =
+            | 'location'
+            | 'prayer'
+            | 'adhan'
+            | 'display'
+            | 'mosques'
+            | 'privacy-data'
+            | 'advanced';""",
+          )
+          replace_once(
+              'src/ui/applicationRoute.ts',
+              """const settingsCategories = new Set<SettingsCategory>([
+            'prayer',
+            'location',
+            'mosque',
+            'notifications',
+            'appearance',
+            'data-privacy',
+            'display-themes',
+            'advanced',
+          ]);""",
+              """const settingsCategories = new Set<SettingsCategory>([
+            'location',
+            'prayer',
+            'adhan',
+            'display',
+            'mosques',
+            'privacy-data',
+            'advanced',
+          ]);
+
+          const legacySettingsCategories: Readonly<Record<string, SettingsCategory>> = Object.freeze({
+            mosque: 'mosques',
+            notifications: 'adhan',
+            appearance: 'display',
+            'data-privacy': 'privacy-data',
+            'display-themes': 'display',
+          });""",
+          )
+          replace_once(
+              'src/ui/applicationRoute.ts',
+              """  const requested = params.get('settingsView');
+            return requested !== null && settingsCategories.has(requested as SettingsCategory)
+              ? (requested as SettingsCategory)
+              : null;""",
+              """  const requested = params.get('settingsView');
+            if (requested !== null && settingsCategories.has(requested as SettingsCategory)) {
+              return requested as SettingsCategory;
+            }
+            return requested !== null && requested in legacySettingsCategories
+              ? (legacySettingsCategories[requested] ?? null)
+              : null;""",
+          )
+
+          # Route tests now enforce seven canonical groups plus backwards-compatible aliases.
+          route_test = Path('src/ui/applicationRoute.test.ts')
+          text = route_test.read_text()
+          text = text.replace(
+              """      'prayer',
+                'location',
+                'mosque',
+                'notifications',
+                'appearance',
+                'data-privacy',
+                'display-themes',
+                'advanced',""",
+              """      'location',
+                'prayer',
+                'adhan',
+                'display',
+                'mosques',
+                'privacy-data',
+                'advanced',""",
+              1,
+          )
+          text = text.replace("      'appearance',\n    );", "      'display',\n    );", 1)
+          text = text.replace("expect(readSettingsCategory(fromAdmin)).toBe('appearance');", "expect(readSettingsCategory(fromAdmin)).toBe('display');", 1)
+          text = text.replace("expect(adminParams.get('settingsView')).toBe('appearance');", "expect(adminParams.get('settingsView')).toBe('display');", 1)
+          marker = """    expect(readSettingsCategory('?view=settings&settingsView=unknown')).toBeNull();
+            });
+
+            it('creates and reads every Stage 24 administration destination', () => {"""
+          replacement = """    expect(readSettingsCategory('?view=settings&settingsView=unknown')).toBeNull();
+            });
+
+            it('migrates pre-Stage-8 Settings deep links into the seven canonical groups', () => {
+              expect(readSettingsCategory('?view=settings&settingsView=mosque')).toBe('mosques');
+              expect(readSettingsCategory('?view=settings&settingsView=notifications')).toBe('adhan');
+              expect(readSettingsCategory('?view=settings&settingsView=appearance')).toBe('display');
+              expect(readSettingsCategory('?view=settings&settingsView=display-themes')).toBe('display');
+              expect(readSettingsCategory('?view=settings&settingsView=data-privacy')).toBe('privacy-data');
+            });
+
+            it('creates and reads every Stage 24 administration destination', () => {"""
+          if marker not in text:
+              raise SystemExit('applicationRoute.test insertion marker missing')
+          route_test.write_text(text.replace(marker, replacement, 1))
+
+          # Reorganise Settings into the seven v1.5 product groups.
+          settings = Path('src/ui/SettingsScreen.tsx')
+          text = settings.read_text()
+          old_categories = """const categories: readonly CategoryDefinition[] = [
+            { id: 'prayer', title: 'prayerTitle', description: 'prayerDescription' },
+            { id: 'location', title: 'locationTitle', description: 'locationDescription' },
+            { id: 'mosque', title: 'mosqueTitle', description: 'mosqueDescription' },
+            {
+              id: 'notifications',
+              title: 'notificationsTitle',
+              description: 'notificationsDescription',
+            },
+            { id: 'appearance', title: 'appearanceTitle', description: 'appearanceDescription' },
+            { id: 'data-privacy', title: 'dataTitle', description: 'dataDescription' },
+            { id: 'display-themes', title: 'displayTitle', description: 'displayDescription' },
+            { id: 'advanced', title: 'advancedTitle', description: 'advancedDescription' },
+          ];"""
+          new_categories = """const categories: readonly CategoryDefinition[] = [
+            { id: 'location', title: 'locationTitle', description: 'locationDescription' },
+            { id: 'prayer', title: 'prayerTitle', description: 'prayerDescription' },
+            {
+              id: 'adhan',
+              title: 'notificationsTitle',
+              description: 'notificationsDescription',
+            },
+            { id: 'display', title: 'displayTitle', description: 'displayDescription' },
+            { id: 'mosques', title: 'mosqueTitle', description: 'mosqueDescription' },
+            { id: 'privacy-data', title: 'dataTitle', description: 'dataDescription' },
+            { id: 'advanced', title: 'advancedTitle', description: 'advancedDescription' },
+          ];"""
+          if old_categories not in text:
+              raise SystemExit('Settings category list marker missing')
+          text = text.replace(old_categories, new_categories, 1)
+          replacements = {
+              "mosqueTitle: 'Mosque & Iqamah'": "mosqueTitle: 'Mosques'",
+              "notificationsTitle: 'Notifications & Adhan'": "notificationsTitle: 'Adhan'",
+              "dataTitle: 'Data & privacy'": "dataTitle: 'Privacy & data'",
+              "displayTitle: 'Display themes'": "displayTitle: 'Display'",
+              "mosqueTitle: 'المسجد والإقامة'": "mosqueTitle: 'المساجد'",
+              "notificationsTitle: 'الإشعارات والأذان'": "notificationsTitle: 'الأذان'",
+              "dataTitle: 'البيانات والخصوصية'": "dataTitle: 'الخصوصية والبيانات'",
+              "displayTitle: 'سمات شاشات العرض'": "displayTitle: 'العرض'",
+              "mosqueTitle: 'Cami ve ikamet'": "mosqueTitle: 'Camiler'",
+              "notificationsTitle: 'Bildirimler ve ezan'": "notificationsTitle: 'Ezan'",
+              "dataTitle: 'Veri ve gizlilik'": "dataTitle: 'Gizlilik ve veri'",
+              "displayTitle: 'Ekran temaları'": "displayTitle: 'Ekran'",
+              "mosqueTitle: 'Masjid & Iqamah'": "mosqueTitle: 'Masjid'",
+              "notificationsTitle: 'Notifikasi & Adzan'": "notificationsTitle: 'Adzan'",
+              "dataTitle: 'Data & privasi'": "dataTitle: 'Privasi & data'",
+              "displayTitle: 'Tema layar'": "displayTitle: 'Tampilan'",
+          }
+          for old, new in replacements.items():
+              if old not in text:
+                  raise SystemExit(f'Settings copy marker missing: {old}')
+              text = text.replace(old, new, 1)
+          text = text.replace("category === 'data-privacy'", "category === 'privacy-data'")
+          text = text.replace("category === 'display-themes'", "category === 'display'")
+          text = text.replace("category === 'mosque'", "category === 'mosques'")
+          text = text.replace("category === 'notifications'", "category === 'adhan'")
+          appearance_block = """      {category === 'appearance' && (
+                <section className=\"settings-focus-panel\" aria-label={copy.appearanceTitle}>
+                  <AppearanceSettingsForm settings={settings} updateSettings={updateSettings} />
+                </section>
+              )}
+
+          """
+          if appearance_block not in text:
+              raise SystemExit('Appearance block marker missing')
+          text = text.replace(appearance_block, '', 1)
+          display_marker = """      {category === 'display' && (
+                <section
+                  className=\"settings-focus-panel settings-display-entry\"
+                  aria-label={copy.displayTitle}
+                >
+                  <MobilePrayerThemeSettings />"""
+          display_replacement = """      {category === 'display' && (
+                <section
+                  className=\"settings-focus-panel settings-display-entry\"
+                  aria-label={copy.displayTitle}
+                >
+                  <div className=\"settings-display-preferences\">
+                    <h2>{copy.appearanceTitle}</h2>
+                    <AppearanceSettingsForm settings={settings} updateSettings={updateSettings} />
+                  </div>
+                  <MobilePrayerThemeSettings />"""
+          if display_marker not in text:
+              raise SystemExit('Display block marker missing')
+          text = text.replace(display_marker, display_replacement, 1)
+          text = text.replace(
+              '<main className="settings-screen settings-screen--index">',
+              '<main className="settings-screen settings-screen--index" data-stage8-settings-categories={String(categories.length)}>',
+              1,
+          )
+          settings.write_text(text)
+
+          # Add a More icon used only by the compact mobile navigation.
+          icon = Path('src/ui/SalahIcon.tsx')
+          text = icon.read_text()
+          text = text.replace("  | 'administration';", "  | 'administration'\n  | 'more';", 1)
+          more_case = """    case 'more':
+              return (
+                <>
+                  <circle cx=\"6\" cy=\"12\" r=\"1\" fill=\"currentColor\" stroke=\"none\" />
+                  <circle cx=\"12\" cy=\"12\" r=\"1\" fill=\"currentColor\" stroke=\"none\" />
+                  <circle cx=\"18\" cy=\"12\" r=\"1\" fill=\"currentColor\" stroke=\"none\" />
+                </>
+              );
+          """
+          icon_marker = "    case 'today':\n    default:"
+          if icon_marker not in text:
+              raise SystemExit('SalahIcon marker missing')
+          icon.write_text(text.replace(icon_marker, more_case + icon_marker, 1))
+
+          # Five visible phone destinations: four primary + More; desktop still shows all six directly.
+          Path('src/ui/PrimaryNavigation.tsx').write_text("""import { useEffect, useState } from 'react';
+
+          import { SalahIcon, type SalahIconName } from './SalahIcon';
+
+          export type PrimaryNavigationIcon = Extract<
+            SalahIconName,
+            'today' | 'mosques' | 'qiblah' | 'knowledge' | 'community' | 'settings'
+          >;
+
+          export type PrimaryNavigationItem = Readonly<{
+            id: string;
+            label: string;
+            icon: PrimaryNavigationIcon;
+            current?: boolean;
+            onSelect: () => void;
+          }>;
+
+          type PrimaryNavigationProps = Readonly<{
+            ariaLabel: string;
+            items: readonly PrimaryNavigationItem[];
+            overflowLabel?: string;
+            overflowItems?: readonly PrimaryNavigationItem[];
+          }>;
+
+          function NavigationItemButton({
+            item,
+            className = '',
+            onSelected,
+            role,
+          }: Readonly<{
+            item: PrimaryNavigationItem;
+            className?: string;
+            onSelected?: () => void;
+            role?: 'menuitem';
+          }>) {
+            return (
+              <button
+                type=\"button\"
+                role={role}
+                className={`congregation-nav-item ${className}`.trim()}
+                aria-current={item.current === true ? 'page' : undefined}
+                onClick={() => {
+                  onSelected?.();
+                  item.onSelect();
+                }}
+              >
+                <span className=\"congregation-nav-icon\">
+                  <SalahIcon name={item.icon} />
+                </span>
+                <span className=\"congregation-nav-label\">{item.label}</span>
+              </button>
+            );
+          }
+
+          export function PrimaryNavigation({
+            ariaLabel,
+            items,
+            overflowLabel = 'More',
+            overflowItems = [],
+          }: PrimaryNavigationProps) {
+            const [overflowOpen, setOverflowOpen] = useState(false);
+            const overflowCurrent = overflowItems.some((item) => item.current === true);
+
+            useEffect(() => {
+              if (!overflowOpen) return;
+              const closeOnEscape = (event: KeyboardEvent) => {
+                if (event.key === 'Escape') setOverflowOpen(false);
+              };
+              document.addEventListener('keydown', closeOnEscape);
+              return () => {
+                document.removeEventListener('keydown', closeOnEscape);
+              };
+            }, [overflowOpen]);
+
+            return (
+              <nav className=\"congregation-nav\" aria-label={ariaLabel}>
+                {items.map((item) => (
+                  <NavigationItemButton item={item} key={item.id} />
+                ))}
+                {overflowItems.map((item) => (
+                  <NavigationItemButton
+                    item={item}
+                    className=\"congregation-nav-item--overflow\"
+                    key={`desktop-${item.id}`}
+                  />
+                ))}
+                {overflowItems.length > 0 && (
+                  <button
+                    type=\"button\"
+                    className=\"congregation-nav-item congregation-nav-item--more\"
+                    aria-expanded={overflowOpen}
+                    aria-haspopup=\"menu\"
+                    data-current={overflowCurrent ? 'true' : 'false'}
+                    onClick={() => {
+                      setOverflowOpen((current) => !current);
+                    }}
+                  >
+                    <span className=\"congregation-nav-icon\">
+                      <SalahIcon name=\"more\" />
+                    </span>
+                    <span className=\"congregation-nav-label\">{overflowLabel}</span>
+                  </button>
+                )}
+                {overflowOpen && overflowItems.length > 0 && (
+                  <div className=\"congregation-nav-overflow-menu\" role=\"menu\">
+                    {overflowItems.map((item) => (
+                      <NavigationItemButton
+                        item={item}
+                        className=\"congregation-nav-overflow-menu__item\"
+                        key={`mobile-${item.id}`}
+                        role=\"menuitem\"
+                        onSelected={() => {
+                          setOverflowOpen(false);
+                        }}
+                      />
+                    ))}
+                  </div>
+                )}
+              </nav>
+            );
+          }
+          """)
+
+          shell = Path('src/ui/CongregationShell.tsx')
+          text = shell.read_text()
+          text = text.replace('  settings: string;\n}>;', '  settings: string;\n  more: string;\n}>;', 1)
+          for old, new in [
+              ("    settings: 'Settings',", "    settings: 'Settings',\n    more: 'More',"),
+              ("    settings: 'الإعدادات',", "    settings: 'الإعدادات',\n    more: 'المزيد',"),
+              ("    settings: 'Ayarlar',", "    settings: 'Ayarlar',\n    more: 'Daha fazla',"),
+              ("    settings: 'Pengaturan',", "    settings: 'Pengaturan',\n    more: 'Lainnya',"),
+          ]:
+              if old not in text:
+                  raise SystemExit(f'Navigation copy marker missing: {old}')
+              text = text.replace(old, new, 1)
+          nav_pattern = re.compile(r"      <PrimaryNavigation\n        ariaLabel=\{labels\.navigation\}\n        items=\{\[.*?\n        \]\}\n      />", re.S)
+          nav_replacement = """      <PrimaryNavigation
+                ariaLabel={labels.navigation}
+                items={[
+                  {
+                    id: 'today',
+                    icon: 'today',
+                    label: labels.today,
+                    current: destination === 'today',
+                    onSelect: () => {
+                      navigate('today');
+                    },
+                  },
+                  {
+                    id: 'mosques',
+                    icon: 'mosques',
+                    label: labels.mosques,
+                    current: destination === 'mosques',
+                    onSelect: () => {
+                      navigate('mosques');
+                    },
+                  },
+                  {
+                    id: 'qiblah',
+                    icon: 'qiblah',
+                    label: labels.qiblah,
+                    current: destination === 'qiblah',
+                    onSelect: () => {
+                      void requestCompassPermission();
+                      navigate('qiblah');
+                    },
+                  },
+                  {
+                    id: 'knowledge',
+                    icon: 'knowledge',
+                    label: labels.knowledge,
+                    current: destination === 'knowledge',
+                    onSelect: () => {
+                      navigate('knowledge');
+                    },
+                  },
+                ]}
+                overflowLabel={labels.more}
+                overflowItems={[
+                  {
+                    id: 'community',
+                    icon: 'community',
+                    label: labels.community,
+                    current: destination === 'community',
+                    onSelect: () => {
+                      navigate('community');
+                    },
+                  },
+                  {
+                    id: 'settings',
+                    icon: 'settings',
+                    label: labels.settings,
+                    current: destination === 'settings',
+                    onSelect: () => {
+                      navigate('settings');
+                    },
+                  },
+                ]}
+              />"""
+          text, count = nav_pattern.subn(nav_replacement, text, count=1)
+          if count != 1:
+              raise SystemExit(f'PrimaryNavigation replacement count={count}')
+          shell.write_text(text)
+
+          # Weather remains managed by the theme surface but is now consumed inside Today's hierarchy.
+          Path('src/ui/MobilePrayerThemeSurface.tsx').write_text("""import { createContext, useContext, useEffect, useState, type ReactNode } from 'react';
+
+          import '../mobile-prayer-themes.css';
+          import '../mobile-prayer-theme-geometry.css';
+          import '../mobile-prayer-modules.css';
+          import {
+            defaultPrayerBoardTemplateConfig,
+            type PrayerBoardTemplateConfig,
+            type PrayerBoardWeatherSnapshot,
+          } from '../domain/prayerBoardTemplate';
+          import { getApplicationStorage } from '../platform/applicationStorage';
+          import {
+            loadMobilePrayerBoardDisplayConfig,
+            MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_CHANGE_EVENT,
+          } from '../platform/mobilePrayerBoardDisplayConfig';
+          import {
+            loadUsablePrayerBoardWeather,
+            PRAYER_BOARD_WEATHER_CHANGE_EVENT,
+            refreshPrayerBoardWeather,
+          } from '../platform/prayerBoardWeather';
+
+          const MobilePrayerThemeConfigContext = createContext<PrayerBoardTemplateConfig>(
+            defaultPrayerBoardTemplateConfig,
+          );
+          const MobilePrayerWeatherContext = createContext<PrayerBoardWeatherSnapshot | null>(null);
+
+          function readThemeConfig(): PrayerBoardTemplateConfig {
+            try {
+              const storage = getApplicationStorage();
+              return loadMobilePrayerBoardDisplayConfig(storage) ?? defaultPrayerBoardTemplateConfig;
+            } catch {
+              return defaultPrayerBoardTemplateConfig;
+            }
+          }
+
+          function readWeather(): PrayerBoardWeatherSnapshot | null {
+            try {
+              return loadUsablePrayerBoardWeather(getApplicationStorage());
+            } catch {
+              return null;
+            }
+          }
+
+          export function useMobilePrayerThemeConfig(): PrayerBoardTemplateConfig {
+            return useContext(MobilePrayerThemeConfigContext);
+          }
+
+          export function useMobilePrayerWeather(): PrayerBoardWeatherSnapshot | null {
+            return useContext(MobilePrayerWeatherContext);
+          }
+
+          export function MobilePrayerThemeSurface({ children }: Readonly<{ children: ReactNode }>) {
+            const [config, setConfig] = useState<PrayerBoardTemplateConfig>(readThemeConfig);
+            const [weather, setWeather] = useState<PrayerBoardWeatherSnapshot | null>(readWeather);
+
+            useEffect(() => {
+              const refresh = () => {
+                setConfig(readThemeConfig());
+              };
+              const refreshWhenVisible = () => {
+                if (document.visibilityState === 'visible') refresh();
+              };
+
+              window.addEventListener(MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_CHANGE_EVENT, refresh);
+              window.addEventListener('focus', refresh);
+              document.addEventListener('visibilitychange', refreshWhenVisible);
+              return () => {
+                window.removeEventListener(MOBILE_PRAYER_BOARD_DISPLAY_CONFIG_CHANGE_EVENT, refresh);
+                window.removeEventListener('focus', refresh);
+                document.removeEventListener('visibilitychange', refreshWhenVisible);
+              };
+            }, []);
+
+            useEffect(() => {
+              if (!config.moduleVisibility.weather) {
+                setWeather(null);
+                return;
+              }
+
+              let active = true;
+              const refresh = async () => {
+                const next = await refreshPrayerBoardWeather(getApplicationStorage());
+                if (active) setWeather(next);
+              };
+              const refreshFromConfiguration = () => {
+                setWeather(readWeather());
+                void refresh();
+              };
+
+              setWeather(readWeather());
+              void refresh();
+              const timer = window.setInterval(() => {
+                void refresh();
+              }, 15 * 60 * 1000);
+              window.addEventListener(PRAYER_BOARD_WEATHER_CHANGE_EVENT, refreshFromConfiguration);
+              return () => {
+                active = false;
+                window.clearInterval(timer);
+                window.removeEventListener(PRAYER_BOARD_WEATHER_CHANGE_EVENT, refreshFromConfiguration);
+              };
+            }, [config.moduleVisibility.weather]);
+
+            return (
+              <MobilePrayerThemeConfigContext.Provider value={config}>
+                <MobilePrayerWeatherContext.Provider value={weather}>
+                  <div
+                    className=\"mobile-prayer-theme-surface\"
+                    data-mobile-prayer-template={config.templateId}
+                    data-mobile-prayer-accent={config.accentPreset}
+                    data-mobile-prayer-theme-version={config.version}
+                    data-mobile-prayer-weather={config.moduleVisibility.weather ? 'on' : 'off'}
+                  >
+                    {children}
+                  </div>
+                </MobilePrayerWeatherContext.Provider>
+              </MobilePrayerThemeConfigContext.Provider>
+            );
+          }
+          """)
+
+          # Today hierarchy: current + next prayer, then local confidence/weather, then prayer table.
+          today = Path('src/ui/TodayScreen.tsx')
+          text = today.read_text()
+          text = text.replace(
+              "import { getApplicationStorage } from '../platform/applicationStorage';",
+              "import { getApplicationStorage } from '../platform/applicationStorage';\nimport { loadRecentBestAvailableLocation } from '../platform/bestAvailableLocation';",
+              1,
+          )
+          text = text.replace(
+              "import { useMobilePrayerThemeConfig } from './MobilePrayerThemeSurface';",
+              "import { useMobilePrayerThemeConfig, useMobilePrayerWeather } from './MobilePrayerThemeSurface';\nimport { PrayerBoardWeatherModule } from './PrayerBoardWeatherModule';",
+              1,
+          )
+          destination_marker = """const destinationLabels: Readonly<
+            Record<Locale, Readonly<Record<'mosques' | 'qiblah' | 'settings', string>>>
+          > = {
+            en: { mosques: 'Mosques', qiblah: 'Qiblah', settings: 'Settings' },
+            ar: { mosques: 'المساجد', qiblah: 'القبلة', settings: 'الإعدادات' },
+            tr: { mosques: 'Camiler', qiblah: 'Kıble', settings: 'Ayarlar' },
+            id: { mosques: 'Masjid', qiblah: 'Kiblat', settings: 'Pengaturan' },
+          };"""
+          ux_copy = destination_marker + """
+
+          const stage8TodayCopy: Readonly<
+            Record<
+              Locale,
+              Readonly<{
+                localContext: string;
+                liveLocation: string;
+                recentLocation: string;
+                savedLocation: string;
+                approximate: string;
+                precise: string;
+                moreToday: string;
+                moreTodayHint: string;
+              }>
+            >
+          > = {
+            en: {
+              localContext: 'Local context',
+              liveLocation: 'Live location',
+              recentLocation: 'Recent location',
+              savedLocation: 'Saved location',
+              approximate: 'Approximate',
+              precise: 'Precise',
+              moreToday: 'More today',
+              moreTodayHint: 'Solar times, Jumu’ah, shortcuts and calculation details',
+            },
+            ar: {
+              localContext: 'السياق المحلي',
+              liveLocation: 'موقع مباشر',
+              recentLocation: 'موقع حديث',
+              savedLocation: 'موقع محفوظ',
+              approximate: 'تقريبي',
+              precise: 'دقيق',
+              moreToday: 'المزيد لليوم',
+              moreTodayHint: 'الشروق والغروب والجمعة والاختصارات وتفاصيل الحساب',
+            },
+            tr: {
+              localContext: 'Yerel bağlam',
+              liveLocation: 'Canlı konum',
+              recentLocation: 'Son konum',
+              savedLocation: 'Kayıtlı konum',
+              approximate: 'Yaklaşık',
+              precise: 'Hassas',
+              moreToday: 'Bugün daha fazlası',
+              moreTodayHint: 'Güneş vakitleri, Cuma, kısayollar ve hesaplama ayrıntıları',
+            },
+            id: {
+              localContext: 'Konteks lokal',
+              liveLocation: 'Lokasi langsung',
+              recentLocation: 'Lokasi terbaru',
+              savedLocation: 'Lokasi tersimpan',
+              approximate: 'Perkiraan',
+              precise: 'Akurat',
+              moreToday: 'Lainnya hari ini',
+              moreTodayHint: 'Waktu matahari, Jumat, pintasan, dan detail perhitungan',
+            },
+          };"""
+          if destination_marker not in text:
+              raise SystemExit('Today destination labels marker missing')
+          text = text.replace(destination_marker, ux_copy, 1)
+          text = text.replace(
+              "  const mobileThemeConfig = useMobilePrayerThemeConfig();\n  const modules = mobileThemeConfig.moduleVisibility;",
+              "  const mobileThemeConfig = useMobilePrayerThemeConfig();\n  const weather = useMobilePrayerWeather();\n  const modules = mobileThemeConfig.moduleVisibility;",
+              1,
+          )
+          text = text.replace(
+              "  const contextualCopy = todayContextCopy[locale];",
+              "  const contextualCopy = todayContextCopy[locale];\n  const uxCopy = stage8TodayCopy[locale];",
+              1,
+          )
+          quick_marker = "  const quickLabels = destinationLabels[locale];\n"
+          quick_replacement = """  const quickLabels = destinationLabels[locale];
+            const currentPrayer =
+              prayerBoardData?.prayers.find(
+                (prayer) => prayer.isCurrent && !isSupplementaryPrayer(prayer.name),
+              ) ?? null;
+            const currentPrayerLabel =
+              currentPrayer === null
+                ? translate(locale, 'notConfigured')
+                : translate(locale, prayerTranslationKeys[currentPrayer.name]);
+            const recentLocation = useMemo(() => {
+              if (coordinates === null) return null;
+              try {
+                return loadRecentBestAvailableLocation(getApplicationStorage());
+              } catch {
+                return null;
+              }
+            }, [coordinates]);
+            const locationSourceLabel =
+              recentLocation?.freshness === 'live'
+                ? uxCopy.liveLocation
+                : recentLocation !== null
+                  ? uxCopy.recentLocation
+                  : uxCopy.savedLocation;
+            const locationConfidenceLabel =
+              recentLocation?.isApproximate === true ? uxCopy.approximate : uxCopy.precise;
+            const locationAccuracyLabel =
+              recentLocation?.accuracyMeters === null || recentLocation?.accuracyMeters === undefined
+                ? null
+                : recentLocation.accuracyMeters < 1_000
+                  ? `±${String(Math.round(recentLocation.accuracyMeters))} m`
+                  : `±${(recentLocation.accuracyMeters / 1_000).toFixed(1)} km`;
+          """
+          if quick_marker not in text:
+              raise SystemExit('Today quick label marker missing')
+          text = text.replace(quick_marker, quick_replacement, 1)
+          next_marker = """          <section className=\"today-next\" aria-labelledby=\"today-next-prayer\">
+                <div className=\"today-next__identity\">"""
+          next_replacement = """          <section className=\"today-next\" aria-labelledby=\"today-next-prayer\">
+                <div className=\"today-next__current\" data-current-prayer>
+                  <span>{translate(locale, 'currentPrayer')}</span>
+                  <strong>{currentPrayerLabel}</strong>
+                </div>
+                <div className=\"today-next__identity\">"""
+          if next_marker not in text:
+              raise SystemExit('Today hero marker missing')
+          text = text.replace(next_marker, next_replacement, 1)
+          dates_marker = """          {modules.dates && (
+                <section className=\"today-dates\" aria-label={translate(locale, 'today')}>"""
+          local_context = """          <section className=\"today-local-context\" aria-label={uxCopy.localContext}>
+                <div
+                  className=\"today-location-confidence\"
+                  data-location-confidence={
+                    recentLocation?.isApproximate === true
+                      ? 'approximate'
+                      : recentLocation === null
+                        ? 'saved'
+                        : 'precise'
+                  }
+                >
+                  <div>
+                    <span>{uxCopy.localContext}</span>
+                    <strong>{locationSourceLabel}</strong>
+                  </div>
+                  <div className=\"today-location-confidence__meta\">
+                    <span>{locationConfidenceLabel}</span>
+                    {locationAccuracyLabel !== null && <span>{locationAccuracyLabel}</span>}
+                    <span dir=\"auto\">{contextLabel}</span>
+                  </div>
+                </div>
+                {modules.weather && <PrayerBoardWeatherModule weather={weather} locale={locale} />}
+              </section>
+
+          """ + dates_marker
+          if dates_marker not in text:
+              raise SystemExit('Today dates marker missing')
+          text = text.replace(dates_marker, local_context, 1)
+
+          contextual_block = """          <TodayContextualSections
+                settings={settings}
+                dashboard={sourcedDashboard}
+                unavailablePrayers={unavailablePrayers}
+                online={!prayerBoardData.offline}
+                now={now}
+                communityHref={destinationHref('community')}
+                mosquesHref={destinationHref('mosques')}
+                showCommunity={modules.announcements}
+              />
+
+          """
+          if contextual_block not in text:
+              raise SystemExit('Today contextual block missing')
+          text = text.replace(contextual_block, '', 1)
+          solar_marker = """          {modules['sunrise-sunset'] && (
+                <section className=\"today-solar\" aria-labelledby=\"today-solar-title\">"""
+          solar_replacement = contextual_block + """          <details className=\"today-secondary-context\">
+                <summary>
+                  <span>{uxCopy.moreToday}</span>
+                  <small>{uxCopy.moreTodayHint}</small>
+                </summary>
+                <div className=\"today-secondary-context__content\">
+          """ + solar_marker
+          if solar_marker not in text:
+              raise SystemExit('Today solar marker missing')
+          text = text.replace(solar_marker, solar_replacement, 1)
+          footer_end = """          </footer>
+              </>
+            )}"""
+          footer_replacement = """          </footer>
+                </div>
+              </details>
+              </>
+            )}"""
+          if footer_end not in text:
+              raise SystemExit('Today footer marker missing')
+          text = text.replace(footer_end, footer_replacement, 1)
+          today.write_text(text)
+
+          # CSS: mobile five-item nav + overflow sheet and Stage 8 Today hierarchy.
+          with Path('src/congregation-shell.css').open('a') as file:
+              file.write("""
+
+          /* v1.5 Stage 8: four primary phone destinations plus a compact More sheet. */
+          .congregation-nav-item--overflow {
+            display: none;
+          }
+
+          .congregation-nav-item--more {
+            display: grid;
+          }
+
+          .congregation-nav-item--more[data-current='true'] {
+            border-color: color-mix(in srgb, var(--salah-fg-accent) 22%, transparent);
+            color: var(--salah-fg-primary);
+            background: color-mix(in srgb, var(--salah-fg-accent) 10%, transparent);
+          }
+
+          .congregation-nav-overflow-menu {
+            position: absolute;
+            inset-inline-end: max(var(--salah-space-2), env(safe-area-inset-right));
+            inset-block-end: calc(100% + var(--salah-space-2));
+            display: grid;
+            width: min(18rem, calc(100vw - 1rem));
+            gap: var(--salah-space-1);
+            padding: var(--salah-space-2);
+            border: 1px solid var(--salah-border-subtle);
+            border-radius: var(--salah-radius-md);
+            background: var(--salah-bg-surface-raised);
+            box-shadow: var(--salah-shadow-lg);
+          }
+
+          .congregation-nav-overflow-menu__item {
+            grid-template-columns: 1.35rem minmax(0, 1fr);
+            min-height: 3.25rem;
+            justify-items: start;
+            gap: var(--salah-space-3);
+            padding-inline: var(--salah-space-3);
+            font-size: var(--salah-text-sm);
+            text-align: start;
+          }
+
+          @media (min-width: 800px) {
+            .congregation-nav-item--overflow {
+              display: grid;
+            }
+
+            .congregation-nav-item--more,
+            .congregation-nav-overflow-menu {
+              display: none;
+            }
+          }
+          """)
+
+          with Path('src/today-screen.css').open('a') as file:
+              file.write("""
+
+          /* v1.5 Stage 8: prayer-first hierarchy and progressive local context. */
+          .today-next__current {
+            grid-column: 1 / -1;
+            display: flex;
+            align-items: center;
+            gap: var(--salah-space-2);
+            padding-block-end: var(--salah-space-2);
+            color: var(--salah-fg-secondary);
+            font-size: var(--salah-text-sm);
+          }
+
+          .today-next__current span {
+            color: var(--salah-fg-tertiary);
+            font-size: var(--salah-text-xs);
+            font-weight: 780;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+          }
+
+          [dir='rtl'] .today-next__current span {
+            letter-spacing: 0;
+          }
+
+          .today-local-context {
+            display: grid;
+            grid-template-columns: minmax(15rem, 0.8fr) minmax(0, 1.4fr);
+            gap: var(--salah-space-3);
+            margin-block-start: var(--salah-space-4);
+          }
+
+          .today-location-confidence {
+            display: grid;
+            align-content: center;
+            gap: var(--salah-space-3);
+            min-width: 0;
+            padding: var(--salah-space-4);
+            border: 1px solid var(--salah-border-subtle);
+            border-radius: var(--salah-radius-md);
+            background: var(--salah-bg-surface);
+          }
+
+          .today-location-confidence > div:first-child {
+            display: grid;
+            gap: var(--salah-space-1);
+          }
+
+          .today-location-confidence > div:first-child span {
+            color: var(--salah-fg-tertiary);
+            font-size: var(--salah-text-xs);
+            font-weight: 780;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+          }
+
+          .today-location-confidence__meta {
+            display: flex;
+            min-width: 0;
+            flex-wrap: wrap;
+            gap: var(--salah-space-1) var(--salah-space-2);
+            color: var(--salah-fg-secondary);
+            font-size: var(--salah-text-xs);
+          }
+
+          .today-location-confidence__meta span:not(:last-child) {
+            padding: 0.22rem 0.5rem;
+            border-radius: 999px;
+            background: var(--salah-bg-accent-soft);
+          }
+
+          .today-location-confidence__meta span:last-child {
+            min-width: 0;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+          }
+
+          .today-secondary-context {
+            margin-block-start: var(--salah-space-5);
+            border-block-start: 1px solid var(--salah-border-subtle);
+          }
+
+          .today-secondary-context > summary {
+            display: flex;
+            min-height: 3.5rem;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--salah-space-4);
+            padding-block: var(--salah-space-3);
+            color: var(--salah-fg-primary);
+            cursor: pointer;
+            font-weight: 780;
+            list-style: none;
+          }
+
+          .today-secondary-context > summary::-webkit-details-marker {
+            display: none;
+          }
+
+          .today-secondary-context > summary::after {
+            content: '+';
+            flex: 0 0 auto;
+            color: var(--salah-fg-tertiary);
+            font-size: 1.35rem;
+          }
+
+          .today-secondary-context[open] > summary::after {
+            content: '−';
+          }
+
+          .today-secondary-context > summary small {
+            margin-inline-start: auto;
+            color: var(--salah-fg-tertiary);
+            font-size: var(--salah-text-xs);
+            font-weight: 500;
+            text-align: end;
+          }
+
+          .today-secondary-context__content {
+            padding-block-end: var(--salah-space-3);
+          }
+
+          @media (max-width: 720px) {
+            .today-local-context {
+              grid-template-columns: minmax(0, 1fr);
+            }
+
+            .today-secondary-context > summary {
+              align-items: flex-start;
+            }
+
+            .today-secondary-context > summary small {
+              display: none;
+            }
+          }
+          """)
+
+          with Path('src/ui/prayer-board-weather.css').open('a') as file:
+              file.write("""
+
+          /* v1.5 Stage 8: Today consumes weather in the local-context band. */
+          .today-local-context .prayer-board-weather {
+            z-index: auto;
+            align-self: stretch;
+            justify-self: stretch;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            width: 100%;
+            max-width: none;
+            margin: 0;
+            padding: var(--salah-space-4);
+            border-color: var(--mobile-theme-border);
+            border-radius: var(--salah-radius-md);
+            background: var(--mobile-theme-surface);
+            color: var(--mobile-theme-fg);
+            box-shadow: none;
+            backdrop-filter: none;
+            pointer-events: auto;
+          }
+
+          .today-local-context .prayer-board-weather[data-weather-state='stale'] {
+            border-style: dashed;
+          }
+
+          .today-local-context .prayer-board-weather__primary {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr) auto;
+            align-items: baseline;
+            gap: 0.45rem 0.75rem;
+          }
+
+          .today-local-context .prayer-board-weather__primary > span,
+          .today-local-context .prayer-board-weather__primary > small,
+          .today-local-context .prayer-board-weather__freshness {
+            color: var(--mobile-theme-secondary);
+          }
+
+          .today-local-context .prayer-board-weather__primary > small {
+            display: inline;
+            white-space: nowrap;
+          }
+
+          .today-local-context .prayer-board-weather__details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
+            gap: 0.55rem;
+            width: 100%;
+          }
+
+          .today-local-context .prayer-board-weather__freshness {
+            display: block;
+            font-size: 0.72rem;
+          }
+
+          @media (max-width: 720px) {
+            .today-local-context .prayer-board-weather__primary {
+              grid-template-columns: auto minmax(0, 1fr);
+            }
+
+            .today-local-context .prayer-board-weather__primary > small {
+              grid-column: 1 / -1;
+            }
+
+            .today-local-context .prayer-board-weather__details {
+              grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+          }
+          """)
+
+          with Path('src/settings-screen.css').open('a') as file:
+              file.write("""
+
+          /* v1.5 Stage 8: Display owns appearance, prayer-board and managed-display preferences. */
+          .settings-display-preferences {
+            display: grid;
+            width: 100%;
+            gap: var(--salah-space-4);
+            padding-block-end: var(--salah-space-5);
+            border-block-end: 1px solid var(--salah-border-subtle);
+          }
+
+          .settings-display-preferences h2 {
+            margin: 0;
+            font-size: var(--salah-text-lg);
+          }
+          """)
+
+          # Product UX browser acceptance becomes part of the permanent visual matrix.
+          Path('scripts/visual-product-ux-stage8.mjs').write_text("""import { mkdir, writeFile } from 'node:fs/promises';
+          import path from 'node:path';
+          import { pathToFileURL } from 'node:url';
+
+          const baseUrl = process.env.SALAHOS_VISUAL_BASE_URL ?? 'http://127.0.0.1:4173';
+          const playwrightModule = process.env.SALAHOS_VISUAL_PLAYWRIGHT_MODULE;
+          const artifactDirectory = path.resolve(
+            process.env.SALAHOS_VISUAL_ARTIFACT_DIR ?? 'visual-artifacts',
+          );
+
+          if (!playwrightModule) {
+            throw new Error('SALAHOS_VISUAL_PLAYWRIGHT_MODULE must point to the isolated Playwright module');
+          }
+
+          const { chromium } = await import(pathToFileURL(playwrightModule).href);
+          await mkdir(artifactDirectory, { recursive: true });
+
+          function settings(locale = 'en') {
+            return {
+              version: 2,
+              locale,
+              theme: 'light',
+              timeFormat: 'h23',
+              calculationMethodId: 'muslim-world-league',
+              asrConvention: 'standard',
+              highLatitudeRule: 'angle-based',
+              hijriCorrectionDays: 0,
+              prayerAdjustments: {},
+              prayerSourceMode: 'calculated',
+              location: {
+                coordinates: { latitude: -33.8688, longitude: 151.2093 },
+                timeZone: 'Australia/Sydney',
+              },
+              mosqueTimetable: null,
+              notifications: {},
+            };
+          }
+
+          async function seed(page, locale = 'en') {
+            await page.addInitScript((stored) => {
+              localStorage.setItem('salahos.settings', JSON.stringify(stored));
+            }, settings(locale));
+          }
+
+          const browser = await chromium.launch({ headless: true });
+          const results = {};
+          try {
+            const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
+            const page = await context.newPage();
+            await seed(page);
+            await page.goto(`${baseUrl}/?view=today`, { waitUntil: 'networkidle' });
+            await page.locator('.today-next').waitFor({ state: 'visible' });
+
+            const visibleNavItems = page.locator('.congregation-nav > .congregation-nav-item:visible');
+            if ((await visibleNavItems.count()) !== 5) {
+              throw new Error(`Expected 5 visible mobile navigation items, got ${String(await visibleNavItems.count())}`);
+            }
+            await page.locator('.congregation-nav-item--more').click();
+            const overflowMenu = page.locator('.congregation-nav-overflow-menu');
+            await overflowMenu.waitFor({ state: 'visible' });
+            if ((await overflowMenu.getByRole('menuitem').count()) !== 2) {
+              throw new Error('Mobile More menu must expose exactly Community and Settings');
+            }
+
+            const hierarchy = await page.evaluate(() => {
+              const hero = document.querySelector('.today-next');
+              const local = document.querySelector('.today-local-context');
+              const schedule = document.querySelector('.today-schedule');
+              if (!hero || !local || !schedule) return null;
+              const position = hero.compareDocumentPosition(local);
+              const localPosition = local.compareDocumentPosition(schedule);
+              return {
+                heroBeforeLocal: Boolean(position & Node.DOCUMENT_POSITION_FOLLOWING),
+                localBeforeSchedule: Boolean(localPosition & Node.DOCUMENT_POSITION_FOLLOWING),
+              };
+            });
+            if (hierarchy?.heroBeforeLocal !== true || hierarchy.localBeforeSchedule !== true) {
+              throw new Error('Today hierarchy must be next prayer → local context/weather → prayer schedule');
+            }
+            await page.locator('[data-current-prayer]').waitFor({ state: 'visible' });
+            await page.locator('.today-location-confidence').waitFor({ state: 'visible' });
+            const secondary = page.locator('.today-secondary-context');
+            if (await secondary.getAttribute('open')) {
+              throw new Error('Secondary Today context must use progressive disclosure by default');
+            }
+            await secondary.locator('summary').click();
+            await page.locator('.today-quick-actions').waitFor({ state: 'visible' });
+
+            await page.locator('.congregation-nav-item--more').click();
+            await page.getByRole('menuitem', { name: 'Settings' }).click();
+            await page.locator('.settings-category-grid').waitFor({ state: 'visible' });
+            const categories = page.locator('.settings-category-card');
+            if ((await categories.count()) !== 7) {
+              throw new Error(`Expected 7 Settings categories, got ${String(await categories.count())}`);
+            }
+            const categoryLabels = await categories.locator('strong').allTextContents();
+            const expected = ['Location', 'Prayer settings', 'Adhan', 'Display', 'Mosques', 'Privacy & data', 'Advanced'];
+            if (JSON.stringify(categoryLabels) !== JSON.stringify(expected)) {
+              throw new Error(`Unexpected Settings category order: ${JSON.stringify(categoryLabels)}`);
+            }
+
+            await page.goto(`${baseUrl}/?view=settings&settingsView=appearance`, { waitUntil: 'networkidle' });
+            await page.getByRole('heading', { name: 'Display', exact: true }).waitFor({ state: 'visible' });
+
+            await page.screenshot({
+              path: path.join(artifactDirectory, 'stage57-product-ux-phone.png'),
+              fullPage: true,
+            });
+            results.mobile = { visibleNavigationItems: 5, settingsCategories: categoryLabels };
+            await context.close();
+
+            const arabicContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
+            const arabicPage = await arabicContext.newPage();
+            await seed(arabicPage, 'ar');
+            await arabicPage.goto(`${baseUrl}/?view=settings`, { waitUntil: 'networkidle' });
+            await arabicPage.locator('.settings-category-grid').waitFor({ state: 'visible' });
+            if ((await arabicPage.locator('.settings-category-card').count()) !== 7) {
+              throw new Error('Arabic Settings must retain the seven canonical groups');
+            }
+            if ((await arabicPage.locator('html').getAttribute('dir')) !== 'rtl') {
+              throw new Error('Arabic Stage 8 Settings must remain RTL');
+            }
+            results.arabic = { direction: 'rtl', settingsCategories: 7 };
+            await arabicContext.close();
+
+            await writeFile(
+              path.join(artifactDirectory, 'stage57-product-ux-results.json'),
+              `${JSON.stringify(results, null, 2)}\n`,
+            );
+            console.log('Stage 57 product UX acceptance passed.');
+          } finally {
+            await browser.close();
+          }
+          """)
+
+          package = Path('package.json')
+          text = package.read_text()
+          old = 'node scripts/visual-regression.mjs && node scripts/visual-today-context.mjs && node scripts/visual-heritage-classic.mjs'
+          new = 'node scripts/visual-regression.mjs && node scripts/visual-today-context.mjs && node scripts/visual-product-ux-stage8.mjs && node scripts/visual-heritage-classic.mjs'
+          if old not in text:
+              raise SystemExit('package visual:check marker missing')
+          package.write_text(text.replace(old, new, 1))
+
+          Path('docs/PRODUCT_UX_V1.5.md').write_text("""# SalahOS v1.5 Product UX
+
+          Stage 8 keeps the existing SalahOS visual identity while making daily use more prayer-first and less configuration-heavy.
+
+          ## Today hierarchy
+
+          The Today surface now presents the current prayer, next prayer/countdown, local location confidence and weather before the daily prayer table. Seasonal/community alerts remain visible when relevant. Solar times, Jumu'ah, shortcuts and technical calculation provenance use a `More today` disclosure so the primary prayer workflow stays compact.
+
+          Location feedback distinguishes a recent live/cached fix from a saved fallback and exposes approximate/precise status plus accuracy when available. This is presentation only; prayer calculations continue to use the existing shared best-available-location resolver.
+
+          ## Mobile navigation
+
+          Phone navigation exposes Today, Mosques, Qiblah and Knowledge directly, plus a fifth `More` destination that contains Community and Settings. Tablet/desktop navigation continues to show all six destinations directly. This avoids the previous six-items-in-five-columns phone layout while retaining every route.
+
+          ## Settings information architecture
+
+          Settings has seven canonical groups, in this order:
+
+          1. Location
+          2. Prayer
+          3. Adhan
+          4. Display
+          5. Mosques
+          6. Privacy & data
+          7. Advanced
+
+          Display now owns language, clock/appearance, prayer-board themes, weather presentation and managed-display entry points. Legacy `settingsView` links (`mosque`, `notifications`, `appearance`, `display-themes`, `data-privacy`) are migrated at read time to the corresponding canonical group, so existing links remain useful.
+
+          ## Verification
+
+          `scripts/visual-product-ux-stage8.mjs` validates phone navigation, the Today content order, progressive disclosure, seven Settings categories, legacy deep-link migration and Arabic RTL behaviour. It runs inside the permanent `visual:check` matrix.
+          """)
+          PY
+
+      - name: Format Stage 57 files
+        run: |
+          npx prettier --write \
+            src/ui/applicationRoute.ts \
+            src/ui/applicationRoute.test.ts \
+            src/ui/SettingsScreen.tsx \
+            src/ui/SalahIcon.tsx \
+            src/ui/PrimaryNavigation.tsx \
+            src/ui/CongregationShell.tsx \
+            src/ui/MobilePrayerThemeSurface.tsx \
+            src/ui/TodayScreen.tsx \
+            src/congregation-shell.css \
+            src/today-screen.css \
+            src/ui/prayer-board-weather.css \
+            src/settings-screen.css \
+            scripts/visual-product-ux-stage8.mjs \
+            docs/PRODUCT_UX_V1.5.md \
+            package.json
+
+      - name: Validate Stage 57 source
+        run: |
+          npm run lint
+          npm run typecheck
+          npm run test
+          npm run build
+
+      - name: Publish helper-free Stage 57 commit object
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name privacyOG
+          git config user.email kriptiik@proton.me
+          git rm .github/workflows/stage57-ux-builder.yml
+          git add \
+            src/ui/applicationRoute.ts \
+            src/ui/applicationRoute.test.ts \
+            src/ui/SettingsScreen.tsx \
+            src/ui/SalahIcon.tsx \
+            src/ui/PrimaryNavigation.tsx \
+            src/ui/CongregationShell.tsx \
+            src/ui/MobilePrayerThemeSurface.tsx \
+            src/ui/TodayScreen.tsx \
+            src/congregation-shell.css \
+            src/today-screen.css \
+            src/ui/prayer-board-weather.css \
+            src/settings-screen.css \
+            scripts/visual-product-ux-stage8.mjs \
+            docs/PRODUCT_UX_V1.5.md \
+            package.json
+          git commit -m "Stage 57: refine product UX"
+          echo "CLEAN_STAGE57_COMMIT=$(git rev-parse HEAD)"
+          git push origin HEAD:stage-57/v1.5-product-ux-refinement || true
