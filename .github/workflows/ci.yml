@@ -50,4 +50,4 @@ jobs:
           git config user.email 'privacyOG@users.noreply.github.com'
           git add package.json package-lock.json android/app/build.gradle ios/App/App.xcodeproj/project.pbxproj .github/workflows/ci.yml .github/workflows/release-assets.yml
           git commit -m 'Prepare SalahOS v1.4.0 version metadata'
-          git push origin HEAD:release/v1.4.0
+          git push --force origin HEAD:release-prep/v1.4.0-final
