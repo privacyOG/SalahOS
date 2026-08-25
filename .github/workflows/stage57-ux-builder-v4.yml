@@ -1,0 +1,139 @@
+name: Stage 57 UX builder v4
+
+on:
+  push:
+    branches:
+      - stage-57/v1.5-product-ux-refinement
+
+permissions:
+  contents: write
+
+jobs:
+  build-stage57:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: stage-57/v1.5-product-ux-refinement
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Reuse proven Stage 57 source generation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          import textwrap
+
+          workflow = Path('.github/workflows/stage57-ux-builder-v3.yml').read_text()
+          for step_name, next_step, output in [
+              ('Apply proven Stage 57 transformation', 'Apply structural validation fixes', '/tmp/stage57-transform.sh'),
+              ('Apply structural validation fixes', 'Format Stage 57 files', '/tmp/stage57-fixes.sh'),
+          ]:
+              pattern = (
+                  rf"      - name: {re.escape(step_name)}\n"
+                  r"        shell: bash\n"
+                  r"        run: \|\n"
+                  rf"(?P<body>.*?)(?=\n      - name: {re.escape(next_step)})"
+              )
+              match = re.search(pattern, workflow, flags=re.S)
+              if match is None:
+                  raise SystemExit(f'Unable to extract {step_name}')
+              Path(output).write_text(textwrap.dedent(match.group('body')))
+          PY
+          bash /tmp/stage57-transform.sh
+          bash /tmp/stage57-fixes.sh
+
+      - name: Correct canonical Settings route test
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          test_file = Path('src/ui/applicationRoute.test.ts')
+          text = test_file.read_text()
+          pattern = re.compile(
+              r"(const fromAdmin = withSettingsCategory\(\s*"
+              r"'\?view=settings&settingsView=prayer&adminView=displays',\s*)"
+              r"'appearance'(\s*,?\s*\);)",
+              flags=re.S,
+          )
+          text, count = pattern.subn(
+              lambda match: match.group(1) + "'display'" + match.group(2),
+              text,
+              count=1,
+          )
+          if count != 1:
+              raise SystemExit(f'Canonical Settings route-test fix count={count}')
+          test_file.write_text(text)
+          PY
+
+      - name: Format Stage 57 files
+        run: |
+          npx prettier --write \
+            src/ui/applicationRoute.ts \
+            src/ui/applicationRoute.test.ts \
+            src/ui/SettingsScreen.tsx \
+            src/ui/SalahIcon.tsx \
+            src/ui/PrimaryNavigation.tsx \
+            src/ui/CongregationShell.tsx \
+            src/ui/MobilePrayerThemeSurface.tsx \
+            src/ui/TodayScreen.tsx \
+            src/congregation-shell.css \
+            src/today-screen.css \
+            src/ui/prayer-board-weather.css \
+            src/settings-screen.css \
+            scripts/visual-product-ux-stage8.mjs \
+            docs/PRODUCT_UX_V1.5.md \
+            package.json
+
+      - name: Validate Stage 57 source
+        run: |
+          npm run lint
+          npm run typecheck
+          npm run test
+          npm run build
+
+      - name: Publish helper-free Stage 57 commit object
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name privacyOG
+          git config user.email kriptiik@proton.me
+          git rm .github/workflows/stage57-ux-builder.yml
+          git rm .github/workflows/stage57-ux-builder-v2.yml
+          git rm .github/workflows/stage57-ux-builder-v3.yml
+          git rm .github/workflows/stage57-ux-builder-v4.yml
+          git add \
+            src/ui/applicationRoute.ts \
+            src/ui/applicationRoute.test.ts \
+            src/ui/SettingsScreen.tsx \
+            src/ui/SalahIcon.tsx \
+            src/ui/PrimaryNavigation.tsx \
+            src/ui/CongregationShell.tsx \
+            src/ui/MobilePrayerThemeSurface.tsx \
+            src/ui/TodayScreen.tsx \
+            src/congregation-shell.css \
+            src/today-screen.css \
+            src/ui/prayer-board-weather.css \
+            src/settings-screen.css \
+            scripts/visual-product-ux-stage8.mjs \
+            docs/PRODUCT_UX_V1.5.md \
+            package.json
+          git commit -m "Stage 57: refine product UX"
+          echo "CLEAN_STAGE57_COMMIT=$(git rev-parse HEAD)"
+          git push origin HEAD:stage-57/v1.5-product-ux-refinement || true
