@@ -6,6 +6,7 @@ import {
   parsePrayerBoardTemplateConfig,
 } from '../domain/prayerBoardTemplate';
 import { ADHAN_AUDIO_PREFERENCES_STORAGE_KEY } from './adhanAudioPreferences';
+import { BEST_AVAILABLE_LOCATION_STORAGE_KEY } from './bestAvailableLocation';
 import { COMMUNITY_CONTENT_STORAGE_KEY } from './communityContentStorage';
 import { MANAGED_DISPLAY_CONNECTION_STORAGE_KEY } from './managedDisplayConnectionStorage';
 import { MANAGED_PRAYER_BOARD_CACHE_STORAGE_KEY } from './managedPrayerBoardCache';
@@ -24,6 +25,7 @@ import { SMART_DISPLAY_THEME_STORAGE_KEY } from './smartDisplayTheme';
 export const PERSISTED_APPLICATION_KEYS = Object.freeze([
   SETTINGS_STORAGE_KEY,
   SAVED_LOCATIONS_STORAGE_KEY,
+  BEST_AVAILABLE_LOCATION_STORAGE_KEY,
   MOSQUE_LIBRARY_STORAGE_KEY,
   COMMUNITY_CONTENT_STORAGE_KEY,
   SMART_DISPLAY_THEME_STORAGE_KEY,
