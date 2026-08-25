@@ -182,11 +182,12 @@ async function shareOfflineAyah(
     await navigator.share({ title: `Qur’an ${result.ayah.key}`, text });
     return true;
   }
-  if (navigator.clipboard?.writeText) {
+  try {
     await navigator.clipboard.writeText(text);
     return true;
+  } catch {
+    return false;
   }
-  return false;
 }
 
 export function QuranOfflineReader({

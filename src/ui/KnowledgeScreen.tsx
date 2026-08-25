@@ -298,11 +298,12 @@ async function shareAyah(entry: QuranKnowledgeEntry, showTranslation: boolean): 
     await navigator.share({ title: entry.title, text });
     return true;
   }
-  if (navigator.clipboard?.writeText) {
+  try {
     await navigator.clipboard.writeText(text);
     return true;
+  } catch {
+    return false;
   }
-  return false;
 }
 
 function QuranEntryCard({
