@@ -9,6 +9,10 @@ const reviewedRemoteNetworkFiles = new Map([
   ['src/platform/managedAdminTransport.ts', 'managed display administration'],
   ['src/platform/prayerBoardWeather.ts', 'explicitly configured prayer-board weather'],
   ['src/platform/qiblaGoogleMaps.ts', 'interactive Qiblah Google Maps provider'],
+  [
+    'src/platform/mosqueDirectoryExternalActions.ts',
+    'user-initiated mosque directions and external navigation',
+  ],
   ['src/platform/sharedMosqueDirectoryTransport.ts', 'shared/community mosque directory'],
 ]);
 const nonRoutableFixtureLiteralFiles = new Set(['src/ui/AdminDisplayThemeManagement.tsx']);
