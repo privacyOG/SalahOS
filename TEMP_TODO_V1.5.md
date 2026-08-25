@@ -29,10 +29,10 @@ Keep this tracker compact. Mark an item `[x]` only after implementation, tests/v
 
 ## Stage 5 — Islamic Knowledge source governance
 
-- [ ] Add an approved scholarly source registry with provenance, edition/translator, citation, review and trust metadata.
-- [ ] Theology/creed content must use sources consistent with the Ash'ari and Maturidi Sunni scholarly traditions without requiring those labels in normal user-facing presentation.
-- [ ] Fiqh content must be sourced through the Hanafi, Maliki, Shafi'i and Hanbali madhhabs and accurately present recognised disagreement where relevant.
-- [ ] Add CI/content validation for approved sources, Qur'an/Hadith references, grading attribution and unattributed religious rulings.
+- [x] Add an approved scholarly source registry with provenance, edition/translator, citation, review and trust metadata.
+- [x] Theology/creed content must use sources consistent with the Ash'ari and Maturidi Sunni scholarly traditions without requiring those labels in normal user-facing presentation.
+- [x] Fiqh content must be sourced through the Hanafi, Maliki, Shafi'i and Hanbali madhhabs and accurately present recognised disagreement where relevant.
+- [x] Add CI/content validation for approved sources, Qur'an/Hadith references, grading attribution and unattributed religious rulings.
 
 ## Stage 6 — Qur'an expansion
 
