@@ -14,6 +14,21 @@ interface AustralianMosqueDirectoryCopy {
   distance: string;
   useMosque: string;
   selected: string;
+  favourite: string;
+  removeFavourite: string;
+  directions: string;
+  call: string;
+  website: string;
+  timetable: string;
+  reportEdit: string;
+  quality: string;
+  unverified: string;
+  verified: string;
+  claimed: string;
+  fresh: string;
+  aging: string;
+  stale: string;
+  unknownFreshness: string;
   showAll: string;
   showLess: string;
   noMatch: string;
@@ -36,6 +51,21 @@ export const australianMosqueDirectoryCopy = {
     distance: 'Distance',
     useMosque: 'Use mosque',
     selected: 'Selected',
+    favourite: 'Favourite',
+    removeFavourite: 'Remove favourite',
+    directions: 'Directions',
+    call: 'Call',
+    website: 'Website',
+    timetable: 'Timetable',
+    reportEdit: 'Report / edit',
+    quality: 'Data quality',
+    unverified: 'Unverified',
+    verified: 'Verified',
+    claimed: 'Claimed',
+    fresh: 'Fresh',
+    aging: 'Review soon',
+    stale: 'Stale',
+    unknownFreshness: 'Freshness unknown',
     showAll: 'Show all results',
     showLess: 'Show fewer',
     noMatch: 'No Australian directory mosques match this search.',
@@ -56,6 +86,21 @@ export const australianMosqueDirectoryCopy = {
     distance: 'المسافة',
     useMosque: 'استخدام المسجد',
     selected: 'محدد',
+    favourite: 'إضافة للمفضلة',
+    removeFavourite: 'إزالة من المفضلة',
+    directions: 'الاتجاهات',
+    call: 'اتصال',
+    website: 'الموقع',
+    timetable: 'المواقيت',
+    reportEdit: 'إبلاغ / تعديل',
+    quality: 'جودة البيانات',
+    unverified: 'غير موثّق',
+    verified: 'موثّق',
+    claimed: 'ملف مُعتمد',
+    fresh: 'حديث',
+    aging: 'يحتاج مراجعة قريباً',
+    stale: 'قديم',
+    unknownFreshness: 'حداثة غير معروفة',
     showAll: 'عرض كل النتائج',
     showLess: 'عرض أقل',
     noMatch: 'لا توجد مساجد في دليل أستراليا تطابق هذا البحث.',
@@ -77,6 +122,21 @@ export const australianMosqueDirectoryCopy = {
     distance: 'Mesafe',
     useMosque: 'Camiyi kullan',
     selected: 'Seçili',
+    favourite: 'Favori',
+    removeFavourite: 'Favoriden çıkar',
+    directions: 'Yol tarifi',
+    call: 'Ara',
+    website: 'Web sitesi',
+    timetable: 'Vakit çizelgesi',
+    reportEdit: 'Bildir / düzenle',
+    quality: 'Veri kalitesi',
+    unverified: 'Doğrulanmamış',
+    verified: 'Doğrulanmış',
+    claimed: 'Sahiplenilmiş',
+    fresh: 'Güncel',
+    aging: 'Yakında gözden geçir',
+    stale: 'Eski',
+    unknownFreshness: 'Güncellik bilinmiyor',
     showAll: 'Tüm sonuçları göster',
     showLess: 'Daha az göster',
     noMatch: 'Bu aramayla eşleşen Avustralya dizini camisi yok.',
@@ -98,6 +158,21 @@ export const australianMosqueDirectoryCopy = {
     distance: 'Jarak',
     useMosque: 'Gunakan masjid',
     selected: 'Dipilih',
+    favourite: 'Favorit',
+    removeFavourite: 'Hapus favorit',
+    directions: 'Petunjuk arah',
+    call: 'Telepon',
+    website: 'Situs web',
+    timetable: 'Jadwal',
+    reportEdit: 'Laporkan / sunting',
+    quality: 'Kualitas data',
+    unverified: 'Belum diverifikasi',
+    verified: 'Terverifikasi',
+    claimed: 'Diklaim',
+    fresh: 'Terkini',
+    aging: 'Tinjau segera',
+    stale: 'Usang',
+    unknownFreshness: 'Kesegaran tidak diketahui',
     showAll: 'Tampilkan semua hasil',
     showLess: 'Tampilkan lebih sedikit',
     noMatch: 'Tidak ada masjid direktori Australia yang cocok dengan pencarian ini.',

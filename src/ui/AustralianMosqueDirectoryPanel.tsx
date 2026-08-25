@@ -9,6 +9,10 @@ import {
   sortAustralianMosquesByDistance,
   type AustralianMosqueRecord,
 } from '../domain/australianMosqueDirectory';
+import {
+  enrichAustralianMosqueRecord,
+  type EnrichedMosqueDirectoryRecord,
+} from '../domain/mosqueDirectoryEnrichment';
 import { localeTag } from '../i18n/i18n';
 import { australianMosqueDirectoryCopy } from '../i18n/australianMosqueDirectoryTranslations';
 import type { Locale } from '../i18n/translations';
@@ -16,6 +20,7 @@ import { getApplicationStorage } from '../platform/applicationStorage';
 import { MOSQUE_PROFILE_LIBRARY_CHANGE_EVENT } from '../platform/mosqueProfileEvents';
 import {
   loadMosqueProfileLibrary,
+  removeMosqueProfile,
   saveMosqueProfileLibrary,
   selectMosqueProfile,
   upsertMosqueProfile,
@@ -53,6 +58,41 @@ function formatDistance(value: number, locale: Locale): string {
 
 function localizedDirectoryName(mosque: AustralianMosqueRecord, locale: Locale): string {
   return locale === 'ar' ? (mosque.nameAr ?? mosque.name) : mosque.name;
+}
+
+function directionsUrl(mosque: AustralianMosqueRecord): string {
+  const destination = encodeURIComponent(`${String(mosque.latitude)},${String(mosque.longitude)}`);
+  return `https://www.google.com/maps/dir/?api=1&destination=${destination}`;
+}
+
+function verificationLabel(
+  record: EnrichedMosqueDirectoryRecord,
+  text: (typeof australianMosqueDirectoryCopy)[Locale],
+): string {
+  switch (record.verification.state) {
+    case 'claimed':
+      return text.claimed;
+    case 'verified':
+      return text.verified;
+    default:
+      return text.unverified;
+  }
+}
+
+function freshnessLabel(
+  record: EnrichedMosqueDirectoryRecord,
+  text: (typeof australianMosqueDirectoryCopy)[Locale],
+): string {
+  switch (record.quality.freshness) {
+    case 'fresh':
+      return text.fresh;
+    case 'aging':
+      return text.aging;
+    case 'stale':
+      return text.stale;
+    default:
+      return text.unknownFreshness;
+  }
 }
 
 export function AustralianMosqueDirectoryPanel() {
@@ -95,13 +135,24 @@ export function AustralianMosqueDirectoryPanel() {
   }, [matchingMosques, savedCoordinates, sortByDistance]);
   const visibleMosques = expanded ? rankedMosques : rankedMosques.slice(0, COLLAPSED_RESULT_LIMIT);
 
-  const useMosque = (mosque: AustralianMosqueRecord) => {
-    const profile = australianMosqueToProfile(mosque);
-    const withProfile = upsertMosqueProfile(library, profile);
-    const next = selectMosqueProfile(withProfile, profile.id);
+  const persistLibrary = (next: MosqueProfileLibraryState) => {
     saveMosqueProfileLibrary(getApplicationStorage(), next);
     setLibrary(next);
     window.dispatchEvent(new Event(MOSQUE_PROFILE_LIBRARY_CHANGE_EVENT));
+  };
+
+  const useMosque = (mosque: AustralianMosqueRecord) => {
+    const profile = australianMosqueToProfile(mosque);
+    const withProfile = upsertMosqueProfile(library, profile);
+    persistLibrary(selectMosqueProfile(withProfile, profile.id));
+  };
+
+  const toggleFavourite = (mosque: AustralianMosqueRecord) => {
+    const profile = australianMosqueToProfile(mosque);
+    const next = followedIds.has(profile.id)
+      ? removeMosqueProfile(library, profile.id)
+      : upsertMosqueProfile(library, profile);
+    persistLibrary(next);
   };
 
   return (
@@ -179,11 +230,16 @@ export function AustralianMosqueDirectoryPanel() {
           {visibleMosques.map(({ mosque, distanceKm }) => {
             const selected = mosque.id === library.selectedProfileId;
             const followed = followedIds.has(mosque.id);
+            const enriched = enrichAustralianMosqueRecord(mosque, australianMosqueDirectory);
+            const timetableUrl = enriched.prayerTimes?.timetableUrl;
             return (
               <article
                 className="mosque-summary-card australian-mosque-directory__card"
                 data-directory-mosque-id={mosque.id}
                 data-selected={selected}
+                data-favourite={followed}
+                data-directory-quality={enriched.quality.score}
+                data-directory-freshness={enriched.quality.freshness}
                 key={mosque.id}
               >
                 <div className="mosque-summary-card__identity">
@@ -196,8 +252,19 @@ export function AustralianMosqueDirectoryPanel() {
                       {text.distance}: {formatDistance(distanceKm, locale)}
                     </span>
                   )}
+                  <div className="australian-mosque-directory__data-status">
+                    <span data-directory-verification={enriched.verification.state}>
+                      {verificationLabel(enriched, text)}
+                    </span>
+                    <span data-directory-freshness-label={enriched.quality.freshness}>
+                      {freshnessLabel(enriched, text)}
+                    </span>
+                    <span>
+                      {text.quality}: {enriched.quality.score}/100
+                    </span>
+                  </div>
                 </div>
-                <div className="mosque-summary-card__actions">
+                <div className="mosque-summary-card__actions australian-mosque-directory__actions">
                   <button
                     type="button"
                     aria-pressed={selected}
@@ -209,6 +276,36 @@ export function AustralianMosqueDirectoryPanel() {
                   >
                     {selected ? text.selected : text.useMosque}
                   </button>
+                  <button
+                    type="button"
+                    className="quiet-button"
+                    aria-pressed={followed}
+                    data-directory-favourite-toggle="true"
+                    onClick={() => {
+                      toggleFavourite(mosque);
+                    }}
+                  >
+                    {followed ? text.removeFavourite : text.favourite}
+                  </button>
+                  <a href={directionsUrl(mosque)} target="_blank" rel="noreferrer">
+                    {text.directions}
+                  </a>
+                  {enriched.contact.phone !== undefined && (
+                    <a href={`tel:${enriched.contact.phone}`}>{text.call}</a>
+                  )}
+                  {enriched.contact.website !== undefined && (
+                    <a href={enriched.contact.website} target="_blank" rel="noreferrer">
+                      {text.website}
+                    </a>
+                  )}
+                  {timetableUrl !== undefined && (
+                    <a href={timetableUrl} target="_blank" rel="noreferrer">
+                      {text.timetable}
+                    </a>
+                  )}
+                  <a href="#shared-mosque-directory-title" data-directory-report-edit="true">
+                    {text.reportEdit}
+                  </a>
                 </div>
               </article>
             );
@@ -248,6 +345,9 @@ export function AustralianMosqueDirectoryPanel() {
           </a>
           <a href={australianMosqueDirectory.source.licenceUrl} rel="noreferrer" target="_blank">
             ODbL 1.0
+          </a>
+          <a href="/mosque-packs/manifest.json" download>
+            Directory packs
           </a>
         </div>
       </footer>

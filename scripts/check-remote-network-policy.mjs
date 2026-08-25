@@ -9,7 +9,21 @@ const reviewedRemoteNetworkFiles = new Map([
   ['src/platform/managedAdminTransport.ts', 'managed display administration'],
   ['src/platform/prayerBoardWeather.ts', 'explicitly configured prayer-board weather'],
   ['src/platform/qiblaGoogleMaps.ts', 'interactive Qiblah Google Maps provider'],
+  [
+    'src/platform/mosqueDirectoryExternalActions.ts',
+    'user-initiated mosque directions and external navigation',
+  ],
   ['src/platform/sharedMosqueDirectoryTransport.ts', 'shared/community mosque directory'],
+]);
+const reviewedRemoteLiteralFiles = new Map([
+  [
+    'src/domain/mosqueDirectoryEnrichment.ts',
+    'OpenStreetMap provenance links stored as directory metadata',
+  ],
+  [
+    'src/ui/AustralianMosqueDirectoryPanel.tsx',
+    'user-initiated mosque website, timetable and directions links',
+  ],
 ]);
 const nonRoutableFixtureLiteralFiles = new Set(['src/ui/AdminDisplayThemeManagement.tsx']);
 const REMOTE_LITERAL_PATTERN = /["'`]https?:\/\/[^"'`\s]+/gu;
@@ -65,6 +79,12 @@ for (const file of applicationFiles) {
       reviewedCapabilities.push(`${repositoryPath}: non-routable .invalid visual fixture literal`);
       continue;
     }
+    if (label === 'remote HTTP URL literal' && reviewedRemoteLiteralFiles.has(repositoryPath)) {
+      reviewedCapabilities.push(
+        `${repositoryPath}: ${label} (${reviewedRemoteLiteralFiles.get(repositoryPath)})`,
+      );
+      continue;
+    }
     if (reviewedRemoteNetworkFiles.has(repositoryPath)) {
       reviewedCapabilities.push(
         `${repositoryPath}: ${label} (${reviewedRemoteNetworkFiles.get(repositoryPath)})`,
@@ -78,6 +98,12 @@ for (const file of applicationFiles) {
 for (const approvedPath of reviewedRemoteNetworkFiles.keys()) {
   if (!applicationFiles.some((file) => relative(repositoryRoot, file) === approvedPath)) {
     throw new Error(`Reviewed remote-network adapter is missing: ${approvedPath}`);
+  }
+}
+
+for (const approvedPath of reviewedRemoteLiteralFiles.keys()) {
+  if (!applicationFiles.some((file) => relative(repositoryRoot, file) === approvedPath)) {
+    throw new Error(`Reviewed remote-link source is missing: ${approvedPath}`);
   }
 }
 

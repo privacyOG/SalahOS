@@ -22,10 +22,10 @@ Keep this tracker compact. Mark an item `[x]` only after implementation, tests/v
 
 ## Stage 4 — Mosque directory enrichment
 
-- [ ] Expand mosque records with complete address, contact, website/social, prayer/Jumu'ah times, facilities, services and verification metadata.
-- [ ] Add multi-source enrichment with field-level provenance, deduplication/entity resolution and data-quality metrics.
-- [ ] Improve mosque cards/actions: distance, directions, call, website, timetable, favourite/select, report/edit and verification freshness.
-- [ ] Prepare regional/global downloadable mosque datasets instead of relying only on the bundled Australian seed.
+- [x] Expand mosque records with complete address, contact, website/social, prayer/Jumu'ah times, facilities, services and verification metadata.
+- [x] Add multi-source enrichment with field-level provenance, deduplication/entity resolution and data-quality metrics.
+- [x] Improve mosque cards/actions: distance, directions, call, website, timetable, favourite/select, report/edit and verification freshness.
+- [x] Prepare regional/global downloadable mosque datasets instead of relying only on the bundled Australian seed.
 
 ## Stage 5 — Islamic Knowledge source governance
 
