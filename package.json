@@ -23,7 +23,7 @@
     "quran:offline:prepare": "node scripts/prepare-quran-offline-pack.mjs",
     "quran:offline:check": "node scripts/prepare-quran-offline-pack.mjs --check",
     "adhan:audio:check": "node scripts/check-adhan-audio-assets.mjs",
-    "knowledge:content:check": "vitest run src/domain/islamicKnowledgeGovernance.test.ts",
+    "knowledge:content:check": "vitest run src/domain/islamicKnowledgeGovernance.test.ts src/domain/islamicKnowledgeStage7.test.ts",
     "ui:design-system-ownership": "node scripts/check-design-system-ownership.mjs",
     "typecheck": "tsc -b --pretty false",
     "test": "vitest run",
