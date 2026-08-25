@@ -13,8 +13,23 @@ def replace_once(path: str, old: str, new: str) -> None:
 
 replace_once(
     "src/domain/islamicKnowledgeStage7.test.ts",
-    "(entry): entry is QaKnowledgeEntry => entry.module === 'qa' && entry.contentType === 'fiqh',",
-    "(entry): entry is QaKnowledgeEntry => entry.module === 'qa',",
+    "  type HadithKnowledgeEntry,\n  type QaKnowledgeEntry,",
+    "  type HadithKnowledgeEntry,\n  type IslamicKnowledgeEntry,\n  type QaKnowledgeEntry,",
+)
+replace_once(
+    "src/domain/islamicKnowledgeStage7.test.ts",
+    "const requiredMadhhabs = ['hanafi', 'maliki', 'shafii', 'hanbali'] as const;",
+    "const catalogue: readonly IslamicKnowledgeEntry[] = islamicKnowledgeEntries;\nconst requiredMadhhabs = ['hanafi', 'maliki', 'shafii', 'hanbali'] as const;",
+)
+replace_once(
+    "src/domain/islamicKnowledgeStage7.test.ts",
+    "const hadithEntries = islamicKnowledgeEntries.filter(",
+    "const hadithEntries = catalogue.filter(",
+)
+replace_once(
+    "src/domain/islamicKnowledgeStage7.test.ts",
+    "const fiqhEntries = islamicKnowledgeEntries.filter(",
+    "const fiqhEntries = catalogue.filter(",
 )
 replace_once(
     "src/ui/KnowledgeStage7Details.tsx",
