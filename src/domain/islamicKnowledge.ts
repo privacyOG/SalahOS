@@ -82,7 +82,8 @@ export const islamicKnowledgeEntries = Object.freeze([
     contentType: 'quran',
     title: 'Seek help through patience and prayer',
     arabic: 'وَاسْتَعِينُوا بِالصَّبْرِ وَالصَّلَاةِ',
-    translation: 'Seek help in patience and prayer; and truly it is hard save for the humble-minded.',
+    translation:
+      'Seek help in patience and prayer; and truly it is hard save for the humble-minded.',
     reference: 'Qur’an 2:45',
     source: 'Arabic Uthmani text · English translation: M. M. Pickthall (1930)',
     sourceIds: ['quran-uthmani-text', 'quran-pickthall-1930'],
@@ -118,7 +119,8 @@ export const islamicKnowledgeEntries = Object.freeze([
     grader: 'Imam al-Bukhari',
     sourceIds: ['hadith-bukhari'],
     gradingAuthoritySourceId: 'hadith-bukhari',
-    sourceNote: 'Concise English rendering; the cited collection and hadith number remain authoritative.',
+    sourceNote:
+      'Concise English rendering; the cited collection and hadith number remain authoritative.',
     tags: ['intention', 'worship', 'sincerity'],
   },
   {
@@ -133,7 +135,8 @@ export const islamicKnowledgeEntries = Object.freeze([
     grader: 'Imam Muslim',
     sourceIds: ['hadith-muslim'],
     gradingAuthoritySourceId: 'hadith-muslim',
-    sourceNote: 'Concise English rendering; the cited collection and hadith number remain authoritative.',
+    sourceNote:
+      'Concise English rendering; the cited collection and hadith number remain authoritative.',
     tags: ['prayer', 'purification', 'faith'],
   },
   {
@@ -148,7 +151,8 @@ export const islamicKnowledgeEntries = Object.freeze([
     grader: 'Imam al-Bukhari',
     sourceIds: ['hadith-bukhari'],
     gradingAuthoritySourceId: 'hadith-bukhari',
-    sourceNote: 'Concise English rendering; the cited collection and hadith number remain authoritative.',
+    sourceNote:
+      'Concise English rendering; the cited collection and hadith number remain authoritative.',
     tags: ['congregation', 'mosque', 'prayer'],
   },
   {
