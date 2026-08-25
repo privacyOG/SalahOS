@@ -18,6 +18,7 @@ import { PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY } from './prayerBoardDisplayCon
 import { PRAYER_BOARD_WEATHER_STORAGE_KEY } from './prayerBoardWeather';
 import { PRIVACY_DIAGNOSTICS_STORAGE_KEY } from './privacyDiagnostics';
 import { QIBLA_PERMISSION_ONBOARDING_STORAGE_KEY } from './qiblaPermissionOnboarding';
+import { QURAN_READING_PREFERENCES_STORAGE_KEY } from './quranReadingPreferences';
 import { SAVED_LOCATIONS_STORAGE_KEY } from './savedLocations';
 import { SETTINGS_STORAGE_KEY } from './settingsStorage';
 import type { KeyValueStorage } from './settingsStorage';
@@ -40,6 +41,7 @@ export const PERSISTED_APPLICATION_KEYS = Object.freeze([
   QIBLA_PERMISSION_ONBOARDING_STORAGE_KEY,
   ADHAN_AUDIO_PREFERENCES_STORAGE_KEY,
   PRIVACY_DIAGNOSTICS_STORAGE_KEY,
+  QURAN_READING_PREFERENCES_STORAGE_KEY,
 ] as const);
 
 export interface PreferencesStore {

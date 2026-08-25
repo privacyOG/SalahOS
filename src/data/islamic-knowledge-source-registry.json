@@ -36,6 +36,22 @@
       "approvedModules": ["quran"]
     },
     {
+      "id": "quran-tafsir-jalalayn",
+      "kind": "quran-tafsir",
+      "title": "Tafsir al-Jalalayn",
+      "authors": ["Jalal al-Din al-Mahalli", "Jalal al-Din al-Suyuti"],
+      "edition": "Classical Arabic work referenced by surah and ayah; no page-specific quotation is bundled",
+      "translator": null,
+      "citation": "Cite surah and ayah and identify bundled tafsir notes as concise source-aware summaries rather than quotations.",
+      "provenance": "Approved classical Sunni tafsir source for the offline Qur'an reading lane. SalahOS notes paraphrase the cited verse-level discussion and do not claim to reproduce an edition verbatim.",
+      "reviewStatus": "approved",
+      "trustTier": "classical-tafsir",
+      "reviewedAt": "2026-08-26",
+      "madhhabs": [],
+      "creedTraditions": [],
+      "approvedModules": ["quran"]
+    },
+    {
       "id": "hadith-bukhari",
       "kind": "hadith-collection",
       "title": "Sahih al-Bukhari",

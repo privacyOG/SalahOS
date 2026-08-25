@@ -3,6 +3,7 @@ import {
   islamicKnowledgeEntries,
   type IslamicKnowledgeEntry,
   type QaKnowledgeEntry,
+  type QuranKnowledgeEntry,
 } from './islamicKnowledge';
 import {
   approvedIslamicKnowledgeSources,
@@ -15,22 +16,40 @@ const catalogue: readonly IslamicKnowledgeEntry[] = islamicKnowledgeEntries;
 describe('Islamic knowledge source governance', () => {
   it('keeps the complete shipped catalogue on approved, attributed sources', () => {
     expect(validateIslamicKnowledgeGovernance(catalogue)).toEqual([]);
-    expect(approvedIslamicKnowledgeSources.length).toBeGreaterThanOrEqual(10);
+    expect(approvedIslamicKnowledgeSources.length).toBeGreaterThanOrEqual(11);
 
     for (const entry of catalogue) {
       expect(getEntryApprovedSources(entry)).toHaveLength(entry.sourceIds.length);
     }
   });
 
-  it('requires named translation provenance for every Qur’an entry', () => {
-    const quranEntries = catalogue.filter((entry) => entry.module === 'quran');
+  it('requires named translation and approved tafsir provenance for every Qur’an entry', () => {
+    const quranEntries = catalogue.filter(
+      (entry): entry is QuranKnowledgeEntry => entry.module === 'quran',
+    );
     for (const entry of quranEntries) {
       const sources = getEntryApprovedSources(entry);
       const translation = sources.find((source) => source.id === entry.translationSourceId);
+      const tafsir = sources.find((source) => source.id === entry.tafsirSourceId);
       expect(entry.reference).toMatch(/^Qur’an \d{1,3}:\d{1,3}$/u);
       expect(translation?.kind).toBe('quran-translation');
       expect(translation?.translator).toBeTruthy();
       expect(translation?.edition).toContain('1930');
+      expect(tafsir?.kind).toBe('quran-tafsir');
+      expect(entry.tafsirSummary).toContain('summary');
+      expect(entry.topics.length).toBeGreaterThan(0);
+      expect(entry.relatedAyahIds.length).toBeGreaterThan(0);
+    }
+  });
+
+  it('keeps every related ayah inside the governed Qur’an catalogue', () => {
+    const quranEntries = catalogue.filter(
+      (entry): entry is QuranKnowledgeEntry => entry.module === 'quran',
+    );
+    const quranIds = new Set(quranEntries.map((entry) => entry.id));
+    for (const entry of quranEntries) {
+      expect(entry.relatedAyahIds.every((relatedId) => quranIds.has(relatedId))).toBe(true);
+      expect(entry.relatedAyahIds).not.toContain(entry.id);
     }
   });
 
@@ -80,6 +99,20 @@ describe('Islamic knowledge source governance', () => {
     const issues = validateIslamicKnowledgeGovernance([invalid]);
     expect(issues.some((issue) => issue.code === 'religious-ruling-unattributed')).toBe(true);
     expect(issues.some((issue) => issue.code === 'fiqh-four-madhhab-coverage-missing')).toBe(true);
+  });
+
+  it('rejects a Qur’an entry that loses tafsir attribution', () => {
+    const baseline = catalogue.find((entry) => entry.id === 'quran-prayer-remembrance');
+    expect(baseline?.module).toBe('quran');
+    if (baseline?.module !== 'quran') throw new Error('Missing Qur’an fixture');
+
+    const invalid: QuranKnowledgeEntry = {
+      ...baseline,
+      tafsirSourceId: 'missing-tafsir',
+      tafsirSummary: '',
+    };
+    const issues = validateIslamicKnowledgeGovernance([invalid]);
+    expect(issues.some((issue) => issue.code === 'quran-tafsir-source-invalid')).toBe(true);
   });
 
   it('defines creed approval only through Ash’ari and Maturidi registry lanes', () => {

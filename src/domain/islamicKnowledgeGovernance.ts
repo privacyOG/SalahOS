@@ -2,7 +2,12 @@ import sourceRegistryJson from '../data/islamic-knowledge-source-registry.json';
 import type { IslamicKnowledgeEntry, Madhhab } from './islamicKnowledge';
 
 export type ScholarlySourceKind =
-  'quran-text' | 'quran-translation' | 'hadith-collection' | 'fiqh' | 'creed';
+  | 'quran-text'
+  | 'quran-translation'
+  | 'quran-tafsir'
+  | 'hadith-collection'
+  | 'fiqh'
+  | 'creed';
 export type ScholarlySourceReviewStatus = 'approved' | 'pending' | 'rejected';
 export type CreedTradition = 'ashari' | 'maturidi';
 
@@ -183,6 +188,7 @@ export function validateIslamicKnowledgeGovernance(
   validateSourceRegistry(issues);
 
   const entryIds = new Set<string>();
+  const entryById = new Map(entries.map((entry) => [entry.id, entry]));
   for (const entry of entries) {
     if (entryIds.has(entry.id)) {
       pushIssue(
@@ -207,6 +213,7 @@ export function validateIslamicKnowledgeGovernance(
       }
       const arabicSource = getIslamicKnowledgeSource(entry.arabicSourceId);
       const translationSource = getIslamicKnowledgeSource(entry.translationSourceId);
+      const tafsirSource = getIslamicKnowledgeSource(entry.tafsirSourceId);
       if (!entry.sourceIds.includes(entry.arabicSourceId) || arabicSource?.kind !== 'quran-text') {
         pushIssue(
           issues,
@@ -226,6 +233,37 @@ export function validateIslamicKnowledgeGovernance(
           'quran-translation-source-invalid',
           `Qur'an entry ${entry.id} must cite an approved named translation source.`,
         );
+      }
+      if (
+        !entry.sourceIds.includes(entry.tafsirSourceId) ||
+        tafsirSource?.kind !== 'quran-tafsir' ||
+        entry.tafsirSummary.trim().length < 40
+      ) {
+        pushIssue(
+          issues,
+          entry.id,
+          'quran-tafsir-source-invalid',
+          `Qur'an entry ${entry.id} must retain an approved tafsir source and an attributed summary.`,
+        );
+      }
+      if (entry.topics.length === 0) {
+        pushIssue(
+          issues,
+          entry.id,
+          'quran-topic-missing',
+          `Qur'an entry ${entry.id} must retain at least one searchable topic.`,
+        );
+      }
+      for (const relatedId of entry.relatedAyahIds) {
+        const related = entryById.get(relatedId);
+        if (!related || related.module !== 'quran' || relatedId === entry.id) {
+          pushIssue(
+            issues,
+            entry.id,
+            'quran-related-ayah-invalid',
+            `Qur'an entry ${entry.id} references invalid related ayah ${relatedId}.`,
+          );
+        }
       }
       continue;
     }

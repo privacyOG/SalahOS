@@ -6,8 +6,10 @@
 
 .knowledge-hero,
 .knowledge-controls,
+.knowledge-quran-reader,
 .knowledge-card,
-.knowledge-empty {
+.knowledge-empty,
+.knowledge-share-status {
   border: 1px solid var(--salah-border-subtle);
   border-radius: var(--salah-radius-lg);
   background: var(--salah-bg-surface);
@@ -99,6 +101,79 @@
   background: var(--salah-bg-accent-soft);
 }
 
+.knowledge-quran-reader {
+  display: grid;
+  gap: 1rem;
+  margin-block-end: 1rem;
+  padding: 1rem;
+}
+
+.knowledge-quran-reader__heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.knowledge-quran-reader__heading p {
+  margin: 0 0 0.2rem;
+  color: var(--salah-fg-accent);
+  font-size: var(--salah-text-sm);
+  font-weight: 800;
+}
+
+.knowledge-quran-reader__heading strong {
+  color: var(--salah-fg-primary);
+}
+
+.knowledge-quran-reader__actions,
+.knowledge-quran-actions,
+.knowledge-related > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.knowledge-quran-reader__actions button,
+.knowledge-quran-actions button,
+.knowledge-related button {
+  min-height: 2.5rem;
+  padding-inline: 0.8rem;
+  border-radius: 999px;
+}
+
+.knowledge-quran-reader__actions button[aria-pressed='true'],
+.knowledge-quran-actions button[aria-pressed='true'] {
+  border-color: color-mix(in srgb, var(--salah-fg-accent) 45%, var(--salah-border-default));
+  background: var(--salah-bg-accent-soft);
+}
+
+.knowledge-quran-settings {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+}
+
+.knowledge-quran-settings label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--salah-fg-secondary);
+  font-size: var(--salah-text-sm);
+  font-weight: 750;
+}
+
+.knowledge-quran-settings select {
+  width: 100%;
+  min-width: 0;
+}
+
+.knowledge-share-status {
+  margin-block: 0 1rem;
+  padding: 0.8rem 1rem;
+  color: var(--salah-fg-secondary);
+}
+
 .knowledge-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(19rem, 100%), 1fr));
@@ -108,6 +183,11 @@
 .knowledge-card {
   min-width: 0;
   padding: clamp(1rem, 2.5vw, 1.4rem);
+}
+
+.knowledge-card--quran {
+  display: flex;
+  flex-direction: column;
 }
 
 .knowledge-card__meta-row {
@@ -157,6 +237,38 @@
   text-align: end;
 }
 
+.knowledge-card__arabic[data-quran-font='naskh'] {
+  font-family: 'Noto Naskh Arabic', 'Amiri', serif;
+}
+
+.knowledge-card__arabic[data-quran-font='traditional'] {
+  font-family: 'Traditional Arabic', 'Scheherazade New', 'Noto Naskh Arabic', serif;
+}
+
+.knowledge-card__arabic[data-quran-font='system'] {
+  font-family: system-ui, sans-serif;
+}
+
+.knowledge-card__arabic[data-quran-scale='compact'] {
+  font-size: clamp(1.15rem, 2.5vw, 1.45rem);
+}
+
+.knowledge-card__arabic[data-quran-scale='comfortable'] {
+  font-size: clamp(1.35rem, 3vw, 1.8rem);
+}
+
+.knowledge-card__arabic[data-quran-scale='large'] {
+  font-size: clamp(1.65rem, 4vw, 2.15rem);
+}
+
+.knowledge-card__arabic[data-quran-scale='xlarge'] {
+  font-size: clamp(1.95rem, 5vw, 2.55rem);
+}
+
+.knowledge-quran-actions {
+  margin-block: 0.25rem 0.5rem;
+}
+
 .knowledge-source-list {
   display: grid;
   gap: 0.65rem;
@@ -182,6 +294,38 @@
   margin: 0;
   color: var(--salah-fg-primary);
   overflow-wrap: anywhere;
+}
+
+.knowledge-tafsir {
+  margin-block-start: 1rem;
+  padding: 0.9rem;
+  border-radius: var(--salah-radius-md);
+  background: color-mix(in srgb, var(--salah-fg-accent) 6%, var(--salah-bg-surface));
+}
+
+.knowledge-tafsir h4 {
+  margin: 0;
+  color: var(--salah-fg-primary);
+  font-size: var(--salah-text-sm);
+}
+
+.knowledge-tafsir p {
+  margin-block-end: 0;
+  font-size: var(--salah-text-sm);
+}
+
+.knowledge-topics,
+.knowledge-related {
+  display: grid;
+  gap: 0.45rem;
+  margin-block-start: 0.9rem;
+  color: var(--salah-fg-secondary);
+  font-size: var(--salah-text-sm);
+}
+
+.knowledge-topics strong,
+.knowledge-related strong {
+  color: var(--salah-fg-primary);
 }
 
 .knowledge-card__source-note {
@@ -218,20 +362,40 @@
   .knowledge-filter button {
     width: 100%;
   }
+
+  .knowledge-quran-settings {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .knowledge-quran-reader__actions,
+  .knowledge-quran-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+  }
+
+  .knowledge-quran-reader__actions button,
+  .knowledge-quran-actions button {
+    width: 100%;
+  }
 }
 
 @media (prefers-contrast: more) {
   .knowledge-hero,
   .knowledge-controls,
+  .knowledge-quran-reader,
   .knowledge-card,
-  .knowledge-empty {
+  .knowledge-empty,
+  .knowledge-share-status {
     border-width: 2px;
   }
 }
 
 @media (forced-colors: active) {
   .knowledge-badge,
-  .knowledge-filter button[aria-pressed='true'] {
+  .knowledge-filter button[aria-pressed='true'],
+  .knowledge-quran-reader__actions button[aria-pressed='true'],
+  .knowledge-quran-actions button[aria-pressed='true'] {
     border-color: Highlight;
   }
 }
