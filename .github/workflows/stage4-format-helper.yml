@@ -1,0 +1,55 @@
+name: Stage 4 Format Helper
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  format-stage4:
+    if: github.event.pull_request.head.ref == 'stage-53/v1.5-mosque-directory-enrichment'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Apply lint-safe Stage 4 fixes
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('src/domain/mosqueDirectoryEnrichment.ts')
+          text = path.read_text()
+          text = text.replace(
+              "const postcode = record.address.match(/\\b\\d{4}\\b/u)?.[0];",
+              "const postcode = /\\b\\d{4}\\b/u.exec(record.address)?.[0];",
+          )
+          old = """    else
+      resolved[duplicateIndex] = mergeEnrichedMosqueDirectoryRecords(
+        resolved[duplicateIndex]!,
+        record,
+        now,
+      );"""
+          new = """    else {
+      const duplicate = resolved[duplicateIndex];
+      if (duplicate === undefined) continue;
+      resolved[duplicateIndex] = mergeEnrichedMosqueDirectoryRecords(duplicate, record, now);
+    }"""
+          if old not in text:
+              raise SystemExit('Expected entity-resolution block not found')
+          path.write_text(text.replace(old, new))
+          PY
+          npx prettier --write src/domain/mosqueDirectoryEnrichment.ts
+          npx eslint src/domain/mosqueDirectoryEnrichment.ts
+          git diff --check
+          git config user.name privacyOG
+          git config user.email "102720550+privacyOG@users.noreply.github.com"
+          git add src/domain/mosqueDirectoryEnrichment.ts
+          git commit -m "Stage 4: resolve enrichment lint findings"
+          git push origin HEAD:${{ github.event.pull_request.head.ref }}
