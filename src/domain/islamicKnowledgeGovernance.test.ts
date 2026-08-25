@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { islamicKnowledgeEntries, type IslamicKnowledgeEntry } from './islamicKnowledge';
+import {
+  islamicKnowledgeEntries,
+  type IslamicKnowledgeEntry,
+  type QaKnowledgeEntry,
+} from './islamicKnowledge';
 import {
   approvedIslamicKnowledgeSources,
   getEntryApprovedSources,
@@ -48,7 +52,7 @@ describe('Islamic knowledge source governance', () => {
 
   it('requires all four Sunni madhhab source lanes for current fiqh guidance', () => {
     const fiqhEntries = catalogue.filter(
-      (entry) => entry.module === 'qa' && entry.contentType === 'fiqh',
+      (entry): entry is QaKnowledgeEntry => entry.module === 'qa' && entry.contentType === 'fiqh',
     );
     expect(fiqhEntries).toHaveLength(3);
 
