@@ -42,14 +42,14 @@ export function parseQuranReadingPreferences(value: unknown): QuranReadingPrefer
   const candidate = value as Partial<QuranReadingPreferences>;
   return Object.freeze({
     version: 1,
-    translationMode: translationModes.has(candidate.translationMode as QuranTranslationMode)
-      ? (candidate.translationMode as QuranTranslationMode)
+    translationMode: translationModes.has(candidate.translationMode!)
+      ? candidate.translationMode!
       : defaultQuranReadingPreferences.translationMode,
-    arabicFont: arabicFonts.has(candidate.arabicFont as QuranArabicFont)
-      ? (candidate.arabicFont as QuranArabicFont)
+    arabicFont: arabicFonts.has(candidate.arabicFont!)
+      ? candidate.arabicFont!
       : defaultQuranReadingPreferences.arabicFont,
-    fontScale: fontScales.has(candidate.fontScale as QuranFontScale)
-      ? (candidate.fontScale as QuranFontScale)
+    fontScale: fontScales.has(candidate.fontScale!)
+      ? candidate.fontScale!
       : defaultQuranReadingPreferences.fontScale,
     bookmarkedAyahIds: stringArray(candidate.bookmarkedAyahIds),
     lastReadAyahId:
