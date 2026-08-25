@@ -2,11 +2,7 @@ import sourceRegistryJson from '../data/islamic-knowledge-source-registry.json';
 import type { IslamicKnowledgeEntry, Madhhab } from './islamicKnowledge';
 
 export type ScholarlySourceKind =
-  | 'quran-text'
-  | 'quran-translation'
-  | 'hadith-collection'
-  | 'fiqh'
-  | 'creed';
+  'quran-text' | 'quran-translation' | 'hadith-collection' | 'fiqh' | 'creed';
 export type ScholarlySourceReviewStatus = 'approved' | 'pending' | 'rejected';
 export type CreedTradition = 'ashari' | 'maturidi';
 
@@ -189,7 +185,12 @@ export function validateIslamicKnowledgeGovernance(
   const entryIds = new Set<string>();
   for (const entry of entries) {
     if (entryIds.has(entry.id)) {
-      pushIssue(issues, entry.id, 'duplicate-entry-id', `Duplicate knowledge entry ID: ${entry.id}`);
+      pushIssue(
+        issues,
+        entry.id,
+        'duplicate-entry-id',
+        `Duplicate knowledge entry ID: ${entry.id}`,
+      );
     }
     entryIds.add(entry.id);
 
