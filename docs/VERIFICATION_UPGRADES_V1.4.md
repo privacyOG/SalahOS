@@ -55,4 +55,6 @@ Stage 52 is complete only when the exact implementation head passes:
 - Android debug build and emulator lifecycle acceptance;
 - iOS Simulator build plus successful fresh iPhone and iPad install/launch/relaunch acceptance.
 
+After Stage 51 is merged, the Stage 52 pull request is retargeted to `main` and an implementation-head synchronization commit is required so these four gates execute again against the final merged-main context. Pre-retarget checks are supporting evidence only and do not replace this final-context pass.
+
 After the temporary v1.4 tracker is reconciled, the resulting tracker-only head must pass the same gates before merge.
