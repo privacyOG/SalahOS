@@ -59,9 +59,10 @@ describe('Islamic knowledge catalogue', () => {
     expect(entry?.module).toBe('quran');
     if (entry?.module !== 'quran') throw new Error('Missing Qur’an fixture');
 
-    expect(
-      entry.relatedAyahIds.map((id) => getIslamicKnowledgeEntryById(id)?.module),
-    ).toEqual(['quran', 'quran']);
+    expect(entry.relatedAyahIds.map((id) => getIslamicKnowledgeEntryById(id)?.module)).toEqual([
+      'quran',
+      'quran',
+    ]);
     expect(getIslamicKnowledgeEntryById('missing')).toBeNull();
   });
 });
