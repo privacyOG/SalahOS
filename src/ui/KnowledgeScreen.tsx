@@ -8,6 +8,7 @@ import {
   type QuranKnowledgeEntry,
 } from '../domain/islamicKnowledge';
 import { getIslamicKnowledgeSource } from '../domain/islamicKnowledgeGovernance';
+import { FiqhStage7Details, HadithStage7Details } from './KnowledgeStage7Details';
 import type { Locale } from '../i18n/translations';
 import { getApplicationStorage } from '../platform/applicationStorage';
 import {
@@ -31,6 +32,7 @@ type KnowledgeCopy = Readonly<{
   all: string;
   quran: string;
   hadith: string;
+  fiqh: string;
   qa: string;
   offline: string;
   source: string;
@@ -70,6 +72,8 @@ type KnowledgeCopy = Readonly<{
   topics: string;
 }>;
 
+type KnowledgeFilter = IslamicKnowledgeModule | 'fiqh' | 'all';
+
 const copy: Readonly<Record<Locale, KnowledgeCopy>> = {
   en: {
     eyebrow: 'Islamic Knowledge',
@@ -81,6 +85,7 @@ const copy: Readonly<Record<Locale, KnowledgeCopy>> = {
     all: 'All',
     quran: 'Qur’an',
     hadith: 'Hadith',
+    fiqh: 'Fiqh',
     qa: 'Q&A',
     offline: 'Available offline',
     source: 'Source',
@@ -130,6 +135,7 @@ const copy: Readonly<Record<Locale, KnowledgeCopy>> = {
     all: 'الكل',
     quran: 'القرآن',
     hadith: 'الحديث',
+    fiqh: 'الفقه',
     qa: 'سؤال وجواب',
     offline: 'متاح دون اتصال',
     source: 'المصدر',
@@ -179,6 +185,7 @@ const copy: Readonly<Record<Locale, KnowledgeCopy>> = {
     all: 'Tümü',
     quran: 'Kur’an',
     hadith: 'Hadis',
+    fiqh: 'Fıkıh',
     qa: 'Soru & Cevap',
     offline: 'Çevrimdışı kullanılabilir',
     source: 'Kaynak',
@@ -228,6 +235,7 @@ const copy: Readonly<Record<Locale, KnowledgeCopy>> = {
     all: 'Semua',
     quran: 'Qur’an',
     hadith: 'Hadis',
+    fiqh: 'Fikih',
     qa: 'Tanya & Jawab',
     offline: 'Tersedia luring',
     source: 'Sumber',
@@ -437,18 +445,24 @@ function QuranEntryCard({
 function KnowledgeEntryCard({
   entry,
   labels,
+  locale,
   quranPreferences,
   onToggleBookmark,
   onMarkLastRead,
   onOpenRelated,
+  onSearchHadithTopic,
+  onNavigateHadith,
   onShareStatus,
 }: Readonly<{
   entry: IslamicKnowledgeEntry;
   labels: KnowledgeCopy;
+  locale: Locale;
   quranPreferences: QuranReadingPreferences;
   onToggleBookmark: (entryId: string) => void;
   onMarkLastRead: (entryId: string) => void;
   onOpenRelated: (entryId: string) => void;
+  onSearchHadithTopic: (topic: string) => void;
+  onNavigateHadith: (entryId: string) => void;
   onShareStatus: (message: string) => void;
 }>) {
   if (entry.module === 'quran') {
@@ -467,52 +481,40 @@ function KnowledgeEntryCard({
 
   if (entry.module === 'hadith') {
     return (
-      <article className="knowledge-card" data-knowledge-module="hadith">
+      <article className="knowledge-card knowledge-card--hadith" data-knowledge-module="hadith">
         <div className="knowledge-card__meta-row">
           <span className="knowledge-badge">{labels.hadith}</span>
           <span className="knowledge-offline">{labels.offline}</span>
         </div>
         <h3>{entry.title}</h3>
-        <p>{entry.text}</p>
-        <dl className="knowledge-source-list">
-          <div>
-            <dt>{labels.collection}</dt>
-            <dd>
-              {entry.collection} · {entry.reference}
-            </dd>
-          </div>
-          <div>
-            <dt>{labels.grade}</dt>
-            <dd>{entry.grade}</dd>
-          </div>
-          <div>
-            <dt>{labels.gradedBy}</dt>
-            <dd>{entry.grader}</dd>
-          </div>
-        </dl>
+        <HadithStage7Details
+          entry={entry}
+          locale={locale}
+          onSearchTopic={onSearchHadithTopic}
+          onNavigateHadith={onNavigateHadith}
+        />
       </article>
     );
   }
 
   return (
-    <article className="knowledge-card" data-knowledge-module="qa">
+    <article
+      className="knowledge-card knowledge-card--fiqh"
+      data-knowledge-module="qa"
+      data-knowledge-content-type={entry.contentType}
+    >
       <div className="knowledge-card__meta-row">
-        <span className="knowledge-badge">{labels.qa}</span>
+        <span className="knowledge-badge">
+          {entry.contentType === 'fiqh' ? labels.fiqh : labels.qa}
+        </span>
         <span className="knowledge-offline">{labels.offline}</span>
       </div>
       <h3>{entry.question}</h3>
-      <p>{entry.answer}</p>
-      <dl className="knowledge-source-list">
-        <div>
-          <dt>{labels.scholar}</dt>
-          <dd>{entry.scholar}</dd>
-        </div>
-        <div>
-          <dt>{labels.source}</dt>
-          <dd>{entry.sourceTitle}</dd>
-        </div>
-      </dl>
-      <p className="knowledge-card__source-note">{entry.sourceNote}</p>
+      {entry.contentType === 'fiqh' ? (
+        <FiqhStage7Details entry={entry} locale={locale} />
+      ) : (
+        <p>{entry.answer}</p>
+      )}
     </article>
   );
 }
@@ -520,7 +522,7 @@ function KnowledgeEntryCard({
 export function KnowledgeScreen() {
   const locale = currentLocale();
   const labels = copy[locale];
-  const [module, setModule] = useState<IslamicKnowledgeModule | 'all'>('all');
+  const [module, setModule] = useState<KnowledgeFilter>('all');
   const [query, setQuery] = useState('');
   const [bookmarksOnly, setBookmarksOnly] = useState(false);
   const [shareStatus, setShareStatus] = useState('');
@@ -528,9 +530,14 @@ export function KnowledgeScreen() {
     loadQuranReadingPreferences(getApplicationStorage()),
   );
   const entries = useMemo(() => {
-    const filtered = filterIslamicKnowledge(module, query);
-    if (!bookmarksOnly) return filtered;
-    return filtered.filter(
+    const baseModule: IslamicKnowledgeModule | 'all' = module === 'fiqh' ? 'qa' : module;
+    const filtered = filterIslamicKnowledge(baseModule, query);
+    const scoped =
+      module === 'fiqh'
+        ? filtered.filter((entry) => entry.module === 'qa' && entry.contentType === 'fiqh')
+        : filtered;
+    if (!bookmarksOnly) return scoped;
+    return scoped.filter(
       (entry) => entry.module === 'quran' && quranPreferences.bookmarkedAyahIds.includes(entry.id),
     );
   }, [bookmarksOnly, module, query, quranPreferences.bookmarkedAyahIds]);
@@ -551,12 +558,13 @@ export function KnowledgeScreen() {
   };
 
   const filters: readonly Readonly<{
-    id: IslamicKnowledgeModule | 'all';
+    id: KnowledgeFilter;
     label: string;
   }>[] = [
     { id: 'all', label: labels.all },
     { id: 'quran', label: labels.quran },
     { id: 'hadith', label: labels.hadith },
+    { id: 'fiqh', label: labels.fiqh },
     { id: 'qa', label: labels.qa },
   ];
 
@@ -706,6 +714,7 @@ export function KnowledgeScreen() {
               key={entry.id}
               entry={entry}
               labels={labels}
+              locale={locale}
               quranPreferences={quranPreferences}
               onToggleBookmark={(entryId) => {
                 persistQuranPreferences(toggleQuranBookmark(quranPreferences, entryId));
@@ -719,6 +728,18 @@ export function KnowledgeScreen() {
                 setModule('quran');
                 setBookmarksOnly(false);
                 setQuery(related.reference.replace('Qur’an ', ''));
+              }}
+              onSearchHadithTopic={(topic) => {
+                setModule('hadith');
+                setBookmarksOnly(false);
+                setQuery(topic);
+              }}
+              onNavigateHadith={(entryId) => {
+                const related = getIslamicKnowledgeEntryById(entryId);
+                if (related?.module !== 'hadith') return;
+                setModule('hadith');
+                setBookmarksOnly(false);
+                setQuery(related.reference);
               }}
               onShareStatus={setShareStatus}
             />

@@ -43,10 +43,10 @@ Keep this tracker compact. Mark an item `[x]` only after implementation, tests/v
 
 ## Stage 7 — Hadith + Fiqh expansion
 
-- [ ] Hadith collection, book/chapter, hadith number, Arabic, translation, grading and grading authority.
-- [ ] Add related hadith and topic taxonomy with searchable/filterable navigation.
-- [ ] Add first-class Fiqh topics with four-madhhab views where differences materially matter.
-- [ ] Expand Q&A with scholar, original source, date/topic, madhhab where relevant and supporting references.
+- [x] Hadith collection, book/chapter, hadith number, Arabic, translation, grading and grading authority.
+- [x] Add related hadith and topic taxonomy with searchable/filterable navigation.
+- [x] Add first-class Fiqh topics with four-madhhab views where differences materially matter.
+- [x] Expand Q&A with scholar, original source, date/topic, madhhab where relevant and supporting references.
 
 ## Stage 8 — Product UX refinement
 

@@ -156,6 +156,37 @@ try {
       (await screen.locator('.knowledge-card').count()) === 3,
       'Hadith filter did not isolate entries',
     );
+    assert(
+      (await screen.locator('[data-hadith-arabic]').count()) === 3,
+      'Hadith Arabic excerpts are missing',
+    );
+    assert(
+      (await screen.locator('[data-hadith-book]').count()) === 3 &&
+        (await screen.locator('[data-hadith-chapter]').count()) === 3,
+      'Hadith book/chapter metadata is missing',
+    );
+    await screen.locator('[data-hadith-topic="intention"]').click();
+    assert(
+      (await screen.locator('[data-knowledge-module="hadith"]').count()) === 1,
+      'Hadith topic navigation did not isolate the intention entry',
+    );
+    await screen.getByRole('searchbox').fill('');
+    await screen.locator('[data-hadith-related] button').first().click();
+    assert(
+      (await screen.locator('[data-knowledge-module="hadith"]').count()) === 1,
+      'Related Hadith navigation did not isolate its target',
+    );
+    await screen.getByRole('searchbox').fill('');
+
+    await screen.locator('[data-knowledge-filter="fiqh"]').click();
+    assert(
+      (await screen.locator('[data-knowledge-content-type="fiqh"]').count()) === 3,
+      'First-class Fiqh filter did not isolate the governed Fiqh entries',
+    );
+    assert(
+      (await screen.locator('[data-fiqh-madhhab]').count()) === 12,
+      'Four-madhhab Fiqh views are incomplete',
+    );
 
     await screen.locator('[data-knowledge-filter="all"]').click();
     await screen.getByRole('searchbox').fill('madhhab');
@@ -182,7 +213,7 @@ try {
     );
 
     await page.screenshot({
-      path: path.join(artifactDirectory, 'stage55-quran-expansion-mobile.png'),
+      path: path.join(artifactDirectory, 'stage56-hadith-fiqh-expansion-mobile.png'),
       fullPage: true,
       animations: 'disabled',
     });
@@ -221,7 +252,7 @@ try {
     );
 
     await page.screenshot({
-      path: path.join(artifactDirectory, 'stage55-quran-expansion-rtl.png'),
+      path: path.join(artifactDirectory, 'stage56-hadith-fiqh-expansion-rtl.png'),
       fullPage: true,
       animations: 'disabled',
     });
@@ -230,10 +261,10 @@ try {
   }
 
   await writeFile(
-    path.join(artifactDirectory, 'stage55-quran-expansion-results.json'),
+    path.join(artifactDirectory, 'stage56-hadith-fiqh-expansion-results.json'),
     `${JSON.stringify(results, null, 2)}\n`,
   );
-  console.log(`Stage 55 Quran expansion acceptance passed: ${String(results.length)} flows.`);
+  console.log(`Stage 56 Hadith and Fiqh acceptance passed: ${String(results.length)} flows.`);
 } finally {
   await browser.close();
 }

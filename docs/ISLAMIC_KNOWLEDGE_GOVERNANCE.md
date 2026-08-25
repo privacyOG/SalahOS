@@ -37,7 +37,7 @@ Fiqh Q&A is governed through four source lanes:
 
 Current cross-school fiqh guidance must carry approved sourcing for all four madhhabs. Where the schools materially differ, the entry must mark recognised disagreement and explain the nature of the difference instead of flattening the issue into a single universal rule.
 
-Later Stage 7 work may add school-specific views and more granular citations. This Stage 5 policy is the minimum governance contract those additions must preserve.
+Stage 7 adds school-specific views while preserving this Stage 5 minimum governance contract. Every displayed Hanafi, Maliki, Shafi‘i and Hanbali position points back to the corresponding approved source lane already attached to the governed Q&A entry.
 
 ## Theology and creed
 
@@ -64,3 +64,13 @@ The ordinary Vitest suite repeats the same shipped-catalogue validation, while t
 ## Adding content
 
 A contributor adding religious content should first add or reuse an approved source record, then attach its stable source ID to the entry. New page-level quotations must pin the actual edition and page used. Do not invent an edition, translator, grading authority, madhhab consensus or scholarly attribution merely to satisfy the schema; leave the content out until its provenance can be established.
+
+## Stage 7 Hadith and Fiqh enrichment
+
+Stage 7 keeps the governed catalogue as the source of truth and adds auditable companion metadata in `src/domain/islamicKnowledgeStage7.ts`.
+
+Each shipped Hadith now carries its canonical collection and hadith number together with book/chapter navigation, a concise Arabic excerpt, the existing English rendering, grade/grading authority, searchable topics and related-Hadith links. Companion metadata is accepted only when its source ID is already an approved Hadith source on the governed base entry.
+
+Current Fiqh Q&A now has a first-class Fiqh navigation view. Each topic carries a review date, supporting references and four distinct school positions. Each Hanafi, Maliki, Shafi‘i and Hanbali position points to that school’s approved classical source rather than being presented as an unattributed universal ruling.
+
+`src/domain/islamicKnowledgeStage7.test.ts` is part of the permanent `knowledge:content:check` gate. It rejects missing Hadith metadata, invalid related-Hadith links, unapproved Hadith source linkage, missing Fiqh audit fields, incomplete four-school position sets or a school position whose source is not approved for that madhhab.

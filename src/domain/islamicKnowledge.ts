@@ -1,3 +1,5 @@
+import { stage7SearchText } from './islamicKnowledgeStage7';
+
 export type IslamicKnowledgeModule = 'quran' | 'hadith' | 'qa';
 export type IslamicKnowledgeContentType = 'quran' | 'hadith' | 'fiqh' | 'creed' | 'general';
 export type Madhhab = 'hanafi' | 'maliki' | 'shafii' | 'hanbali';
@@ -264,6 +266,7 @@ function searchableText(entry: IslamicKnowledgeEntry): string {
       entry.grade,
       entry.grader,
       entry.sourceNote,
+      stage7SearchText(entry.id),
       ...entry.sourceIds,
       ...entry.tags,
     ]
@@ -277,6 +280,7 @@ function searchableText(entry: IslamicKnowledgeEntry): string {
     entry.sourceTitle,
     entry.sourceNote,
     entry.disagreementNote ?? '',
+    stage7SearchText(entry.id),
     ...entry.sourceIds,
     ...entry.madhhabs,
     ...entry.tags,
