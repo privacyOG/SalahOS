@@ -85,7 +85,10 @@ try {
     persisted.bookmarkedAyahIds?.includes('114:6'),
     'Complete Qur’an bookmark did not persist by canonical verse key',
   );
-  assert(persisted.lastReadAyahId === '114:6', 'Complete Qur’an last-read position did not persist');
+  assert(
+    persisted.lastReadAyahId === '114:6',
+    'Complete Qur’an last-read position did not persist',
+  );
 
   await search.fill('');
   await reader.locator('[data-quran-offline-resume]').click();
@@ -106,7 +109,9 @@ try {
   await knowledge.locator('[data-quran-font-select]').selectOption('traditional');
   await knowledge.locator('[data-quran-size-select]').selectOption('xlarge');
   await page.waitForFunction(() => {
-    const ayah = document.querySelector('[data-quran-offline-ayah="114:6"] .knowledge-card__arabic');
+    const ayah = document.querySelector(
+      '[data-quran-offline-ayah="114:6"] .knowledge-card__arabic',
+    );
     return (
       ayah?.classList.contains('knowledge-card__arabic--traditional') === true &&
       ayah.classList.contains('knowledge-card__arabic--xlarge') === true
