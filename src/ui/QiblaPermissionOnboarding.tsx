@@ -122,8 +122,9 @@ export function QiblaPermissionOnboarding() {
       // platforms such as iOS Safari, so request it before the asynchronous location flow.
       await requestCompassPermission();
       const storage = getApplicationStorage();
+      const saved = savedLocationFallback();
       const location = await resolveBestAvailableLocation(storage, {
-        saved: savedLocationFallback(),
+        ...(saved === undefined ? {} : { saved }),
       });
       if (location !== null && location.freshness === 'live') {
         locationEnabled = true;
