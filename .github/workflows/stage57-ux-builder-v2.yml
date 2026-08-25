@@ -87,6 +87,77 @@ jobs:
           if display_patch_count != 1:
               raise SystemExit('Unable to harden Display block transformation')
 
+          brittle_hero = re.compile(
+              r"next_marker = \"\"\".*?text = text\.replace\(next_marker, next_replacement, 1\)\n",
+              flags=re.S,
+          )
+          robust_hero = """current_prayer_markup = \"\"\"<div className=\\\"today-next__current\\\" data-current-prayer>\n  <span>{translate(locale, 'currentPrayer')}</span>\n  <strong>{currentPrayerLabel}</strong>\n</div>\n\"\"\"
+          text, hero_count = re.subn(
+              r\"(<section className=\\\"today-next\\\" aria-labelledby=\\\"today-next-prayer\\\">\\s*)\",
+              lambda match: match.group(1) + current_prayer_markup,
+              text,
+              count=1,
+          )
+          if hero_count != 1:
+              raise SystemExit(f'Today hero replacement count={hero_count}')
+          """
+          body, hero_patch_count = brittle_hero.subn(lambda _: robust_hero, body, count=1)
+          if hero_patch_count != 1:
+              raise SystemExit('Unable to harden Today hero transformation')
+
+          brittle_dates = re.compile(
+              r"dates_marker = \"\"\".*?text = text\.replace\(dates_marker, local_context, 1\)\n",
+              flags=re.S,
+          )
+          robust_dates = """local_context_markup = \"\"\"<section className=\\\"today-local-context\\\" aria-label={uxCopy.localContext}>\n  <div\n    className=\\\"today-location-confidence\\\"\n    data-location-confidence={\n      recentLocation?.isApproximate === true\n        ? 'approximate'\n        : recentLocation === null\n          ? 'saved'\n          : 'precise'\n    }\n  >\n    <div>\n      <span>{uxCopy.localContext}</span>\n      <strong>{locationSourceLabel}</strong>\n    </div>\n    <div className=\\\"today-location-confidence__meta\\\">\n      <span>{locationConfidenceLabel}</span>\n      {locationAccuracyLabel !== null && <span>{locationAccuracyLabel}</span>}\n      <span dir=\\\"auto\\\">{contextLabel}</span>\n    </div>\n  </div>\n  {modules.weather && <PrayerBoardWeatherModule weather={weather} locale={locale} />}\n</section>\n\n\"\"\"
+          text, dates_count = re.subn(
+              r\"(\\n\\s*\\{modules\\.dates && \\(\\n)\",
+              lambda match: '\\n' + local_context_markup + match.group(1),
+              text,
+              count=1,
+          )
+          if dates_count != 1:
+              raise SystemExit(f'Today local-context replacement count={dates_count}')
+          """
+          body, dates_patch_count = brittle_dates.subn(lambda _: robust_dates, body, count=1)
+          if dates_patch_count != 1:
+              raise SystemExit('Unable to harden Today local-context transformation')
+
+          brittle_secondary = re.compile(
+              r"contextual_block = \"\"\".*?text = text\.replace\(footer_end, footer_replacement, 1\)\n",
+              flags=re.S,
+          )
+          robust_secondary = """context_match = re.search(
+              r\"\\n\\s*<TodayContextualSections\\n.*?\\n\\s*/>\\n\",
+              text,
+              flags=re.S,
+          )
+          if context_match is None:
+              raise SystemExit('Today contextual sections block missing')
+          contextual_markup = context_match.group(0)
+          text = text[:context_match.start()] + '\\n' + text[context_match.end():]
+          details_open = \"\"\"\n<details className=\\\"today-secondary-context\\\">\n  <summary>\n    <span>{uxCopy.moreToday}</span>\n    <small>{uxCopy.moreTodayHint}</small>\n  </summary>\n  <div className=\\\"today-secondary-context__content\\\">\n\"\"\"
+          text, secondary_open_count = re.subn(
+              r\"(\\n\\s*\\{modules\\['sunrise-sunset'\\] && \\(\\n)\",
+              lambda match: contextual_markup + details_open + match.group(1),
+              text,
+              count=1,
+          )
+          if secondary_open_count != 1:
+              raise SystemExit(f'Today secondary disclosure opening count={secondary_open_count}')
+          text, secondary_close_count = re.subn(
+              r\"(\\n\\s*</footer>)(\\n\\s*</>\\n)\",
+              lambda match: match.group(1) + '\\n  </div>\\n</details>' + match.group(2),
+              text,
+              count=1,
+          )
+          if secondary_close_count != 1:
+              raise SystemExit(f'Today secondary disclosure closing count={secondary_close_count}')
+          """
+          body, secondary_patch_count = brittle_secondary.subn(lambda _: robust_secondary, body, count=1)
+          if secondary_patch_count != 1:
+              raise SystemExit('Unable to harden Today secondary-content transformation')
+
           Path('/tmp/stage57-apply.sh').write_text(body)
           PY
           bash /tmp/stage57-apply.sh
