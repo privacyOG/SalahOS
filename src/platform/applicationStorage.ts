@@ -16,6 +16,7 @@ import { MOSQUE_PROFILE_LIBRARY_STORAGE_KEY } from './mosqueProfileLibrary';
 import { PRAYER_BOARD_ANNOUNCEMENT_ROTATION_STORAGE_KEY } from './prayerBoardAnnouncementRotation';
 import { PRAYER_BOARD_DISPLAY_CONFIG_STORAGE_KEY } from './prayerBoardDisplayConfig';
 import { PRAYER_BOARD_WEATHER_STORAGE_KEY } from './prayerBoardWeather';
+import { PRIVACY_DIAGNOSTICS_STORAGE_KEY } from './privacyDiagnostics';
 import { QIBLA_PERMISSION_ONBOARDING_STORAGE_KEY } from './qiblaPermissionOnboarding';
 import { SAVED_LOCATIONS_STORAGE_KEY } from './savedLocations';
 import { SETTINGS_STORAGE_KEY } from './settingsStorage';
@@ -38,6 +39,7 @@ export const PERSISTED_APPLICATION_KEYS = Object.freeze([
   PRAYER_BOARD_ANNOUNCEMENT_ROTATION_STORAGE_KEY,
   QIBLA_PERMISSION_ONBOARDING_STORAGE_KEY,
   ADHAN_AUDIO_PREFERENCES_STORAGE_KEY,
+  PRIVACY_DIAGNOSTICS_STORAGE_KEY,
 ] as const);
 
 export interface PreferencesStore {
