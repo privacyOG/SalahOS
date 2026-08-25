@@ -142,7 +142,10 @@ export function loadPrivacyDiagnosticsState(storage: KeyValueStorage): PrivacyDi
   }
 }
 
-function saveState(storage: KeyValueStorage, state: PrivacyDiagnosticsState): PrivacyDiagnosticsState {
+function saveState(
+  storage: KeyValueStorage,
+  state: PrivacyDiagnosticsState,
+): PrivacyDiagnosticsState {
   const normalized = Object.freeze({
     version: PRIVACY_DIAGNOSTICS_VERSION,
     enabled: state.enabled,
@@ -239,10 +242,7 @@ export function collectCurrentPerformanceDiagnostics(
   );
 }
 
-export function exportPrivacyDiagnostics(
-  storage: KeyValueStorage,
-  now: Date = new Date(),
-): string {
+export function exportPrivacyDiagnostics(storage: KeyValueStorage, now: Date = new Date()): string {
   const state = loadPrivacyDiagnosticsState(storage);
   const payload: PrivacyDiagnosticsExport = Object.freeze({
     version: PRIVACY_DIAGNOSTICS_VERSION,

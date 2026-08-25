@@ -111,9 +111,9 @@ async function validatePrivacyDiagnostics(browser) {
       window.dispatchEvent(new ErrorEvent('error', { error }));
     });
 
-    const stored =
-      (await page.evaluate((key) => localStorage.getItem(key), diagnosticsKey)) ?? '';
-    if (!stored.includes('"enabled":true')) throw new Error('diagnostics enablement was not persisted');
+    const stored = (await page.evaluate((key) => localStorage.getItem(key), diagnosticsKey)) ?? '';
+    if (!stored.includes('"enabled":true'))
+      throw new Error('diagnostics enablement was not persisted');
     for (const forbidden of ['private-message', 'example.test', '-33.8688', '151.2093']) {
       if (stored.includes(forbidden)) {
         throw new Error(`diagnostics persistence leaked forbidden value: ${forbidden}`);

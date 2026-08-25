@@ -51,7 +51,11 @@ describe('privacy diagnostics', () => {
   it('is disabled by default and records nothing until explicitly enabled', () => {
     const storage = new MemoryStorage();
 
-    expect(loadPrivacyDiagnosticsState(storage)).toEqual({ version: 1, enabled: false, events: [] });
+    expect(loadPrivacyDiagnosticsState(storage)).toEqual({
+      version: 1,
+      enabled: false,
+      events: [],
+    });
     recordCrashDiagnostic(storage, 'window-error', new Error('boom'));
     collectCurrentPerformanceDiagnostics(storage, performanceSource());
 
