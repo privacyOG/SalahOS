@@ -24,12 +24,14 @@ class MemoryStorage {
   }
 }
 
-describe('Qiblah permission onboarding persistence', () => {
+describe('location permission onboarding persistence', () => {
   it('defaults to incomplete and required on a true first run', () => {
     const storage = new MemoryStorage();
     expect(loadQiblaPermissionOnboarding(storage)).toEqual({
-      version: 1,
+      version: 2,
       completed: false,
+      dismissed: false,
+      autoLocation: false,
     });
     expect(qiblaPermissionOnboardingRequired(storage)).toBe(true);
   });
@@ -37,19 +39,56 @@ describe('Qiblah permission onboarding persistence', () => {
   it('does not interrupt existing configured installations during upgrade', () => {
     const storage = new MemoryStorage();
     storage.setItem(SETTINGS_STORAGE_KEY, JSON.stringify({ version: 2 }));
-    expect(loadQiblaPermissionOnboarding(storage)).toEqual({ version: 1, completed: true });
+    expect(loadQiblaPermissionOnboarding(storage)).toEqual({
+      version: 2,
+      completed: true,
+      dismissed: true,
+      autoLocation: true,
+    });
     expect(qiblaPermissionOnboardingRequired(storage)).toBe(false);
   });
 
-  it('persists completion using the application storage key', () => {
+  it('persists automatic-location consent after enablement', () => {
     const storage = new MemoryStorage();
-    completeQiblaPermissionOnboarding(storage);
+    completeQiblaPermissionOnboarding(storage, true);
 
     expect(storage.getItem(QIBLA_PERMISSION_ONBOARDING_STORAGE_KEY)).toBe(
+      JSON.stringify({ version: 2, dismissed: true, autoLocation: true }),
+    );
+    expect(loadQiblaPermissionOnboarding(storage)).toEqual({
+      version: 2,
+      completed: true,
+      dismissed: true,
+      autoLocation: true,
+    });
+    expect(qiblaPermissionOnboardingRequired(storage)).toBe(false);
+  });
+
+  it('remembers Not now without enabling automatic location', () => {
+    const storage = new MemoryStorage();
+    completeQiblaPermissionOnboarding(storage, false);
+
+    expect(loadQiblaPermissionOnboarding(storage)).toEqual({
+      version: 2,
+      completed: false,
+      dismissed: true,
+      autoLocation: false,
+    });
+    expect(qiblaPermissionOnboardingRequired(storage)).toBe(false);
+  });
+
+  it('migrates the original completed state to enabled automatic location', () => {
+    const storage = new MemoryStorage();
+    storage.setItem(
+      QIBLA_PERMISSION_ONBOARDING_STORAGE_KEY,
       JSON.stringify({ version: 1, completed: true }),
     );
-    expect(loadQiblaPermissionOnboarding(storage)).toEqual({ version: 1, completed: true });
-    expect(qiblaPermissionOnboardingRequired(storage)).toBe(false);
+    expect(loadQiblaPermissionOnboarding(storage)).toEqual({
+      version: 2,
+      completed: true,
+      dismissed: true,
+      autoLocation: true,
+    });
   });
 
   it('fails closed to first-run onboarding for invalid persisted data', () => {
@@ -60,8 +99,9 @@ describe('Qiblah permission onboarding persistence', () => {
 
     storage.setItem(
       QIBLA_PERMISSION_ONBOARDING_STORAGE_KEY,
-      JSON.stringify({ version: 2, completed: true }),
+      JSON.stringify({ version: 2, dismissed: true }),
     );
     expect(loadQiblaPermissionOnboarding(storage).completed).toBe(false);
+    expect(qiblaPermissionOnboardingRequired(storage)).toBe(true);
   });
 });
