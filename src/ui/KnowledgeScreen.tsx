@@ -530,8 +530,7 @@ export function KnowledgeScreen() {
     const filtered = filterIslamicKnowledge(module, query);
     if (!bookmarksOnly) return filtered;
     return filtered.filter(
-      (entry) =>
-        entry.module === 'quran' && quranPreferences.bookmarkedAyahIds.includes(entry.id),
+      (entry) => entry.module === 'quran' && quranPreferences.bookmarkedAyahIds.includes(entry.id),
     );
   }, [bookmarksOnly, module, query, quranPreferences.bookmarkedAyahIds]);
 
