@@ -152,12 +152,10 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
 };
 
 function curatedEntryForVerseKey(verseKey: string): QuranKnowledgeEntry | null {
-  return (
-    islamicKnowledgeEntries.find(
-      (entry): entry is QuranKnowledgeEntry =>
-        entry.module === 'quran' && entry.reference === `Qur’an ${verseKey}`,
-    ) ?? null
+  const entry = islamicKnowledgeEntries.find(
+    (candidate) => candidate.module === 'quran' && candidate.reference === `Qur’an ${verseKey}`,
   );
+  return entry?.module === 'quran' ? entry : null;
 }
 
 function relatedVerseKeys(entry: QuranKnowledgeEntry): readonly string[] {
