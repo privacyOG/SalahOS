@@ -182,7 +182,7 @@ jobs:
             src/platform/quranReadingPreferences.ts \
             src/ui/KnowledgeScreen.tsx \
             src/data/quran-offline-manifest.json \
-            .prettierignore
+            .github/workflows/stage55-quran-import.yml
 
       - name: Verify generated corpus and repository checks
         run: |
