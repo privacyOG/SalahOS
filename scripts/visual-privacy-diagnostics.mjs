@@ -14,6 +14,7 @@ if (!playwrightModule) {
 
 const { chromium } = await import(pathToFileURL(playwrightModule).href);
 const diagnosticsKey = 'salahos.privacyDiagnostics';
+const diagnosticsSeedKey = 'salahos.visual.privacyDiagnosticsSeeded';
 
 function settings() {
   return {
@@ -38,15 +39,22 @@ function settings() {
 
 async function seed(page) {
   await page.addInitScript(
-    ({ serializedSettings }) => {
+    ({ serializedSettings, diagnosticsStorageKey, seedStorageKey }) => {
       localStorage.setItem('salahos.settings', serializedSettings);
       localStorage.setItem(
         'salahos.qiblaPermissionOnboarding',
         JSON.stringify({ version: 2, dismissed: true, autoLocation: false }),
       );
-      localStorage.removeItem('salahos.privacyDiagnostics');
+      if (sessionStorage.getItem(seedStorageKey) !== '1') {
+        localStorage.removeItem(diagnosticsStorageKey);
+        sessionStorage.setItem(seedStorageKey, '1');
+      }
     },
-    { serializedSettings: JSON.stringify(settings()) },
+    {
+      serializedSettings: JSON.stringify(settings()),
+      diagnosticsStorageKey: diagnosticsKey,
+      seedStorageKey: diagnosticsSeedKey,
+    },
   );
 }
 
