@@ -45,18 +45,23 @@ function failingGeolocation(code: 1 | 2 | 3): Geolocation {
 }
 
 describe('requestBrowserLocation', () => {
-  it('returns only the coordinates required for prayer calculations', async () => {
+  it('retains only coordinates plus useful accuracy/freshness metadata', async () => {
     const result = await requestBrowserLocation(successfulGeolocation());
     expect(result.ok).toBe(true);
-    if (!result.ok) {
-      throw new Error('Expected successful location result');
-    }
+    if (!result.ok) throw new Error('Expected successful location result');
 
     expect(result.location).toEqual({
       coordinates: { latitude: -33.8688, longitude: 151.2093 },
-      source: 'browser',
+      source: 'browser-network-approximate',
+      accuracyMeters: 25,
+      capturedAtIso: '2026-08-16T00:00:00.000Z',
     });
-    expect(Object.keys(result.location).sort()).toEqual(['coordinates', 'source']);
+    expect(Object.keys(result.location).sort()).toEqual([
+      'accuracyMeters',
+      'capturedAtIso',
+      'coordinates',
+      'source',
+    ]);
   });
 
   it('uses one low-accuracy request by default and never starts a location watch', async () => {
@@ -87,7 +92,7 @@ describe('requestBrowserLocation', () => {
     });
   });
 
-  it('allows high accuracy only when a caller explicitly opts in', async () => {
+  it('marks explicitly requested high accuracy as GPS-preferred', async () => {
     let receivedOptions: PositionOptions | undefined;
     const geolocation: Geolocation = {
       getCurrentPosition(success, _error, options) {
@@ -98,9 +103,10 @@ describe('requestBrowserLocation', () => {
       clearWatch: () => undefined,
     };
 
-    await requestBrowserLocation(geolocation, { enableHighAccuracy: true });
+    const result = await requestBrowserLocation(geolocation, { enableHighAccuracy: true });
 
     expect(receivedOptions?.enableHighAccuracy).toBe(true);
+    expect(result).toMatchObject({ ok: true, location: { source: 'browser-gps' } });
   });
 
   it('handles unsupported geolocation without throwing', async () => {

@@ -2,27 +2,41 @@
 
 **Author:** privacyOG
 
-## Privacy model
+## Shared best-available location
 
-SalahOS treats precise coordinates as sensitive local data. Core prayer-time operation does not require a remote location or timezone API.
+SalahOS uses one foreground location resolver for prayer times, Qiblah, weather and nearby-mosque features. After the user enables automatic location it prefers:
 
-- Browser GPS is requested only when the user explicitly requests/current-location functionality.
-- The browser adapter performs a one-shot `getCurrentPosition` request rather than continuous tracking.
-- Manual coordinates are supported by the same validated coordinate model.
-- Coordinates are converted to an IANA timezone locally using the bundled `@photostructure/tz-lookup` dataset.
-- SalahOS does not derive a civil timezone from longitude.
-- UTC offsets and daylight-saving changes are obtained from the runtime's IANA timezone rules through `Intl.DateTimeFormat`.
-- The current core implementation does not transmit precise coordinates over the network.
+1. a precise OS/GPS-assisted fix;
+2. an OS/network-assisted approximate fix;
+3. a recent live-location cache;
+4. selected mosque or saved location where supplied by the feature; and
+5. an explicit manual location.
+
+Each resolved context carries coordinates, source, horizontal accuracy when available, fix time, freshness, approximate/precise status and an IANA timezone. Unrelated device telemetry such as altitude, speed and heading is not retained by the shared location path.
+
+Automatic refresh is foreground-only: app start, focus/visibility return, connectivity recovery and a bounded 15-minute interval. SalahOS does not request background location for this resolver.
+
+## Permission experience
+
+First-run permission education is benefit-first: location supports local prayer times, Qiblah, nearby mosques and local weather. Choosing **Not now** dismisses onboarding without enabling automatic location, so later background UI activity cannot unexpectedly prompt for location. Saved/manual workflows remain usable.
+
+Existing configured installations migrate to the automatic-location behavior already expected by their previous completed location/Qiblah onboarding state.
 
 ## Offline timezone lookup
 
-`@photostructure/tz-lookup` is pinned in the dependency lockfile. Its compact timezone-boundary data is bundled with the application, allowing coordinate-to-IANA lookup while offline.
+Coordinates are converted to an IANA timezone locally using the pinned `@photostructure/tz-lookup` dataset. No remote timezone API is required.
 
-The lookup is intentionally marked `approximateBoundaryLookup: true` in provenance. Compact polygon lookup can be ambiguous or approximate close to timezone borders. A later settings/UI layer should allow a user to inspect and override the detected IANA timezone instead of pretending boundary lookup is infallible.
+The lookup remains marked `approximateBoundaryLookup: true` because compact boundary data can be ambiguous near timezone borders. Persisted explicit timezone selections are retained where available.
 
-## Browser geolocation states
+UTC offsets and daylight-saving changes come from the runtime IANA rules through `Intl.DateTimeFormat`; SalahOS does not derive civil time from longitude.
 
-The browser adapter returns typed outcomes rather than throwing for ordinary location-service failures:
+## Location quality and travel
+
+Browser/native adapters retain only coordinates, horizontal accuracy and fix timestamp required to judge location quality. High-accuracy positioning is attempted first and falls back to OS/network-assisted positioning after ordinary timeout/unavailable failures.
+
+A successful live fix is cached for temporary offline continuity. Shared prayer settings update after meaningful movement (250 metres or more) or timezone change, avoiding repeated writes from normal GPS jitter while allowing travel between locations/timezones to update prayer calculations automatically.
+
+Typed foreground failures remain:
 
 - `unsupported`
 - `permission-denied`
@@ -30,23 +44,10 @@ The browser adapter returns typed outcomes rather than throwing for ordinary loc
 - `timeout`
 - `unknown`
 
-A platform/UI layer can therefore retain a previously saved/manual location when GPS is denied or unavailable.
+## Network use
 
-## DST and civil date
+Core prayer-time and timezone calculation remain local. Features that inherently use online providers, such as enabled weather, may send the resolved coordinates required for that feature. The shared location resolver itself does not send coordinates to a remote location service.
 
-The timezone module resolves the offset for a specific instant. This is required because the same location can have different UTC offsets across the year. Tests cover both southern-hemisphere and northern-hemisphere DST behavior, including exact 2026 transition boundaries for Sydney and London.
+## Verification
 
-`civilDateInTimeZone` also converts the current instant to the selected location's local Gregorian date before the pure prayer engine is invoked. This prevents the host device's timezone from selecting the wrong prayer day for a remote/saved location.
-
-## Remaining work
-
-The domain/platform core is intentionally separate from:
-
-- saved/favourite location persistence;
-- manual city search/geocoding;
-- native Android/iOS location adapters;
-- UI permission/error flows;
-- manual IANA timezone override;
-- persistence/version migration.
-
-Those remain separate TODO items and must not be inferred complete merely because the local resolver exists.
+Automated coverage verifies precise-first acquisition, approximate fallback, permission denial, accuracy/fix metadata, cache expiry, saved/manual fallback, offline timezone resolution, GPS-jitter suppression and meaningful travel/timezone updates. Qiblah one-shot acquisition delegates to the same shared foreground resolver while retaining its continuous live watch for compass guidance.

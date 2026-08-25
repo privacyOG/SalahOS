@@ -1,14 +1,25 @@
 import { Capacitor } from '@capacitor/core';
 import { Geolocation } from '@capacitor/geolocation';
+
 import { createCoordinates } from '../domain/coordinates';
 import type { Coordinates } from '../domain/coordinates';
-import { requestBrowserLocation, type BrowserLocationFailureReason } from './browserGeolocation';
+import {
+  requestBrowserLocation,
+  type BrowserLocationFailureReason,
+  type BrowserLocationOptions,
+  type BrowserLocationResult,
+  type BrowserLocationSource,
+} from './browserGeolocation';
 
 export type LocationFailureReason = BrowserLocationFailureReason;
+export type CurrentLocationSource =
+  BrowserLocationSource | 'native-gps' | 'native-network-approximate';
 
 export interface CurrentLocationFix {
   readonly coordinates: Coordinates;
-  readonly source: 'browser' | 'native';
+  readonly source: CurrentLocationSource;
+  readonly accuracyMeters: number | null;
+  readonly capturedAtIso: string;
 }
 
 export type CurrentLocationResult =
@@ -23,7 +34,9 @@ interface NativePosition {
   readonly coords: {
     readonly latitude: number;
     readonly longitude: number;
+    readonly accuracy?: number;
   };
+  readonly timestamp?: number;
 }
 
 export interface CurrentLocationDependencies {
@@ -35,7 +48,7 @@ export interface CurrentLocationDependencies {
     readonly timeout: number;
     readonly maximumAge: number;
   }) => Promise<NativePosition>;
-  readonly requestBrowser: () => Promise<CurrentLocationResult>;
+  readonly requestBrowser: (options: BrowserLocationOptions) => Promise<BrowserLocationResult>;
 }
 
 const defaultDependencies: CurrentLocationDependencies = {
@@ -43,7 +56,7 @@ const defaultDependencies: CurrentLocationDependencies = {
   checkNativePermissions: () => Geolocation.checkPermissions(),
   requestNativePermissions: () => Geolocation.requestPermissions(),
   getNativeCurrentPosition: (options) => Geolocation.getCurrentPosition(options),
-  requestBrowser: () => requestBrowserLocation(),
+  requestBrowser: (options) => requestBrowserLocation(undefined, options),
 };
 
 function permissionGranted(status: NativePermissionStatus): boolean {
@@ -70,16 +83,70 @@ function nativeFailureReason(error: unknown): LocationFailureReason {
   return 'unknown';
 }
 
+function terminalFailure(reason: LocationFailureReason): boolean {
+  return reason === 'permission-denied' || reason === 'unsupported';
+}
+
+function normalizedAccuracy(value: number | undefined): number | null {
+  return typeof value === 'number' && Number.isFinite(value) && value >= 0 ? value : null;
+}
+
+function normalizedTimestamp(value: number | undefined): string {
+  if (typeof value === 'number') {
+    const instant = new Date(value);
+    if (Number.isFinite(instant.getTime())) return instant.toISOString();
+  }
+  return new Date().toISOString();
+}
+
+async function requestNativePosition(
+  dependencies: CurrentLocationDependencies,
+  enableHighAccuracy: boolean,
+): Promise<CurrentLocationResult> {
+  try {
+    const position = await dependencies.getNativeCurrentPosition({
+      enableHighAccuracy,
+      timeout: enableHighAccuracy ? 12_000 : 10_000,
+      maximumAge: enableHighAccuracy ? 0 : 60_000,
+    });
+    return {
+      ok: true,
+      location: {
+        coordinates: createCoordinates(position.coords.latitude, position.coords.longitude),
+        source: enableHighAccuracy ? 'native-gps' : 'native-network-approximate',
+        accuracyMeters: normalizedAccuracy(position.coords.accuracy),
+        capturedAtIso: normalizedTimestamp(position.timestamp),
+      },
+    };
+  } catch (error) {
+    return { ok: false, reason: nativeFailureReason(error) };
+  }
+}
+
+async function requestBrowserPosition(
+  dependencies: CurrentLocationDependencies,
+  enableHighAccuracy: boolean,
+): Promise<CurrentLocationResult> {
+  return dependencies.requestBrowser({
+    enableHighAccuracy,
+    timeoutMilliseconds: enableHighAccuracy ? 12_000 : 10_000,
+    maximumAgeMilliseconds: enableHighAccuracy ? 0 : 60_000,
+  });
+}
+
 /**
- * Request one current location fix from the active platform. Native shells use
- * the first-party Capacitor geolocation plugin; browsers keep the existing
- * one-shot browser adapter. Only latitude/longitude cross this boundary.
+ * Request the best current foreground location from the active platform.
+ * SalahOS first asks the operating system for a precise fix, then falls back to
+ * an approximate/network-assisted fix when precision is unavailable. Only
+ * coordinates, horizontal accuracy and fix time are retained.
  */
 export async function requestCurrentLocation(
   dependencies: CurrentLocationDependencies = defaultDependencies,
 ): Promise<CurrentLocationResult> {
   if (!dependencies.isNativePlatform()) {
-    return dependencies.requestBrowser();
+    const precise = await requestBrowserPosition(dependencies, true);
+    if (precise.ok || terminalFailure(precise.reason)) return precise;
+    return requestBrowserPosition(dependencies, false);
   }
 
   try {
@@ -90,21 +157,11 @@ export async function requestCurrentLocation(
     if (!permissionGranted(permission)) {
       return { ok: false, reason: 'permission-denied' };
     }
-
-    const position = await dependencies.getNativeCurrentPosition({
-      enableHighAccuracy: false,
-      timeout: 10_000,
-      maximumAge: 300_000,
-    });
-
-    return {
-      ok: true,
-      location: {
-        coordinates: createCoordinates(position.coords.latitude, position.coords.longitude),
-        source: 'native',
-      },
-    };
   } catch (error) {
     return { ok: false, reason: nativeFailureReason(error) };
   }
+
+  const precise = await requestNativePosition(dependencies, true);
+  if (precise.ok || terminalFailure(precise.reason)) return precise;
+  return requestNativePosition(dependencies, false);
 }

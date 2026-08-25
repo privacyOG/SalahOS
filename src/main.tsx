@@ -1,10 +1,12 @@
-import { lazy, StrictMode, Suspense } from 'react';
+import { lazy, StrictMode, Suspense, useEffect, useState } from 'react';
 import { createRoot } from 'react-dom/client';
 
 import {
   flushApplicationStorage,
   initializeApplicationStorage,
 } from './platform/applicationStorage';
+import { installAutomaticLocationSync } from './platform/automaticLocationSync';
+import { LOCATION_CONTEXT_CHANGE_EVENT } from './platform/bestAvailableLocation';
 import { CongregationShell } from './ui/CongregationShell';
 import { MobilePrayerThemeSurface } from './ui/MobilePrayerThemeSurface';
 import { QiblaPermissionOnboarding } from './ui/QiblaPermissionOnboarding';
@@ -127,10 +129,24 @@ function CongregationRoute({ destination }: Readonly<{ destination: Congregation
 }
 
 function CongregationApplication() {
+  const [locationRevision, setLocationRevision] = useState(0);
+
+  useEffect(() => {
+    const locationChanged = () => {
+      setLocationRevision((current) => current + 1);
+    };
+    window.addEventListener(LOCATION_CONTEXT_CHANGE_EVENT, locationChanged);
+    const stopLocationSync = installAutomaticLocationSync();
+    return () => {
+      stopLocationSync();
+      window.removeEventListener(LOCATION_CONTEXT_CHANGE_EVENT, locationChanged);
+    };
+  }, []);
+
   return (
     <>
       <QiblaPermissionOnboarding />
-      <CongregationShell>
+      <CongregationShell key={locationRevision}>
         {(destination) => <CongregationRoute destination={destination} />}
       </CongregationShell>
     </>

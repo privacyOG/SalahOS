@@ -14,7 +14,7 @@
   display: inline-flex;
   align-items: baseline;
   gap: 0.65rem;
-  max-width: min(36vw, 28rem);
+  max-width: min(42vw, 36rem);
   margin: clamp(1rem, 2vw, 2rem);
   padding: 0.55rem 0.85rem;
   border: 1px solid color-mix(in srgb, currentColor 20%, transparent);
@@ -26,13 +26,20 @@
   pointer-events: none;
 }
 
-.prayer-board-weather strong {
+.prayer-board-weather__primary {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.55rem;
+  min-width: 0;
+}
+
+.prayer-board-weather__primary > strong {
   font: 700 clamp(1rem, 1.5vw, 1.65rem) / 1 var(--salah-font-display, inherit);
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
 }
 
-.prayer-board-weather span {
+.prayer-board-weather__primary > span {
   overflow: hidden;
   font-size: clamp(0.78rem, 1vw, 1.05rem);
   line-height: 1.15;
@@ -40,13 +47,21 @@
   white-space: nowrap;
 }
 
+.prayer-board-weather__primary > small,
+.prayer-board-weather__details,
+.prayer-board-weather__freshness {
+  display: none;
+}
+
 .mobile-prayer-theme-surface > .prayer-board-weather {
   z-index: 1;
   display: flex;
+  flex-direction: column;
+  align-items: stretch;
   width: calc(100% - 2 * var(--salah-space-4));
   max-width: 42rem;
   margin: 0 auto calc(var(--salah-space-6) + env(safe-area-inset-bottom));
-  padding: 0.75rem 1rem;
+  padding: 0.9rem 1rem;
   border-color: var(--mobile-theme-border);
   border-radius: var(--salah-radius-md);
   background: var(--mobile-theme-surface);
@@ -56,8 +71,61 @@
   pointer-events: auto;
 }
 
-.mobile-prayer-theme-surface > .prayer-board-weather span {
+.mobile-prayer-theme-surface > .prayer-board-weather[data-weather-state='stale'] {
+  border-style: dashed;
+}
+
+.mobile-prayer-theme-surface > .prayer-board-weather .prayer-board-weather__primary {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 0.45rem 0.75rem;
+}
+
+.mobile-prayer-theme-surface > .prayer-board-weather .prayer-board-weather__primary > span,
+.mobile-prayer-theme-surface > .prayer-board-weather .prayer-board-weather__primary > small,
+.mobile-prayer-theme-surface > .prayer-board-weather .prayer-board-weather__freshness {
   color: var(--mobile-theme-secondary);
+}
+
+.mobile-prayer-theme-surface > .prayer-board-weather .prayer-board-weather__primary > small {
+  display: inline;
+  white-space: nowrap;
+}
+
+.mobile-prayer-theme-surface > .prayer-board-weather .prayer-board-weather__details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
+  gap: 0.55rem;
+  width: 100%;
+}
+
+.prayer-board-weather__details > span {
+  display: grid;
+  gap: 0.15rem;
+  min-width: 0;
+  padding: 0.55rem 0.6rem;
+  border: 1px solid var(--mobile-theme-border);
+  border-radius: calc(var(--salah-radius-md) - 0.2rem);
+}
+
+.prayer-board-weather__details small {
+  overflow: hidden;
+  color: var(--mobile-theme-secondary);
+  font-size: 0.72rem;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.prayer-board-weather__details strong {
+  font-size: 0.86rem;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+
+.mobile-prayer-theme-surface > .prayer-board-weather .prayer-board-weather__freshness {
+  display: block;
+  font-size: 0.72rem;
 }
 
 @media (prefers-reduced-transparency: reduce) {
@@ -73,11 +141,23 @@
 
 @media (max-width: 720px) {
   .prayer-board-weather {
-    max-width: 52vw;
+    max-width: 58vw;
   }
 
   .mobile-prayer-theme-surface > .prayer-board-weather {
     width: calc(100% - 2 * var(--salah-space-3));
     max-width: none;
+  }
+
+  .mobile-prayer-theme-surface > .prayer-board-weather .prayer-board-weather__primary {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .mobile-prayer-theme-surface > .prayer-board-weather .prayer-board-weather__primary > small {
+    grid-column: 1 / -1;
+  }
+
+  .mobile-prayer-theme-surface > .prayer-board-weather .prayer-board-weather__details {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }

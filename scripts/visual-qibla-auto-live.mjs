@@ -210,12 +210,17 @@ try {
     await page.getByRole('button', { name: 'Enable location & compass' }).click();
     await dialog.waitFor({ state: 'detached' });
 
-    const onboardingState = await page.evaluate(() => ({
-      stored: localStorage.getItem('salahos.qibla-permission-onboarding'),
-      orientationPermissionRequests: globalThis.__salahosOrientationPermissionRequests,
-    }));
+    const onboardingState = await page.evaluate(() => {
+      const serialized = localStorage.getItem('salahos.qibla-permission-onboarding');
+      return {
+        stored: serialized === null ? null : JSON.parse(serialized),
+        orientationPermissionRequests: globalThis.__salahosOrientationPermissionRequests,
+      };
+    });
     assert(
-      onboardingState.stored === JSON.stringify({ version: 1, completed: true }),
+      onboardingState.stored?.version === 2 &&
+        onboardingState.stored.dismissed === true &&
+        onboardingState.stored.autoLocation === true,
       'First-run Qiblah permission completion was not persisted',
     );
     assert(
@@ -227,6 +232,12 @@ try {
     await qiblahNavigation.click();
     const finder = page.locator('.qibla-finder');
     await finder.waitFor({ state: 'visible' });
+    await page.waitForFunction(() => {
+      const element = document.querySelector('.qibla-finder');
+      const state = element?.getAttribute('data-compass-state');
+      return state === 'starting' || state === 'active';
+    });
+    await emitSydneyAlignedHeading(page);
     await page.waitForFunction(() => {
       const element = document.querySelector('.qibla-finder');
       return element?.getAttribute('data-location-state') === 'live';

@@ -4,15 +4,15 @@ Keep this tracker compact. Mark an item `[x]` only after implementation, tests/v
 
 ## Stage 1 — Unified location + permissions
 
-- [ ] Add one best-available location resolver for prayer times, Qiblah, weather and mosques.
-- [ ] Prefer live GPS/GNSS; support approximate, saved/mosque, network and manual fallbacks with source/accuracy/freshness.
-- [ ] Make permission onboarding benefit-first and handle denied/stale/offline/travel/timezone cases.
+- [x] Add one best-available location resolver for prayer times, Qiblah, weather and mosques.
+- [x] Prefer live GPS/GNSS; support approximate, saved/mosque, network and manual fallbacks with source/accuracy/freshness.
+- [x] Make permission onboarding benefit-first and handle denied/stale/offline/travel/timezone cases.
 
 ## Stage 2 — Automatic weather
 
-- [ ] Make weather automatically use current resolved location and network when available.
-- [ ] Add current conditions, feels-like, high/low, precipitation, humidity, wind, UV, sunrise/sunset and useful prayer context.
-- [ ] Add caching, freshness display, offline/stale fallback and provider-failure isolation from prayer calculations.
+- [x] Make weather automatically use current resolved location and network when available.
+- [x] Add current conditions, feels-like, high/low, precipitation, humidity, wind, UV, sunrise/sunset and useful prayer context.
+- [x] Add caching, freshness display, offline/stale fallback and provider-failure isolation from prayer calculations.
 
 ## Stage 3 — Privacy without feature friction
 
