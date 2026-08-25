@@ -2,11 +2,7 @@ import { createCoordinates } from '../domain/coordinates';
 import type { Coordinates } from '../domain/coordinates';
 
 export type BrowserLocationFailureReason =
-  | 'unsupported'
-  | 'permission-denied'
-  | 'unavailable'
-  | 'timeout'
-  | 'unknown';
+  'unsupported' | 'permission-denied' | 'unavailable' | 'timeout' | 'unknown';
 
 export type BrowserLocationSource = 'browser-gps' | 'browser-network-approximate';
 

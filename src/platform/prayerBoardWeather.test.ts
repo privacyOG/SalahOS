@@ -168,12 +168,7 @@ describe('prayer-board weather', () => {
     const fetcher = vi.fn<WeatherFetch>();
 
     await expect(
-      refreshPrayerBoardWeather(
-        storage,
-        fetcher,
-        new Date('2026-08-25T01:05:00.000Z'),
-        noLocation,
-      ),
+      refreshPrayerBoardWeather(storage, fetcher, new Date('2026-08-25T01:05:00.000Z'), noLocation),
     ).resolves.toBeNull();
     expect(fetcher).not.toHaveBeenCalled();
   });
@@ -191,7 +186,9 @@ describe('prayer-board weather', () => {
     const resolver = vi.fn<WeatherLocationResolver>();
     const fetcher = vi.fn<WeatherFetch>();
 
-    await expect(refreshPrayerBoardWeather(storage, fetcher, new Date(), resolver)).resolves.toBeNull();
+    await expect(
+      refreshPrayerBoardWeather(storage, fetcher, new Date(), resolver),
+    ).resolves.toBeNull();
     expect(resolver).not.toHaveBeenCalled();
     expect(fetcher).not.toHaveBeenCalled();
   });

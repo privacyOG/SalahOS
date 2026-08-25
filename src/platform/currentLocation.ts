@@ -13,9 +13,7 @@ import {
 
 export type LocationFailureReason = BrowserLocationFailureReason;
 export type CurrentLocationSource =
-  | BrowserLocationSource
-  | 'native-gps'
-  | 'native-network-approximate';
+  BrowserLocationSource | 'native-gps' | 'native-network-approximate';
 
 export interface CurrentLocationFix {
   readonly coordinates: Coordinates;

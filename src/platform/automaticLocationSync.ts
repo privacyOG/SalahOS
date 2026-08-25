@@ -20,7 +20,9 @@ function savedFallback(): LocationFallback | undefined {
     : {
         coordinates: settings.location.coordinates,
         source: 'saved',
-        ...(settings.location.timeZone === undefined ? {} : { timeZone: settings.location.timeZone }),
+        ...(settings.location.timeZone === undefined
+          ? {}
+          : { timeZone: settings.location.timeZone }),
       };
 }
 

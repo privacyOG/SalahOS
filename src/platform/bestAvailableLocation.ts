@@ -21,11 +21,7 @@ const DEFAULT_CACHE_MAX_AGE_MS = 6 * 60 * 60 * 1000;
 const SETTINGS_MOVE_THRESHOLD_METERS = 250;
 
 export type BestAvailableLocationSource =
-  | CurrentLocationFix['source']
-  | 'recent-cache'
-  | 'mosque'
-  | 'saved'
-  | 'manual';
+  CurrentLocationFix['source'] | 'recent-cache' | 'mosque' | 'saved' | 'manual';
 
 export type LocationFreshness = 'live' | 'recent-cache' | 'fallback';
 
@@ -228,7 +224,8 @@ export function persistBestAvailableLocation(
   const current = settings.location;
   const moved =
     current === null ||
-    locationDistanceMeters(current.coordinates, location.coordinates) >= SETTINGS_MOVE_THRESHOLD_METERS;
+    locationDistanceMeters(current.coordinates, location.coordinates) >=
+      SETTINGS_MOVE_THRESHOLD_METERS;
   const timeZoneChanged = current?.timeZone !== location.timeZone;
   if (!moved && !timeZoneChanged) return false;
 
