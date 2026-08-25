@@ -25,10 +25,6 @@ export const defaultQuranReadingPreferences: QuranReadingPreferences = Object.fr
   lastReadAyahId: null,
 });
 
-const arabicFonts = new Set<QuranArabicFont>(['naskh', 'traditional', 'system']);
-const fontScales = new Set<QuranFontScale>(['compact', 'comfortable', 'large', 'xlarge']);
-const translationModes = new Set<QuranTranslationMode>(['pickthall-1930', 'none']);
-
 function stringArray(value: unknown): readonly string[] {
   if (!Array.isArray(value)) return [];
   return Object.freeze([
@@ -36,21 +32,33 @@ function stringArray(value: unknown): readonly string[] {
   ]);
 }
 
+function translationMode(value: unknown): QuranTranslationMode {
+  return value === 'pickthall-1930' || value === 'none'
+    ? value
+    : defaultQuranReadingPreferences.translationMode;
+}
+
+function arabicFont(value: unknown): QuranArabicFont {
+  return value === 'naskh' || value === 'traditional' || value === 'system'
+    ? value
+    : defaultQuranReadingPreferences.arabicFont;
+}
+
+function fontScale(value: unknown): QuranFontScale {
+  return value === 'compact' || value === 'comfortable' || value === 'large' || value === 'xlarge'
+    ? value
+    : defaultQuranReadingPreferences.fontScale;
+}
+
 export function parseQuranReadingPreferences(value: unknown): QuranReadingPreferences {
   if (!value || typeof value !== 'object') return defaultQuranReadingPreferences;
 
-  const candidate = value as Partial<QuranReadingPreferences>;
+  const candidate = value as Record<string, unknown>;
   return Object.freeze({
     version: 1,
-    translationMode: translationModes.has(candidate.translationMode!)
-      ? candidate.translationMode!
-      : defaultQuranReadingPreferences.translationMode,
-    arabicFont: arabicFonts.has(candidate.arabicFont!)
-      ? candidate.arabicFont!
-      : defaultQuranReadingPreferences.arabicFont,
-    fontScale: fontScales.has(candidate.fontScale!)
-      ? candidate.fontScale!
-      : defaultQuranReadingPreferences.fontScale,
+    translationMode: translationMode(candidate.translationMode),
+    arabicFont: arabicFont(candidate.arabicFont),
+    fontScale: fontScale(candidate.fontScale),
     bookmarkedAyahIds: stringArray(candidate.bookmarkedAyahIds),
     lastReadAyahId:
       typeof candidate.lastReadAyahId === 'string' && candidate.lastReadAyahId.length > 0
