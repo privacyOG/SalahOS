@@ -1,0 +1,101 @@
+name: Stage 55 lint fix
+
+on:
+  push:
+    branches:
+      - stage-55/v1.5-quran-expansion
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: stage-55/v1.5-quran-expansion
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Apply runtime-safe clipboard fallback
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          old = """  if (navigator.clipboard?.writeText) {
+            await navigator.clipboard.writeText(text);
+            return true;
+          }
+          return false;"""
+          new = """  try {
+            await navigator.clipboard.writeText(text);
+            return true;
+          } catch {
+            return false;
+          }"""
+
+          for name in ('src/ui/KnowledgeScreen.tsx', 'src/ui/QuranOfflineReader.tsx'):
+              path = Path(name)
+              text = path.read_text()
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{name}: expected one clipboard fallback, found {count}')
+              path.write_text(text.replace(old, new))
+          PY
+      - name: Format and lint changed screens
+        run: |
+          npx prettier --write src/ui/KnowledgeScreen.tsx src/ui/QuranOfflineReader.tsx
+          npx eslint src/ui/KnowledgeScreen.tsx src/ui/QuranOfflineReader.tsx
+      - name: Create clean server-side commit object
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          BASE_TREE="$(gh api "repos/${GITHUB_REPOSITORY}/git/commits/${GITHUB_SHA}" --jq .tree.sha)"
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+
+          entries = []
+          for name in ('src/ui/KnowledgeScreen.tsx', 'src/ui/QuranOfflineReader.tsx'):
+              entries.append({
+                  'path': name,
+                  'mode': '100644',
+                  'type': 'blob',
+                  'content': Path(name).read_text(),
+              })
+          entries.append({
+              'path': '.github/workflows/stage55-lint-fix.yml',
+              'mode': '100644',
+              'type': 'blob',
+              'sha': None,
+          })
+          Path('/tmp/tree.json').write_text(json.dumps({'base_tree': '${BASE_TREE}', 'tree': entries}))
+          PY
+          python3 - <<PY
+          import json
+          from pathlib import Path
+          p = json.loads(Path('/tmp/tree.json').read_text())
+          p['base_tree'] = '${BASE_TREE}'
+          Path('/tmp/tree.json').write_text(json.dumps(p))
+          PY
+          TREE_SHA="$(gh api "repos/${GITHUB_REPOSITORY}/git/trees" -X POST --input /tmp/tree.json --jq .sha)"
+          python3 - <<PY
+          import json
+          from pathlib import Path
+          Path('/tmp/commit.json').write_text(json.dumps({
+              'message': 'Stage 55: make share fallback runtime-safe',
+              'tree': '${TREE_SHA}',
+              'parents': ['${GITHUB_SHA}'],
+          }))
+          PY
+          COMMIT_SHA="$(gh api "repos/${GITHUB_REPOSITORY}/git/commits" -X POST --input /tmp/commit.json --jq .sha)"
+          echo "STAGED_COMMIT_SHA=${COMMIT_SHA}"
+          echo "${COMMIT_SHA}" > staged-commit.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stage55-lint-fix-commit
+          path: staged-commit.txt
