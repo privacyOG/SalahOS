@@ -8,7 +8,7 @@ on:
       - .github/workflows/stage55-format-export.yml
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   format-export:
@@ -18,6 +18,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: stage-55/v1.5-quran-expansion
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -43,21 +44,11 @@ jobs:
             src/quran-offline-reader.css \
             src/main.tsx
 
-      - name: Export formatted files
-        uses: actions/upload-artifact@v4
-        with:
-          name: stage55-formatted-files
-          if-no-files-found: error
-          retention-days: 3
-          path: |
-            scripts/prepare-quran-offline-pack.mjs
-            scripts/visual-quran-offline-reader.mjs
-            src/domain/islamicKnowledge.test.ts
-            src/domain/islamicKnowledgeGovernance.ts
-            src/domain/quranOfflineLibrary.ts
-            src/platform/quranReadingPreferences.ts
-            src/ui/KnowledgeScreen.tsx
-            src/ui/QuranOfflineReader.tsx
-            src/ui/KnowledgeExperience.tsx
-            src/quran-offline-reader.css
-            src/main.tsx
+      - name: Publish clean formatter commit to staging ref
+        run: |
+          rm .github/workflows/stage55-format-export.yml
+          git config user.name "privacyOG"
+          git config user.email "kriptiik@proton.me"
+          git add -A
+          git commit -m "Stage 55: apply exact repository formatting"
+          git push --force origin HEAD:formatter/stage55-output
