@@ -162,6 +162,55 @@ jobs:
           PY
           bash /tmp/stage57-apply.sh
 
+      - name: Fix Stage 57 validation issues
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          today = Path('src/ui/TodayScreen.tsx')
+          text = today.read_text()
+          old = """  const locationAccuracyLabel =
+            recentLocation?.accuracyMeters === null || recentLocation?.accuracyMeters === undefined
+              ? null
+              : recentLocation.accuracyMeters < 1_000
+                ? `±${String(Math.round(recentLocation.accuracyMeters))} m`
+                : `±${(recentLocation.accuracyMeters / 1_000).toFixed(1)} km`;
+          """
+          new = """  const locationAccuracyMeters =
+            recentLocation === null ? null : recentLocation.accuracyMeters;
+          const locationAccuracyLabel =
+            locationAccuracyMeters === null
+              ? null
+              : locationAccuracyMeters < 1_000
+                ? `±${String(Math.round(locationAccuracyMeters))} m`
+                : `±${(locationAccuracyMeters / 1_000).toFixed(1)} km`;
+          """
+          if old not in text:
+              raise SystemExit('Location accuracy validation-fix marker missing')
+          today.write_text(text.replace(old, new, 1))
+
+          visual = Path('scripts/visual-product-ux-stage8.mjs')
+          text = visual.read_text()
+          old = """    if ((await overflowMenu.getByRole('menuitem').count()) !== 2) {
+              throw new Error('Mobile More menu must expose exactly Community and Settings');
+            }
+
+            const hierarchy = await page.evaluate(() => {
+          """
+          new = """    if ((await overflowMenu.getByRole('menuitem').count()) !== 2) {
+              throw new Error('Mobile More menu must expose exactly Community and Settings');
+            }
+            await page.locator('.congregation-nav-item--more').click();
+
+            const hierarchy = await page.evaluate(() => {
+          """
+          if old not in text:
+              raise SystemExit('Mobile More acceptance-state marker missing')
+          visual.write_text(text.replace(old, new, 1))
+          PY
+
       - name: Format Stage 57 files
         run: |
           npx prettier --write \
