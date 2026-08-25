@@ -41,6 +41,7 @@ import './qibla-permission-onboarding.css';
 import './mosques-community-v2.css';
 import './shared-mosque-directory.css';
 import './islamic-knowledge.css';
+import './quran-offline-reader.css';
 import './accessibility-rtl-refinement.css';
 
 const AdministrationApplication = lazy(async () => ({
@@ -55,8 +56,8 @@ const MosquesRoute = lazy(async () => ({
 const QiblaFinder = lazy(async () => ({
   default: (await import('./ui/QiblaFinder')).QiblaFinder,
 }));
-const KnowledgeScreen = lazy(async () => ({
-  default: (await import('./ui/KnowledgeScreen')).KnowledgeScreen,
+const KnowledgeExperience = lazy(async () => ({
+  default: (await import('./ui/KnowledgeExperience')).KnowledgeExperience,
 }));
 const CommunityScreen = lazy(async () => ({
   default: (await import('./ui/CommunityScreen')).CommunityScreen,
@@ -96,7 +97,7 @@ function CongregationRoute({ destination }: Readonly<{ destination: Congregation
       return (
         <div className="congregation-route congregation-route--knowledge">
           <Suspense fallback={<LoadingSurface />}>
-            <KnowledgeScreen />
+            <KnowledgeExperience />
           </Suspense>
         </div>
       );
