@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 const mainSource = readFileSync(new URL('../main.tsx', import.meta.url), 'utf8');
+const mosquesRouteSource = readFileSync(new URL('./MosquesRoute.tsx', import.meta.url), 'utf8');
 const mosquesSource = readFileSync(new URL('./MosquesScreen.tsx', import.meta.url), 'utf8');
 const communitySource = readFileSync(new URL('./CommunityScreen.tsx', import.meta.url), 'utf8');
 
@@ -21,10 +22,12 @@ describe('Congregation destination ownership', () => {
       'function CongregationApplication',
     );
 
-    expect(mainSource).toContain("import { MosquesScreen } from './ui/MosquesScreen';");
-    expect(mainSource).toContain("import { CommunityScreen } from './ui/CommunityScreen';");
+    expect(mainSource).toContain("import('./ui/MosquesRoute')");
+    expect(mainSource).toContain("import('./ui/CommunityScreen')");
+    expect(mosquesRouteSource).toContain("import { MosquesScreen } from './MosquesScreen';");
+    expect(mosquesRouteSource).toContain('<MosquesScreen />');
     expect(congregationRoutes).toContain("case 'mosques'");
-    expect(congregationRoutes).toContain('<MosquesScreen />');
+    expect(congregationRoutes).toContain('<MosquesRoute />');
     expect(congregationRoutes).toContain("case 'community'");
     expect(congregationRoutes).toContain('<CommunityScreen />');
     expect(congregationRoutes).not.toContain('<MosqueProfilesPanel />');

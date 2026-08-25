@@ -1,6 +1,6 @@
 import type { MosqueTimetable } from '../domain/mosqueTimetable';
 import { validateMosqueTimetable } from '../domain/mosqueTimetable';
-import { parseMosqueTimetableJson } from '../domain/timetableImport';
+import { parseMosqueTimetablePayload } from '../domain/mosqueTimetablePayload';
 import type { KeyValueStorage } from './settingsStorage';
 
 export const MOSQUE_LIBRARY_STORAGE_KEY = 'salahos.mosqueLibrary';
@@ -33,7 +33,7 @@ function parseEntry(value: unknown): MosqueLibraryEntry {
     throw new TypeError('Mosque library entry must contain an id and timetable');
   }
 
-  const timetable = parseMosqueTimetableJson(JSON.stringify(value.timetable));
+  const timetable = parseMosqueTimetablePayload(value.timetable);
   const id = mosqueLibraryId(timetable.mosqueName);
   if (value.id !== id) {
     throw new RangeError('Mosque library entry id does not match the timetable name');
