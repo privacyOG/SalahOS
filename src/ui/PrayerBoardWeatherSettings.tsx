@@ -24,7 +24,7 @@ interface Copy {
   readonly longitude: string;
   readonly locationLabel: string;
   readonly provider: string;
-  readonly privacy: string;
+  readonly locationUse: string;
   readonly save: string;
   readonly saved: string;
   readonly invalid: string;
@@ -32,68 +32,68 @@ interface Copy {
 
 const copy: Readonly<Record<Locale, Copy>> = {
   en: {
-    title: 'Optional weather',
+    title: 'Local weather',
     description:
-      'Weather stays off unless a prayer-board surface enables the Weather module and this fixed-location feed is enabled.',
-    enabled: 'Enable fixed-location weather feed',
+      'Weather follows your best available SalahOS location automatically. Saved or manual coordinates are used only when live positioning is unavailable.',
+    enabled: 'Enable local weather',
     phoneHomeEnabled: 'Show weather on Phone / Home',
-    latitude: 'Fixed latitude',
-    longitude: 'Fixed longitude',
-    locationLabel: 'Location label',
-    provider: 'Provider: Open-Meteo current weather',
-    privacy:
-      'SalahOS never reads or transmits device GPS for weather. When enabled, only the fixed coordinates entered here are sent to Open-Meteo. The provider also receives normal request metadata such as the device public IP address.',
-    save: 'Save weather configuration',
-    saved: 'Weather configuration saved.',
-    invalid: 'Enter a valid latitude (-90 to 90) and longitude (-180 to 180).',
+    latitude: 'Manual fallback latitude',
+    longitude: 'Manual fallback longitude',
+    locationLabel: 'Manual fallback label',
+    provider: 'Provider: Open-Meteo',
+    locationUse:
+      'When weather is enabled, SalahOS sends only the resolved coordinates needed for the forecast to Open-Meteo. Prayer calculations continue normally if weather or the network is unavailable.',
+    save: 'Save weather settings',
+    saved: 'Weather settings saved.',
+    invalid: 'Enter both fallback coordinates, or leave both blank.',
   },
   ar: {
-    title: 'الطقس الاختياري',
+    title: 'الطقس المحلي',
     description:
-      'يبقى الطقس متوقفاً ما لم تُفعّل وحدة الطقس على واجهة مواقيت الصلاة ويُفعّل موجز الموقع الثابت هنا.',
-    enabled: 'تفعيل موجز الطقس لموقع ثابت',
+      'يتبع الطقس أفضل موقع متاح في SalahOS تلقائياً. تُستخدم الإحداثيات المحفوظة أو اليدوية فقط عند تعذر تحديد الموقع المباشر.',
+    enabled: 'تفعيل الطقس المحلي',
     phoneHomeEnabled: 'إظهار الطقس على الهاتف / الرئيسية',
-    latitude: 'خط العرض الثابت',
-    longitude: 'خط الطول الثابت',
-    locationLabel: 'اسم الموقع',
-    provider: 'المزوّد: Open-Meteo للطقس الحالي',
-    privacy:
-      'لا يقرأ SalahOS موقع GPS للجهاز ولا يرسله من أجل الطقس. عند التفعيل، تُرسل فقط الإحداثيات الثابتة المُدخلة هنا إلى Open-Meteo، كما يستقبل المزوّد بيانات الطلب المعتادة مثل عنوان IP العام.',
+    latitude: 'خط عرض احتياطي يدوي',
+    longitude: 'خط طول احتياطي يدوي',
+    locationLabel: 'اسم الموقع الاحتياطي',
+    provider: 'المزوّد: Open-Meteo',
+    locationUse:
+      'عند تفعيل الطقس يرسل SalahOS فقط الإحداثيات اللازمة للتوقع إلى Open-Meteo. تستمر حسابات الصلاة بصورة طبيعية إذا تعذر الطقس أو الاتصال بالشبكة.',
     save: 'حفظ إعدادات الطقس',
     saved: 'تم حفظ إعدادات الطقس.',
-    invalid: 'أدخل خط عرض صالحاً من -90 إلى 90 وخط طول من -180 إلى 180.',
+    invalid: 'أدخل الإحداثيين الاحتياطيين معاً أو اتركهما فارغين.',
   },
   tr: {
-    title: 'İsteğe bağlı hava durumu',
+    title: 'Yerel hava durumu',
     description:
-      'Hava durumu yalnızca bir namaz panosu Hava modülünü ve buradaki sabit konum beslemesini birlikte etkinleştirdiğinde çalışır.',
-    enabled: 'Sabit konum hava durumu beslemesini etkinleştir',
+      'Hava durumu otomatik olarak SalahOS içindeki en iyi kullanılabilir konumunuzu izler. Kayıtlı veya elle girilen koordinatlar yalnızca canlı konum kullanılamadığında devreye girer.',
+    enabled: 'Yerel hava durumunu etkinleştir',
     phoneHomeEnabled: 'Telefon / Ana Sayfada hava durumunu göster',
-    latitude: 'Sabit enlem',
-    longitude: 'Sabit boylam',
-    locationLabel: 'Konum etiketi',
-    provider: 'Sağlayıcı: Open-Meteo güncel hava durumu',
-    privacy:
-      'SalahOS hava durumu için cihaz GPS konumunu okumaz veya göndermez. Etkinleştirildiğinde yalnızca burada girilen sabit koordinatlar Open-Meteo’ya gönderilir; sağlayıcı ayrıca genel IP gibi olağan istek metadatasını görür.',
+    latitude: 'Elle yedek enlem',
+    longitude: 'Elle yedek boylam',
+    locationLabel: 'Elle yedek konum etiketi',
+    provider: 'Sağlayıcı: Open-Meteo',
+    locationUse:
+      'Hava durumu etkinken SalahOS yalnızca tahmin için gereken çözülmüş koordinatları Open-Meteo’ya gönderir. Hava durumu veya ağ kullanılamazsa namaz hesaplamaları normal şekilde devam eder.',
     save: 'Hava durumu ayarlarını kaydet',
     saved: 'Hava durumu ayarları kaydedildi.',
-    invalid: 'Geçerli enlem (-90–90) ve boylam (-180–180) girin.',
+    invalid: 'Her iki yedek koordinatı da girin veya ikisini de boş bırakın.',
   },
   id: {
-    title: 'Cuaca opsional',
+    title: 'Cuaca lokal',
     description:
-      'Cuaca hanya aktif saat permukaan papan salat mengaktifkan modul Cuaca dan feed lokasi tetap ini juga diaktifkan.',
-    enabled: 'Aktifkan feed cuaca lokasi tetap',
+      'Cuaca otomatis mengikuti lokasi SalahOS terbaik yang tersedia. Koordinat tersimpan atau manual hanya digunakan saat posisi langsung tidak tersedia.',
+    enabled: 'Aktifkan cuaca lokal',
     phoneHomeEnabled: 'Tampilkan cuaca di Ponsel / Beranda',
-    latitude: 'Lintang tetap',
-    longitude: 'Bujur tetap',
-    locationLabel: 'Label lokasi',
-    provider: 'Penyedia: cuaca terkini Open-Meteo',
-    privacy:
-      'SalahOS tidak membaca atau mengirim GPS perangkat untuk cuaca. Saat diaktifkan, hanya koordinat tetap yang dimasukkan di sini yang dikirim ke Open-Meteo; penyedia juga menerima metadata permintaan biasa seperti alamat IP publik.',
-    save: 'Simpan konfigurasi cuaca',
-    saved: 'Konfigurasi cuaca disimpan.',
-    invalid: 'Masukkan lintang valid (-90 sampai 90) dan bujur (-180 sampai 180).',
+    latitude: 'Lintang cadangan manual',
+    longitude: 'Bujur cadangan manual',
+    locationLabel: 'Label lokasi cadangan',
+    provider: 'Penyedia: Open-Meteo',
+    locationUse:
+      'Saat cuaca aktif, SalahOS hanya mengirim koordinat yang diperlukan untuk prakiraan ke Open-Meteo. Perhitungan salat tetap berjalan normal jika cuaca atau jaringan tidak tersedia.',
+    save: 'Simpan pengaturan cuaca',
+    saved: 'Pengaturan cuaca disimpan.',
+    invalid: 'Masukkan kedua koordinat cadangan atau biarkan keduanya kosong.',
   },
 };
 
@@ -120,8 +120,10 @@ export function PrayerBoardWeatherSettings() {
   const [status, setStatus] = useState<string | null>(null);
 
   const save = () => {
-    const latitudeValue = latitude.trim() === '' ? null : Number(latitude);
-    const longitudeValue = longitude.trim() === '' ? null : Number(longitude);
+    const latitudeEmpty = latitude.trim() === '';
+    const longitudeEmpty = longitude.trim() === '';
+    const latitudeValue = latitudeEmpty ? null : Number(latitude);
+    const longitudeValue = longitudeEmpty ? null : Number(longitude);
     const coordinatesValid =
       latitudeValue !== null &&
       longitudeValue !== null &&
@@ -131,7 +133,8 @@ export function PrayerBoardWeatherSettings() {
       latitudeValue <= 90 &&
       longitudeValue >= -180 &&
       longitudeValue <= 180;
-    if (enabled && !coordinatesValid) {
+    const coordinatesBlank = latitudeEmpty && longitudeEmpty;
+    if (!coordinatesBlank && !coordinatesValid) {
       setStatus(text.invalid);
       return;
     }
@@ -142,7 +145,7 @@ export function PrayerBoardWeatherSettings() {
       provider: 'open-meteo',
       latitude: coordinatesValid ? latitudeValue : null,
       longitude: coordinatesValid ? longitudeValue : null,
-      locationLabel,
+      locationLabel: coordinatesValid ? locationLabel : '',
     });
 
     const mobileConfig =
@@ -238,7 +241,7 @@ export function PrayerBoardWeatherSettings() {
             />
           </label>
         </div>
-        <p className="prayer-board-config-panel__help">{text.privacy}</p>
+        <p className="prayer-board-config-panel__help">{text.locationUse}</p>
         <div className="prayer-board-config-actions">
           <button type="button" className="primary" onClick={save}>
             {text.save}
