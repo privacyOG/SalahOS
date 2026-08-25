@@ -31,9 +31,9 @@ const translationModes = new Set<QuranTranslationMode>(['pickthall-1930', 'none'
 
 function stringArray(value: unknown): readonly string[] {
   if (!Array.isArray(value)) return [];
-  return Object.freeze(
-    [...new Set(value.filter((item): item is string => typeof item === 'string' && item.length > 0))],
-  );
+  return Object.freeze([
+    ...new Set(value.filter((item): item is string => typeof item === 'string' && item.length > 0)),
+  ]);
 }
 
 export function parseQuranReadingPreferences(value: unknown): QuranReadingPreferences {
@@ -70,7 +70,8 @@ export function loadQuranReadingPreferences(storage: KeyValueStorage): QuranRead
 }
 
 function announceQuranReadingPreferencesChange(): void {
-  if (typeof globalThis.dispatchEvent !== 'function' || typeof globalThis.Event !== 'function') return;
+  if (typeof globalThis.dispatchEvent !== 'function' || typeof globalThis.Event !== 'function')
+    return;
   globalThis.dispatchEvent(new Event(QURAN_READING_PREFERENCES_CHANGE_EVENT));
 }
 
