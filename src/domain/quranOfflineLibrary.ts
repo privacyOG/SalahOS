@@ -74,7 +74,10 @@ export function validateQuranOfflinePack(value: unknown): QuranOfflinePack {
   assertPack(pack.counts?.surahs === 114, 'Offline Qur’an pack must contain 114 surahs.');
   assertPack(pack.counts.ayahs === 6236, 'Offline Qur’an pack must contain 6,236 ayat.');
   const surahs = pack.surahs;
-  assertPack(surahs !== undefined && surahs.length === 114, 'Offline Qur’an surah data is incomplete.');
+  assertPack(
+    surahs !== undefined && surahs.length === 114,
+    'Offline Qur’an surah data is incomplete.',
+  );
 
   let ayahCount = 0;
   const verseKeys = new Set<string>();
