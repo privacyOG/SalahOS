@@ -14,6 +14,9 @@ managed-service/.state/
 # Local public API deployment snapshot
 local-api/public-data.json
 
+# Generated offline Qur'an pack is recreated from pinned, hash-verified sources
+public/data/quran/quran-offline-pack.json
+
 # Private keys, certificates and signing material
 *.key
 *.pem
