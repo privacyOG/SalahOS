@@ -47,11 +47,12 @@ jobs:
               raise SystemExit('Unable to extract Stage 57 transformation from builder v1')
 
           body = textwrap.dedent(match.group('body'))
-          brittle = re.compile(
+
+          brittle_appearance = re.compile(
               r"appearance_block = \"\"\".*?text = text\.replace\(appearance_block, '', 1\)\n",
               flags=re.S,
           )
-          robust = """text, appearance_count = re.subn(
+          robust_appearance = """text, appearance_count = re.subn(
               r\"\\n\\s*\\{category === 'appearance' && \\(\\n.*?\\n\\s*\\)\\}\\n\",
               \"\\n\",
               text,
@@ -61,9 +62,30 @@ jobs:
           if appearance_count != 1:
               raise SystemExit(f'Appearance block replacement count={appearance_count}')
           """
-          body, count = brittle.subn(lambda _: robust, body, count=1)
+          body, count = brittle_appearance.subn(lambda _: robust_appearance, body, count=1)
           if count != 1:
               raise SystemExit('Unable to harden Appearance block transformation')
+
+          brittle_display = re.compile(
+              r"display_marker = \"\"\".*?text = text\.replace\(display_marker, display_replacement, 1\)\n",
+              flags=re.S,
+          )
+          robust_display = """display_pattern = re.compile(
+              r\"(\\{category === 'display' && \\(\\s*<section\\s+className=\\\"settings-focus-panel settings-display-entry\\\"\\s+aria-label=\\{copy\\.displayTitle\\}\\s*>\\s*)(<MobilePrayerThemeSettings />)\",
+              flags=re.S,
+          )
+          display_preferences = \"\"\"<div className=\\\"settings-display-preferences\\\">\n    <h2>{copy.appearanceTitle}</h2>\n    <AppearanceSettingsForm settings={settings} updateSettings={updateSettings} />\n  </div>\n  \"\"\"
+          text, display_count = display_pattern.subn(
+              lambda match: match.group(1) + display_preferences + match.group(2),
+              text,
+              count=1,
+          )
+          if display_count != 1:
+              raise SystemExit(f'Display block replacement count={display_count}')
+          """
+          body, display_patch_count = brittle_display.subn(lambda _: robust_display, body, count=1)
+          if display_patch_count != 1:
+              raise SystemExit('Unable to harden Display block transformation')
 
           Path('/tmp/stage57-apply.sh').write_text(body)
           PY
