@@ -4,6 +4,36 @@ All notable SalahOS changes are recorded here.
 
 ## Unreleased
 
+## 1.4.0 — 2026-08-25
+
+### Mobile, accessibility and Qiblah
+
+- Harden phone layouts at 360×780 and 390×844 so prayer rows and trailing content remain reachable above navigation and safe areas, with improved contrast, RTL and scalable-text acceptance.
+- Add automatic best-available OS location and true-heading acquisition when Qiblah opens, while preserving saved/manual fallback and first-run permission education.
+- Add manual and poor-accuracy-triggered compass recalibration with guided reassessment, denied-permission handling and unsupported-device fallback.
+- Make Google Maps the primary interactive Qiblah provider with Map, Satellite and Hybrid modes, user/Kaaba markers, geodesic direction styling, click-to-pin fallback and provider-error recovery.
+
+### Mosques, Adhan and Islamic Knowledge
+
+- Add a reproducibly generated, bundled offline-first Australian mosque catalogue with OpenStreetMap/ODbL provenance, nearby ordering, search, selection and deduplication.
+- Add shared/community mosque directory models and flows for text/geographical lookup, submissions, duplicate detection, moderation/edit suggestions, verification/claim state and offline cache resilience.
+- Add a rights-verified packaged Adhan audio library with default/per-prayer selection, preview, volume and notification-only controls while keeping private local uploads device-local.
+- Add the Islamic Knowledge destination with offline-first Qur'an, Hadith and Q&A starter modules, local search/filtering, explicit source/reference metadata, Hadith grading authority and scholar/juristic attribution.
+
+### Performance and verification
+
+- Remove the timetable-import static edge and split Admin, smart-display, Mosques, Qiblah, Knowledge, Community and Settings behind route/surface-level lazy loading while keeping Today eager.
+- Add a permanent bundle architecture budget; the validated v1.4 baseline emits 21 JavaScript chunks with a 469,196-byte largest chunk and 898,871 total JavaScript bytes.
+- Add deterministic golden screenshot diffing, automated axe/WCAG/RTL/container-overflow acceptance and Chromium, Firefox and WebKit smoke journeys.
+- Add locked V8 core coverage thresholds and preserve exact-head Quality, Visual, Android emulator lifecycle and fresh iPhone/iPad Simulator acceptance as release gates.
+
+### Release packaging
+
+- Synchronise npm, package-lock, Android and iOS marketing versions at 1.4.0 and advance native build numbers to 6.
+- Publish the persistently signed Android APK and AAB together with the Web/PWA ZIP, Raspberry Pi kiosk bundle and portable SHA-256 manifest from the exact current `main` revision.
+- Preserve fail-closed signing, version/build parity, archive-integrity and exact-final-file-set release preflights.
+- Keep consumer iOS/iPadOS `.ipa` publication gated on Apple distribution signing/provisioning; Simulator acceptance remains test evidence rather than a consumer installer.
+
 ## 1.3.0 — 2026-08-23
 
 ### UI/UX v2 completion
