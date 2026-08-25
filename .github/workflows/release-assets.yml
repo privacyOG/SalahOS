@@ -1,22 +1,105 @@
-name: Prepare v1.4.0 Release Metadata
+name: Release Assets
 
 on:
   push:
     branches:
-      - 'release/v1.4.0'
+      - 'release/v*'
+    tags:
+      - 'v*'
+  workflow_dispatch:
+    inputs:
+      build_android:
+        description: Build the signed Android release APK and AAB
+        required: false
+        default: false
+        type: boolean
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  prepare:
+  preflight:
+    name: Exact-main release preflight
     runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    outputs:
+      version: ${{ steps.version.outputs.version }}
     steps:
-      - name: Checkout release branch
+      - name: Checkout candidate
         uses: actions/checkout@v4
         with:
-          ref: release/v1.4.0
           fetch-depth: 0
+
+      - name: Require exact current main commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main --no-tags
+          HEAD_SHA="$(git rev-parse HEAD)"
+          MAIN_SHA="$(git rev-parse origin/main)"
+          [[ "$HEAD_SHA" == "$MAIN_SHA" ]] || {
+            echo "Release candidate ${HEAD_SHA} is not exact current main ${MAIN_SHA}" >&2
+            exit 1
+          }
+          if [[ "${GITHUB_REF_TYPE:-}" == "tag" ]]; then
+            TAG_SHA="$(git rev-list -n 1 "$GITHUB_REF_NAME")"
+            [[ "$TAG_SHA" == "$HEAD_SHA" ]] || {
+              echo "Tag ${GITHUB_REF_NAME} does not resolve to checked-out commit ${HEAD_SHA}" >&2
+              exit 1
+            }
+          fi
+
+      - name: Resolve and verify release version
+        id: version
+        shell: bash
+        run: |
+          set -euo pipefail
+          PACKAGE_VERSION="$(node -p "require('./package.json').version")"
+          LOCK_VERSION="$(node -p "require('./package-lock.json').version")"
+          LOCK_ROOT_VERSION="$(node -p "require('./package-lock.json').packages[''].version")"
+          ANDROID_VERSION="$(sed -n 's/^[[:space:]]*versionName[[:space:]]*"\([^"]*\)".*/\1/p' android/app/build.gradle | head -1)"
+          ANDROID_VERSION_CODE="$(sed -n 's/^[[:space:]]*versionCode[[:space:]]*\([0-9][0-9]*\).*/\1/p' android/app/build.gradle | head -1)"
+          IOS_VERSION="$(sed -n 's/^[[:space:]]*MARKETING_VERSION = \([^;]*\);/\1/p' ios/App/App.xcodeproj/project.pbxproj | sort -u)"
+          IOS_BUILD_NUMBER="$(sed -n 's/^[[:space:]]*CURRENT_PROJECT_VERSION = \([^;]*\);/\1/p' ios/App/App.xcodeproj/project.pbxproj | sort -u)"
+          [[ -n "$PACKAGE_VERSION" && "$ANDROID_VERSION" == "$PACKAGE_VERSION" ]] || {
+            echo "Package version ${PACKAGE_VERSION} and Android version ${ANDROID_VERSION} do not match" >&2
+            exit 1
+          }
+          [[ "$IOS_VERSION" == "$PACKAGE_VERSION" ]] || {
+            echo "Package version ${PACKAGE_VERSION} and iOS marketing version ${IOS_VERSION} do not match" >&2
+            exit 1
+          }
+          [[ "$LOCK_VERSION" == "$PACKAGE_VERSION" && "$LOCK_ROOT_VERSION" == "$PACKAGE_VERSION" ]] || {
+            echo "Package-lock version ${LOCK_VERSION}/${LOCK_ROOT_VERSION} does not match package version ${PACKAGE_VERSION}" >&2
+            exit 1
+          }
+          [[ "$ANDROID_VERSION_CODE" =~ ^[1-9][0-9]*$ && "$ANDROID_VERSION_CODE" == "$IOS_BUILD_NUMBER" ]] || {
+            echo "Android versionCode ${ANDROID_VERSION_CODE} and iOS build number ${IOS_BUILD_NUMBER} do not match" >&2
+            exit 1
+          }
+          if [[ "${GITHUB_REF_TYPE:-}" == "tag" ]]; then
+            [[ "$GITHUB_REF_NAME" == "v${PACKAGE_VERSION}" ]] || {
+              echo "Tag ${GITHUB_REF_NAME} does not match package version v${PACKAGE_VERSION}" >&2
+              exit 1
+            }
+          elif [[ "${GITHUB_REF_TYPE:-}" == "branch" && "${GITHUB_REF_NAME:-}" == release/* ]]; then
+            [[ "$GITHUB_REF_NAME" == "release/v${PACKAGE_VERSION}" ]] || {
+              echo "Release branch ${GITHUB_REF_NAME} does not match package version release/v${PACKAGE_VERSION}" >&2
+              exit 1
+            }
+          fi
+          echo "version=${PACKAGE_VERSION}" >> "$GITHUB_OUTPUT"
+
+  web-kiosk:
+    name: Web and Raspberry Pi bundles
+    needs: preflight
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -24,29 +107,304 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Synchronize v1.4.0 metadata
-        shell: bash
-        run: |
-          set -euo pipefail
-          git fetch origin main --no-tags
-          npm version 1.4.0 --no-git-tag-version
-          sed -i -E 's/versionCode[[:space:]]+[0-9]+/versionCode 6/' android/app/build.gradle
-          sed -i -E 's/versionName[[:space:]]+"[^"]+"/versionName "1.4.0"/' android/app/build.gradle
-          sed -i -E 's/CURRENT_PROJECT_VERSION = [^;]+;/CURRENT_PROJECT_VERSION = 6;/g' ios/App/App.xcodeproj/project.pbxproj
-          sed -i -E 's/MARKETING_VERSION = [^;]+;/MARKETING_VERSION = 1.4.0;/g' ios/App/App.xcodeproj/project.pbxproj
-          git checkout origin/main -- .github/workflows/release-assets.yml
-          node -e "const p=require('./package.json'); const l=require('./package-lock.json'); if(p.version!=='1.4.0'||l.version!=='1.4.0'||l.packages[''].version!=='1.4.0') process.exit(1)"
-          test "$(sed -n 's/^[[:space:]]*versionName[[:space:]]*"'"'\([^"'"']*\)"'"'.*/\1/p' android/app/build.gradle | head -1)" = '1.4.0'
-          test "$(sed -n 's/^[[:space:]]*versionCode[[:space:]]*\([0-9][0-9]*\).*/\1/p' android/app/build.gradle | head -1)" = '6'
-          test "$(sed -n 's/^[[:space:]]*MARKETING_VERSION = \([^;]*\);/\1/p' ios/App/App.xcodeproj/project.pbxproj | sort -u)" = '1.4.0'
-          test "$(sed -n 's/^[[:space:]]*CURRENT_PROJECT_VERSION = \([^;]*\);/\1/p' ios/App/App.xcodeproj/project.pbxproj | sort -u)" = '6'
+      - name: Install dependencies from lockfile
+        run: npm ci --ignore-scripts
 
-      - name: Commit synchronized release metadata
+      - name: Repository quality gate
+        run: npm run check
+
+      - name: Package Web/PWA and Raspberry Pi kiosk bundles
         shell: bash
         run: |
           set -euo pipefail
-          git config user.name 'privacyOG'
-          git config user.email 'privacyOG@users.noreply.github.com'
-          git add package.json package-lock.json android/app/build.gradle ios/App/App.xcodeproj/project.pbxproj .github/workflows/release-assets.yml
-          git commit -m 'Prepare SalahOS v1.4.0 version metadata'
-          git push origin HEAD:release/v1.4.0
+          VERSION='${{ needs.preflight.outputs.version }}'
+          mkdir -p release/web release/pi/SalahOS
+          cp -a dist/. release/web/
+          cp -a dist release/pi/SalahOS/dist
+          mkdir -p release/pi/SalahOS/scripts/kiosk
+          cp scripts/kiosk/run-salahos-kiosk.sh scripts/kiosk/install-labwc-autostart.sh release/pi/SalahOS/scripts/kiosk/
+          cp docs/RELEASE_ASSETS.md release/pi/SalahOS/INSTALL.md
+          chmod +x release/pi/SalahOS/scripts/kiosk/*.sh
+          (cd release/web && zip -qr "../SalahOS-v${VERSION}-web-pwa.zip" .)
+          tar -C release/pi -czf "release/SalahOS-v${VERSION}-raspberry-pi-kiosk.tar.gz" SalahOS
+          (
+            cd release
+            sha256sum \
+              "SalahOS-v${VERSION}-web-pwa.zip" \
+              "SalahOS-v${VERSION}-raspberry-pi-kiosk.tar.gz" \
+              > SHA256SUMS-web-kiosk.txt
+            sha256sum --check SHA256SUMS-web-kiosk.txt
+          )
+          test -s "release/SalahOS-v${VERSION}-web-pwa.zip"
+          test -s "release/SalahOS-v${VERSION}-raspberry-pi-kiosk.tar.gz"
+
+      - name: Upload Web/PWA and Raspberry Pi artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-web-kiosk
+          path: |
+            release/SalahOS-v*-web-pwa.zip
+            release/SalahOS-v*-raspberry-pi-kiosk.tar.gz
+            release/SHA256SUMS-web-kiosk.txt
+          if-no-files-found: error
+          retention-days: 14
+
+  android:
+    name: Signed Android APK and AAB
+    if: github.event_name == 'push' || inputs.build_android == true
+    needs: preflight
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    env:
+      SALAHOS_ANDROID_KEYSTORE_BASE64: ${{ secrets.SALAHOS_ANDROID_KEYSTORE_BASE64 }}
+      SALAHOS_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.SALAHOS_ANDROID_KEYSTORE_PASSWORD }}
+      SALAHOS_ANDROID_KEY_ALIAS: ${{ secrets.SALAHOS_ANDROID_KEY_ALIAS }}
+      SALAHOS_ANDROID_KEY_PASSWORD: ${{ secrets.SALAHOS_ANDROID_KEY_PASSWORD }}
+      SALAHOS_ANDROID_REQUIRE_SIGNING: 'true'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Setup Java
+        uses: actions/setup-java@v5
+        with:
+          distribution: temurin
+          java-version: '21'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install Android SDK packages
+        run: sdkmanager 'platforms;android-36' 'build-tools;36.0.0'
+
+      - name: Require persistent Android release signing
+        shell: bash
+        run: |
+          set -euo pipefail
+          for name in \
+            SALAHOS_ANDROID_KEYSTORE_BASE64 \
+            SALAHOS_ANDROID_KEYSTORE_PASSWORD \
+            SALAHOS_ANDROID_KEY_ALIAS \
+            SALAHOS_ANDROID_KEY_PASSWORD; do
+            [[ -n "${!name:-}" ]] || {
+              echo "Required Android release signing secret is not configured: ${name}" >&2
+              exit 1
+            }
+          done
+          KEYSTORE="$RUNNER_TEMP/salahos-release.jks"
+          printf '%s' "$SALAHOS_ANDROID_KEYSTORE_BASE64" | base64 --decode > "$KEYSTORE"
+          chmod 600 "$KEYSTORE"
+          test -s "$KEYSTORE"
+          echo "SALAHOS_ANDROID_KEYSTORE_PATH=$KEYSTORE" >> "$GITHUB_ENV"
+
+      - name: Install dependencies from lockfile
+        run: npm ci --ignore-scripts
+
+      - name: Build signed Android release packages
+        run: npm run android:release-check
+
+      - name: Verify and package signed Android artifacts
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION='${{ needs.preflight.outputs.version }}'
+          APK='android/app/build/outputs/apk/release/app-release.apk'
+          AAB='android/app/build/outputs/bundle/release/app-release.aab'
+          test -s "$APK"
+          test -s "$AAB"
+          APKSIGNER="$(find "${ANDROID_HOME:-$ANDROID_SDK_ROOT}/build-tools" -type f -name apksigner -perm -u+x | sort -V | tail -1)"
+          test -x "$APKSIGNER"
+
+          normalize_fingerprint() {
+            tr '[:lower:]' '[:upper:]' | tr -d ':[:space:]'
+          }
+
+          EXPECTED_SIGNER_SHA256="$(
+            LC_ALL=C keytool -list -v \
+              -keystore "$SALAHOS_ANDROID_KEYSTORE_PATH" \
+              -storepass "$SALAHOS_ANDROID_KEYSTORE_PASSWORD" \
+              -alias "$SALAHOS_ANDROID_KEY_ALIAS" \
+              | awk '/SHA256:/{print $2; exit}' \
+              | normalize_fingerprint
+          )"
+          [[ -n "$EXPECTED_SIGNER_SHA256" ]] || {
+            echo 'Unable to resolve Android release signing certificate SHA-256 fingerprint' >&2
+            exit 1
+          }
+
+          APK_VERIFY_OUTPUT="$("$APKSIGNER" verify --verbose --print-certs "$APK" 2>&1)"
+          printf '%s\n' "$APK_VERIFY_OUTPUT"
+          APK_SIGNER_SHA256="$(
+            printf '%s\n' "$APK_VERIFY_OUTPUT" \
+              | awk '/certificate SHA-256 digest:/ { sub(/^.*certificate SHA-256 digest:[[:space:]]*/, ""); print; exit }' \
+              | normalize_fingerprint
+          )"
+          [[ -n "$APK_SIGNER_SHA256" ]] || {
+            echo 'Unable to resolve signed APK certificate SHA-256 fingerprint' >&2
+            exit 1
+          }
+
+          jarsigner -verify -certs "$AAB"
+          AAB_SIGNER_SHA256="$(
+            LC_ALL=C keytool -printcert -jarfile "$AAB" \
+              | awk '/SHA256:/{print $2; exit}' \
+              | normalize_fingerprint
+          )"
+          [[ -n "$AAB_SIGNER_SHA256" ]] || {
+            echo 'Unable to resolve signed AAB certificate SHA-256 fingerprint' >&2
+            exit 1
+          }
+
+          [[ "$APK_SIGNER_SHA256" == "$EXPECTED_SIGNER_SHA256" ]] || {
+            echo 'Signed APK certificate does not match the configured Android release key' >&2
+            exit 1
+          }
+          [[ "$AAB_SIGNER_SHA256" == "$EXPECTED_SIGNER_SHA256" ]] || {
+            echo 'Signed AAB certificate does not match the configured Android release key' >&2
+            exit 1
+          }
+
+          mkdir -p release
+          cp "$APK" "release/SalahOS-v${VERSION}-android.apk"
+          cp "$AAB" "release/SalahOS-v${VERSION}-android.aab"
+          (
+            cd release
+            sha256sum \
+              "SalahOS-v${VERSION}-android.apk" \
+              "SalahOS-v${VERSION}-android.aab" \
+              > SHA256SUMS-android.txt
+            sha256sum --check SHA256SUMS-android.txt
+          )
+
+      - name: Upload signed Android artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-android
+          path: |
+            release/SalahOS-v*-android.apk
+            release/SalahOS-v*-android.aab
+            release/SHA256SUMS-android.txt
+          if-no-files-found: error
+          retention-days: 14
+
+  final-package-preflight:
+    name: Final package preflight
+    if: github.event_name == 'push' || inputs.build_android == true
+    needs:
+      - preflight
+      - web-kiosk
+      - android
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - name: Download Web/PWA and Raspberry Pi artifacts
+        uses: actions/download-artifact@v4
+        with:
+          name: release-web-kiosk
+          path: release
+
+      - name: Download signed Android artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: release-android
+          path: release
+
+      - name: Verify exact final release package
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION='${{ needs.preflight.outputs.version }}'
+          WEB="SalahOS-v${VERSION}-web-pwa.zip"
+          PI="SalahOS-v${VERSION}-raspberry-pi-kiosk.tar.gz"
+          ANDROID="SalahOS-v${VERSION}-android.apk"
+          ANDROID_BUNDLE="SalahOS-v${VERSION}-android.aab"
+          for file in "$WEB" "$PI" "$ANDROID" "$ANDROID_BUNDLE" SHA256SUMS-web-kiosk.txt SHA256SUMS-android.txt; do
+            test -s "release/$file"
+          done
+          unzip -t "release/$WEB"
+          PI_CONTENTS="$(tar -tzf "release/$PI")"
+          grep -Fxq 'SalahOS/INSTALL.md' <<< "$PI_CONTENTS"
+          grep -Fxq 'SalahOS/dist/index.html' <<< "$PI_CONTENTS"
+          cat release/SHA256SUMS-web-kiosk.txt release/SHA256SUMS-android.txt > release/SHA256SUMS.txt
+          rm release/SHA256SUMS-web-kiosk.txt release/SHA256SUMS-android.txt
+          (
+            cd release
+            sha256sum --check SHA256SUMS.txt
+            EXPECTED="$(printf '%s\n' "$WEB" "$PI" "$ANDROID" "$ANDROID_BUNDLE" SHA256SUMS.txt | sort)"
+            ACTUAL="$(find . -maxdepth 1 -type f -printf '%f\n' | sort)"
+            [[ "$ACTUAL" == "$EXPECTED" ]] || {
+              echo 'Final release package contains missing or unexpected files' >&2
+              diff -u <(printf '%s\n' "$EXPECTED") <(printf '%s\n' "$ACTUAL") || true
+              exit 1
+            }
+          )
+
+      - name: Upload final verified release package
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-final
+          path: release/*
+          if-no-files-found: error
+          retention-days: 14
+
+  publish:
+    name: Publish GitHub release assets
+    if: github.event_name == 'push'
+    needs:
+      - preflight
+      - final-package-preflight
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout release metadata
+        uses: actions/checkout@v4
+
+      - name: Download final verified release package
+        uses: actions/download-artifact@v4
+        with:
+          name: release-final
+          path: release
+
+      - name: Reverify checksums immediately before publication
+        shell: bash
+        run: |
+          set -euo pipefail
+          (cd release && sha256sum --check SHA256SUMS.txt)
+
+      - name: Publish release and verified assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION='${{ needs.preflight.outputs.version }}'
+          RELEASE_TAG="v${VERSION}"
+          if [[ "${GITHUB_REF_TYPE:-}" == "tag" ]]; then
+            [[ "$GITHUB_REF_NAME" == "$RELEASE_TAG" ]] || {
+              echo "Tag ${GITHUB_REF_NAME} does not match release version ${RELEASE_TAG}" >&2
+              exit 1
+            }
+          else
+            [[ "${GITHUB_REF_NAME:-}" == "release/${RELEASE_TAG}" ]] || {
+              echo "Release branch ${GITHUB_REF_NAME:-unknown} must be release/${RELEASE_TAG}" >&2
+              exit 1
+            }
+          fi
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" release/* --clobber
+          else
+            gh release create "$RELEASE_TAG" \
+              --target "$GITHUB_SHA" \
+              --title "SalahOS ${RELEASE_TAG}" \
+              --notes-file RELEASE_NOTES.md \
+              release/*
+          fi

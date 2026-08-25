@@ -1,21 +1,26 @@
-name: Prepare v1.4.0 Metadata
+name: Quality Gate
 
 on:
+  push:
+    branches:
+      - main
+      - 'agent/**'
   pull_request:
 
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 permissions:
-  contents: write
+  contents: read
 
 jobs:
-  prepare:
-    if: github.head_ref == 'release/v1.4.0'
-    runs-on: ubuntu-24.04
+  quality:
+    runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '["ubuntu-24.04"]' || '["self-hosted","Linux","X64"]') }}
+    timeout-minutes: 15
     steps:
-      - name: Checkout release branch
+      - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: release/v1.4.0
-          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -23,32 +28,65 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Synchronize v1.4.0 metadata
-        shell: bash
-        run: |
-          set -euo pipefail
-          git fetch origin main --no-tags
-          npm version 1.4.0 --no-git-tag-version
-          sed -i -E 's/versionCode[[:space:]]+[0-9]+/versionCode 6/' android/app/build.gradle
-          sed -i -E 's/versionName[[:space:]]+"[^"]+"/versionName "1.4.0"/' android/app/build.gradle
-          sed -i -E 's/CURRENT_PROJECT_VERSION = [^;]+;/CURRENT_PROJECT_VERSION = 6;/g' ios/App/App.xcodeproj/project.pbxproj
-          sed -i -E 's/MARKETING_VERSION = [^;]+;/MARKETING_VERSION = 1.4.0;/g' ios/App/App.xcodeproj/project.pbxproj
-          git checkout origin/main -- .github/workflows/ci.yml .github/workflows/release-assets.yml
-          node -e "const p=require('./package.json'); const l=require('./package-lock.json'); if(p.version!=='1.4.0'||l.version!=='1.4.0'||l.packages[''].version!=='1.4.0') process.exit(1)"
-          grep -Eq 'versionCode[[:space:]]+6' android/app/build.gradle
-          grep -Eq 'versionName[[:space:]]+"1\.4\.0"' android/app/build.gradle
-          grep -Eq 'MARKETING_VERSION = 1\.4\.0;' ios/App/App.xcodeproj/project.pbxproj
-          ! grep -Eq 'MARKETING_VERSION = 1\.3\.0;' ios/App/App.xcodeproj/project.pbxproj
-          grep -Eq 'CURRENT_PROJECT_VERSION = 6;' ios/App/App.xcodeproj/project.pbxproj
-          ! grep -Eq 'CURRENT_PROJECT_VERSION = 5;' ios/App/App.xcodeproj/project.pbxproj
+      - name: Install dependencies from lockfile
+        run: npm ci --ignore-scripts
 
-      - name: Commit synchronized release metadata
-        shell: bash
-        run: |
-          set -euo pipefail
-          git config user.name 'privacyOG'
-          git config user.email 'privacyOG@users.noreply.github.com'
-          git add package.json package-lock.json android/app/build.gradle ios/App/App.xcodeproj/project.pbxproj .github/workflows/ci.yml .github/workflows/release-assets.yml
-          git commit -m 'Prepare SalahOS v1.4.0 version metadata'
-          echo "PREPARED_RELEASE_COMMIT=$(git rev-parse HEAD)"
-          git push --force origin HEAD:release-prep/v1.4.0-final
+      - name: Sensitive-file policy
+        run: npm run security:sensitive-files
+
+      - name: Native permission policy
+        run: npm run security:native-permissions
+
+      - name: Remote network policy
+        run: npm run security:remote-network
+
+      - name: Dependency vulnerability audit
+        run: npm run security:audit
+
+      - name: Dependency license policy
+        run: npm run security:licenses
+
+      - name: Documentation link verification
+        run: npm run docs:links
+
+      - name: Australian mosque directory reproducibility
+        run: npm run mosques:australia:check
+
+      - name: Packaged Adhan audio integrity
+        run: npm run adhan:audio:check
+
+      - name: Shared mosque directory service acceptance
+        run: npm run directory:test
+
+      - name: PWA raster icon reproducibility
+        run: python3 scripts/generate_pwa_icons.py --check
+
+      - name: Design-system ownership policy
+        run: npm run ui:design-system-ownership
+
+      - name: UI/UX v2 retirement policy
+        run: npm run ui:v2-retirement
+
+      - name: Format check
+        run: npm run format:check
+
+      - name: Lint
+        run: npm run lint
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Test
+        run: npm run test
+
+      - name: Core coverage thresholds
+        run: npm run test:coverage
+
+      - name: Production build
+        run: npm run build
+
+      - name: Bundle architecture budget
+        run: npm run bundle:size
+
+      - name: Verify deployable web artifact
+        run: npm run verify:web-build
