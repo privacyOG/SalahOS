@@ -1,6 +1,7 @@
 import type { KeyValueStorage } from './settingsStorage';
 
 export const QURAN_READING_PREFERENCES_STORAGE_KEY = 'salahos.quran-reading-preferences.v1';
+export const QURAN_READING_PREFERENCES_CHANGE_EVENT = 'salahos:quran-reading-preferences-change';
 
 export type QuranArabicFont = 'naskh' | 'traditional' | 'system';
 export type QuranFontScale = 'compact' | 'comfortable' | 'large' | 'xlarge';
@@ -68,6 +69,11 @@ export function loadQuranReadingPreferences(storage: KeyValueStorage): QuranRead
   }
 }
 
+function announceQuranReadingPreferencesChange(): void {
+  if (typeof globalThis.dispatchEvent !== 'function' || typeof globalThis.Event !== 'function') return;
+  globalThis.dispatchEvent(new Event(QURAN_READING_PREFERENCES_CHANGE_EVENT));
+}
+
 export function saveQuranReadingPreferences(
   storage: KeyValueStorage,
   preferences: QuranReadingPreferences,
@@ -76,6 +82,7 @@ export function saveQuranReadingPreferences(
     QURAN_READING_PREFERENCES_STORAGE_KEY,
     JSON.stringify(parseQuranReadingPreferences(preferences)),
   );
+  announceQuranReadingPreferencesChange();
 }
 
 export function toggleQuranBookmark(
