@@ -8,17 +8,21 @@ describe('Islamic knowledge catalogue', () => {
     expect(islamicKnowledgeEntries.filter((entry) => entry.module === 'qa')).toHaveLength(3);
 
     for (const entry of islamicKnowledgeEntries) {
+      expect(entry.sourceIds.length).toBeGreaterThan(0);
       if (entry.module === 'quran') {
         expect(entry.reference).toMatch(/^Qur’an \d+:\d+$/u);
         expect(entry.source.length).toBeGreaterThan(10);
+        expect(entry.translationSourceId).toBe('quran-pickthall-1930');
       } else if (entry.module === 'hadith') {
         expect(entry.collection.length).toBeGreaterThan(5);
         expect(entry.grade).toBe('Sahih');
         expect(entry.grader.length).toBeGreaterThan(5);
+        expect(entry.gradingAuthoritySourceId).toMatch(/^hadith-/u);
       } else {
         expect(entry.scholar.length).toBeGreaterThan(5);
         expect(entry.sourceTitle.length).toBeGreaterThan(10);
         expect(entry.sourceNote.length).toBeGreaterThan(20);
+        expect(entry.contentType).toBe('fiqh');
       }
     }
   });
@@ -29,6 +33,7 @@ describe('Islamic knowledge catalogue', () => {
       'hadith-congregation',
     ]);
     expect(filterIslamicKnowledge('qa', 'madhhab').map((entry) => entry.id)).toEqual([
+      'qa-intention',
       'qa-prayer-doubt',
       'qa-travel-prayer',
     ]);
