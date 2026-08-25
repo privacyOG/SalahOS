@@ -111,8 +111,53 @@
   margin-top: 0.8rem;
 }
 
-.australian-mosque-directory__card .mosque-summary-card__actions button {
-  width: 100%;
+.australian-mosque-directory__data-status {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.65rem;
+}
+
+.australian-mosque-directory__data-status span {
+  padding: 0.22rem 0.5rem;
+  border: 1px solid var(--border-subtle, var(--salah-border-subtle));
+  border-radius: 999px;
+  background: var(--surface-soft, var(--salah-bg-accent-soft));
+  color: var(--text-muted, var(--salah-fg-secondary));
+  font-size: 0.73rem;
+  font-weight: 750;
+  line-height: 1.2;
+}
+
+.australian-mosque-directory__actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.45rem;
+}
+
+.australian-mosque-directory__actions button,
+.australian-mosque-directory__actions a {
+  display: inline-flex;
+  min-height: 2.65rem;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem 0.7rem;
+  border-radius: var(--radius-md, 0.75rem);
+  text-align: center;
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 750;
+}
+
+.australian-mosque-directory__actions a {
+  border: 1px solid var(--border-subtle, var(--salah-border-subtle));
+  color: inherit;
+  background: var(--surface-elevated, var(--salah-bg-surface));
+}
+
+.australian-mosque-directory__actions a:hover,
+.australian-mosque-directory__actions a:focus-visible {
+  background: var(--surface-soft, var(--salah-bg-accent-soft));
 }
 
 .australian-mosque-directory__expand {
@@ -158,6 +203,12 @@
   .australian-mosque-directory__sort {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 28rem) {
+  .australian-mosque-directory__actions {
+    grid-template-columns: 1fr;
   }
 }
 
