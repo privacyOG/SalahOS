@@ -77,7 +77,9 @@ This tracker is intentionally compact. A stage is marked complete only after imp
 
 ## Stage 10 — Verification upgrades
 
-- [ ] Golden screenshot baseline/diff regression.
-- [ ] Automated WCAG/axe coverage and stronger RTL/container-overflow checks.
-- [ ] Coverage thresholds plus Chromium/WebKit/Firefox smoke journeys.
-- [ ] Final exact-head mobile/native/web/display validation and v1.4.0 completion reconciliation.
+- [x] Golden screenshot baseline/diff regression.
+- [x] Automated WCAG/axe coverage and stronger RTL/container-overflow checks.
+- [x] Coverage thresholds plus Chromium/WebKit/Firefox smoke journeys.
+- [x] Final exact-head mobile/native/web/display validation and v1.4.0 completion reconciliation.
+
+**Stage 10 verification (2026-08-25):** final merged-Stage-9 implementation head `da6cf46b68b07ae554d12c3329ba35a9cd5b9622` passed Quality Gate `32792277431` (#2226), Visual Regression `32792277426` (#1076), Android Build `32792277425` (#1232), and iOS Build `32792277427` (#1141). Quality passed all 704 tests, locked V8 coverage at 89.36% statements, 81.83% branches, 98.29% functions and 90.53% lines, production build, deployable-web verification and the permanent 21-chunk bundle budget with a 469,196-byte largest chunk and 898,871 total JavaScript bytes. Visual passed the complete regression matrix plus 2 deterministic golden screenshot diffs, 3 axe/WCAG/RTL/container scenarios, and cross-browser smoke in Chromium, Firefox and WebKit. Android passed debug APK build and emulator lifecycle acceptance. iOS passed Simulator build plus install, launch and relaunch on fresh iPhone and iPad Simulators and its runtime-acceptance report. This completion commit reconciles the temporary v1.4 tracker from the merged Stage 9 `main` baseline and changes tracker documentation only; it remains subject to the same four exact-head gates before merge.

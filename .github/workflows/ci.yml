@@ -79,6 +79,9 @@ jobs:
       - name: Test
         run: npm run test
 
+      - name: Core coverage thresholds
+        run: npm run test:coverage
+
       - name: Production build
         run: npm run build
 
