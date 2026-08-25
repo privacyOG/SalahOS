@@ -28,8 +28,9 @@ async function refreshAutomaticLocation(): Promise<void> {
   const storage = getApplicationStorage();
   if (!loadQiblaPermissionOnboarding(storage).autoLocation) return;
 
+  const saved = savedFallback();
   const location = await resolveBestAvailableLocation(storage, {
-    saved: savedFallback(),
+    ...(saved === undefined ? {} : { saved }),
   });
   if (location === null) return;
   if (persistBestAvailableLocation(storage, location)) {
