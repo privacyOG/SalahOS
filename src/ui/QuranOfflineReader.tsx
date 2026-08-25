@@ -287,7 +287,9 @@ export function QuranOfflineReader({
               setSearch('');
             }}
           >
-            {bookmarksOnly ? labels.allAyat : `${labels.bookmarks} (${String(preferences.bookmarkedAyahIds.filter((key) => parseQuranVerseKey(key)).length)})`}
+            {bookmarksOnly
+              ? labels.allAyat
+              : `${labels.bookmarks} (${String(preferences.bookmarkedAyahIds.filter((key) => parseQuranVerseKey(key)).length)})`}
           </button>
           {lastRead ? (
             <button
@@ -409,9 +411,7 @@ export function QuranOfflineReader({
                         type="button"
                         data-quran-offline-bookmark={result.ayah.key}
                         onClick={() => {
-                          onPreferencesChange(
-                            toggleQuranBookmark(preferences, result.ayah.key),
-                          );
+                          onPreferencesChange(toggleQuranBookmark(preferences, result.ayah.key));
                         }}
                       >
                         {isBookmarked ? labels.removeBookmark : labels.bookmark}
@@ -467,7 +467,10 @@ export function QuranOfflineReader({
             </div>
           )}
 
-          {!bookmarksOnly && search.trim().length === 0 && selected && visibleAyahCount < selected.ayahs.length ? (
+          {!bookmarksOnly &&
+          search.trim().length === 0 &&
+          selected &&
+          visibleAyahCount < selected.ayahs.length ? (
             <button
               type="button"
               className="quran-offline-reader__more"
