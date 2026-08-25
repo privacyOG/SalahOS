@@ -4,7 +4,6 @@ import type { Locale } from '../i18n/translations';
 import { getApplicationStorage } from '../platform/applicationStorage';
 import {
   clearPrivacyDiagnostics,
-  collectCurrentPerformanceDiagnostics,
   exportPrivacyDiagnostics,
   loadPrivacyDiagnosticsState,
   PRIVACY_DIAGNOSTICS_CHANGE_EVENT,
@@ -112,9 +111,6 @@ export function PrivacyDiagnosticsSettings() {
     setPayload('');
     setStatus(null);
     window.dispatchEvent(new Event(PRIVACY_DIAGNOSTICS_CHANGE_EVENT));
-    if (nextEnabled) {
-      collectCurrentPerformanceDiagnostics(storage, performance);
-    }
     refreshCount();
   };
 
