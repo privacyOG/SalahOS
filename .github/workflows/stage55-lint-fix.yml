@@ -23,27 +23,19 @@ jobs:
       - name: Apply runtime-safe clipboard fallback
         run: |
           python3 - <<'PY'
+          import re
           from pathlib import Path
 
-          old = """  if (navigator.clipboard?.writeText) {
-            await navigator.clipboard.writeText(text);
-            return true;
-          }
-          return false;"""
-          new = """  try {
-            await navigator.clipboard.writeText(text);
-            return true;
-          } catch {
-            return false;
-          }"""
+          pattern = re.compile(r"  if \(navigator\.clipboard\?\.writeText\) \{\s+await navigator\.clipboard\.writeText\(text\);\s+return true;\s+\}\s+return false;")
+          replacement = "  try {\n    await navigator.clipboard.writeText(text);\n    return true;\n  } catch {\n    return false;\n  }"
 
           for name in ('src/ui/KnowledgeScreen.tsx', 'src/ui/QuranOfflineReader.tsx'):
               path = Path(name)
               text = path.read_text()
-              count = text.count(old)
+              updated, count = pattern.subn(replacement, text, count=1)
               if count != 1:
                   raise SystemExit(f'{name}: expected one clipboard fallback, found {count}')
-              path.write_text(text.replace(old, new))
+              path.write_text(updated)
           PY
       - name: Format and lint changed screens
         run: |
@@ -73,14 +65,14 @@ jobs:
               'type': 'blob',
               'sha': None,
           })
-          Path('/tmp/tree.json').write_text(json.dumps({'base_tree': '${BASE_TREE}', 'tree': entries}))
+          Path('/tmp/tree.json').write_text(json.dumps({'tree': entries}))
           PY
           python3 - <<PY
           import json
           from pathlib import Path
-          p = json.loads(Path('/tmp/tree.json').read_text())
-          p['base_tree'] = '${BASE_TREE}'
-          Path('/tmp/tree.json').write_text(json.dumps(p))
+          payload = json.loads(Path('/tmp/tree.json').read_text())
+          payload['base_tree'] = '${BASE_TREE}'
+          Path('/tmp/tree.json').write_text(json.dumps(payload))
           PY
           TREE_SHA="$(gh api "repos/${GITHUB_REPOSITORY}/git/trees" -X POST --input /tmp/tree.json --jq .sha)"
           python3 - <<PY
