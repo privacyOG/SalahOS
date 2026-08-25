@@ -1,0 +1,33 @@
+name: Stage 3 Format Helper
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  format-evidence:
+    if: github.event.pull_request.head.ref == 'stage-52/v1.5-privacy-friction'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Print exact Prettier diff
+        run: |
+          npx prettier --write \
+            scripts/visual-privacy-diagnostics.mjs \
+            src/platform/privacyDiagnostics.test.ts \
+            src/platform/privacyDiagnostics.ts \
+            src/ui/SettingsScreen.tsx
+          git diff --check
+          git diff -- \
+            scripts/visual-privacy-diagnostics.mjs \
+            src/platform/privacyDiagnostics.test.ts \
+            src/platform/privacyDiagnostics.ts \
+            src/ui/SettingsScreen.tsx
