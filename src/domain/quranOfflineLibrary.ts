@@ -47,7 +47,9 @@ function assertPack(condition: unknown, message: string): asserts condition {
   if (!condition) throw new Error(message);
 }
 
-export function parseQuranVerseKey(value: string): Readonly<{ surah: number; ayah: number }> | null {
+export function parseQuranVerseKey(
+  value: string,
+): Readonly<{ surah: number; ayah: number }> | null {
   const match = /^(\d{1,3}):(\d{1,3})$/u.exec(value.trim());
   if (!match) return null;
   const surah = Number(match[1]);
@@ -64,7 +66,10 @@ export function validateQuranOfflinePack(value: unknown): QuranOfflinePack {
   assertPack(pack.schemaVersion === 1, 'Offline Qur’an pack schema version is invalid.');
   assertPack(pack.counts?.surahs === 114, 'Offline Qur’an pack must contain 114 surahs.');
   assertPack(pack.counts?.ayahs === 6236, 'Offline Qur’an pack must contain 6,236 ayat.');
-  assertPack(Array.isArray(pack.surahs) && pack.surahs.length === 114, 'Offline Qur’an surah data is incomplete.');
+  assertPack(
+    Array.isArray(pack.surahs) && pack.surahs.length === 114,
+    'Offline Qur’an surah data is incomplete.',
+  );
 
   let ayahCount = 0;
   const verseKeys = new Set<string>();
@@ -75,7 +80,10 @@ export function validateQuranOfflinePack(value: unknown): QuranOfflinePack {
       const key = `${String(surah.surah)}:${String(ayah.ayah)}`;
       assertPack(ayah.key === key, `Offline Qur’an verse key ${ayah.key} is invalid.`);
       assertPack(!verseKeys.has(key), `Offline Qur’an verse key ${key} is duplicated.`);
-      assertPack(ayah.arabic.trim().length > 0, `Offline Qur’an Arabic text is missing for ${key}.`);
+      assertPack(
+        ayah.arabic.trim().length > 0,
+        `Offline Qur’an Arabic text is missing for ${key}.`,
+      );
       assertPack(
         ayah.translations['pickthall-1930']?.trim().length > 0,
         `Offline Qur’an Pickthall translation is missing for ${key}.`,
@@ -84,7 +92,10 @@ export function validateQuranOfflinePack(value: unknown): QuranOfflinePack {
       ayahCount += 1;
     }
   }
-  assertPack(ayahCount === 6236, `Offline Qur’an contains ${String(ayahCount)} ayat instead of 6,236.`);
+  assertPack(
+    ayahCount === 6236,
+    `Offline Qur’an contains ${String(ayahCount)} ayat instead of 6,236.`,
+  );
   return pack as QuranOfflinePack;
 }
 
@@ -100,7 +111,9 @@ export async function loadQuranOfflinePack(
   cachedPackPromise ??= (async () => {
     const response = await fetcher(manifest.packPath);
     if (!response.ok) {
-      throw new Error(`Packaged offline Qur’an could not be loaded (HTTP ${String(response.status)}).`);
+      throw new Error(
+        `Packaged offline Qur’an could not be loaded (HTTP ${String(response.status)}).`,
+      );
     }
     return validateQuranOfflinePack(await response.json());
   })();
