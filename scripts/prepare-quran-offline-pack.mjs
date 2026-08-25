@@ -36,7 +36,10 @@ function validatePack(pack) {
       const expectedKey = `${String(surah.surah)}:${String(ayah.ayah)}`;
       assert(ayah.key === expectedKey, `Unexpected verse key ${String(ayah.key)}.`);
       assert(!verseKeys.has(ayah.key), `Duplicate verse key ${String(ayah.key)}.`);
-      assert(typeof ayah.arabic === 'string' && ayah.arabic.length > 0, `Missing Arabic for ${ayah.key}.`);
+      assert(
+        typeof ayah.arabic === 'string' && ayah.arabic.length > 0,
+        `Missing Arabic for ${ayah.key}.`,
+      );
       assert(
         typeof ayah.translations?.['pickthall-1930'] === 'string' &&
           ayah.translations['pickthall-1930'].length > 0,
@@ -47,14 +50,20 @@ function validatePack(pack) {
     }
   }
 
-  assert(ayahCount === manifest.ayahs, `Offline Qur’an ayah count ${String(ayahCount)} is invalid.`);
+  assert(
+    ayahCount === manifest.ayahs,
+    `Offline Qur’an ayah count ${String(ayahCount)} is invalid.`,
+  );
   assert(verseKeys.size === manifest.ayahs, 'Offline Qur’an verse keys are not unique.');
 }
 
 async function validateExistingPack() {
   const content = await readFile(targetPath);
   const digest = sha256(content);
-  assert(digest === manifest.sha256, `Offline Qur’an pack hash ${digest} does not match the pinned manifest.`);
+  assert(
+    digest === manifest.sha256,
+    `Offline Qur’an pack hash ${digest} does not match the pinned manifest.`,
+  );
   const pack = JSON.parse(content.toString('utf8'));
   validatePack(pack);
   return digest;
@@ -74,8 +83,14 @@ async function fetchJson(url, label) {
 }
 
 function buildPack(arabic, pickthall) {
-  assert(Array.isArray(arabic?.surahs) && arabic.surahs.length === 114, 'Pinned Arabic source must contain 114 surahs.');
-  assert(Array.isArray(pickthall) && pickthall.length === 114, 'Pinned Pickthall source must contain 114 surahs.');
+  assert(
+    Array.isArray(arabic?.surahs) && arabic.surahs.length === 114,
+    'Pinned Arabic source must contain 114 surahs.',
+  );
+  assert(
+    Array.isArray(pickthall) && pickthall.length === 114,
+    'Pinned Pickthall source must contain 114 surahs.',
+  );
 
   const translationBySurah = new Map(pickthall.map((surah) => [Number(surah.number), surah]));
   const surahs = arabic.surahs.map((surah) => {
@@ -92,7 +107,10 @@ function buildPack(arabic, pickthall) {
       const expectedKey = `${String(surahNumber)}:${String(ayahNumber)}`;
       assert(key === expectedKey, `Unexpected source verse key ${key}; expected ${expectedKey}.`);
       const translation = translations.get(ayahNumber);
-      assert(typeof translation === 'string' && translation.trim().length > 0, `Missing Pickthall translation for ${key}.`);
+      assert(
+        typeof translation === 'string' && translation.trim().length > 0,
+        `Missing Pickthall translation for ${key}.`,
+      );
       return {
         ayah: ayahNumber,
         key,
@@ -142,7 +160,9 @@ function buildPack(arabic, pickthall) {
 
 try {
   const digest = await validateExistingPack();
-  console.log(`Offline Qur’an pack verified: ${String(manifest.surahs)} surahs / ${String(manifest.ayahs)} ayat / sha256:${digest}`);
+  console.log(
+    `Offline Qur’an pack verified: ${String(manifest.surahs)} surahs / ${String(manifest.ayahs)} ayat / sha256:${digest}`,
+  );
 } catch (error) {
   if (checkOnly) throw error;
 
@@ -160,5 +180,7 @@ try {
   );
   await mkdir(dirname(targetPath), { recursive: true });
   await writeFile(targetPath, content);
-  console.log(`Generated offline Qur’an pack: ${String(manifest.surahs)} surahs / ${String(manifest.ayahs)} ayat / sha256:${digest}`);
+  console.log(
+    `Generated offline Qur’an pack: ${String(manifest.surahs)} surahs / ${String(manifest.ayahs)} ayat / sha256:${digest}`,
+  );
 }
