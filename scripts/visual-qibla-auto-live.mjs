@@ -234,6 +234,12 @@ try {
     await finder.waitFor({ state: 'visible' });
     await page.waitForFunction(() => {
       const element = document.querySelector('.qibla-finder');
+      const state = element?.getAttribute('data-compass-state');
+      return state === 'starting' || state === 'active';
+    });
+    await emitSydneyAlignedHeading(page);
+    await page.waitForFunction(() => {
+      const element = document.querySelector('.qibla-finder');
       return element?.getAttribute('data-location-state') === 'live';
     });
     await page.waitForFunction(() => {
