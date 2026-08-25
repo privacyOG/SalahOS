@@ -11,7 +11,12 @@ const fixture = {
   schemaVersion: 1,
   counts: { surahs: 114, ayahs: 6236 },
   sources: {
-    arabic: { id: 'quran-uthmani-text', upstream: 'fixture', commit: 'fixture', license: 'fixture' },
+    arabic: {
+      id: 'quran-uthmani-text',
+      upstream: 'fixture',
+      commit: 'fixture',
+      license: 'fixture',
+    },
     translations: {
       'pickthall-1930': {
         sourceId: 'quran-pickthall-1930',
