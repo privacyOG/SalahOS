@@ -70,7 +70,7 @@ export function qiblaPermissionOnboardingRequired(storage: KeyValueStorage): boo
 
 export function completeQiblaPermissionOnboarding(
   storage: KeyValueStorage,
-  autoLocation: boolean = true,
+  autoLocation = true,
 ): void {
   storage.setItem(
     QIBLA_PERMISSION_ONBOARDING_STORAGE_KEY,
