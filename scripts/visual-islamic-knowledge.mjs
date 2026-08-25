@@ -167,7 +167,9 @@ try {
     path.join(artifactDirectory, 'stage54-islamic-knowledge-governance-results.json'),
     `${JSON.stringify(results, null, 2)}\n`,
   );
-  console.log(`Stage 54 Islamic Knowledge governance acceptance passed: ${String(results.length)} flows.`);
+  console.log(
+    `Stage 54 Islamic Knowledge governance acceptance passed: ${String(results.length)} flows.`,
+  );
 } finally {
   await browser.close();
 }
