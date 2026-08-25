@@ -123,7 +123,10 @@ async function validateAutomaticWeatherFromAvailableLocation(browser) {
   await page.route(`${weatherEndpoint}**`, async (route) => {
     providerRequests += 1;
     const requestUrl = route.request().url();
-    if (!requestUrl.includes('latitude=-33.8688') || !requestUrl.includes('longitude=151.2093')) {
+    if (
+      !requestUrl.includes('latitude=-33.8688') ||
+      !requestUrl.includes('longitude=151.2093')
+    ) {
       throw new Error(`automatic weather request did not use the available location: ${requestUrl}`);
     }
     await route.fulfill({
@@ -167,7 +170,10 @@ async function validateConfiguredWeatherAndFallback(browser) {
   await page.route(`${weatherEndpoint}**`, async (route) => {
     providerRequests += 1;
     const requestUrl = route.request().url();
-    if (!requestUrl.includes('latitude=-33.8688') || !requestUrl.includes('longitude=151.2093')) {
+    if (
+      !requestUrl.includes('latitude=-33.8688') ||
+      !requestUrl.includes('longitude=151.2093')
+    ) {
       throw new Error(`weather request did not use resolved coordinates: ${requestUrl}`);
     }
     if (providerFails) {
