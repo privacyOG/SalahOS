@@ -349,7 +349,7 @@ export function enrichAustralianMosqueRecord(
   directory: AustralianMosqueDirectory,
   now: Date = new Date(),
 ): EnrichedMosqueDirectoryRecord {
-  const postcode = record.address.match(/\b\d{4}\b/u)?.[0];
+  const postcode = /\b\d{4}\b/u.exec(record.address)?.[0];
   const osmUrl = `https://www.openstreetmap.org/${record.osmType}/${String(record.osmId)}`;
   return createEnrichedMosqueDirectoryRecord(
     {
@@ -584,12 +584,11 @@ export function resolveMosqueDirectoryEntities(
   for (const record of records) {
     const duplicateIndex = resolved.findIndex((candidate) => likelySameMosque(candidate, record));
     if (duplicateIndex === -1) resolved.push(record);
-    else
-      resolved[duplicateIndex] = mergeEnrichedMosqueDirectoryRecords(
-        resolved[duplicateIndex]!,
-        record,
-        now,
-      );
+    else {
+      const duplicate = resolved[duplicateIndex];
+      if (duplicate === undefined) continue;
+      resolved[duplicateIndex] = mergeEnrichedMosqueDirectoryRecords(duplicate, record, now);
+    }
   }
   return Object.freeze(resolved);
 }
