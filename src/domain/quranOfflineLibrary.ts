@@ -73,16 +73,14 @@ export function validateQuranOfflinePack(value: unknown): QuranOfflinePack {
   assertPack(pack.schemaVersion === 1, 'Offline Qur’an pack schema version is invalid.');
   assertPack(pack.counts?.surahs === 114, 'Offline Qur’an pack must contain 114 surahs.');
   assertPack(pack.counts.ayahs === 6236, 'Offline Qur’an pack must contain 6,236 ayat.');
-  assertPack(
-    Array.isArray(pack.surahs) && pack.surahs.length === 114,
-    'Offline Qur’an surah data is incomplete.',
-  );
+  const surahs = pack.surahs;
+  assertPack(surahs !== undefined && surahs.length === 114, 'Offline Qur’an surah data is incomplete.');
 
   let ayahCount = 0;
   const verseKeys = new Set<string>();
-  for (const surah of pack.surahs) {
+  for (const surah of surahs) {
     assertPack(Number.isInteger(surah.surah), 'Offline Qur’an surah number is invalid.');
-    assertPack(Array.isArray(surah.ayahs), `Surah ${String(surah.surah)} has no ayat.`);
+    assertPack(surah.ayahs.length > 0, `Surah ${String(surah.surah)} has no ayat.`);
     for (const ayah of surah.ayahs) {
       const key = `${String(surah.surah)}:${String(ayah.ayah)}`;
       assertPack(ayah.key === key, `Offline Qur’an verse key ${ayah.key} is invalid.`);
