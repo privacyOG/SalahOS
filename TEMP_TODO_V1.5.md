@@ -16,9 +16,9 @@ Keep this tracker compact. Mark an item `[x]` only after implementation, tests/v
 
 ## Stage 3 — Privacy without feature friction
 
-- [ ] Remove unnecessary privacy/configuration friction from normal user workflows.
-- [ ] Keep privacy/data controls in Settings while collecting/transmitting only data required by enabled features.
-- [ ] Add optional privacy-respecting crash/performance diagnostics without precise-location tracking.
+- [x] Remove unnecessary privacy/configuration friction from normal user workflows.
+- [x] Keep privacy/data controls in Settings while collecting/transmitting only data required by enabled features.
+- [x] Add optional privacy-respecting crash/performance diagnostics without precise-location tracking.
 
 ## Stage 4 — Mosque directory enrichment
 
