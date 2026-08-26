@@ -72,6 +72,15 @@ describe('mosque timetable domain', () => {
     expect(resolved.fajr.source).toBe('local-mosque');
   });
 
+  it('gives an available local mosque entry precedence over calculated prayer starts', () => {
+    const calculated = calculatedSchedule();
+    const resolved = resolvePrayerSource('local-mosque', calculated, friday);
+
+    expect(resolved.fajr.startLocalMinutes).toBe(friday.prayers.fajr?.startLocalMinutes);
+    expect(resolved.fajr.startLocalMinutes).not.toBe(calculated.prayers.fajr.roundedLocalMinutes);
+    expect(resolved.fajr.source).toBe('local-mosque');
+  });
+
   it('does not silently fall back to calculated time when a mosque entry is missing', () => {
     const incomplete: MosqueDayTimetable = {
       date: friday.date,
@@ -88,6 +97,28 @@ describe('mosque timetable domain', () => {
     expect(resolved.dhuhr.available).toBe(false);
     expect(resolved.dhuhr.startLocalMinutes).toBeNull();
     expect(resolved.dhuhr.source).toBe('local-mosque');
+  });
+
+  it('does not silently fall back to calculated times when the selected mosque has no day record', () => {
+    const resolved = resolvePrayerSource('local-mosque', calculatedSchedule(), null);
+
+    for (const prayer of ['fajr', 'dhuhr', 'asr', 'maghrib', 'isha'] as const) {
+      expect(resolved[prayer]).toMatchObject({
+        source: 'local-mosque',
+        available: false,
+        startLocalMinutes: null,
+        iqamahLocalMinutes: null,
+      });
+    }
+  });
+
+  it('rejects a mosque day from a different civil date before applying timetable precedence', () => {
+    expect(() =>
+      resolvePrayerSource('local-mosque', calculatedSchedule(), {
+        ...friday,
+        date: '2026-08-22',
+      }),
+    ).toThrow(/date must match/u);
   });
 
   it('exposes calculated and calculated-adjustments as explicit source modes', () => {
