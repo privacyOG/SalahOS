@@ -78,15 +78,15 @@ describe('Stage 9 mosque directory data quality', () => {
   it('classifies the same sourced record as fresh, aging and stale at release boundaries', () => {
     const input = baseRecord('2026-01-01T00:00:00.000Z');
 
-    expect(calculateMosqueDirectoryQuality(input, new Date('2026-03-31T00:00:00.000Z')).freshness).toBe(
-      'fresh',
-    );
-    expect(calculateMosqueDirectoryQuality(input, new Date('2026-04-02T00:00:00.000Z')).freshness).toBe(
-      'aging',
-    );
-    expect(calculateMosqueDirectoryQuality(input, new Date('2027-01-02T00:00:00.000Z')).freshness).toBe(
-      'stale',
-    );
+    expect(
+      calculateMosqueDirectoryQuality(input, new Date('2026-03-31T00:00:00.000Z')).freshness,
+    ).toBe('fresh');
+    expect(
+      calculateMosqueDirectoryQuality(input, new Date('2026-04-02T00:00:00.000Z')).freshness,
+    ).toBe('aging');
+    expect(
+      calculateMosqueDirectoryQuality(input, new Date('2027-01-02T00:00:00.000Z')).freshness,
+    ).toBe('stale');
   });
 
   it('penalizes unresolved conflicts without losing completeness or provenance coverage', () => {
