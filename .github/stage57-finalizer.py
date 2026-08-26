@@ -61,6 +61,7 @@ def fix_settings_route_contract() -> None:
 def fix_primary_navigation() -> None:
     path = Path('src/ui/CongregationShell.tsx')
     text = path.read_text()
+    text = text.replace("import { requestCompassPermission } from '../platform/deviceCompass';\n", '', 1)
     pattern = re.compile(
         r"\s*<PrimaryNavigation\s+ariaLabel=\{labels\.navigation\}\s+items=\{\[.*?\]\}\s+overflowLabel=\{labels\.more\}\s+overflowItems=\{\[.*?\]\}\s*/>",
         flags=re.S,
