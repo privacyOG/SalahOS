@@ -1,6 +1,6 @@
 # SalahOS v1.5.0 release notes
 
-SalahOS v1.5.0 completes the ten-stage v1.5 programme with stronger real-world resilience, richer mosque and Islamic-content experiences, clearer privacy controls, more focused product UX, and an explicit release-verification contract across Web, Android, iOS/iPadOS, Raspberry Pi Touch Display and TV/kiosk targets.
+SalahOS v1.5.0 completes the ten-stage v1.5 programme with stronger real-world resilience, richer mosque and Islamic-content experiences, clearer privacy controls, more focused product UX, and an explicit release-verification contract across Web, Android, iOS/iPadOS, Windows, Raspberry Pi Touch Display and TV/kiosk targets.
 
 ## Location, weather and local context
 
@@ -47,6 +47,7 @@ See `docs/REAL_WORLD_VERIFICATION_V1.5.md` for the Stage 9/10 acceptance matrix 
 - Synchronises npm, package-lock, Android and iOS marketing versions at `1.5.0`.
 - Advances Android `versionCode` and iOS `CURRENT_PROJECT_VERSION` together to build `7`.
 - Preserves the established release-asset pipeline for persistently signed Android APK/AAB, Web/PWA ZIP, Raspberry Pi kiosk archive and portable SHA-256 manifest.
+- Adds a self-contained Windows x64 desktop executable with the production SalahOS application embedded and a packaged self-test before publication.
 - Preserves fail-closed release preflight for exact-main revision, Android signing, version/build parity, archive integrity and final package contents.
 
 ## Downloadable v1.5.0 assets
@@ -55,11 +56,12 @@ A successful v1.5.0 publication includes:
 
 - `SalahOS-v1.5.0-android.apk` — persistently signed Android release APK for direct installation;
 - `SalahOS-v1.5.0-android.aab` — persistently signed Android App Bundle for Google Play/distribution workflows;
+- `SalahOS-v1.5.0-windows-x64.exe` — self-contained 64-bit Windows 10/11 desktop executable;
 - `SalahOS-v1.5.0-web-pwa.zip` — complete production Web/PWA package;
 - `SalahOS-v1.5.0-raspberry-pi-kiosk.tar.gz` — production Web/PWA files plus Raspberry Pi/Linux Chromium kiosk launch and autostart helpers;
 - `SHA256SUMS.txt` — SHA-256 hashes for all packaged release assets.
 
-GitHub also exposes the standard source-code ZIP and tarball for the release tag.
+The Windows executable includes its .NET runtime and expects the Microsoft Edge WebView2 Runtime, normally present on current Windows 10/11 installations. GitHub also exposes the standard source-code ZIP and tarball for the release tag.
 
 ## Distribution boundaries
 
@@ -71,7 +73,7 @@ GitHub also exposes the standard source-code ZIP and tarball for the release tag
 
 The v1.5.0 release revision must be the exact current `main` commit and pass the permanent Quality, Visual Regression, Android and iOS workflows. The exact final pull-request head is revalidated after tracker reconciliation before merge. The iOS runtime gate is accepted only when the fresh iPhone/iPad Simulator install/launch/relaunch step itself reports success, not merely when the enclosing workflow reports success.
 
-The release-asset workflow then reruns repository quality checks, verifies persistent Android signing, builds and verifies APK/AAB packages, validates Web/PWA and Raspberry Pi archives, checks the exact final file set and SHA-256 manifest, and only then creates or updates the GitHub release.
+The core release-asset workflow then reruns repository quality checks, verifies persistent Android signing, builds and verifies APK/AAB packages, validates Web/PWA and Raspberry Pi archives, checks the exact final file set and SHA-256 manifest, and only then creates or updates the GitHub release. The Windows release workflow runs independently with read-only build permissions, self-tests the packaged executable, waits for the verified core release to complete, verifies exact-main identity and then uploads the Windows executable while reconciling and revalidating `SHA256SUMS.txt`.
 
 The completed implementation and exact-head evidence for all ten v1.5 stages is recorded in `TEMP_TODO_V1.5.md`. See `docs/REAL_WORLD_VERIFICATION_V1.5.md`, `docs/RELEASE_ASSETS.md`, `TESTING.md`, `TODO.md` and `docs/PLATFORM_STATUS.md` for detailed validation and distribution boundaries.
 
