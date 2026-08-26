@@ -78,6 +78,9 @@ jobs:
       - name: Run visual regression matrix
         run: npm run visual:check
 
+      - name: Run v1.5 real-world accessibility acceptance
+        run: node scripts/visual-real-world-verification-v15.mjs
+
       - name: Build Google satellite Qibla fixture
         env:
           VITE_GOOGLE_MAPS_API_KEY: salahos-visual-fixture-key
