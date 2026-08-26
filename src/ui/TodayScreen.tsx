@@ -20,6 +20,7 @@ import {
 import { todayContextCopy } from '../i18n/todayContextV2Translations';
 import type { Locale, TranslationKey } from '../i18n/translations';
 import { getApplicationStorage } from '../platform/applicationStorage';
+import { loadRecentBestAvailableLocation } from '../platform/bestAvailableLocation';
 import { installRuntimeRefreshListeners } from '../platform/runtimeRefresh';
 import {
   defaultPersistedSettings,
@@ -29,7 +30,8 @@ import {
 import { readSystemTime } from '../platform/systemTime';
 import { BidiText } from './BidiText';
 import { TodayContextualSections } from './TodayContextualSections';
-import { useMobilePrayerThemeConfig } from './MobilePrayerThemeSurface';
+import { useMobilePrayerThemeConfig, useMobilePrayerWeather } from './MobilePrayerThemeSurface';
+import { PrayerBoardWeatherModule } from './PrayerBoardWeatherModule';
 import { searchForCongregationDestination, type CongregationDestination } from './applicationRoute';
 
 const prayerTranslationKeys: Readonly<Record<PrayerName, TranslationKey>> = {
@@ -64,6 +66,63 @@ const destinationLabels: Readonly<
   ar: { mosques: 'المساجد', qiblah: 'القبلة', settings: 'الإعدادات' },
   tr: { mosques: 'Camiler', qiblah: 'Kıble', settings: 'Ayarlar' },
   id: { mosques: 'Masjid', qiblah: 'Kiblat', settings: 'Pengaturan' },
+};
+
+const stage8TodayCopy: Readonly<
+  Record<
+    Locale,
+    Readonly<{
+      localContext: string;
+      liveLocation: string;
+      recentLocation: string;
+      savedLocation: string;
+      approximate: string;
+      precise: string;
+      moreToday: string;
+      moreTodayHint: string;
+    }>
+  >
+> = {
+  en: {
+    localContext: 'Local context',
+    liveLocation: 'Live location',
+    recentLocation: 'Recent location',
+    savedLocation: 'Saved location',
+    approximate: 'Approximate',
+    precise: 'Precise',
+    moreToday: 'More today',
+    moreTodayHint: 'Solar times, Jumu’ah, shortcuts and calculation details',
+  },
+  ar: {
+    localContext: 'السياق المحلي',
+    liveLocation: 'موقع مباشر',
+    recentLocation: 'موقع حديث',
+    savedLocation: 'موقع محفوظ',
+    approximate: 'تقريبي',
+    precise: 'دقيق',
+    moreToday: 'المزيد لليوم',
+    moreTodayHint: 'الشروق والغروب والجمعة والاختصارات وتفاصيل الحساب',
+  },
+  tr: {
+    localContext: 'Yerel bağlam',
+    liveLocation: 'Canlı konum',
+    recentLocation: 'Son konum',
+    savedLocation: 'Kayıtlı konum',
+    approximate: 'Yaklaşık',
+    precise: 'Hassas',
+    moreToday: 'Bugün daha fazlası',
+    moreTodayHint: 'Güneş vakitleri, Cuma, kısayollar ve hesaplama ayrıntıları',
+  },
+  id: {
+    localContext: 'Konteks lokal',
+    liveLocation: 'Lokasi langsung',
+    recentLocation: 'Lokasi terbaru',
+    savedLocation: 'Lokasi tersimpan',
+    approximate: 'Perkiraan',
+    precise: 'Akurat',
+    moreToday: 'Lainnya hari ini',
+    moreTodayHint: 'Waktu matahari, Jumat, pintasan, dan detail perhitungan',
+  },
 };
 
 function initialSettings(): PersistedSettings {
@@ -119,9 +178,11 @@ function prayerBoardCivilDate(data: PrayerBoardData): Date {
 export function TodayScreen() {
   const settings = useMemo(initialSettings, []);
   const mobileThemeConfig = useMobilePrayerThemeConfig();
+  const weather = useMobilePrayerWeather();
   const modules = mobileThemeConfig.moduleVisibility;
   const locale = settings.locale;
   const contextualCopy = todayContextCopy[locale];
+  const uxCopy = stage8TodayCopy[locale];
   const coordinates = settings.location?.coordinates ?? null;
   const timeZoneOverride = settings.location?.timeZone ?? null;
   const [now, setNow] = useState<Date | null>(() => readSystemTime());
@@ -229,6 +290,37 @@ export function TodayScreen() {
     settings.location?.timeZone ??
     translate(locale, 'notConfigured');
   const quickLabels = destinationLabels[locale];
+  const currentPrayer =
+    prayerBoardData?.prayers.find(
+      (prayer) => prayer.isCurrent && !isSupplementaryPrayer(prayer.name),
+    ) ?? null;
+  const currentPrayerLabel =
+    currentPrayer === null
+      ? translate(locale, 'notConfigured')
+      : translate(locale, prayerTranslationKeys[currentPrayer.name]);
+  const recentLocation = useMemo(() => {
+    if (coordinates === null) return null;
+    try {
+      return loadRecentBestAvailableLocation(getApplicationStorage());
+    } catch {
+      return null;
+    }
+  }, [coordinates]);
+  const locationSourceLabel =
+    recentLocation?.freshness === 'live'
+      ? uxCopy.liveLocation
+      : recentLocation !== null
+        ? uxCopy.recentLocation
+        : uxCopy.savedLocation;
+  const locationConfidenceLabel =
+    recentLocation?.isApproximate === true ? uxCopy.approximate : uxCopy.precise;
+  const locationAccuracyMeters = recentLocation === null ? null : recentLocation.accuracyMeters;
+  const locationAccuracyLabel =
+    locationAccuracyMeters === null
+      ? null
+      : locationAccuracyMeters < 1_000
+        ? `±${String(Math.round(locationAccuracyMeters))} m`
+        : `±${(locationAccuracyMeters / 1_000).toFixed(1)} km`;
 
   return (
     <main
@@ -292,6 +384,10 @@ export function TodayScreen() {
       ) : (
         <>
           <section className="today-next" aria-labelledby="today-next-prayer">
+            <div className="today-next__current" data-current-prayer>
+              <span>{translate(locale, 'currentPrayer')}</span>
+              <strong>{currentPrayerLabel}</strong>
+            </div>
             <div className="today-next__identity">
               <p>{translate(locale, 'nextPrayer')}</p>
               <h1 id="today-next-prayer">{nextPrayerLabel}</h1>
@@ -317,6 +413,29 @@ export function TodayScreen() {
                 <dd>{nextPrayerIqamah}</dd>
               </div>
             </dl>
+          </section>
+          <section className="today-local-context" aria-label={uxCopy.localContext}>
+            <div
+              className="today-location-confidence"
+              data-location-confidence={
+                recentLocation?.isApproximate === true
+                  ? 'approximate'
+                  : recentLocation === null
+                    ? 'saved'
+                    : 'precise'
+              }
+            >
+              <div>
+                <span>{uxCopy.localContext}</span>
+                <strong>{locationSourceLabel}</strong>
+              </div>
+              <div className="today-location-confidence__meta">
+                <span>{locationConfidenceLabel}</span>
+                {locationAccuracyLabel !== null && <span>{locationAccuracyLabel}</span>}
+                <span dir="auto">{contextLabel}</span>
+              </div>
+            </div>
+            {modules.weather && <PrayerBoardWeatherModule weather={weather} locale={locale} />}
           </section>
 
           {modules.dates && (
@@ -436,71 +555,6 @@ export function TodayScreen() {
             </div>
           </section>
 
-          {modules['sunrise-sunset'] && (
-            <section className="today-solar" aria-labelledby="today-solar-title">
-              <div className="today-section-heading">
-                <div>
-                  <p>{contextualCopy.solarEyebrow}</p>
-                  <h2 id="today-solar-title">{contextualCopy.solarTitle}</h2>
-                </div>
-              </div>
-              <div className="today-solar__times">
-                <div>
-                  <span>{translate(locale, 'prayerSunrise')}</span>
-                  <strong>
-                    {prayerBoardData.solarEvents.sunriseLocalMinutes === null
-                      ? '—'
-                      : formatLocalTime(
-                          prayerBoardData.solarEvents.sunriseLocalMinutes,
-                          locale,
-                          settings.timeFormat,
-                        )}
-                  </strong>
-                </div>
-                <div>
-                  <span>{contextualCopy.sunset}</span>
-                  <strong>
-                    {prayerBoardData.solarEvents.sunsetLocalMinutes === null
-                      ? '—'
-                      : formatLocalTime(
-                          prayerBoardData.solarEvents.sunsetLocalMinutes,
-                          locale,
-                          settings.timeFormat,
-                        )}
-                  </strong>
-                </div>
-              </div>
-            </section>
-          )}
-
-          {modules.jumuah && prayerBoardData.jumuahSessions.length > 0 && (
-            <section className="today-jumuah" aria-labelledby="today-jumuah-title">
-              <div className="today-section-heading">
-                <div>
-                  <p>{translate(locale, 'today')}</p>
-                  <h2 id="today-jumuah-title">{translate(locale, 'jumuah')}</h2>
-                </div>
-              </div>
-              <div className="today-jumuah__sessions">
-                {prayerBoardData.jumuahSessions.map((session) => (
-                  <div key={session.label}>
-                    <strong>
-                      <BidiText>{session.label}</BidiText>
-                    </strong>
-                    <span>
-                      {translate(locale, 'khutbah')} ·{' '}
-                      {formatLocalTime(session.khutbahLocalMinutes, locale, settings.timeFormat)}
-                    </span>
-                    <span>
-                      {translate(locale, 'salah')} ·{' '}
-                      {formatLocalTime(session.salahLocalMinutes, locale, settings.timeFormat)}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            </section>
-          )}
-
           <TodayContextualSections
             settings={settings}
             dashboard={sourcedDashboard}
@@ -512,27 +566,104 @@ export function TodayScreen() {
             showCommunity={modules.announcements}
           />
 
-          <nav className="today-quick-actions" aria-label={translate(locale, 'today')}>
-            <a href={destinationHref('qiblah')}>{quickLabels.qiblah}</a>
-            <a href={destinationHref('mosques')}>{quickLabels.mosques}</a>
-            <a href={destinationHref('settings')}>{quickLabels.settings}</a>
-          </nav>
+          <details className="today-secondary-context">
+            <summary>
+              <span>{uxCopy.moreToday}</span>
+              <small>{uxCopy.moreTodayHint}</small>
+            </summary>
+            <div className="today-secondary-context__content">
+              {modules['sunrise-sunset'] && (
+                <section className="today-solar" aria-labelledby="today-solar-title">
+                  <div className="today-section-heading">
+                    <div>
+                      <p>{contextualCopy.solarEyebrow}</p>
+                      <h2 id="today-solar-title">{contextualCopy.solarTitle}</h2>
+                    </div>
+                  </div>
+                  <div className="today-solar__times">
+                    <div>
+                      <span>{translate(locale, 'prayerSunrise')}</span>
+                      <strong>
+                        {prayerBoardData.solarEvents.sunriseLocalMinutes === null
+                          ? '—'
+                          : formatLocalTime(
+                              prayerBoardData.solarEvents.sunriseLocalMinutes,
+                              locale,
+                              settings.timeFormat,
+                            )}
+                      </strong>
+                    </div>
+                    <div>
+                      <span>{contextualCopy.sunset}</span>
+                      <strong>
+                        {prayerBoardData.solarEvents.sunsetLocalMinutes === null
+                          ? '—'
+                          : formatLocalTime(
+                              prayerBoardData.solarEvents.sunsetLocalMinutes,
+                              locale,
+                              settings.timeFormat,
+                            )}
+                      </strong>
+                    </div>
+                  </div>
+                </section>
+              )}
 
-          <footer className="today-provenance">
-            <span>
-              {translate(locale, 'method')}:{' '}
-              <BidiText>{sourcedDashboard.base.method.name}</BidiText>
-            </span>
-            <span>
-              {translate(locale, 'timezone')}: <BidiText>{prayerBoardData.timeZone}</BidiText>
-            </span>
-            {modules['mosque-branding'] && prayerBoardData.mosqueName !== null && (
-              <span>
-                {translate(locale, 'selectedMosque')}:{' '}
-                <BidiText>{prayerBoardData.mosqueName}</BidiText>
-              </span>
-            )}
-          </footer>
+              {modules.jumuah && prayerBoardData.jumuahSessions.length > 0 && (
+                <section className="today-jumuah" aria-labelledby="today-jumuah-title">
+                  <div className="today-section-heading">
+                    <div>
+                      <p>{translate(locale, 'today')}</p>
+                      <h2 id="today-jumuah-title">{translate(locale, 'jumuah')}</h2>
+                    </div>
+                  </div>
+                  <div className="today-jumuah__sessions">
+                    {prayerBoardData.jumuahSessions.map((session) => (
+                      <div key={session.label}>
+                        <strong>
+                          <BidiText>{session.label}</BidiText>
+                        </strong>
+                        <span>
+                          {translate(locale, 'khutbah')} ·{' '}
+                          {formatLocalTime(
+                            session.khutbahLocalMinutes,
+                            locale,
+                            settings.timeFormat,
+                          )}
+                        </span>
+                        <span>
+                          {translate(locale, 'salah')} ·{' '}
+                          {formatLocalTime(session.salahLocalMinutes, locale, settings.timeFormat)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </section>
+              )}
+
+              <nav className="today-quick-actions" aria-label={translate(locale, 'today')}>
+                <a href={destinationHref('qiblah')}>{quickLabels.qiblah}</a>
+                <a href={destinationHref('mosques')}>{quickLabels.mosques}</a>
+                <a href={destinationHref('settings')}>{quickLabels.settings}</a>
+              </nav>
+
+              <footer className="today-provenance">
+                <span>
+                  {translate(locale, 'method')}:{' '}
+                  <BidiText>{sourcedDashboard.base.method.name}</BidiText>
+                </span>
+                <span>
+                  {translate(locale, 'timezone')}: <BidiText>{prayerBoardData.timeZone}</BidiText>
+                </span>
+                {modules['mosque-branding'] && prayerBoardData.mosqueName !== null && (
+                  <span>
+                    {translate(locale, 'selectedMosque')}:{' '}
+                    <BidiText>{prayerBoardData.mosqueName}</BidiText>
+                  </span>
+                )}
+              </footer>
+            </div>
+          </details>
         </>
       )}
     </main>

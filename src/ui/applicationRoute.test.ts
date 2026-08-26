@@ -46,13 +46,12 @@ describe('applicationRoute', () => {
 
   it('creates, reads and clears reloadable Settings category links', () => {
     for (const category of [
-      'prayer',
       'location',
-      'mosque',
-      'notifications',
-      'appearance',
-      'data-privacy',
-      'display-themes',
+      'prayer',
+      'adhan',
+      'display',
+      'mosques',
+      'privacy-data',
       'advanced',
     ] as const) {
       const search = searchForSettingsCategory('?view=settings&debug=1', category);
@@ -63,14 +62,14 @@ describe('applicationRoute', () => {
 
     const fromAdmin = searchForSettingsCategory(
       '?surface=admin&adminView=displays&debug=1',
-      'appearance',
+      'display',
     );
     const adminParams = new URLSearchParams(fromAdmin);
     expect(readProductSurface(fromAdmin)).toBe('congregation');
     expect(readCongregationDestination(fromAdmin)).toBe('settings');
-    expect(readSettingsCategory(fromAdmin)).toBe('appearance');
+    expect(readSettingsCategory(fromAdmin)).toBe('display');
     expect(adminParams.get('view')).toBe('settings');
-    expect(adminParams.get('settingsView')).toBe('appearance');
+    expect(adminParams.get('settingsView')).toBe('display');
     expect(adminParams.has('surface')).toBe(false);
     expect(adminParams.has('adminView')).toBe(false);
     expect(adminParams.get('debug')).toBe('1');
@@ -81,6 +80,14 @@ describe('applicationRoute', () => {
     expect(readSettingsCategory(cleared)).toBeNull();
     expect(new URLSearchParams(cleared).get('debug')).toBe('1');
     expect(readSettingsCategory('?view=settings&settingsView=unknown')).toBeNull();
+  });
+
+  it('migrates pre-Stage-8 Settings deep links into the seven canonical groups', () => {
+    expect(readSettingsCategory('?view=settings&settingsView=mosque')).toBe('mosques');
+    expect(readSettingsCategory('?view=settings&settingsView=notifications')).toBe('adhan');
+    expect(readSettingsCategory('?view=settings&settingsView=appearance')).toBe('display');
+    expect(readSettingsCategory('?view=settings&settingsView=display-themes')).toBe('display');
+    expect(readSettingsCategory('?view=settings&settingsView=data-privacy')).toBe('privacy-data');
   });
 
   it('creates and reads every Stage 24 administration destination', () => {

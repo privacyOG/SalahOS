@@ -18,11 +18,11 @@ import {
   PRAYER_BOARD_WEATHER_CHANGE_EVENT,
   refreshPrayerBoardWeather,
 } from '../platform/prayerBoardWeather';
-import { PrayerBoardWeatherModule } from './PrayerBoardWeatherModule';
 
 const MobilePrayerThemeConfigContext = createContext<PrayerBoardTemplateConfig>(
   defaultPrayerBoardTemplateConfig,
 );
+const MobilePrayerWeatherContext = createContext<PrayerBoardWeatherSnapshot | null>(null);
 
 function readThemeConfig(): PrayerBoardTemplateConfig {
   try {
@@ -43,6 +43,10 @@ function readWeather(): PrayerBoardWeatherSnapshot | null {
 
 export function useMobilePrayerThemeConfig(): PrayerBoardTemplateConfig {
   return useContext(MobilePrayerThemeConfigContext);
+}
+
+export function useMobilePrayerWeather(): PrayerBoardWeatherSnapshot | null {
+  return useContext(MobilePrayerWeatherContext);
 }
 
 export function MobilePrayerThemeSurface({ children }: Readonly<{ children: ReactNode }>) {
@@ -101,18 +105,17 @@ export function MobilePrayerThemeSurface({ children }: Readonly<{ children: Reac
 
   return (
     <MobilePrayerThemeConfigContext.Provider value={config}>
-      <div
-        className="mobile-prayer-theme-surface"
-        data-mobile-prayer-template={config.templateId}
-        data-mobile-prayer-accent={config.accentPreset}
-        data-mobile-prayer-theme-version={config.version}
-        data-mobile-prayer-weather={config.moduleVisibility.weather ? 'on' : 'off'}
-      >
-        {children}
-        {config.moduleVisibility.weather && (
-          <PrayerBoardWeatherModule weather={weather} locale={config.primaryLocale} />
-        )}
-      </div>
+      <MobilePrayerWeatherContext.Provider value={weather}>
+        <div
+          className="mobile-prayer-theme-surface"
+          data-mobile-prayer-template={config.templateId}
+          data-mobile-prayer-accent={config.accentPreset}
+          data-mobile-prayer-theme-version={config.version}
+          data-mobile-prayer-weather={config.moduleVisibility.weather ? 'on' : 'off'}
+        >
+          {children}
+        </div>
+      </MobilePrayerWeatherContext.Provider>
     </MobilePrayerThemeConfigContext.Provider>
   );
 }

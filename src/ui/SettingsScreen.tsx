@@ -71,16 +71,16 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
     locationTitle: 'Location',
     locationDescription:
       'Current location, offline city search, saved places and manual coordinates.',
-    mosqueTitle: 'Mosque & Iqamah',
+    mosqueTitle: 'Mosques',
     mosqueDescription: 'Local mosque timetables, Iqamah, Ramadan and Taraweeh configuration.',
-    notificationsTitle: 'Notifications & Adhan',
+    notificationsTitle: 'Adhan',
     notificationsDescription:
       'Prayer reminders, prayer-time alerts, vibration, sound and local Adhan options.',
     appearanceTitle: 'Appearance & language',
     appearanceDescription: 'Language, clock format and light or dark appearance.',
-    dataTitle: 'Data & privacy',
+    dataTitle: 'Privacy & data',
     dataDescription: 'Manage local data, privacy controls and optional diagnostics.',
-    displayTitle: 'Display themes',
+    displayTitle: 'Display',
     displayDescription:
       'Open managed-display configuration without mixing credentials or fleet controls into daily settings.',
     advancedTitle: 'Advanced',
@@ -103,16 +103,16 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
     locationTitle: 'الموقع',
     locationDescription:
       'الموقع الحالي والبحث المحلي دون اتصال والمواقع المحفوظة والإحداثيات اليدوية.',
-    mosqueTitle: 'المسجد والإقامة',
+    mosqueTitle: 'المساجد',
     mosqueDescription: 'جداول المسجد والإقامة وإعدادات رمضان والتراويح.',
-    notificationsTitle: 'الإشعارات والأذان',
+    notificationsTitle: 'الأذان',
     notificationsDescription:
       'التذكيرات وإشعارات وقت الصلاة والاهتزاز والصوت وخيارات الأذان المحلي.',
     appearanceTitle: 'المظهر واللغة',
     appearanceDescription: 'اللغة وتنسيق الساعة والمظهر الفاتح أو الداكن.',
-    dataTitle: 'البيانات والخصوصية',
+    dataTitle: 'الخصوصية والبيانات',
     dataDescription: 'إدارة البيانات المحلية وضوابط الخصوصية والتشخيصات الاختيارية.',
-    displayTitle: 'سمات شاشات العرض',
+    displayTitle: 'العرض',
     displayDescription:
       'افتح إدارة الشاشات من دون إظهار بيانات الدخول أو الأسطول في الإعدادات اليومية.',
     advancedTitle: 'متقدم',
@@ -134,16 +134,16 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
     locationTitle: 'Konum',
     locationDescription:
       'Mevcut konum, çevrimdışı şehir araması, kayıtlı yerler ve elle koordinatlar.',
-    mosqueTitle: 'Cami ve ikamet',
+    mosqueTitle: 'Camiler',
     mosqueDescription: 'Yerel cami vakitleri, ikamet, Ramazan ve teravih yapılandırması.',
-    notificationsTitle: 'Bildirimler ve ezan',
+    notificationsTitle: 'Ezan',
     notificationsDescription:
       'Hatırlatmalar, vakit bildirimleri, titreşim, ses ve yerel ezan seçenekleri.',
     appearanceTitle: 'Görünüm ve dil',
     appearanceDescription: 'Dil, saat biçimi ve açık veya koyu görünüm.',
-    dataTitle: 'Veri ve gizlilik',
+    dataTitle: 'Gizlilik ve veri',
     dataDescription: 'Yerel verileri, gizlilik kontrollerini ve isteğe bağlı tanılamayı yönetin.',
-    displayTitle: 'Ekran temaları',
+    displayTitle: 'Ekran',
     displayDescription:
       'Kimlik bilgilerini veya filo kontrollerini günlük ayarlara karıştırmadan yönetilen ekranları açın.',
     advancedTitle: 'Gelişmiş',
@@ -166,16 +166,16 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
     locationTitle: 'Lokasi',
     locationDescription:
       'Lokasi saat ini, pencarian kota luring, lokasi tersimpan, dan koordinat manual.',
-    mosqueTitle: 'Masjid & Iqamah',
+    mosqueTitle: 'Masjid',
     mosqueDescription: 'Jadwal masjid lokal, Iqamah, Ramadan, dan konfigurasi Tarawih.',
-    notificationsTitle: 'Notifikasi & Adzan',
+    notificationsTitle: 'Adzan',
     notificationsDescription:
       'Pengingat, notifikasi waktu salat, getaran, suara, dan opsi Adzan lokal.',
     appearanceTitle: 'Tampilan & bahasa',
     appearanceDescription: 'Bahasa, format jam, serta tampilan terang atau gelap.',
-    dataTitle: 'Data & privasi',
+    dataTitle: 'Privasi & data',
     dataDescription: 'Kelola data lokal, kontrol privasi, dan diagnostik opsional.',
-    displayTitle: 'Tema layar',
+    displayTitle: 'Tampilan',
     displayDescription:
       'Buka layar terkelola tanpa mencampur kredensial atau kontrol armada ke pengaturan harian.',
     advancedTitle: 'Lanjutan',
@@ -217,17 +217,16 @@ type CategoryDefinition = Readonly<{
 }>;
 
 const categories: readonly CategoryDefinition[] = [
-  { id: 'prayer', title: 'prayerTitle', description: 'prayerDescription' },
   { id: 'location', title: 'locationTitle', description: 'locationDescription' },
-  { id: 'mosque', title: 'mosqueTitle', description: 'mosqueDescription' },
+  { id: 'prayer', title: 'prayerTitle', description: 'prayerDescription' },
   {
-    id: 'notifications',
+    id: 'adhan',
     title: 'notificationsTitle',
     description: 'notificationsDescription',
   },
-  { id: 'appearance', title: 'appearanceTitle', description: 'appearanceDescription' },
-  { id: 'data-privacy', title: 'dataTitle', description: 'dataDescription' },
-  { id: 'display-themes', title: 'displayTitle', description: 'displayDescription' },
+  { id: 'display', title: 'displayTitle', description: 'displayDescription' },
+  { id: 'mosques', title: 'mosqueTitle', description: 'mosqueDescription' },
+  { id: 'privacy-data', title: 'dataTitle', description: 'dataDescription' },
   { id: 'advanced', title: 'advancedTitle', description: 'advancedDescription' },
 ];
 
@@ -506,7 +505,10 @@ export function SettingsScreen() {
 
   if (category === null || selectedDefinition === null) {
     return (
-      <main className="settings-screen settings-screen--index">
+      <main
+        className="settings-screen settings-screen--index"
+        data-stage8-settings-categories={String(categories.length)}
+      >
         <header className="settings-screen__header">
           <p className="settings-screen__eyebrow">SalahOS</p>
           <h1>{copy.heading}</h1>
@@ -562,13 +564,7 @@ export function SettingsScreen() {
         </section>
       )}
 
-      {category === 'appearance' && (
-        <section className="settings-focus-panel" aria-label={copy.appearanceTitle}>
-          <AppearanceSettingsForm settings={settings} updateSettings={updateSettings} />
-        </section>
-      )}
-
-      {category === 'data-privacy' && (
+      {category === 'privacy-data' && (
         <section className="settings-focus-panel settings-data-panel" aria-label={copy.dataTitle}>
           <p>{copy.exportHelp}</p>
           <label>
@@ -602,11 +598,15 @@ export function SettingsScreen() {
         </section>
       )}
 
-      {category === 'display-themes' && (
+      {category === 'display' && (
         <section
           className="settings-focus-panel settings-display-entry"
           aria-label={copy.displayTitle}
         >
+          <div className="settings-display-preferences">
+            <h2>{copy.appearanceTitle}</h2>
+            <AppearanceSettingsForm settings={settings} updateSettings={updateSettings} />
+          </div>
           <MobilePrayerThemeSettings />
           <PrayerBoardWeatherSettings />
           <a className="surface-entry-card__action" href={administrationDisplaysHref()}>
@@ -619,11 +619,11 @@ export function SettingsScreen() {
         <LocationSettingsPanel settings={settings} updateSettings={updateSettings} />
       )}
 
-      {category === 'mosque' && (
+      {category === 'mosques' && (
         <MosqueIqamahSettingsPanel settings={settings} updateSettings={updateSettings} />
       )}
 
-      {category === 'notifications' && (
+      {category === 'adhan' && (
         <NotificationAdhanSettingsPanel
           settings={settings}
           updateSettings={updateSettings}
@@ -635,7 +635,7 @@ export function SettingsScreen() {
         <AdvancedPrayerSettingsPanel settings={settings} updateSettings={updateSettings} />
       )}
 
-      {category === 'mosque' && (
+      {category === 'mosques' && (
         <div className="settings-screen__seasonal">
           <RamadanModePanel />
           <TaraweehPanel />
