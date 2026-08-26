@@ -17,15 +17,15 @@ The permanent unit suite covers the location and weather failure ladders that ca
 
 ## Device acceptance matrix
 
-| Target | Automated release evidence | Physical-device status |
-| --- | --- | --- |
-| Android phone | Android API 35 `pixel_7_pro` emulator install/launch lifecycle plus 412×915 browser semantic/text-scale acceptance | Physical OEM hardware is not attached to GitHub CI; use physical acceptance when hardware is available. |
-| iPhone | Fresh iPhone Simulator install/launch/relaunch plus 390×844 browser semantic/text-scale acceptance | Physical iPhone hardware is not attached to GitHub CI. |
-| iPad | Fresh iPad Simulator install/launch/relaunch plus 820×1180 browser semantic/text-scale acceptance | Physical iPad hardware is not attached to GitHub CI. |
-| Raspberry Pi Touch Display | Browser acceptance at representative 5-inch, 7-inch and 10-inch portrait/landscape profiles, including recovery target geometry and overflow checks | Physical Raspberry Pi/Touch Display evidence remains separate when hardware is available. |
-| TV / kiosk | Browser acceptance across all prayer-board templates at 1920×1080 and 3840×2160, safe-frame checks, burn-in mitigation and keyboard recovery | Physical TV/panel evidence remains separate when hardware is available. |
+| Target                     | Automated release evidence                                                                                                                          | Physical-device status                                                                                  |
+| -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| Android phone              | Android API 35 `pixel_7_pro` emulator install/launch lifecycle plus 412×915 browser semantic/text-scale acceptance                                  | Physical OEM hardware is not attached to GitHub CI; use physical acceptance when hardware is available. |
+| iPhone                     | Fresh iPhone Simulator install/launch/relaunch plus 390×844 browser semantic/text-scale acceptance                                                  | Physical iPhone hardware is not attached to GitHub CI.                                                  |
+| iPad                       | Fresh iPad Simulator install/launch/relaunch plus 820×1180 browser semantic/text-scale acceptance                                                   | Physical iPad hardware is not attached to GitHub CI.                                                    |
+| Raspberry Pi Touch Display | Browser acceptance at representative 5-inch, 7-inch and 10-inch portrait/landscape profiles, including recovery target geometry and overflow checks | Physical Raspberry Pi/Touch Display evidence remains separate when hardware is available.               |
+| TV / kiosk                 | Browser acceptance across all prayer-board templates at 1920×1080 and 3840×2160, safe-frame checks, burn-in mitigation and keyboard recovery        | Physical TV/panel evidence remains separate when hardware is available.                                 |
 
-The words *emulator*, *Simulator* and *browser acceptance* are deliberate. They must not be described as physical-device testing.
+The words _emulator_, _Simulator_ and _browser acceptance_ are deliberate. They must not be described as physical-device testing.
 
 ## Accessibility acceptance
 
