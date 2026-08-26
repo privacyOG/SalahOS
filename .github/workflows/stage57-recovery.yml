@@ -1,0 +1,132 @@
+name: Stage 57 recovery validation
+
+on:
+  push:
+    branches:
+      - stage-57/v1.5-product-ux-refinement
+
+permissions:
+  contents: write
+
+jobs:
+  recover-stage57:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: stage-57/v1.5-product-ux-refinement
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Generate Stage 57 source
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          import textwrap
+
+          workflow = Path('.github/workflows/stage57-ux-builder-v2.yml').read_text()
+          match = re.search(
+              r"      - name: Apply Stage 57 UX refinement robustly\n        shell: bash\n        run: \|\n(?P<body>.*?)(?=\n      - name: Fix Stage 57 validation issues)",
+              workflow,
+              flags=re.S,
+          )
+          if match is None:
+              raise SystemExit('Unable to extract robust Stage 57 transformation')
+          Path('/tmp/stage57-apply.sh').write_text(textwrap.dedent(match.group('body')))
+          PY
+          bash /tmp/stage57-apply.sh
+
+      - name: Apply semantic validation fixes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          today = Path('src/ui/TodayScreen.tsx')
+          text = today.read_text()
+          start = text.find('  const locationAccuracyLabel =')
+          if start == -1:
+              raise SystemExit('Location accuracy declaration missing')
+          km = text.find(' km`;', start)
+          if km == -1:
+              raise SystemExit('Location accuracy declaration end missing')
+          end = text.find('\n', km)
+          if end == -1:
+              end = len(text)
+          else:
+              end += 1
+          replacement = """  const locationAccuracyMeters =
+            recentLocation === null ? null : recentLocation.accuracyMeters;
+          const locationAccuracyLabel =
+            locationAccuracyMeters === null
+              ? null
+              : locationAccuracyMeters < 1_000
+                ? `±${String(Math.round(locationAccuracyMeters))} m`
+                : `±${(locationAccuracyMeters / 1_000).toFixed(1)} km`;
+          """
+          text = text[:start] + replacement + text[end:]
+          today.write_text(text)
+
+          visual = Path('scripts/visual-product-ux-stage8.mjs')
+          text = visual.read_text()
+          click = "await page.locator('.congregation-nav-item--more').click();"
+          hierarchy = "  const hierarchy = await page.evaluate(() => {"
+          if click not in text:
+              if hierarchy not in text:
+                  raise SystemExit('Stage 57 hierarchy assertion missing')
+              text = text.replace(hierarchy, f"  {click}\n\n{hierarchy}", 1)
+          visual.write_text(text)
+          PY
+
+      - name: Format Stage 57 files
+        run: |
+          npx prettier --write \
+            src/ui/applicationRoute.ts \
+            src/ui/applicationRoute.test.ts \
+            src/ui/SettingsScreen.tsx \
+            src/ui/SalahIcon.tsx \
+            src/ui/PrimaryNavigation.tsx \
+            src/ui/CongregationShell.tsx \
+            src/ui/MobilePrayerThemeSurface.tsx \
+            src/ui/TodayScreen.tsx \
+            src/congregation-shell.css \
+            src/today-screen.css \
+            src/ui/prayer-board-weather.css \
+            src/settings-screen.css \
+            scripts/visual-product-ux-stage8.mjs \
+            docs/PRODUCT_UX_V1.5.md \
+            package.json
+
+      - name: Validate Stage 57 source
+        run: |
+          npm run lint
+          npm run typecheck
+          npm run test
+          npm run build
+
+      - name: Publish validated helper-free candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name privacyOG
+          git config user.email kriptiik@proton.me
+          git rm -f .github/stage57-finalizer.py || true
+          git rm -f .github/workflows/stage57-*.yml || true
+          git add -A
+          git commit -m "Stage 57: refine product UX"
+          echo "VALIDATED_STAGE57_COMMIT=$(git rev-parse HEAD)"
+          git push --force origin HEAD:refs/heads/stage57-validated-candidate
