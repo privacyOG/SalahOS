@@ -245,3 +245,10 @@
     background: Highlight;
   }
 }
+
+/* v1.5 Stage 8: keep the phone prayer bar to five focused destinations. */
+@media (max-width: 799px) {
+  .congregation-nav-item[data-navigation-id='community'] {
+    display: none;
+  }
+}

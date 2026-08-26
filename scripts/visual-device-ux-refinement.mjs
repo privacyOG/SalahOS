@@ -92,7 +92,14 @@ async function phoneMetrics(page) {
     const contentRect = content.getBoundingClientRect();
     const navigationTargets = [...nav.querySelectorAll('button')].map((element) => {
       const rect = element.getBoundingClientRect();
-      return { width: rect.width, height: rect.height, label: element.textContent?.trim() ?? '' };
+      const style = getComputedStyle(element);
+      return {
+        width: rect.width,
+        height: rect.height,
+        label: element.textContent?.trim() ?? '',
+        navigationId: element.dataset.navigationId ?? '',
+        visible: style.display !== 'none' && rect.width > 0 && rect.height > 0,
+      };
     });
     const quickTargets = [...document.querySelectorAll('.today-quick-actions a')].map((element) => {
       const rect = element.getBoundingClientRect();
@@ -145,9 +152,23 @@ function assertPhoneMetrics(name, metrics) {
     throw new Error(`${name} expected the Today surface to exercise the mobile scroll container`);
   }
   if (metrics.navigationTargets.length !== 6) {
-    throw new Error(`${name} expected six primary navigation targets`);
+    throw new Error(`${name} expected six route-capable primary navigation targets in the DOM`);
   }
-  for (const target of [...metrics.navigationTargets, ...metrics.quickTargets]) {
+  const visibleNavigationTargets = metrics.navigationTargets.filter((target) => target.visible);
+  if (visibleNavigationTargets.length !== 5) {
+    throw new Error(
+      `${name} expected five visible mobile navigation targets: ${JSON.stringify(metrics.navigationTargets)}`,
+    );
+  }
+  const communityTarget = metrics.navigationTargets.find(
+    (target) => target.navigationId === 'community',
+  );
+  if (communityTarget === undefined || communityTarget.visible) {
+    throw new Error(
+      `${name} expected Community to remain route-capable but hidden from the mobile bottom bar`,
+    );
+  }
+  for (const target of [...visibleNavigationTargets, ...metrics.quickTargets]) {
     if (target.width < 44 || target.height < 44) {
       throw new Error(`${name} touch target below 44px: ${JSON.stringify(target)}`);
     }
@@ -161,7 +182,9 @@ function assertPhoneMetrics(name, metrics) {
 
 async function reachableAboveNavigation(page, selector) {
   const target = page.locator(selector).last();
-  await target.scrollIntoViewIfNeeded();
+  await target.evaluate((element) => {
+    element.scrollIntoView({ block: 'end', inline: 'nearest' });
+  });
   await page.evaluate(
     () => new Promise((resolve) => requestAnimationFrame(() => resolve(undefined))),
   );
@@ -218,6 +241,14 @@ async function validatePhone(browser, scenario) {
       '.today-prayer-row:not(.today-prayer-row--header)',
     );
     assertReachable(scenario.name, 'Isha row', ishaReachability);
+
+    const secondaryContext = page.locator('.today-secondary-context');
+    if ((await secondaryContext.getAttribute('open')) === null) {
+      await secondaryContext.locator('summary').click();
+    }
+    if ((await secondaryContext.getAttribute('open')) === null) {
+      throw new Error(`${scenario.name} More today progressive disclosure did not open`);
+    }
     const footerReachability = await reachableAboveNavigation(page, '.today-provenance');
     assertReachable(scenario.name, 'trailing provenance', footerReachability);
 

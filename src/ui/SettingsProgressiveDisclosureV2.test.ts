@@ -16,16 +16,15 @@ function sourceBetween(source: string, startMarker: string, endMarker: string): 
   return source.slice(start, end);
 }
 
-describe('Settings progressive disclosure and Stage 27 ownership', () => {
-  it('keeps the eight category destinations explicit and reloadable', () => {
+describe('Settings progressive disclosure and Stage 8 product UX ownership', () => {
+  it('keeps the seven v1.5 category destinations explicit and reloadable', () => {
     for (const category of [
-      'prayer',
       'location',
-      'mosque',
-      'notifications',
-      'appearance',
-      'data-privacy',
-      'display-themes',
+      'prayer',
+      'adhan',
+      'display',
+      'mosques',
+      'privacy-data',
       'advanced',
     ]) {
       expect(settingsSource).toContain(`id: '${category}'`);
@@ -41,7 +40,7 @@ describe('Settings progressive disclosure and Stage 27 ownership', () => {
       'export function AdvancedPrayerSettingsPanel',
     );
 
-    expect(settingsSource).toContain("category === 'mosque'");
+    expect(settingsSource).toContain("category === 'mosques'");
     expect(settingsSource).toContain('<MosqueIqamahSettingsPanel');
     expect(mosquePanel).toContain('mosque-library-row');
     expect(mosquePanel).toContain('selectMosqueTimetable');
@@ -69,16 +68,16 @@ describe('Settings progressive disclosure and Stage 27 ownership', () => {
   });
 
   it('keeps data transfer and notification controls owned by focused categories', () => {
-    expect(settingsSource).toContain("category === 'data-privacy'");
+    expect(settingsSource).toContain("category === 'privacy-data'");
     expect(settingsSource).toContain('settings-data-panel');
-    expect(settingsSource).toContain("category === 'notifications'");
+    expect(settingsSource).toContain("category === 'adhan'");
     expect(settingsSource).toContain('<NotificationAdhanSettingsPanel');
     expect(migrationSource).toContain('export function NotificationAdhanSettingsPanel');
     expect(migrationSource).toContain('notification-fieldset');
   });
 
   it('owns personal display themes and optional weather directly', () => {
-    expect(settingsSource).toContain("category === 'display-themes'");
+    expect(settingsSource).toContain("category === 'display'");
     expect(settingsSource).toContain('<MobilePrayerThemeSettings />');
     expect(settingsSource).toContain('<PrayerBoardWeatherSettings />');
     expect(settingsSource).toContain('administrationDisplaysHref()');
