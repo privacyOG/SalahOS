@@ -56,12 +56,12 @@ Keep this tracker compact. Mark an item `[x]` only after implementation, tests/v
 
 ## Stage 9 — Real-world verification
 
-- [ ] Expand automated tests for GPS/location fallbacks, weather failures/cache, mosque data quality/actions and timetable precedence.
-- [ ] Add representative physical-device acceptance for Android/iPhone/iPad plus Raspberry Pi/TV targets where available.
-- [ ] Add VoiceOver/TalkBack, large text, reduced motion and relevant accessibility acceptance.
+- [x] Expand automated tests for GPS/location fallbacks, weather failures/cache, mosque data quality/actions and timetable precedence.
+- [x] Add representative physical-device acceptance for Android/iPhone/iPad plus Raspberry Pi/TV targets where available.
+- [x] Add VoiceOver/TalkBack, large text, reduced motion and relevant accessibility acceptance.
 
 ## Stage 10 — v1.5 release reconciliation
 
-- [ ] Run Quality, Visual, Android emulator lifecycle and fresh iPhone/iPad Simulator acceptance on the exact final head.
-- [ ] Verify web/mobile/display regressions, content-source policy, bundle/coverage budgets and final documentation.
-- [ ] Reconcile all v1.5 tracker items and merge only after final exact-head gates pass.
+- [x] Run Quality, Visual, Android emulator lifecycle and fresh iPhone/iPad Simulator acceptance on the exact final head.
+- [x] Verify web/mobile/display regressions, content-source policy, bundle/coverage budgets and final documentation.
+- [x] Reconcile all v1.5 tracker items and merge only after final exact-head gates pass.
