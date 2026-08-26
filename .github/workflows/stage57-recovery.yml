@@ -32,20 +32,18 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          git show 20e655af96004807b75fab97648c34f24cdf72c3:.github/workflows/stage57-ux-builder-v2.yml > /tmp/stage57-v2.yml
           python3 - <<'PY'
           from pathlib import Path
-          import re
           import textwrap
 
-          workflow = Path('.github/workflows/stage57-ux-builder-v2.yml').read_text()
-          match = re.search(
-              r"      - name: Apply Stage 57 UX refinement robustly\n        shell: bash\n        run: \|\n(?P<body>.*?)(?=\n      - name: Fix Stage 57 validation issues)",
-              workflow,
-              flags=re.S,
-          )
-          if match is None:
-              raise SystemExit('Unable to extract robust Stage 57 transformation')
-          Path('/tmp/stage57-apply.sh').write_text(textwrap.dedent(match.group('body')))
+          workflow = Path('/tmp/stage57-v2.yml').read_text()
+          step_start = workflow.index('      - name: Apply Stage 57 UX refinement robustly')
+          marker = "          python3 - <<'PY'\n"
+          script_start = workflow.index(marker, step_start) + len(marker)
+          script_end = workflow.index('\n          PY\n          bash /tmp/stage57-apply.sh', script_start)
+          script = textwrap.dedent(workflow[script_start:script_end])
+          exec(compile(script, '/tmp/stage57-v2-transform.py', 'exec'), {})
           PY
           bash /tmp/stage57-apply.sh
 
@@ -58,37 +56,38 @@ jobs:
 
           today = Path('src/ui/TodayScreen.tsx')
           text = today.read_text()
-          start = text.find('  const locationAccuracyLabel =')
-          if start == -1:
+          marker = 'const locationAccuracyLabel ='
+          marker_index = text.find(marker)
+          if marker_index == -1:
               raise SystemExit('Location accuracy declaration missing')
-          km = text.find(' km`;', start)
-          if km == -1:
+          line_start = text.rfind('\n', 0, marker_index) + 1
+          declaration_end = text.find(';', marker_index)
+          if declaration_end == -1:
               raise SystemExit('Location accuracy declaration end missing')
-          end = text.find('\n', km)
-          if end == -1:
-              end = len(text)
-          else:
-              end += 1
-          replacement = """  const locationAccuracyMeters =
-            recentLocation === null ? null : recentLocation.accuracyMeters;
-          const locationAccuracyLabel =
-            locationAccuracyMeters === null
-              ? null
-              : locationAccuracyMeters < 1_000
-                ? `±${String(Math.round(locationAccuracyMeters))} m`
-                : `±${(locationAccuracyMeters / 1_000).toFixed(1)} km`;
-          """
-          text = text[:start] + replacement + text[end:]
+          declaration_end += 1
+          replacement = (
+              '  const locationAccuracyMeters =\n'
+              '    recentLocation === null ? null : recentLocation.accuracyMeters;\n'
+              '  const locationAccuracyLabel =\n'
+              '    locationAccuracyMeters === null\n'
+              '      ? null\n'
+              '      : locationAccuracyMeters < 1_000\n'
+              '        ? `±${String(Math.round(locationAccuracyMeters))} m`\n'
+              '        : `±${(locationAccuracyMeters / 1_000).toFixed(1)} km`;'
+          )
+          text = text[:line_start] + replacement + text[declaration_end:]
           today.write_text(text)
 
           visual = Path('scripts/visual-product-ux-stage8.mjs')
           text = visual.read_text()
-          click = "await page.locator('.congregation-nav-item--more').click();"
-          hierarchy = "  const hierarchy = await page.evaluate(() => {"
-          if click not in text:
-              if hierarchy not in text:
-                  raise SystemExit('Stage 57 hierarchy assertion missing')
-              text = text.replace(hierarchy, f"  {click}\n\n{hierarchy}", 1)
+          hierarchy = 'const hierarchy = await page.evaluate(() => {'
+          hierarchy_index = text.find(hierarchy)
+          if hierarchy_index == -1:
+              raise SystemExit('Stage 57 hierarchy assertion missing')
+          hierarchy_line_start = text.rfind('\n', 0, hierarchy_index) + 1
+          indent = text[hierarchy_line_start:hierarchy_index]
+          close_more = indent + "await page.locator('.congregation-nav-item--more').click();\n\n"
+          text = text[:hierarchy_line_start] + close_more + text[hierarchy_line_start:]
           visual.write_text(text)
           PY
 
