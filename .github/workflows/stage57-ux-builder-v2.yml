@@ -162,7 +162,7 @@ jobs:
           PY
           bash /tmp/stage57-apply.sh
 
-      - name: Fix Stage 57 validation issues
+      - name: Fix Stage 57 validation issues semantically
         shell: bash
         run: |
           set -euo pipefail
@@ -171,44 +171,37 @@ jobs:
 
           today = Path('src/ui/TodayScreen.tsx')
           text = today.read_text()
-          old = """  const locationAccuracyLabel =
-            recentLocation?.accuracyMeters === null || recentLocation?.accuracyMeters === undefined
-              ? null
-              : recentLocation.accuracyMeters < 1_000
-                ? `±${String(Math.round(recentLocation.accuracyMeters))} m`
-                : `±${(recentLocation.accuracyMeters / 1_000).toFixed(1)} km`;
-          """
-          new = """  const locationAccuracyMeters =
-            recentLocation === null ? null : recentLocation.accuracyMeters;
-          const locationAccuracyLabel =
-            locationAccuracyMeters === null
-              ? null
-              : locationAccuracyMeters < 1_000
-                ? `±${String(Math.round(locationAccuracyMeters))} m`
-                : `±${(locationAccuracyMeters / 1_000).toFixed(1)} km`;
-          """
-          if old not in text:
-              raise SystemExit('Location accuracy validation-fix marker missing')
-          today.write_text(text.replace(old, new, 1))
+          marker = 'const locationAccuracyLabel ='
+          marker_index = text.find(marker)
+          if marker_index == -1:
+              raise SystemExit('Location accuracy declaration missing')
+          line_start = text.rfind('\n', 0, marker_index) + 1
+          declaration_end = text.find(';', marker_index)
+          if declaration_end == -1:
+              raise SystemExit('Location accuracy declaration end missing')
+          declaration_end += 1
+          replacement = """  const locationAccuracyMeters =
+    recentLocation === null ? null : recentLocation.accuracyMeters;
+  const locationAccuracyLabel =
+    locationAccuracyMeters === null
+      ? null
+      : locationAccuracyMeters < 1_000
+        ? `±${String(Math.round(locationAccuracyMeters))} m`
+        : `±${(locationAccuracyMeters / 1_000).toFixed(1)} km`;"""
+          text = text[:line_start] + replacement + text[declaration_end:]
+          today.write_text(text)
 
           visual = Path('scripts/visual-product-ux-stage8.mjs')
           text = visual.read_text()
-          old = """    if ((await overflowMenu.getByRole('menuitem').count()) !== 2) {
-              throw new Error('Mobile More menu must expose exactly Community and Settings');
-            }
-
-            const hierarchy = await page.evaluate(() => {
-          """
-          new = """    if ((await overflowMenu.getByRole('menuitem').count()) !== 2) {
-              throw new Error('Mobile More menu must expose exactly Community and Settings');
-            }
-            await page.locator('.congregation-nav-item--more').click();
-
-            const hierarchy = await page.evaluate(() => {
-          """
-          if old not in text:
-              raise SystemExit('Mobile More acceptance-state marker missing')
-          visual.write_text(text.replace(old, new, 1))
+          hierarchy = 'const hierarchy = await page.evaluate(() => {'
+          hierarchy_index = text.find(hierarchy)
+          if hierarchy_index == -1:
+              raise SystemExit('Stage 57 hierarchy assertion missing')
+          hierarchy_line_start = text.rfind('\n', 0, hierarchy_index) + 1
+          indent = text[hierarchy_line_start:hierarchy_index]
+          close_more = f"{indent}await page.locator('.congregation-nav-item--more').click();\n\n"
+          text = text[:hierarchy_line_start] + close_more + text[hierarchy_line_start:]
+          visual.write_text(text)
           PY
 
       - name: Format Stage 57 files
@@ -237,30 +230,15 @@ jobs:
           npm run test
           npm run build
 
-      - name: Publish helper-free Stage 57 commit object
+      - name: Publish validated helper-free candidate
         shell: bash
         run: |
           set -euo pipefail
           git config user.name privacyOG
           git config user.email kriptiik@proton.me
-          git rm .github/workflows/stage57-ux-builder.yml
-          git rm .github/workflows/stage57-ux-builder-v2.yml
-          git add \
-            src/ui/applicationRoute.ts \
-            src/ui/applicationRoute.test.ts \
-            src/ui/SettingsScreen.tsx \
-            src/ui/SalahIcon.tsx \
-            src/ui/PrimaryNavigation.tsx \
-            src/ui/CongregationShell.tsx \
-            src/ui/MobilePrayerThemeSurface.tsx \
-            src/ui/TodayScreen.tsx \
-            src/congregation-shell.css \
-            src/today-screen.css \
-            src/ui/prayer-board-weather.css \
-            src/settings-screen.css \
-            scripts/visual-product-ux-stage8.mjs \
-            docs/PRODUCT_UX_V1.5.md \
-            package.json
+          git rm -f .github/stage57-finalizer.py || true
+          git rm -f .github/workflows/stage57-*.yml || true
+          git add -A
           git commit -m "Stage 57: refine product UX"
-          echo "CLEAN_STAGE57_COMMIT=$(git rev-parse HEAD)"
-          git push origin HEAD:stage-57/v1.5-product-ux-refinement || true
+          echo "VALIDATED_STAGE57_COMMIT=$(git rev-parse HEAD)"
+          git push --force origin HEAD:refs/heads/stage57-validated-candidate
