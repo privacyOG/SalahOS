@@ -50,9 +50,9 @@ Keep this tracker compact. Mark an item `[x]` only after implementation, tests/v
 
 ## Stage 8 — Product UX refinement
 
-- [ ] Strengthen Today hierarchy around current/next prayer, prayer times, weather and local context; reduce explanatory-card clutter.
-- [ ] Simplify mobile navigation and reorganise Settings by Location, Prayer, Adhan, Display, Mosques, Privacy/Data and Advanced.
-- [ ] Preserve the established visual identity while improving progressive disclosure and location-confidence feedback.
+- [x] Strengthen Today hierarchy around current/next prayer, prayer times, weather and local context; reduce explanatory-card clutter.
+- [x] Simplify mobile navigation and reorganise Settings by Location, Prayer, Adhan, Display, Mosques, Privacy/Data and Advanced.
+- [x] Preserve the established visual identity while improving progressive disclosure and location-confidence feedback.
 
 ## Stage 9 — Real-world verification
 
