@@ -112,6 +112,13 @@ jobs:
           npx eslint src/ui/SettingsScreen.tsx --fix
           npx prettier --write src/ui/SettingsScreen.tsx
 
+      - name: Show generated Stage 57 route contract
+        run: |
+          echo '--- src/ui/applicationRoute.ts ---'
+          cat src/ui/applicationRoute.ts
+          echo '--- src/ui/applicationRoute.test.ts ---'
+          cat src/ui/applicationRoute.test.ts
+
       - name: Validate Stage 57 source
         run: |
           npm run lint
