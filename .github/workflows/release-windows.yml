@@ -1,0 +1,194 @@
+name: Windows Release
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/release-windows.yml'
+      - 'desktop/windows/**'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'src/**'
+      - 'public/**'
+      - 'index.html'
+      - 'vite.config.*'
+      - 'tsconfig*.json'
+  workflow_run:
+    workflows:
+      - Release Assets
+    types:
+      - completed
+
+permissions:
+  contents: read
+
+jobs:
+  build-windows:
+    name: Windows x64 executable
+    if: >-
+      github.event_name == 'pull_request' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       startsWith(github.event.workflow_run.head_branch, 'release/v'))
+    runs-on: windows-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout release source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event_name == 'workflow_run' && github.event.workflow_run.head_sha || github.sha }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install application dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Build production web application
+        run: npm run build
+
+      - name: Embed production web application
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $archive = 'desktop/windows/web-assets.zip'
+          if (Test-Path $archive) { Remove-Item $archive -Force }
+          Compress-Archive -Path 'dist/*' -DestinationPath $archive -CompressionLevel Optimal
+          if (-not (Test-Path $archive) -or (Get-Item $archive).Length -eq 0) {
+            throw 'Windows embedded web asset archive was not created.'
+          }
+
+      - name: Publish self-contained Windows executable
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $version = node -p "require('./package.json').version"
+          if ([string]::IsNullOrWhiteSpace($version)) { throw 'Unable to resolve SalahOS version.' }
+          dotnet publish desktop/windows/SalahOS.Windows.csproj `
+            --configuration Release `
+            --runtime win-x64 `
+            --self-contained true `
+            -p:Version=$version `
+            --output desktop/windows/publish
+          $source = 'desktop/windows/publish/SalahOS.exe'
+          if (-not (Test-Path $source) -or (Get-Item $source).Length -lt 1MB) {
+            throw 'Published SalahOS.exe is missing or unexpectedly small.'
+          }
+          New-Item -ItemType Directory -Force -Path release | Out-Null
+          $target = "release/SalahOS-v$version-windows-x64.exe"
+          Copy-Item $source $target -Force
+          Set-Content -Path 'release/VERSION.txt' -Value $version -NoNewline
+
+      - name: Run packaged Windows self-test
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $version = Get-Content 'release/VERSION.txt' -Raw
+          $exe = "release/SalahOS-v$version-windows-x64.exe"
+          $process = Start-Process -FilePath $exe -ArgumentList '--self-test' -Wait -PassThru -NoNewWindow
+          if ($process.ExitCode -ne 0) {
+            throw "Windows packaged self-test failed with exit code $($process.ExitCode)."
+          }
+
+      - name: Generate and verify Windows checksum
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $version = Get-Content 'release/VERSION.txt' -Raw
+          $name = "SalahOS-v$version-windows-x64.exe"
+          $hash = (Get-FileHash "release/$name" -Algorithm SHA256).Hash.ToLowerInvariant()
+          Set-Content -Path 'release/SHA256SUMS-windows.txt' -Value "$hash  $name"
+          $expected = (Get-Content 'release/SHA256SUMS-windows.txt' -Raw).Split(' ', [System.StringSplitOptions]::RemoveEmptyEntries)[0]
+          $actual = (Get-FileHash "release/$name" -Algorithm SHA256).Hash.ToLowerInvariant()
+          if ($actual -ne $expected) { throw 'Windows SHA-256 verification failed.' }
+
+      - name: Upload verified Windows package
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-windows-x64
+          path: |
+            release/SalahOS-v*-windows-x64.exe
+            release/SHA256SUMS-windows.txt
+            release/VERSION.txt
+          if-no-files-found: error
+          retention-days: 14
+
+  publish-windows:
+    name: Publish Windows asset
+    if: >-
+      github.event_name == 'workflow_run' &&
+      github.event.workflow_run.conclusion == 'success' &&
+      startsWith(github.event.workflow_run.head_branch, 'release/v')
+    needs:
+      - build-windows
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: write
+    steps:
+      - name: Checkout exact release source
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+          fetch-depth: 0
+
+      - name: Require exact current main commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main --no-tags
+          HEAD_SHA="$(git rev-parse HEAD)"
+          MAIN_SHA="$(git rev-parse origin/main)"
+          [[ "$HEAD_SHA" == "$MAIN_SHA" ]] || {
+            echo "Windows release source ${HEAD_SHA} is not exact current main ${MAIN_SHA}" >&2
+            exit 1
+          }
+
+      - name: Download verified Windows package
+        uses: actions/download-artifact@v4
+        with:
+          name: release-windows-x64
+          path: release-windows
+
+      - name: Verify release identity and Windows checksum
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="$(node -p "require('./package.json').version")"
+          RECORDED_VERSION="$(cat release-windows/VERSION.txt)"
+          [[ "$RECORDED_VERSION" == "$VERSION" ]]
+          [[ "${{ github.event.workflow_run.head_branch }}" == "release/v${VERSION}" ]]
+          WINDOWS="SalahOS-v${VERSION}-windows-x64.exe"
+          test -s "release-windows/$WINDOWS"
+          (cd release-windows && sha256sum --check SHA256SUMS-windows.txt)
+
+      - name: Publish Windows executable and reconcile checksums
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION="$(node -p "require('./package.json').version")"
+          TAG="v${VERSION}"
+          WINDOWS="SalahOS-v${VERSION}-windows-x64.exe"
+          gh release view "$TAG" >/dev/null
+
+          mkdir -p existing
+          gh release download "$TAG" --pattern SHA256SUMS.txt --dir existing
+          grep -v -F "  $WINDOWS" existing/SHA256SUMS.txt > SHA256SUMS.txt || true
+          cat release-windows/SHA256SUMS-windows.txt >> SHA256SUMS.txt
+
+          gh release upload "$TAG" \
+            "release-windows/$WINDOWS#Windows x64 desktop executable" \
+            SHA256SUMS.txt \
+            --clobber
+
+          mkdir -p published
+          gh release download "$TAG" --pattern "$WINDOWS" --pattern SHA256SUMS.txt --dir published
+          grep -F "  $WINDOWS" published/SHA256SUMS.txt | (cd published && sha256sum --check)
