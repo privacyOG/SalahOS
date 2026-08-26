@@ -1,0 +1,50 @@
+name: Stage 57 UX diagnostic
+
+on:
+  push:
+    branches:
+      - stage-57/v1.5-product-ux-refinement
+
+permissions:
+  contents: read
+
+jobs:
+  inspect-route-test:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: stage-57/v1.5-product-ux-refinement
+
+      - name: Generate Stage 57 source
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+          import textwrap
+
+          workflow = Path('.github/workflows/stage57-ux-builder-v3.yml').read_text()
+          for step_name, next_step, output in [
+              ('Apply proven Stage 57 transformation', 'Apply structural validation fixes', '/tmp/stage57-transform.sh'),
+              ('Apply structural validation fixes', 'Format Stage 57 files', '/tmp/stage57-fixes.sh'),
+          ]:
+              pattern = (
+                  rf"      - name: {re.escape(step_name)}\n"
+                  r"        shell: bash\n"
+                  r"        run: \|\n"
+                  rf"(?P<body>.*?)(?=\n      - name: {re.escape(next_step)})"
+              )
+              match = re.search(pattern, workflow, flags=re.S)
+              if match is None:
+                  raise SystemExit(f'Unable to extract {step_name}')
+              Path(output).write_text(textwrap.dedent(match.group('body')))
+          PY
+          bash /tmp/stage57-transform.sh
+          bash /tmp/stage57-fixes.sh
+
+      - name: Show failing route-contract test
+        run: |
+          nl -ba src/ui/applicationRoute.test.ts | sed -n '165,190p'
