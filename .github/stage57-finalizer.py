@@ -46,23 +46,15 @@ def fix_today_location_accuracy() -> None:
 def fix_settings_route_contract() -> None:
     path = Path('src/ui/applicationRoute.test.ts')
     text = path.read_text()
-    test_name = 'writes canonical Settings category links without dropping requested category intent'
-    start = text.find(test_name)
-    if start < 0:
-        raise SystemExit('Canonical Settings route test missing')
-    next_test = text.find("\n  it(", start + len(test_name))
-    end = len(text) if next_test < 0 else next_test
-    block = text[start:end]
     pattern = re.compile(
         r"(const\s+fromAdmin\s*=\s*withSettingsCategory\(.*?,\s*)"
         r"(['\"])[^'\"]+\2"
         r"(\s*,?\s*\);)",
         flags=re.S,
     )
-    block, count = pattern.subn(lambda m: m.group(1) + "'display'" + m.group(3), block, count=1)
+    text, count = pattern.subn(lambda m: m.group(1) + "'display'" + m.group(3), text, count=1)
     if count != 1:
-        raise SystemExit('Unable to set canonical Settings test category to display')
-    text = text[:start] + block + text[end:]
+        raise SystemExit('Unable to set fromAdmin Settings category to display')
     path.write_text(text)
 
 
