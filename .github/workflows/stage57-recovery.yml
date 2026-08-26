@@ -109,6 +109,8 @@ jobs:
             scripts/visual-product-ux-stage8.mjs \
             docs/PRODUCT_UX_V1.5.md \
             package.json
+          npx eslint src/ui/SettingsScreen.tsx --fix
+          npx prettier --write src/ui/SettingsScreen.tsx
 
       - name: Validate Stage 57 source
         run: |
