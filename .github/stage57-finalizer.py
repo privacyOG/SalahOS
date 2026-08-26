@@ -47,7 +47,7 @@ def fix_settings_route_contract() -> None:
     path = Path('src/ui/applicationRoute.test.ts')
     text = path.read_text()
     pattern = re.compile(
-        r"(const\s+fromAdmin\s*=\s*withSettingsCategory\(.*?,\s*)"
+        r"(const\s+fromAdmin\s*=\s*searchForSettingsCategory\(.*?,\s*)"
         r"(['\"])[^'\"]+\2"
         r"(\s*,?\s*\);)",
         flags=re.S,
