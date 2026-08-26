@@ -92,9 +92,9 @@ jobs:
           $ErrorActionPreference = 'Stop'
           $version = Get-Content 'release/VERSION.txt' -Raw
           $exe = "release/SalahOS-v$version-windows-x64.exe"
-          & $exe --self-test
-          if ($LASTEXITCODE -ne 0) {
-            throw "Windows packaged self-test failed with exit code $LASTEXITCODE."
+          $process = Start-Process -FilePath $exe -ArgumentList '--self-test' -Wait -PassThru -NoNewWindow
+          if ($process.ExitCode -ne 0) {
+            throw "Windows packaged self-test failed with exit code $($process.ExitCode)."
           }
 
       - name: Generate and verify Windows checksum
