@@ -6,6 +6,7 @@ GitHub releases are intended to provide ready-to-use artifacts for nontechnical 
 
 - **Android:** `SalahOS-vX.Y.Z-android.apk` — a cryptographically signed Android release APK. Android may ask you to permit installation from the browser or file manager used to open the APK.
 - **Android App Bundle:** `SalahOS-vX.Y.Z-android.aab` — the persistently signed bundle intended for Google Play/distribution workflows; it is not a sideload installer.
+- **Windows x64:** `SalahOS-vX.Y.Z-windows-x64.exe` — the self-contained SalahOS desktop executable for 64-bit Windows 10/11.
 - **Web/PWA:** `SalahOS-vX.Y.Z-web-pwa.zip` — the complete production Web/PWA build for static hosting.
 - **Raspberry Pi / kiosk / TV-style Chromium display:** `SalahOS-vX.Y.Z-raspberry-pi-kiosk.tar.gz` — the production Web/PWA build plus the SalahOS Chromium kiosk launch/autostart helpers.
 - **Checksums:** `SHA256SUMS.txt` — SHA-256 hashes for the published release assets.
@@ -22,6 +23,14 @@ Consumer Android APK and AAB packages are published only when the repository has
 `SALAHOS_ANDROID_KEYSTORE_BASE64` is the base64 representation of the persistent Android release keystore. The keystore itself and its passwords must never be committed to this repository. Keep a secure offline backup: future Android updates must be signed with the same key.
 
 The release workflow fails rather than publishing unsigned or debug Android packages when signing is unavailable, verifies the release APK with Android `apksigner`, and verifies the AAB signature before publication.
+
+## Windows desktop executable
+
+The Windows x64 package is built from the same production web application as the other SalahOS targets and embeds those assets in a self-contained .NET desktop executable. On first launch it extracts the versioned application assets into the current user's local application-data directory and displays them through Microsoft Edge WebView2.
+
+The `.exe` includes the required .NET runtime. It expects the Microsoft Edge WebView2 Runtime, which is normally already installed on current Windows 10 and Windows 11 systems. If WebView2 is unavailable, SalahOS reports that requirement instead of silently failing.
+
+The Windows release job runs the packaged executable with `--self-test`, verifies the embedded `index.html` and production asset bundle, generates a SHA-256 digest, publishes the executable only after the main release pipeline succeeds, and then verifies the uploaded asset against the reconciled release checksum manifest.
 
 ## Raspberry Pi / kiosk bundle
 
