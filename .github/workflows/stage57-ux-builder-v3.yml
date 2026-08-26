@@ -1,4 +1,4 @@
-name: Stage 57 UX builder v3
+name: Stage 57 UX finalizer
 
 on:
   push:
@@ -9,7 +9,7 @@ permissions:
   contents: write
 
 jobs:
-  build-stage57:
+  finalize-stage57:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
@@ -28,189 +28,14 @@ jobs:
       - name: Install dependencies
         run: npm ci --ignore-scripts
 
-      - name: Apply proven Stage 57 transformation
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 - <<'PY'
-          from pathlib import Path
-          import re
-          import textwrap
-
-          workflow = Path('.github/workflows/stage57-ux-builder-v2.yml').read_text()
-          match = re.search(
-              r"      - name: Apply Stage 57 UX refinement robustly\n        shell: bash\n        run: \|\n(?P<body>.*?)(?=\n      - name: Fix Stage 57 validation issues)",
-              workflow,
-              flags=re.S,
-          )
-          if match is None:
-              raise SystemExit('Unable to extract proven Stage 57 transformation')
-          Path('/tmp/stage57-proven.sh').write_text(textwrap.dedent(match.group('body')))
-          PY
-          bash /tmp/stage57-proven.sh
-
-      - name: Apply final Stage 57 contract fixes
-        shell: bash
-        run: |
-          set -euo pipefail
-          python3 - <<'PY'
-          from pathlib import Path
-          import re
-
-          today = Path('src/ui/TodayScreen.tsx')
-          text = today.read_text()
-          pattern = re.compile(
-              r"(?m)^\s*const locationAccuracyLabel =\s*\n"
-              r"\s*recentLocation\?\.accuracyMeters === null \|\| recentLocation\?\.accuracyMeters === undefined\s*\n"
-              r"\s*\? null\s*\n"
-              r"\s*: recentLocation\.accuracyMeters < 1_000\s*\n"
-              r"\s*\? `±\$\{String\(Math\.round\(recentLocation\.accuracyMeters\)\)\} m`\s*\n"
-              r"\s*: `±\$\{\(recentLocation\.accuracyMeters / 1_000\)\.toFixed\(1\)\} km`;"
-          )
-          replacement = """  const locationAccuracyMeters =
-            recentLocation === null ? null : recentLocation.accuracyMeters;
-          const locationAccuracyLabel =
-            locationAccuracyMeters === null
-              ? null
-              : locationAccuracyMeters < 1_000
-                ? `±${String(Math.round(locationAccuracyMeters))} m`
-                : `±${(locationAccuracyMeters / 1_000).toFixed(1)} km`;"""
-          text, count = pattern.subn(replacement, text, count=1)
-          if count != 1:
-              raise SystemExit(f'Location accuracy structural fix count={count}')
-          today.write_text(text)
-
-          route_test = Path('src/ui/applicationRoute.test.ts')
-          text = route_test.read_text()
-          anchor = "expect(readSettingsCategory(fromAdmin)).toBe('display');"
-          anchor_pos = text.find(anchor)
-          if anchor_pos < 0:
-              raise SystemExit('Canonical Settings assertion anchor missing')
-          search_start = max(0, anchor_pos - 1_500)
-          segment = text[search_start:anchor_pos]
-          legacy_pos = segment.rfind("'appearance'")
-          if legacy_pos < 0:
-              raise SystemExit('Legacy appearance argument missing before canonical Settings assertion')
-          absolute = search_start + legacy_pos
-          text = text[:absolute] + "'display'" + text[absolute + len("'appearance'"):]
-          route_test.write_text(text)
-
-          shell = Path('src/ui/CongregationShell.tsx')
-          text = shell.read_text()
-          nav_pattern = re.compile(
-              r"\s*<PrimaryNavigation\s+ariaLabel=\{labels\.navigation\}\s+items=\{\[.*?\]\}\s+overflowLabel=\{labels\.more\}\s+overflowItems=\{\[.*?\]\}\s*/>",
-              flags=re.S,
-          )
-          nav_replacement = """
-      <PrimaryNavigation
-        ariaLabel={labels.navigation}
-        items={[
-          {
-            id: 'today',
-            icon: 'today',
-            label: labels.today,
-            current: destination === 'today',
-            onSelect: () => {
-              navigate('today');
-            },
-          },
-          {
-            id: 'mosques',
-            icon: 'mosques',
-            label: labels.mosques,
-            current: destination === 'mosques',
-            onSelect: () => {
-              navigate('mosques');
-            },
-          },
-          {
-            id: 'qiblah',
-            icon: 'qiblah',
-            label: labels.qiblah,
-            current: destination === 'qiblah',
-            onSelect: () => {
-              navigate('qiblah');
-            },
-          },
-          {
-            id: 'knowledge',
-            icon: 'knowledge',
-            label: labels.knowledge,
-            current: destination === 'knowledge',
-            onSelect: () => {
-              navigate('knowledge');
-            },
-          },
-          {
-            id: 'settings',
-            icon: 'settings',
-            label: labels.settings,
-            current: destination === 'settings',
-            onSelect: () => {
-              navigate('settings');
-            },
-          },
-        ]}
-      />"""
-          text, nav_count = nav_pattern.subn(nav_replacement, text, count=1)
-          if nav_count != 1:
-              raise SystemExit(f'Primary navigation replacement count={nav_count}')
-          shell.write_text(text)
-
-          visual = Path('scripts/visual-product-ux-stage8.mjs')
-          text = visual.read_text()
-          mobile_nav_pattern = re.compile(
-              r"\s*await page\.locator\('\.congregation-nav-item--more'\)\.click\(\);\s*"
-              r"const overflowMenu = page\.locator\('\.congregation-nav-overflow-menu'\);\s*"
-              r"await overflowMenu\.waitFor\(\{ state: 'visible' \}\);\s*"
-              r"if \(\(await overflowMenu\.getByRole\('menuitem'\)\.count\(\)\) !== 2\) \{\s*"
-              r"throw new Error\('Mobile More menu must expose exactly Community and Settings'\);\s*\}",
-              flags=re.S,
-          )
-          mobile_nav_replacement = """
-    const primaryNavItems = page.locator('.congregation-nav > .congregation-nav-item');
-    if ((await primaryNavItems.count()) !== 5) {
-      throw new Error('Mobile primary navigation must expose exactly five destinations');
-    }
-    const primaryNavLabels = await primaryNavItems
-      .locator('.congregation-nav-label')
-      .allTextContents();
-    const expectedPrimaryNavLabels = ['Today', 'Mosques', 'Qiblah', 'Knowledge', 'Settings'];
-    if (JSON.stringify(primaryNavLabels) !== JSON.stringify(expectedPrimaryNavLabels)) {
-      throw new Error(`Unexpected mobile primary navigation: ${primaryNavLabels.join(', ')}`);
-    }
-"""
-          text, visual_count = mobile_nav_pattern.subn(mobile_nav_replacement, text, count=1)
-          if visual_count != 1:
-              raise SystemExit(f'Mobile navigation acceptance replacement count={visual_count}')
-          visual.write_text(text)
-          PY
+      - name: Generate Stage 57 source
+        run: python3 .github/stage57-finalizer.py
 
       - name: Format Stage 57 files
-        run: |
-          npx prettier --write \
-            src/ui/applicationRoute.ts \
-            src/ui/applicationRoute.test.ts \
-            src/ui/SettingsScreen.tsx \
-            src/ui/SalahIcon.tsx \
-            src/ui/PrimaryNavigation.tsx \
-            src/ui/CongregationShell.tsx \
-            src/ui/MobilePrayerThemeSurface.tsx \
-            src/ui/TodayScreen.tsx \
-            src/congregation-shell.css \
-            src/today-screen.css \
-            src/ui/prayer-board-weather.css \
-            src/settings-screen.css \
-            scripts/visual-product-ux-stage8.mjs \
-            docs/PRODUCT_UX_V1.5.md \
-            package.json
+        run: npx prettier --write src/ui/applicationRoute.ts src/ui/applicationRoute.test.ts src/ui/SettingsScreen.tsx src/ui/SalahIcon.tsx src/ui/PrimaryNavigation.tsx src/ui/CongregationShell.tsx src/ui/MobilePrayerThemeSurface.tsx src/ui/TodayScreen.tsx src/congregation-shell.css src/today-screen.css src/ui/prayer-board-weather.css src/settings-screen.css scripts/visual-product-ux-stage8.mjs docs/PRODUCT_UX_V1.5.md package.json
 
       - name: Validate Stage 57 source
-        run: |
-          npm run lint
-          npm run typecheck
-          npm run test
-          npm run build
+        run: npm run lint && npm run typecheck && npm run test && npm run build
 
       - name: Publish helper-free Stage 57 commit
         shell: bash
@@ -225,21 +50,7 @@ jobs:
           git rm .github/workflows/stage57-ux-builder-v5.yml
           git rm .github/workflows/stage57-ux-builder-v6.yml
           git rm .github/workflows/stage57-ux-diagnostic.yml
-          git add \
-            src/ui/applicationRoute.ts \
-            src/ui/applicationRoute.test.ts \
-            src/ui/SettingsScreen.tsx \
-            src/ui/SalahIcon.tsx \
-            src/ui/PrimaryNavigation.tsx \
-            src/ui/CongregationShell.tsx \
-            src/ui/MobilePrayerThemeSurface.tsx \
-            src/ui/TodayScreen.tsx \
-            src/congregation-shell.css \
-            src/today-screen.css \
-            src/ui/prayer-board-weather.css \
-            src/settings-screen.css \
-            scripts/visual-product-ux-stage8.mjs \
-            docs/PRODUCT_UX_V1.5.md \
-            package.json
+          git rm .github/stage57-finalizer.py
+          git add src/ui/applicationRoute.ts src/ui/applicationRoute.test.ts src/ui/SettingsScreen.tsx src/ui/SalahIcon.tsx src/ui/PrimaryNavigation.tsx src/ui/CongregationShell.tsx src/ui/MobilePrayerThemeSurface.tsx src/ui/TodayScreen.tsx src/congregation-shell.css src/today-screen.css src/ui/prayer-board-weather.css src/settings-screen.css scripts/visual-product-ux-stage8.mjs docs/PRODUCT_UX_V1.5.md package.json
           git commit -m "Stage 57: refine product UX"
           git push origin HEAD:stage-57/v1.5-product-ux-refinement
