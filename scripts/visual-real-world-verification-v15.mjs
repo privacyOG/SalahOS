@@ -58,17 +58,25 @@ async function validateAssistiveTechnologySemantics(page, name) {
     const visible = (element) => {
       const rect = element.getBoundingClientRect();
       const style = getComputedStyle(element);
-      return rect.width > 0 && rect.height > 0 && style.visibility !== 'hidden' && style.display !== 'none';
+      return (
+        rect.width > 0 &&
+        rect.height > 0 &&
+        style.visibility !== 'hidden' &&
+        style.display !== 'none'
+      );
     };
-    const controls = [...document.querySelectorAll('button, a, summary, input, select, textarea')]
-      .filter((element) => element instanceof HTMLElement && visible(element));
+    const controls = [
+      ...document.querySelectorAll('button, a, summary, input, select, textarea'),
+    ].filter((element) => element instanceof HTMLElement && visible(element));
     const unnamed = controls
       .filter((element) => {
         const text = element.textContent?.trim() ?? '';
         const aria = element.getAttribute('aria-label')?.trim() ?? '';
         const labelledBy = element.getAttribute('aria-labelledby')?.trim() ?? '';
         const title = element.getAttribute('title')?.trim() ?? '';
-        return text.length === 0 && aria.length === 0 && labelledBy.length === 0 && title.length === 0;
+        return (
+          text.length === 0 && aria.length === 0 && labelledBy.length === 0 && title.length === 0
+        );
       })
       .map((element) => `${element.tagName.toLowerCase()}.${element.className}`);
     return {
@@ -80,7 +88,9 @@ async function validateAssistiveTechnologySemantics(page, name) {
   });
   if (result.controls === 0) throw new Error(`${name} exposed no interactive controls`);
   if (result.unnamed.length > 0) {
-    throw new Error(`${name} has visible controls without accessible names: ${result.unnamed.join(', ')}`);
+    throw new Error(
+      `${name} has visible controls without accessible names: ${result.unnamed.join(', ')}`,
+    );
   }
   if (result.currentPrayerAnnouncements === 0) {
     throw new Error(`${name} did not expose current-prayer semantics`);
@@ -103,7 +113,8 @@ async function validateProfile(browser, profile) {
     const reducedMotion = await page.evaluate(
       () => globalThis.matchMedia('(prefers-reduced-motion: reduce)').matches,
     );
-    if (!reducedMotion) throw new Error(`${profile.name} did not receive reduced-motion preference`);
+    if (!reducedMotion)
+      throw new Error(`${profile.name} did not receive reduced-motion preference`);
 
     const semantics = await validateAssistiveTechnologySemantics(page, profile.name);
     const normalOverflow = await assertNoHorizontalOverflow(page, profile.name);
@@ -112,9 +123,13 @@ async function validateProfile(browser, profile) {
       document.documentElement.style.fontSize = '200%';
     });
     await page.waitForTimeout(50);
-    const largeTextOverflow = await assertNoHorizontalOverflow(page, `${profile.name} at 200% text`);
+    const largeTextOverflow = await assertNoHorizontalOverflow(
+      page,
+      `${profile.name} at 200% text`,
+    );
     const nextPrayerVisible = await page.locator('.today-next').isVisible();
-    if (!nextPrayerVisible) throw new Error(`${profile.name} lost the next-prayer hierarchy at 200% text`);
+    if (!nextPrayerVisible)
+      throw new Error(`${profile.name} lost the next-prayer hierarchy at 200% text`);
 
     await page.screenshot({
       path: path.join(artifactDirectory, `${profile.name}-large-text.png`),
