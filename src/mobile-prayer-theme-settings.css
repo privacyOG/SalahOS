@@ -82,6 +82,9 @@
 .mobile-theme-choice__thumb {
   position: relative;
   display: grid;
+  box-sizing: border-box;
+  min-width: 0;
+  max-width: 100%;
   min-height: 9rem;
   align-content: start;
   gap: 0.35rem;
@@ -94,14 +97,20 @@
 .mobile-theme-choice__mini-focus,
 .mobile-theme-choice__mini-row {
   display: block;
+  min-width: 0;
+  max-width: 100%;
   border-radius: 0.35rem;
 }
 
 .mobile-theme-choice__mini-clock {
+  overflow: hidden;
   font-style: normal;
   font-size: 1.45rem;
   font-variant-numeric: tabular-nums;
   font-weight: 800;
+  line-height: 1.1;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .mobile-theme-choice__mini-focus {
@@ -150,7 +159,7 @@
 }
 
 .mobile-theme-choice__thumb--bold-countdown-focus .mobile-theme-choice__mini-clock {
-  font-size: 2.2rem;
+  font-size: clamp(1.8rem, 7vw, 2.2rem);
 }
 
 .mobile-theme-choice__thumb--bold-countdown-focus .mobile-theme-choice__mini-focus {
