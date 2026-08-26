@@ -1,0 +1,64 @@
+name: Stage 57 split validation diagnostics
+
+on:
+  push:
+    branches:
+      - stage-57/v1.5-product-ux-refinement-final
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: stage-57/v1.5-product-ux-refinement-final
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Replay Stage 57 generation
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          src = Path('.github/workflows/stage57-final-build.yml').read_text().splitlines()
+
+          def extract_step(name: str, target: str):
+              start = next(i for i, line in enumerate(src) if line.strip() == f'- name: {name}')
+              run_line = next(i for i in range(start + 1, len(src)) if src[i].strip() == 'run: |')
+              body = []
+              for line in src[run_line + 1:]:
+                  if line.startswith('      - name: ') or line.startswith('      - uses: '):
+                      break
+                  if line.startswith('          '):
+                      body.append(line[10:])
+                  elif not line.strip():
+                      body.append('')
+                  else:
+                      break
+              Path(target).write_text('\n'.join(body) + '\n')
+
+          extract_step('Generate Stage 57 product UX source', '/tmp/stage57-generate.sh')
+          extract_step('Apply final Stage 57 contracts', '/tmp/stage57-contracts.sh')
+          extract_step('Format Stage 57 files', '/tmp/stage57-format.sh')
+          PY
+          bash /tmp/stage57-generate.sh
+          bash /tmp/stage57-contracts.sh
+          bash /tmp/stage57-format.sh
+      - name: Lint
+        run: npm run lint
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Unit tests
+        run: npm run test
+      - name: Production build
+        run: npm run build
