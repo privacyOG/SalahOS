@@ -55,6 +55,55 @@ jobs:
           bash /tmp/generate.sh
           bash /tmp/contracts.sh
           bash /tmp/format.sh
+
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('src/ui/SettingsProgressiveDisclosureV2.test.ts')
+          text = path.read_text()
+          text = text.replace(
+              "describe('Settings progressive disclosure and Stage 27 ownership', () => {",
+              "describe('Settings progressive disclosure and Stage 8 product UX ownership', () => {",
+          )
+          text = text.replace(
+              "it('keeps the eight category destinations explicit and reloadable', () => {",
+              "it('keeps the seven v1.5 category destinations explicit and reloadable', () => {",
+          )
+          old_categories = """    for (const category of [
+      'prayer',
+      'location',
+      'mosque',
+      'notifications',
+      'appearance',
+      'data-privacy',
+      'display-themes',
+      'advanced',
+    ]) {"""
+          new_categories = """    for (const category of [
+      'location',
+      'prayer',
+      'adhan',
+      'display',
+      'mosques',
+      'privacy-data',
+      'advanced',
+    ]) {"""
+          if old_categories not in text:
+              raise SystemExit('Settings progressive-disclosure category fixture is not at the expected baseline')
+          text = text.replace(old_categories, new_categories, 1)
+          replacements = {
+              "category === 'mosque'": "category === 'mosques'",
+              "category === 'data-privacy'": "category === 'privacy-data'",
+              "category === 'notifications'": "category === 'adhan'",
+              "category === 'display-themes'": "category === 'display'",
+          }
+          for old, new in replacements.items():
+              if old not in text:
+                  raise SystemExit(f'Missing expected Settings test contract: {old}')
+              text = text.replace(old, new)
+          path.write_text(text)
+          PY
+          npx prettier --write src/ui/SettingsProgressiveDisclosureV2.test.ts
       - name: Lint
         run: npm run lint
       - name: Typecheck
