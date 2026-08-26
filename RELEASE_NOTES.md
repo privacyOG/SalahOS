@@ -1,72 +1,62 @@
-# SalahOS v1.4.0 release notes
+# SalahOS v1.5.0 release notes
 
-SalahOS v1.4.0 completes the ten-stage v1.4 programme and packages the resulting release-ready targets from one exact, validated `main` revision. The release strengthens mobile accessibility, makes live Qiblah guidance substantially more automatic and resilient, expands mosque and Islamic-content capabilities, improves startup architecture, and raises permanent verification coverage across browsers and native runtimes.
+SalahOS v1.5.0 completes the ten-stage v1.5 programme with stronger real-world resilience, richer mosque and Islamic-content experiences, clearer privacy controls, more focused product UX, and an explicit release-verification contract across Web, Android, iOS/iPadOS, Raspberry Pi Touch Display and TV/kiosk targets.
 
-## Mobile and accessibility hardening
+## Location, weather and local context
 
-- Hardens compact phone layouts at 360×780 and 390×844 so the final prayer row and trailing content remain reachable above bottom navigation and safe areas.
-- Improves confirmed light/dark/RTL contrast cases while preserving the established SalahOS visual identity.
-- Extends automated regression coverage for navigation overlap, RTL, text expansion, viewport containment and accessibility-sensitive states.
+- Strengthens best-available location handling so precise GPS remains preferred while network-assisted fallback is used only after non-terminal precision failures.
+- Preserves terminal permission-denial behaviour and fails closed when both precise and approximate acquisition fail instead of inventing coordinates.
+- Integrates automatic local weather with cached current/daily context, stale-cache recovery on provider/network failure and expiry of obsolete weather data.
+- Improves Today around current/next prayer, prayer times, weather, location confidence and concise local context.
 
-## Automatic Qiblah and compass guidance
+## Mosque directory and timetable quality
 
-- Automatically acquires the best available OS location when Qiblah opens and starts true-heading updates where supported, while retaining saved and manual fallbacks.
-- Moves required permission education into first-run onboarding at the earliest operating-system-valid point.
-- Adds a manual Recalibrate Compass action plus poor-heading-accuracy detection, guided recalibration and post-calibration reassessment.
-- Makes Google Maps the primary interactive Qiblah provider with Map, Satellite and Hybrid modes, user and Kaaba markers, a high-visibility geodesic Qiblah line, full-route refit, click-to-pin selection and provider-error recovery.
-- Keeps a network-free manual-pin fallback when the interactive provider is unavailable.
+- Expands mosque directory coverage and enrichment with distance-aware discovery, selection/favourites, directions, report/edit flows, verification/freshness state, provenance and data-quality scoring.
+- Adds explicit quality checks for completeness, provenance coverage, freshness boundaries and unresolved-data conflict penalties.
+- Removes unsafe website/social URLs before they can become user actions.
+- Preserves local-mosque timetable precedence over calculated times and exposes missing mosque entries as unavailable rather than silently substituting calculated data.
+- Keeps timetable date validation fail-closed so mosque data from the wrong civil date cannot override the active schedule.
 
-## Mosque directories
+## Qur'an, Hadith, Fiqh and Islamic Knowledge
 
-- Adds a bundled offline-first Australian mosque catalogue generated reproducibly from a committed OpenStreetMap snapshot with contributor/ODbL provenance.
-- Adds nearby ordering, text search, selection/persistence and deduplication for the bundled catalogue.
-- Adds shared/community mosque directory models and service flows for text/geographical lookup, submissions, duplicate detection, moderation/edit suggestions, verification/claim state and local offline cache resilience.
+- Expands the Islamic Knowledge experience while preserving source/reference provenance and governance requirements.
+- Strengthens Qur'an offline/content handling and the supporting content-source policy.
+- Extends Hadith and Fiqh/Q&A presentation with explicit reference, grading/scholarly attribution and juristic-context safeguards where applicable.
+- Keeps Islamic-content source governance in the permanent Quality Gate.
 
-## Adhan audio library
+## Product UX refinement
 
-- Adds two rights-verified packaged Adhan recordings with pinned provenance/attribution and normalized audio metadata.
-- Adds default and per-prayer selection, preview, volume and notification-only controls.
-- Keeps private user-selected local recordings device-local.
-- Extends permanent quality/native bundle checks so packaged Adhan audio integrity is verified on Web, Android and iOS synchronization paths.
+- Strengthens Today hierarchy around current/next prayer and reduces explanatory-card clutter through progressive disclosure.
+- Simplifies phone navigation to the primary destinations while preserving the broader desktop experience.
+- Reorganises Settings into Location, Prayer settings, Adhan, Display, Mosques, Privacy & data and Advanced.
+- Preserves SalahOS visual identity while improving location-confidence feedback, Arabic/RTL behaviour and compact-device usability.
 
-## Islamic Knowledge
+## Real-world and accessibility verification
 
-- Adds the Knowledge destination with bundled offline-first Qur'an, Hadith and Q&A starter modules.
-- Adds local search and module filtering.
-- Preserves explicit Qur'an source/reference labels, Hadith collection/reference/grade/grading authority and Q&A scholar/source attribution with juristic-variation notes where appropriate.
-- Provides Knowledge navigation and shell copy across English, Arabic, Turkish and Indonesian, including Arabic RTL acceptance.
+- Expands automated GPS/location fallback, weather failure/cache, mosque data-quality/action and timetable-precedence tests.
+- Adds a v1.5 representative acceptance matrix for Android-phone, iPhone and iPad viewports with 200% text scaling, reduced-motion preference and assistive-technology-oriented accessible-name/current-prayer semantics.
+- Retains dedicated Raspberry Pi Touch Display acceptance across representative 5-inch, 7-inch and 10-inch portrait/landscape profiles.
+- Retains TV/kiosk acceptance across all prayer-board templates at 1920×1080 and 3840×2160, including safe-frame, burn-in mitigation and keyboard recovery checks.
+- Retains axe-core WCAG A/AA, RTL/container-overflow and cross-browser Chromium/Firefox/WebKit acceptance.
+- Clearly distinguishes emulator, Simulator and browser evidence from physical-device testing. Physical Android OEM, iPhone/iPad, Raspberry Pi Touch Display and TV/panel acceptance remains supplementary where hardware is available.
 
-## Performance architecture
+See `docs/REAL_WORLD_VERIFICATION_V1.5.md` for the Stage 9/10 acceptance matrix and physical-device boundary.
 
-- Removes the ineffective static edge around timetable import/export so the module is emitted as a genuine lazy chunk.
-- Keeps Today eager while Admin, smart-display, Mosques, Qiblah, Knowledge, Community and Settings load at route/surface level.
-- Reduces the validated startup JavaScript path from the previous approximately 882 kB monolithic chunk to a largest chunk of 469,196 bytes; the timetable-import module is approximately 4 kB and lazy loaded.
-- Adds a permanent bundle architecture budget. The validated v1.4 build emits 21 JavaScript chunks, with 898,871 total JavaScript bytes.
+## Release reconciliation
 
-## Verification upgrades
+- Synchronises npm, package-lock, Android and iOS marketing versions at `1.5.0`.
+- Advances Android `versionCode` and iOS `CURRENT_PROJECT_VERSION` together to build `7`.
+- Preserves the established release-asset pipeline for persistently signed Android APK/AAB, Web/PWA ZIP, Raspberry Pi kiosk archive and portable SHA-256 manifest.
+- Preserves fail-closed release preflight for exact-main revision, Android signing, version/build parity, archive integrity and final package contents.
 
-- Adds deterministic golden screenshot regression for representative Today EN/light and Knowledge AR/dark states.
-- Adds axe-core WCAG A/AA checks plus stronger RTL and viewport/container-overflow acceptance.
-- Adds Chromium, Firefox and WebKit smoke journeys covering eager and lazy-loaded application surfaces.
-- Locks V8 core coverage thresholds into the Quality Gate.
-- Preserves exact-head Quality, Visual Regression, Android emulator lifecycle and fresh iPhone/iPad Simulator lifecycle acceptance before release.
+## Downloadable v1.5.0 assets
 
-## Release and integrity improvements
+A successful v1.5.0 publication includes:
 
-- Synchronises npm, package-lock, Android and iOS marketing versions at `1.4.0`.
-- Advances Android `versionCode` and iOS `CURRENT_PROJECT_VERSION` together to build `6`.
-- Publishes both a persistently signed Android APK and signed Android App Bundle (AAB).
-- Verifies the APK with Android `apksigner`, verifies the AAB signature, validates Web/PWA and Raspberry Pi archive integrity, and publishes a portable SHA-256 manifest covering every packaged artifact.
-- Fails closed if the release candidate is not the exact current `main`, persistent Android release signing is unavailable, version/build metadata diverges, or the final package contains missing or unexpected files.
-
-## Downloadable v1.4.0 assets
-
-A successful v1.4.0 publication includes:
-
-- `SalahOS-v1.4.0-android.apk` — persistently signed Android release APK for direct installation;
-- `SalahOS-v1.4.0-android.aab` — persistently signed Android App Bundle for Google Play/distribution workflows;
-- `SalahOS-v1.4.0-web-pwa.zip` — complete production Web/PWA package;
-- `SalahOS-v1.4.0-raspberry-pi-kiosk.tar.gz` — production Web/PWA files plus Raspberry Pi/Linux Chromium kiosk launch and autostart helpers;
+- `SalahOS-v1.5.0-android.apk` — persistently signed Android release APK for direct installation;
+- `SalahOS-v1.5.0-android.aab` — persistently signed Android App Bundle for Google Play/distribution workflows;
+- `SalahOS-v1.5.0-web-pwa.zip` — complete production Web/PWA package;
+- `SalahOS-v1.5.0-raspberry-pi-kiosk.tar.gz` — production Web/PWA files plus Raspberry Pi/Linux Chromium kiosk launch and autostart helpers;
 - `SHA256SUMS.txt` — SHA-256 hashes for all packaged release assets.
 
 GitHub also exposes the standard source-code ZIP and tarball for the release tag.
@@ -75,13 +65,15 @@ GitHub also exposes the standard source-code ZIP and tarball for the release tag
 
 - A consumer iOS/iPadOS `.ipa` is not published until Apple distribution signing/provisioning is configured and a distribution archive can be validated. Fresh iPhone and iPad Simulator acceptance is test evidence, not a consumer installer.
 - No native macOS `.dmg` is published because SalahOS does not contain a native macOS application target.
-- Physical Raspberry Pi, TV/panel, iPhone/iPad and broad Android OEM acceptance remains separate from automated browser, emulator, Simulator and packaging evidence.
+- Physical Raspberry Pi, TV/panel, iPhone/iPad and broad Android OEM acceptance is not inferred from browser, emulator or Simulator evidence.
 
 ## Release gates
 
-The v1.4.0 release revision must be the exact current `main` commit and pass the permanent Quality, Android, Visual Regression and iOS workflows. The release-asset workflow then reruns the complete repository quality gate, verifies persistent Android signing, builds and verifies APK/AAB packages, validates Web/PWA and Raspberry Pi archives, checks the exact final file set and SHA-256 manifest, and only then creates or updates the GitHub release.
+The v1.5.0 release revision must be the exact current `main` commit and pass the permanent Quality, Visual Regression, Android and iOS workflows. The exact final pull-request head is revalidated after tracker reconciliation before merge. The iOS runtime gate is accepted only when the fresh iPhone/iPad Simulator install/launch/relaunch step itself reports success, not merely when the enclosing workflow reports success.
 
-The completed implementation and exact-head evidence for all ten v1.4 stages is recorded in `TEMP_TODO_V1.4.md`. See `docs/RELEASE_ASSETS.md`, `TESTING.md`, `TODO.md` and `docs/PLATFORM_STATUS.md` for detailed implementation, validation and distribution boundaries.
+The release-asset workflow then reruns repository quality checks, verifies persistent Android signing, builds and verifies APK/AAB packages, validates Web/PWA and Raspberry Pi archives, checks the exact final file set and SHA-256 manifest, and only then creates or updates the GitHub release.
+
+The completed implementation and exact-head evidence for all ten v1.5 stages is recorded in `TEMP_TODO_V1.5.md`. See `docs/REAL_WORLD_VERIFICATION_V1.5.md`, `docs/RELEASE_ASSETS.md`, `TESTING.md`, `TODO.md` and `docs/PLATFORM_STATUS.md` for detailed validation and distribution boundaries.
 
 ## Author
 

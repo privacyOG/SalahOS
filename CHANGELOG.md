@@ -4,6 +4,28 @@ All notable SalahOS changes are recorded here.
 
 ## Unreleased
 
+## 1.5.0 — 2026-08-26
+
+### Product UX refinement
+
+- Strengthen Today around the current and next prayer, prayer times, weather and local context while moving secondary explanatory material behind progressive disclosure.
+- Simplify phone navigation and reorganise Settings around Location, Prayer, Adhan, Display, Mosques, Privacy/Data and Advanced, while preserving legacy deep-link aliases.
+- Improve location-confidence feedback, Arabic/RTL theme-preview resilience and responsive presentation without changing the established SalahOS visual identity.
+
+### Real-world verification
+
+- Expand automated location acceptance across fresh GPS, stale-fix rejection, permission denial, unavailable providers, saved-location fallback and manual recovery.
+- Expand weather failure/cache acceptance and mosque timetable/data-quality coverage, including authoritative timetable precedence, provenance/freshness boundaries and directory action contracts.
+- Add representative Android, iPhone and iPad semantic/accessibility acceptance for large text and reduced motion, while preserving fresh native emulator/Simulator lifecycle coverage.
+- Document the verification boundary for physical Android/iPhone/iPad, Raspberry Pi and TV/panel hardware so browser, emulator and Simulator evidence is never represented as physical-device evidence.
+
+### Release reconciliation
+
+- Synchronise npm, package-lock, Android and iOS marketing versions at 1.5.0 and advance Android/iOS native build numbers together to 7.
+- Reconcile v1.5 release notes, platform/device evidence and release documentation around one exact final candidate revision.
+- Preserve the permanent Quality, Visual Regression, Android emulator lifecycle and fresh iPhone/iPad Simulator gates as mandatory exact-head release checks.
+- Keep consumer iOS/iPadOS IPA publication gated on Apple distribution signing/provisioning and keep physical-device acceptance separate from automated release evidence.
+
 ## 1.4.0 — 2026-08-25
 
 ### Mobile, accessibility and Qiblah

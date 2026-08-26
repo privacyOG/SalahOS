@@ -162,6 +162,42 @@ describe('prayer-board weather', () => {
     expect(loadUsablePrayerBoardWeather(storage, new Date('2026-08-25T13:06:00.000Z'))).toBeNull();
   });
 
+  it('falls back to the cache when the provider returns a non-success status', async () => {
+    const storage = memoryStorage();
+    await refreshPrayerBoardWeather(
+      storage,
+      successfulWeatherFetch(),
+      new Date('2026-08-25T01:05:00.000Z'),
+      resolveSydney,
+    );
+    const failedFetch: WeatherFetch = () =>
+      Promise.resolve({ ok: false, json: () => Promise.resolve({}) });
+
+    await expect(
+      refreshPrayerBoardWeather(
+        storage,
+        failedFetch,
+        new Date('2026-08-25T02:05:00.000Z'),
+        resolveSydney,
+      ),
+    ).resolves.toMatchObject({ state: 'stale', temperatureC: 18.4 });
+  });
+
+  it('does not fabricate weather when the provider fails before any cache exists', async () => {
+    const storage = memoryStorage();
+    const failedFetch: WeatherFetch = () => Promise.reject(new Error('offline'));
+
+    await expect(
+      refreshPrayerBoardWeather(
+        storage,
+        failedFetch,
+        new Date('2026-08-25T01:05:00.000Z'),
+        resolveSydney,
+      ),
+    ).resolves.toBeNull();
+    expect(loadUsablePrayerBoardWeather(storage)).toBeNull();
+  });
+
   it('isolates missing-location/provider failure and never throws into prayer rendering', async () => {
     const storage = memoryStorage();
     const noLocation: WeatherLocationResolver = () => Promise.resolve(null);
