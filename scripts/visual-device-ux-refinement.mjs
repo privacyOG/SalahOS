@@ -182,7 +182,9 @@ function assertPhoneMetrics(name, metrics) {
 
 async function reachableAboveNavigation(page, selector) {
   const target = page.locator(selector).last();
-  await target.scrollIntoViewIfNeeded();
+  await target.evaluate((element) => {
+    element.scrollIntoView({ block: 'end', inline: 'nearest' });
+  });
   await page.evaluate(
     () => new Promise((resolve) => requestAnimationFrame(() => resolve(undefined))),
   );
@@ -239,6 +241,14 @@ async function validatePhone(browser, scenario) {
       '.today-prayer-row:not(.today-prayer-row--header)',
     );
     assertReachable(scenario.name, 'Isha row', ishaReachability);
+
+    const secondaryContext = page.locator('.today-secondary-context');
+    if ((await secondaryContext.getAttribute('open')) === null) {
+      await secondaryContext.locator('summary').click();
+    }
+    if ((await secondaryContext.getAttribute('open')) === null) {
+      throw new Error(`${scenario.name} More today progressive disclosure did not open`);
+    }
     const footerReachability = await reachableAboveNavigation(page, '.today-provenance');
     assertReachable(scenario.name, 'trailing provenance', footerReachability);
 
