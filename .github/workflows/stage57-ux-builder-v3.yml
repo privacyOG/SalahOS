@@ -49,7 +49,7 @@ jobs:
           PY
           bash /tmp/stage57-proven.sh
 
-      - name: Apply structural validation fixes
+      - name: Apply final Stage 57 contract fixes
         shell: bash
         run: |
           set -euo pipefail
@@ -80,23 +80,109 @@ jobs:
               raise SystemExit(f'Location accuracy structural fix count={count}')
           today.write_text(text)
 
-          visual = Path('scripts/visual-product-ux-stage8.mjs')
-          text = visual.read_text()
-          pattern = re.compile(
-              r"(if \(\(await overflowMenu\.getByRole\('menuitem'\)\.count\(\)\) !== 2\) \{\s*"
-              r"throw new Error\('Mobile More menu must expose exactly Community and Settings'\);\s*\})"
-              r"(\s*const hierarchy = await page\.evaluate\(\(\) => \{)",
+          route_test = Path('src/ui/applicationRoute.test.ts')
+          text = route_test.read_text()
+          anchor = "expect(readSettingsCategory(fromAdmin)).toBe('display');"
+          anchor_pos = text.find(anchor)
+          if anchor_pos < 0:
+              raise SystemExit('Canonical Settings assertion anchor missing')
+          search_start = max(0, anchor_pos - 1_500)
+          segment = text[search_start:anchor_pos]
+          legacy_pos = segment.rfind("'appearance'")
+          if legacy_pos < 0:
+              raise SystemExit('Legacy appearance argument missing before canonical Settings assertion')
+          absolute = search_start + legacy_pos
+          text = text[:absolute] + "'display'" + text[absolute + len("'appearance'"):]
+          route_test.write_text(text)
+
+          shell = Path('src/ui/CongregationShell.tsx')
+          text = shell.read_text()
+          nav_pattern = re.compile(
+              r"\s*<PrimaryNavigation\s+ariaLabel=\{labels\.navigation\}\s+items=\{\[.*?\]\}\s+overflowLabel=\{labels\.more\}\s+overflowItems=\{\[.*?\]\}\s*/>",
               flags=re.S,
           )
-          text, count = pattern.subn(
-              lambda match: match.group(1)
-              + "\n    await page.locator('.congregation-nav-item--more').click();\n\n    "
-              + match.group(2).lstrip(),
-              text,
-              count=1,
+          nav_replacement = """
+      <PrimaryNavigation
+        ariaLabel={labels.navigation}
+        items={[
+          {
+            id: 'today',
+            icon: 'today',
+            label: labels.today,
+            current: destination === 'today',
+            onSelect: () => {
+              navigate('today');
+            },
+          },
+          {
+            id: 'mosques',
+            icon: 'mosques',
+            label: labels.mosques,
+            current: destination === 'mosques',
+            onSelect: () => {
+              navigate('mosques');
+            },
+          },
+          {
+            id: 'qiblah',
+            icon: 'qiblah',
+            label: labels.qiblah,
+            current: destination === 'qiblah',
+            onSelect: () => {
+              navigate('qiblah');
+            },
+          },
+          {
+            id: 'knowledge',
+            icon: 'knowledge',
+            label: labels.knowledge,
+            current: destination === 'knowledge',
+            onSelect: () => {
+              navigate('knowledge');
+            },
+          },
+          {
+            id: 'settings',
+            icon: 'settings',
+            label: labels.settings,
+            current: destination === 'settings',
+            onSelect: () => {
+              navigate('settings');
+            },
+          },
+        ]}
+      />"""
+          text, nav_count = nav_pattern.subn(nav_replacement, text, count=1)
+          if nav_count != 1:
+              raise SystemExit(f'Primary navigation replacement count={nav_count}')
+          shell.write_text(text)
+
+          visual = Path('scripts/visual-product-ux-stage8.mjs')
+          text = visual.read_text()
+          mobile_nav_pattern = re.compile(
+              r"\s*await page\.locator\('\.congregation-nav-item--more'\)\.click\(\);\s*"
+              r"const overflowMenu = page\.locator\('\.congregation-nav-overflow-menu'\);\s*"
+              r"await overflowMenu\.waitFor\(\{ state: 'visible' \}\);\s*"
+              r"if \(\(await overflowMenu\.getByRole\('menuitem'\)\.count\(\)\) !== 2\) \{\s*"
+              r"throw new Error\('Mobile More menu must expose exactly Community and Settings'\);\s*\}",
+              flags=re.S,
           )
-          if count != 1:
-              raise SystemExit(f'Mobile More structural fix count={count}')
+          mobile_nav_replacement = """
+    const primaryNavItems = page.locator('.congregation-nav > .congregation-nav-item');
+    if ((await primaryNavItems.count()) !== 5) {
+      throw new Error('Mobile primary navigation must expose exactly five destinations');
+    }
+    const primaryNavLabels = await primaryNavItems
+      .locator('.congregation-nav-label')
+      .allTextContents();
+    const expectedPrimaryNavLabels = ['Today', 'Mosques', 'Qiblah', 'Knowledge', 'Settings'];
+    if (JSON.stringify(primaryNavLabels) !== JSON.stringify(expectedPrimaryNavLabels)) {
+      throw new Error(`Unexpected mobile primary navigation: ${primaryNavLabels.join(', ')}`);
+    }
+"""
+          text, visual_count = mobile_nav_pattern.subn(mobile_nav_replacement, text, count=1)
+          if visual_count != 1:
+              raise SystemExit(f'Mobile navigation acceptance replacement count={visual_count}')
           visual.write_text(text)
           PY
 
@@ -126,7 +212,7 @@ jobs:
           npm run test
           npm run build
 
-      - name: Publish helper-free Stage 57 commit object
+      - name: Publish helper-free Stage 57 commit
         shell: bash
         run: |
           set -euo pipefail
@@ -135,6 +221,10 @@ jobs:
           git rm .github/workflows/stage57-ux-builder.yml
           git rm .github/workflows/stage57-ux-builder-v2.yml
           git rm .github/workflows/stage57-ux-builder-v3.yml
+          git rm .github/workflows/stage57-ux-builder-v4.yml
+          git rm .github/workflows/stage57-ux-builder-v5.yml
+          git rm .github/workflows/stage57-ux-builder-v6.yml
+          git rm .github/workflows/stage57-ux-diagnostic.yml
           git add \
             src/ui/applicationRoute.ts \
             src/ui/applicationRoute.test.ts \
@@ -152,5 +242,4 @@ jobs:
             docs/PRODUCT_UX_V1.5.md \
             package.json
           git commit -m "Stage 57: refine product UX"
-          echo "CLEAN_STAGE57_COMMIT=$(git rev-parse HEAD)"
-          git push origin HEAD:stage-57/v1.5-product-ux-refinement || true
+          git push origin HEAD:stage-57/v1.5-product-ux-refinement
