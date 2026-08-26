@@ -92,6 +92,29 @@ describe('requestCurrentLocation', () => {
     });
   });
 
+  it('returns the approximate browser failure when both acquisition tiers fail', async () => {
+    const requestBrowser = vi
+      .fn<CurrentLocationDependencies['requestBrowser']>()
+      .mockResolvedValueOnce({ ok: false, reason: 'timeout' })
+      .mockResolvedValueOnce({ ok: false, reason: 'unavailable' });
+
+    await expect(
+      requestCurrentLocation(dependencies({ isNativePlatform: () => false, requestBrowser })),
+    ).resolves.toEqual({ ok: false, reason: 'unavailable' });
+    expect(requestBrowser).toHaveBeenCalledTimes(2);
+  });
+
+  it('does not retry after a terminal browser permission denial', async () => {
+    const requestBrowser = vi
+      .fn<CurrentLocationDependencies['requestBrowser']>()
+      .mockResolvedValue({ ok: false, reason: 'permission-denied' });
+
+    await expect(
+      requestCurrentLocation(dependencies({ isNativePlatform: () => false, requestBrowser })),
+    ).resolves.toEqual({ ok: false, reason: 'permission-denied' });
+    expect(requestBrowser).toHaveBeenCalledOnce();
+  });
+
   it('uses granted native permission and retains location-quality metadata', async () => {
     const requestNativePermissions = vi.fn(() => Promise.resolve({ location: 'granted' }));
     const getNativeCurrentPosition = vi.fn(() =>
@@ -146,6 +169,18 @@ describe('requestCurrentLocation', () => {
       ok: true,
       location: { source: 'native-network-approximate', accuracyMeters: 900 },
     });
+  });
+
+  it('retains the approximate native failure after both acquisition tiers fail', async () => {
+    const getNativeCurrentPosition = vi
+      .fn<CurrentLocationDependencies['getNativeCurrentPosition']>()
+      .mockRejectedValueOnce(new Error('Location request timeout'))
+      .mockRejectedValueOnce(new Error('Position unavailable'));
+
+    await expect(
+      requestCurrentLocation(dependencies({ getNativeCurrentPosition })),
+    ).resolves.toEqual({ ok: false, reason: 'unavailable' });
+    expect(getNativeCurrentPosition).toHaveBeenCalledTimes(2);
   });
 
   it('requests permission when needed and fails closed when denied', async () => {
