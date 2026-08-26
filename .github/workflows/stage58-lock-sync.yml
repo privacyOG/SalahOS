@@ -46,4 +46,4 @@ jobs:
           git add package-lock.json .github/workflows/stage58-lock-sync.yml
           git diff --cached --check
           git commit -m 'release: reconcile v1.5 lockfile metadata'
-          git push --force origin HEAD:"$TARGET_BRANCH"
+          git push --force origin HEAD:"refs/heads/$TARGET_BRANCH"
