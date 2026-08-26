@@ -83,12 +83,13 @@ jobs:
         run: npm run test
       - name: Production build
         run: npm run build
-      - name: Publish validated Stage 57 candidate
+      - name: Export validated Stage 57 candidate
         shell: bash
         run: |
           set -euo pipefail
           git config user.name privacyOG
           git config user.email kriptiik@proton.me
+          git clean -fd public/mosque-packs
           git rm -f .github/workflows/stage57-final-build.yml .github/workflows/stage57-diagnostic.yml
           if git diff --unified=0 -- . ':!.github/workflows/stage57-final-build.yml' ':!.github/workflows/stage57-diagnostic.yml' | grep '^+' | grep -Eiq 'chatgpt|openai|gpt[- _]?[0-9]'; then
             echo 'Forbidden AI branding found in Stage 57 additions.' >&2
@@ -98,4 +99,4 @@ jobs:
           git status --short
           git commit -m "Stage 57: refine v1.5 product UX"
           echo "STAGE57_CANDIDATE_SHA=$(git rev-parse HEAD)"
-          git push origin HEAD:stage-57/v1.5-product-ux-refinement-final
+          git push --force origin HEAD:refs/tags/stage57-product-candidate-v1
