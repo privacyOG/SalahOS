@@ -130,7 +130,9 @@ async function validateEnabledWeather(browser) {
   try {
     await seed(page, true);
     await page.goto(`${baseUrl}/?view=today`, { waitUntil: 'networkidle' });
-    const weather = page.locator('.mobile-prayer-theme-surface > .prayer-board-weather');
+    const localContext = page.locator('.today-screen > .today-local-context');
+    await localContext.waitFor({ state: 'visible' });
+    const weather = localContext.locator(':scope > .prayer-board-weather');
     await weather.waitFor({ state: 'visible' });
     const text = await weather.textContent();
     if (!text?.includes('19°C') || !text.includes('Rain')) {
@@ -141,6 +143,15 @@ async function validateEnabledWeather(browser) {
     if (providerRequests < 1) throw new Error('Phone/Home weather provider was not contacted');
     if ((await page.locator('.today-prayer-row:not(.today-prayer-row--header)').count()) !== 5) {
       throw new Error('Phone/Home weather altered the five obligatory prayer rows');
+    }
+    const localContextContract = await localContext.evaluate((element) => ({
+      hasLocationConfidence: element.querySelector(':scope > .today-location-confidence') !== null,
+      hasWeather: element.querySelector(':scope > .prayer-board-weather') !== null,
+    }));
+    if (!localContextContract.hasLocationConfidence || !localContextContract.hasWeather) {
+      throw new Error(
+        `Phone/Home weather is not grouped with Stage 8 local context: ${JSON.stringify(localContextContract)}`,
+      );
     }
     await weather.scrollIntoViewIfNeeded();
     await capture(page, 'mobile-prayer-board-weather-ready-en');
@@ -183,9 +194,7 @@ async function validateModuleOffNoRequest(browser) {
     if (providerRequests !== 0) {
       throw new Error('Phone/Home weather contacted the provider while its module was disabled');
     }
-    if (
-      (await page.locator('.mobile-prayer-theme-surface > .prayer-board-weather').count()) !== 0
-    ) {
+    if ((await page.locator('.today-local-context > .prayer-board-weather').count()) !== 0) {
       throw new Error('Phone/Home weather rendered while its module was disabled');
     }
     if ((await page.locator('.today-prayer-row:not(.today-prayer-row--header)').count()) !== 5) {
