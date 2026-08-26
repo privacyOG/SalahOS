@@ -25,6 +25,7 @@ export function PrimaryNavigation({ ariaLabel, items }: PrimaryNavigationProps) 
         <button
           type="button"
           className="congregation-nav-item"
+          data-navigation-id={item.id}
           aria-current={item.current === true ? 'page' : undefined}
           key={item.id}
           onClick={item.onSelect}

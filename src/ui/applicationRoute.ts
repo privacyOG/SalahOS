@@ -2,14 +2,7 @@ export type ProductSurface = 'congregation' | 'admin';
 export type CongregationDestination =
   'today' | 'mosques' | 'qiblah' | 'knowledge' | 'community' | 'settings';
 export type SettingsCategory =
-  | 'prayer'
-  | 'location'
-  | 'mosque'
-  | 'notifications'
-  | 'appearance'
-  | 'data-privacy'
-  | 'display-themes'
-  | 'advanced';
+  'location' | 'prayer' | 'adhan' | 'display' | 'mosques' | 'privacy-data' | 'advanced';
 export type AdminDestination =
   | 'overview'
   | 'prayer-iqamah'
@@ -30,15 +23,22 @@ const congregationDestinations = new Set<CongregationDestination>([
 ]);
 
 const settingsCategories = new Set<SettingsCategory>([
-  'prayer',
   'location',
-  'mosque',
-  'notifications',
-  'appearance',
-  'data-privacy',
-  'display-themes',
+  'prayer',
+  'adhan',
+  'display',
+  'mosques',
+  'privacy-data',
   'advanced',
 ]);
+
+const legacySettingsCategories: Readonly<Record<string, SettingsCategory>> = Object.freeze({
+  mosque: 'mosques',
+  notifications: 'adhan',
+  appearance: 'display',
+  'data-privacy': 'privacy-data',
+  'display-themes': 'display',
+});
 
 const adminDestinations = new Set<AdminDestination>([
   'overview',
@@ -73,8 +73,11 @@ export function readSettingsCategory(search: string): SettingsCategory | null {
     return null;
   }
   const requested = params.get('settingsView');
-  return requested !== null && settingsCategories.has(requested as SettingsCategory)
-    ? (requested as SettingsCategory)
+  if (requested !== null && settingsCategories.has(requested as SettingsCategory)) {
+    return requested as SettingsCategory;
+  }
+  return requested !== null && requested in legacySettingsCategories
+    ? (legacySettingsCategories[requested] ?? null)
     : null;
 }
 

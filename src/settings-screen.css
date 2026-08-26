@@ -293,3 +293,17 @@
     background: Canvas;
   }
 }
+
+/* v1.5 Stage 8: Display owns appearance, prayer-board and managed-display preferences. */
+.settings-display-preferences {
+  display: grid;
+  width: 100%;
+  gap: var(--salah-space-4);
+  padding-block-end: var(--salah-space-5);
+  border-block-end: 1px solid var(--salah-border-subtle);
+}
+
+.settings-display-preferences h2 {
+  margin: 0;
+  font-size: var(--salah-text-lg);
+}

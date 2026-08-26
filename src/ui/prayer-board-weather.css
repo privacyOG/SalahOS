@@ -161,3 +161,72 @@
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+
+/* v1.5 Stage 8: Today consumes weather in the local-context band. */
+.today-local-context .prayer-board-weather {
+  z-index: auto;
+  align-self: stretch;
+  justify-self: stretch;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: var(--salah-space-4);
+  border-color: var(--mobile-theme-border);
+  border-radius: var(--salah-radius-md);
+  background: var(--mobile-theme-surface);
+  color: var(--mobile-theme-fg);
+  box-shadow: none;
+  backdrop-filter: none;
+  pointer-events: auto;
+}
+
+.today-local-context .prayer-board-weather[data-weather-state='stale'] {
+  border-style: dashed;
+}
+
+.today-local-context .prayer-board-weather__primary {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: baseline;
+  gap: 0.45rem 0.75rem;
+}
+
+.today-local-context .prayer-board-weather__primary > span,
+.today-local-context .prayer-board-weather__primary > small,
+.today-local-context .prayer-board-weather__freshness {
+  color: var(--mobile-theme-secondary);
+}
+
+.today-local-context .prayer-board-weather__primary > small {
+  display: inline;
+  white-space: nowrap;
+}
+
+.today-local-context .prayer-board-weather__details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(6.5rem, 1fr));
+  gap: 0.55rem;
+  width: 100%;
+}
+
+.today-local-context .prayer-board-weather__freshness {
+  display: block;
+  font-size: 0.72rem;
+}
+
+@media (max-width: 720px) {
+  .today-local-context .prayer-board-weather__primary {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+
+  .today-local-context .prayer-board-weather__primary > small {
+    grid-column: 1 / -1;
+  }
+
+  .today-local-context .prayer-board-weather__details {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
