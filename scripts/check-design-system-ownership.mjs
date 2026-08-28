@@ -17,6 +17,7 @@ function forbid(content, pattern, label) {
 }
 
 const designSystem = read('src/design-system.css');
+const paletteLayer = read('src/theme-palettes.css');
 const primitives = read('src/design-system-primitives.css');
 const legacyStyles = read('src/styles.css');
 const responsiveHardening = read('src/responsive-hardening.css');
@@ -35,6 +36,8 @@ requireText(designSystem, '.prayer-card {', 'prayer-card ownership in design-sys
 requireText(designSystem, '.brand-icon {', 'brand icon ownership in design-system.css');
 requireText(designSystem, '@media (forced-colors: active)', 'forced-colours ownership');
 requireText(designSystem, '@media (prefers-reduced-motion: reduce)', 'reduced-motion ownership');
+requireText(paletteLayer, "data-palette='salah-classic'", 'authoritative palette layer');
+requireText(paletteLayer, "data-palette='high-contrast'", 'high-contrast palette');
 
 for (const primitive of [
   '.ds-page {',
@@ -65,8 +68,9 @@ forbid(
   'design-system-primitives.css must consume semantic tokens rather than define them',
 );
 
+const tokenAuthorityFiles = new Set(['design-system.css', 'theme-palettes.css']);
 for (const filename of readdirSync('src').filter((name) => name.endsWith('.css'))) {
-  if (filename === 'design-system.css') {
+  if (tokenAuthorityFiles.has(filename)) {
     continue;
   }
   forbid(
