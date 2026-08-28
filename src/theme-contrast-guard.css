@@ -1,0 +1,102 @@
+/*
+ * SalahOS v1.5.1 Stage 1 — semantic contrast guard.
+ *
+ * This layer deliberately contains no feature-specific colours. It fixes the
+ * failure class where inherited/hard-coded light foregrounds remain on light
+ * semantic surfaces after switching Light/System appearance modes.
+ */
+
+:root {
+  --salah-fg-on-accent: #0a100c;
+  --salah-fg-on-warning: #0a100c;
+}
+
+:root[data-theme='dark'] {
+  --salah-fg-on-accent: #0a100c;
+  --salah-fg-on-warning: #0a100c;
+}
+
+:root[data-theme='light'] {
+  --salah-fg-on-accent: #ffffff;
+  --salah-fg-on-warning: #ffffff;
+}
+
+@media (prefers-color-scheme: light) {
+  :root[data-theme='system'] {
+    --salah-fg-on-accent: #ffffff;
+    --salah-fg-on-warning: #ffffff;
+  }
+}
+
+/* Shared semantic surfaces must establish their own readable foreground. */
+.ds-surface,
+.ds-next-prayer,
+.ds-mosque-summary,
+.ds-announcement-preview,
+.location-panel,
+.settings-panel,
+.status-card,
+.prayer-panel,
+.hero {
+  color: var(--salah-fg-primary);
+}
+
+/* Form controls and navigation inherit mode-safe semantic foregrounds. */
+button,
+input,
+select,
+textarea,
+[role='button'],
+[role='tab'],
+[role='menuitem'] {
+  color: var(--salah-fg-primary);
+}
+
+/* Muted copy must never rely on a previously inherited white foreground. */
+.ds-type-metadata,
+.ds-type-caption,
+.ds-field__label,
+.ds-field__hint,
+.ds-switch,
+.ds-banner,
+.hero-copy,
+.language-control,
+.brand-name,
+.settings-panel summary {
+  color: var(--salah-fg-secondary);
+}
+
+.ds-type-metadata,
+.ds-type-caption,
+.ds-field__hint,
+.settings-panel summary {
+  color: var(--salah-fg-tertiary);
+}
+
+/* Filled accent controls require a dedicated on-accent token, not canvas. */
+.ds-button--primary {
+  color: var(--salah-fg-on-accent);
+}
+
+/* Native disabled controls remain legible instead of fading into light cards. */
+button:disabled,
+input:disabled,
+select:disabled,
+textarea:disabled,
+[aria-disabled='true'] {
+  color: var(--salah-fg-secondary);
+  opacity: 0.72;
+}
+
+@media (forced-colors: active) {
+  .ds-button--primary,
+  button,
+  input,
+  select,
+  textarea,
+  [role='button'],
+  [role='tab'],
+  [role='menuitem'] {
+    color: CanvasText;
+  }
+}
