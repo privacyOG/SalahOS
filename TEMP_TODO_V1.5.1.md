@@ -38,12 +38,12 @@ Keep this tracker compact. Mark an item `[x]` only after implementation and rele
 - [x] Add responsive/RTL/accessibility styling and regression/acceptance coverage.
 - [ ] Validate Stage 5.1 on the exact final head and mark complete.
 
-Stage 5.1 implementation: canonical Hijri presentation now emits `AH` explicitly rather than relying on an ambiguous era label; `src/domain/prayerCalendar.ts` derives date ranges and prayer rows from the same location/timezone/calculation settings as the app; `PrayerCalendarScreen` supplies Daily/Weekly/Monthly/Yearly views on a separate Calendar destination; `prayerCalendar.test.ts` locks the requested 2026 reference alignment and month names; `calendar:check` is enforced by the Quality Gate. Exact-head CI validation is pending before this stage is marked complete.
+Stage 5.1 implementation: canonical Hijri presentation now emits `AH` explicitly rather than relying on an ambiguous era label; `src/domain/prayerCalendar.ts` derives date ranges and prayer rows from the same location/timezone/calculation settings as the app; `PrayerCalendarScreen` supplies Daily/Weekly/Monthly/Yearly views on a separate Calendar destination; `prayerCalendar.test.ts` locks the requested 2026 reference alignment and month names; `calendar:check` is enforced by the Quality Gate. Exact-head CI validation remains pending before this stage is marked complete.
 
-## Stage 6 — Instructions guide
-- [ ] Create `Instructions guide.md` for ordinary users and mosque administrators.
-- [ ] Cover Android, iPhone/iPad, Web/PWA, Raspberry Pi and TV/kiosk operation.
-- [ ] Document setup, location, prayer calculation/madhhab, Iqamah, Qiblah, mosque features, Adhan/notifications, language/themes, offline use, displays, updates, troubleshooting and reset.
+## Stage 6 — Instructions guide ✅
+- [x] Create `Instructions guide.md` for ordinary users and mosque administrators.
+- [x] Cover Android, iPhone/iPad, Web/PWA, Raspberry Pi and TV/kiosk operation.
+- [x] Document setup, location, prayer calculation/madhhab, Iqamah, Qiblah, mosque features, Adhan/notifications, language/themes, offline use, displays, updates, troubleshooting and reset.
 
 ## Stage 7 — v1.5.1 reconciliation
 - [ ] Run relevant quality, visual, web/mobile/display and accessibility gates on the exact final head.
