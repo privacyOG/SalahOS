@@ -24,14 +24,19 @@ Keep this tracker compact. Mark an item `[x]` only after implementation and rele
 - [x] Support mosque branding without sacrificing readability at viewing distance.
 - [x] Reuse shared semantic tokens rather than introducing an independent styling system.
 
-Stage 4 implementation: `src/mosque-display-theme.css` adds viewing-distance hierarchy for clocks, next prayer, prayer/Iqamah rows, announcements and subordinate mosque branding. Royal Blue, Emerald Mosque, Midnight Gold and High Contrast receive display treatments while consuming the Stage 2 semantic palette contract. Smart-display runtime explicitly reapplies persisted palette + appearance and keeps reduced-motion/forced-colour behaviour.
-
 ## Stage 5 — Visual regression and accessibility QA ✅
 - [x] Cover representative Light/Dark/System + palette combinations across phone, tablet, web and display targets.
 - [x] Add contrast, text-clipping, RTL and large-text acceptance where practical.
 - [x] Preserve regression fixtures for the reported Today and Qiblah readability failures.
 
-Stage 5 implementation: `scripts/visual-theme-matrix.mjs` covers Today phone/light, Qiblah phone/dark, Settings tablet/System, high-contrast web, 1080p and 4K smart displays, plus Arabic RTL at 125% text size. It checks applied mode/palette, System resolution, RTL, horizontal clipping and visible text contrast. `scripts/check-theme-stage45.mjs` statically enforces the mosque hierarchy and matrix coverage. Both are wired into repository quality/visual gates; the Stage 1 Today/Qiblah contrast regression guard remains active.
+## Stage 5.1 — Hijri-aligned prayer calendar
+- [ ] Correct Hijri/Gregorian alignment using the Umm al-Qura calendar with the existing optional ±2-day local correction.
+- [ ] Standardise English Hijri month names: Muharram, Safar, Rabi al-Awwal, Rabi al-Akhir, Jumada al-Ula, Jumada al-Akhirah, Rajab, Sha'ban, Ramadan, Shawwal, Dhu al-Qi'dah, Dhu al-Hijjah.
+- [ ] Add explicit reference acceptance for 1 January 2026 = 12 Rajab 1447 AH and key 2026 month/year boundaries.
+- [ ] Add a separate Prayer Calendar route with Daily, Weekly, Monthly and Yearly views; do not alter the Today screen.
+- [ ] Keep every calendar view derived from the same civil-date, Hijri and prayer-time calculation pipeline so views remain mutually aligned.
+- [ ] Add responsive/RTL/accessibility styling and regression/acceptance coverage.
+- [ ] Validate Stage 5.1 and mark complete.
 
 ## Stage 6 — Instructions guide
 - [ ] Create `Instructions guide.md` for ordinary users and mosque administrators.
