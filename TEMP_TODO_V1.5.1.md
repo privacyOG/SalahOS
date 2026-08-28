@@ -30,13 +30,15 @@ Keep this tracker compact. Mark an item `[x]` only after implementation and rele
 - [x] Preserve regression fixtures for the reported Today and Qiblah readability failures.
 
 ## Stage 5.1 — Hijri-aligned prayer calendar
-- [ ] Correct Hijri/Gregorian alignment using the Umm al-Qura calendar with the existing optional ±2-day local correction.
-- [ ] Standardise English Hijri month names: Muharram, Safar, Rabi al-Awwal, Rabi al-Akhir, Jumada al-Ula, Jumada al-Akhirah, Rajab, Sha'ban, Ramadan, Shawwal, Dhu al-Qi'dah, Dhu al-Hijjah.
-- [ ] Add explicit reference acceptance for 1 January 2026 = 12 Rajab 1447 AH and key 2026 month/year boundaries.
-- [ ] Add a separate Prayer Calendar route with Daily, Weekly, Monthly and Yearly views; do not alter the Today screen.
-- [ ] Keep every calendar view derived from the same civil-date, Hijri and prayer-time calculation pipeline so views remain mutually aligned.
-- [ ] Add responsive/RTL/accessibility styling and regression/acceptance coverage.
-- [ ] Validate Stage 5.1 and mark complete.
+- [x] Correct Hijri/Gregorian alignment using the Umm al-Qura calendar with the existing optional ±2-day local correction.
+- [x] Standardise English Hijri month names: Muharram, Safar, Rabi al-Awwal, Rabi al-Akhir, Jumada al-Ula, Jumada al-Akhirah, Rajab, Sha'ban, Ramadan, Shawwal, Dhu al-Qi'dah, Dhu al-Hijjah.
+- [x] Add explicit reference acceptance for 1 January 2026 = 12 Rajab 1447 AH and key 2026 month/year boundaries.
+- [x] Add a separate Prayer Calendar route with Daily, Weekly, Monthly and Yearly views; do not alter the Today screen.
+- [x] Keep every calendar view derived from the same civil-date, Hijri and prayer-time calculation pipeline so views remain mutually aligned.
+- [x] Add responsive/RTL/accessibility styling and regression/acceptance coverage.
+- [ ] Validate Stage 5.1 on the exact final head and mark complete.
+
+Stage 5.1 implementation: canonical Hijri presentation now emits `AH` explicitly rather than relying on an ambiguous era label; `src/domain/prayerCalendar.ts` derives date ranges and prayer rows from the same location/timezone/calculation settings as the app; `PrayerCalendarScreen` supplies Daily/Weekly/Monthly/Yearly views on a separate Calendar destination; `prayerCalendar.test.ts` locks the requested 2026 reference alignment and month names; `calendar:check` is enforced by the Quality Gate. Exact-head CI validation is pending before this stage is marked complete.
 
 ## Stage 6 — Instructions guide
 - [ ] Create `Instructions guide.md` for ordinary users and mosque administrators.
