@@ -1,0 +1,17 @@
+import fs from 'node:fs';
+const read=p=>fs.readFileSync(p,'utf8');
+const display=read('src/mosque-display-theme.css');
+const palettes=read('src/theme-palettes.css');
+const contrast=read('src/theme-contrast-guard.css');
+const main=read('src/main.tsx');
+const smart=read('src/ui/SmartDisplayApplication.tsx');
+const visual=read('scripts/visual-theme-matrix.mjs');
+const required=['next-prayer','prayer-card','iqamah','announcement','smart-display-brand'];
+for(const marker of required)if(!display.includes(marker))throw new Error(`Mosque hierarchy missing ${marker}`);
+for(const p of ['royal-blue','emerald-mosque','midnight-gold','high-contrast'])if(!display.includes(`data-palette='${p}'`))throw new Error(`Display palette treatment missing ${p}`);
+if(!main.includes("'./mosque-display-theme.css'"))throw new Error('Mosque display theme not loaded');
+if(!smart.includes('applyThemePalette(settings.palette'))throw new Error('Smart display does not consume shared palette contract');
+for(const q of ['@media (prefers-reduced-motion: reduce)','@media (forced-colors: active)'])if(!(display+contrast).includes(q))throw new Error(`Accessibility guard missing ${q}`);
+for(const p of ['salah-classic','midnight-gold','emerald-mosque','royal-blue','desert-sand','olive-heritage','monochrome','high-contrast'])if(!palettes.includes(p))throw new Error(`Palette missing ${p}`);
+for(const marker of ['today','qiblah','settings','smart-display','rtl','large-text','system'])if(!visual.includes(marker))throw new Error(`Visual matrix missing ${marker}`);
+console.log('Stage 4 mosque display and Stage 5 visual/accessibility acceptance checks passed.');
