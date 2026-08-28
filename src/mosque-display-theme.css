@@ -1,0 +1,93 @@
+/* Mosque/display hierarchy layered on the shared semantic contract. */
+.smart-display {
+  --mosque-display-highlight: var(--salah-palette-accent, var(--salah-fg-accent));
+  --mosque-display-highlight-strong: var(--salah-palette-accent-strong, var(--salah-fg-accent));
+}
+
+.smart-display .prayer-board-configured-surface {
+  color: var(--salah-fg-primary);
+}
+
+/* Clock and next-prayer information must dominate at hall viewing distance. */
+.smart-display :is(.smart-display-clock, [class*='__clock']) {
+  font-variant-numeric: tabular-nums;
+  text-shadow: 0 0.04em 0.14em var(--salah-shadow-color);
+}
+
+.smart-display :is(.next-prayer-block, [class*='__next']) {
+  border-color: color-mix(in srgb, var(--mosque-display-highlight) 55%, var(--salah-border-strong));
+}
+
+.smart-display :is(.next-prayer-block, [class*='__next']) strong,
+.smart-display :is(.countdown, [class*='__countdown']) {
+  color: var(--salah-fg-primary);
+  font-weight: 900;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Prayer/iqamah rows remain legible on 1080p and 4K boards from a distance. */
+.smart-display :is(.prayer-card, [class*='__prayer']) {
+  border-color: var(--salah-border-default);
+}
+
+.smart-display :is(.prayer-time, [class*='__time'], [class*='__iqamah']) {
+  font-variant-numeric: tabular-nums;
+}
+
+.smart-display [class*='__iqamah'] {
+  color: var(--salah-fg-primary);
+  font-weight: 800;
+}
+
+/* Branding is intentionally subordinate to prayer information. */
+.smart-display :is(.smart-display-brand, [class*='__brand']) {
+  color: var(--salah-fg-secondary);
+}
+
+.smart-display :is(.smart-display-brand, [class*='__brand']) img {
+  object-fit: contain;
+  background: var(--salah-bg-surface-raised);
+}
+
+/* Announcements use a readable panel rather than unbounded branding colours. */
+.smart-display :is([class*='__announcement'], [class*='announcement']) {
+  border-color: var(--salah-border-default);
+  background: var(--salah-bg-surface-raised);
+  color: var(--salah-fg-primary);
+}
+
+.smart-display :is([class*='__announcement'], [class*='announcement']) :is(p, span, small) {
+  color: var(--salah-fg-secondary);
+}
+
+/* Mosque-oriented palette treatments; no separate token system. */
+.smart-display[data-palette='royal-blue'] :is(.next-prayer-block, [class*='__next']),
+.smart-display[data-palette='emerald-mosque'] :is(.next-prayer-block, [class*='__next']),
+.smart-display[data-palette='midnight-gold'] :is(.next-prayer-block, [class*='__next']) {
+  background: color-mix(in srgb, var(--mosque-display-highlight) 18%, var(--salah-bg-surface-raised));
+}
+
+.smart-display[data-palette='high-contrast'] :is(.prayer-card, [class*='__prayer'], [class*='__announcement']) {
+  border-width: 2px;
+}
+
+@media (min-width: 1600px) {
+  .smart-display :is([class*='__prayer-name'], .prayer-card strong) { font-size: clamp(1.75rem, 2.1vw, 3.25rem); }
+  .smart-display :is(.prayer-time, [class*='__time'], [class*='__iqamah']) { font-size: clamp(1.9rem, 2.45vw, 3.8rem); }
+  .smart-display :is([class*='__announcement'], [class*='announcement']) { font-size: clamp(1.1rem, 1.45vw, 2rem); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .smart-display *, .smart-display *::before, .smart-display *::after {
+    scroll-behavior: auto !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .smart-display :is(.next-prayer-block, .prayer-card, [class*='__next'], [class*='__prayer'], [class*='__announcement']) {
+    border: 2px solid CanvasText;
+    background: Canvas;
+    color: CanvasText;
+    forced-color-adjust: auto;
+  }
+}
