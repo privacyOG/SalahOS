@@ -14,24 +14,24 @@ Keep this tracker compact. Mark an item `[x]` only after implementation and rele
 - [x] Provide deliberate Light and Dark variants while keeping appearance mode independent from palette selection.
 - [x] Persist palette selection and expose it cleanly in Display settings.
 
-Stage 2 implementation: `src/theme-palettes.css` contains the curated semantic variants; `src/platform/themePalette.ts` defines the shared palette contract; palette is validated/persisted through `settingsStorage` and selectable independently from System/Light/Dark in Display settings.
-
 ## Stage 3 — Theme architecture and cross-platform consistency ✅
 - [x] Centralise palette + appearance-mode resolution through semantic design tokens.
 - [x] Ensure Android, iOS/iPadOS, Web/PWA and display/kiosk surfaces consume the same theme contract where applicable.
 - [x] Preserve RTL, reduced-motion, forced-colours and accessibility behaviour.
 
-Stage 3 implementation: bootstrap now applies persisted appearance + palette before rendering the shared React/Capacitor surface, so Web/PWA and packaged Android/iOS consume the same semantic CSS contract and display/kiosk routes inherit it from the same root. Existing RTL/reduced-motion/forced-colour layers remain intact. `scripts/check-theme-architecture.mjs` enforces palette completeness, Light/Dark variants, persistence, bootstrap integration, Display-settings exposure and forced-colours support; it is wired into `npm run check`.
+## Stage 4 — Mosque / smart-display themes ✅
+- [x] Add display-oriented variants with strong clock, next-prayer, prayer/Iqamah and announcement hierarchy.
+- [x] Support mosque branding without sacrificing readability at viewing distance.
+- [x] Reuse shared semantic tokens rather than introducing an independent styling system.
 
-## Stage 4 — Mosque / smart-display themes
-- [ ] Add display-oriented variants with strong clock, next-prayer, prayer/Iqamah and announcement hierarchy.
-- [ ] Support mosque branding without sacrificing readability at viewing distance.
-- [ ] Reuse shared semantic tokens rather than introducing an independent styling system.
+Stage 4 implementation: `src/mosque-display-theme.css` adds viewing-distance hierarchy for clocks, next prayer, prayer/Iqamah rows, announcements and subordinate mosque branding. Royal Blue, Emerald Mosque, Midnight Gold and High Contrast receive display treatments while consuming the Stage 2 semantic palette contract. Smart-display runtime explicitly reapplies persisted palette + appearance and keeps reduced-motion/forced-colour behaviour.
 
-## Stage 5 — Visual regression and accessibility QA
-- [ ] Cover representative Light/Dark/System + palette combinations across phone, tablet, web and display targets.
-- [ ] Add contrast, text-clipping, RTL and large-text acceptance where practical.
-- [ ] Preserve regression fixtures for the reported Today and Qiblah readability failures.
+## Stage 5 — Visual regression and accessibility QA ✅
+- [x] Cover representative Light/Dark/System + palette combinations across phone, tablet, web and display targets.
+- [x] Add contrast, text-clipping, RTL and large-text acceptance where practical.
+- [x] Preserve regression fixtures for the reported Today and Qiblah readability failures.
+
+Stage 5 implementation: `scripts/visual-theme-matrix.mjs` covers Today phone/light, Qiblah phone/dark, Settings tablet/System, high-contrast web, 1080p and 4K smart displays, plus Arabic RTL at 125% text size. It checks applied mode/palette, System resolution, RTL, horizontal clipping and visible text contrast. `scripts/check-theme-stage45.mjs` statically enforces the mosque hierarchy and matrix coverage. Both are wired into repository quality/visual gates; the Stage 1 Today/Qiblah contrast regression guard remains active.
 
 ## Stage 6 — Instructions guide
 - [ ] Create `Instructions guide.md` for ordinary users and mosque administrators.
