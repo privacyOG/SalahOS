@@ -1,19 +1,13 @@
 name: Quality Gate
-
 on:
   push:
-    branches:
-      - main
-      - 'agent/**'
+    branches: [main, 'agent/**']
   pull_request:
-
 concurrency:
   group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
-
 permissions:
   contents: read
-
 jobs:
   quality:
     runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '["ubuntu-24.04"]' || '["self-hosted","Linux","X64"]') }}
@@ -21,84 +15,62 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: npm
-
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
-
       - name: Sensitive-file policy
         run: npm run security:sensitive-files
-
       - name: Native permission policy
         run: npm run security:native-permissions
-
       - name: Remote network policy
         run: npm run security:remote-network
-
       - name: Dependency vulnerability audit
         run: npm run security:audit
-
       - name: Dependency license policy
         run: npm run security:licenses
-
       - name: Documentation link verification
         run: npm run docs:links
-
       - name: Prepare pinned offline Qur'an corpus
         run: npm run quran:offline:prepare
-
       - name: Offline Qur'an corpus integrity
         run: npm run quran:offline:check
-
       - name: Islamic Knowledge source governance
         run: npm run knowledge:content:check
-
       - name: Australian mosque directory reproducibility
         run: npm run mosques:australia:check
-
       - name: Mosque directory pack reproducibility
         run: npm run mosques:packs:check
-
       - name: Packaged Adhan audio integrity
         run: npm run adhan:audio:check
-
       - name: Shared mosque directory service acceptance
         run: npm run directory:test
-
       - name: PWA raster icon reproducibility
         run: python3 scripts/generate_pwa_icons.py --check
-
       - name: Design-system ownership policy
         run: npm run ui:design-system-ownership
-
+      - name: Theme architecture acceptance
+        run: npm run ui:theme-contrast && npm run ui:theme-architecture && npm run ui:theme-stage45
+      - name: Hijri prayer calendar acceptance
+        run: npm run calendar:check
       - name: UI/UX v2 retirement policy
         run: npm run ui:v2-retirement
-
       - name: Format check
         run: npm run format:check
-
       - name: Lint
         run: npm run lint
-
       - name: Typecheck
         run: npm run typecheck
-
       - name: Test
         run: npm run test
-
       - name: Core coverage thresholds
         run: npm run test:coverage
-
       - name: Production build
         run: npm run build
-
       - name: Bundle architecture budget
         run: npm run bundle:size
-
       - name: Verify deployable web artifact
         run: npm run verify:web-build
