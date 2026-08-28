@@ -1,32 +1,9 @@
 /*
  * SalahOS v1.5.1 Stage 1 — semantic contrast guard.
  *
- * This layer deliberately contains no feature-specific colours. It fixes the
- * failure class where inherited/hard-coded light foregrounds remain on light
- * semantic surfaces after switching Light/System appearance modes.
+ * This layer deliberately contains no feature-specific colours or semantic
+ * token definitions. Authoritative semantic tokens live in design-system.css.
  */
-
-:root {
-  --salah-fg-on-accent: #0a100c;
-  --salah-fg-on-warning: #0a100c;
-}
-
-:root[data-theme='dark'] {
-  --salah-fg-on-accent: #0a100c;
-  --salah-fg-on-warning: #0a100c;
-}
-
-:root[data-theme='light'] {
-  --salah-fg-on-accent: #ffffff;
-  --salah-fg-on-warning: #ffffff;
-}
-
-@media (prefers-color-scheme: light) {
-  :root[data-theme='system'] {
-    --salah-fg-on-accent: #ffffff;
-    --salah-fg-on-warning: #ffffff;
-  }
-}
 
 /* Shared semantic surfaces must establish their own readable foreground. */
 .ds-surface,
@@ -73,7 +50,7 @@ textarea,
   color: var(--salah-fg-tertiary);
 }
 
-/* Filled accent controls require a dedicated on-accent token, not canvas. */
+/* Filled accent controls require the authoritative on-accent semantic token. */
 .ds-button--primary {
   color: var(--salah-fg-on-accent);
 }
