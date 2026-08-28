@@ -2,13 +2,15 @@
 
 Keep this tracker compact. Mark an item `[x]` only after implementation and relevant validation are complete.
 
-## Stage 1 — Theme-system audit and contrast fixes
+## Stage 1 — Theme-system audit and contrast fixes ✅
 
-- [ ] Audit semantic foreground/background behaviour across Light, Dark and System modes.
-- [ ] Remove/fix theme-dependent foreground/background pairings that can produce unreadable text, controls or cards.
-- [ ] Ensure System mode resolves cleanly to the OS colour scheme and all shared semantic tokens have explicit light/dark values.
-- [ ] Add regression protection for core semantic contrast pairs and the reported Qiblah/Today light-theme failure class.
-- [ ] Validate Stage 1 and mark complete.
+- [x] Audit semantic foreground/background behaviour across Light, Dark and System modes.
+- [x] Remove/fix theme-dependent foreground/background pairings that can produce unreadable text, controls or cards.
+- [x] Ensure System mode resolves cleanly to the OS colour scheme and all shared semantic tokens have explicit light/dark values.
+- [x] Add regression protection for core semantic contrast pairs and the reported Qiblah/Today light-theme failure class.
+- [x] Validate Stage 1 and mark complete.
+
+Stage 1 implementation: `src/theme-contrast-guard.css` establishes mode-safe foreground ownership for shared surfaces/controls and dedicated on-accent foregrounds; `scripts/check-theme-contrast.mjs` guards Light/System semantic-token coverage plus Today/Qiblah failure-class surfaces and is wired into `npm run check`.
 
 ## Stage 2 — Expanded colour palettes
 
