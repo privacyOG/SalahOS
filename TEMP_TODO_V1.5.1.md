@@ -1,0 +1,46 @@
+# SalahOS v1.5.1 — Temporary UI Theme & Guide Tracker
+
+Keep this tracker compact. Mark an item `[x]` only after implementation and relevant validation are complete.
+
+## Stage 1 — Theme-system audit and contrast fixes
+
+- [ ] Audit semantic foreground/background behaviour across Light, Dark and System modes.
+- [ ] Remove/fix theme-dependent foreground/background pairings that can produce unreadable text, controls or cards.
+- [ ] Ensure System mode resolves cleanly to the OS colour scheme and all shared semantic tokens have explicit light/dark values.
+- [ ] Add regression protection for core semantic contrast pairs and the reported Qiblah/Today light-theme failure class.
+- [ ] Validate Stage 1 and mark complete.
+
+## Stage 2 — Expanded colour palettes
+
+- [ ] Add curated Salah Classic, Midnight Gold, Emerald Mosque, Royal Blue, Desert Sand, Olive Heritage, Monochrome and High Contrast palettes.
+- [ ] Provide deliberate Light and Dark variants while keeping appearance mode independent from palette selection.
+- [ ] Persist palette selection and expose it cleanly in Display settings.
+
+## Stage 3 — Theme architecture and cross-platform consistency
+
+- [ ] Centralise palette + appearance-mode resolution through semantic design tokens.
+- [ ] Ensure Android, iOS/iPadOS, Web/PWA and display/kiosk surfaces consume the same theme contract where applicable.
+- [ ] Preserve RTL, reduced-motion, forced-colours and accessibility behaviour.
+
+## Stage 4 — Mosque / smart-display themes
+
+- [ ] Add display-oriented variants with strong clock, next-prayer, prayer/Iqamah and announcement hierarchy.
+- [ ] Support mosque branding without sacrificing readability at viewing distance.
+- [ ] Reuse shared semantic tokens rather than introducing an independent styling system.
+
+## Stage 5 — Visual regression and accessibility QA
+
+- [ ] Cover representative Light/Dark/System + palette combinations across phone, tablet, web and display targets.
+- [ ] Add contrast, text-clipping, RTL and large-text acceptance where practical.
+- [ ] Preserve regression fixtures for the reported Today and Qiblah readability failures.
+
+## Stage 6 — Instructions guide
+
+- [ ] Create `Instructions guide.md` for ordinary users and mosque administrators.
+- [ ] Cover Android, iPhone/iPad, Web/PWA, Raspberry Pi and TV/kiosk operation.
+- [ ] Document setup, location, prayer calculation/madhhab, Iqamah, Qiblah, mosque features, Adhan/notifications, language/themes, offline use, displays, updates, troubleshooting and reset.
+
+## Stage 7 — v1.5.1 reconciliation
+
+- [ ] Run relevant quality, visual, web/mobile/display and accessibility gates on the exact final head.
+- [ ] Reconcile this tracker and mark v1.5.1 complete only when all stages pass.
