@@ -13,7 +13,6 @@
   font-synthesis: none;
   text-rendering: optimizeLegibility;
 
-  /* Semantic surfaces */
   --salah-bg-canvas: #0a100c;
   --salah-bg-subtle: #101813;
   --salah-bg-surface: rgba(20, 30, 23, 0.88);
@@ -23,7 +22,6 @@
   --salah-bg-canvas-glow: rgba(114, 158, 105, 0.16);
   --salah-bg-warning-soft: rgba(111, 72, 36, 0.28);
 
-  /* Semantic content */
   --salah-fg-primary: #f5f8f3;
   --salah-fg-secondary: #c8d3c6;
   --salah-fg-tertiary: #9eb19e;
@@ -33,13 +31,11 @@
   --salah-fg-on-accent: #0a100c;
   --salah-fg-on-warning: #0a100c;
 
-  /* Borders and focus */
   --salah-border-subtle: rgba(255, 255, 255, 0.08);
   --salah-border-default: rgba(255, 255, 255, 0.13);
   --salah-border-strong: rgba(255, 255, 255, 0.2);
   --salah-focus-ring: #cce8c5;
 
-  /* Shape */
   --salah-radius-xs: 0.55rem;
   --salah-radius-sm: 0.8rem;
   --salah-radius-md: 1.1rem;
@@ -47,7 +43,6 @@
   --salah-radius-xl: 1.9rem;
   --salah-radius-pill: 999px;
 
-  /* Spacing: 8px-oriented with compact 4/12/20px exceptions. */
   --salah-space-1: 0.25rem;
   --salah-space-2: 0.5rem;
   --salah-space-3: 0.75rem;
@@ -59,13 +54,11 @@
   --salah-space-12: 3rem;
   --salah-space-16: 4rem;
 
-  /* Elevation */
   --salah-shadow-sm: 0 0.45rem 1.2rem rgba(0, 0, 0, 0.14);
   --salah-shadow-md: 0 1.4rem 3.8rem rgba(0, 0, 0, 0.22);
   --salah-shadow-hero: 0 2rem 5rem rgba(0, 0, 0, 0.25);
   --salah-shadow-color: rgba(0, 0, 0, 0.2);
 
-  /* Typography */
   --salah-text-xs: clamp(0.78rem, 0.74rem + 0.12vw, 0.86rem);
   --salah-text-sm: clamp(0.9rem, 0.86rem + 0.14vw, 0.98rem);
   --salah-text-md: clamp(1rem, 0.96rem + 0.18vw, 1.12rem);
@@ -75,7 +68,6 @@
   --salah-text-countdown: clamp(2.25rem, 1.7rem + 2.2vw, 4.4rem);
   --salah-text-page-title: clamp(2.35rem, 7vw, 5.5rem);
 
-  /* Motion */
   --salah-motion-fast: 120ms;
   --salah-motion-standard: 180ms;
   --salah-ease-standard: cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -164,4 +156,331 @@ textarea {
   border-radius: var(--salah-radius-sm);
   color: var(--salah-fg-primary);
   background: var(--salah-bg-control);
+  font: inherit;
+  transition-duration: var(--salah-motion-fast);
+  transition-timing-function: var(--salah-ease-standard);
+}
+
+button,
+select,
+input {
+  min-height: 2.75rem;
+}
+
+button {
+  padding-inline: var(--salah-space-4);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+input,
+select,
+textarea {
+  padding: 0.65rem 0.7rem;
+}
+
+textarea {
+  width: 100%;
+  resize: vertical;
+}
+
+h1,
+h2,
+p {
+  margin-top: 0;
+}
+
+h1 {
+  margin-block-end: 0.8rem;
+  font-size: var(--salah-text-page-title);
+  line-height: 0.98;
+  letter-spacing: -0.055em;
+}
+
+[dir='rtl'] h1 {
+  line-height: 1.15;
+  letter-spacing: 0;
+}
+
+h2 {
+  margin-block-end: 0;
+  font-size: clamp(1.7rem, 3vw, 2.4rem);
+}
+
+.app-shell {
+  display: flex;
+  width: min(1240px, calc(100% - clamp(1rem, 4vw, 3rem)));
+  margin: 0 auto;
+  padding-block-start: calc(clamp(1.5rem, 4vw, 4rem) + env(safe-area-inset-top));
+  padding-block-end: calc(clamp(1.5rem, 4vw, 4rem) + env(safe-area-inset-bottom));
+  padding-inline-start: env(safe-area-inset-left);
+  padding-inline-end: env(safe-area-inset-right);
+  flex-direction: column;
+}
+
+.offline-banner {
+  order: -30;
+}
+
+.hero {
+  order: -20;
+  max-width: none;
+  margin-block-end: var(--salah-space-5);
+  padding: clamp(1rem, 2vw, 1.4rem) clamp(1.2rem, 2.5vw, 2rem);
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-xl);
+  background: var(--salah-bg-surface);
+  box-shadow: var(--salah-shadow-md);
+}
+
+.hero-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--salah-space-4);
+}
+
+.brand-icon {
+  width: clamp(2.75rem, 5vw, 3.8rem);
+  height: clamp(2.75rem, 5vw, 3.8rem);
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-sm);
+  box-shadow: var(--salah-shadow-sm);
+}
+
+.brand-name,
+.hero-copy,
+.next-prayer,
+.prayer-card span {
+  color: var(--salah-fg-secondary);
+}
+
+.live-clock {
+  margin: 0;
+  color: var(--salah-fg-primary);
+  font-size: var(--salah-text-xl);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.language-control {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  color: var(--salah-fg-secondary);
+  font-size: var(--salah-text-sm);
+}
+
+button:hover:not(:disabled) {
+  border-color: var(--salah-border-strong);
+}
+
+button:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible {
+  outline: 3px solid var(--salah-focus-ring);
+  outline-offset: 3px;
+}
+
+.location-panel,
+.settings-panel,
+.status-card,
+.prayer-panel {
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-lg);
+  background: var(--salah-bg-surface);
+  box-shadow: var(--salah-shadow-sm);
+  backdrop-filter: blur(18px);
+}
+
+.location-panel,
+.settings-panel {
+  margin-block-end: var(--salah-space-4);
+  padding: clamp(1rem, 2vw, 1.35rem);
+}
+
+.status-card {
+  order: -10;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: clamp(0.85rem, 2vw, 1.35rem);
+  margin-block-end: var(--salah-space-4);
+  padding: clamp(1.1rem, 2.2vw, 1.55rem);
+}
+
+.prayer-panel {
+  order: -10;
+  margin-block-end: var(--salah-space-5);
+  padding: clamp(1.2rem, 3vw, 2.2rem);
+  box-shadow: var(--salah-shadow-hero);
+}
+
+.section-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--salah-space-4);
+  margin-block-end: clamp(1rem, 2.5vw, 1.75rem);
+}
+
+.next-prayer-block {
+  min-width: min(23rem, 100%);
+  padding: clamp(1.15rem, 2vw, 1.6rem);
+  border: 1px solid var(--salah-border-default);
+  border-radius: var(--salah-radius-md);
+  background: var(--salah-bg-accent-soft);
+}
+
+.countdown {
+  margin-block-start: var(--salah-space-2) !important;
+  font-size: var(--salah-text-countdown);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+  line-height: 1;
+}
+
+.prayer-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: clamp(0.55rem, 1.2vw, 0.85rem);
+}
+
+.prayer-card {
+  display: flex;
+  min-height: 9rem;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(0.9rem, 1.5vw, 1.15rem);
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-md);
+  background: var(--salah-bg-control);
+  transition-duration: var(--salah-motion-standard);
+}
+
+.prayer-card-next {
+  border-color: var(--salah-border-strong);
+  background: var(--salah-bg-accent-soft);
+}
+
+.prayer-card-current {
+  border-color: var(--salah-fg-warning);
+}
+
+.prayer-card-supplementary {
+  opacity: 0.78;
+}
+
+.prayer-card strong {
+  font-size: clamp(1.35rem, 2.6vw, 2rem);
+  font-variant-numeric: tabular-nums;
+}
+
+.eyebrow,
+.label,
+.prayer-time-label {
+  color: var(--salah-fg-tertiary);
+  font-size: var(--salah-text-xs);
+  font-weight: 750;
+  line-height: 1.4;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+.ds-surface {
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-lg);
+  background: var(--salah-bg-surface);
+  box-shadow: var(--salah-shadow-sm);
+}
+
+@media (max-width: 1000px) {
+  .prayer-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .status-card {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 760px) {
+  .app-shell {
+    width: min(100% - 1rem, 42rem);
+  }
+
+  .status-card,
+  .prayer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .prayer-card {
+    min-height: 4.65rem;
+    flex-direction: row;
+    align-items: center;
+    padding: 0.85rem 1rem;
+  }
+
+  .section-heading {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .next-prayer-block {
+    width: 100%;
+  }
+}
+
+@media (forced-colors: active) {
+  :root {
+    --salah-bg-canvas: Canvas;
+    --salah-bg-subtle: Canvas;
+    --salah-bg-surface: Canvas;
+    --salah-bg-surface-raised: Canvas;
+    --salah-bg-control: Canvas;
+    --salah-bg-accent-soft: Canvas;
+    --salah-fg-primary: CanvasText;
+    --salah-fg-secondary: CanvasText;
+    --salah-fg-tertiary: CanvasText;
+    --salah-fg-accent: Highlight;
+    --salah-fg-warning: Mark;
+    --salah-fg-provenance: CanvasText;
+    --salah-fg-on-accent: HighlightText;
+    --salah-fg-on-warning: CanvasText;
+    --salah-border-subtle: CanvasText;
+    --salah-border-default: ButtonText;
+    --salah-border-strong: CanvasText;
+    --salah-focus-ring: Highlight;
+    --salah-bg-canvas-glow: transparent;
+    --salah-bg-warning-soft: Canvas;
+  }
+
+  .hero,
+  .location-panel,
+  .settings-panel,
+  .status-card,
+  .prayer-panel,
+  .prayer-card,
+  .ds-surface {
+    border-color: CanvasText;
+    background: Canvas;
+    box-shadow: none;
+    backdrop-filter: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
 }
