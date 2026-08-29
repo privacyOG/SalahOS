@@ -17,7 +17,7 @@ new_writer = """async function writeJson(filePath, value) {
   const prettierConfig = (await resolveConfig(path.join(root, '.prettierrc.json'))) ?? {};
   const formatted = await format(JSON.stringify(value), {
     ...prettierConfig,
-    parser: 'json-stringify',
+    parser: 'json',
   });
   await writeFile(filePath, formatted, 'utf8');
 }"""
