@@ -1,81 +1,64 @@
-# SalahOS v1.5.0 release notes
+# SalahOS v1.5.1 release notes
 
-SalahOS v1.5.0 completes the ten-stage v1.5 programme with stronger real-world resilience, richer mosque and Islamic-content experiences, clearer privacy controls, more focused product UX, and an explicit release-verification contract across Web, Android, iOS/iPadOS, Windows, Raspberry Pi Touch Display and TV/kiosk targets.
+SalahOS v1.5.1 is a focused quality, accessibility and usability update that completes the v1.5.1 theme and Prayer Calendar programme while preserving the release-verification contract established in v1.5.0.
 
-## Location, weather and local context
+## Theme, contrast and visual consistency
 
-- Strengthens best-available location handling so precise GPS remains preferred while network-assisted fallback is used only after non-terminal precision failures.
-- Preserves terminal permission-denial behaviour and fails closed when both precise and approximate acquisition fail instead of inventing coordinates.
-- Integrates automatic local weather with cached current/daily context, stale-cache recovery on provider/network failure and expiry of obsolete weather data.
-- Improves Today around current/next prayer, prayer times, weather, location confidence and concise local context.
+- Strengthens semantic foreground/background ownership so Light, Dark and System appearance modes remain readable and predictable.
+- Adds and validates eight curated palettes: Salah Classic, Midnight Gold, Emerald Mosque, Royal Blue, Desert Sand, Olive Heritage, Monochrome and High Contrast.
+- Keeps appearance mode independent from palette selection and persists the selected palette through Display settings.
+- Extends the shared theme contract across phone, tablet, Web/PWA and mosque/smart-display surfaces.
+- Strengthens display-oriented hierarchy for clock, next prayer, prayer/Iqamah rows, announcements and mosque branding without creating a separate styling system.
+- Expands representative theme-matrix contrast checks, RTL/large-text coverage and regression protection for the Today and Qiblah readability failure classes.
 
-## Mosque directory and timetable quality
+## Hijri-aligned Prayer Calendar
 
-- Expands mosque directory coverage and enrichment with distance-aware discovery, selection/favourites, directions, report/edit flows, verification/freshness state, provenance and data-quality scoring.
-- Adds explicit quality checks for completeness, provenance coverage, freshness boundaries and unresolved-data conflict penalties.
-- Removes unsafe website/social URLs before they can become user actions.
-- Preserves local-mosque timetable precedence over calculated times and exposes missing mosque entries as unavailable rather than silently substituting calculated data.
-- Keeps timetable date validation fail-closed so mosque data from the wrong civil date cannot override the active schedule.
+- Adds a dedicated Prayer Calendar destination with Daily, Weekly, Monthly and Yearly views without changing the Today screen.
+- Aligns Gregorian and Hijri presentation through the Umm al-Qura calendar while preserving the existing optional local Hijri correction of ±2 days.
+- Standardises English Hijri month names and explicitly displays the `AH` era.
+- Locks reference acceptance for 1 January 2026 = 12 Rajab 1447 AH and key 2026 Hijri month/year boundaries.
+- Keeps all calendar views on the same civil-date, location, timezone, calculation-method and prayer-time pipeline so views remain mutually consistent.
+- Adds responsive, RTL and accessibility coverage for the Prayer Calendar.
 
-## Qur'an, Hadith, Fiqh and Islamic Knowledge
+## Instructions and operational guidance
 
-- Expands the Islamic Knowledge experience while preserving source/reference provenance and governance requirements.
-- Strengthens Qur'an offline/content handling and the supporting content-source policy.
-- Extends Hadith and Fiqh/Q&A presentation with explicit reference, grading/scholarly attribution and juristic-context safeguards where applicable.
-- Keeps Islamic-content source governance in the permanent Quality Gate.
-
-## Product UX refinement
-
-- Strengthens Today hierarchy around current/next prayer and reduces explanatory-card clutter through progressive disclosure.
-- Simplifies phone navigation to the primary destinations while preserving the broader desktop experience.
-- Reorganises Settings into Location, Prayer settings, Adhan, Display, Mosques, Privacy & data and Advanced.
-- Preserves SalahOS visual identity while improving location-confidence feedback, Arabic/RTL behaviour and compact-device usability.
-
-## Real-world and accessibility verification
-
-- Expands automated GPS/location fallback, weather failure/cache, mosque data-quality/action and timetable-precedence tests.
-- Adds a v1.5 representative acceptance matrix for Android-phone, iPhone and iPad viewports with 200% text scaling, reduced-motion preference and assistive-technology-oriented accessible-name/current-prayer semantics.
-- Retains dedicated Raspberry Pi Touch Display acceptance across representative 5-inch, 7-inch and 10-inch portrait/landscape profiles.
-- Retains TV/kiosk acceptance across all prayer-board templates at 1920×1080 and 3840×2160, including safe-frame, burn-in mitigation and keyboard recovery checks.
-- Retains axe-core WCAG A/AA, RTL/container-overflow and cross-browser Chromium/Firefox/WebKit acceptance.
-- Clearly distinguishes emulator, Simulator and browser evidence from physical-device testing. Physical Android OEM, iPhone/iPad, Raspberry Pi Touch Display and TV/panel acceptance remains supplementary where hardware is available.
-
-See `docs/REAL_WORLD_VERIFICATION_V1.5.md` for the Stage 9/10 acceptance matrix and physical-device boundary.
+- Adds `Instructions guide.md` for ordinary users and mosque administrators.
+- Covers Android, iPhone/iPad, Web/PWA, Raspberry Pi and TV/kiosk operation.
+- Documents setup, location, prayer calculation and madhhab options, Iqamah, Qiblah, mosque features, Adhan/notifications, language/themes, offline use, display operation, updates, troubleshooting and reset.
 
 ## Release reconciliation
 
-- Synchronises npm, package-lock, Android and iOS marketing versions at `1.5.0`.
-- Advances Android `versionCode` and iOS `CURRENT_PROJECT_VERSION` together to build `7`.
-- Preserves the established release-asset pipeline for persistently signed Android APK/AAB, Web/PWA ZIP, Raspberry Pi kiosk archive and portable SHA-256 manifest.
-- Adds a self-contained Windows x64 desktop executable with the production SalahOS application embedded and a packaged self-test before publication.
-- Preserves fail-closed release preflight for exact-main revision, Android signing, version/build parity, archive integrity and final package contents.
+- Synchronises npm, package-lock, Android and iOS marketing versions at `1.5.1`.
+- Advances Android `versionCode` and iOS `CURRENT_PROJECT_VERSION` together to build `8`.
+- Preserves fail-closed exact-main release preflight, Android production-signing verification, archive integrity checks and final package verification.
+- Corrects the mobile device-UX acceptance contract so it matches the current seven route-capable destinations, with Community retained as a route but hidden from the six-item mobile primary navigation.
 
-## Downloadable v1.5.0 assets
+## Downloadable v1.5.1 assets
 
-A successful v1.5.0 publication includes:
+A successful v1.5.1 publication includes:
 
-- `SalahOS-v1.5.0-android.apk` — persistently signed Android release APK for direct installation;
-- `SalahOS-v1.5.0-android.aab` — persistently signed Android App Bundle for Google Play/distribution workflows;
-- `SalahOS-v1.5.0-windows-x64.exe` — self-contained 64-bit Windows 10/11 desktop executable;
-- `SalahOS-v1.5.0-web-pwa.zip` — complete production Web/PWA package;
-- `SalahOS-v1.5.0-raspberry-pi-kiosk.tar.gz` — production Web/PWA files plus Raspberry Pi/Linux Chromium kiosk launch and autostart helpers;
+- `SalahOS-v1.5.1-android.apk` — persistently signed Android release APK for direct installation;
+- `SalahOS-v1.5.1-android.aab` — persistently signed Android App Bundle for Google Play/distribution workflows;
+- `SalahOS-v1.5.1-windows-x64.exe` — self-contained 64-bit Windows 10/11 desktop executable;
+- `SalahOS-v1.5.1-web-pwa.zip` — complete production Web/PWA package;
+- `SalahOS-v1.5.1-raspberry-pi-kiosk.tar.gz` — production Web/PWA files plus Raspberry Pi/Linux Chromium kiosk launch and autostart helpers;
 - `SHA256SUMS.txt` — SHA-256 hashes for all packaged release assets.
 
 The Windows executable includes its .NET runtime and expects the Microsoft Edge WebView2 Runtime, normally present on current Windows 10/11 installations. GitHub also exposes the standard source-code ZIP and tarball for the release tag.
 
 ## Distribution boundaries
 
-- A consumer iOS/iPadOS `.ipa` is not published until Apple distribution signing/provisioning is configured and a distribution archive can be validated. Fresh iPhone and iPad Simulator acceptance is test evidence, not a consumer installer.
+- A consumer iOS/iPadOS `.ipa` is not published until Apple distribution signing/provisioning is configured and a distribution archive can be validated. iPhone/iPad Simulator acceptance is test evidence, not a consumer installer.
 - No native macOS `.dmg` is published because SalahOS does not contain a native macOS application target.
 - Physical Raspberry Pi, TV/panel, iPhone/iPad and broad Android OEM acceptance is not inferred from browser, emulator or Simulator evidence.
 
 ## Release gates
 
-The v1.5.0 release revision must be the exact current `main` commit and pass the permanent Quality, Visual Regression, Android and iOS workflows. The exact final pull-request head is revalidated after tracker reconciliation before merge. The iOS runtime gate is accepted only when the fresh iPhone/iPad Simulator install/launch/relaunch step itself reports success, not merely when the enclosing workflow reports success.
+The v1.5.1 release revision must be the exact current `main` commit and pass the permanent Quality Gate, Visual Regression, Android and iOS workflows. Stage 5.1 is accepted only when its calendar acceptance runs successfully on that exact final head. Stage 7 is accepted only after the complete v1.5.1 reconciliation is green.
 
-The core release-asset workflow then reruns repository quality checks, verifies persistent Android signing, builds and verifies APK/AAB packages, validates Web/PWA and Raspberry Pi archives, checks the exact final file set and SHA-256 manifest, and only then creates or updates the GitHub release. The Windows release workflow runs independently with read-only build permissions, self-tests the packaged executable, waits for the verified core release to complete, verifies exact-main identity and then uploads the Windows executable while reconciling and revalidating `SHA256SUMS.txt`.
+The core release-asset workflow reruns repository quality checks, verifies persistent Android signing, builds and verifies APK/AAB packages, validates Web/PWA and Raspberry Pi archives, checks the exact final file set and SHA-256 manifest, and only then creates or updates the GitHub release. The Windows release workflow independently self-tests the packaged executable and reconciles the published checksum manifest.
 
-The completed implementation and exact-head evidence for all ten v1.5 stages is recorded in `TEMP_TODO_V1.5.md`. See `docs/REAL_WORLD_VERIFICATION_V1.5.md`, `docs/RELEASE_ASSETS.md`, `TESTING.md`, `TODO.md` and `docs/PLATFORM_STATUS.md` for detailed validation and distribution boundaries.
+Implementation and exact-head completion state are recorded in `TEMP_TODO_V1.5.1.md`. See `Instructions guide.md`, `docs/RELEASE_ASSETS.md`, `TESTING.md`, `TODO.md` and `docs/PLATFORM_STATUS.md` for detailed operation, validation and distribution boundaries.
 
 ## Author
 
