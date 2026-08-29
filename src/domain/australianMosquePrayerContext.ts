@@ -14,17 +14,21 @@ function parseClock(value: string): number | null {
   const normalized = value.trim().toLocaleLowerCase('en-AU');
   const twelveHour = normalized.match(/^(\d{1,2}):(\d{2})\s*(am|pm)$/u);
   if (twelveHour !== null) {
-    const hour = Number.parseInt(twelveHour[1], 10);
-    const minute = Number.parseInt(twelveHour[2], 10);
+    const [, hourText, minuteText, period] = twelveHour;
+    if (hourText === undefined || minuteText === undefined || period === undefined) return null;
+    const hour = Number.parseInt(hourText, 10);
+    const minute = Number.parseInt(minuteText, 10);
     if (hour < 1 || hour > 12 || minute < 0 || minute > 59) return null;
-    const hour24 = (hour % 12) + (twelveHour[3] === 'pm' ? 12 : 0);
+    const hour24 = (hour % 12) + (period === 'pm' ? 12 : 0);
     return hour24 * 60 + minute;
   }
 
   const twentyFourHour = normalized.match(/^(\d{1,2}):(\d{2})$/u);
   if (twentyFourHour === null) return null;
-  const hour = Number.parseInt(twentyFourHour[1], 10);
-  const minute = Number.parseInt(twentyFourHour[2], 10);
+  const [, hourText, minuteText] = twentyFourHour;
+  if (hourText === undefined || minuteText === undefined) return null;
+  const hour = Number.parseInt(hourText, 10);
+  const minute = Number.parseInt(minuteText, 10);
   if (hour < 0 || hour > 23 || minute < 0 || minute > 59) return null;
   return hour * 60 + minute;
 }
