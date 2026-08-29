@@ -1,0 +1,67 @@
+name: Temporary v1.5.1 complete theme diagnostic
+
+on:
+  push:
+    branches:
+      - utility/v151-theme-diagnostic-final
+    paths:
+      - .github/workflows/temporary-v151-theme-diagnostic-final.yml
+
+permissions:
+  contents: read
+
+jobs:
+  diagnostic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: /tmp/salahos-pw-browsers-1.62.0
+      SALAHOS_VISUAL_PLAYWRIGHT_MODULE: /tmp/salahos-visual-harness/node_modules/playwright/index.mjs
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install application dependencies
+        run: npm ci --ignore-scripts
+      - name: Verify cheap gates
+        run: |
+          npm run format:check
+          npm run lint
+          npm run typecheck
+          npm run ui:theme-stage45
+      - name: Build production application
+        run: npm run build
+      - name: Install Chromium harness
+        run: |
+          rm -rf /tmp/salahos-visual-harness
+          mkdir -p /tmp/salahos-visual-harness
+          cd /tmp/salahos-visual-harness
+          npm init -y >/dev/null 2>&1
+          npm install --ignore-scripts --save-exact playwright@1.62.0
+          npx playwright install --with-deps chromium
+      - name: Start production server
+        run: |
+          python3 -m http.server 4173 --directory dist --bind 127.0.0.1 >/tmp/salahos-visual-http.log 2>&1 &
+          echo $! >/tmp/salahos-visual-server.pid
+          python3 - <<'PY'
+          import time
+          import urllib.request
+          for _ in range(50):
+              try:
+                  with urllib.request.urlopen('http://127.0.0.1:4173/', timeout=1) as response:
+                      if response.status == 200:
+                          raise SystemExit(0)
+              except Exception:
+                  time.sleep(0.1)
+          raise SystemExit('Local SalahOS production server did not become ready')
+          PY
+      - name: Run complete theme matrix
+        run: node scripts/visual-theme-matrix.mjs
+      - name: Stop production server
+        if: always()
+        run: |
+          if [ -f /tmp/salahos-visual-server.pid ]; then
+            kill "$(cat /tmp/salahos-visual-server.pid)" 2>/dev/null || true
+          fi
