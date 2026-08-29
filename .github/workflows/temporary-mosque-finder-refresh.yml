@@ -1,0 +1,48 @@
+name: Temporary Mosque Finder Refresh
+
+on:
+  push:
+    branches:
+      - data/australia-mosque-finder
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: data/australia-mosque-finder
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Verify parser
+        run: node scripts/generate-australian-mosque-finder.mjs --self-test
+
+      - name: Retrieve Australia-wide mosque directory
+        run: node scripts/generate-australian-mosque-finder.mjs --fetch
+
+      - name: Validate generated snapshot
+        run: node scripts/generate-australian-mosque-finder.mjs
+
+      - name: Commit factual snapshot
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --check
+          git config user.name privacyOG
+          git config user.email kriptiik@proton.me
+          git add src/data/australian-mosque-finder.json
+          if git diff --cached --quiet; then
+            echo 'Snapshot unchanged.'
+            exit 0
+          fi
+          git commit -m 'data: import Australian Mosque Finder directory'
+          git push origin HEAD:data/australia-mosque-finder
