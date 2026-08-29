@@ -23,6 +23,13 @@ jobs:
         with:
           node-version: 22
 
+      - name: Inspect sitemap shape
+        shell: bash
+        run: |
+          set -euo pipefail
+          curl --fail --location --user-agent 'SalahOS/1.5.1 (+https://github.com/privacyOG/SalahOS)' \
+            https://mosque-finder.com.au/mosque/sitemap.xml | head -c 5000
+
       - name: Verify parser
         run: node scripts/generate-australian-mosque-finder.mjs --self-test
 
