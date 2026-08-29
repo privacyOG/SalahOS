@@ -1,0 +1,73 @@
+name: Temporary v1.5.1 Release Prep
+
+on:
+  push:
+    branches:
+      - release-prep/v1.5.1
+
+permissions:
+  contents: read
+
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout release-prep branch
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Generate synchronized v1.5.1 metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm version 1.5.1 --no-git-tag-version
+          python3 - <<'PY'
+          from pathlib import Path
+
+          android = Path('android/app/build.gradle')
+          text = android.read_text()
+          text = text.replace('versionCode 7', 'versionCode 8')
+          text = text.replace('versionName "1.5.0"', 'versionName "1.5.1"')
+          android.write_text(text)
+
+          ios = Path('ios/App/App.xcodeproj/project.pbxproj')
+          text = ios.read_text()
+          text = text.replace('CURRENT_PROJECT_VERSION = 7;', 'CURRENT_PROJECT_VERSION = 8;')
+          text = text.replace('MARKETING_VERSION = 1.5.0;', 'MARKETING_VERSION = 1.5.1;')
+          ios.write_text(text)
+          PY
+
+          test "$(node -p "require('./package.json').version")" = '1.5.1'
+          test "$(node -p "require('./package-lock.json').version")" = '1.5.1'
+          test "$(node -p "require('./package-lock.json').packages[''].version")" = '1.5.1'
+          grep -q 'versionCode 8' android/app/build.gradle
+          grep -q 'versionName "1.5.1"' android/app/build.gradle
+          test "$(grep -c 'CURRENT_PROJECT_VERSION = 8;' ios/App/App.xcodeproj/project.pbxproj)" -eq 2
+          test "$(grep -c 'MARKETING_VERSION = 1.5.1;' ios/App/App.xcodeproj/project.pbxproj)" -eq 2
+
+      - name: Validate generated dependency metadata
+        run: npm ci --ignore-scripts
+
+      - name: Package generated metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p generated/android/app generated/ios/App/App.xcodeproj
+          cp package.json package-lock.json generated/
+          cp android/app/build.gradle generated/android/app/
+          cp ios/App/App.xcodeproj/project.pbxproj generated/ios/App/App.xcodeproj/
+          tar -C generated -czf v151-release-metadata.tar.gz .
+
+      - name: Upload generated metadata
+        uses: actions/upload-artifact@v4
+        with:
+          name: v151-release-metadata
+          path: v151-release-metadata.tar.gz
+          if-no-files-found: error
+          retention-days: 1
