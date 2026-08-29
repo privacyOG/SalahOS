@@ -27,6 +27,7 @@ function settingsFor(locale) {
     version: 2,
     locale,
     theme: locale === 'ar' ? 'dark' : 'light',
+    palette: 'salah-classic',
     timeFormat: 'h23',
     calculationMethodId: 'muslim-world-league',
     asrConvention: 'standard',
@@ -122,16 +123,21 @@ async function validateTranslatedTheme(browser, scenario) {
     if ((await surface.getAttribute('data-mobile-prayer-template')) !== scenario.templateId) {
       throw new Error(`${scenario.name} did not apply ${scenario.templateId}`);
     }
-    const visibleNavigation = page.locator(
-      '.congregation-nav > .congregation-nav-item:visible',
-    );
+    const visibleNavigation = page.locator('.congregation-nav > .congregation-nav-item:visible');
     if ((await visibleNavigation.count()) !== 6) {
       throw new Error(`${scenario.name} did not preserve the six-item primary navigation`);
     }
     const visibleNavigationIds = await visibleNavigation.evaluateAll((items) =>
       items.map((item) => item.getAttribute('data-navigation-id')),
     );
-    const expectedNavigationIds = ['today', 'calendar', 'mosques', 'qiblah', 'knowledge', 'settings'];
+    const expectedNavigationIds = [
+      'today',
+      'calendar',
+      'mosques',
+      'qiblah',
+      'knowledge',
+      'settings',
+    ];
     if (JSON.stringify(visibleNavigationIds) !== JSON.stringify(expectedNavigationIds)) {
       throw new Error(
         `${scenario.name} visible navigation order changed: ${JSON.stringify(visibleNavigationIds)}`,
