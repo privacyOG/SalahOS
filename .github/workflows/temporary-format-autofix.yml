@@ -31,14 +31,13 @@ jobs:
       - name: Format repository
         run: npx prettier --write .
 
-      - name: Commit formatting only
+      - name: Remove temporary workflow from formatted branch
+        run: rm .github/workflows/temporary-format-autofix.yml
+
+      - name: Commit formatting branch
         run: |
-          if git diff --quiet; then
-            echo "No formatting changes required."
-            exit 0
-          fi
           git config user.name "privacyOG"
           git config user.email "privacyOG@users.noreply.github.com"
           git add -A
           git commit -m "style: apply repository formatting"
-          git push origin HEAD:main
+          git push --force origin HEAD:v151-format-autofix
