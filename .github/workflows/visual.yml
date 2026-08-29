@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   visual:
-    runs-on: ${{ fromJSON(github.event_name == 'pull_request' && '["ubuntu-24.04"]' || '["self-hosted","Linux","X64"]') }}
+    runs-on: ubuntu-24.04
     timeout-minutes: 40
     env:
       PLAYWRIGHT_BROWSERS_PATH: /tmp/salahos-pw-browsers-1.62.0
