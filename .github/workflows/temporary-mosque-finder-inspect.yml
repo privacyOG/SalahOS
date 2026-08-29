@@ -1,0 +1,36 @@
+name: Temporary Mosque Finder Inspect
+
+on:
+  push:
+    branches:
+      - utility/mosque-finder-inspect
+
+permissions:
+  contents: read
+
+jobs:
+  inspect:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Fetch public pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/mosque-finder
+          UA='SalahOS/1.5.1 (+https://github.com/privacyOG/SalahOS; public factual directory refresh)'
+          curl --fail --location --retry 2 --retry-delay 2 --user-agent "$UA" \
+            https://www.mosque-finder.com.au/robots.txt -o /tmp/mosque-finder/robots.txt || true
+          curl --fail --location --retry 2 --retry-delay 2 --user-agent "$UA" \
+            https://www.mosque-finder.com.au/nsw/index.html -o /tmp/mosque-finder/nsw-index.html
+          curl --fail --location --retry 2 --retry-delay 2 --user-agent "$UA" \
+            https://www.mosque-finder.com.au/mosque/sydney-cbd-erskine-musallah/index.html -o /tmp/mosque-finder/detail-erskine.html
+          curl --fail --location --retry 2 --retry-delay 2 --user-agent "$UA" \
+            https://www.mosque-finder.com.au/mosque/artarmon-hampden-road-mosque/index.html -o /tmp/mosque-finder/detail-artarmon.html
+          grep -Eio 'href=["'"'][^"'"']*mosque/[^"'"']+' /tmp/mosque-finder/nsw-index.html | head -20 > /tmp/mosque-finder/detail-links.txt || true
+          grep -Ein 'lat|lon|google|map|address|jummah|feature|phone|email' /tmp/mosque-finder/detail-erskine.html | head -250 > /tmp/mosque-finder/detail-signals.txt || true
+      - name: Upload inspection
+        uses: actions/upload-artifact@v4
+        with:
+          name: mosque-finder-inspect
+          path: /tmp/mosque-finder
+          retention-days: 1
