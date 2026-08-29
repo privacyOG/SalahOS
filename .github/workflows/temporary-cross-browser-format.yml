@@ -1,0 +1,31 @@
+name: Temporary cross-browser formatter
+
+on:
+  push:
+    branches:
+      - utility/v151-cross-browser-format
+    paths:
+      - .github/workflows/temporary-cross-browser-format.yml
+
+permissions:
+  contents: read
+
+jobs:
+  format:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Format target
+        run: npx prettier --write scripts/cross-browser-smoke.mjs
+      - name: Verify target
+        run: npx prettier --check scripts/cross-browser-smoke.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: formatted-cross-browser-smoke
+          path: scripts/cross-browser-smoke.mjs
+          retention-days: 1
