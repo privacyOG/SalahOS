@@ -30,8 +30,10 @@ jobs:
       - name: Install application dependencies
         run: npm ci --ignore-scripts
 
-      - name: Focused static checks
+      - name: Format candidate and run focused static checks
         run: |
+          npx prettier --write scripts/visual-theme-matrix.mjs src/theme-contrast-guard.css
+          git diff -- scripts/visual-theme-matrix.mjs src/theme-contrast-guard.css
           npx prettier --check \
             scripts/visual-theme-matrix.mjs \
             src/theme-contrast-guard.css
