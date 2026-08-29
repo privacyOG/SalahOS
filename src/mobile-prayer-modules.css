@@ -1,5 +1,10 @@
+.mobile-prayer-theme-surface {
+  --mobile-theme-next-muted: var(--mobile-theme-tertiary);
+}
+
 .mobile-prayer-theme-surface[data-mobile-prayer-template='minimal-modern'] {
   --mobile-theme-tertiary: #65736f;
+  --mobile-theme-next-muted: #b7cbc5;
 }
 
 .mobile-prayer-theme-surface[data-mobile-prayer-template='structured-split-board'] {
@@ -8,6 +13,14 @@
 
 .mobile-prayer-theme-surface[data-mobile-prayer-template='family-classroom'] {
   --mobile-theme-tertiary: #5c6974;
+}
+
+.mobile-prayer-theme-surface .today-next__current {
+  color: inherit;
+}
+
+.mobile-prayer-theme-surface .today-next__current span {
+  color: var(--mobile-theme-next-muted);
 }
 
 .mobile-prayer-theme-surface .today-context-state,
