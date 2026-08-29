@@ -91,16 +91,6 @@ function luminance(rgb) {
   });
   return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
 }
-function parseRgb(value) {
-  const normalized = value.trim().toLowerCase();
-  const srgb = normalized.match(
-    /^color\(srgb\s+([+-]?(?:\d+\.?\d*|\.\d+))\s+([+-]?(?:\d+\.?\d*|\.\d+))\s+([+-]?(?:\d+\.?\d*|\.\d+))(?:\s*\/[^)]*)?\)$/,
-  );
-  if (srgb) return srgb.slice(1, 4).map((component) => Number(component) * 255);
-
-  const rgb = normalized.match(/^rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)/);
-  return rgb ? rgb.slice(1, 4).map(Number) : null;
-}
 const browser = await chromium.launch({ headless: true });
 const failures = [];
 try {
@@ -149,48 +139,116 @@ try {
         failures.push(`${s.name}: rtl did not apply`);
       if (root.overflow) failures.push(`${s.name}: horizontal clipping detected`);
 
-      const samples = await page.locator('body *:visible').evaluateAll((elements) =>
-        elements
+      const samples = await page.locator('body *:visible').evaluateAll((elements) => {
+        const parseColor = (value) => {
+          const normalized = value.trim().toLowerCase();
+          if (normalized === 'transparent') return { r: 0, g: 0, b: 0, a: 0 };
+
+          const srgb = normalized.match(
+            /^color\(srgb\s+([+-]?(?:\d+\.?\d*|\.\d+))\s+([+-]?(?:\d+\.?\d*|\.\d+))\s+([+-]?(?:\d+\.?\d*|\.\d+))(?:\s*\/\s*([+-]?(?:\d+\.?\d*|\.\d+)%?))?\)$/,
+          );
+          if (srgb) {
+            const alphaText = srgb[4];
+            const alpha = alphaText
+              ? alphaText.endsWith('%')
+                ? Number.parseFloat(alphaText) / 100
+                : Number.parseFloat(alphaText)
+              : 1;
+            return {
+              r: Number.parseFloat(srgb[1]) * 255,
+              g: Number.parseFloat(srgb[2]) * 255,
+              b: Number.parseFloat(srgb[3]) * 255,
+              a: alpha,
+            };
+          }
+
+          const rgb = normalized.match(
+            /^rgba?\(\s*([\d.]+)(%?)\s*[, ]\s*([\d.]+)(%?)\s*[, ]\s*([\d.]+)(%?)(?:\s*[,/]\s*([\d.]+)(%)?)?\s*\)$/,
+          );
+          if (!rgb) return null;
+          const channel = (raw, percent) =>
+            percent === '%' ? (Number.parseFloat(raw) / 100) * 255 : Number.parseFloat(raw);
+          const alpha = rgb[7]
+            ? rgb[8] === '%'
+              ? Number.parseFloat(rgb[7]) / 100
+              : Number.parseFloat(rgb[7])
+            : 1;
+          return {
+            r: channel(rgb[1], rgb[2]),
+            g: channel(rgb[3], rgb[4]),
+            b: channel(rgb[5], rgb[6]),
+            a: alpha,
+          };
+        };
+
+        const over = (front, back) => {
+          const a = front.a + back.a * (1 - front.a);
+          if (a <= 0) return { r: 0, g: 0, b: 0, a: 0 };
+          return {
+            r: (front.r * front.a + back.r * back.a * (1 - front.a)) / a,
+            g: (front.g * front.a + back.g * back.a * (1 - front.a)) / a,
+            b: (front.b * front.a + back.b * back.a * (1 - front.a)) / a,
+            a,
+          };
+        };
+
+        return elements
           .map((element) => {
             const text = (element.textContent ?? '').trim();
             if (!text || element.children.length > 0) return null;
 
             const style = getComputedStyle(element);
+            const foreground = parseColor(style.color);
+            if (!foreground) return null;
+
+            let background = { r: 0, g: 0, b: 0, a: 0 };
             let backgroundElement = element;
-            let backgroundStyle = getComputedStyle(backgroundElement);
-            let complexBackground = backgroundStyle.backgroundImage !== 'none';
-            while (
-              backgroundElement.parentElement !== null &&
-              (backgroundStyle.backgroundColor === 'rgba(0, 0, 0, 0)' ||
-                backgroundStyle.backgroundColor === 'transparent')
-            ) {
+            let complexBackground = false;
+            while (backgroundElement !== null && background.a < 0.999) {
+              const backgroundStyle = getComputedStyle(backgroundElement);
+              if (backgroundStyle.backgroundImage !== 'none') {
+                complexBackground = true;
+                break;
+              }
+              const layer = parseColor(backgroundStyle.backgroundColor);
+              if (!layer) {
+                complexBackground = true;
+                break;
+              }
+              if (layer.a > 0) background = over(background, layer);
               backgroundElement = backgroundElement.parentElement;
-              backgroundStyle = getComputedStyle(backgroundElement);
-              complexBackground ||= backgroundStyle.backgroundImage !== 'none';
             }
 
+            if (complexBackground || background.a < 0.999) {
+              return {
+                text: text.slice(0, 80),
+                complexBackground: true,
+              };
+            }
+
+            const renderedForeground =
+              foreground.a < 0.999 ? over(foreground, background) : foreground;
             const fontWeight = Number.parseInt(style.fontWeight, 10);
             return {
-              fg: style.color,
-              bg: backgroundStyle.backgroundColor,
+              fg: [renderedForeground.r, renderedForeground.g, renderedForeground.b],
+              bg: [background.r, background.g, background.b],
               fontSize: Number.parseFloat(style.fontSize),
               fontWeight: Number.isFinite(fontWeight) ? fontWeight : 400,
               text: text.slice(0, 80),
-              complexBackground,
+              complexBackground: false,
             };
           })
           .filter((sample) => sample !== null)
-          .slice(0, 250),
-      );
+          .slice(0, 250);
+      });
 
+      let checkedSamples = 0;
       for (const item of samples) {
-        if (item.complexBackground) continue;
-        const fg = parseRgb(item.fg);
-        const bg = parseRgb(item.bg);
-        if (!fg || !bg) continue;
+        if (item.complexBackground || !item.fg || !item.bg) continue;
+        checkedSamples += 1;
 
-        const l1 = luminance(fg);
-        const l2 = luminance(bg);
+        const l1 = luminance(item.fg);
+        const l2 = luminance(item.bg);
         const ratio = (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
         const largeText = item.fontSize >= 24 || (item.fontSize >= 18.66 && item.fontWeight >= 700);
         const minimumRatio = largeText ? 3 : 4.5;
@@ -201,11 +259,15 @@ try {
         }
       }
 
+      if (checkedSamples === 0) {
+        failures.push(`${s.name}: no simple-background text samples were available for contrast validation`);
+      }
+
       if (failures.length === failureCountBeforeScenario) {
-        console.log(`theme matrix passed: ${s.name}`);
+        console.log(`theme matrix passed: ${s.name} (${String(checkedSamples)} contrast samples)`);
       } else {
         console.log(
-          `theme matrix found ${String(failures.length - failureCountBeforeScenario)} issue(s): ${s.name}`,
+          `theme matrix found ${String(failures.length - failureCountBeforeScenario)} issue(s): ${s.name} (${String(checkedSamples)} contrast samples)`,
         );
       }
     } catch (error) {
