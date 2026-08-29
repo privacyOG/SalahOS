@@ -1,12 +1,14 @@
 import fs from 'node:fs';
-const read = (p) => fs.readFileSync(p, 'utf8');
-const domain = read('src/domain/prayerCalendar.ts'),
-  calendar = read('src/domain/calendar.ts'),
-  screen = read('src/ui/PrayerCalendarScreen.tsx'),
-  route = read('src/ui/applicationRoute.ts'),
-  main = read('src/main.tsx'),
-  tests = read('src/domain/prayerCalendar.test.ts');
-for (const n of [
+
+const read = (path) => fs.readFileSync(path, 'utf8');
+const domain = read('src/domain/prayerCalendar.ts');
+const calendar = read('src/domain/calendar.ts');
+const screen = read('src/ui/PrayerCalendarScreen.tsx');
+const route = read('src/ui/applicationRoute.ts');
+const main = read('src/main.tsx');
+const tests = read('src/domain/prayerCalendar.test.ts');
+
+for (const name of [
   'Muharram',
   'Safar',
   'Rabi al-Awwal',
@@ -19,15 +21,29 @@ for (const n of [
   'Shawwal',
   "Dhu al-Qi'dah",
   'Dhu al-Hijjah',
-])
-  if (!calendar.includes(n)) throw new Error(`Hijri month missing: ${n}`);
-for (const v of ['daily', 'weekly', 'monthly', 'yearly'])
-  if (!screen.includes(v)) throw new Error(`Calendar view missing: ${v}`);
-if (!route.includes("'calendar'") || !main.includes('PrayerCalendarScreen'))
+]) {
+  if (!calendar.includes(name)) throw new Error(`Hijri month missing: ${name}`);
+}
+
+for (const view of ['daily', 'weekly', 'monthly', 'yearly']) {
+  if (!screen.includes(view)) throw new Error(`Calendar view missing: ${view}`);
+}
+
+if (!route.includes("'calendar'") || !main.includes('PrayerCalendarScreen')) {
   throw new Error('Calendar route is not mounted');
-if (!domain.includes('buildPrayerDashboardResult'))
+}
+
+if (!domain.includes('buildPrayerDashboardResult')) {
   throw new Error('Calendar prayer rows do not use shared prayer pipeline');
-if (!tests.includes('12 Rajab 1447 AH') || !tests.includes('2026,1,1'))
+}
+
+const hasReferenceDate = /utcCivilDate\(2026,\s*1,\s*1\)/.test(tests);
+if (!tests.includes('12 Rajab 1447 AH') || !hasReferenceDate) {
   throw new Error('Reference Hijri alignment fixture missing');
-if (screen.includes('TodayScreen')) throw new Error('Calendar must remain separate from Today');
+}
+
+if (screen.includes('TodayScreen')) {
+  throw new Error('Calendar must remain separate from Today');
+}
+
 console.log('Prayer calendar architecture and reference fixtures passed.');
