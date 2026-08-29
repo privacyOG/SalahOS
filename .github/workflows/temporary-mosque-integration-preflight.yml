@@ -1,0 +1,28 @@
+name: Temporary Mosque Integration Preflight
+
+on:
+  push:
+    branches:
+      - utility/mosque-integration-preflight
+
+permissions:
+  contents: read
+
+jobs:
+  inputs:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Upload current mosque source and integration code
+        uses: actions/upload-artifact@v4
+        with:
+          name: mosque-integration-inputs
+          path: |
+            src/data/australian-mosques.json
+            src/domain/australianMosqueDirectory.ts
+            src/domain/australianMosqueDirectory.test.ts
+            scripts/generate-mosque-directory-packs.mjs
+          retention-days: 2
+          if-no-files-found: error
