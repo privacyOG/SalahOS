@@ -76,11 +76,6 @@ jobs:
           )
           replace_once(
               'src/ui/PrayerCalendarScreen.tsx',
-              "? ` – ${end.monthName}` : ''",
-              "? ` – ${String(end.monthName)}` : ''",
-          )
-          replace_once(
-              'src/ui/PrayerCalendarScreen.tsx',
               "{start.year === end.year ? `${start.year} AH` : `${start.year}–${end.year} AH`}",
               "{start.year === end.year\n                ? [String(start.year), 'AH'].join(' ')\n                : [String(start.year), '–', String(end.year), 'AH'].join(' ')}",
           )
