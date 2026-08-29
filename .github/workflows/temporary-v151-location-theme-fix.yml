@@ -1,0 +1,141 @@
+name: Temporary v1.5.1 location theme fix
+
+on:
+  push:
+    branches:
+      - utility/v151-location-theme-fix
+    paths:
+      - .github/workflows/temporary-v151-location-theme-fix.yml
+
+permissions:
+  contents: write
+
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Apply location-card mobile theme ownership
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('src/mobile-prayer-themes.css')
+          text = path.read_text()
+
+          old = """.mobile-prayer-theme-surface .today-appbar__brand span,
+          .mobile-prayer-theme-surface .today-section-heading > span,
+          .mobile-prayer-theme-surface .today-schedule__notice,
+          .mobile-prayer-theme-surface .today-provenance,
+          .mobile-prayer-theme-surface .today-jumuah__sessions span {
+            color: var(--mobile-theme-secondary);
+          }
+          """
+          new = """.mobile-prayer-theme-surface .today-appbar__brand span,
+          .mobile-prayer-theme-surface .today-section-heading > span,
+          .mobile-prayer-theme-surface .today-schedule__notice,
+          .mobile-prayer-theme-surface .today-provenance,
+          .mobile-prayer-theme-surface .today-jumuah__sessions span,
+          .mobile-prayer-theme-surface .today-location-confidence__meta {
+            color: var(--mobile-theme-secondary);
+          }
+          """
+          if old not in text:
+              raise SystemExit('secondary selector block not found')
+          text = text.replace(old, new, 1)
+
+          old = """.mobile-prayer-theme-surface .today-next__identity p,
+          .mobile-prayer-theme-surface .today-next__countdown span,
+          .mobile-prayer-theme-surface .today-section-heading p,
+          .mobile-prayer-theme-surface .today-dates span,
+          .mobile-prayer-theme-surface .today-next__times dt,
+          .mobile-prayer-theme-surface .today-prayer-row__name small {
+            color: var(--mobile-theme-tertiary);
+          }
+          """
+          new = """.mobile-prayer-theme-surface .today-next__identity p,
+          .mobile-prayer-theme-surface .today-next__countdown span,
+          .mobile-prayer-theme-surface .today-section-heading p,
+          .mobile-prayer-theme-surface .today-dates span,
+          .mobile-prayer-theme-surface .today-next__times dt,
+          .mobile-prayer-theme-surface .today-prayer-row__name small,
+          .mobile-prayer-theme-surface .today-location-confidence > div:first-child span {
+            color: var(--mobile-theme-tertiary);
+          }
+          """
+          if old not in text:
+              raise SystemExit('tertiary selector block not found')
+          text = text.replace(old, new, 1)
+
+          old = """.mobile-prayer-theme-surface .today-appbar__meta a,
+          .mobile-prayer-theme-surface .today-prayer-table,
+          .mobile-prayer-theme-surface .today-jumuah__sessions > div,
+          .mobile-prayer-theme-surface .today-quick-actions a,
+          .mobile-prayer-theme-surface .today-state {
+            border-color: var(--mobile-theme-border);
+            color: var(--mobile-theme-fg);
+            background: var(--mobile-theme-surface);
+          }
+          """
+          new = """.mobile-prayer-theme-surface .today-appbar__meta a,
+          .mobile-prayer-theme-surface .today-prayer-table,
+          .mobile-prayer-theme-surface .today-jumuah__sessions > div,
+          .mobile-prayer-theme-surface .today-quick-actions a,
+          .mobile-prayer-theme-surface .today-state,
+          .mobile-prayer-theme-surface .today-location-confidence {
+            border-color: var(--mobile-theme-border);
+            color: var(--mobile-theme-fg);
+            background: var(--mobile-theme-surface);
+          }
+          """
+          if old not in text:
+              raise SystemExit('surface selector block not found')
+          text = text.replace(old, new, 1)
+
+          anchor = """.mobile-prayer-theme-surface .today-prayer-row__name > span,
+          .mobile-prayer-theme-surface .today-next__tomorrow {
+            border-color: color-mix(in srgb, var(--mobile-theme-accent) 32%, transparent);
+            color: var(--mobile-theme-fg);
+            background: var(--mobile-theme-soft);
+          }
+          """
+          addition = anchor + """
+          .mobile-prayer-theme-surface .today-location-confidence__meta span:not(:last-child) {
+            background: var(--mobile-theme-soft);
+          }
+          """
+          if anchor not in text:
+              raise SystemExit('accent-soft selector block not found')
+          text = text.replace(anchor, addition, 1)
+
+          path.write_text(text)
+          PY
+      - name: Format and verify target
+        run: |
+          npx prettier --write src/mobile-prayer-themes.css
+          npx prettier --check src/mobile-prayer-themes.css
+          git diff --check
+      - name: Create repository blob
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          encoded="$(base64 -w0 src/mobile-prayer-themes.css)"
+          payload="$(jq -n --arg content "$encoded" '{content:$content,encoding:"base64"}')"
+          response="$(curl --fail-with-body -sS -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/git/blobs" \
+            -d "$payload")"
+          echo "$response" | jq -r '.sha' > blob-sha.txt
+          test -s blob-sha.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v151-location-theme-blob
+          path: blob-sha.txt
+          retention-days: 1
