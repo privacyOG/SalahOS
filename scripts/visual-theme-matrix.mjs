@@ -96,8 +96,10 @@ function parseRgb(value) {
   return values && values.length >= 3 ? values.slice(0, 3).map(Number) : null;
 }
 const browser = await chromium.launch({ headless: true });
+const failures = [];
 try {
   for (const s of scenarios) {
+    const failureCountBeforeScenario = failures.length;
     const context = await browser.newContext({
       viewport: s.viewport,
       colorScheme: s.scheme ?? (s.theme === 'dark' ? 'dark' : 'light'),
@@ -132,14 +134,14 @@ try {
         dir: document.documentElement.dir,
         overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 2,
       }));
-      if (root.palette !== s.palette) throw new Error(`${s.name}: palette did not apply`);
+      if (root.palette !== s.palette) failures.push(`${s.name}: palette did not apply`);
       if (s.theme !== 'system' && root.theme !== s.theme)
-        throw new Error(`${s.name}: appearance did not apply`);
+        failures.push(`${s.name}: appearance did not apply`);
       if (s.theme === 'system' && root.theme !== s.scheme)
-        throw new Error(`${s.name}: system appearance did not resolve`);
+        failures.push(`${s.name}: system appearance did not resolve`);
       if ((s.locale ?? 'en') === 'ar' && root.dir !== 'rtl')
-        throw new Error(`${s.name}: rtl did not apply`);
-      if (root.overflow) throw new Error(`${s.name}: horizontal clipping detected`);
+        failures.push(`${s.name}: rtl did not apply`);
+      if (root.overflow) failures.push(`${s.name}: horizontal clipping detected`);
 
       const samples = await page.locator('body *:visible').evaluateAll((elements) =>
         elements
@@ -187,12 +189,22 @@ try {
         const largeText = item.fontSize >= 24 || (item.fontSize >= 18.66 && item.fontWeight >= 700);
         const minimumRatio = largeText ? 3 : 4.5;
         if (ratio < minimumRatio) {
-          throw new Error(
+          failures.push(
             `${s.name}: visible text contrast below ${minimumRatio}:1 (${ratio.toFixed(2)}) for ${JSON.stringify(item.text)}`,
           );
         }
       }
-      console.log(`theme matrix passed: ${s.name}`);
+
+      if (failures.length === failureCountBeforeScenario) {
+        console.log(`theme matrix passed: ${s.name}`);
+      } else {
+        console.log(
+          `theme matrix found ${String(failures.length - failureCountBeforeScenario)} issue(s): ${s.name}`,
+        );
+      }
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      failures.push(`${s.name}: scenario execution failed: ${message}`);
     } finally {
       await context.close();
     }
@@ -200,6 +212,11 @@ try {
 } finally {
   await browser.close();
 }
+
+if (failures.length > 0) {
+  throw new Error(`Theme visual matrix found ${String(failures.length)} issue(s):\n- ${failures.join('\n- ')}`);
+}
+
 console.log(
   `Theme visual matrix passed ${scenarios.length} scenarios including today, qiblah, settings, smart-display, system, rtl and large-text.`,
 );
