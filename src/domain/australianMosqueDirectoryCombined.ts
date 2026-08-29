@@ -216,7 +216,9 @@ function parseCombinedRecord(value: unknown): AustralianMosqueRecord {
     requiredNumber(value, 'longitude', 'Mosque longitude'),
   );
   const recordRegionCode = regionCode(value.address.regionCode);
+  const locality = optionalString(value.address, 'locality');
   const state = optionalString(value.address, 'region');
+  const postcode = optionalString(value.address, 'postcode');
   const nameAr = optionalString(value, 'nameAr');
   const website = optionalString(value.contact, 'website');
   const phone = optionalString(value.contact, 'phone');
@@ -235,14 +237,10 @@ function parseCombinedRecord(value: unknown): AustralianMosqueRecord {
       aliases,
       address: {
         formatted: requiredString(value.address, 'formatted', 'Combined mosque address'),
-        ...(optionalString(value.address, 'locality') === undefined
-          ? {}
-          : { locality: optionalString(value.address, 'locality') }),
+        ...(locality === undefined ? {} : { locality }),
         ...(state === undefined ? {} : { region: state }),
         regionCode: recordRegionCode,
-        ...(optionalString(value.address, 'postcode') === undefined
-          ? {}
-          : { postcode: optionalString(value.address, 'postcode') }),
+        ...(postcode === undefined ? {} : { postcode }),
         countryCode: 'AU',
       },
       latitude: coordinates.latitude,
