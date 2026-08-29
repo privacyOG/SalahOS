@@ -50,6 +50,18 @@ textarea,
   color: var(--salah-fg-tertiary);
 }
 
+/* Theme status chips need an opaque semantic surface paired with their theme foreground. */
+.mobile-prayer-theme-surface .today-location-confidence__meta > span:not(:last-child) {
+  color: var(--mobile-theme-fg);
+  background: var(--mobile-theme-raised);
+  opacity: 1;
+}
+
+.mobile-prayer-theme-surface .today-location-confidence__meta > span:last-child {
+  color: var(--mobile-theme-secondary);
+  opacity: 1;
+}
+
 /* Filled accent controls require the authoritative on-accent semantic token. */
 .ds-button--primary {
   color: var(--salah-fg-on-accent);

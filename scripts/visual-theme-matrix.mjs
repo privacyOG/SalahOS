@@ -95,6 +95,7 @@ function parseRgb(value) {
   const values = value.match(/[\d.]+/g);
   return values && values.length >= 3 ? values.slice(0, 3).map(Number) : null;
 }
+const contrastFailures = [];
 const browser = await chromium.launch({ headless: true });
 try {
   for (const s of scenarios) {
@@ -141,30 +142,59 @@ try {
         throw new Error(`${s.name}: rtl did not apply`);
       if (root.overflow) throw new Error(`${s.name}: horizontal clipping detected`);
 
-      const samples = await page.locator('body *:visible').evaluateAll((elements) =>
-        elements
+      const samples = await page.locator('body *:visible').evaluateAll((elements) => {
+        const parseCssColor = (value) => {
+          const values = value.match(/[\d.]+/g);
+          if (!values || values.length < 3) return null;
+          return {
+            r: Number(values[0]),
+            g: Number(values[1]),
+            b: Number(values[2]),
+            a: values.length >= 4 ? Number(values[3]) : 1,
+          };
+        };
+        const compositeOver = (front, back) => {
+          const alpha = front.a + back.a * (1 - front.a);
+          if (alpha <= 0) return { r: 0, g: 0, b: 0, a: 0 };
+          const behind = back.a * (1 - front.a);
+          return {
+            r: (front.r * front.a + back.r * behind) / alpha,
+            g: (front.g * front.a + back.g * behind) / alpha,
+            b: (front.b * front.a + back.b * behind) / alpha,
+            a: alpha,
+          };
+        };
+        const resolveEffectiveBackground = (element) => {
+          let backgroundElement = element;
+          let effective = { r: 0, g: 0, b: 0, a: 0 };
+          let complexBackground = false;
+          while (backgroundElement !== null && effective.a < 0.999) {
+            const backgroundStyle = getComputedStyle(backgroundElement);
+            complexBackground ||= backgroundStyle.backgroundImage !== 'none';
+            const layer = parseCssColor(backgroundStyle.backgroundColor);
+            if (layer !== null && layer.a > 0) effective = compositeOver(effective, layer);
+            backgroundElement = backgroundElement.parentElement;
+          }
+          if (effective.a < 0.999) {
+            effective = compositeOver(effective, { r: 255, g: 255, b: 255, a: 1 });
+          }
+          return {
+            background: [effective.r, effective.g, effective.b],
+            complexBackground,
+          };
+        };
+
+        return elements
           .map((element) => {
             const text = (element.textContent ?? '').trim();
             if (!text || element.children.length > 0) return null;
 
             const style = getComputedStyle(element);
-            let backgroundElement = element;
-            let backgroundStyle = getComputedStyle(backgroundElement);
-            let complexBackground = backgroundStyle.backgroundImage !== 'none';
-            while (
-              backgroundElement.parentElement !== null &&
-              (backgroundStyle.backgroundColor === 'rgba(0, 0, 0, 0)' ||
-                backgroundStyle.backgroundColor === 'transparent')
-            ) {
-              backgroundElement = backgroundElement.parentElement;
-              backgroundStyle = getComputedStyle(backgroundElement);
-              complexBackground ||= backgroundStyle.backgroundImage !== 'none';
-            }
-
+            const { background, complexBackground } = resolveEffectiveBackground(element);
             const fontWeight = Number.parseInt(style.fontWeight, 10);
             return {
               fg: style.color,
-              bg: backgroundStyle.backgroundColor,
+              bg: background,
               fontSize: Number.parseFloat(style.fontSize),
               fontWeight: Number.isFinite(fontWeight) ? fontWeight : 400,
               text: text.slice(0, 80),
@@ -172,13 +202,14 @@ try {
             };
           })
           .filter((sample) => sample !== null)
-          .slice(0, 250),
-      );
+          .slice(0, 250);
+      });
 
+      const failuresBeforeScenario = contrastFailures.length;
       for (const item of samples) {
         if (item.complexBackground) continue;
         const fg = parseRgb(item.fg);
-        const bg = parseRgb(item.bg);
+        const bg = item.bg;
         if (!fg || !bg) continue;
 
         const l1 = luminance(fg);
@@ -187,18 +218,29 @@ try {
         const largeText = item.fontSize >= 24 || (item.fontSize >= 18.66 && item.fontWeight >= 700);
         const minimumRatio = largeText ? 3 : 4.5;
         if (ratio < minimumRatio) {
-          throw new Error(
+          contrastFailures.push(
             `${s.name}: visible text contrast below ${minimumRatio}:1 (${ratio.toFixed(2)}) for ${JSON.stringify(item.text)}`,
           );
         }
       }
-      console.log(`theme matrix passed: ${s.name}`);
+      if (contrastFailures.length === failuresBeforeScenario) {
+        console.log(`theme matrix passed: ${s.name}`);
+      } else {
+        console.log(
+          `theme matrix collected ${contrastFailures.length - failuresBeforeScenario} contrast failure(s): ${s.name}`,
+        );
+      }
     } finally {
       await context.close();
     }
   }
 } finally {
   await browser.close();
+}
+if (contrastFailures.length > 0) {
+  throw new Error(
+    `Theme visual matrix found ${contrastFailures.length} contrast failure(s):\n${contrastFailures.join('\n')}`,
+  );
 }
 console.log(
   `Theme visual matrix passed ${scenarios.length} scenarios including today, qiblah, settings, smart-display, system, rtl and large-text.`,

@@ -4,6 +4,11 @@
   --qibla-guide: #d7ad58;
 }
 
+.qibla-finder--v2 .qibla-view-switch button[aria-pressed='true'],
+.qibla-finder--v2 .qibla-segmented-control button[aria-pressed='true'] {
+  color: #07182c;
+}
+
 .qibla-finder--v2 .qibla-finder-privacy {
   display: none;
 }

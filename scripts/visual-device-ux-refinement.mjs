@@ -151,13 +151,13 @@ function assertPhoneMetrics(name, metrics) {
   if (metrics.contentScrollHeight <= metrics.contentClientHeight) {
     throw new Error(`${name} expected the Today surface to exercise the mobile scroll container`);
   }
-  if (metrics.navigationTargets.length !== 6) {
-    throw new Error(`${name} expected six route-capable primary navigation targets in the DOM`);
+  if (metrics.navigationTargets.length !== 7) {
+    throw new Error(`${name} expected seven route-capable primary navigation targets in the DOM`);
   }
   const visibleNavigationTargets = metrics.navigationTargets.filter((target) => target.visible);
-  if (visibleNavigationTargets.length !== 5) {
+  if (visibleNavigationTargets.length !== 6) {
     throw new Error(
-      `${name} expected five visible mobile navigation targets: ${JSON.stringify(metrics.navigationTargets)}`,
+      `${name} expected six visible mobile navigation targets: ${JSON.stringify(metrics.navigationTargets)}`,
     );
   }
   const communityTarget = metrics.navigationTargets.find(
