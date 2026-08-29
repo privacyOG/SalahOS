@@ -1,0 +1,49 @@
+name: Stage 7 Preflight Formatter
+
+on:
+  push:
+    branches:
+      - preflight/stage7-efficiency
+    paths:
+      - scripts/visual-theme-matrix.mjs
+      - src/mosque-display-theme.css
+      - .github/workflows/preflight-format.yml
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: preflight/stage7-efficiency
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies from lockfile
+        run: npm ci --ignore-scripts
+
+      - name: Format Stage 7 files
+        run: npx prettier --write scripts/visual-theme-matrix.mjs src/mosque-display-theme.css
+
+      - name: Commit formatter output
+        run: |
+          set -euo pipefail
+          git diff --check
+          if git diff --quiet -- scripts/visual-theme-matrix.mjs src/mosque-display-theme.css; then
+            echo 'Target files already match Prettier.'
+            exit 0
+          fi
+          git config user.name privacyOG
+          git config user.email kriptiik@proton.me
+          git add scripts/visual-theme-matrix.mjs src/mosque-display-theme.css
+          git commit -m 'style: format stage 7 preflight'
+          git push origin HEAD:preflight/stage7-efficiency
