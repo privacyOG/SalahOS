@@ -1,9 +1,7 @@
 name: Focused Visual Repair Preflight
 
 on:
-  push:
-    branches:
-      - preflight/device-nav-calendar
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -41,6 +39,13 @@ jobs:
       - name: Build production application
         run: npm run build
 
+      - name: Cache Chromium browser
+        id: playwright-cache
+        uses: actions/cache@v4
+        with:
+          path: /tmp/salahos-visual-repair-pw
+          key: salāhos-visual-repair-${{ runner.os }}-playwright-1.62.0-chromium
+
       - name: Install Chromium visual harness
         run: |
           rm -rf /tmp/salahos-visual-repair-harness
@@ -51,7 +56,10 @@ jobs:
             playwright@1.62.0 \
             pngjs@7.0.0 \
             pixelmatch@7.1.0
-          npx playwright install --with-deps chromium
+          npx playwright install-deps chromium
+          if [ "${{ steps.playwright-cache.outputs.cache-hit }}" != "true" ]; then
+            npx playwright install chromium
+          fi
 
       - name: Start local production server
         run: |
