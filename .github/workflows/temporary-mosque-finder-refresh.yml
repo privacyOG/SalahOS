@@ -54,6 +54,18 @@ jobs:
           if new_filter not in s or new_map not in s or new_region_guard not in s or new_failures not in s:
               raise SystemExit('Mosque Finder importer patch did not reach the expected final form')
           p.write_text(s)
+
+          combined = Path('scripts/generate-australian-mosque-combined.mjs')
+          c = combined.read_text()
+          old_fields = "const fields = ['name', 'address', 'coordinates'];"
+          new_fields = "const fields = ['name', 'aliases', 'address', 'coordinates'];"
+          if old_fields in c:
+              if c.count(old_fields) != 2:
+                  raise SystemExit('Unexpected provenance field declaration count')
+              c = c.replace(old_fields, new_fields)
+          if c.count(new_fields) != 2:
+              raise SystemExit('Combined provenance patch did not reach the expected final form')
+          combined.write_text(c)
           PY
 
       - name: Verify parser
@@ -79,6 +91,7 @@ jobs:
           git config user.name privacyOG
           git config user.email kriptiik@proton.me
           git add scripts/generate-australian-mosque-finder.mjs \
+            scripts/generate-australian-mosque-combined.mjs \
             src/data/australian-mosque-finder.json \
             src/data/australian-mosques-combined.json
           if git diff --cached --quiet; then
