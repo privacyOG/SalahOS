@@ -19,10 +19,10 @@ interface ThemeWindow {
   matchMedia(query: string): ThemeMediaQueryList;
 }
 
-type ActiveThemePreference = Readonly<{
-  token: symbol;
-  dispose: () => void;
-}>;
+type ActiveThemePreference = {
+  readonly leases: Set<symbol>;
+  disposeSystemListener: () => void;
+};
 
 const activeThemePreferences = new WeakMap<object, ActiveThemePreference>();
 
@@ -30,36 +30,54 @@ function applyEffectiveTheme(documentTarget: ThemeDocument, theme: EffectiveThem
   documentTarget.documentElement.dataset.theme = theme;
 }
 
+function applyThemePreference(
+  preference: ThemePreference,
+  targets: { readonly documentTarget: ThemeDocument; readonly windowTarget: ThemeWindow },
+  active: ActiveThemePreference,
+): void {
+  active.disposeSystemListener();
+  active.disposeSystemListener = () => undefined;
+
+  if (preference !== 'system') {
+    applyEffectiveTheme(targets.documentTarget, preference);
+    return;
+  }
+
+  const media = targets.windowTarget.matchMedia('(prefers-color-scheme: dark)');
+  const refresh = () => {
+    applyEffectiveTheme(targets.documentTarget, media.matches ? 'dark' : 'light');
+  };
+
+  refresh();
+  media.addEventListener('change', refresh);
+  active.disposeSystemListener = () => {
+    media.removeEventListener('change', refresh);
+  };
+}
+
 export function installThemePreference(
   preference: ThemePreference,
   targets: { readonly documentTarget: ThemeDocument; readonly windowTarget: ThemeWindow },
 ): () => void {
-  activeThemePreferences.get(targets.documentTarget)?.dispose();
-
-  const token = Symbol('theme-preference');
-  let dispose = () => undefined;
-
-  if (preference !== 'system') {
-    applyEffectiveTheme(targets.documentTarget, preference);
-  } else {
-    const media = targets.windowTarget.matchMedia('(prefers-color-scheme: dark)');
-    const refresh = () => {
-      applyEffectiveTheme(targets.documentTarget, media.matches ? 'dark' : 'light');
+  let active = activeThemePreferences.get(targets.documentTarget);
+  if (active === undefined) {
+    active = {
+      leases: new Set<symbol>(),
+      disposeSystemListener: () => undefined,
     };
-
-    refresh();
-    media.addEventListener('change', refresh);
-    dispose = () => {
-      media.removeEventListener('change', refresh);
-    };
+    activeThemePreferences.set(targets.documentTarget, active);
   }
 
-  activeThemePreferences.set(targets.documentTarget, { token, dispose });
+  const token = Symbol('theme-preference');
+  active.leases.add(token);
+  applyThemePreference(preference, targets, active);
 
   return () => {
-    const active = activeThemePreferences.get(targets.documentTarget);
-    if (active?.token !== token) return;
-    active.dispose();
+    const current = activeThemePreferences.get(targets.documentTarget);
+    if (current !== active || !active.leases.delete(token)) return;
+    if (active.leases.size > 0) return;
+
+    active.disposeSystemListener();
     activeThemePreferences.delete(targets.documentTarget);
   };
 }
