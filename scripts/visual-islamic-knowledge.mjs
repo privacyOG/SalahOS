@@ -201,12 +201,19 @@ try {
     );
     await screen.getByText('May an obligatory prayer be shortened while travelling?').waitFor();
 
+    const visibleNavigation = page.locator('.congregation-nav > .congregation-nav-item:visible');
+    const visibleNavigationIds = await visibleNavigation.evaluateAll((items) =>
+      items.map((item) => item.getAttribute('data-navigation-id')),
+    );
+    assert(
+      visibleNavigationIds.length === 6 && visibleNavigationIds.includes('knowledge'),
+      `Knowledge was not retained in the six-item visible primary navigation: ${JSON.stringify(visibleNavigationIds)}`,
+    );
+
     const metrics = await page.evaluate(() => ({
       innerWidth: window.innerWidth,
       scrollWidth: document.documentElement.scrollWidth,
-      navItems: document.querySelectorAll('.congregation-nav-item').length,
     }));
-    assert(metrics.navItems === 6, 'Knowledge was not added as a first-class navigation item');
     assert(
       metrics.scrollWidth <= metrics.innerWidth + 1,
       `Knowledge caused mobile horizontal overflow: ${String(metrics.scrollWidth)}px > ${String(metrics.innerWidth)}px`,
@@ -217,7 +224,7 @@ try {
       fullPage: true,
       animations: 'disabled',
     });
-    results.push({ name: 'quran-expansion-mobile', ...metrics });
+    results.push({ name: 'quran-expansion-mobile', visibleNavigationIds, ...metrics });
     await context.close();
   }
 
