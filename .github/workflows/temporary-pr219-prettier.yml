@@ -1,0 +1,34 @@
+name: Temporary PR219 Prettier
+
+on:
+  push:
+    branches: [agent/pr219-prettier-fix]
+
+permissions:
+  contents: read
+
+jobs:
+  format:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Format target files
+        run: npx prettier --write src/ui/AustralianMosqueDirectoryPanel.tsx src/ui/TodayScreen.tsx
+      - name: Emit exact formatted files
+        shell: bash
+        run: |
+          echo 'PANEL_BEGIN'
+          base64 -w0 src/ui/AustralianMosqueDirectoryPanel.tsx
+          echo
+          echo 'PANEL_END'
+          echo 'TODAY_BEGIN'
+          base64 -w0 src/ui/TodayScreen.tsx
+          echo
+          echo 'TODAY_END'
+          npx prettier --check src/ui/AustralianMosqueDirectoryPanel.tsx src/ui/TodayScreen.tsx
