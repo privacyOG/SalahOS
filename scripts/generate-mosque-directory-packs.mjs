@@ -3,6 +3,8 @@ import { tmpdir } from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { format } from 'prettier';
+
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const sourcePath = path.join(root, 'src', 'data', 'australian-mosques-combined.json');
 const publicRoot = path.join(root, 'public', 'mosque-packs');
@@ -70,7 +72,34 @@ function packDocument(packId, label, regionCode, records, source) {
 
 async function writeJson(filePath, value) {
   await mkdir(path.dirname(filePath), { recursive: true });
-  await writeFile(filePath, `${JSON.stringify(value, null, 2)}\n`, 'utf8');
+  const formatted = await format(JSON.stringify(value), { parser: 'json' });
+  await writeFile(filePath, formatted, 'utf8');
+}
+
+function outputRelativePaths() {
+  return [
+    'manifest.json',
+    'au/au.json',
+    ...Object.keys(REGION_LABELS).map(
+      (regionCode) => `au/${regionCode.toLocaleLowerCase('en-AU')}.json`,
+    ),
+  ];
+}
+
+async function assertPersistedOutputsMatch(generatedRoot) {
+  for (const relativePath of outputRelativePaths()) {
+    const generated = await readFile(path.join(generatedRoot, relativePath), 'utf8');
+    let persisted;
+    try {
+      persisted = await readFile(path.join(publicRoot, relativePath), 'utf8');
+    } catch (error) {
+      if (error?.code === 'ENOENT') {
+        throw new Error(`Mosque directory pack is missing: ${relativePath}`);
+      }
+      throw error;
+    }
+    assert(persisted === generated, `Mosque directory pack is stale: ${relativePath}`);
+  }
 }
 
 function validateCombinedSource(raw) {
@@ -205,6 +234,7 @@ try {
       manifest.recordCount,
     'Australian regional pack counts must equal the country record count',
   );
+  if (checkOnly) await assertPersistedOutputsMatch(targetRoot);
   console.log(
     `${checkOnly ? 'Validated' : 'Generated'} mosque directory packs: ${String(manifest.recordCount)} records, ${String(manifest.countries[0].regions.length)} AU regional packs.`,
   );
