@@ -310,7 +310,9 @@ function parseDirectory(value: unknown): AustralianMosqueDirectory {
   const ids = new Set(records.map((record) => record.id));
   if (ids.size !== records.length)
     throw new RangeError('Combined Australian mosque IDs must be unique');
-  const sources = Array.isArray(value.source.sources) ? value.source.sources : [];
+  const sources = Array.isArray(value.source.sources)
+    ? value.source.sources.map((entry: unknown) => entry)
+    : [];
   const osmSource = sources.find(
     (entry) => isRecord(entry) && entry.sourceKind === 'openstreetmap',
   );
