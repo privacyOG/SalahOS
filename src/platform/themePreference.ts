@@ -19,10 +19,10 @@ interface ThemeWindow {
   matchMedia(query: string): ThemeMediaQueryList;
 }
 
-type ActiveThemePreference = {
+interface ActiveThemePreference {
   readonly leases: Set<symbol>;
   disposeSystemListener: () => void;
-};
+}
 
 const activeThemePreferences = new WeakMap<object, ActiveThemePreference>();
 
