@@ -12,7 +12,17 @@ import {
   type CongregationDestination,
 } from './applicationRoute';
 type Props = Readonly<{ children: (destination: CongregationDestination) => ReactNode }>;
-const copy: Readonly<Record<Locale, Record<string, string>>> = {
+type CongregationCopy = Readonly<{
+  navigation: string;
+  today: string;
+  calendar: string;
+  mosques: string;
+  qiblah: string;
+  knowledge: string;
+  community: string;
+  settings: string;
+}>;
+const copy: Readonly<Record<Locale, CongregationCopy>> = {
   en: {
     navigation: 'Primary navigation',
     today: 'Today',
@@ -89,24 +99,34 @@ export function CongregationShell({ children }: Props) {
     }
   }, []);
   useEffect(() => {
-    const o = new MutationObserver(() => setLocale(documentLocale()));
+    const o = new MutationObserver(() => {
+      setLocale(documentLocale());
+    });
     o.observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
-    return () => o.disconnect();
+    return () => {
+      o.disconnect();
+    };
   }, []);
   useEffect(() => {
     const h = () => {
       setDestination(readCongregationDestination(window.location.search));
-      requestAnimationFrame(() => scrollTop(ref.current));
+      requestAnimationFrame(() => {
+        scrollTop(ref.current);
+      });
     };
     window.addEventListener('popstate', h);
-    return () => window.removeEventListener('popstate', h);
+    return () => {
+      window.removeEventListener('popstate', h);
+    };
   }, []);
   const navigate = (next: CongregationDestination) => {
     if (next === destination) return;
     const search = searchForCongregationDestination(window.location.search, next);
     history.pushState(null, '', `${location.pathname}${search}${location.hash}`);
     setDestination(next);
-    requestAnimationFrame(() => scrollTop(ref.current));
+    requestAnimationFrame(() => {
+      scrollTop(ref.current);
+    });
   };
   const l = copy[locale];
   return (
@@ -115,33 +135,39 @@ export function CongregationShell({ children }: Props) {
         {children(destination)}
       </div>
       <PrimaryNavigation
-        ariaLabel={l.navigation!}
+        ariaLabel={l.navigation}
         items={[
           {
             id: 'today',
             icon: 'today',
-            label: l.today!,
+            label: l.today,
             current: destination === 'today',
-            onSelect: () => navigate('today'),
+            onSelect: () => {
+              navigate('today');
+            },
           },
           {
             id: 'calendar',
             icon: 'calendar',
-            label: l.calendar!,
+            label: l.calendar,
             current: destination === 'calendar',
-            onSelect: () => navigate('calendar'),
+            onSelect: () => {
+              navigate('calendar');
+            },
           },
           {
             id: 'mosques',
             icon: 'mosques',
-            label: l.mosques!,
+            label: l.mosques,
             current: destination === 'mosques',
-            onSelect: () => navigate('mosques'),
+            onSelect: () => {
+              navigate('mosques');
+            },
           },
           {
             id: 'qiblah',
             icon: 'qiblah',
-            label: l.qiblah!,
+            label: l.qiblah,
             current: destination === 'qiblah',
             onSelect: () => {
               void requestCompassPermission();
@@ -151,23 +177,29 @@ export function CongregationShell({ children }: Props) {
           {
             id: 'knowledge',
             icon: 'knowledge',
-            label: l.knowledge!,
+            label: l.knowledge,
             current: destination === 'knowledge',
-            onSelect: () => navigate('knowledge'),
+            onSelect: () => {
+              navigate('knowledge');
+            },
           },
           {
             id: 'community',
             icon: 'community',
-            label: l.community!,
+            label: l.community,
             current: destination === 'community',
-            onSelect: () => navigate('community'),
+            onSelect: () => {
+              navigate('community');
+            },
           },
           {
             id: 'settings',
             icon: 'settings',
-            label: l.settings!,
+            label: l.settings,
             current: destination === 'settings',
-            onSelect: () => navigate('settings'),
+            onSelect: () => {
+              navigate('settings');
+            },
           },
         ]}
       />

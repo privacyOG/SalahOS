@@ -43,7 +43,7 @@ export function PrayerCalendarScreen() {
   const [anchor, setAnchor] = useState(todayCivil);
   const locale = config.locale;
 
-  const move = (delta: number) =>
+  const move = (delta: number) => {
     setAnchor((date) => {
       const year = date.getUTCFullYear();
       const month = date.getUTCMonth();
@@ -51,6 +51,7 @@ export function PrayerCalendarScreen() {
       if (view === 'monthly') return utcCivilDate(year, month + 1 + delta, 1);
       return new Date(date.getTime() + delta * (view === 'weekly' ? 7 : 1) * 86_400_000);
     });
+  };
 
   const dates = useMemo(
     () => (view === 'yearly' ? [] : civilDatesForView(anchor, view)),
@@ -91,7 +92,9 @@ export function PrayerCalendarScreen() {
             key={calendarView}
             role="tab"
             aria-selected={view === calendarView}
-            onClick={() => setView(calendarView)}
+            onClick={() => {
+              setView(calendarView);
+            }}
           >
             {viewLabel(calendarView)}
           </button>
@@ -99,13 +102,30 @@ export function PrayerCalendarScreen() {
       </div>
 
       <div className="prayer-calendar__pager">
-        <button type="button" onClick={() => move(-1)} aria-label="Previous period">
+        <button
+          type="button"
+          onClick={() => {
+            move(-1);
+          }}
+          aria-label="Previous period"
+        >
           ‹
         </button>
-        <button type="button" onClick={() => setAnchor(todayCivil())}>
+        <button
+          type="button"
+          onClick={() => {
+            setAnchor(todayCivil());
+          }}
+        >
           Current
         </button>
-        <button type="button" onClick={() => move(1)} aria-label="Next period">
+        <button
+          type="button"
+          onClick={() => {
+            move(1);
+          }}
+          aria-label="Next period"
+        >
           ›
         </button>
       </div>
@@ -186,13 +206,19 @@ function YearView({
   onMonth: (month: number) => void;
 }) {
   return (
-    <section className="prayer-calendar__year" aria-label={`${year} calendar`}>
+    <section className="prayer-calendar__year" aria-label={[String(year), 'calendar'].join(' ')}>
       {Array.from({ length: 12 }, (_, index) => {
         const date = utcCivilDate(year, index + 1, 1);
         const start = hijriCalendarLabel(date, correction);
         const end = hijriCalendarLabel(utcCivilDate(year, index + 2, 0), correction);
         return (
-          <button type="button" key={index} onClick={() => onMonth(index + 1)}>
+          <button
+            type="button"
+            key={index}
+            onClick={() => {
+              onMonth(index + 1);
+            }}
+          >
             <span>{index + 1}</span>
             <strong>
               {new Intl.DateTimeFormat('en-AU', { timeZone: 'UTC', month: 'short' })
@@ -207,7 +233,9 @@ function YearView({
               {start.year !== end.year || start.month !== end.month ? ` – ${end.monthName}` : ''}
             </em>
             <small>
-              {start.year === end.year ? `${start.year} AH` : `${start.year}–${end.year} AH`}
+              {start.year === end.year
+                ? [String(start.year), 'AH'].join(' ')
+                : [String(start.year), '–', String(end.year), 'AH'].join(' ')}
             </small>
           </button>
         );

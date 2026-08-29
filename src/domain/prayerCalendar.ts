@@ -39,7 +39,7 @@ export function hijriCalendarLabel(date: Date, correctionDays = 0) {
   return {
     ...h,
     monthName: hijriMonthName(h.month),
-    label: `${h.day} ${hijriMonthName(h.month)} ${h.year} AH`,
+    label: [String(h.day), hijriMonthName(h.month), String(h.year), 'AH'].join(' '),
   };
 }
 function instantForCivilDate(date: Date, timeZone: string) {
@@ -53,7 +53,11 @@ function instantForCivilDate(date: Date, timeZone: string) {
         month: '2-digit',
         day: '2-digit',
       }).formatToParts(instant),
-      value = `${parts.find((p) => p.type === 'year')?.value}-${parts.find((p) => p.type === 'month')?.value}-${parts.find((p) => p.type === 'day')?.value}`;
+      year = parts.find((part) => part.type === 'year')?.value,
+      month = parts.find((part) => part.type === 'month')?.value,
+      day = parts.find((part) => part.type === 'day')?.value;
+    if (year === undefined || month === undefined || day === undefined) continue;
+    const value = [year, month, day].join('-');
     if (value === target) return instant;
   }
   throw new RangeError(`Unable to resolve civil date ${target} in ${timeZone}`);

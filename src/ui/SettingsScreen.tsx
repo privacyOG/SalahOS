@@ -240,12 +240,12 @@ function PrayerSettingsForm({
         <span>{translate(locale, 'sourceMode')}</span>
         <select
           value={settings.prayerSourceMode}
-          onChange={(event) =>
+          onChange={(event) => {
             updateSettings((current) => ({
               ...current,
               prayerSourceMode: event.target.value as PersistedSettings['prayerSourceMode'],
-            }))
-          }
+            }));
+          }}
         >
           <option value="calculated">{translate(locale, 'sourceCalculated')}</option>
           <option value="calculated-adjustments">
@@ -260,12 +260,12 @@ function PrayerSettingsForm({
         <span>{translate(locale, 'calculationMethod')}</span>
         <select
           value={settings.calculationMethodId}
-          onChange={(event) =>
+          onChange={(event) => {
             updateSettings((current) => ({
               ...current,
               calculationMethodId: event.target.value as PersistedSettings['calculationMethodId'],
-            }))
-          }
+            }));
+          }}
         >
           {Object.values(calculationMethods).map((method) => (
             <option dir="auto" key={method.id} value={method.id}>
@@ -278,12 +278,12 @@ function PrayerSettingsForm({
         <span>{translate(locale, 'asrMethod')}</span>
         <select
           value={settings.asrConvention}
-          onChange={(event) =>
+          onChange={(event) => {
             updateSettings((current) => ({
               ...current,
               asrConvention: event.target.value as PersistedSettings['asrConvention'],
-            }))
-          }
+            }));
+          }}
         >
           <option value="standard">{translate(locale, 'asrStandard')}</option>
           <option value="hanafi">{translate(locale, 'asrHanafi')}</option>
@@ -294,12 +294,12 @@ function PrayerSettingsForm({
         <span>{translate(locale, 'highLatitudeRule')}</span>
         <select
           value={settings.highLatitudeRule}
-          onChange={(event) =>
+          onChange={(event) => {
             updateSettings((current) => ({
               ...current,
               highLatitudeRule: event.target.value as PersistedSettings['highLatitudeRule'],
-            }))
-          }
+            }));
+          }}
         >
           <option value="angle-based">{translate(locale, 'highLatitudeAngle')}</option>
           <option value="middle-of-the-night">{translate(locale, 'highLatitudeMiddle')}</option>
@@ -310,16 +310,16 @@ function PrayerSettingsForm({
         <span>{translate(locale, 'hijriCorrection')}</span>
         <select
           value={settings.hijriCorrectionDays}
-          onChange={(event) =>
+          onChange={(event) => {
             updateSettings((current) => ({
               ...current,
               hijriCorrectionDays: Number(event.target.value),
-            }))
-          }
+            }));
+          }}
         >
           {[-2, -1, 0, 1, 2].map((day) => (
             <option key={day} value={day}>
-              {day > 0 ? `+${day}` : day}
+              {day > 0 ? `+${String(day)}` : day}
             </option>
           ))}
         </select>
@@ -342,9 +342,9 @@ function AppearanceSettingsForm({
         <span>{translate(locale, 'language')}</span>
         <select
           value={settings.locale}
-          onChange={(event) =>
-            updateSettings((current) => ({ ...current, locale: event.target.value as Locale }))
-          }
+          onChange={(event) => {
+            updateSettings((current) => ({ ...current, locale: event.target.value as Locale }));
+          }}
         >
           <option value="en">{translate(locale, 'english')}</option>
           <option value="ar">{translate(locale, 'arabic')}</option>
@@ -356,12 +356,12 @@ function AppearanceSettingsForm({
         <span>{translate(locale, 'timeFormat')}</span>
         <select
           value={settings.timeFormat}
-          onChange={(event) =>
+          onChange={(event) => {
             updateSettings((current) => ({
               ...current,
               timeFormat: event.target.value as PersistedSettings['timeFormat'],
-            }))
-          }
+            }));
+          }}
         >
           <option value="h23">{translate(locale, 'time24')}</option>
           <option value="h12">{translate(locale, 'time12')}</option>
@@ -371,12 +371,12 @@ function AppearanceSettingsForm({
         <span>{translate(locale, 'theme')}</span>
         <select
           value={settings.theme}
-          onChange={(event) =>
+          onChange={(event) => {
             updateSettings((current) => ({
               ...current,
               theme: event.target.value as PersistedSettings['theme'],
-            }))
-          }
+            }));
+          }}
         >
           <option value="system">{translate(locale, 'themeSystem')}</option>
           <option value="light">{translate(locale, 'themeLight')}</option>
@@ -387,12 +387,12 @@ function AppearanceSettingsForm({
         <span>{settingsCopy[locale].palette}</span>
         <select
           value={settings.palette}
-          onChange={(event) =>
+          onChange={(event) => {
             updateSettings((current) => ({
               ...current,
               palette: event.target.value as PersistedSettings['palette'],
-            }))
-          }
+            }));
+          }}
         >
           {themePalettes.map((palette) => (
             <option key={palette} value={palette}>
@@ -434,9 +434,13 @@ export function SettingsScreen() {
   }, [settings]);
 
   useEffect(() => {
-    const handlePopState = () => setCategory(readSettingsCategory(window.location.search));
+    const handlePopState = () => {
+      setCategory(readSettingsCategory(window.location.search));
+    };
     window.addEventListener('popstate', handlePopState);
-    return () => window.removeEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
   }, []);
 
   useEffect(() => {
@@ -501,7 +505,9 @@ export function SettingsScreen() {
               type="button"
               className="settings-category-card"
               key={definition.id}
-              onClick={() => navigateCategory(definition.id)}
+              onClick={() => {
+                navigateCategory(definition.id);
+              }}
             >
               <span>
                 <strong>{copy[definition.title]}</strong>
@@ -523,7 +529,9 @@ export function SettingsScreen() {
         <button
           type="button"
           className="settings-screen__back"
-          onClick={() => navigateCategory(null)}
+          onClick={() => {
+            navigateCategory(null);
+          }}
         >
           <span aria-hidden="true">←</span>
           <span>{copy.back}</span>

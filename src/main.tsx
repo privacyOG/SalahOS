@@ -152,7 +152,9 @@ function CongregationApplication() {
   const [locationRevision, setLocationRevision] = useState(0);
 
   useEffect(() => {
-    const handleLocationChange = () => setLocationRevision((current) => current + 1);
+    const handleLocationChange = () => {
+      setLocationRevision((current) => current + 1);
+    };
     window.addEventListener(LOCATION_CONTEXT_CHANGE_EVENT, handleLocationChange);
     const stopAutomaticLocationSync = installAutomaticLocationSync();
     return () => {

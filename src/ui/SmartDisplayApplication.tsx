@@ -82,7 +82,8 @@ export function SmartDisplayApplication() {
     };
     const refresh = () => {
       const s = sampleNow();
-      s === null ? invalidate() : reset(s);
+      if (s === null) invalidate();
+      else reset(s);
     };
     const tick = () => {
       const s = sampleNow();
@@ -114,8 +115,12 @@ export function SmartDisplayApplication() {
     };
   }, [errorLogger]);
   useEffect(() => {
-    const on = () => setOnline(true),
-      off = () => setOnline(false);
+    const on = () => {
+        setOnline(true);
+      },
+      off = () => {
+        setOnline(false);
+      };
     window.addEventListener('online', on);
     window.addEventListener('offline', off);
     return () => {
@@ -124,9 +129,13 @@ export function SmartDisplayApplication() {
     };
   }, []);
   useEffect(() => {
-    const h = () => setNotificationSyncRevision((c) => c + 1);
+    const h = () => {
+      setNotificationSyncRevision((c) => c + 1);
+    };
     window.addEventListener(ANDROID_EXACT_ALARM_CAPABILITY_CHANGE_EVENT, h);
-    return () => window.removeEventListener(ANDROID_EXACT_ALARM_CAPABILITY_CHANGE_EVENT, h);
+    return () => {
+      window.removeEventListener(ANDROID_EXACT_ALARM_CAPABILITY_CHANGE_EVENT, h);
+    };
   }, []);
   const dashboardResult = useMemo(
     () =>
@@ -169,12 +178,12 @@ export function SmartDisplayApplication() {
     });
     const intents = buildNotificationIntents(inputs, settings.notifications);
     const resolutions = resolveNotificationScheduleInstants(intents, dashboard.timeZone);
-    void synchronizeAndroidPrayerNotifications(resolutions, locale).catch(() =>
-      errorLogger.log('notification-scheduling-unavailable'),
-    );
-    void synchronizeIosPrayerNotifications(resolutions, locale).catch(() =>
-      errorLogger.log('notification-scheduling-unavailable'),
-    );
+    void synchronizeAndroidPrayerNotifications(resolutions, locale).catch(() => {
+      errorLogger.log('notification-scheduling-unavailable');
+    });
+    void synchronizeIosPrayerNotifications(resolutions, locale).catch(() => {
+      errorLogger.log('notification-scheduling-unavailable');
+    });
   }, [
     dashboard?.today.date,
     dashboard?.tomorrow.date,
@@ -196,7 +205,9 @@ export function SmartDisplayApplication() {
       window.location.assign(target);
     };
     window.addEventListener('keydown', h);
-    return () => window.removeEventListener('keydown', h);
+    return () => {
+      window.removeEventListener('keydown', h);
+    };
   }, []);
   const currentClock =
     now === null

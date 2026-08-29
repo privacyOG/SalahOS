@@ -104,14 +104,16 @@ export function hijriDateParts(
     source: 'runtime-intl-calendar',
   };
 }
-export function hijriMonthName(month: number) {
+export function hijriMonthName(month: number): (typeof HIJRI_MONTH_NAMES)[number] {
   if (!Number.isInteger(month) || month < 1 || month > 12)
     throw new RangeError('Hijri month must be 1 through 12');
-  return HIJRI_MONTH_NAMES[month - 1];
+  const name = HIJRI_MONTH_NAMES[month - 1];
+  if (name === undefined) throw new RangeError('Hijri month must be 1 through 12');
+  return name;
 }
 export function formatHijriDateEnglish(civilDate: Date, correctionDays = 0) {
   const h = hijriDateParts(civilDate, correctionDays);
-  return `${h.day} ${hijriMonthName(h.month)} ${h.year} AH`;
+  return [String(h.day), hijriMonthName(h.month), String(h.year), 'AH'].join(' ');
 }
 export function calendarDate(
   civilDate: Date,
