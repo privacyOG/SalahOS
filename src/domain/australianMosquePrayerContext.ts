@@ -10,9 +10,12 @@ const OBLIGATORY_PRAYERS: readonly ObligatoryPrayerName[] = [
   'isha',
 ];
 
+const TWELVE_HOUR_CLOCK = /^(\d{1,2}):(\d{2})\s*(am|pm)$/u;
+const TWENTY_FOUR_HOUR_CLOCK = /^(\d{1,2}):(\d{2})$/u;
+
 function parseClock(value: string): number | null {
   const normalized = value.trim().toLocaleLowerCase('en-AU');
-  const twelveHour = normalized.match(/^(\d{1,2}):(\d{2})\s*(am|pm)$/u);
+  const twelveHour = TWELVE_HOUR_CLOCK.exec(normalized);
   if (twelveHour !== null) {
     const [, hourText, minuteText, period] = twelveHour;
     if (hourText === undefined || minuteText === undefined || period === undefined) return null;
@@ -23,7 +26,7 @@ function parseClock(value: string): number | null {
     return hour24 * 60 + minute;
   }
 
-  const twentyFourHour = normalized.match(/^(\d{1,2}):(\d{2})$/u);
+  const twentyFourHour = TWENTY_FOUR_HOUR_CLOCK.exec(normalized);
   if (twentyFourHour === null) return null;
   const [, hourText, minuteText] = twentyFourHour;
   if (hourText === undefined || minuteText === undefined) return null;

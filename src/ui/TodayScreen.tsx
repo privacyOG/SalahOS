@@ -238,14 +238,15 @@ function prayerBoardCivilDate(data: PrayerBoardData): Date {
 export function TodayScreen() {
   const settings = useMemo(initialSettings, []);
   const selectedDirectoryMosque = useMemo(initialSelectedAustralianMosque, []);
-  const directoryMosqueActive =
-    selectedDirectoryMosque !== null && settings.prayerSourceMode !== 'local-mosque';
+  const activeDirectoryMosque =
+    selectedDirectoryMosque !== null && settings.prayerSourceMode !== 'local-mosque'
+      ? selectedDirectoryMosque
+      : null;
+  const directoryMosqueActive = activeDirectoryMosque !== null;
   const selectedDirectoryProfile = useMemo(
     () =>
-      directoryMosqueActive && selectedDirectoryMosque !== null
-        ? australianMosqueToProfile(selectedDirectoryMosque)
-        : null,
-    [directoryMosqueActive, selectedDirectoryMosque],
+      activeDirectoryMosque === null ? null : australianMosqueToProfile(activeDirectoryMosque),
+    [activeDirectoryMosque],
   );
   const mobileThemeConfig = useMobilePrayerThemeConfig();
   const weather = useMobilePrayerWeather();
@@ -316,16 +317,10 @@ export function TodayScreen() {
       sourceMode: settings.prayerSourceMode,
       mosqueTimetable: settings.mosqueTimetable,
     });
-    return directoryMosqueActive && selectedDirectoryMosque !== null
-      ? applyAustralianMosqueCongregationTimes(sourced, selectedDirectoryMosque)
-      : sourced;
-  }, [
-    dashboard,
-    directoryMosqueActive,
-    selectedDirectoryMosque,
-    settings.mosqueTimetable,
-    settings.prayerSourceMode,
-  ]);
+    return activeDirectoryMosque === null
+      ? sourced
+      : applyAustralianMosqueCongregationTimes(sourced, activeDirectoryMosque);
+  }, [activeDirectoryMosque, dashboard, settings.mosqueTimetable, settings.prayerSourceMode]);
   const prayerBoardData = useMemo(
     () =>
       sourcedDashboard === null
@@ -414,9 +409,7 @@ export function TodayScreen() {
       className="today-screen"
       data-prayer-board-data-version={prayerBoardData?.version}
       data-prayer-board-source={prayerBoardData?.sourceMode}
-      data-selected-directory-mosque-id={
-        directoryMosqueActive ? selectedDirectoryMosque?.id : undefined
-      }
+      data-selected-directory-mosque-id={activeDirectoryMosque?.id}
       data-mobile-module-dates={modules.dates ? 'visible' : 'hidden'}
       data-mobile-module-jumuah={modules.jumuah ? 'visible' : 'hidden'}
       data-mobile-module-sunrise-sunset={modules['sunrise-sunset'] ? 'visible' : 'hidden'}
@@ -600,9 +593,9 @@ export function TodayScreen() {
                       );
                 const isSunrise = prayer.name === 'sunrise';
                 const publishedIqamahMinutes =
-                  directoryMosqueActive && selectedDirectoryMosque !== null && !isSunrise
+                  activeDirectoryMosque !== null && !isSunrise
                     ? publishedAustralianMosqueCongregationMinutes(
-                        selectedDirectoryMosque,
+                        activeDirectoryMosque,
                         prayer.name,
                       )
                     : [];
