@@ -34,7 +34,7 @@ Keep this tracker compact. Mark an item `[x]` only after implementation and rele
 - [x] Add contrast, text-clipping, RTL and large-text acceptance where practical.
 - [x] Preserve regression fixtures for the reported Today and Qiblah readability failures.
 
-## Stage 5.1 — Hijri-aligned prayer calendar
+## Stage 5.1 — Hijri-aligned prayer calendar ✅
 
 - [x] Correct Hijri/Gregorian alignment using the Umm al-Qura calendar with the existing optional ±2-day local correction.
 - [x] Standardise English Hijri month names: Muharram, Safar, Rabi al-Awwal, Rabi al-Akhir, Jumada al-Ula, Jumada al-Akhirah, Rajab, Sha'ban, Ramadan, Shawwal, Dhu al-Qi'dah, Dhu al-Hijjah.
@@ -42,9 +42,9 @@ Keep this tracker compact. Mark an item `[x]` only after implementation and rele
 - [x] Add a separate Prayer Calendar route with Daily, Weekly, Monthly and Yearly views; do not alter the Today screen.
 - [x] Keep every calendar view derived from the same civil-date, Hijri and prayer-time calculation pipeline so views remain mutually aligned.
 - [x] Add responsive/RTL/accessibility styling and regression/acceptance coverage.
-- [ ] Validate Stage 5.1 on the exact final head and mark complete.
+- [x] Validate Stage 5.1 on the exact v1.5.1 release head and mark complete.
 
-Stage 5.1 implementation: canonical Hijri presentation now emits `AH` explicitly rather than relying on an ambiguous era label; `src/domain/prayerCalendar.ts` derives date ranges and prayer rows from the same location/timezone/calculation settings as the app; `PrayerCalendarScreen` supplies Daily/Weekly/Monthly/Yearly views on a separate Calendar destination; `prayerCalendar.test.ts` locks the requested 2026 reference alignment and month names; `calendar:check` is enforced by the Quality Gate. Exact-head CI validation remains pending before this stage is marked complete.
+Stage 5.1 verification: canonical Hijri presentation emits `AH` explicitly; `src/domain/prayerCalendar.ts` derives date ranges and prayer rows from the same location/timezone/calculation settings as the app; `PrayerCalendarScreen` supplies Daily/Weekly/Monthly/Yearly views on a separate Calendar destination; `prayerCalendar.test.ts` locks the requested 2026 reference alignment and month names; `calendar:check` is enforced by the Quality Gate. Exact v1.5.1 release head `57ee8aeff33d0269a2e11866f16b3983ad709d45` passed Quality Gate `33238254631`, including Hijri prayer calendar acceptance.
 
 ## Stage 6 — Instructions guide ✅
 
@@ -52,7 +52,9 @@ Stage 5.1 implementation: canonical Hijri presentation now emits `AH` explicitly
 - [x] Cover Android, iPhone/iPad, Web/PWA, Raspberry Pi and TV/kiosk operation.
 - [x] Document setup, location, prayer calculation/madhhab, Iqamah, Qiblah, mosque features, Adhan/notifications, language/themes, offline use, displays, updates, troubleshooting and reset.
 
-## Stage 7 — v1.5.1 reconciliation
+## Stage 7 — v1.5.1 reconciliation ✅
 
-- [ ] Run relevant quality, visual, web/mobile/display and accessibility gates on the exact final head.
-- [ ] Reconcile this tracker and mark v1.5.1 complete only when all stages pass.
+- [x] Run relevant quality, visual, web/mobile/display and accessibility gates on the exact v1.5.1 release head.
+- [x] Reconcile this tracker and mark v1.5.1 complete only when all stages pass.
+
+Stage 7 verification: exact release head `57ee8aeff33d0269a2e11866f16b3983ad709d45` passed Quality Gate `33238254631`, Visual Regression `33238308926`, Android Build `33238308968` and iOS Build `33238309041`. Release Assets run `33238690810` then passed exact-main preflight, persistent Android signing, Web/PWA and Raspberry Pi packaging, final package integrity and GitHub publication. Windows Release run `33238873487` passed the packaged executable self-test, checksum verification and publication. GitHub release `v1.5.1` is published with the signed APK/AAB, Web/PWA bundle, Raspberry Pi kiosk bundle, Windows x64 executable and reconciled `SHA256SUMS.txt`.
