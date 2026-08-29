@@ -1,9 +1,7 @@
 name: Focused Visual Repair Preflight
 
 on:
-  push:
-    branches:
-      - preflight/device-nav-calendar
+  workflow_dispatch:
 
 permissions:
   contents: read
