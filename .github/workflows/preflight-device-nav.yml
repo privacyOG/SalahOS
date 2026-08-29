@@ -1,7 +1,9 @@
 name: Focused Visual Repair Preflight
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - preflight/device-nav-calendar
 
 permissions:
   contents: read
@@ -44,7 +46,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: /tmp/salahos-visual-repair-pw
-          key: salāhos-visual-repair-${{ runner.os }}-playwright-1.62.0-chromium
+          key: salahos-visual-repair-${{ runner.os }}-playwright-1.62.0-chromium
 
       - name: Install Chromium visual harness
         run: |
