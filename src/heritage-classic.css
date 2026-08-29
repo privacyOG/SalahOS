@@ -429,7 +429,7 @@
   }
 
   .heritage-classic-board__clock strong {
-    font-size: clamp(3.3rem, 18vw, 5.8rem);
+    font-size: clamp(3rem, 17vw, 5rem);
   }
 
   .heritage-classic-board__next {
@@ -438,23 +438,23 @@
     padding: 1rem;
   }
 
-  .heritage-classic-board__next dl {
-    grid-column: 1;
-  }
-
   .heritage-classic-board__countdown {
     justify-items: start;
   }
 
-  .heritage-classic-board__countdown strong {
-    font-size: clamp(2.6rem, 13vw, 4.2rem);
+  .heritage-classic-board__next dl {
+    grid-column: auto;
   }
 
   .heritage-classic-board__table-heading,
   .heritage-classic-prayer-row {
-    grid-template-columns: minmax(7rem, 1.2fr) repeat(2, minmax(4.5rem, 0.7fr));
-    gap: 0.4rem;
-    padding: 0.7rem 0.75rem;
+    grid-template-columns: minmax(7rem, 1.2fr) repeat(2, minmax(5rem, 0.8fr));
+    gap: 0.45rem;
+    padding: 0.7rem 0.65rem;
+  }
+
+  .heritage-classic-board__table-heading {
+    font-size: 0.67rem;
   }
 
   .heritage-classic-prayer-row__name {
@@ -463,76 +463,54 @@
     gap: 0.25rem;
   }
 
-  .heritage-classic-board__lower-grid {
-    grid-template-columns: 1fr;
+  .heritage-classic-prayer-row__name strong,
+  .heritage-classic-prayer-row > strong {
+    font-size: clamp(1rem, 4.6vw, 1.3rem);
   }
 
-  .heritage-classic-board__jumuah > div {
-    grid-template-columns: 1fr;
+  .heritage-classic-board__lower-grid {
+    gap: 0.65rem;
   }
 }
 
-@media (orientation: landscape) and (max-height: 720px) {
+@media (orientation: landscape) and (max-height: 760px) {
   .heritage-classic-board {
     gap: 0.55rem;
-    min-height: 0;
-    border-radius: 1rem;
   }
 
   .heritage-classic-board__masthead {
-    padding-block-start: 0.7rem;
-  }
-
-  .heritage-classic-board__brand img {
-    width: 3rem;
-    height: 3rem;
+    padding-block-start: 0.65rem;
   }
 
   .heritage-classic-board__hero {
-    grid-template-columns: minmax(18rem, 0.8fr) minmax(24rem, 1.2fr);
+    grid-template-columns: minmax(15rem, 0.75fr) minmax(23rem, 1.25fr);
   }
 
   .heritage-classic-board__clock,
   .heritage-classic-board__next {
-    min-height: 0;
-    padding: 0.9rem 1.1rem;
+    min-height: 7.5rem;
+    padding: 0.8rem 1rem;
   }
 
   .heritage-classic-board__clock strong {
-    font-size: clamp(3.4rem, 8vw, 5.8rem);
+    font-size: clamp(3.2rem, 8vw, 5.3rem);
   }
 
   .heritage-classic-board__next > div:first-child > strong {
-    font-size: clamp(2rem, 4vw, 3.3rem);
+    font-size: clamp(1.8rem, 4vw, 3.1rem);
   }
 
   .heritage-classic-board__countdown strong {
-    font-size: clamp(2.5rem, 5vw, 4rem);
+    font-size: clamp(2.3rem, 5vw, 4rem);
   }
 
   .heritage-classic-board__table-heading,
   .heritage-classic-prayer-row {
-    padding-block: 0.5rem;
-  }
-
-  .heritage-classic-prayer-row__name strong,
-  .heritage-classic-prayer-row > strong {
-    font-size: clamp(1.05rem, 1.8vw, 1.6rem);
+    padding-block: 0.48rem;
   }
 
   .heritage-classic-board__lower-grid {
-    display: none;
-  }
-
-  .heritage-classic-board__footer {
-    padding-block-end: 0.65rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .heritage-classic-board,
-  .heritage-classic-board * {
-    scroll-behavior: auto !important;
+    grid-template-columns: minmax(14rem, 0.6fr) minmax(0, 1.4fr);
   }
 }
 
@@ -543,7 +521,7 @@
   .heritage-classic-board__timetable,
   .heritage-classic-board__solar,
   .heritage-classic-board__jumuah {
-    border-color: CanvasText;
+    border: 1px solid CanvasText;
     background: Canvas;
     color: CanvasText;
     box-shadow: none;
