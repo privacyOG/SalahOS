@@ -7,7 +7,7 @@ SalahOS includes an offline-first Australian mosque and musalla directory so con
 The integrated directory combines two reviewed factual source snapshots:
 
 - **OpenStreetMap contributors**, with OpenStreetMap-derived data distributed under the Open Database License (ODbL) 1.0; and
-- **Australian Mosque Finder**, used as a factual organisation-directory source for mosque identity/location facts.
+- **Australian Mosque Finder**, used as a factual organisation-directory source for mosque identity/location facts and explicitly published mosque-specific congregation information where present.
 
 OpenStreetMap attribution and licence references remain attached to the combined catalogue and generated packs:
 
@@ -33,6 +33,19 @@ The integration accounting is deliberately non-additive:
 - final integrated directory: **254 records** (`106 + 170 - 22`).
 
 The pipeline therefore never represents `106 + 176` as a unique-mosque count.
+
+## Prayer starts, Sunrise and mosque-published congregation times
+
+Selecting **Use mosque** makes that directory mosque the active location context for the Today prayer calculation without overwriting the user's separately saved personal location. Prayer starts remain calculated through the user's selected SalahOS calculation method, Asr convention, high-latitude rule and manual adjustments unless an explicit full local-mosque timetable mode is selected.
+
+Australian Mosque Finder pages can contain two different classes of time data and SalahOS keeps them separate:
+
+- the site's locality prayer calendar (Fajr, Sunrise, Dhuhr, Asr, Maghrib and Isha), which is not treated as a mosque Iqamah timetable; and
+- mosque-specific daily congregation times stated in the listing details, which may be used as published Iqamah/Jama'ah context when explicitly present.
+
+Sparse mosque-specific data is never promoted into a fake complete timetable. If a selected listing publishes a congregation time for a prayer, Today displays it; if it publishes multiple sessions, Today exposes the published sessions in source order. If no mosque-specific congregation time is published, Today says **Not published** rather than inventing an Iqamah.
+
+Sunrise is always retained as a calculated solar boundary. It is displayed in the daily schedule as a **non-prayer time** marking **Fajr ends** and never becomes the current or next obligatory prayer.
 
 ## Deduplication and false-merge protection
 
@@ -82,12 +95,10 @@ The combined and pack checks are part of the permanent repository quality gate. 
 
 Bundled directory search is on-device. Nearby ordering uses the location already selected or permitted in SalahOS and local distance calculations; directory browsing does not require transmitting the user's prayer-calculation location to either upstream directory source.
 
-Favouriting a directory mosque adds it to the followed-mosque library. A favourite action does not silently replace the active prayer-time mosque/source. Prayer, Iqamah and Jumu'ah authority continues to follow the explicitly configured SalahOS prayer source and mosque timetable rules.
-
-External directions and shared correction/report workflows are separate network-dependent actions and fail independently from local prayer calculation and bundled mosque discovery.
+Favouriting a directory mosque adds it to the followed-mosque library without activating it. **Use mosque** explicitly selects it for mosque context on Today. External directions and shared correction/report workflows are separate network-dependent actions and fail independently from local prayer calculation and bundled mosque discovery.
 
 ## Corrections and shared directory service
 
 The combined catalogue also seeds the shared mosque directory service. Contributions are subject to duplicate checks, moderation and verification/claim state. Corrections should use the report/edit workflow rather than silently changing source identity or collapsing distinct nearby venues.
 
-Directory identity/location facts should not be treated as an authoritative daily timetable. Users and mosque administrators should verify prayer/Iqamah/Jumu'ah data against the configured mosque timetable or other trusted local source before relying on it operationally.
+Directory identity/location facts and generic locality prayer calendars should not be represented as mosque-specific Iqamah. Only explicit mosque-published congregation information is surfaced as such; mosque administrators should still verify operational prayer/Iqamah/Jumu'ah data against the mosque's authoritative current source.

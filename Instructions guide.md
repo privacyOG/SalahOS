@@ -17,6 +17,8 @@ Manual prayer adjustments are intended for documented local requirements. If a l
 
 High-latitude handling should be configured for locations where normal twilight events are unavailable or unsuitable. Do not use manual adjustments to conceal an incorrect location, timezone or calculation method.
 
+**Fajr and Sunrise:** the Fajr prayer time begins at true dawn and ends when the sun begins to rise. SalahOS therefore shows **Sunrise** in the daily schedule as a non-prayer boundary labelled **Fajr ends**. Sunrise is not one of the five obligatory prayers and is never treated as the current or next obligatory prayer.
+
 ## 3. Hijri date and Prayer Calendar
 
 SalahOS presents Gregorian dates alongside the Umm al-Qura Hijri calendar. The English Hijri month names are Muharram, Safar, Rabi al-Awwal, Rabi al-Akhir, Jumada al-Ula, Jumada al-Akhirah, Rajab, Sha'ban, Ramadan, Shawwal, Dhu al-Qi'dah and Dhu al-Hijjah.
@@ -155,10 +157,12 @@ For technical build/signing details, consult the repository's platform-specific 
 
 ## 19. Australian mosque directory and corrections
 
-The **Mosques** experience includes a bundled offline-first Australian directory containing the project's current deduplicated mosque and musalla records. You can search the bundled data and use nearby ordering when you have explicitly selected or permitted a location. Browsing the bundled catalogue does not require a live request to OpenStreetMap or Australian Mosque Finder.
+The **Mosques** experience includes a bundled offline-first Australian directory containing the project's current 254 deduplicated mosque and musalla records. You can search the bundled data and use nearby ordering when you have explicitly selected or permitted a location. Browsing the bundled catalogue does not require a live request to OpenStreetMap or Australian Mosque Finder.
 
-Directory records preserve source provenance and data-quality/freshness information where available. A directory listing identifies a place; it is not automatically an authoritative source for that mosque's prayer, Iqamah or Jumu'ah timetable. Verify those times through the active SalahOS mosque timetable/source before relying on them.
+Use **Favourite** to retain a mosque without changing Today. Use **Use mosque** when you want the selected directory mosque to become the active mosque context on Today. SalahOS then calculates prayer starts at the mosque's coordinates using your existing calculation method and madhhab/Asr settings; it does not silently overwrite your separately saved personal location.
 
-Favouriting a mosque adds it to the followed-mosque library and does not silently change the active prayer-time source. **Directions** may open an external map provider and therefore requires network access. If a listing is wrong or incomplete, use the shared **report/edit** correction workflow rather than treating a nearby record as the same mosque or manually collapsing two distinct venues.
+Where the Australian Mosque Finder listing explicitly publishes mosque-specific daily congregation times, SalahOS uses those values as published Iqamah/Jama'ah context. Multiple published sessions remain visible. If the listing does not publish a congregation time for a prayer, SalahOS displays **Not published** rather than manufacturing an Iqamah. The generic locality seven-day prayer calendar shown on Mosque Finder is not treated as a mosque Iqamah timetable.
+
+Directory records preserve source provenance and data-quality/freshness information where available. **Directions** may open an external map provider and therefore requires network access. If a listing is wrong or incomplete, use the shared **report/edit** correction workflow rather than treating a nearby record as the same mosque or manually collapsing two distinct venues.
 
 For the current dataset accounting, upstream-source boundary and reproducibility details, see `docs/AUSTRALIAN_MOSQUE_DIRECTORY.md` in the project repository.

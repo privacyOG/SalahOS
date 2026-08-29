@@ -8,11 +8,8 @@ import {
   searchAustralianMosques,
   sortAustralianMosquesByDistance,
   type AustralianMosqueRecord,
-} from '../domain/australianMosqueDirectory';
-import {
-  enrichAustralianMosqueRecord,
-  type EnrichedMosqueDirectoryRecord,
-} from '../domain/mosqueDirectoryEnrichment';
+} from '../domain/australianMosqueDirectoryCombined';
+import type { EnrichedMosqueDirectoryRecord } from '../domain/mosqueDirectoryEnrichment';
 import { localeTag } from '../i18n/i18n';
 import { australianMosqueDirectoryCopy } from '../i18n/australianMosqueDirectoryTranslations';
 import type { Locale } from '../i18n/translations';
@@ -230,7 +227,7 @@ export function AustralianMosqueDirectoryPanel() {
           {visibleMosques.map(({ mosque, distanceKm }) => {
             const selected = mosque.id === library.selectedProfileId;
             const followed = followedIds.has(mosque.id);
-            const enriched = enrichAustralianMosqueRecord(mosque, australianMosqueDirectory);
+            const enriched = mosque.enriched;
             const timetableUrl = enriched.prayerTimes?.timetableUrl;
             return (
               <article
@@ -240,6 +237,9 @@ export function AustralianMosqueDirectoryPanel() {
                 data-favourite={followed}
                 data-directory-quality={enriched.quality.score}
                 data-directory-freshness={enriched.quality.freshness}
+                data-directory-published-prayer-times={
+                  enriched.prayerTimes === null ? 'false' : 'true'
+                }
                 key={mosque.id}
               >
                 <div className="mosque-summary-card__identity">
@@ -329,22 +329,33 @@ export function AustralianMosqueDirectoryPanel() {
         <p>{text.attribution}</p>
         <p>
           {text.snapshot}:{' '}
-          <time dateTime={australianMosqueDirectory.source.osmBaseTimestamp}>
+          <time dateTime={australianMosqueDirectory.source.generatedAt}>
             {new Intl.DateTimeFormat(localeTag(locale), { dateStyle: 'medium' }).format(
-              new Date(australianMosqueDirectory.source.osmBaseTimestamp),
+              new Date(australianMosqueDirectory.source.generatedAt),
             )}
           </time>
         </p>
         <div>
           <a
-            href={australianMosqueDirectory.source.attributionUrl}
+            href={australianMosqueDirectory.source.osmAttributionUrl}
             rel="noreferrer"
             target="_blank"
           >
             OpenStreetMap
           </a>
-          <a href={australianMosqueDirectory.source.licenceUrl} rel="noreferrer" target="_blank">
+          <a
+            href={australianMosqueDirectory.source.osmLicenceUrl}
+            rel="noreferrer"
+            target="_blank"
+          >
             ODbL 1.0
+          </a>
+          <a
+            href={australianMosqueDirectory.source.mosqueFinderUrl}
+            rel="noreferrer"
+            target="_blank"
+          >
+            {text.mosqueFinderSource}
           </a>
           <a href="/mosque-packs/manifest.json" download>
             Directory packs

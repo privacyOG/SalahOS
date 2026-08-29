@@ -89,6 +89,57 @@ describe('selected prayer source dashboard', () => {
     expect(sourced.prayers.find((row) => row.name === 'sunrise')?.isCurrent).toBe(false);
   });
 
+  it('keeps Fajr current only until the calculated sunrise boundary', () => {
+    const base = buildPrayerDashboard({
+      instant: new Date('2026-08-15T20:00:00.000Z'),
+      coordinates: sydney,
+    });
+    const sunrise = base.today.prayers.sunrise.roundedLocalMinutes;
+    const fajr = base.today.prayers.fajr.roundedLocalMinutes;
+    expect(fajr).not.toBeNull();
+    expect(sunrise).not.toBeNull();
+    expect(fajr ?? 1_440).toBeLessThan(base.clock.localMinutes);
+    expect(sunrise ?? 0).toBeGreaterThan(base.clock.localMinutes);
+
+    const sourced = applyPrayerSourceToDashboard({
+      dashboard: base,
+      sourceMode: 'calculated',
+      mosqueTimetable: null,
+    });
+
+    expect(sourced.currentPrayer).toBe('fajr');
+    expect(sourced.prayers.find((row) => row.name === 'fajr')?.isCurrent).toBe(true);
+    expect(sourced.prayers.find((row) => row.name === 'sunrise')?.isCurrent).toBe(false);
+  });
+
+  it('ends the Fajr current interval at sunrise while keeping Dhuhr as the next prayer', () => {
+    const base = buildPrayerDashboard({
+      instant: new Date('2026-08-15T21:00:00.000Z'),
+      coordinates: sydney,
+    });
+    const sunrise = base.today.prayers.sunrise.roundedLocalMinutes;
+    const dhuhr = base.today.prayers.dhuhr.roundedLocalMinutes;
+    expect(sunrise).not.toBeNull();
+    expect(dhuhr).not.toBeNull();
+    expect(sunrise ?? 1_440).toBeLessThanOrEqual(base.clock.localMinutes);
+    expect(dhuhr ?? 0).toBeGreaterThan(base.clock.localMinutes);
+
+    const sourced = applyPrayerSourceToDashboard({
+      dashboard: base,
+      sourceMode: 'calculated',
+      mosqueTimetable: null,
+    });
+
+    expect(sourced.currentPrayer).toBeNull();
+    expect(sourced.prayers.some((row) => row.isCurrent)).toBe(false);
+    expect(sourced.nextPrayer).toBe('dhuhr');
+    expect(sourced.prayers.find((row) => row.name === 'dhuhr')?.isNext).toBe(true);
+    expect(sourced.prayers.find((row) => row.name === 'sunrise')).toMatchObject({
+      isCurrent: false,
+      isNext: false,
+    });
+  });
+
   it('keeps Isha current after Isha while next prayer rolls to tomorrow Fajr', () => {
     const base = buildPrayerDashboard({
       instant: new Date('2026-08-16T13:59:30.000Z'),

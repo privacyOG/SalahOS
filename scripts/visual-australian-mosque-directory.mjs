@@ -7,6 +7,7 @@ const playwrightModule = process.env.SALAHOS_VISUAL_PLAYWRIGHT_MODULE;
 const artifactDirectory = path.resolve(
   process.env.SALAHOS_VISUAL_ARTIFACT_DIR ?? 'visual-artifacts',
 );
+const expectedAustralianMosqueRecords = 254;
 
 if (!playwrightModule) {
   throw new Error('SALAHOS_VISUAL_PLAYWRIGHT_MODULE must point to the isolated Playwright module');
@@ -69,8 +70,9 @@ try {
     const panel = page.locator('.australian-mosque-directory');
     await panel.waitFor({ state: 'visible' });
     assert(
-      (await panel.getAttribute('data-directory-record-count')) === '106',
-      'Australian mosque directory did not expose the expected 106-record snapshot',
+      (await panel.getAttribute('data-directory-record-count')) ===
+        String(expectedAustralianMosqueRecords),
+      `Australian mosque directory did not expose the expected ${String(expectedAustralianMosqueRecords)}-record combined snapshot`,
     );
     await panel.getByRole('button', { name: 'Nearest first' }).click();
     await panel
@@ -136,10 +138,64 @@ try {
       fullPage: true,
       animations: 'disabled',
     });
+
+    await search.fill('Sydney CBD - Erskine Musallah');
+    const erskine = panel.locator(
+      '[data-directory-mosque-id="mosque-finder:sydney-cbd-erskine-musallah"]',
+    );
+    await erskine.waitFor({ state: 'visible' });
+    assert(
+      (await erskine.getAttribute('data-directory-published-prayer-times')) === 'true',
+      'Sydney CBD source fixture lost its published daily congregation times',
+    );
+    await erskine.getByRole('button', { name: 'Use mosque' }).click();
+    await erskine.getByRole('button', { name: 'Selected' }).waitFor();
+
+    await page.goto(`${baseUrl}/?view=today`, { waitUntil: 'networkidle' });
+    const today = page.locator('.today-screen');
+    await today.waitFor({ state: 'visible' });
+    assert(
+      (await today.getAttribute('data-selected-directory-mosque-id')) ===
+        'mosque-finder:sydney-cbd-erskine-musallah',
+      'Today did not activate the selected combined-directory mosque context',
+    );
+    const sunrise = today.locator('[data-today-prayer-name="sunrise"]');
+    await sunrise.waitFor({ state: 'visible' });
+    assert(
+      (await sunrise.textContent())?.includes('Fajr ends') === true,
+      'Sunrise is not labelled as the Fajr end boundary',
+    );
+    assert(
+      (await sunrise.textContent())?.includes('Non-prayer time') === true,
+      'Sunrise is not explicitly identified as a non-prayer time',
+    );
+    assert(
+      (await sunrise.textContent())?.includes('Not applicable') === true,
+      'Sunrise incorrectly exposes an Iqamah configuration state',
+    );
+    const dhuhr = today.locator('[data-today-prayer-name="dhuhr"]');
+    assert(
+      (await dhuhr.getAttribute('data-directory-published-iqamah')) === 'true',
+      'Selected mosque published Dhuhr congregation time was not applied as Iqamah/Jama’ah context',
+    );
+    const dhuhrText = (await dhuhr.textContent()) ?? '';
+    assert(
+      dhuhrText.includes('12:15') && dhuhrText.includes('13:15'),
+      'Multiple published Dhuhr congregation sessions were not exposed on Today',
+    );
+
+    await page.screenshot({
+      path: path.join(artifactDirectory, 'stage47-selected-mosque-today-sunrise-iqamah.png'),
+      fullPage: true,
+      animations: 'disabled',
+    });
     results.push({
       name: 'mobile-search-nearest-selection',
       nearestDistancesKm: distances.slice(0, 5),
       ...metrics,
+      selectedMosqueToday: 'mosque-finder:sydney-cbd-erskine-musallah',
+      sunriseBoundary: true,
+      publishedDhuhrSessions: true,
     });
     await context.close();
   }
