@@ -1,0 +1,134 @@
+name: Temporary Mosque Finder Snapshot
+
+on:
+  push:
+    branches:
+      - utility/mosque-finder-snapshot
+
+permissions:
+  contents: read
+
+jobs:
+  snapshot:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Capture Australia mosque directory source pages
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/mosque-finder-raw
+          python3 - <<'PY'
+          import hashlib
+          import json
+          import pathlib
+          import re
+          import subprocess
+          import time
+          from html.parser import HTMLParser
+          from urllib.parse import urljoin, urlparse
+
+          BASE = 'https://www.mosque-finder.com.au/'
+          STATES = ('nsw', 'vic', 'qld', 'wa', 'sa', 'tas', 'nt', 'act')
+          ROOT = pathlib.Path('/tmp/mosque-finder-raw')
+          COOKIE = '/tmp/mosque-finder.cookies'
+          UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0 Safari/537.36'
+
+          class LinkParser(HTMLParser):
+              def __init__(self):
+                  super().__init__()
+                  self.links = []
+              def handle_starttag(self, tag, attrs):
+                  if tag.lower() != 'a':
+                      return
+                  href = dict(attrs).get('href')
+                  if href:
+                      self.links.append(href)
+
+          def fetch(url, destination, referer=BASE):
+              command = [
+                  'curl', '--fail-with-body', '--location', '--silent', '--show-error',
+                  '--compressed', '--retry', '2', '--retry-delay', '1',
+                  '--connect-timeout', '20', '--max-time', '45',
+                  '--user-agent', UA,
+                  '--header', 'Accept: text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,*/*;q=0.8',
+                  '--header', 'Accept-Language: en-AU,en;q=0.9',
+                  '--header', 'Cache-Control: no-cache',
+                  '--header', 'Pragma: no-cache',
+                  '--referer', referer,
+                  '--cookie', COOKIE, '--cookie-jar', COOKIE,
+                  '--output', str(destination),
+                  '--write-out', '%{http_code}',
+                  url,
+              ]
+              result = subprocess.run(command, text=True, capture_output=True)
+              if result.returncode != 0:
+                  raise RuntimeError(f'fetch failed for {url}: curl={result.returncode}, http={result.stdout!r}, stderr={result.stderr[-500:]!r}')
+              if result.stdout.strip() != '200':
+                  raise RuntimeError(f'fetch returned HTTP {result.stdout.strip()} for {url}')
+              data = destination.read_bytes()
+              if len(data) < 500:
+                  raise RuntimeError(f'fetch returned suspiciously small body ({len(data)} bytes) for {url}')
+              return data
+
+          metadata = {'source': BASE, 'retrievedAt': '2026-08-29', 'states': {}, 'pages': []}
+
+          home = ROOT / 'index.html'
+          fetch(BASE + 'index.html', home, BASE)
+          time.sleep(0.5)
+
+          for state in STATES:
+              state_dir = ROOT / state
+              state_dir.mkdir(parents=True, exist_ok=True)
+              index_url = f'{BASE}{state}/index.html'
+              index_path = state_dir / 'index.html'
+              index_bytes = fetch(index_url, index_path, BASE + 'index.html')
+              index_text = index_bytes.decode('utf-8', errors='replace')
+              parser = LinkParser()
+              parser.feed(index_text)
+
+              detail_urls = set()
+              for href in parser.links:
+                  absolute = urljoin(index_url, href)
+                  parsed = urlparse(absolute)
+                  if parsed.netloc.lower() != 'www.mosque-finder.com.au':
+                      continue
+                  path = parsed.path
+                  prefix = f'/{state}/'
+                  if not path.startswith(prefix):
+                      continue
+                  tail = path[len(prefix):].strip('/')
+                  if not tail or tail.lower() in ('index.html', 'index'):
+                      continue
+                  if '/' in tail:
+                      continue
+                  if not re.fullmatch(r'[A-Za-z0-9._%+-]+(?:\.html)?', tail):
+                      continue
+                  detail_urls.add(absolute.split('#', 1)[0].split('?', 1)[0])
+
+              metadata['states'][state.upper()] = {'indexUrl': index_url, 'detailCount': len(detail_urls)}
+              metadata['pages'].append({'state': state.upper(), 'kind': 'index', 'url': index_url, 'sha256': hashlib.sha256(index_bytes).hexdigest(), 'bytes': len(index_bytes)})
+
+              for number, url in enumerate(sorted(detail_urls), start=1):
+                  tail = pathlib.PurePosixPath(urlparse(url).path).name
+                  if not tail.lower().endswith('.html'):
+                      tail += '.html'
+                  destination = state_dir / tail
+                  data = fetch(url, destination, index_url)
+                  metadata['pages'].append({'state': state.upper(), 'kind': 'detail', 'url': url, 'sha256': hashlib.sha256(data).hexdigest(), 'bytes': len(data)})
+                  if number % 20 == 0:
+                      print(f'{state.upper()}: fetched {number}/{len(detail_urls)} detail pages')
+                  time.sleep(0.12)
+
+              print(f'{state.upper()}: {len(detail_urls)} detail pages')
+
+          (ROOT / 'metadata.json').write_text(json.dumps(metadata, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+          print(json.dumps(metadata['states'], indent=2))
+          PY
+
+      - name: Upload raw snapshot
+        uses: actions/upload-artifact@v4
+        with:
+          name: mosque-finder-australia-raw
+          path: /tmp/mosque-finder-raw/
+          retention-days: 3
+          if-no-files-found: error
