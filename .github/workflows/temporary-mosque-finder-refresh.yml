@@ -83,7 +83,72 @@ jobs:
       - name: Validate merged directory
         run: node scripts/generate-australian-mosque-combined.mjs --check
 
-      - name: Commit importer and directory snapshots
+      - name: Audit unresolved near-duplicates
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p tmp
+          python3 - <<'PY'
+          import json, math, re, unicodedata
+          from difflib import SequenceMatcher
+          from pathlib import Path
+          STOP = {'mosque','masjid','musalla','musallah','islamic','centre','center','prayer','room','jummah','jumuah'}
+          def norm(value):
+              text = unicodedata.normalize('NFKD', str(value or '')).encode('ascii','ignore').decode().lower()
+              words = re.findall(r'[a-z0-9]+', text)
+              return ' '.join(w for w in words if w not in STOP)
+          def phone(value): return re.sub(r'\D', '', str(value or ''))
+          def domain(value):
+              value = str(value or '').lower().replace('https://','').replace('http://','').split('/')[0]
+              return value.removeprefix('www.')
+          def distance(a,b):
+              r=6371.0
+              p1,p2=math.radians(a['latitude']),math.radians(b['latitude'])
+              dp=math.radians(b['latitude']-a['latitude']); dl=math.radians(b['longitude']-a['longitude'])
+              h=math.sin(dp/2)**2+math.cos(p1)*math.cos(p2)*math.sin(dl/2)**2
+              return r*2*math.atan2(math.sqrt(h),math.sqrt(1-h))
+          osm=json.loads(Path('src/data/australian-mosques.json').read_text())['records']
+          finder=json.loads(Path('src/data/australian-mosque-finder.json').read_text())['records']
+          combined=json.loads(Path('src/data/australian-mosques-combined.json').read_text())
+          merged={(m['osmId'],m['finderId']) for m in combined['source']['matchEvidence']}
+          candidates=[]
+          for o in osm:
+              for f in finder:
+                  if o['regionCode'] != f['address']['regionCode'] or (o['id'],f['id']) in merged: continue
+                  d=distance(o,f)
+                  if d > 5: continue
+                  on,fn=norm(o.get('name')),norm(f.get('name'))
+                  oa,fa=norm(o.get('address')),norm(f['address'].get('formatted'))
+                  op,fp=phone(o.get('phone')),phone(f.get('contact',{}).get('phone'))
+                  od,fd=domain(o.get('website')),domain(f.get('contact',{}).get('website'))
+                  sim=SequenceMatcher(None,on,fn).ratio() if on and fn else 0
+                  exact_name=bool(on and on==fn)
+                  inclusion=bool(on and fn and (on in fn or fn in on))
+                  exact_address=bool(oa and oa==fa)
+                  exact_phone=bool(len(op)>=8 and op==fp)
+                  exact_domain=bool(od and od==fd)
+                  high=(exact_name and d<=1.5) or (inclusion and d<=0.35) or (sim>=0.88 and d<=0.5) or (exact_address and d<=2) or (exact_phone and d<=5) or (exact_domain and d<=5)
+                  if high:
+                      candidates.append({'osmId':o['id'],'osmName':o.get('name'),'finderId':f['id'],'finderName':f.get('name'),'distanceKm':round(d,3),'nameSimilarity':round(sim,3),'exactName':exact_name,'nameInclusion':inclusion,'exactAddress':exact_address,'exactPhone':exact_phone,'exactDomain':exact_domain})
+          candidates.sort(key=lambda x:(x['distanceKm'],-x['nameSimilarity'],x['osmName'] or ''))
+          report={'confirmedMergedPairCount':combined['source']['mergedPairCount'],'generatedRecordCount':combined['source']['recordCount'],'highConfidenceUnresolvedCount':len(candidates),'candidates':candidates}
+          Path('tmp/australian-mosque-dedup-review.json').write_text(json.dumps(report,indent=2)+'\n')
+          print(f"Dedup review: {len(candidates)} high-confidence unresolved candidate pairs after {combined['source']['mergedPairCount']} confirmed merges.")
+          for item in candidates[:80]: print(json.dumps(item,ensure_ascii=False))
+          PY
+
+      - name: Upload generated directory evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: australian-mosque-directory-evidence
+          path: |
+            src/data/australian-mosque-finder.json
+            src/data/australian-mosques-combined.json
+            tmp/australian-mosque-dedup-review.json
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Publish generated snapshot branch
         shell: bash
         run: |
           set -euo pipefail
@@ -94,9 +159,5 @@ jobs:
             scripts/generate-australian-mosque-combined.mjs \
             src/data/australian-mosque-finder.json \
             src/data/australian-mosques-combined.json
-          if git diff --cached --quiet; then
-            echo 'Snapshot unchanged.'
-            exit 0
-          fi
           git commit -m 'data: import and deduplicate Australia-wide mosque directory'
-          git push origin HEAD:data/australia-mosque-finder
+          git push --force origin HEAD:refs/heads/automation/australian-mosque-directory-import
