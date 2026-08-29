@@ -82,14 +82,7 @@ for (const [engineName, engine] of engines) {
       'community',
       'settings',
     ];
-    const expectedVisibleIds = [
-      'today',
-      'calendar',
-      'mosques',
-      'qiblah',
-      'knowledge',
-      'settings',
-    ];
+    const expectedVisibleIds = ['today', 'calendar', 'mosques', 'qiblah', 'knowledge', 'settings'];
     const routeIds = navigation.map(({ id }) => id);
     const visibleIds = navigation.filter(({ visible }) => visible).map(({ id }) => id);
     assert(
