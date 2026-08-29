@@ -5,7 +5,7 @@ on:
     branches: [agent/pr219-lint-fix]
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   validate:
@@ -26,36 +26,38 @@ jobs:
 
           helper = Path('src/domain/australianMosquePrayerContext.ts')
           text = helper.read_text()
-          anchor = "const OBLIGATORY_PRAYERS: readonly ObligatoryPrayerName[] = [\n  'fajr',\n  'dhuhr',\n  'asr',\n  'maghrib',\n  'isha',\n];\n"
-          replacement = anchor + "\nconst TWELVE_HOUR_CLOCK = /^(\\d{1,2}):(\\d{2})\\s*(am|pm)$/u;\nconst TWENTY_FOUR_HOUR_CLOCK = /^(\\d{1,2}):(\\d{2})$/u;\n"
-          assert anchor in text
-          text = text.replace(anchor, replacement, 1)
-          text = text.replace("const twelveHour = normalized.match(/^(\\d{1,2}):(\\d{2})\\s*(am|pm)$/u);", "const twelveHour = TWELVE_HOUR_CLOCK.exec(normalized);")
-          text = text.replace("const twentyFourHour = normalized.match(/^(\\d{1,2}):(\\d{2})$/u);", "const twentyFourHour = TWENTY_FOUR_HOUR_CLOCK.exec(normalized);")
-          helper.write_text(text)
+          if 'const TWELVE_HOUR_CLOCK' not in text:
+              anchor = "const OBLIGATORY_PRAYERS: readonly ObligatoryPrayerName[] = [\n  'fajr',\n  'dhuhr',\n  'asr',\n  'maghrib',\n  'isha',\n];\n"
+              replacement = anchor + "\nconst TWELVE_HOUR_CLOCK = /^(\\d{1,2}):(\\d{2})\\s*(am|pm)$/u;\nconst TWENTY_FOUR_HOUR_CLOCK = /^(\\d{1,2}):(\\d{2})$/u;\n"
+              assert anchor in text
+              text = text.replace(anchor, replacement, 1)
+              text = text.replace("const twelveHour = normalized.match(/^(\\d{1,2}):(\\d{2})\\s*(am|pm)$/u);", "const twelveHour = TWELVE_HOUR_CLOCK.exec(normalized);")
+              text = text.replace("const twentyFourHour = normalized.match(/^(\\d{1,2}):(\\d{2})$/u);", "const twentyFourHour = TWENTY_FOUR_HOUR_CLOCK.exec(normalized);")
+              helper.write_text(text)
 
           today = Path('src/ui/TodayScreen.tsx')
           text = today.read_text()
-          old = """  const selectedDirectoryMosque = useMemo(initialSelectedAustralianMosque, []);\n  const directoryMosqueActive =\n    selectedDirectoryMosque !== null && settings.prayerSourceMode !== 'local-mosque';\n  const selectedDirectoryProfile = useMemo(\n    () =>\n      directoryMosqueActive && selectedDirectoryMosque !== null\n        ? australianMosqueToProfile(selectedDirectoryMosque)\n        : null,\n    [directoryMosqueActive, selectedDirectoryMosque],\n  );\n"""
-          new = """  const selectedDirectoryMosque = useMemo(initialSelectedAustralianMosque, []);\n  const activeDirectoryMosque =\n    selectedDirectoryMosque !== null && settings.prayerSourceMode !== 'local-mosque'\n      ? selectedDirectoryMosque\n      : null;\n  const directoryMosqueActive = activeDirectoryMosque !== null;\n  const selectedDirectoryProfile = useMemo(\n    () =>\n      activeDirectoryMosque === null ? null : australianMosqueToProfile(activeDirectoryMosque),\n    [activeDirectoryMosque],\n  );\n"""
-          assert old in text
-          text = text.replace(old, new, 1)
+          if 'const activeDirectoryMosque' not in text:
+              old = """  const selectedDirectoryMosque = useMemo(initialSelectedAustralianMosque, []);\n  const directoryMosqueActive =\n    selectedDirectoryMosque !== null && settings.prayerSourceMode !== 'local-mosque';\n  const selectedDirectoryProfile = useMemo(\n    () =>\n      directoryMosqueActive && selectedDirectoryMosque !== null\n        ? australianMosqueToProfile(selectedDirectoryMosque)\n        : null,\n    [directoryMosqueActive, selectedDirectoryMosque],\n  );\n"""
+              new = """  const selectedDirectoryMosque = useMemo(initialSelectedAustralianMosque, []);\n  const activeDirectoryMosque =\n    selectedDirectoryMosque !== null && settings.prayerSourceMode !== 'local-mosque'\n      ? selectedDirectoryMosque\n      : null;\n  const directoryMosqueActive = activeDirectoryMosque !== null;\n  const selectedDirectoryProfile = useMemo(\n    () =>\n      activeDirectoryMosque === null ? null : australianMosqueToProfile(activeDirectoryMosque),\n    [activeDirectoryMosque],\n  );\n"""
+              assert old in text
+              text = text.replace(old, new, 1)
 
-          old = """    return directoryMosqueActive && selectedDirectoryMosque !== null\n      ? applyAustralianMosqueCongregationTimes(sourced, selectedDirectoryMosque)\n      : sourced;\n  }, [\n    dashboard,\n    directoryMosqueActive,\n    selectedDirectoryMosque,\n    settings.mosqueTimetable,\n    settings.prayerSourceMode,\n  ]);\n"""
-          new = """    return activeDirectoryMosque === null\n      ? sourced\n      : applyAustralianMosqueCongregationTimes(sourced, activeDirectoryMosque);\n  }, [\n    activeDirectoryMosque,\n    dashboard,\n    settings.mosqueTimetable,\n    settings.prayerSourceMode,\n  ]);\n"""
-          assert old in text
-          text = text.replace(old, new, 1)
+              old = """    return directoryMosqueActive && selectedDirectoryMosque !== null\n      ? applyAustralianMosqueCongregationTimes(sourced, selectedDirectoryMosque)\n      : sourced;\n  }, [\n    dashboard,\n    directoryMosqueActive,\n    selectedDirectoryMosque,\n    settings.mosqueTimetable,\n    settings.prayerSourceMode,\n  ]);\n"""
+              new = """    return activeDirectoryMosque === null\n      ? sourced\n      : applyAustralianMosqueCongregationTimes(sourced, activeDirectoryMosque);\n  }, [\n    activeDirectoryMosque,\n    dashboard,\n    settings.mosqueTimetable,\n    settings.prayerSourceMode,\n  ]);\n"""
+              assert old in text
+              text = text.replace(old, new, 1)
 
-          old = """      data-selected-directory-mosque-id={\n        directoryMosqueActive ? selectedDirectoryMosque?.id : undefined\n      }\n"""
-          new = """      data-selected-directory-mosque-id={activeDirectoryMosque?.id}\n"""
-          assert old in text
-          text = text.replace(old, new, 1)
+              old = """      data-selected-directory-mosque-id={\n        directoryMosqueActive ? selectedDirectoryMosque?.id : undefined\n      }\n"""
+              new = """      data-selected-directory-mosque-id={activeDirectoryMosque?.id}\n"""
+              assert old in text
+              text = text.replace(old, new, 1)
 
-          old = """                const publishedIqamahMinutes =\n                  directoryMosqueActive && selectedDirectoryMosque !== null && !isSunrise\n                    ? publishedAustralianMosqueCongregationMinutes(\n                        selectedDirectoryMosque,\n                        prayer.name,\n                      )\n                    : [];\n"""
-          new = """                const publishedIqamahMinutes =\n                  activeDirectoryMosque !== null && !isSunrise\n                    ? publishedAustralianMosqueCongregationMinutes(\n                        activeDirectoryMosque,\n                        prayer.name,\n                      )\n                    : [];\n"""
-          assert old in text
-          text = text.replace(old, new, 1)
-          today.write_text(text)
+              old = """                const publishedIqamahMinutes =\n                  directoryMosqueActive && selectedDirectoryMosque !== null && !isSunrise\n                    ? publishedAustralianMosqueCongregationMinutes(\n                        selectedDirectoryMosque,\n                        prayer.name,\n                      )\n                    : [];\n"""
+              new = """                const publishedIqamahMinutes =\n                  activeDirectoryMosque !== null && !isSunrise\n                    ? publishedAustralianMosqueCongregationMinutes(\n                        activeDirectoryMosque,\n                        prayer.name,\n                      )\n                    : [];\n"""
+              assert old in text
+              text = text.replace(old, new, 1)
+              today.write_text(text)
           PY
       - name: Format candidate
         run: npx prettier --write src/domain/australianMosquePrayerContext.ts src/ui/TodayScreen.tsx
@@ -65,14 +67,15 @@ jobs:
           npm run lint
           npm run typecheck
           npx vitest run src/domain/australianMosquePrayerContext.test.ts src/domain/australianMosqueDirectoryCombined.test.ts src/domain/sourcedDashboard.test.ts
-      - name: Emit exact candidate files
+      - name: Commit exact candidate bytes
         shell: bash
         run: |
-          echo 'HELPER_BEGIN'
-          base64 -w0 src/domain/australianMosquePrayerContext.ts
-          echo
-          echo 'HELPER_END'
-          echo 'TODAY_BEGIN'
-          base64 -w0 src/ui/TodayScreen.tsx
-          echo
-          echo 'TODAY_END'
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/domain/australianMosquePrayerContext.ts src/ui/TodayScreen.tsx
+          if git diff --cached --quiet; then
+            echo 'No source changes to commit.'
+            exit 0
+          fi
+          git commit -m 'chore: capture validated PR219 lint fix'
+          git push
