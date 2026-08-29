@@ -55,7 +55,7 @@ jobs:
       - name: Islamic Knowledge source governance
         run: npm run knowledge:content:check
       - name: Australian mosque directory reproducibility
-        run: npm run mosques:australia:check
+        run: npm run mosques:australia:check && npm run mosques:australia:finder:check && npm run mosques:australia:combined:check
       - name: Mosque directory pack reproducibility
         run: npm run mosques:packs:check
       - name: Packaged Adhan audio integrity

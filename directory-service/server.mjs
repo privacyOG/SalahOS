@@ -5,7 +5,10 @@ import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const repositoryRoot = fileURLToPath(new URL('..', import.meta.url));
-const australianCataloguePath = resolve(repositoryRoot, 'src/data/australian-mosques.json');
+const australianCataloguePath = resolve(
+  repositoryRoot,
+  'src/data/australian-mosques-combined.json',
+);
 const databasePath = resolve(
   process.env.SALAHOS_DIRECTORY_DB_PATH ??
     resolve(repositoryRoot, '.local/shared-mosque-directory.json'),
@@ -127,16 +130,36 @@ function validateSubmission(body) {
   return { name, address, countryCode, latitude, longitude, timeZone, website, phone };
 }
 
+function nameSimilarity(left, right) {
+  const tokens = (value) =>
+    new Set(
+      normalize(value)
+        .split(' ')
+        .filter((token) => token.length > 2),
+    );
+  const leftTokens = tokens(left);
+  const rightTokens = tokens(right);
+  if (leftTokens.size === 0 || rightTokens.size === 0) return 0;
+  let shared = 0;
+  for (const token of leftTokens) {
+    if (rightTokens.has(token)) shared += 1;
+  }
+  return shared / Math.min(leftTokens.size, rightTokens.size);
+}
+
 function findDuplicate(records, submission) {
   const name = normalize(submission.name);
   const address = normalize(submission.address);
   return (
     records.find((record) => {
       const distance = distanceKm(submission, record);
+      const exactName = normalize(record.name) === name;
+      const exactAddress = normalize(record.address) === address;
+      const similarNearbyName = nameSimilarity(record.name, submission.name) >= 0.6;
       return (
-        (normalize(record.name) === name && distance <= 1) ||
-        (normalize(record.address) === address && distance <= 0.25) ||
-        distance <= 0.08
+        (exactName && distance <= 1) ||
+        (exactAddress && distance <= 0.25) ||
+        (similarNearbyName && distance <= 0.08)
       );
     }) ?? null
   );
@@ -144,23 +167,42 @@ function findDuplicate(records, submission) {
 
 async function seedDatabase() {
   const catalogue = JSON.parse(await readFile(australianCataloguePath, 'utf8'));
-  const updatedAt = catalogue.source?.osmBaseTimestamp ?? new Date().toISOString();
-  const records = catalogue.records.map((record) => ({
-    id: record.id,
-    name: record.name,
-    nameAr: record.nameAr ?? null,
-    address: record.address,
-    countryCode: 'AU',
-    latitude: record.latitude,
-    longitude: record.longitude,
-    timeZone: stateTimeZones[record.state] ?? 'Australia/Sydney',
-    website: record.website ?? null,
-    phone: record.phone ?? null,
-    source: 'openstreetmap',
-    verification: { state: 'unverified', verifiedAt: null, claimedAt: null },
-    revision: 1,
-    updatedAt,
-  }));
+  if (
+    catalogue.schemaVersion !== 2 ||
+    !Array.isArray(catalogue.records) ||
+    catalogue.source?.recordCount !== catalogue.records.length
+  ) {
+    throw new Error('Combined Australian mosque catalogue is invalid');
+  }
+  const updatedAt = catalogue.source.generatedAt ?? new Date().toISOString();
+  const records = catalogue.records.map((record) => {
+    if (
+      typeof record.name !== 'string' ||
+      typeof record.address?.formatted !== 'string' ||
+      !coordinatesValid(record.latitude, record.longitude)
+    ) {
+      throw new Error(`Combined Australian mosque record is invalid: ${String(record.id)}`);
+    }
+    return {
+      id: record.id,
+      name: record.name,
+      nameAr:
+        record.aliases?.find(
+          (alias) => typeof alias === 'string' && /[\u0600-\u06FF]/u.test(alias),
+        ) ?? null,
+      address: record.address.formatted,
+      countryCode: 'AU',
+      latitude: record.latitude,
+      longitude: record.longitude,
+      timeZone: stateTimeZones[record.address.region] ?? 'Australia/Sydney',
+      website: record.contact?.website ?? null,
+      phone: record.contact?.phone ?? null,
+      source: record.sourceType ?? 'combined-directory',
+      verification: { state: 'unverified', verifiedAt: null, claimedAt: null },
+      revision: 1,
+      updatedAt,
+    };
+  });
   return { schemaVersion: 1, records, contributions: [] };
 }
 

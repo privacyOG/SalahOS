@@ -9,6 +9,13 @@ const databasePath = join(temporaryDirectory, 'directory.json');
 const port = 48788;
 const baseUrl = `http://127.0.0.1:${String(port)}`;
 const moderatorToken = 'stage48-test-moderator';
+const combinedCatalogue = JSON.parse(
+  await readFile(join(process.cwd(), 'src/data/australian-mosques-combined.json'), 'utf8'),
+);
+assert.equal(combinedCatalogue.schemaVersion, 2);
+assert.ok(Array.isArray(combinedCatalogue.records));
+assert.equal(combinedCatalogue.source?.recordCount, combinedCatalogue.records.length);
+const expectedSeedCount = combinedCatalogue.records.length;
 const child = spawn(process.execPath, ['directory-service/server.mjs'], {
   cwd: process.cwd(),
   env: {
@@ -54,9 +61,12 @@ try {
   const initialSearch = await request('/api/v1/shared-mosques?q=Adelaide&limit=10');
   assert.equal(initialSearch.response.status, 200);
   assert.ok(Array.isArray(initialSearch.body));
-  assert.ok(initialSearch.body.some((record) => record.name === 'Adelaide Mosque'));
+  const seededRecord = initialSearch.body.find((record) => record.id === 'osm-node-1614034144');
+  assert.ok(seededRecord, 'Expected audited Adelaide Mosque seed record');
 
-  const seededRecord = initialSearch.body[0];
+  const seededDatabase = JSON.parse(await readFile(databasePath, 'utf8'));
+  assert.equal(seededDatabase.records.length, expectedSeedCount);
+  assert.equal(seededDatabase.contributions.length, 0);
   const duplicate = await request('/api/v1/shared-mosques/submissions', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -154,7 +164,7 @@ try {
   assert.ok(finalSearch.body[0].revision >= 3);
 
   const database = JSON.parse(await readFile(databasePath, 'utf8'));
-  assert.ok(database.records.length >= 107);
+  assert.equal(database.records.length, expectedSeedCount + 1);
   assert.equal(database.contributions.length, 3);
 
   console.log('Stage 48 shared mosque directory service acceptance passed.');

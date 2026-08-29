@@ -1,0 +1,178 @@
+{
+  "schemaVersion": 1,
+  "packId": "au-nt",
+  "label": "Northern Territory",
+  "countryCode": "AU",
+  "regionCode": "AU-NT",
+  "recordCount": 3,
+  "generatedFrom": "2026-08-29T12:02:14.303Z",
+  "source": {
+    "name": "SalahOS Australian mosque directory",
+    "licence": "ODbL-1.0",
+    "attributionUrl": "https://www.openstreetmap.org/copyright",
+    "licenceUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "upstreamSources": [
+      {
+        "name": "OpenStreetMap contributors",
+        "sourceKind": "openstreetmap",
+        "licence": "ODbL-1.0",
+        "attributionUrl": "https://www.openstreetmap.org/copyright",
+        "licenceUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+        "observedAt": "2026-08-24T10:38:06Z"
+      },
+      {
+        "name": "Australian Mosque Finder",
+        "sourceKind": "organization-directory",
+        "attributionUrl": "https://mosque-finder.com.au",
+        "observedAt": "2026-08-29T12:02:14.303Z",
+        "factsOnly": true
+      }
+    ],
+    "accounting": {
+      "osmRecordCount": 106,
+      "mosqueFinderRawRecordCount": 176,
+      "finderInternalMergedPairCount": 4,
+      "coordinateExcludedCount": 2,
+      "mosqueFinderRecordCount": 170,
+      "mergedPairCount": 22,
+      "forcedMatchCount": 6,
+      "automaticMatchCount": 16,
+      "osmOnlyCount": 84,
+      "finderOnlyCount": 148
+    }
+  },
+  "records": [
+    {
+      "id": "osm-way-395695967",
+      "sourceRecordIds": ["osm-way-395695967"],
+      "name": "Afghan Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "Northern Territory, Australia",
+        "region": "Northern Territory",
+        "regionCode": "AU-NT",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:395695967",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/395695967",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -23.6953051, "longitude": 133.8333975 }
+    },
+    {
+      "id": "mosque-finder:alice-springs-larapinta-lyndavale-drive-mosque",
+      "sourceRecordIds": ["mosque-finder:alice-springs-larapinta-lyndavale-drive-mosque"],
+      "name": "Alice Springs - Larapinta Lyndavale Drive Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "101 Lyndavale Drive,. NT, Larapinta, NT, 0870",
+        "locality": "Larapinta",
+        "region": "NT",
+        "regionCode": "AU-NT",
+        "postcode": "0870",
+        "countryCode": "AU"
+      },
+      "contact": { "phone": "(08) 8955 1001", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:alice-springs-larapinta-lyndavale-drive-mosque",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/alice-springs-larapinta-lyndavale-drive-mosque/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "phone"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "mosque",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -23.69531, "longitude": 133.8334 }
+    },
+    {
+      "id": "osm-way-598516828",
+      "sourceRecordIds": ["osm-way-598516828"],
+      "name": "Islamic Society of Palmerston",
+      "aliases": [],
+      "address": {
+        "formatted": "104 Bonson Terrace, Northern Territory, Australia",
+        "region": "Northern Territory",
+        "regionCode": "AU-NT",
+        "countryCode": "AU"
+      },
+      "contact": { "website": "https://isp.org.au/", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:598516828",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/598516828",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates", "website"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -12.5059866, "longitude": 130.9696809 }
+    }
+  ]
+}

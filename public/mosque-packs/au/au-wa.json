@@ -1,0 +1,1228 @@
+{
+  "schemaVersion": 1,
+  "packId": "au-wa",
+  "label": "Western Australia",
+  "countryCode": "AU",
+  "regionCode": "AU-WA",
+  "recordCount": 25,
+  "generatedFrom": "2026-08-29T12:02:14.303Z",
+  "source": {
+    "name": "SalahOS Australian mosque directory",
+    "licence": "ODbL-1.0",
+    "attributionUrl": "https://www.openstreetmap.org/copyright",
+    "licenceUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "upstreamSources": [
+      {
+        "name": "OpenStreetMap contributors",
+        "sourceKind": "openstreetmap",
+        "licence": "ODbL-1.0",
+        "attributionUrl": "https://www.openstreetmap.org/copyright",
+        "licenceUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+        "observedAt": "2026-08-24T10:38:06Z"
+      },
+      {
+        "name": "Australian Mosque Finder",
+        "sourceKind": "organization-directory",
+        "attributionUrl": "https://mosque-finder.com.au",
+        "observedAt": "2026-08-29T12:02:14.303Z",
+        "factsOnly": true
+      }
+    ],
+    "accounting": {
+      "osmRecordCount": 106,
+      "mosqueFinderRawRecordCount": 176,
+      "finderInternalMergedPairCount": 4,
+      "coordinateExcludedCount": 2,
+      "mosqueFinderRecordCount": 170,
+      "mergedPairCount": 22,
+      "forcedMatchCount": 6,
+      "automaticMatchCount": 16,
+      "osmOnlyCount": 84,
+      "finderOnlyCount": 148
+    }
+  },
+  "records": [
+    {
+      "id": "osm-way-474497185",
+      "sourceRecordIds": ["osm-way-474497185"],
+      "name": "510 Musalla",
+      "aliases": [],
+      "address": {
+        "formatted": "510 Curtin University, Bentley, WA, 6102, Australia",
+        "region": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6102",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:474497185",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/474497185",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -32.0096775, "longitude": 115.8938871 }
+    },
+    {
+      "id": "mosque-finder:albany-serpentine-road-musalla",
+      "sourceRecordIds": ["mosque-finder:albany-serpentine-road-musalla"],
+      "name": "Albany - Serpentine Road Musalla",
+      "aliases": [],
+      "address": {
+        "formatted": "Unit 1, 166 Serpentine Road, Albany, WA, 6330",
+        "locality": "Albany",
+        "region": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6330",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:albany-serpentine-road-musalla",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/albany-serpentine-road-musalla/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "musalla",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -35.02029, "longitude": 117.87782 }
+    },
+    {
+      "id": "mosque-finder:beechboro-bosnian-and-hercegovnia-cultural-and-recreation-centre",
+      "sourceRecordIds": [
+        "mosque-finder:beechboro-bosnian-and-hercegovnia-cultural-and-recreation-centre"
+      ],
+      "name": "Beechboro - Bosnian & Hercegovnia Cultural & Recreation Centre",
+      "aliases": [],
+      "address": {
+        "formatted": "289 Beechboro Road, Beechboro, Morley, WA",
+        "locality": "Morley",
+        "region": "WA",
+        "regionCode": "AU-WA",
+        "countryCode": "AU"
+      },
+      "contact": { "phone": "(08) 9401 2375", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:beechboro-bosnian-and-hercegovnia-cultural-and-recreation-centre",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/beechboro-bosnian-and-hercegovnia-cultural-and-recreation-centre/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "phone"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "prayer-room",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -31.89076, "longitude": 115.92383 }
+    },
+    {
+      "id": "mosque-finder:bentley-bentley-community-centre",
+      "sourceRecordIds": ["mosque-finder:bentley-bentley-community-centre"],
+      "name": "Bentley - Bentley Community Centre",
+      "aliases": [],
+      "address": {
+        "formatted": "Nyamup Way, Bentley, WA, 6102",
+        "locality": "Bentley",
+        "region": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6102",
+        "countryCode": "AU"
+      },
+      "contact": { "phone": "(08) 9351 8593", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:bentley-bentley-community-centre",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/bentley-bentley-community-centre/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "phone"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "prayer-room",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -32.01089, "longitude": 115.91067 }
+    },
+    {
+      "id": "mosque-finder:beresford-george-road-geraldton-masjid",
+      "sourceRecordIds": ["mosque-finder:beresford-george-road-geraldton-masjid"],
+      "name": "Beresford - George Road Geraldton Masjid",
+      "aliases": [],
+      "address": {
+        "formatted": "172 Walter Street, Beresford, WA, 6530",
+        "locality": "Beresford",
+        "region": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6530",
+        "countryCode": "AU"
+      },
+      "contact": { "phone": "(08) 9964 1318", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:beresford-george-road-geraldton-masjid",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/beresford-george-road-geraldton-masjid/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "phone"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "mosque",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -28.75714, "longitude": 114.62198 }
+    },
+    {
+      "id": "mosque-finder:canning-vale-musalla",
+      "sourceRecordIds": ["mosque-finder:canning-vale-musalla"],
+      "name": "Canning Vale Musalla",
+      "aliases": [],
+      "address": {
+        "formatted": "3/5 Hughes St,, Canning Vale, WA, 6155",
+        "locality": "Canning Vale",
+        "region": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6155",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": {
+        "maghrib": "11:00 am",
+        "sourceLabel": "Australian Mosque Finder",
+        "updatedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "jumuahTimes": [],
+      "facilities": ["women-prayer-space"],
+      "services": ["classes"],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:canning-vale-musalla",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/canning-vale-musalla/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": [
+            "name",
+            "aliases",
+            "address",
+            "coordinates",
+            "prayer-times",
+            "facilities",
+            "services"
+          ]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "musalla",
+      "quality": {
+        "score": 58,
+        "completenessPercent": 50,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -32.06705, "longitude": 115.93156 }
+    },
+    {
+      "id": "mosque-finder:clarkson-ainsbury-parade-musalla",
+      "sourceRecordIds": ["mosque-finder:clarkson-ainsbury-parade-musalla"],
+      "name": "Clarkson - Ainsbury Parade Musalla",
+      "aliases": [],
+      "address": {
+        "formatted": "Shop 2, 30 Ainsbury Parade, Clarkson, WA, 6036",
+        "locality": "Clarkson",
+        "region": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6036",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:clarkson-ainsbury-parade-musalla",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/clarkson-ainsbury-parade-musalla/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "musalla",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -31.67862, "longitude": 115.71706 }
+    },
+    {
+      "id": "mosque-finder:crawley-university-of-western-australia-musalla",
+      "sourceRecordIds": ["mosque-finder:crawley-university-of-western-australia-musalla"],
+      "name": "Crawley - University of Western Australia Musalla",
+      "aliases": [],
+      "address": {
+        "formatted": "35 Stirling Highway, Crawley, WA, 6009",
+        "locality": "Crawley",
+        "region": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6009",
+        "countryCode": "AU"
+      },
+      "contact": {
+        "phone": "(08) 9380 3838",
+        "website": "http://www.cmss.uwa.edu.au/",
+        "social": []
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [{ "time": "1:15 pm", "label": "Jumu’ah" }],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:crawley-university-of-western-australia-musalla",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/crawley-university-of-western-australia-musalla/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": [
+            "name",
+            "aliases",
+            "address",
+            "coordinates",
+            "phone",
+            "website",
+            "jumuah-times"
+          ]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "musalla",
+      "quality": {
+        "score": 58,
+        "completenessPercent": 50,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -31.98006, "longitude": 115.81882 }
+    },
+    {
+      "id": "osm-way-1210949421",
+      "sourceRecordIds": ["osm-way-1210949421"],
+      "name": "Geraldton Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "172 George Road, Beresford, WA, Australia",
+        "region": "WA",
+        "regionCode": "AU-WA",
+        "countryCode": "AU"
+      },
+      "contact": { "phone": "+61 8 9964 1318", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:1210949421",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/1210949421",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates", "phone"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -28.7604701, "longitude": 114.6196627 }
+    },
+    {
+      "id": "mosque-finder:gosnells-masjid-al-rahman-and-islamic-centre",
+      "sourceRecordIds": ["mosque-finder:gosnells-masjid-al-rahman-and-islamic-centre"],
+      "name": "Gosnells - Masjid Al-Rahman & Islamic Centre",
+      "aliases": [],
+      "address": {
+        "formatted": "54 Mills Road West, Gosnells, WA, 6110",
+        "locality": "Gosnells",
+        "region": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6110",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:gosnells-masjid-al-rahman-and-islamic-centre",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/gosnells-masjid-al-rahman-and-islamic-centre/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "mosque",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -32.06713, "longitude": 116.00413 }
+    },
+    {
+      "id": "osm-node-276369920",
+      "sourceRecordIds": ["osm-node-276369920"],
+      "name": "Hepburn Heights Mosque (Al-Hidayah)",
+      "aliases": [],
+      "address": {
+        "formatted": "Western Australia, Australia",
+        "region": "Western Australia",
+        "regionCode": "AU-WA",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:node:276369920",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/node/276369920",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -31.8151705, "longitude": 115.7763904 }
+    },
+    {
+      "id": "mosque-finder:ington-masjid-al-sunnah",
+      "sourceRecordIds": ["mosque-finder:ington-masjid-al-sunnah"],
+      "name": "ington - Masjid Al-Sunnah",
+      "aliases": [],
+      "address": {
+        "formatted": "Unit 1, 45 Kent Street, Cannington, WA, 6107",
+        "locality": "Cannington",
+        "region": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6107",
+        "countryCode": "AU"
+      },
+      "contact": {
+        "phone": "(08) 9258 4781 / (08) 9258 4791",
+        "website": "http://www.dawa.org.au/",
+        "social": []
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:ington-masjid-al-sunnah",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/ington-masjid-al-sunnah/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "phone", "website"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "mosque",
+      "quality": {
+        "score": 54,
+        "completenessPercent": 42,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -32.01623, "longitude": 115.92648 }
+    },
+    {
+      "id": "osm-node-2611047321",
+      "sourceRecordIds": ["osm-node-2611047321"],
+      "name": "Katanning Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "2 Warren Road, Katanning, WA, 6317, Australia",
+        "region": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6317",
+        "countryCode": "AU"
+      },
+      "contact": { "phone": "+61 8 9821 2627", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:node:2611047321",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/node/2611047321",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates", "phone"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -33.6815729, "longitude": 117.5551555 }
+    },
+    {
+      "id": "osm-way-587515410",
+      "sourceRecordIds": ["osm-way-587515410"],
+      "name": "Masjid Ibrahim",
+      "aliases": [],
+      "address": {
+        "formatted": "Lot 1526 Leslie Street, Southern River, WA, 6110, Australia",
+        "region": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "1526",
+        "countryCode": "AU"
+      },
+      "contact": { "website": "https://www.masjidibrahim.com.au/", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:587515410",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/587515410",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates", "website"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -32.0930804, "longitude": 115.9739853 }
+    },
+    {
+      "id": "osm-node-5065163821",
+      "sourceRecordIds": ["osm-node-5065163821", "mosque-finder:mirrabooka-masjid-al-taqwa"],
+      "name": "Mirrabooka - Masjid Al Taqwa",
+      "nameAr": "مسجد التقوى",
+      "aliases": ["مسجد التقوى", "Masjid Al Taqwa", "Mirrabooka - Masjid Al Taqwa"],
+      "address": {
+        "formatted": "Mirrabooka Village, 135 Boyare Avenue, Mirrabooka, WA, 6061",
+        "region": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6061",
+        "countryCode": "AU",
+        "locality": "Mirrabooka"
+      },
+      "contact": { "phone": "(08) 9248 8559", "website": "https://altaqwa.org.au/", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [{ "time": "1:00 pm", "label": "Jumu’ah" }],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:node:5065163821",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/node/5065163821",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates", "aliases", "website"]
+        },
+        {
+          "sourceId": "mosque-finder:mirrabooka-masjid-al-taqwa",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/mirrabooka-masjid-al-taqwa/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "phone", "jumuah-times"]
+        }
+      ],
+      "conflictCount": 1,
+      "sourceType": "merged",
+      "quality": {
+        "score": 53,
+        "completenessPercent": 58,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 1
+      },
+      "locationType": "mosque",
+      "coordinates": { "latitude": -31.855908, "longitude": 115.8685363 }
+    },
+    {
+      "id": "mosque-finder:murdoch-murdoch-university-musalla",
+      "sourceRecordIds": ["mosque-finder:murdoch-murdoch-university-musalla"],
+      "name": "Murdoch – Murdoch University Musalla",
+      "aliases": [],
+      "address": {
+        "formatted": "Murdoch University, Broadwalk, Murdoch, WA, 6150",
+        "locality": "Murdoch",
+        "region": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6150",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": ["classes"],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:murdoch-murdoch-university-musalla",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/murdoch-murdoch-university-musalla/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "services"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "musalla",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -32.071, "longitude": 115.825 }
+    },
+    {
+      "id": "osm-way-1321549028",
+      "sourceRecordIds": ["osm-way-1321549028"],
+      "name": "Nasir Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "239 Barrington Street, Bibra Lake, WA, 6163, Australia",
+        "region": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6163",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:1321549028",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/1321549028",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -32.1149867, "longitude": 115.8145718 }
+    },
+    {
+      "id": "mosque-finder:newman-abydos-way-musalla",
+      "sourceRecordIds": ["mosque-finder:newman-abydos-way-musalla"],
+      "name": "Newman - Abydos Way Musalla",
+      "aliases": [],
+      "address": {
+        "formatted": "4 Abydos Way, Newman, WA, 6753",
+        "locality": "Newman",
+        "region": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6753",
+        "countryCode": "AU"
+      },
+      "contact": { "phone": "08 9175 1597", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:newman-abydos-way-musalla",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/newman-abydos-way-musalla/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "phone"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "musalla",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -23.35522, "longitude": 119.7389 }
+    },
+    {
+      "id": "mosque-finder:padbury-al-majid-mosque",
+      "sourceRecordIds": ["mosque-finder:padbury-al-majid-mosque"],
+      "name": "Padbury Al-Majid Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "64 Walter Padbury Blvd, Padbury, WA, 6025",
+        "locality": "Padbury",
+        "region": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6025",
+        "countryCode": "AU"
+      },
+      "contact": { "phone": "(08) 9403 7548", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:padbury-al-majid-mosque",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/padbury-al-majid-mosque/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "phone"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "mosque",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -31.81626, "longitude": 115.77486 }
+    },
+    {
+      "id": "osm-way-150558747",
+      "sourceRecordIds": ["osm-way-150558747", "mosque-finder:perth-city-perth-masjid"],
+      "name": "Perth City - Perth Masjid",
+      "aliases": ["Perth Mosque", "Perth City - Perth Masjid"],
+      "address": {
+        "formatted": "427 William Street, Perth, WA, 6000",
+        "region": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6000",
+        "countryCode": "AU",
+        "locality": "Perth"
+      },
+      "contact": { "phone": "(08) 9328 8535", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [{ "time": "1:00 pm", "label": "Jumu’ah" }],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:150558747",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/150558747",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        },
+        {
+          "sourceId": "mosque-finder:perth-city-perth-masjid",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/perth-city-perth-masjid/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "phone", "jumuah-times"]
+        }
+      ],
+      "conflictCount": 1,
+      "sourceType": "merged",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 50,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 1
+      },
+      "locationType": "mosque",
+      "coordinates": { "latitude": -31.9435558, "longitude": 115.8623195 }
+    },
+    {
+      "id": "mosque-finder:port-headland-masjid-and-islamic-association",
+      "sourceRecordIds": ["mosque-finder:port-headland-masjid-and-islamic-association"],
+      "name": "Port Headland - Masjid & Islamic Association",
+      "aliases": [],
+      "address": {
+        "formatted": "34 Trumpet Way, South Hedland, WA, 6722",
+        "locality": "South Hedland",
+        "region": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6722",
+        "countryCode": "AU"
+      },
+      "contact": { "phone": "(08) 9172 3914", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:port-headland-masjid-and-islamic-association",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/port-headland-masjid-and-islamic-association/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "phone"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "musalla",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -20.40627, "longitude": 118.61063 }
+    },
+    {
+      "id": "mosque-finder:queens-park-turkish-suleymaniye-masjid",
+      "sourceRecordIds": ["mosque-finder:queens-park-turkish-suleymaniye-masjid"],
+      "name": "Queens Park – Turkish Suleymaniye Masjid",
+      "aliases": [],
+      "address": {
+        "formatted": "239 Welshpool Rd, Queens Park, WA, 6107",
+        "locality": "Queens Park",
+        "region": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6107",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:queens-park-turkish-suleymaniye-masjid",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/queens-park-turkish-suleymaniye-masjid/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "mosque",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -31.99739, "longitude": 115.94756 }
+    },
+    {
+      "id": "osm-way-1424722448",
+      "sourceRecordIds": ["osm-way-1424722448"],
+      "name": "Sakina Islamic Centre",
+      "aliases": [],
+      "address": {
+        "formatted": "Western Australia, Australia",
+        "region": "Western Australia",
+        "regionCode": "AU-WA",
+        "countryCode": "AU"
+      },
+      "contact": { "website": "https://sakinahislamiccentre.com.au/", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:1424722448",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/1424722448",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates", "website"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -32.1208259, "longitude": 115.848813 }
+    },
+    {
+      "id": "mosque-finder:southern-river-masjid-ibrahim",
+      "sourceRecordIds": ["mosque-finder:southern-river-masjid-ibrahim"],
+      "name": "Southern River – Masjid Ibrahim",
+      "aliases": [],
+      "address": {
+        "formatted": "LOT 1526 Leslie St, Southern River, WA, 6110",
+        "locality": "Southern River",
+        "region": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6110",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [{ "time": "1:15 pm", "label": "Jumu’ah" }],
+      "facilities": ["wudu", "women-prayer-space"],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:southern-river-masjid-ibrahim",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/southern-river-masjid-ibrahim/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "jumuah-times", "facilities"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "mosque",
+      "featureLabels": ["Wudu facility"],
+      "quality": {
+        "score": 54,
+        "completenessPercent": 42,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -32.09783, "longitude": 115.97658 }
+    },
+    {
+      "id": "mosque-finder:thornlie-masjid-and-australian-islamic-college",
+      "sourceRecordIds": ["mosque-finder:thornlie-masjid-and-australian-islamic-college"],
+      "name": "Thornlie - Masjid & Australian Islamic College",
+      "aliases": [],
+      "address": {
+        "formatted": "7 Tonbridge Way, Thornlie, WA, 6108",
+        "locality": "Thornlie",
+        "region": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6108",
+        "countryCode": "AU"
+      },
+      "contact": { "phone": "(08) 9493 2718", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:thornlie-masjid-and-australian-islamic-college",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/thornlie-masjid-and-australian-islamic-college/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "phone"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "musalla",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -32.0533, "longitude": 115.96249 }
+    }
+  ]
+}

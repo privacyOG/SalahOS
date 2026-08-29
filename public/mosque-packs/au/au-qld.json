@@ -1,0 +1,1152 @@
+{
+  "schemaVersion": 1,
+  "packId": "au-qld",
+  "label": "Queensland",
+  "countryCode": "AU",
+  "regionCode": "AU-QLD",
+  "recordCount": 24,
+  "generatedFrom": "2026-08-29T12:02:14.303Z",
+  "source": {
+    "name": "SalahOS Australian mosque directory",
+    "licence": "ODbL-1.0",
+    "attributionUrl": "https://www.openstreetmap.org/copyright",
+    "licenceUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "upstreamSources": [
+      {
+        "name": "OpenStreetMap contributors",
+        "sourceKind": "openstreetmap",
+        "licence": "ODbL-1.0",
+        "attributionUrl": "https://www.openstreetmap.org/copyright",
+        "licenceUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+        "observedAt": "2026-08-24T10:38:06Z"
+      },
+      {
+        "name": "Australian Mosque Finder",
+        "sourceKind": "organization-directory",
+        "attributionUrl": "https://mosque-finder.com.au",
+        "observedAt": "2026-08-29T12:02:14.303Z",
+        "factsOnly": true
+      }
+    ],
+    "accounting": {
+      "osmRecordCount": 106,
+      "mosqueFinderRawRecordCount": 176,
+      "finderInternalMergedPairCount": 4,
+      "coordinateExcludedCount": 2,
+      "mosqueFinderRecordCount": 170,
+      "mergedPairCount": 22,
+      "forcedMatchCount": 6,
+      "automaticMatchCount": 16,
+      "osmOnlyCount": 84,
+      "finderOnlyCount": 148
+    }
+  },
+  "records": [
+    {
+      "id": "osm-way-550404720",
+      "sourceRecordIds": ["osm-way-550404720"],
+      "name": "Al Farooq - Mosque ( Masjid )",
+      "aliases": [],
+      "address": {
+        "formatted": "1408 Beenleigh Road, Kuraby, QLD, 4112, Australia",
+        "region": "QLD",
+        "regionCode": "AU-QLD",
+        "postcode": "1408",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:550404720",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/550404720",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -27.6057751, "longitude": 153.0933994 }
+    },
+    {
+      "id": "osm-way-262005084",
+      "sourceRecordIds": ["osm-way-262005084"],
+      "name": "Algester Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "48 Learoyd Road, Algester, QLD, 4115, Australia",
+        "region": "QLD",
+        "regionCode": "AU-QLD",
+        "postcode": "4115",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:262005084",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/262005084",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -27.5989877, "longitude": 153.0360994 }
+    },
+    {
+      "id": "osm-way-1307412049",
+      "sourceRecordIds": ["osm-way-1307412049"],
+      "name": "Australian Centre For Unity",
+      "aliases": [],
+      "address": {
+        "formatted": "Queensland, Australia",
+        "region": "Queensland",
+        "regionCode": "AU-QLD",
+        "countryCode": "AU"
+      },
+      "contact": { "website": "https://www.slackscreekmosque.org.au/", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:1307412049",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/1307412049",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates", "website"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -27.6494127, "longitude": 153.1205534 }
+    },
+    {
+      "id": "osm-way-1232805388",
+      "sourceRecordIds": ["osm-way-1232805388"],
+      "name": "Baitul Masroor Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "1 Neville Road, Stockleigh, QLD, 4280, Australia",
+        "region": "QLD",
+        "regionCode": "AU-QLD",
+        "postcode": "4280",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:1232805388",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/1232805388",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -27.7901146, "longitude": 153.0367831 }
+    },
+    {
+      "id": "osm-node-667941215",
+      "sourceRecordIds": ["osm-node-667941215"],
+      "name": "Brisbane Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "Queensland, Australia",
+        "region": "Queensland",
+        "regionCode": "AU-QLD",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:node:667941215",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/node/667941215",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -27.5272955, "longitude": 153.0756712 }
+    },
+    {
+      "id": "osm-way-302909764",
+      "sourceRecordIds": [
+        "osm-way-302909764",
+        "mosque-finder:cairns-north-abou-bakr-asdeek-mosque"
+      ],
+      "name": "Cairns North - Abou Bakr Asdeek Mosque",
+      "aliases": ["Cairns Mosque", "Cairns North - Abou Bakr Asdeek Mosque"],
+      "address": {
+        "formatted": "31 Dunn Street, Cairns North, QLD, 4870",
+        "region": "QLD",
+        "regionCode": "AU-QLD",
+        "countryCode": "AU",
+        "locality": "Cairns North",
+        "postcode": "4870"
+      },
+      "contact": {
+        "phone": "(07) 4041 3572",
+        "website": "http://www.cairnsmosque.com/",
+        "social": []
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [{ "time": "1:10 pm", "label": "Jumu’ah" }],
+      "facilities": ["wudu", "parking", "women-prayer-space"],
+      "services": ["classes"],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:302909764",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/302909764",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        },
+        {
+          "sourceId": "mosque-finder:cairns-north-abou-bakr-asdeek-mosque",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/cairns-north-abou-bakr-asdeek-mosque/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": [
+            "name",
+            "aliases",
+            "address",
+            "coordinates",
+            "phone",
+            "website",
+            "jumuah-times",
+            "facilities",
+            "services"
+          ]
+        }
+      ],
+      "conflictCount": 1,
+      "sourceType": "merged",
+      "quality": {
+        "score": 61,
+        "completenessPercent": 75,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 1
+      },
+      "locationType": "mosque",
+      "featureLabels": ["Car park", "Street parking", "Wudu facility"],
+      "coordinates": { "latitude": -16.9165082, "longitude": 145.7635303 }
+    },
+    {
+      "id": "osm-way-251882571",
+      "sourceRecordIds": ["osm-way-251882571"],
+      "name": "Islamic Centre, West End Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "12 Princhester Street, West End, Queensland, 4101, Australia",
+        "region": "Queensland",
+        "regionCode": "AU-QLD",
+        "postcode": "4101",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:251882571",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/251882571",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -27.4812877, "longitude": 153.0107256 }
+    },
+    {
+      "id": "osm-way-31896319",
+      "sourceRecordIds": ["osm-way-31896319"],
+      "name": "Islamic Society of Darra",
+      "aliases": [],
+      "address": {
+        "formatted": "219 Douglas Street, Oxley, QLD, 4075, Australia",
+        "region": "QLD",
+        "regionCode": "AU-QLD",
+        "postcode": "4075",
+        "countryCode": "AU"
+      },
+      "contact": { "website": "https://www.isd.org.au/", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:31896319",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/31896319",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates", "website"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -27.5670083, "longitude": 152.9705378 }
+    },
+    {
+      "id": "osm-way-1321545741",
+      "sourceRecordIds": ["osm-way-1321545741"],
+      "name": "Islamic Society of Gold Coast",
+      "aliases": [],
+      "address": {
+        "formatted": "144 Allied Drive, Arundel, QLD, 4214, Australia",
+        "region": "QLD",
+        "regionCode": "AU-QLD",
+        "postcode": "4214",
+        "countryCode": "AU"
+      },
+      "contact": {
+        "phone": "+61 7 5594 9097",
+        "website": "http://www.goldcoastmasjid.org.au/",
+        "social": []
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:1321545741",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/1321545741",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates", "phone", "website"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 54,
+        "completenessPercent": 42,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -27.939071, "longitude": 153.3868583 }
+    },
+    {
+      "id": "osm-node-1732585575",
+      "sourceRecordIds": ["osm-node-1732585575"],
+      "name": "Mackay Islamic Society",
+      "aliases": [],
+      "address": {
+        "formatted": "Queensland, Australia",
+        "region": "Queensland",
+        "regionCode": "AU-QLD",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:node:1732585575",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/node/1732585575",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -21.202774, "longitude": 149.1475907 }
+    },
+    {
+      "id": "mosque-finder:mareeba-walsh-street-mosque",
+      "sourceRecordIds": ["mosque-finder:mareeba-walsh-street-mosque"],
+      "name": "Mareeba - Walsh Street Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "108 Walsh Street, Mareeba, QLD, 4880",
+        "locality": "Mareeba",
+        "region": "QLD",
+        "regionCode": "AU-QLD",
+        "postcode": "4880",
+        "countryCode": "AU"
+      },
+      "contact": { "phone": "(07) 4775 7312", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:mareeba-walsh-street-mosque",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/mareeba-walsh-street-mosque/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "phone"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "mosque",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -16.98916, "longitude": 145.42262 }
+    },
+    {
+      "id": "osm-way-626563838",
+      "sourceRecordIds": ["osm-way-626563838"],
+      "name": "Masjid As-Sunnah",
+      "aliases": [],
+      "address": {
+        "formatted": "33 Fuller Street, Lutwyche, Queensland, 4030, Australia",
+        "region": "Queensland",
+        "regionCode": "AU-QLD",
+        "postcode": "4030",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:626563838",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/626563838",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -27.4251088, "longitude": 153.0306488 }
+    },
+    {
+      "id": "osm-way-46419257",
+      "sourceRecordIds": ["osm-way-46419257"],
+      "name": "Masjid Taqwah Bald Hills Brisbane",
+      "aliases": [],
+      "address": {
+        "formatted": "117 Telegraph Road, Bald Hills, Queensland, Australia",
+        "region": "Queensland",
+        "regionCode": "AU-QLD",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:46419257",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/46419257",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -27.3300116, "longitude": 153.0158627 }
+    },
+    {
+      "id": "osm-way-953265229",
+      "sourceRecordIds": ["osm-way-953265229"],
+      "name": "Moorooka Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "51 Mayfield Road, Moorooka, QLD, 4105, Australia",
+        "region": "QLD",
+        "regionCode": "AU-QLD",
+        "postcode": "4105",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:953265229",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/953265229",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -27.5335507, "longitude": 153.0275142 }
+    },
+    {
+      "id": "mosque-finder:mt-gravatt-griffith-university-mount-gravatt-musalla",
+      "sourceRecordIds": ["mosque-finder:mt-gravatt-griffith-university-mount-gravatt-musalla"],
+      "name": "Mt. Gravatt - Griffith University - Mount Gravatt Musalla",
+      "aliases": [],
+      "address": {
+        "formatted": "176 Messines Ridge Road, Mt Gravatt, QLD, 4122",
+        "locality": "Mt Gravatt",
+        "region": "QLD",
+        "regionCode": "AU-QLD",
+        "postcode": "4122",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": ["wudu"],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:mt-gravatt-griffith-university-mount-gravatt-musalla",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/mt-gravatt-griffith-university-mount-gravatt-musalla/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "facilities"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "musalla",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -27.54324, "longitude": 153.06464 }
+    },
+    {
+      "id": "osm-way-422746572",
+      "sourceRecordIds": ["osm-way-422746572"],
+      "name": "Mubarak Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "456 Old Cleveland Road, Camp Hill, QLD, 4152, Australia",
+        "region": "QLD",
+        "regionCode": "AU-QLD",
+        "postcode": "4152",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:422746572",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/422746572",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -27.4915579, "longitude": 153.0667211 }
+    },
+    {
+      "id": "mosque-finder:mundingburra-ross-river-road-townsville-mosque",
+      "sourceRecordIds": ["mosque-finder:mundingburra-ross-river-road-townsville-mosque"],
+      "name": "Mundingburra - Ross River Road - Townsville Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "183 Ross River Rd, Mundingburra, QLD, 4812",
+        "locality": "Mundingburra",
+        "region": "QLD",
+        "regionCode": "AU-QLD",
+        "postcode": "4812",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:mundingburra-ross-river-road-townsville-mosque",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/mundingburra-ross-river-road-townsville-mosque/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "mosque",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -19.2954, "longitude": 146.77832 }
+    },
+    {
+      "id": "mosque-finder:nathan-kessels-road-griffith-university",
+      "sourceRecordIds": ["mosque-finder:nathan-kessels-road-griffith-university"],
+      "name": "Nathan - Kessels Road - Griffith University",
+      "aliases": [],
+      "address": {
+        "formatted": "170 Kessels Road, Nathan, QLD, 4111",
+        "locality": "Nathan",
+        "region": "QLD",
+        "regionCode": "AU-QLD",
+        "postcode": "4111",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [{ "time": "1:05 pm", "label": "Jumu’ah" }],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:nathan-kessels-road-griffith-university",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/nathan-kessels-road-griffith-university/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "jumuah-times"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "musalla",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -27.55843, "longitude": 153.05092 }
+    },
+    {
+      "id": "mosque-finder:oxenford-movie-world-musalla",
+      "sourceRecordIds": ["mosque-finder:oxenford-movie-world-musalla"],
+      "name": "Oxenford - Movie World Musalla",
+      "aliases": [],
+      "address": {
+        "formatted": "Warner Bros. Movie World, Pacific Highway, QLD, 4210",
+        "locality": "Pacific Highway",
+        "region": "QLD",
+        "regionCode": "AU-QLD",
+        "postcode": "4210",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:oxenford-movie-world-musalla",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/oxenford-movie-world-musalla/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "musalla",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -27.90622, "longitude": 153.31249 }
+    },
+    {
+      "id": "mosque-finder:oxley-douglas-street-darra-mosque",
+      "sourceRecordIds": ["mosque-finder:oxley-douglas-street-darra-mosque"],
+      "name": "Oxley - Douglas Street - Darra Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "219 Douglas Street, Oxley, QLD, 4075",
+        "locality": "Oxley",
+        "region": "QLD",
+        "regionCode": "AU-QLD",
+        "postcode": "4075",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:oxley-douglas-street-darra-mosque",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/oxley-douglas-street-darra-mosque/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "mosque",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -27.56703, "longitude": 152.97046 }
+    },
+    {
+      "id": "mosque-finder:southport-gcyc-southport-community-centre",
+      "sourceRecordIds": ["mosque-finder:southport-gcyc-southport-community-centre"],
+      "name": "Southport - GCYC southport community centre",
+      "aliases": [],
+      "address": {
+        "formatted": "6 Lawson St, Southport, QLD, 4215",
+        "locality": "Southport",
+        "region": "QLD",
+        "regionCode": "AU-QLD",
+        "postcode": "4215",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [{ "time": "1:10 pm", "label": "Jumu’ah" }],
+      "facilities": ["parking"],
+      "services": ["counselling", "youth"],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:southport-gcyc-southport-community-centre",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/southport-gcyc-southport-community-centre/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": [
+            "name",
+            "aliases",
+            "address",
+            "coordinates",
+            "jumuah-times",
+            "facilities",
+            "services"
+          ]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "prayer-room",
+      "featureLabels": ["Car park", "Street parking", "Marriage services"],
+      "quality": {
+        "score": 58,
+        "completenessPercent": 50,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -27.97071, "longitude": 153.41356 }
+    },
+    {
+      "id": "osm-node-11286742649",
+      "sourceRecordIds": ["osm-node-11286742649"],
+      "name": "Southport Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "Queensland, Australia",
+        "region": "Queensland",
+        "regionCode": "AU-QLD",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:node:11286742649",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/node/11286742649",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -27.9873871, "longitude": 153.4019065 }
+    },
+    {
+      "id": "osm-node-821679379",
+      "sourceRecordIds": ["osm-node-821679379"],
+      "name": "Toowoomba Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "West Street, Harristown, QLD, 4350, Australia",
+        "region": "QLD",
+        "regionCode": "AU-QLD",
+        "postcode": "4350",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:node:821679379",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/node/821679379",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -27.5727204, "longitude": 151.9408478 }
+    },
+    {
+      "id": "osm-node-13895264602",
+      "sourceRecordIds": ["osm-node-13895264602"],
+      "name": "United Muslims of Brisbane (UMB)",
+      "aliases": [],
+      "address": {
+        "formatted": "8 Blackwood Road, Queensland, Australia",
+        "region": "Queensland",
+        "regionCode": "AU-QLD",
+        "countryCode": "AU"
+      },
+      "contact": { "phone": "+61 401 972 443", "website": "https://umb.org.au/", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:node:13895264602",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/node/13895264602",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates", "phone", "website"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 54,
+        "completenessPercent": 42,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -27.6386842, "longitude": 153.1068301 }
+    }
+  ]
+}
