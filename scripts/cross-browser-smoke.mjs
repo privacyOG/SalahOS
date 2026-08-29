@@ -83,7 +83,9 @@ for (const [engineName, engine] of engines) {
     );
 
     await page
-      .locator('.congregation-nav > .congregation-nav-item[data-navigation-id="knowledge"]:visible')
+      .locator(
+        '.congregation-nav > .congregation-nav-item[data-navigation-id="knowledge"]:visible',
+      )
       .click();
     await page.locator('[data-knowledge-screen]').waitFor({ state: 'visible' });
     assert(
