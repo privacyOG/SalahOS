@@ -92,8 +92,14 @@ function luminance(rgb) {
   return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
 }
 function parseRgb(value) {
-  const values = value.match(/[\d.]+/g);
-  return values && values.length >= 3 ? values.slice(0, 3).map(Number) : null;
+  const normalized = value.trim().toLowerCase();
+  const srgb = normalized.match(
+    /^color\(srgb\s+([+-]?(?:\d+\.?\d*|\.\d+))\s+([+-]?(?:\d+\.?\d*|\.\d+))\s+([+-]?(?:\d+\.?\d*|\.\d+))(?:\s*\/[^)]*)?\)$/,
+  );
+  if (srgb) return srgb.slice(1, 4).map((component) => Number(component) * 255);
+
+  const rgb = normalized.match(/^rgba?\(\s*([\d.]+)[,\s]+([\d.]+)[,\s]+([\d.]+)/);
+  return rgb ? rgb.slice(1, 4).map(Number) : null;
 }
 const browser = await chromium.launch({ headless: true });
 const failures = [];
@@ -214,7 +220,9 @@ try {
 }
 
 if (failures.length > 0) {
-  throw new Error(`Theme visual matrix found ${String(failures.length)} issue(s):\n- ${failures.join('\n- ')}`);
+  throw new Error(
+    `Theme visual matrix found ${String(failures.length)} issue(s):\n- ${failures.join('\n- ')}`,
+  );
 }
 
 console.log(
