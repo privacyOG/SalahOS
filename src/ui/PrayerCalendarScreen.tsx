@@ -8,10 +8,7 @@ import {
 } from '../domain/prayerCalendar';
 import { formatLocalTime, localeTag } from '../i18n/i18n';
 import { getApplicationStorage } from '../platform/applicationStorage';
-import {
-  defaultPersistedSettings,
-  loadPersistedSettings,
-} from '../platform/settingsStorage';
+import { defaultPersistedSettings, loadPersistedSettings } from '../platform/settingsStorage';
 
 const views: readonly PrayerCalendarView[] = ['daily', 'weekly', 'monthly', 'yearly'];
 const prayerNames = {
@@ -59,7 +56,10 @@ export function PrayerCalendarScreen() {
     () => (view === 'yearly' ? [] : civilDatesForView(anchor, view)),
     [anchor, view],
   );
-  const rows = useMemo(() => dates.map((date) => buildPrayerCalendarDay(date, config)), [dates, config]);
+  const rows = useMemo(
+    () => dates.map((date) => buildPrayerCalendarDay(date, config)),
+    [dates, config],
+  );
   const title =
     view === 'yearly'
       ? String(anchor.getUTCFullYear())
@@ -169,8 +169,8 @@ export function PrayerCalendarScreen() {
       )}
 
       <p className="prayer-calendar__note">
-        Hijri dates use Umm al-Qura with your configured Hijri correction. Prayer times use the
-        same location, calculation method, madhhab/Asr convention and adjustments as SalahOS.
+        Hijri dates use Umm al-Qura with your configured Hijri correction. Prayer times use the same
+        location, calculation method, madhhab/Asr convention and adjustments as SalahOS.
       </p>
     </main>
   );

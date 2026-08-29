@@ -29,7 +29,7 @@ function blockAfter(source, marker) {
 }
 
 const light = blockAfter(designSystem, ":root[data-theme='light'] {");
-const systemLightStart = designSystem.indexOf("@media (prefers-color-scheme: light)");
+const systemLightStart = designSystem.indexOf('@media (prefers-color-scheme: light)');
 const systemLight = designSystem.slice(systemLightStart);
 
 for (const token of requiredLightTokens) {

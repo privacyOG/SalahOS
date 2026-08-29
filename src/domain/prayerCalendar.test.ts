@@ -1,2 +1,67 @@
-import { describe,expect,it } from 'vitest';import { formatHijriDateEnglish,hijriDateParts,hijriMonthName,HIJRI_MONTH_NAMES } from './calendar';import { civilDatesForView,utcCivilDate } from './prayerCalendar';
-describe('Hijri-aligned prayer calendar',()=>{it('uses the requested canonical English month spellings',()=>{expect(HIJRI_MONTH_NAMES).toEqual(['Muharram','Safar','Rabi al-Awwal','Rabi al-Akhir','Jumada al-Ula','Jumada al-Akhirah','Rajab',"Sha'ban",'Ramadan','Shawwal',"Dhu al-Qi'dah",'Dhu al-Hijjah']);});it('locks 1 January 2026 to 12 Rajab 1447 AH under Umm al-Qura',()=>{const d=utcCivilDate(2026,1,1);expect(hijriDateParts(d)).toMatchObject({day:12,month:7,year:1447});expect(formatHijriDateEnglish(d)).toBe('12 Rajab 1447 AH');});it('locks key 2026 Umm al-Qura boundaries',()=>{expect(hijriDateParts(utcCivilDate(2026,1,20))).toMatchObject({day:1,month:8,year:1447});expect(hijriDateParts(utcCivilDate(2026,2,18))).toMatchObject({day:1,month:9,year:1447});expect(hijriDateParts(utcCivilDate(2026,6,16))).toMatchObject({day:1,month:1,year:1448});expect(hijriDateParts(utcCivilDate(2026,8,14))).toMatchObject({day:1,month:3,year:1448});});it('never presents a Hijri year as BC',()=>{expect(formatHijriDateEnglish(utcCivilDate(2026,8,29))).toMatch(/1448 AH$/);expect(formatHijriDateEnglish(utcCivilDate(2026,8,29))).not.toMatch(/BC|BCE/);});it('builds aligned daily weekly monthly yearly civil ranges',()=>{const a=utcCivilDate(2026,8,29);expect(civilDatesForView(a,'daily')).toHaveLength(1);expect(civilDatesForView(a,'weekly')).toHaveLength(7);expect(civilDatesForView(a,'monthly')).toHaveLength(31);expect(civilDatesForView(a,'yearly')).toHaveLength(365);});it('maps all twelve month numbers without aliases',()=>{for(let m=1;m<=12;m++)expect(hijriMonthName(m)).toBe(HIJRI_MONTH_NAMES[m-1]);});});
+import { describe, expect, it } from 'vitest';
+import {
+  formatHijriDateEnglish,
+  hijriDateParts,
+  hijriMonthName,
+  HIJRI_MONTH_NAMES,
+} from './calendar';
+import { civilDatesForView, utcCivilDate } from './prayerCalendar';
+describe('Hijri-aligned prayer calendar', () => {
+  it('uses the requested canonical English month spellings', () => {
+    expect(HIJRI_MONTH_NAMES).toEqual([
+      'Muharram',
+      'Safar',
+      'Rabi al-Awwal',
+      'Rabi al-Akhir',
+      'Jumada al-Ula',
+      'Jumada al-Akhirah',
+      'Rajab',
+      "Sha'ban",
+      'Ramadan',
+      'Shawwal',
+      "Dhu al-Qi'dah",
+      'Dhu al-Hijjah',
+    ]);
+  });
+  it('locks 1 January 2026 to 12 Rajab 1447 AH under Umm al-Qura', () => {
+    const d = utcCivilDate(2026, 1, 1);
+    expect(hijriDateParts(d)).toMatchObject({ day: 12, month: 7, year: 1447 });
+    expect(formatHijriDateEnglish(d)).toBe('12 Rajab 1447 AH');
+  });
+  it('locks key 2026 Umm al-Qura boundaries', () => {
+    expect(hijriDateParts(utcCivilDate(2026, 1, 20))).toMatchObject({
+      day: 1,
+      month: 8,
+      year: 1447,
+    });
+    expect(hijriDateParts(utcCivilDate(2026, 2, 18))).toMatchObject({
+      day: 1,
+      month: 9,
+      year: 1447,
+    });
+    expect(hijriDateParts(utcCivilDate(2026, 6, 16))).toMatchObject({
+      day: 1,
+      month: 1,
+      year: 1448,
+    });
+    expect(hijriDateParts(utcCivilDate(2026, 8, 14))).toMatchObject({
+      day: 1,
+      month: 3,
+      year: 1448,
+    });
+  });
+  it('never presents a Hijri year as BC', () => {
+    expect(formatHijriDateEnglish(utcCivilDate(2026, 8, 29))).toMatch(/1448 AH$/);
+    expect(formatHijriDateEnglish(utcCivilDate(2026, 8, 29))).not.toMatch(/BC|BCE/);
+  });
+  it('builds aligned daily weekly monthly yearly civil ranges', () => {
+    const a = utcCivilDate(2026, 8, 29);
+    expect(civilDatesForView(a, 'daily')).toHaveLength(1);
+    expect(civilDatesForView(a, 'weekly')).toHaveLength(7);
+    expect(civilDatesForView(a, 'monthly')).toHaveLength(31);
+    expect(civilDatesForView(a, 'yearly')).toHaveLength(365);
+  });
+  it('maps all twelve month numbers without aliases', () => {
+    for (let m = 1; m <= 12; m++) expect(hijriMonthName(m)).toBe(HIJRI_MONTH_NAMES[m - 1]);
+  });
+});

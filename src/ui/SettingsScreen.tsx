@@ -66,26 +66,33 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
   en: {
     ...base,
     heading: 'Settings',
-    intro: 'Choose a category. Everyday controls stay focused while uncommon tools remain out of the way.',
+    intro:
+      'Choose a category. Everyday controls stay focused while uncommon tools remain out of the way.',
     back: 'All settings',
     prayerTitle: 'Prayer settings',
-    prayerDescription: 'Prayer source, calculation method, Asr convention and high-latitude handling.',
+    prayerDescription:
+      'Prayer source, calculation method, Asr convention and high-latitude handling.',
     locationTitle: 'Location',
-    locationDescription: 'Current location, offline city search, saved places and manual coordinates.',
+    locationDescription:
+      'Current location, offline city search, saved places and manual coordinates.',
     mosqueTitle: 'Mosques',
     mosqueDescription: 'Local mosque timetables, Iqamah, Ramadan and Taraweeh configuration.',
     notificationsTitle: 'Adhan',
-    notificationsDescription: 'Prayer reminders, prayer-time alerts, vibration, sound and local Adhan options.',
+    notificationsDescription:
+      'Prayer reminders, prayer-time alerts, vibration, sound and local Adhan options.',
     appearanceTitle: 'Appearance & language',
     appearanceDescription: 'Language, clock format, appearance and colour palette.',
     dataTitle: 'Privacy & data',
     dataDescription: 'Manage local data, privacy controls and optional diagnostics.',
     displayTitle: 'Display',
-    displayDescription: 'Open managed-display configuration without mixing credentials or fleet controls into daily settings.',
+    displayDescription:
+      'Open managed-display configuration without mixing credentials or fleet controls into daily settings.',
     advancedTitle: 'Advanced',
-    advancedDescription: 'Manual timetable import, prayer offsets and less common prayer configuration.',
+    advancedDescription:
+      'Manual timetable import, prayer offsets and less common prayer configuration.',
     displayAction: 'Open managed displays',
-    exportHelp: 'Import, export or reset device settings here. Optional diagnostics are controlled separately below.',
+    exportHelp:
+      'Import, export or reset device settings here. Optional diagnostics are controlled separately below.',
     imported: 'Settings imported successfully.',
     importError: 'Settings data is invalid or unsupported.',
     reset: 'Settings reset to defaults.',
@@ -94,22 +101,26 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
     ...base,
     palette: 'لوحة الألوان',
     heading: 'الإعدادات',
-    intro: 'اختر فئة. تبقى الإعدادات اليومية واضحة بينما توضع الأدوات غير الشائعة بعيداً عن الواجهة الأساسية.',
+    intro:
+      'اختر فئة. تبقى الإعدادات اليومية واضحة بينما توضع الأدوات غير الشائعة بعيداً عن الواجهة الأساسية.',
     back: 'كل الإعدادات',
     prayerTitle: 'إعدادات الصلاة',
     prayerDescription: 'مصدر المواقيت وطريقة الحساب ومذهب العصر ومعالجة خطوط العرض العليا.',
     locationTitle: 'الموقع',
-    locationDescription: 'الموقع الحالي والبحث المحلي دون اتصال والمواقع المحفوظة والإحداثيات اليدوية.',
+    locationDescription:
+      'الموقع الحالي والبحث المحلي دون اتصال والمواقع المحفوظة والإحداثيات اليدوية.',
     mosqueTitle: 'المساجد',
     mosqueDescription: 'جداول المسجد والإقامة وإعدادات رمضان والتراويح.',
     notificationsTitle: 'الأذان',
-    notificationsDescription: 'التذكيرات وإشعارات وقت الصلاة والاهتزاز والصوت وخيارات الأذان المحلي.',
+    notificationsDescription:
+      'التذكيرات وإشعارات وقت الصلاة والاهتزاز والصوت وخيارات الأذان المحلي.',
     appearanceTitle: 'المظهر واللغة',
     appearanceDescription: 'اللغة وتنسيق الساعة والمظهر ولوحة الألوان.',
     dataTitle: 'الخصوصية والبيانات',
     dataDescription: 'إدارة البيانات المحلية وضوابط الخصوصية والتشخيصات الاختيارية.',
     displayTitle: 'العرض',
-    displayDescription: 'افتح إدارة الشاشات من دون إظهار بيانات الدخول أو الأسطول في الإعدادات اليومية.',
+    displayDescription:
+      'افتح إدارة الشاشات من دون إظهار بيانات الدخول أو الأسطول في الإعدادات اليومية.',
     advancedTitle: 'متقدم',
     advancedDescription: 'استيراد الجداول يدوياً وتعديلات أوقات الصلاة والإعدادات الأقل استخداماً.',
     displayAction: 'افتح الشاشات المُدارة',
@@ -122,16 +133,19 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
     ...base,
     palette: 'Renk paleti',
     heading: 'Ayarlar',
-    intro: 'Bir kategori seçin. Günlük kontroller odaklı kalırken seyrek kullanılan araçlar geri planda tutulur.',
+    intro:
+      'Bir kategori seçin. Günlük kontroller odaklı kalırken seyrek kullanılan araçlar geri planda tutulur.',
     back: 'Tüm ayarlar',
     prayerTitle: 'Namaz ayarları',
     prayerDescription: 'Vakit kaynağı, hesaplama yöntemi, ikindi yaklaşımı ve yüksek enlem kuralı.',
     locationTitle: 'Konum',
-    locationDescription: 'Mevcut konum, çevrimdışı şehir araması, kayıtlı yerler ve elle koordinatlar.',
+    locationDescription:
+      'Mevcut konum, çevrimdışı şehir araması, kayıtlı yerler ve elle koordinatlar.',
     mosqueTitle: 'Camiler',
     mosqueDescription: 'Yerel cami vakitleri, ikamet, Ramazan ve teravih yapılandırması.',
     notificationsTitle: 'Ezan',
-    notificationsDescription: 'Hatırlatmalar, vakit bildirimleri, titreşim, ses ve yerel ezan seçenekleri.',
+    notificationsDescription:
+      'Hatırlatmalar, vakit bildirimleri, titreşim, ses ve yerel ezan seçenekleri.',
     appearanceTitle: 'Görünüm ve dil',
     appearanceDescription: 'Dil, saat biçimi, görünüm ve renk paleti.',
     dataTitle: 'Gizlilik ve veri',
@@ -150,16 +164,19 @@ const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
     ...base,
     palette: 'Palet warna',
     heading: 'Pengaturan',
-    intro: 'Pilih kategori. Kontrol harian tetap fokus sementara alat yang jarang dipakai tidak mengganggu.',
+    intro:
+      'Pilih kategori. Kontrol harian tetap fokus sementara alat yang jarang dipakai tidak mengganggu.',
     back: 'Semua pengaturan',
     prayerTitle: 'Pengaturan salat',
     prayerDescription: 'Sumber waktu, metode perhitungan, aturan Asar, dan lintang tinggi.',
     locationTitle: 'Lokasi',
-    locationDescription: 'Lokasi saat ini, pencarian kota luring, lokasi tersimpan, dan koordinat manual.',
+    locationDescription:
+      'Lokasi saat ini, pencarian kota luring, lokasi tersimpan, dan koordinat manual.',
     mosqueTitle: 'Masjid',
     mosqueDescription: 'Jadwal masjid lokal, Iqamah, Ramadan, dan konfigurasi Tarawih.',
     notificationsTitle: 'Adzan',
-    notificationsDescription: 'Pengingat, notifikasi waktu salat, getaran, suara, dan opsi Adzan lokal.',
+    notificationsDescription:
+      'Pengingat, notifikasi waktu salat, getaran, suara, dan opsi Adzan lokal.',
     appearanceTitle: 'Tampilan & bahasa',
     appearanceDescription: 'Bahasa, format jam, tampilan, dan palet warna.',
     dataTitle: 'Privasi & data',
@@ -294,7 +311,10 @@ function PrayerSettingsForm({
         <select
           value={settings.hijriCorrectionDays}
           onChange={(event) =>
-            updateSettings((current) => ({ ...current, hijriCorrectionDays: Number(event.target.value) }))
+            updateSettings((current) => ({
+              ...current,
+              hijriCorrectionDays: Number(event.target.value),
+            }))
           }
         >
           {[-2, -1, 0, 1, 2].map((day) => (
@@ -433,7 +453,11 @@ export function SettingsScreen() {
   };
   const navigateCategory = (next: SettingsCategory | null) => {
     const search = categorySearch(next);
-    window.history.pushState(null, '', `${window.location.pathname}${search}${window.location.hash}`);
+    window.history.pushState(
+      null,
+      '',
+      `${window.location.pathname}${search}${window.location.hash}`,
+    );
     setCategory(next);
     window.scrollTo({ top: 0, behavior: 'auto' });
   };
@@ -496,7 +520,11 @@ export function SettingsScreen() {
   return (
     <main className="settings-screen settings-screen--detail">
       <header className="settings-screen__detail-header">
-        <button type="button" className="settings-screen__back" onClick={() => navigateCategory(null)}>
+        <button
+          type="button"
+          className="settings-screen__back"
+          onClick={() => navigateCategory(null)}
+        >
           <span aria-hidden="true">←</span>
           <span>{copy.back}</span>
         </button>

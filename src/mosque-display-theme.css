@@ -64,27 +64,47 @@
 .smart-display[data-palette='royal-blue'] :is(.next-prayer-block, [class*='__next']),
 .smart-display[data-palette='emerald-mosque'] :is(.next-prayer-block, [class*='__next']),
 .smart-display[data-palette='midnight-gold'] :is(.next-prayer-block, [class*='__next']) {
-  background: color-mix(in srgb, var(--mosque-display-highlight) 18%, var(--salah-bg-surface-raised));
+  background: color-mix(
+    in srgb,
+    var(--mosque-display-highlight) 18%,
+    var(--salah-bg-surface-raised)
+  );
 }
 
-.smart-display[data-palette='high-contrast'] :is(.prayer-card, [class*='__prayer'], [class*='__announcement']) {
+.smart-display[data-palette='high-contrast']
+  :is(.prayer-card, [class*='__prayer'], [class*='__announcement']) {
   border-width: 2px;
 }
 
 @media (min-width: 1600px) {
-  .smart-display :is([class*='__prayer-name'], .prayer-card strong) { font-size: clamp(1.75rem, 2.1vw, 3.25rem); }
-  .smart-display :is(.prayer-time, [class*='__time'], [class*='__iqamah']) { font-size: clamp(1.9rem, 2.45vw, 3.8rem); }
-  .smart-display :is([class*='__announcement'], [class*='announcement']) { font-size: clamp(1.1rem, 1.45vw, 2rem); }
+  .smart-display :is([class*='__prayer-name'], .prayer-card strong) {
+    font-size: clamp(1.75rem, 2.1vw, 3.25rem);
+  }
+  .smart-display :is(.prayer-time, [class*='__time'], [class*='__iqamah']) {
+    font-size: clamp(1.9rem, 2.45vw, 3.8rem);
+  }
+  .smart-display :is([class*='__announcement'], [class*='announcement']) {
+    font-size: clamp(1.1rem, 1.45vw, 2rem);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .smart-display *, .smart-display *::before, .smart-display *::after {
+  .smart-display *,
+  .smart-display *::before,
+  .smart-display *::after {
     scroll-behavior: auto !important;
   }
 }
 
 @media (forced-colors: active) {
-  .smart-display :is(.next-prayer-block, .prayer-card, [class*='__next'], [class*='__prayer'], [class*='__announcement']) {
+  .smart-display
+    :is(
+      .next-prayer-block,
+      .prayer-card,
+      [class*='__next'],
+      [class*='__prayer'],
+      [class*='__announcement']
+    ) {
     border: 2px solid CanvasText;
     background: Canvas;
     color: CanvasText;
