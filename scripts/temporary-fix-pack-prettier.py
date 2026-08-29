@@ -14,10 +14,10 @@ old_writer = """async function writeJson(filePath, value) {
 }"""
 new_writer = """async function writeJson(filePath, value) {
   await mkdir(path.dirname(filePath), { recursive: true });
-  const prettierConfig = (await resolveConfig(filePath)) ?? {};
+  const prettierConfig = (await resolveConfig(path.join(root, '.prettierrc.json'))) ?? {};
   const formatted = await format(JSON.stringify(value), {
     ...prettierConfig,
-    filepath: filePath,
+    parser: 'json-stringify',
   });
   await writeFile(filePath, formatted, 'utf8');
 }"""
