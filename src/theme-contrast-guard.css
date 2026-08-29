@@ -62,6 +62,12 @@ textarea,
   opacity: 1;
 }
 
+/* Prayer-card context labels follow the card foreground because several templates invert that surface. */
+.mobile-prayer-theme-surface .today-next__current,
+.mobile-prayer-theme-surface .today-next__current span {
+  color: inherit;
+}
+
 /* Filled accent controls require the authoritative on-accent semantic token. */
 .ds-button--primary {
   color: var(--salah-fg-on-accent);
