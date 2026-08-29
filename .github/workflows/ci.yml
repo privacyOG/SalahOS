@@ -22,6 +22,12 @@ jobs:
           cache: npm
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
+      - name: Format check
+        run: npm run format:check
+      - name: Lint
+        run: npm run lint
+      - name: Typecheck
+        run: npm run typecheck
       - name: Sensitive-file policy
         run: npm run security:sensitive-files
       - name: Native permission policy
@@ -34,6 +40,14 @@ jobs:
         run: npm run security:licenses
       - name: Documentation link verification
         run: npm run docs:links
+      - name: Design-system ownership policy
+        run: npm run ui:design-system-ownership
+      - name: Theme architecture acceptance
+        run: npm run ui:theme-contrast && npm run ui:theme-architecture && npm run ui:theme-stage45
+      - name: Hijri prayer calendar acceptance
+        run: npm run calendar:check
+      - name: UI/UX v2 retirement policy
+        run: npm run ui:v2-retirement
       - name: Prepare pinned offline Qur'an corpus
         run: npm run quran:offline:prepare
       - name: Offline Qur'an corpus integrity
@@ -50,20 +64,6 @@ jobs:
         run: npm run directory:test
       - name: PWA raster icon reproducibility
         run: python3 scripts/generate_pwa_icons.py --check
-      - name: Design-system ownership policy
-        run: npm run ui:design-system-ownership
-      - name: Theme architecture acceptance
-        run: npm run ui:theme-contrast && npm run ui:theme-architecture && npm run ui:theme-stage45
-      - name: Hijri prayer calendar acceptance
-        run: npm run calendar:check
-      - name: UI/UX v2 retirement policy
-        run: npm run ui:v2-retirement
-      - name: Format check
-        run: npm run format:check
-      - name: Lint
-        run: npm run lint
-      - name: Typecheck
-        run: npm run typecheck
       - name: Test
         run: npm run test
       - name: Core coverage thresholds
