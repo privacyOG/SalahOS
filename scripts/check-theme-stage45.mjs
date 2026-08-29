@@ -58,10 +58,7 @@ if (!knowledge.includes('lang="ar"') || !knowledge.includes('dir="rtl"'))
   throw new Error('Arabic Qur’an/Hadith content must declare Arabic RTL semantics');
 if (!contrast.includes(".knowledge-card__arabic[lang='ar'][dir='rtl']"))
   throw new Error('Arabic scripture direction guard is missing');
-if (
-  !contrast.includes('text-align: right;') ||
-  !contrast.includes('unicode-bidi: isolate;')
-)
+if (!contrast.includes('text-align: right;') || !contrast.includes('unicode-bidi: isolate;'))
   throw new Error('Arabic scripture must remain explicitly right aligned and bidi-isolated');
 for (const translationSelector of [
   '[data-quran-translation]',
