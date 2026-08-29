@@ -4,6 +4,12 @@ All notable SalahOS changes are recorded here.
 
 ## Unreleased
 
+### Australian mosque directory
+
+- Expand the bundled Australian mosque catalogue from the former 106-record OpenStreetMap-only runtime to a 254-record deduplicated combined directory using reviewed OpenStreetMap and Australian Mosque Finder factual source snapshots.
+- Preserve source provenance through the combined catalogue and deployable country/regional packs, with audited/automatic cross-source identity matching, coordinate quarantine for unsafe geospatial records and explicit protection against known false merges.
+- Wire the combined catalogue into the shared directory service, harden near-duplicate detection so proximity alone is insufficient, and enforce source/combined/pack reproducibility plus the 254-record visual acceptance contract in CI.
+
 ## 1.5.0 — 2026-08-26
 
 ### Product UX refinement

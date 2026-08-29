@@ -152,3 +152,13 @@ After a reset, repeat first setup and verify prayer times against a trusted refe
 Before leaving a display unattended, verify today's Gregorian and Hijri dates, all prayer times, Iqamah times, Jumu'ah sessions, the next-prayer indicator/countdown, timezone, announcements, display readability and restart behaviour. Test both network-connected and offline operation where the deployment is expected to survive connectivity loss.
 
 For technical build/signing details, consult the repository's platform-specific documentation and tested-platform status files.
+
+## 19. Australian mosque directory and corrections
+
+The **Mosques** experience includes a bundled offline-first Australian directory containing the project's current deduplicated mosque and musalla records. You can search the bundled data and use nearby ordering when you have explicitly selected or permitted a location. Browsing the bundled catalogue does not require a live request to OpenStreetMap or Australian Mosque Finder.
+
+Directory records preserve source provenance and data-quality/freshness information where available. A directory listing identifies a place; it is not automatically an authoritative source for that mosque's prayer, Iqamah or Jumu'ah timetable. Verify those times through the active SalahOS mosque timetable/source before relying on them.
+
+Favouriting a mosque adds it to the followed-mosque library and does not silently change the active prayer-time source. **Directions** may open an external map provider and therefore requires network access. If a listing is wrong or incomplete, use the shared **report/edit** correction workflow rather than treating a nearby record as the same mosque or manually collapsing two distinct venues.
+
+For the current dataset accounting, upstream-source boundary and reproducibility details, see `docs/AUSTRALIAN_MOSQUE_DIRECTORY.md` in the project repository.

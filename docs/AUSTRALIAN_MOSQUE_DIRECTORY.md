@@ -1,61 +1,93 @@
 # Australian mosque directory
 
-SalahOS includes a compact Australian mosque and musalla directory so mosque discovery continues to work without a network connection. The application does not contact OpenStreetMap, Overpass, Google, or another directory service when browsing, searching, sorting, or selecting the bundled records.
+SalahOS includes an offline-first Australian mosque and musalla directory so congregation discovery continues to work without requiring a live directory request. Core browsing, search, bundled nearby ordering and selection use committed application data rather than contacting OpenStreetMap, Overpass, Australian Mosque Finder, Google or another directory service at runtime.
 
-## Source and licence
+## Sources, attribution and data boundary
 
-The bundled directory is derived from **OpenStreetMap contributors** and is distributed as an OpenStreetMap-derived database under the **Open Database License (ODbL) 1.0**. The in-app directory displays the required OpenStreetMap contributor attribution and links to the ODbL licence. The SalahOS source-code licence does not replace or relicense the bundled OpenStreetMap-derived data.
+The integrated directory combines two reviewed factual source snapshots:
 
-Source references:
+- **OpenStreetMap contributors**, with OpenStreetMap-derived data distributed under the Open Database License (ODbL) 1.0; and
+- **Australian Mosque Finder**, used as a factual organisation-directory source for mosque identity/location facts.
+
+OpenStreetMap attribution and licence references remain attached to the combined catalogue and generated packs:
 
 - OpenStreetMap copyright and attribution: <https://www.openstreetmap.org/copyright>
 - Open Database License 1.0: <https://opendatacommons.org/licenses/odbl/1-0/>
 
-The committed source snapshot is `data/osm/australian-muslim-places-of-worship.overpass.json`. The generated application catalogue is `src/data/australian-mosques.json`.
+The SalahOS source-code licence does not replace or relicense the bundled OpenStreetMap-derived data. The Australian Mosque Finder integration is limited to factual directory data and records its own source provenance separately from OpenStreetMap provenance.
 
-## Inclusion query
+The committed OpenStreetMap snapshot is `data/osm/australian-muslim-places-of-worship.overpass.json`. The legacy OSM-only generated catalogue is `src/data/australian-mosques.json`. The Australian Mosque Finder parsed snapshot is `src/data/australian-mosque-finder.json`, and the runtime integrated catalogue is `src/data/australian-mosques-combined.json`.
 
-The refresh pipeline queries each Australian state or territory separately using its `ISO3166-2` administrative area. It includes OpenStreetMap elements that satisfy either of these tag combinations:
+## Current integrated snapshot
 
-- `amenity=place_of_worship` and `religion=muslim`; or
-- `amenity=place_of_worship` and `building=mosque`.
+The current combined catalogue contains **254 deduplicated records**.
 
-The eight queried regions are ACT, NSW, NT, QLD, SA, TAS, VIC and WA. Splitting the acquisition by region keeps public Overpass requests bounded and allows endpoint failover. Records without a usable name or coordinates are excluded.
+The integration accounting is deliberately non-additive:
 
-## Reproducible generation
+- OpenStreetMap integrated source: 106 records;
+- Australian Mosque Finder successfully parsed: 176 of 178 sitemap pages;
+- Finder-internal duplicate merges: 4 pairs;
+- Finder records quarantined from geospatial integration because their published coordinates conflict with the stated location: 2;
+- Finder records eligible for cross-source integration: 170;
+- OSM/Finder cross-source identity merges: 22, consisting of 6 audited matches and 16 automatic evidence-scored matches; and
+- final integrated directory: **254 records** (`106 + 170 - 22`).
 
-Refresh the source snapshot and regenerate the directory with:
+The pipeline therefore never represents `106 + 176` as a unique-mosque count.
+
+## Deduplication and false-merge protection
+
+The integration pipeline normalises naming/address evidence and uses one-to-one source matching. Known nearby-but-distinct venues are explicitly protected from false merging. A record is not merged merely because another mosque is physically close.
+
+Six difficult cross-source pairs are handled through audited identity-backed matches. Automatic matches must satisfy the generator's identity/evidence rules. Two Finder records whose coordinates conflict with their stated locations are retained in source accounting but excluded from unsafe geospatial matching.
+
+The shared directory service follows the same safety principle: proximity alone is not sufficient to classify a submitted mosque as a duplicate. Very-near records require compatible identity/name evidence unless an exact name or address rule applies.
+
+## Provenance and quality metadata
+
+Every integrated record retains `sourceRecordIds` and provenance entries. When an OSM and Australian Mosque Finder record are merged, both source identities remain represented rather than being replaced by an opaque canonical record.
+
+Generated downloadable packs preserve the combined provenance and quality metadata. The pack set contains:
+
+- one Australian country pack with all 254 records;
+- regional packs for ACT, NSW, NT, QLD, SA, TAS, VIC and WA; and
+- a global manifest that records the combined accounting and upstream-source metadata.
+
+## Reproducible generation and CI
+
+Refresh/regenerate the original OpenStreetMap source path with:
 
 ```sh
 npm run mosques:australia:refresh
-```
-
-Regenerate only from the already committed source snapshot with:
-
-```sh
 npm run mosques:australia:generate
-```
-
-Verify that the committed catalogue is an exact deterministic product of the committed snapshot with:
-
-```sh
 npm run mosques:australia:check
 ```
 
-`mosques:australia:check` is part of the repository quality gate. Normal builds and app runtime never perform the network refresh.
+Validate the committed Australian Mosque Finder snapshot and the combined directory with:
 
-## Normalisation and duplicate handling
+```sh
+npm run mosques:australia:finder:check
+npm run mosques:australia:combined:check
+```
 
-The generator preserves the originating OpenStreetMap element type and numeric ID in each generated record. It normalises display names, addresses, optional public website/contact fields and coordinates into a compact application schema.
+Generate or verify the deployable country/regional packs with:
 
-OpenStreetMap may represent the same mosque as both a node and a building/relation. The generator therefore canonicalises mosque/masjid/musalla naming variants and treats records with the same canonical name within 250 metres as duplicate candidates. It keeps the richer representation, preferring relations over ways over nodes and favouring records containing address or public contact information. Distinct same-named mosques farther apart remain separate.
+```sh
+npm run mosques:packs:generate
+npm run mosques:packs:check
+```
+
+The combined and pack checks are part of the permanent repository quality gate. Pack check mode compares generated bytes with the tracked outputs, so a stale or missing pack fails CI rather than passing merely because temporary generation succeeded.
 
 ## Offline search, nearby ordering and selection
 
-Search is entirely on-device and matches the mosque name, Arabic name when present, address, state and Australian region code. Nearby ordering uses the location already saved in SalahOS and a local Haversine distance calculation; it does not request a new GPS fix or transmit the saved location.
+Bundled directory search is on-device. Nearby ordering uses the location already selected or permitted in SalahOS and local distance calculations; directory browsing does not require transmitting the user's prayer-calculation location to either upstream directory source.
 
-When a directory mosque is selected, SalahOS converts that record into the existing validated `MosqueProfile` model, resolves its IANA timezone locally from coordinates, upserts it into the followed-mosque library and makes it the selected mosque. This keeps prayer context, Today integration and local persistence on the same mosque-domain path used by manually configured profiles.
+Favouriting a directory mosque adds it to the followed-mosque library. A favourite action does not silently replace the active prayer-time mosque/source. Prayer, Iqamah and Jumu'ah authority continues to follow the explicitly configured SalahOS prayer source and mosque timetable rules.
 
-## Snapshot currently bundled
+External directions and shared correction/report workflows are separate network-dependent actions and fail independently from local prayer calculation and bundled mosque discovery.
 
-The Stage 47 source snapshot contains 122 qualifying OpenStreetMap elements and deterministically generates 106 deduplicated records. Its generated metadata records the earliest OSM base timestamp represented by the state/territory queries so the age of the shipped catalogue is visible in-app and auditable in the repository.
+## Corrections and shared directory service
+
+The combined catalogue also seeds the shared mosque directory service. Contributions are subject to duplicate checks, moderation and verification/claim state. Corrections should use the report/edit workflow rather than silently changing source identity or collapsing distinct nearby venues.
+
+Directory identity/location facts should not be treated as an authoritative daily timetable. Users and mosque administrators should verify prayer/Iqamah/Jumu'ah data against the configured mosque timetable or other trusted local source before relying on it operationally.
