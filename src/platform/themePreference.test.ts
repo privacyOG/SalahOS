@@ -72,4 +72,19 @@ describe('runtime theme preference', () => {
     cleanup();
     expect(media.listener).toBeNull();
   });
+
+  it('replaces an existing system listener on the same document', () => {
+    const { dataset, media, targets } = createTargets(false);
+    const staleCleanup = installThemePreference('system', targets);
+
+    expect(media.listener).not.toBeNull();
+    installThemePreference('light', targets);
+
+    expect(dataset.theme).toBe('light');
+    expect(media.listener).toBeNull();
+
+    staleCleanup();
+    expect(dataset.theme).toBe('light');
+    expect(media.listener).toBeNull();
+  });
 });
