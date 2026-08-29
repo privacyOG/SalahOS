@@ -1,0 +1,89 @@
+name: Temporary v1.5.1 location contrast check
+
+on:
+  push:
+    branches:
+      - utility/v151-location-axe-check
+    paths:
+      - .github/workflows/temporary-v151-location-axe-check.yml
+
+permissions:
+  contents: read
+
+jobs:
+  targeted:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: /tmp/salahos-pw-browsers-1.62.0
+      SALAHOS_VISUAL_PLAYWRIGHT_MODULE: /tmp/salahos-visual-harness/node_modules/playwright/index.mjs
+      SALAHOS_VISUAL_HARNESS_ROOT: /tmp/salahos-visual-harness
+      SALAHOS_VISUAL_ARTIFACT_DIR: visual-artifacts
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install application dependencies
+        run: npm ci --ignore-scripts
+      - name: Verify static gates
+        run: |
+          npm run format:check
+          npm run lint
+          npm run typecheck
+          npm run theme:check
+      - name: Build production application
+        run: npm run build
+      - name: Install Chromium harness
+        run: |
+          rm -rf /tmp/salahos-visual-harness
+          mkdir -p /tmp/salahos-visual-harness
+          cd /tmp/salahos-visual-harness
+          npm init -y >/dev/null 2>&1
+          npm install --ignore-scripts --save-exact \
+            playwright@1.62.0 \
+            axe-core@4.10.3 \
+            pngjs@7.0.0 \
+            pixelmatch@7.1.0
+          npm audit --audit-level=moderate
+          npx playwright install --with-deps chromium
+      - name: Start production server
+        run: |
+          rm -rf visual-artifacts
+          python3 -m http.server 4173 --directory dist --bind 127.0.0.1 >/tmp/salahos-visual-http.log 2>&1 &
+          echo $! >/tmp/salahos-visual-server.pid
+          python3 - <<'PY'
+          import time
+          import urllib.request
+          for _ in range(50):
+              try:
+                  with urllib.request.urlopen('http://127.0.0.1:4173/', timeout=1) as response:
+                      if response.status == 200:
+                          raise SystemExit(0)
+              except Exception:
+                  time.sleep(0.1)
+          raise SystemExit('Local SalahOS production server did not become ready')
+          PY
+      - name: Run Today smoke
+        run: node scripts/visual-today-smoke.mjs
+      - name: Run axe acceptance
+        run: node scripts/visual-accessibility-axe.mjs
+      - name: Run theme matrix
+        run: node scripts/visual-theme-matrix.mjs
+      - name: Run golden regression
+        run: node scripts/visual-golden-regression.mjs
+      - name: Upload evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v151-location-contrast-evidence
+          path: visual-artifacts/
+          if-no-files-found: ignore
+          retention-days: 1
+      - name: Stop production server
+        if: always()
+        run: |
+          if [ -f /tmp/salahos-visual-server.pid ]; then
+            kill "$(cat /tmp/salahos-visual-server.pid)" 2>/dev/null || true
+          fi
