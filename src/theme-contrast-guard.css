@@ -19,9 +19,14 @@
   color: var(--salah-fg-primary);
 }
 
-/* Small status copy on prominent prayer surfaces needs normal-text contrast. */
-.today-next__current {
-  color: var(--salah-fg-primary);
+/*
+ * Small status copy on the next-prayer hero must follow the active mobile
+ * template foreground when that surface is present. Falling back to the
+ * global semantic foreground keeps the ordinary Today surface mode-safe.
+ */
+.today-next__current,
+.today-next__current span {
+  color: var(--mobile-theme-fg, var(--salah-fg-primary));
 }
 
 /* Form controls and navigation inherit mode-safe semantic foregrounds. */
