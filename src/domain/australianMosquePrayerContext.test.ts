@@ -24,9 +24,13 @@ describe('Australian mosque published congregation times', () => {
   it('parses all explicitly published daily congregation sessions without inventing missing prayers', () => {
     const record = erskineMusallah();
 
-    expect(publishedAustralianMosqueCongregationMinutes(record, 'dhuhr')).toEqual([735, 795]);
-    expect(publishedAustralianMosqueCongregationMinutes(record, 'fajr')).toEqual([]);
-    expect(hasPublishedAustralianMosqueCongregationTimes(record)).toBe(true);
+    expect(
+      publishedAustralianMosqueCongregationMinutes(record.enriched.prayerTimes, 'dhuhr'),
+    ).toEqual([735, 795]);
+    expect(
+      publishedAustralianMosqueCongregationMinutes(record.enriched.prayerTimes, 'fajr'),
+    ).toEqual([]);
+    expect(hasPublishedAustralianMosqueCongregationTimes(record.enriched.prayerTimes)).toBe(true);
   });
 
   it('overlays the primary published congregation time while keeping calculated prayer starts', () => {
@@ -41,7 +45,10 @@ describe('Australian mosque published congregation times', () => {
       sourceMode: 'calculated',
       mosqueTimetable: null,
     });
-    const enriched = applyAustralianMosqueCongregationTimes(calculated, record);
+    const enriched = applyAustralianMosqueCongregationTimes(calculated, {
+      mosqueName: record.name,
+      prayerTimes: record.enriched.prayerTimes,
+    });
 
     expect(enriched.sourceMode).toBe('calculated');
     expect(enriched.mosqueName).toBe(record.name);

@@ -3,11 +3,6 @@ import { useEffect, useMemo, useState } from 'react';
 import '../today-contextual-v2.css';
 
 import {
-  australianMosques,
-  australianMosqueToProfile,
-  type AustralianMosqueRecord,
-} from '../domain/australianMosqueDirectoryCombined';
-import {
   applyAustralianMosqueCongregationTimes,
   publishedAustralianMosqueCongregationMinutes,
 } from '../domain/australianMosquePrayerContext';
@@ -31,6 +26,10 @@ import type { Locale, TranslationKey } from '../i18n/translations';
 import { getApplicationStorage } from '../platform/applicationStorage';
 import { loadRecentBestAvailableLocation } from '../platform/bestAvailableLocation';
 import { loadMosqueProfileLibrary } from '../platform/mosqueProfileLibrary';
+import {
+  loadSelectedDirectoryMosqueContext,
+  type SelectedDirectoryMosqueContext,
+} from '../platform/selectedDirectoryMosqueContext';
 import { installRuntimeRefreshListeners } from '../platform/runtimeRefresh';
 import {
   defaultPersistedSettings,
@@ -183,11 +182,13 @@ function initialSettings(): PersistedSettings {
   }
 }
 
-function initialSelectedAustralianMosque(): AustralianMosqueRecord | null {
+function initialSelectedDirectoryMosqueContext(): SelectedDirectoryMosqueContext | null {
   try {
-    const selectedProfileId = loadMosqueProfileLibrary(getApplicationStorage()).selectedProfileId;
+    const storage = getApplicationStorage();
+    const selectedProfileId = loadMosqueProfileLibrary(storage).selectedProfileId;
     if (selectedProfileId === null) return null;
-    return australianMosques.find((mosque) => mosque.id === selectedProfileId) ?? null;
+    const context = loadSelectedDirectoryMosqueContext(storage);
+    return context?.mosqueId === selectedProfileId ? context : null;
   } catch {
     return null;
   }
@@ -237,27 +238,20 @@ function prayerBoardCivilDate(data: PrayerBoardData): Date {
 
 export function TodayScreen() {
   const settings = useMemo(initialSettings, []);
-  const selectedDirectoryMosque = useMemo(initialSelectedAustralianMosque, []);
+  const selectedDirectoryContext = useMemo(initialSelectedDirectoryMosqueContext, []);
   const activeDirectoryMosque =
-    selectedDirectoryMosque !== null && settings.prayerSourceMode !== 'local-mosque'
-      ? selectedDirectoryMosque
+    selectedDirectoryContext !== null && settings.prayerSourceMode !== 'local-mosque'
+      ? selectedDirectoryContext
       : null;
   const directoryMosqueActive = activeDirectoryMosque !== null;
-  const selectedDirectoryProfile = useMemo(
-    () =>
-      activeDirectoryMosque === null ? null : australianMosqueToProfile(activeDirectoryMosque),
-    [activeDirectoryMosque],
-  );
   const mobileThemeConfig = useMobilePrayerThemeConfig();
   const weather = useMobilePrayerWeather();
   const modules = mobileThemeConfig.moduleVisibility;
   const locale = settings.locale;
   const contextualCopy = todayContextCopy[locale];
   const uxCopy = stage8TodayCopy[locale];
-  const coordinates =
-    selectedDirectoryProfile?.coordinates ?? settings.location?.coordinates ?? null;
-  const timeZoneOverride =
-    selectedDirectoryProfile?.timeZone ?? settings.location?.timeZone ?? null;
+  const coordinates = activeDirectoryMosque?.coordinates ?? settings.location?.coordinates ?? null;
+  const timeZoneOverride = activeDirectoryMosque?.timeZone ?? settings.location?.timeZone ?? null;
   const [now, setNow] = useState<Date | null>(() => readSystemTime());
   const [online, setOnline] = useState(() => navigator.onLine);
 
@@ -409,7 +403,7 @@ export function TodayScreen() {
       className="today-screen"
       data-prayer-board-data-version={prayerBoardData?.version}
       data-prayer-board-source={prayerBoardData?.sourceMode}
-      data-selected-directory-mosque-id={activeDirectoryMosque?.id}
+      data-selected-directory-mosque-id={activeDirectoryMosque?.mosqueId}
       data-mobile-module-dates={modules.dates ? 'visible' : 'hidden'}
       data-mobile-module-jumuah={modules.jumuah ? 'visible' : 'hidden'}
       data-mobile-module-sunrise-sunset={modules['sunrise-sunset'] ? 'visible' : 'hidden'}
@@ -595,7 +589,7 @@ export function TodayScreen() {
                 const publishedIqamahMinutes =
                   activeDirectoryMosque !== null && !isSunrise
                     ? publishedAustralianMosqueCongregationMinutes(
-                        activeDirectoryMosque,
+                        activeDirectoryMosque.prayerTimes,
                         prayer.name,
                       )
                     : [];

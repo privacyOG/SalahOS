@@ -14,6 +14,7 @@ import { localeTag } from '../i18n/i18n';
 import { australianMosqueDirectoryCopy } from '../i18n/australianMosqueDirectoryTranslations';
 import type { Locale } from '../i18n/translations';
 import { getApplicationStorage } from '../platform/applicationStorage';
+import { saveSelectedDirectoryMosqueContext } from '../platform/selectedDirectoryMosqueContext';
 import { MOSQUE_PROFILE_LIBRARY_CHANGE_EVENT } from '../platform/mosqueProfileEvents';
 import {
   loadMosqueProfileLibrary,
@@ -140,6 +141,13 @@ export function AustralianMosqueDirectoryPanel() {
 
   const useMosque = (mosque: AustralianMosqueRecord) => {
     const profile = australianMosqueToProfile(mosque);
+    saveSelectedDirectoryMosqueContext(getApplicationStorage(), {
+      mosqueId: mosque.id,
+      mosqueName: mosque.name,
+      coordinates: profile.coordinates,
+      timeZone: profile.timeZone,
+      prayerTimes: mosque.enriched.prayerTimes,
+    });
     const withProfile = upsertMosqueProfile(library, profile);
     persistLibrary(selectMosqueProfile(withProfile, profile.id));
   };
