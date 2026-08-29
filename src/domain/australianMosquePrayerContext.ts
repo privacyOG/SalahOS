@@ -1,4 +1,4 @@
-import type { AustralianMosqueRecord } from './australianMosqueDirectoryCombined';
+import type { MosqueDirectoryPrayerSummary } from './mosqueDirectoryEnrichment';
 import type { ObligatoryPrayerName, PrayerName } from './prayerEngine';
 import type { SourcedPrayerDashboard } from './sourcedDashboard';
 
@@ -12,6 +12,11 @@ const OBLIGATORY_PRAYERS: readonly ObligatoryPrayerName[] = [
 
 const TWELVE_HOUR_CLOCK = /^(\d{1,2}):(\d{2})\s*(am|pm)$/u;
 const TWENTY_FOUR_HOUR_CLOCK = /^(\d{1,2}):(\d{2})$/u;
+
+export interface PublishedMosqueCongregationContext {
+  readonly mosqueName: string;
+  readonly prayerTimes: MosqueDirectoryPrayerSummary | null;
+}
 
 function parseClock(value: string): number | null {
   const normalized = value.trim().toLocaleLowerCase('en-AU');
@@ -37,11 +42,11 @@ function parseClock(value: string): number | null {
 }
 
 export function publishedAustralianMosqueCongregationMinutes(
-  record: AustralianMosqueRecord,
+  prayerTimes: MosqueDirectoryPrayerSummary | null,
   prayer: PrayerName,
 ): readonly number[] {
   if (prayer === 'sunrise') return Object.freeze([]);
-  const raw = record.enriched.prayerTimes?.[prayer];
+  const raw = prayerTimes?.[prayer];
   if (raw === undefined) return Object.freeze([]);
 
   const values = raw
@@ -52,10 +57,10 @@ export function publishedAustralianMosqueCongregationMinutes(
 }
 
 export function hasPublishedAustralianMosqueCongregationTimes(
-  record: AustralianMosqueRecord,
+  prayerTimes: MosqueDirectoryPrayerSummary | null,
 ): boolean {
   return OBLIGATORY_PRAYERS.some(
-    (prayer) => publishedAustralianMosqueCongregationMinutes(record, prayer).length > 0,
+    (prayer) => publishedAustralianMosqueCongregationMinutes(prayerTimes, prayer).length > 0,
   );
 }
 
@@ -68,12 +73,15 @@ export function hasPublishedAustralianMosqueCongregationTimes(
  */
 export function applyAustralianMosqueCongregationTimes(
   dashboard: SourcedPrayerDashboard,
-  record: AustralianMosqueRecord,
+  context: PublishedMosqueCongregationContext,
 ): SourcedPrayerDashboard {
   if (dashboard.sourceMode === 'local-mosque') return dashboard;
 
   const prayers = dashboard.prayers.map((row) => {
-    const published = publishedAustralianMosqueCongregationMinutes(record, row.name);
+    const published = publishedAustralianMosqueCongregationMinutes(
+      context.prayerTimes,
+      row.name,
+    );
     const primary = published[0];
     return primary === undefined
       ? row
@@ -85,7 +93,7 @@ export function applyAustralianMosqueCongregationTimes(
 
   return Object.freeze({
     ...dashboard,
-    mosqueName: record.name,
+    mosqueName: context.mosqueName,
     prayers: Object.freeze(prayers),
   });
 }
