@@ -95,6 +95,7 @@ function parseRgb(value) {
   const values = value.match(/[\d.]+/g);
   return values && values.length >= 3 ? values.slice(0, 3).map(Number) : null;
 }
+const contrastFailures = [];
 const browser = await chromium.launch({ headless: true });
 try {
   for (const s of scenarios) {
@@ -204,6 +205,7 @@ try {
           .slice(0, 250);
       });
 
+      const failuresBeforeScenario = contrastFailures.length;
       for (const item of samples) {
         if (item.complexBackground) continue;
         const fg = parseRgb(item.fg);
@@ -216,18 +218,29 @@ try {
         const largeText = item.fontSize >= 24 || (item.fontSize >= 18.66 && item.fontWeight >= 700);
         const minimumRatio = largeText ? 3 : 4.5;
         if (ratio < minimumRatio) {
-          throw new Error(
+          contrastFailures.push(
             `${s.name}: visible text contrast below ${minimumRatio}:1 (${ratio.toFixed(2)}) for ${JSON.stringify(item.text)}`,
           );
         }
       }
-      console.log(`theme matrix passed: ${s.name}`);
+      if (contrastFailures.length === failuresBeforeScenario) {
+        console.log(`theme matrix passed: ${s.name}`);
+      } else {
+        console.log(
+          `theme matrix collected ${contrastFailures.length - failuresBeforeScenario} contrast failure(s): ${s.name}`,
+        );
+      }
     } finally {
       await context.close();
     }
   }
 } finally {
   await browser.close();
+}
+if (contrastFailures.length > 0) {
+  throw new Error(
+    `Theme visual matrix found ${contrastFailures.length} contrast failure(s):\n${contrastFailures.join('\n')}`,
+  );
 }
 console.log(
   `Theme visual matrix passed ${scenarios.length} scenarios including today, qiblah, settings, smart-display, system, rtl and large-text.`,
