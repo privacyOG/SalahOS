@@ -61,9 +61,15 @@
 }
 
 /* Mosque-oriented palette treatments; no separate token system. */
-.smart-display[data-palette='royal-blue'] :is(.next-prayer-block, [class*='__next']),
-.smart-display[data-palette='emerald-mosque'] :is(.next-prayer-block, [class*='__next']),
-.smart-display[data-palette='midnight-gold'] :is(.next-prayer-block, [class*='__next']) {
+:root[data-palette='royal-blue']
+  .smart-display
+  :is(.next-prayer-block, [class*='__next']),
+:root[data-palette='emerald-mosque']
+  .smart-display
+  :is(.next-prayer-block, [class*='__next']),
+:root[data-palette='midnight-gold']
+  .smart-display
+  :is(.next-prayer-block, [class*='__next']) {
   background: color-mix(
     in srgb,
     var(--mosque-display-highlight) 18%,
@@ -71,7 +77,8 @@
   );
 }
 
-.smart-display[data-palette='high-contrast']
+:root[data-palette='high-contrast']
+  .smart-display
   :is(.prayer-card, [class*='__prayer'], [class*='__announcement']) {
   border-width: 2px;
 }
