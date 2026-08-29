@@ -19,6 +19,11 @@
   color: var(--salah-fg-primary);
 }
 
+/* Small status copy on prominent prayer surfaces needs normal-text contrast. */
+.today-next__current {
+  color: var(--salah-fg-primary);
+}
+
 /* Form controls and navigation inherit mode-safe semantic foregrounds. */
 button,
 input,
