@@ -9,18 +9,8 @@
     "sitemapRecordCount": 178,
     "recordCount": 176,
     "failedRecordCount": 2,
-    "regionCodes": [
-      "AU-NSW",
-      "AU-NT",
-      "AU-QLD",
-      "AU-SA",
-      "AU-TAS",
-      "AU-VIC",
-      "AU-WA"
-    ],
-    "missingRegionCodes": [
-      "AU-ACT"
-    ]
+    "regionCodes": ["AU-NSW", "AU-NT", "AU-QLD", "AU-SA", "AU-TAS", "AU-VIC", "AU-WA"],
+    "missingRegionCodes": ["AU-ACT"]
   },
   "records": [
     {
@@ -44,13 +34,9 @@
       },
       "prayerTimes": null,
       "jumuahTimes": [],
-      "features": [
-        "Car park"
-      ],
+      "features": ["Car park"],
       "facilities": [],
-      "services": [
-        "youth"
-      ],
+      "services": ["youth"],
       "sourceUrl": "https://mosque-finder.com.au/mosque/adelaide-islamic-information-centre-of-sa/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
     },
@@ -76,9 +62,7 @@
       "prayerTimes": null,
       "jumuahTimes": [],
       "features": [],
-      "facilities": [
-        "women-prayer-space"
-      ],
+      "facilities": ["women-prayer-space"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/adelaide-little-gilbert-street-mosque/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -459,14 +443,8 @@
         "Educational facility",
         "Non-muslim visit (by appointment)"
       ],
-      "facilities": [
-        "wudu",
-        "toilets",
-        "parking"
-      ],
-      "services": [
-        "classes"
-      ],
+      "facilities": ["wudu", "toilets", "parking"],
+      "services": ["classes"],
       "sourceUrl": "https://mosque-finder.com.au/mosque/artarmon-hampden-road-mosque/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
     },
@@ -489,14 +467,8 @@
       "contact": {},
       "prayerTimes": null,
       "jumuahTimes": [],
-      "features": [
-        "Street parking",
-        "Toilets"
-      ],
-      "facilities": [
-        "toilets",
-        "parking"
-      ],
+      "features": ["Street parking", "Toilets"],
+      "facilities": ["toilets", "parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/ashfield-holden-street-musalla/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -556,12 +528,8 @@
           "label": "Jumu’ah 2"
         }
       ],
-      "features": [
-        "Street parking"
-      ],
-      "facilities": [
-        "parking"
-      ],
+      "features": ["Street parking"],
+      "facilities": ["parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/asquith-hornsby-musalla/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -593,13 +561,9 @@
           "label": "Jumu’ah"
         }
       ],
-      "features": [
-        "Educational facility"
-      ],
+      "features": ["Educational facility"],
       "facilities": [],
-      "services": [
-        "classes"
-      ],
+      "services": ["classes"],
       "sourceUrl": "https://mosque-finder.com.au/mosque/auburn-bukhari-house-musalla/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
     },
@@ -643,15 +607,8 @@
         "Educational facility",
         "Non-muslim visit (by appointment)"
       ],
-      "facilities": [
-        "wudu",
-        "toilets",
-        "parking",
-        "wheelchair-accessible"
-      ],
-      "services": [
-        "classes"
-      ],
+      "facilities": ["wudu", "toilets", "parking", "wheelchair-accessible"],
+      "services": ["classes"],
       "sourceUrl": "https://mosque-finder.com.au/mosque/auburn-gelibolu-parade-gallipoli-mosque/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
     },
@@ -686,18 +643,9 @@
           "label": "winter"
         }
       ],
-      "features": [
-        "Street parking",
-        "Toilets"
-      ],
-      "facilities": [
-        "toilets",
-        "parking"
-      ],
-      "services": [
-        "classes",
-        "youth"
-      ],
+      "features": ["Street parking", "Toilets"],
+      "facilities": ["toilets", "parking"],
+      "services": ["classes", "youth"],
       "sourceUrl": "https://mosque-finder.com.au/mosque/auburn-harrow-road-auburn-islamic-centre/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
     },
@@ -728,12 +676,8 @@
           "label": "Jumu’ah"
         }
       ],
-      "features": [
-        "Street parking"
-      ],
-      "facilities": [
-        "parking"
-      ],
+      "features": ["Street parking"],
+      "facilities": ["parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/auburn-masjid-abu-bakr-al-siddeeq/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -757,12 +701,8 @@
       "contact": {},
       "prayerTimes": null,
       "jumuahTimes": [],
-      "features": [
-        "Street parking"
-      ],
-      "facilities": [
-        "parking"
-      ],
+      "features": ["Street parking"],
+      "facilities": ["parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/auburn-omar-mosque/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -795,14 +735,8 @@
           "label": "winter"
         }
       ],
-      "features": [
-        "Street parking",
-        "Toilets"
-      ],
-      "facilities": [
-        "toilets",
-        "parking"
-      ],
+      "features": ["Street parking", "Toilets"],
+      "facilities": ["toilets", "parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/auburn-town-hall-civic-centre-friday-prayer-only/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -859,9 +793,7 @@
         }
       ],
       "features": [],
-      "facilities": [
-        "parking"
-      ],
+      "facilities": ["parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/ballarat-elsworth-street-masjid/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -931,15 +863,8 @@
         "Toilets",
         "Educational facility"
       ],
-      "facilities": [
-        "wudu",
-        "toilets",
-        "parking",
-        "women-prayer-space"
-      ],
-      "services": [
-        "classes"
-      ],
+      "facilities": ["wudu", "toilets", "parking", "women-prayer-space"],
+      "services": ["classes"],
       "sourceUrl": "https://mosque-finder.com.au/mosque/bankstown-daar-ibn-abbas-college-cross-street-musalla/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
     },
@@ -970,16 +895,9 @@
           "label": "Jumu’ah"
         }
       ],
-      "features": [
-        "Street parking"
-      ],
-      "facilities": [
-        "parking"
-      ],
-      "services": [
-        "classes",
-        "youth"
-      ],
+      "features": ["Street parking"],
+      "facilities": ["parking"],
+      "services": ["classes", "youth"],
       "sourceUrl": "https://mosque-finder.com.au/mosque/bankstown-fitya-centre-musalla/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
     },
@@ -1005,12 +923,8 @@
       },
       "prayerTimes": null,
       "jumuahTimes": [],
-      "features": [
-        "Street parking"
-      ],
-      "facilities": [
-        "parking"
-      ],
+      "features": ["Street parking"],
+      "facilities": ["parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/bankstown-winspear-avenue-mosque/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -1067,10 +981,7 @@
         }
       ],
       "features": [],
-      "facilities": [
-        "wudu",
-        "women-prayer-space"
-      ],
+      "facilities": ["wudu", "women-prayer-space"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/bathurst-al-sahabah-kelso-mosque/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -1100,11 +1011,7 @@
         }
       ],
       "features": [],
-      "facilities": [
-        "wudu",
-        "parking",
-        "women-prayer-space"
-      ],
+      "facilities": ["wudu", "parking", "women-prayer-space"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/castle-grand-jummah-only/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -1245,12 +1152,8 @@
           "label": "Khutbah"
         }
       ],
-      "features": [
-        "Street parking"
-      ],
-      "facilities": [
-        "parking"
-      ],
+      "features": ["Street parking"],
+      "facilities": ["parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/blacktown-afghan-osman-mosque/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -1276,13 +1179,8 @@
       },
       "prayerTimes": null,
       "jumuahTimes": [],
-      "features": [
-        "Wudu facility"
-      ],
-      "facilities": [
-        "wudu",
-        "women-prayer-space"
-      ],
+      "features": ["Wudu facility"],
+      "facilities": ["wudu", "women-prayer-space"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/box-hill-tafe-musalla/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -1441,19 +1339,9 @@
           "label": "Jumu’ah"
         }
       ],
-      "features": [
-        "Car park",
-        "Street parking",
-        "Wudu facility"
-      ],
-      "facilities": [
-        "wudu",
-        "parking",
-        "women-prayer-space"
-      ],
-      "services": [
-        "classes"
-      ],
+      "features": ["Car park", "Street parking", "Wudu facility"],
+      "facilities": ["wudu", "parking", "women-prayer-space"],
+      "services": ["classes"],
       "sourceUrl": "https://mosque-finder.com.au/mosque/cairns-north-abou-bakr-asdeek-mosque/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
     },
@@ -1476,15 +1364,8 @@
       "contact": {},
       "prayerTimes": null,
       "jumuahTimes": [],
-      "features": [
-        "Car park",
-        "Street parking",
-        "Toilets"
-      ],
-      "facilities": [
-        "toilets",
-        "parking"
-      ],
+      "features": ["Car park", "Street parking", "Toilets"],
+      "facilities": ["toilets", "parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/callaghan-newcastle-university-faith-centre-musalla/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -1508,15 +1389,8 @@
       "contact": {},
       "prayerTimes": null,
       "jumuahTimes": [],
-      "features": [
-        "Car park",
-        "Street parking",
-        "Toilets"
-      ],
-      "facilities": [
-        "toilets",
-        "parking"
-      ],
+      "features": ["Car park", "Street parking", "Toilets"],
+      "facilities": ["toilets", "parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/campbelltown-uws-macarthur-musalla/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -1603,12 +1477,8 @@
       },
       "jumuahTimes": [],
       "features": [],
-      "facilities": [
-        "women-prayer-space"
-      ],
-      "services": [
-        "classes"
-      ],
+      "facilities": ["women-prayer-space"],
+      "services": ["classes"],
       "sourceUrl": "https://mosque-finder.com.au/mosque/canning-vale-musalla/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
     },
@@ -1842,14 +1712,8 @@
       "contact": {},
       "prayerTimes": null,
       "jumuahTimes": [],
-      "features": [
-        "Street parking",
-        "Toilets"
-      ],
-      "facilities": [
-        "toilets",
-        "parking"
-      ],
+      "features": ["Street parking", "Toilets"],
+      "facilities": ["toilets", "parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/cringila-illawarra-bilal-mosque/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -1881,9 +1745,7 @@
         }
       ],
       "features": [],
-      "facilities": [
-        "women-prayer-space"
-      ],
+      "facilities": ["women-prayer-space"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/cumberland-university-of-sydney-musalla/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -1923,15 +1785,8 @@
         "Educational facility",
         "Zakaat"
       ],
-      "facilities": [
-        "wudu",
-        "toilets",
-        "parking"
-      ],
-      "services": [
-        "classes",
-        "funeral-services"
-      ],
+      "facilities": ["wudu", "toilets", "parking"],
+      "services": ["classes", "funeral-services"],
       "sourceUrl": "https://mosque-finder.com.au/mosque/darul-imaan-wolli-creek-mosque/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
     },
@@ -1961,12 +1816,8 @@
           "label": "Jumu’ah"
         }
       ],
-      "features": [
-        "Street parking"
-      ],
-      "facilities": [
-        "parking"
-      ],
+      "features": ["Street parking"],
+      "facilities": ["parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/dee-why-manly-warringah-mosque/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -1997,15 +1848,8 @@
           "label": "Jumu’ah"
         }
       ],
-      "features": [
-        "Car park",
-        "Wudu facility",
-        "Toilets"
-      ],
-      "facilities": [
-        "wudu",
-        "toilets"
-      ],
+      "features": ["Car park", "Wudu facility", "Toilets"],
+      "facilities": ["wudu", "toilets"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/dubbo-kotku-mosque/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -2031,12 +1875,8 @@
       },
       "prayerTimes": null,
       "jumuahTimes": [],
-      "features": [
-        "Street parking"
-      ],
-      "facilities": [
-        "parking"
-      ],
+      "features": ["Street parking"],
+      "facilities": ["parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/dural-old-northern-road-dural-iqama-musallah/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -2235,10 +2075,7 @@
         }
       ],
       "features": [],
-      "facilities": [
-        "wudu",
-        "parking"
-      ],
+      "facilities": ["wudu", "parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/glenfield-hall-jummah-only/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -2359,12 +2196,8 @@
           "label": "Jumu’ah 2"
         }
       ],
-      "features": [
-        "Street parking"
-      ],
-      "facilities": [
-        "parking"
-      ],
+      "features": ["Street parking"],
+      "facilities": ["parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/granville-gya-town-hall-jummah/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -2432,13 +2265,8 @@
           "label": "Jumu’ah"
         }
       ],
-      "features": [
-        "Wudu facility"
-      ],
-      "facilities": [
-        "wudu",
-        "women-prayer-space"
-      ],
+      "features": ["Wudu facility"],
+      "facilities": ["wudu", "women-prayer-space"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/granville-south-masjid-al-noor/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -2469,19 +2297,8 @@
           "label": "Jumu’ah"
         }
       ],
-      "features": [
-        "Car park",
-        "Street parking",
-        "Wudu facility",
-        "Disabled access",
-        "Toilets"
-      ],
-      "facilities": [
-        "wudu",
-        "toilets",
-        "parking",
-        "wheelchair-accessible"
-      ],
+      "features": ["Car park", "Street parking", "Wudu facility", "Disabled access", "Toilets"],
+      "facilities": ["wudu", "toilets", "parking", "wheelchair-accessible"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/green-valley-wilson-road-green-valley-mosque/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -2537,12 +2354,8 @@
       },
       "prayerTimes": null,
       "jumuahTimes": [],
-      "features": [
-        "Street parking"
-      ],
-      "facilities": [
-        "parking"
-      ],
+      "features": ["Street parking"],
+      "facilities": ["parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/greenacre/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -2568,14 +2381,8 @@
       },
       "prayerTimes": null,
       "jumuahTimes": [],
-      "features": [
-        "Street parking",
-        "Wudu facility"
-      ],
-      "facilities": [
-        "wudu",
-        "parking"
-      ],
+      "features": ["Street parking", "Wudu facility"],
+      "facilities": ["wudu", "parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/griffith-kotku-riaz-mosque/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -2632,14 +2439,8 @@
       },
       "prayerTimes": null,
       "jumuahTimes": [],
-      "features": [
-        "Street parking",
-        "Wudu facility"
-      ],
-      "facilities": [
-        "wudu",
-        "parking"
-      ],
+      "features": ["Street parking", "Wudu facility"],
+      "facilities": ["wudu", "parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/guildford-mountford-ave-mosque/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -2703,15 +2504,8 @@
         "Funeral services",
         "Counselling services"
       ],
-      "facilities": [
-        "wudu",
-        "toilets",
-        "parking"
-      ],
-      "services": [
-        "counselling",
-        "funeral-services"
-      ],
+      "facilities": ["wudu", "toilets", "parking"],
+      "services": ["counselling", "funeral-services"],
       "sourceUrl": "https://mosque-finder.com.au/mosque/gwynneville-omar-masjid-wollongong/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
     },
@@ -2737,17 +2531,8 @@
       },
       "prayerTimes": null,
       "jumuahTimes": [],
-      "features": [
-        "Car park",
-        "Street parking",
-        "Wudu facility",
-        "Toilets"
-      ],
-      "facilities": [
-        "wudu",
-        "toilets",
-        "parking"
-      ],
+      "features": ["Car park", "Street parking", "Wudu facility", "Toilets"],
+      "facilities": ["wudu", "toilets", "parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/gwynneville-university-of-wollongong-musalla/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -2771,12 +2556,8 @@
       "contact": {},
       "prayerTimes": null,
       "jumuahTimes": [],
-      "features": [
-        "Street parking"
-      ],
-      "facilities": [
-        "parking"
-      ],
+      "features": ["Street parking"],
+      "facilities": ["parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/harris-park-grand-avenue-north-musalla/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -2860,18 +2641,9 @@
           "label": "Jumu’ah"
         }
       ],
-      "features": [
-        "Street parking",
-        "Educational facility"
-      ],
-      "facilities": [
-        "parking"
-      ],
-      "services": [
-        "classes",
-        "counselling",
-        "youth"
-      ],
+      "features": ["Street parking", "Educational facility"],
+      "facilities": ["parking"],
+      "services": ["classes", "counselling", "youth"],
       "sourceUrl": "https://mosque-finder.com.au/mosque/hoppers-crossing-al-taqwa-mosque/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
     },
@@ -2950,10 +2722,7 @@
       "prayerTimes": null,
       "jumuahTimes": [],
       "features": [],
-      "facilities": [
-        "wudu",
-        "women-prayer-space"
-      ],
+      "facilities": ["wudu", "women-prayer-space"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/ingleburn-islamic-centre-musalla/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -2977,17 +2746,8 @@
       "contact": {},
       "prayerTimes": null,
       "jumuahTimes": [],
-      "features": [
-        "Car park",
-        "Street parking",
-        "Wudu facility",
-        "Toilets"
-      ],
-      "facilities": [
-        "wudu",
-        "toilets",
-        "parking"
-      ],
+      "features": ["Car park", "Street parking", "Wudu facility", "Toilets"],
+      "facilities": ["wudu", "toilets", "parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/ingleburn-lancaster-st-musalla/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -3017,10 +2777,7 @@
         }
       ],
       "features": [],
-      "facilities": [
-        "wudu",
-        "toilets"
-      ],
+      "facilities": ["wudu", "toilets"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/ingleburn-ingleburn-community-hall-jummah-only/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -3104,17 +2861,8 @@
           "label": "Jumu’ah"
         }
       ],
-      "features": [
-        "Street parking",
-        "Toilets",
-        "Wudu facility"
-      ],
-      "facilities": [
-        "wudu",
-        "toilets",
-        "parking",
-        "women-prayer-space"
-      ],
+      "features": ["Street parking", "Toilets", "Wudu facility"],
+      "facilities": ["wudu", "toilets", "parking", "women-prayer-space"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/kensington-university-of-nsw-musalla/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -3202,15 +2950,8 @@
         "Funeral services",
         "Non-muslim visit (by appointment)"
       ],
-      "facilities": [
-        "wudu",
-        "toilets",
-        "parking",
-        "women-prayer-space"
-      ],
-      "services": [
-        "funeral-services"
-      ],
+      "facilities": ["wudu", "toilets", "parking", "women-prayer-space"],
+      "services": ["funeral-services"],
       "sourceUrl": "https://mosque-finder.com.au/mosque/lakemba-ali-ibn-abu-taleb-mosque/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
     },
@@ -3243,9 +2984,7 @@
         }
       ],
       "features": [],
-      "facilities": [
-        "parking"
-      ],
+      "facilities": ["parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/lakemba-ernest-street-mosque/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -3276,18 +3015,9 @@
           "label": "Jumu’ah"
         }
       ],
-      "features": [
-        "Street parking"
-      ],
-      "facilities": [
-        "wudu",
-        "toilets",
-        "parking",
-        "women-prayer-space"
-      ],
-      "services": [
-        "classes"
-      ],
+      "features": ["Street parking"],
+      "facilities": ["wudu", "toilets", "parking", "women-prayer-space"],
+      "services": ["classes"],
       "sourceUrl": "https://mosque-finder.com.au/mosque/lakemba-haldon-st-aswj-musalla/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
     },
@@ -3311,13 +3041,8 @@
       "prayerTimes": null,
       "jumuahTimes": [],
       "features": [],
-      "facilities": [
-        "wudu",
-        "women-prayer-space"
-      ],
-      "services": [
-        "classes"
-      ],
+      "facilities": ["wudu", "women-prayer-space"],
+      "services": ["classes"],
       "sourceUrl": "https://mosque-finder.com.au/mosque/lakemba-islamic-centre/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
     },
@@ -3345,15 +3070,8 @@
           "label": "Jumu’ah"
         }
       ],
-      "features": [
-        "Car park",
-        "Street parking",
-        "Wudu facility"
-      ],
-      "facilities": [
-        "wudu",
-        "parking"
-      ],
+      "features": ["Car park", "Street parking", "Wudu facility"],
+      "facilities": ["wudu", "parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/lakemba-kca-centre-jummah-only/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -3424,14 +3142,8 @@
           "label": "Jumu’ah 2"
         }
       ],
-      "features": [
-        "Street parking",
-        "Wudu facility"
-      ],
-      "facilities": [
-        "wudu",
-        "parking"
-      ],
+      "features": ["Street parking", "Wudu facility"],
+      "facilities": ["wudu", "parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/lakemba-railway-parade-musalla/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -3519,9 +3231,7 @@
       "prayerTimes": null,
       "jumuahTimes": [],
       "features": [],
-      "facilities": [
-        "wheelchair-accessible"
-      ],
+      "facilities": ["wheelchair-accessible"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/launceston-university-of-tasmania-musalla/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -3553,17 +3263,9 @@
           "label": "Jumu’ah"
         }
       ],
-      "features": [
-        "Street parking",
-        "Wudu facility"
-      ],
-      "facilities": [
-        "wudu",
-        "parking"
-      ],
-      "services": [
-        "classes"
-      ],
+      "features": ["Street parking", "Wudu facility"],
+      "facilities": ["wudu", "parking"],
+      "services": ["classes"],
       "sourceUrl": "https://mosque-finder.com.au/mosque/leumeah-campbelltown-masjid/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
     },
@@ -3623,16 +3325,8 @@
           "label": "Jumu’ah"
         }
       ],
-      "features": [
-        "Street parking",
-        "Disabled access",
-        "Toilets"
-      ],
-      "facilities": [
-        "toilets",
-        "parking",
-        "wheelchair-accessible"
-      ],
+      "features": ["Street parking", "Disabled access", "Toilets"],
+      "facilities": ["toilets", "parking", "wheelchair-accessible"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/lismore-masallah/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -3656,12 +3350,8 @@
       "contact": {},
       "prayerTimes": null,
       "jumuahTimes": [],
-      "features": [
-        "Car park"
-      ],
-      "facilities": [
-        "parking"
-      ],
+      "features": ["Car park"],
+      "facilities": ["parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/liverpool-whitlam-leisure-centre-musalla-jummah-only/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -3691,9 +3381,7 @@
         }
       ],
       "features": [],
-      "facilities": [
-        "wudu"
-      ],
+      "facilities": ["wudu"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/liverpool-liverpool-hospital-don-everett-musalla/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -3723,9 +3411,7 @@
         }
       ],
       "features": [],
-      "facilities": [
-        "parking"
-      ],
+      "facilities": ["parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/macquarie-fields-iec-glenquarie-musalla-jummah-only/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -3750,12 +3436,8 @@
       "prayerTimes": null,
       "jumuahTimes": [],
       "features": [],
-      "facilities": [
-        "wudu"
-      ],
-      "services": [
-        "classes"
-      ],
+      "facilities": ["wudu"],
+      "services": ["classes"],
       "sourceUrl": "https://mosque-finder.com.au/mosque/macquarie-fields-islamic-education-centre/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
     },
@@ -4058,12 +3740,8 @@
           "label": "Jumu’ah"
         }
       ],
-      "features": [
-        "Street parking"
-      ],
-      "facilities": [
-        "parking"
-      ],
+      "features": ["Street parking"],
+      "facilities": ["parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/minto-suburban-islamic-centre-minto-masjid/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -4095,16 +3773,8 @@
           "label": "Jumu’ah"
         }
       ],
-      "features": [
-        "Street parking",
-        "Wudu facility",
-        "Toilets"
-      ],
-      "facilities": [
-        "wudu",
-        "toilets",
-        "parking"
-      ],
+      "features": ["Street parking", "Wudu facility", "Toilets"],
+      "facilities": ["wudu", "toilets", "parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/minto-mosque/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -4168,11 +3838,7 @@
         }
       ],
       "features": [],
-      "facilities": [
-        "wudu",
-        "toilets",
-        "women-prayer-space"
-      ],
+      "facilities": ["wudu", "toilets", "women-prayer-space"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/minto-mosque-2/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -4254,9 +3920,7 @@
       "prayerTimes": null,
       "jumuahTimes": [],
       "features": [],
-      "facilities": [
-        "wudu"
-      ],
+      "facilities": ["wudu"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/mt-gravatt-griffith-university-mount-gravatt-musalla/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -4307,9 +3971,7 @@
       "jumuahTimes": [],
       "features": [],
       "facilities": [],
-      "services": [
-        "classes"
-      ],
+      "services": ["classes"],
       "sourceUrl": "https://mosque-finder.com.au/mosque/murdoch-murdoch-university-musalla/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
     },
@@ -4509,14 +4171,9 @@
           "label": "Jumu’ah"
         }
       ],
-      "features": [
-        "Car park",
-        "Educational facility"
-      ],
+      "features": ["Car park", "Educational facility"],
       "facilities": [],
-      "services": [
-        "classes"
-      ],
+      "services": ["classes"],
       "sourceUrl": "https://mosque-finder.com.au/mosque/north-ryde-macquarie-university-musalla/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
     },
@@ -4671,9 +4328,7 @@
       "jumuahTimes": [],
       "features": [],
       "facilities": [],
-      "services": [
-        "youth"
-      ],
+      "services": ["youth"],
       "sourceUrl": "https://mosque-finder.com.au/mosque/parafield-gardens-masjid/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
     },
@@ -4752,12 +4407,8 @@
       "contact": {},
       "prayerTimes": null,
       "jumuahTimes": [],
-      "features": [
-        "Street parking"
-      ],
-      "facilities": [
-        "parking"
-      ],
+      "features": ["Street parking"],
+      "facilities": ["parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/parramatta-marsden-street-mosque/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -5012,21 +4663,9 @@
           "label": "Jumu’ah 2"
         }
       ],
-      "features": [
-        "Car park",
-        "Street parking",
-        "Wudu facility",
-        "Toilets"
-      ],
-      "facilities": [
-        "wudu",
-        "toilets",
-        "parking",
-        "women-prayer-space"
-      ],
-      "services": [
-        "classes"
-      ],
+      "features": ["Car park", "Street parking", "Wudu facility", "Toilets"],
+      "facilities": ["wudu", "toilets", "parking", "women-prayer-space"],
+      "services": ["classes"],
       "sourceUrl": "https://mosque-finder.com.au/mosque/rockdale-masjid-al-hidaya/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
     },
@@ -5120,13 +4759,8 @@
           "label": "Jumu’ah"
         }
       ],
-      "features": [
-        "Wudu facility"
-      ],
-      "facilities": [
-        "wudu",
-        "women-prayer-space"
-      ],
+      "features": ["Wudu facility"],
+      "facilities": ["wudu", "women-prayer-space"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/southern-river-masjid-ibrahim/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -5155,18 +4789,9 @@
           "label": "Jumu’ah"
         }
       ],
-      "features": [
-        "Car park",
-        "Street parking",
-        "Marriage services"
-      ],
-      "facilities": [
-        "parking"
-      ],
-      "services": [
-        "counselling",
-        "youth"
-      ],
+      "features": ["Car park", "Street parking", "Marriage services"],
+      "facilities": ["parking"],
+      "services": ["counselling", "youth"],
       "sourceUrl": "https://mosque-finder.com.au/mosque/southport-gcyc-southport-community-centre/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
     },
@@ -5231,14 +4856,8 @@
           "label": "Khutbah"
         }
       ],
-      "features": [
-        "Wudu facility",
-        "Toilets"
-      ],
-      "facilities": [
-        "wudu",
-        "toilets"
-      ],
+      "features": ["Wudu facility", "Toilets"],
+      "facilities": ["wudu", "toilets"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/sydney-cbd-erskine-musallah/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -5269,12 +4888,8 @@
           "label": "Khutbah"
         }
       ],
-      "features": [
-        "Toilets"
-      ],
-      "facilities": [
-        "toilets"
-      ],
+      "features": ["Toilets"],
+      "facilities": ["toilets"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/sydney-cbd-millers-point-abraham-mott-hall-jummah-only/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -5306,9 +4921,7 @@
         }
       ],
       "features": [],
-      "facilities": [
-        "women-prayer-space"
-      ],
+      "facilities": ["women-prayer-space"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/tempe-al-hijrah-mosque/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
@@ -5366,17 +4979,9 @@
           "label": "Jumu’ah"
         }
       ],
-      "features": [
-        "Toilets",
-        "Educational facility",
-        "Car park"
-      ],
-      "facilities": [
-        "toilets"
-      ],
-      "services": [
-        "classes"
-      ],
+      "features": ["Toilets", "Educational facility", "Car park"],
+      "facilities": ["toilets"],
+      "services": ["classes"],
       "sourceUrl": "https://mosque-finder.com.au/mosque/university-of-new-england-masque/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"
     },
@@ -5407,16 +5012,8 @@
           "label": "Jumu’ah"
         }
       ],
-      "features": [
-        "Car park",
-        "Wudu facility",
-        "Toilets"
-      ],
-      "facilities": [
-        "wudu",
-        "toilets",
-        "parking"
-      ],
+      "features": ["Car park", "Wudu facility", "Toilets"],
+      "facilities": ["wudu", "toilets", "parking"],
       "services": [],
       "sourceUrl": "https://mosque-finder.com.au/mosque/west-hobart-warwick-street-mosque/index.html",
       "observedAt": "2026-08-29T12:02:14.303Z"

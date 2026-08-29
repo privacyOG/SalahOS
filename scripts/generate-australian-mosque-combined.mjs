@@ -43,32 +43,46 @@ const FINDER_DUPLICATE_GROUPS = Object.freeze([
   }),
 ]);
 
-const FINDER_COORDINATE_EXCLUSIONS = Object.freeze(new Map([
-  ['mosque-finder:north-ryde-macquarie-university-musalla', 'source coordinates resolve to Newcastle rather than Macquarie University, North Ryde'],
-  ['mosque-finder:sydney-airport-prayer-room', 'source coordinates duplicate the separate Mascot Botany Road musalla rather than Sydney Airport T1'],
-]));
+const FINDER_COORDINATE_EXCLUSIONS = Object.freeze(
+  new Map([
+    [
+      'mosque-finder:north-ryde-macquarie-university-musalla',
+      'source coordinates resolve to Newcastle rather than Macquarie University, North Ryde',
+    ],
+    [
+      'mosque-finder:sydney-airport-prayer-room',
+      'source coordinates duplicate the separate Mascot Botany Road musalla rather than Sydney Airport T1',
+    ],
+  ]),
+);
 
-const FORCED_MATCHES = Object.freeze(new Map([
-  ['mosque-finder:adelaide-little-gilbert-street-mosque', 'osm-node-1614034144'],
-  ['mosque-finder:minto-mosque', 'osm-node-2464887186'],
-  ['mosque-finder:gilles-plains-abu-bakr-assiddiq-masjid', 'osm-node-13919243601'],
-  ['mosque-finder:albanvale-station-road-deer-park-mosque', 'osm-way-1170477550'],
-  ['mosque-finder:blacktown-afghan-osman-mosque', 'osm-node-4243973889'],
-  ['mosque-finder:kensington-university-of-nsw-musalla', 'osm-node-7871916571'],
-]));
+const FORCED_MATCHES = Object.freeze(
+  new Map([
+    ['mosque-finder:adelaide-little-gilbert-street-mosque', 'osm-node-1614034144'],
+    ['mosque-finder:minto-mosque', 'osm-node-2464887186'],
+    ['mosque-finder:gilles-plains-abu-bakr-assiddiq-masjid', 'osm-node-13919243601'],
+    ['mosque-finder:albanvale-station-road-deer-park-mosque', 'osm-way-1170477550'],
+    ['mosque-finder:blacktown-afghan-osman-mosque', 'osm-node-4243973889'],
+    ['mosque-finder:kensington-university-of-nsw-musalla', 'osm-node-7871916571'],
+  ]),
+);
 
-const BLOCKED_MATCHES = Object.freeze(new Set([
-  'osm-way-1190951588|mosque-finder:ashfield-liverpool-road-musalla',
-  'osm-way-1126413889|mosque-finder:lakemba-islamic-centre',
-  'osm-node-1614034144|mosque-finder:adelaide-islamic-information-centre-of-sa',
-]));
+const BLOCKED_MATCHES = Object.freeze(
+  new Set([
+    'osm-way-1190951588|mosque-finder:ashfield-liverpool-road-musalla',
+    'osm-way-1126413889|mosque-finder:lakemba-islamic-centre',
+    'osm-node-1614034144|mosque-finder:adelaide-islamic-information-centre-of-sa',
+  ]),
+);
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
 function unique(values) {
-  return [...new Set(values.filter((value) => typeof value === 'string' && value.trim().length > 0))];
+  return [
+    ...new Set(values.filter((value) => typeof value === 'string' && value.trim().length > 0)),
+  ];
 }
 
 function normalize(value) {
@@ -76,7 +90,10 @@ function normalize(value) {
     .normalize('NFKD')
     .replace(/\p{Diacritic}/gu, '')
     .toLocaleLowerCase('en-AU')
-    .replace(/\b(?:mosque|masjid|musalla|musallah|islamic|centre|center|prayer|room|jummah|jumuah)\b/gu, ' ')
+    .replace(
+      /\b(?:mosque|masjid|musalla|musallah|islamic|centre|center|prayer|room|jummah|jumuah)\b/gu,
+      ' ',
+    )
     .replace(/[^\p{L}\p{N}]+/gu, ' ')
     .trim()
     .replace(/\s+/gu, ' ');
@@ -119,10 +136,18 @@ function scoreMatch(osm, finder) {
 
   let score = distance <= 0.08 ? 0.45 : distance <= 0.25 ? 0.34 : 0.18;
   let identitySignals = 0;
-  const osmNames = unique([osm.name, ...(osm.aliases ?? [])]).map(normalize).filter(Boolean);
-  const finderNames = unique([finder.name, ...(finder.aliases ?? [])]).map(normalize).filter(Boolean);
+  const osmNames = unique([osm.name, ...(osm.aliases ?? [])])
+    .map(normalize)
+    .filter(Boolean);
+  const finderNames = unique([finder.name, ...(finder.aliases ?? [])])
+    .map(normalize)
+    .filter(Boolean);
   const exactName = osmNames.some((left) => finderNames.includes(left));
-  const nameInclusion = !exactName && osmNames.some((left) => finderNames.some((right) => left.includes(right) || right.includes(left)));
+  const nameInclusion =
+    !exactName &&
+    osmNames.some((left) =>
+      finderNames.some((right) => left.includes(right) || right.includes(left)),
+    );
   if (exactName) {
     score += 0.35;
     identitySignals += 2;
@@ -225,16 +250,46 @@ function withQuality(record) {
   if (record.services.length) presentFields.add('services');
   const covered = new Set(record.provenance.flatMap((entry) => entry.fields));
   const provenanceCoveragePercent = Math.round(
-    ([...presentFields].filter((field) => covered.has(field)).length / Math.max(presentFields.size, 1)) * 100,
+    ([...presentFields].filter((field) => covered.has(field)).length /
+      Math.max(presentFields.size, 1)) *
+      100,
   );
-  const latest = Math.max(...record.provenance.map((entry) => Date.parse(entry.observedAt)).filter(Number.isFinite));
-  const ageDays = Number.isFinite(latest) ? Math.max(0, (Date.now() - latest) / 86_400_000) : Number.POSITIVE_INFINITY;
-  const freshness = ageDays <= 90 ? 'fresh' : ageDays <= 365 ? 'aging' : Number.isFinite(ageDays) ? 'stale' : 'unknown';
+  const latest = Math.max(
+    ...record.provenance.map((entry) => Date.parse(entry.observedAt)).filter(Number.isFinite),
+  );
+  const ageDays = Number.isFinite(latest)
+    ? Math.max(0, (Date.now() - latest) / 86_400_000)
+    : Number.POSITIVE_INFINITY;
+  const freshness =
+    ageDays <= 90
+      ? 'fresh'
+      : ageDays <= 365
+        ? 'aging'
+        : Number.isFinite(ageDays)
+          ? 'stale'
+          : 'unknown';
   const freshnessWeight = freshness === 'fresh' ? 10 : freshness === 'aging' ? 5 : 0;
-  const score = Math.max(0, Math.min(100, Math.round(completenessPercent * 0.45 + provenanceCoveragePercent * 0.25 + freshnessWeight - record.conflictCount * 8)));
+  const score = Math.max(
+    0,
+    Math.min(
+      100,
+      Math.round(
+        completenessPercent * 0.45 +
+          provenanceCoveragePercent * 0.25 +
+          freshnessWeight -
+          record.conflictCount * 8,
+      ),
+    ),
+  );
   return {
     ...record,
-    quality: { score, completenessPercent, provenanceCoveragePercent, freshness, conflictCount: record.conflictCount },
+    quality: {
+      score,
+      completenessPercent,
+      provenanceCoveragePercent,
+      freshness,
+      conflictCount: record.conflictCount,
+    },
   };
 }
 
@@ -265,16 +320,22 @@ function fromOsm(record, source) {
     jumuahTimes: [],
     facilities: [],
     services: [],
-    verification: { state: 'unverified', verifiedAt: null, lastReviewedAt: source.osmBaseTimestamp },
-    provenance: [{
-      sourceId: `osm:${record.osmType}:${String(record.osmId)}`,
-      sourceKind: 'openstreetmap',
-      sourceLabel: source.name,
-      sourceUrl: `https://www.openstreetmap.org/${record.osmType}/${String(record.osmId)}`,
-      observedAt: source.osmBaseTimestamp,
-      confidence: 0.82,
-      fields: osmFields(record),
-    }],
+    verification: {
+      state: 'unverified',
+      verifiedAt: null,
+      lastReviewedAt: source.osmBaseTimestamp,
+    },
+    provenance: [
+      {
+        sourceId: `osm:${record.osmType}:${String(record.osmId)}`,
+        sourceKind: 'openstreetmap',
+        sourceLabel: source.name,
+        sourceUrl: `https://www.openstreetmap.org/${record.osmType}/${String(record.osmId)}`,
+        observedAt: source.osmBaseTimestamp,
+        confidence: 0.82,
+        fields: osmFields(record),
+      },
+    ],
     conflictCount: 0,
     sourceType: 'openstreetmap',
   });
@@ -297,24 +358,29 @@ function fromFinder(record, source) {
     latitude: record.latitude,
     longitude: record.longitude,
     contact: { ...(record.contact ?? {}), social: [] },
-    prayerTimes: record.prayerTimes === null ? null : {
-      ...record.prayerTimes,
-      sourceLabel: source.name,
-      updatedAt: record.observedAt,
-    },
+    prayerTimes:
+      record.prayerTimes === null
+        ? null
+        : {
+            ...record.prayerTimes,
+            sourceLabel: source.name,
+            updatedAt: record.observedAt,
+          },
     jumuahTimes: record.jumuahTimes ?? [],
     facilities: record.facilities ?? [],
     services: record.services ?? [],
     verification: { state: 'unverified', verifiedAt: null, lastReviewedAt: record.observedAt },
-    provenance: [{
-      sourceId: record.id,
-      sourceKind: 'organization-directory',
-      sourceLabel: source.name,
-      sourceUrl: record.sourceUrl,
-      observedAt: record.observedAt,
-      confidence: 0.86,
-      fields: finderFields(record),
-    }],
+    provenance: [
+      {
+        sourceId: record.id,
+        sourceKind: 'organization-directory',
+        sourceLabel: source.name,
+        sourceUrl: record.sourceUrl,
+        observedAt: record.observedAt,
+        confidence: 0.86,
+        fields: finderFields(record),
+      },
+    ],
     conflictCount: 0,
     sourceType: 'australian-mosque-finder',
     ...(record.type ? { locationType: record.type } : {}),
@@ -329,7 +395,10 @@ function conflict(left, right) {
 function mergeFinderDuplicate(primary, duplicate, suppressDuplicateNameAliases) {
   const duplicateNameAliases = suppressDuplicateNameAliases ? [] : [duplicate.name];
   const jumuahByKey = new Map(
-    [...primary.jumuahTimes, ...duplicate.jumuahTimes].map((item) => [`${item.time}|${item.label ?? ''}`, item]),
+    [...primary.jumuahTimes, ...duplicate.jumuahTimes].map((item) => [
+      `${item.time}|${item.label ?? ''}`,
+      item,
+    ]),
   );
   const conflictCount =
     primary.conflictCount +
@@ -337,16 +406,30 @@ function mergeFinderDuplicate(primary, duplicate, suppressDuplicateNameAliases) 
     conflict(primary.address.formatted, duplicate.address.formatted) +
     conflict(primary.contact.phone, duplicate.contact.phone) +
     conflict(primary.contact.website, duplicate.contact.website) +
-    (primary.prayerTimes !== null && duplicate.prayerTimes !== null && JSON.stringify(primary.prayerTimes) !== JSON.stringify(duplicate.prayerTimes) ? 1 : 0) +
-    (primary.jumuahTimes.length > 0 && duplicate.jumuahTimes.length > 0 && JSON.stringify(primary.jumuahTimes) !== JSON.stringify(duplicate.jumuahTimes) ? 1 : 0);
+    (primary.prayerTimes !== null &&
+    duplicate.prayerTimes !== null &&
+    JSON.stringify(primary.prayerTimes) !== JSON.stringify(duplicate.prayerTimes)
+      ? 1
+      : 0) +
+    (primary.jumuahTimes.length > 0 &&
+    duplicate.jumuahTimes.length > 0 &&
+    JSON.stringify(primary.jumuahTimes) !== JSON.stringify(duplicate.jumuahTimes)
+      ? 1
+      : 0);
   return withQuality({
     ...primary,
     sourceRecordIds: unique([...primary.sourceRecordIds, ...duplicate.sourceRecordIds]),
     aliases: unique([...primary.aliases, ...duplicate.aliases, ...duplicateNameAliases]),
     contact: {
-      ...(primary.contact.phone ?? duplicate.contact.phone ? { phone: primary.contact.phone ?? duplicate.contact.phone } : {}),
-      ...(primary.contact.email ?? duplicate.contact.email ? { email: primary.contact.email ?? duplicate.contact.email } : {}),
-      ...(primary.contact.website ?? duplicate.contact.website ? { website: primary.contact.website ?? duplicate.contact.website } : {}),
+      ...((primary.contact.phone ?? duplicate.contact.phone)
+        ? { phone: primary.contact.phone ?? duplicate.contact.phone }
+        : {}),
+      ...((primary.contact.email ?? duplicate.contact.email)
+        ? { email: primary.contact.email ?? duplicate.contact.email }
+        : {}),
+      ...((primary.contact.website ?? duplicate.contact.website)
+        ? { website: primary.contact.website ?? duplicate.contact.website }
+        : {}),
       social: [],
     },
     prayerTimes: primary.prayerTimes ?? duplicate.prayerTimes,
@@ -356,7 +439,12 @@ function mergeFinderDuplicate(primary, duplicate, suppressDuplicateNameAliases) 
     provenance: [...primary.provenance, ...duplicate.provenance],
     conflictCount,
     ...(primary.featureLabels || duplicate.featureLabels
-      ? { featureLabels: unique([...(primary.featureLabels ?? []), ...(duplicate.featureLabels ?? [])]) }
+      ? {
+          featureLabels: unique([
+            ...(primary.featureLabels ?? []),
+            ...(duplicate.featureLabels ?? []),
+          ]),
+        }
       : {}),
   });
 }
@@ -373,7 +461,11 @@ function dedupeFinderRecords(records) {
       if (duplicate === undefined || mergedDuplicateIds.has(duplicateId)) continue;
       primary = mergeFinderDuplicate(primary, duplicate, group.suppressDuplicateNameAliases);
       mergedDuplicateIds.add(duplicateId);
-      evidence.push({ canonicalId: group.canonicalId, duplicateId, matchType: 'audited-source-duplicate' });
+      evidence.push({
+        canonicalId: group.canonicalId,
+        duplicateId,
+        matchType: 'audited-source-duplicate',
+      });
     }
     byId.set(group.canonicalId, primary);
   }
@@ -394,7 +486,12 @@ function mergeMatched(osmRecord, finderRecord) {
     sourceRecordIds: unique([...osmRecord.sourceRecordIds, ...finderRecord.sourceRecordIds]),
     name: finderRecord.name || osmRecord.name,
     ...(osmRecord.nameAr ? { nameAr: osmRecord.nameAr } : {}),
-    aliases: unique([...osmRecord.aliases, ...finderRecord.aliases, osmRecord.name, finderRecord.name]),
+    aliases: unique([
+      ...osmRecord.aliases,
+      ...finderRecord.aliases,
+      osmRecord.name,
+      finderRecord.name,
+    ]),
     address: {
       ...osmRecord.address,
       ...finderRecord.address,
@@ -404,16 +501,26 @@ function mergeMatched(osmRecord, finderRecord) {
     latitude: osmRecord.latitude,
     longitude: osmRecord.longitude,
     contact: {
-      ...(finderRecord.contact.phone ?? osmRecord.contact.phone ? { phone: finderRecord.contact.phone ?? osmRecord.contact.phone } : {}),
-      ...(finderRecord.contact.email ?? osmRecord.contact.email ? { email: finderRecord.contact.email ?? osmRecord.contact.email } : {}),
-      ...(finderRecord.contact.website ?? osmRecord.contact.website ? { website: finderRecord.contact.website ?? osmRecord.contact.website } : {}),
+      ...((finderRecord.contact.phone ?? osmRecord.contact.phone)
+        ? { phone: finderRecord.contact.phone ?? osmRecord.contact.phone }
+        : {}),
+      ...((finderRecord.contact.email ?? osmRecord.contact.email)
+        ? { email: finderRecord.contact.email ?? osmRecord.contact.email }
+        : {}),
+      ...((finderRecord.contact.website ?? osmRecord.contact.website)
+        ? { website: finderRecord.contact.website ?? osmRecord.contact.website }
+        : {}),
       social: [],
     },
     prayerTimes: finderRecord.prayerTimes,
     jumuahTimes: finderRecord.jumuahTimes,
     facilities: unique([...osmRecord.facilities, ...finderRecord.facilities]),
     services: unique([...osmRecord.services, ...finderRecord.services]),
-    verification: { state: 'unverified', verifiedAt: null, lastReviewedAt: finderRecord.verification.lastReviewedAt },
+    verification: {
+      state: 'unverified',
+      verifiedAt: null,
+      lastReviewedAt: finderRecord.verification.lastReviewedAt,
+    },
     provenance: [...osmRecord.provenance, ...finderRecord.provenance],
     conflictCount,
     sourceType: 'merged',
@@ -424,14 +531,26 @@ function mergeMatched(osmRecord, finderRecord) {
 
 function validateSource(osm, finder) {
   assert(osm.schemaVersion === 1 && Array.isArray(osm.records), 'OSM mosque source is invalid');
-  assert(finder.schemaVersion === 1 && Array.isArray(finder.records), 'Australian Mosque Finder source is invalid');
+  assert(
+    finder.schemaVersion === 1 && Array.isArray(finder.records),
+    'Australian Mosque Finder source is invalid',
+  );
   assert(osm.source.recordCount === osm.records.length, 'OSM record count mismatch');
-  assert(finder.source.recordCount === finder.records.length, 'Mosque Finder record count mismatch');
+  assert(
+    finder.source.recordCount === finder.records.length,
+    'Mosque Finder record count mismatch',
+  );
 }
 
 function validateCombined(directory) {
-  assert(directory.schemaVersion === 2, 'Combined Australian mosque directory must use schema version 2');
-  assert(directory.source.recordCount === directory.records.length, 'Combined directory count mismatch');
+  assert(
+    directory.schemaVersion === 2,
+    'Combined Australian mosque directory must use schema version 2',
+  );
+  assert(
+    directory.source.recordCount === directory.records.length,
+    'Combined directory count mismatch',
+  );
   const ids = new Set();
   const regions = new Set();
   for (const record of directory.records) {
@@ -439,19 +558,44 @@ function validateCombined(directory) {
     ids.add(record.id);
     assert(REGION_CODES.includes(record.address.regionCode), `Invalid region for ${record.id}`);
     regions.add(record.address.regionCode);
-    assert(Number.isFinite(record.latitude) && Number.isFinite(record.longitude), `Invalid coordinates for ${record.id}`);
+    assert(
+      Number.isFinite(record.latitude) && Number.isFinite(record.longitude),
+      `Invalid coordinates for ${record.id}`,
+    );
     assert(record.provenance.length > 0, `Missing provenance for ${record.id}`);
-    assert(record.quality.provenanceCoveragePercent === 100, `Incomplete provenance coverage for ${record.id}`);
+    assert(
+      record.quality.provenanceCoveragePercent === 100,
+      `Incomplete provenance coverage for ${record.id}`,
+    );
     for (const excludedId of FINDER_COORDINATE_EXCLUSIONS.keys()) {
-      assert(!record.sourceRecordIds.includes(excludedId), `Coordinate-quarantined record leaked into combined directory: ${excludedId}`);
+      assert(
+        !record.sourceRecordIds.includes(excludedId),
+        `Coordinate-quarantined record leaked into combined directory: ${excludedId}`,
+      );
     }
   }
-  for (const region of REGION_CODES) assert(regions.has(region), `Combined directory missing ${region}`);
-  assert(directory.source.mergedPairCount + directory.source.osmOnlyCount === directory.source.osmRecordCount, 'OSM merge accounting mismatch');
-  assert(directory.source.mergedPairCount + directory.source.finderOnlyCount === directory.source.mosqueFinderRecordCount, 'Mosque Finder merge accounting mismatch');
-  assert(directory.source.forcedMatchCount + directory.source.automaticMatchCount === directory.source.mergedPairCount, 'Cross-source match accounting mismatch');
+  for (const region of REGION_CODES)
+    assert(regions.has(region), `Combined directory missing ${region}`);
   assert(
-    directory.source.mosqueFinderRawRecordCount - directory.source.finderInternalMergedPairCount - directory.source.coordinateExcludedCount === directory.source.mosqueFinderRecordCount,
+    directory.source.mergedPairCount + directory.source.osmOnlyCount ===
+      directory.source.osmRecordCount,
+    'OSM merge accounting mismatch',
+  );
+  assert(
+    directory.source.mergedPairCount + directory.source.finderOnlyCount ===
+      directory.source.mosqueFinderRecordCount,
+    'Mosque Finder merge accounting mismatch',
+  );
+  assert(
+    directory.source.forcedMatchCount + directory.source.automaticMatchCount ===
+      directory.source.mergedPairCount,
+    'Cross-source match accounting mismatch',
+  );
+  assert(
+    directory.source.mosqueFinderRawRecordCount -
+      directory.source.finderInternalMergedPairCount -
+      directory.source.coordinateExcludedCount ===
+      directory.source.mosqueFinderRecordCount,
     'Mosque Finder preprocessing accounting mismatch',
   );
 }
@@ -483,8 +627,14 @@ async function generate() {
     const finderRecord = finderById.get(finderId);
     const osmRecord = osmById.get(osmId);
     if (finderRecord === undefined || osmRecord === undefined) continue;
-    assert(!BLOCKED_MATCHES.has(`${osmId}|${finderId}`), `Forced match is also blocked: ${osmId} / ${finderId}`);
-    assert(!usedOsmIds.has(osmId) && !usedFinderIds.has(finderId), `Forced match reuses a record: ${osmId} / ${finderId}`);
+    assert(
+      !BLOCKED_MATCHES.has(`${osmId}|${finderId}`),
+      `Forced match is also blocked: ${osmId} / ${finderId}`,
+    );
+    assert(
+      !usedOsmIds.has(osmId) && !usedFinderIds.has(finderId),
+      `Forced match reuses a record: ${osmId} / ${finderId}`,
+    );
     const evidence = scoreMatch(osmRecord, finderRecord);
     usedOsmIds.add(osmId);
     usedFinderIds.add(finderId);
@@ -510,12 +660,13 @@ async function generate() {
       candidates.push({ osmRecord, finderRecord, evidence });
     }
   }
-  candidates.sort((left, right) =>
-    right.evidence.score - left.evidence.score ||
-    right.evidence.identitySignals - left.evidence.identitySignals ||
-    left.evidence.distanceKm - right.evidence.distanceKm ||
-    left.osmRecord.id.localeCompare(right.osmRecord.id) ||
-    left.finderRecord.id.localeCompare(right.finderRecord.id),
+  candidates.sort(
+    (left, right) =>
+      right.evidence.score - left.evidence.score ||
+      right.evidence.identitySignals - left.evidence.identitySignals ||
+      left.evidence.distanceKm - right.evidence.distanceKm ||
+      left.osmRecord.id.localeCompare(right.osmRecord.id) ||
+      left.finderRecord.id.localeCompare(right.finderRecord.id),
   );
 
   for (const candidate of candidates) {
@@ -536,10 +687,14 @@ async function generate() {
 
   for (const record of finderRecords) if (!usedFinderIds.has(record.id)) combined.push(record);
   for (const record of osmRecords) if (!usedOsmIds.has(record.id)) combined.push(record);
-  combined.sort((left, right) => left.name.localeCompare(right.name, 'en-AU', { sensitivity: 'base' }));
+  combined.sort((left, right) =>
+    left.name.localeCompare(right.name, 'en-AU', { sensitivity: 'base' }),
+  );
 
   const mergedPairCount = matchEvidence.length;
-  const forcedMatchCount = matchEvidence.filter((entry) => entry.matchType === 'audited-forced').length;
+  const forcedMatchCount = matchEvidence.filter(
+    (entry) => entry.matchType === 'audited-forced',
+  ).length;
   const automaticMatchCount = mergedPairCount - forcedMatchCount;
   const directory = {
     schemaVersion: 2,
@@ -605,7 +760,9 @@ async function main() {
       JSON.stringify(normalizeForCheck(existing)) === JSON.stringify(normalizeForCheck(directory)),
       'Combined Australian mosque directory is stale; regenerate it',
     );
-    console.log(`Validated combined Australian mosque directory: ${String(directory.records.length)} records.`);
+    console.log(
+      `Validated combined Australian mosque directory: ${String(directory.records.length)} records.`,
+    );
     return;
   }
   await writeFile(outputPath, `${JSON.stringify(directory, null, 2)}\n`, 'utf8');

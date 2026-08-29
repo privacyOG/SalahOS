@@ -12,14 +12,7 @@ import { createMosqueProfile, type MosqueFacility, type MosqueProfile } from './
 import { resolveIanaTimeZone } from './timezone';
 
 export type AustralianMosqueRegionCode =
-  | 'AU-ACT'
-  | 'AU-NSW'
-  | 'AU-NT'
-  | 'AU-QLD'
-  | 'AU-SA'
-  | 'AU-TAS'
-  | 'AU-VIC'
-  | 'AU-WA';
+  'AU-ACT' | 'AU-NSW' | 'AU-NT' | 'AU-QLD' | 'AU-SA' | 'AU-TAS' | 'AU-VIC' | 'AU-WA';
 
 export interface AustralianMosqueRecord {
   readonly id: string;
@@ -113,7 +106,8 @@ function optionalString(record: Record<string, unknown>, key: string): string | 
 
 function requiredNumber(record: Record<string, unknown>, key: string, label: string): number {
   const value = record[key];
-  if (typeof value !== 'number' || !Number.isFinite(value)) throw new TypeError(`${label} is invalid`);
+  if (typeof value !== 'number' || !Number.isFinite(value))
+    throw new TypeError(`${label} is invalid`);
   return value;
 }
 
@@ -127,7 +121,9 @@ function requiredInteger(record: Record<string, unknown>, key: string, label: st
 
 function stringArray(value: unknown): readonly string[] {
   if (!Array.isArray(value)) return [];
-  return Object.freeze(value.filter((item): item is string => typeof item === 'string' && item.trim().length > 0));
+  return Object.freeze(
+    value.filter((item): item is string => typeof item === 'string' && item.trim().length > 0),
+  );
 }
 
 function regionCode(value: unknown): AustralianMosqueRegionCode {
@@ -139,22 +135,35 @@ function regionCode(value: unknown): AustralianMosqueRegionCode {
 
 function facilities(value: unknown): readonly MosqueFacility[] {
   return Object.freeze(
-    stringArray(value).filter((item): item is MosqueFacility => FACILITIES.includes(item as MosqueFacility)),
+    stringArray(value).filter((item): item is MosqueFacility =>
+      FACILITIES.includes(item as MosqueFacility),
+    ),
   );
 }
 
 function services(value: unknown): readonly MosqueDirectoryService[] {
   return Object.freeze(
-    stringArray(value).filter((item): item is MosqueDirectoryService => SERVICES.includes(item as MosqueDirectoryService)),
+    stringArray(value).filter((item): item is MosqueDirectoryService =>
+      SERVICES.includes(item as MosqueDirectoryService),
+    ),
   );
 }
 
 function parsePrayerTimes(value: unknown): MosqueDirectoryPrayerSummary | null {
   if (!isRecord(value)) return null;
   return Object.freeze({
-    ...(['fajr', 'dhuhr', 'asr', 'maghrib', 'isha', 'timetableUrl', 'sourceLabel', 'updatedAt'] as const).reduce<
-      Record<string, string>
-    >((result, key) => {
+    ...(
+      [
+        'fajr',
+        'dhuhr',
+        'asr',
+        'maghrib',
+        'isha',
+        'timetableUrl',
+        'sourceLabel',
+        'updatedAt',
+      ] as const
+    ).reduce<Record<string, string>>((result, key) => {
       const item = optionalString(value, key);
       if (item !== undefined) result[key] = item;
       return result;
@@ -289,21 +298,34 @@ function parseCombinedRecord(value: unknown): AustralianMosqueRecord {
 }
 
 function parseDirectory(value: unknown): AustralianMosqueDirectory {
-  if (!isRecord(value) || value.schemaVersion !== 2 || !isRecord(value.source) || !Array.isArray(value.records)) {
+  if (
+    !isRecord(value) ||
+    value.schemaVersion !== 2 ||
+    !isRecord(value.source) ||
+    !Array.isArray(value.records)
+  ) {
     throw new TypeError('Combined Australian mosque directory must use schema version 2');
   }
   const records = Object.freeze(value.records.map(parseCombinedRecord));
   const ids = new Set(records.map((record) => record.id));
-  if (ids.size !== records.length) throw new RangeError('Combined Australian mosque IDs must be unique');
+  if (ids.size !== records.length)
+    throw new RangeError('Combined Australian mosque IDs must be unique');
   const sources = Array.isArray(value.source.sources) ? value.source.sources : [];
-  const osmSource = sources.find((entry) => isRecord(entry) && entry.sourceKind === 'openstreetmap');
+  const osmSource = sources.find(
+    (entry) => isRecord(entry) && entry.sourceKind === 'openstreetmap',
+  );
   const finderSource = sources.find(
     (entry) => isRecord(entry) && entry.sourceKind === 'organization-directory',
   );
-  if (!isRecord(osmSource) || !isRecord(finderSource)) throw new TypeError('Combined directory sources are incomplete');
+  if (!isRecord(osmSource) || !isRecord(finderSource))
+    throw new TypeError('Combined directory sources are incomplete');
   const source: AustralianMosqueDirectorySource = Object.freeze({
     name: requiredString(value.source, 'name', 'Combined directory source name'),
-    generatedAt: requiredString(value.source, 'generatedAt', 'Combined directory generation timestamp'),
+    generatedAt: requiredString(
+      value.source,
+      'generatedAt',
+      'Combined directory generation timestamp',
+    ),
     recordCount: requiredInteger(value.source, 'recordCount', 'Combined directory record count'),
     osmRecordCount: requiredInteger(value.source, 'osmRecordCount', 'OSM source record count'),
     mosqueFinderRecordCount: requiredInteger(
@@ -313,12 +335,21 @@ function parseDirectory(value: unknown): AustralianMosqueDirectory {
     ),
     mergedPairCount: requiredInteger(value.source, 'mergedPairCount', 'Merged mosque pair count'),
     osmOnlyCount: requiredInteger(value.source, 'osmOnlyCount', 'OSM-only record count'),
-    finderOnlyCount: requiredInteger(value.source, 'finderOnlyCount', 'Mosque Finder-only record count'),
+    finderOnlyCount: requiredInteger(
+      value.source,
+      'finderOnlyCount',
+      'Mosque Finder-only record count',
+    ),
     osmAttributionUrl: requiredString(osmSource, 'attributionUrl', 'OSM attribution URL'),
     osmLicenceUrl: requiredString(osmSource, 'licenceUrl', 'OSM licence URL'),
-    mosqueFinderUrl: requiredString(finderSource, 'attributionUrl', 'Mosque Finder attribution URL'),
+    mosqueFinderUrl: requiredString(
+      finderSource,
+      'attributionUrl',
+      'Mosque Finder attribution URL',
+    ),
   });
-  if (source.recordCount !== records.length) throw new RangeError('Combined directory record count is inconsistent');
+  if (source.recordCount !== records.length)
+    throw new RangeError('Combined directory record count is inconsistent');
   return Object.freeze({ schemaVersion: 2, source, records });
 }
 
@@ -379,7 +410,9 @@ export function sortAustralianMosquesByDistance(
 ): readonly AustralianMosqueDistance[] {
   return Object.freeze(
     records
-      .map((mosque) => Object.freeze({ mosque, distanceKm: australianMosqueDistanceKm(from, mosque) }))
+      .map((mosque) =>
+        Object.freeze({ mosque, distanceKm: australianMosqueDistanceKm(from, mosque) }),
+      )
       .sort((left, right) => {
         const distanceDifference = left.distanceKm - right.distanceKm;
         return distanceDifference !== 0
