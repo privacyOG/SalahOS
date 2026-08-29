@@ -6,7 +6,7 @@ on:
       - release-prep/v1.5.1
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   prepare:
@@ -54,20 +54,28 @@ jobs:
       - name: Validate generated dependency metadata
         run: npm ci --ignore-scripts
 
-      - name: Package generated metadata
+      - name: Create repository blobs for generated metadata
+        env:
+          GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
-          mkdir -p generated/android/app generated/ios/App/App.xcodeproj
-          cp package.json package-lock.json generated/
-          cp android/app/build.gradle generated/android/app/
-          cp ios/App/App.xcodeproj/project.pbxproj generated/ios/App/App.xcodeproj/
-          tar -C generated -czf v151-release-metadata.tar.gz .
+          : > v151-blob-shas.txt
+          for file in \
+            package.json \
+            package-lock.json \
+            android/app/build.gradle \
+            ios/App/App.xcodeproj/project.pbxproj; do
+            sha="$(jq -Rs '{content: ., encoding: "utf-8"}' "$file" | gh api --method POST "repos/${GITHUB_REPOSITORY}/git/blobs" --input - --jq .sha)"
+            test -n "$sha"
+            printf '%s %s\n' "$sha" "$file" >> v151-blob-shas.txt
+          done
+          cat v151-blob-shas.txt
 
-      - name: Upload generated metadata
+      - name: Upload blob manifest
         uses: actions/upload-artifact@v4
         with:
-          name: v151-release-metadata
-          path: v151-release-metadata.tar.gz
+          name: v151-blob-shas
+          path: v151-blob-shas.txt
           if-no-files-found: error
           retention-days: 1
