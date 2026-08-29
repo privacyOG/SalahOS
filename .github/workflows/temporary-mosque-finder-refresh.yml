@@ -35,7 +35,6 @@ jobs:
           from pathlib import Path
           p = Path('scripts/generate-australian-mosque-finder.mjs')
           s = p.read_text()
-
           old_filter = ".filter((url) => /^https:\\/\\/(?:www\\.)?mosque-finder\\.com\\.au\\/mosque\\/[^/]+\\/index\\.html$/iu.test(url))"
           new_filter = ".filter((url) => /^https:\\/\\/(?:www\\.)?mosque-finder\\.com\\.au\\/mosque\\/[^/?#]+(?:\\/index\\.html|\\/?)$/iu.test(url))"
           old_map = ".map((url) => url.replace('https://www.mosque-finder.com.au', BASE_URL));"
@@ -44,31 +43,14 @@ jobs:
               s = s.replace(old_filter, new_filter)
           if old_map in s:
               s = s.replace(old_map, new_map)
-
-          old_region_guard = """  for (const regionCode of Object.values(REGION_CODES)) {
-    assert(regions.has(regionCode), `Mosque Finder directory is missing ${regionCode}`);
-  }
-  return directory;"""
-          new_region_guard = """  assert(regions.size > 0, 'Mosque Finder directory has no regional coverage');
-  const declaredRegions = new Set(directory.source.regionCodes ?? []);
-  assert(declaredRegions.size === regions.size && [...regions].every((regionCode) => declaredRegions.has(regionCode)), 'Mosque Finder regional coverage metadata mismatch');
-  return directory;"""
+          old_region_guard = "  for (const regionCode of Object.values(REGION_CODES)) {\n    assert(regions.has(regionCode), `Mosque Finder directory is missing ${regionCode}`);\n  }\n  return directory;"
+          new_region_guard = "  assert(regions.size > 0, 'Mosque Finder directory has no regional coverage');\n  const declaredRegions = new Set(directory.source.regionCodes ?? []);\n  assert(declaredRegions.size === regions.size && [...regions].every((regionCode) => declaredRegions.has(regionCode)), 'Mosque Finder regional coverage metadata mismatch');\n  return directory;"
           if old_region_guard in s:
               s = s.replace(old_region_guard, new_region_guard)
-
-          old_failures = """      failedRecordCount: failures.length,
-    },
-    records: sorted,"""
-          new_failures = """      failedRecordCount: failures.length,
-      regionCodes: [...new Set(sorted.map((record) => record.address.regionCode))].sort(),
-      missingRegionCodes: Object.values(REGION_CODES).filter(
-        (regionCode) => !sorted.some((record) => record.address.regionCode === regionCode),
-      ),
-    },
-    records: sorted,"""
+          old_failures = "      failedRecordCount: failures.length,\n    },\n    records: sorted,"
+          new_failures = "      failedRecordCount: failures.length,\n      regionCodes: [...new Set(sorted.map((record) => record.address.regionCode))].sort(),\n      missingRegionCodes: Object.values(REGION_CODES).filter((regionCode) => !sorted.some((record) => record.address.regionCode === regionCode)),\n    },\n    records: sorted,"
           if old_failures in s:
               s = s.replace(old_failures, new_failures)
-
           if new_filter not in s or new_map not in s or new_region_guard not in s or new_failures not in s:
               raise SystemExit('Mosque Finder importer patch did not reach the expected final form')
           p.write_text(s)
