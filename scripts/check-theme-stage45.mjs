@@ -9,9 +9,10 @@ const visual = read('scripts/visual-theme-matrix.mjs');
 const required = ['next-prayer', 'prayer-card', 'iqamah', 'announcement', 'smart-display-brand'];
 for (const marker of required)
   if (!display.includes(marker)) throw new Error(`Mosque hierarchy missing ${marker}`);
-for (const p of ['royal-blue', 'emerald-mosque', 'midnight-gold', 'high-contrast'])
-  if (!display.includes(`data-palette='${p}'`))
-    throw new Error(`Display palette treatment missing ${p}`);
+for (const p of ['royal-blue', 'emerald-mosque', 'midnight-gold', 'high-contrast']) {
+  if (!display.includes(`:root[data-palette='${p}']`))
+    throw new Error(`Display palette treatment is not rooted at data-palette for ${p}`);
+}
 if (!main.includes("'./mosque-display-theme.css'"))
   throw new Error('Mosque display theme not loaded');
 if (!smart.includes('applyThemePalette(settings.palette'))
@@ -39,4 +40,10 @@ for (const marker of [
   'system',
 ])
   if (!visual.includes(marker)) throw new Error(`Visual matrix missing ${marker}`);
+if (!visual.includes("ready: '.qibla-finder--v2'"))
+  throw new Error('Qiblah visual matrix readiness selector is stale');
+if (!visual.includes('.map((element) =>'))
+  throw new Error('Visual contrast sampling must map DOM nodes into serializable samples');
+if (!visual.includes('const minimumRatio = largeText ? 3 : 4.5'))
+  throw new Error('Visual matrix must enforce WCAG text contrast thresholds');
 console.log('Stage 4 mosque display and Stage 5 visual/accessibility acceptance checks passed.');
