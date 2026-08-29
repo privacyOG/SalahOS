@@ -8,7 +8,7 @@ on:
       - '.github/workflows/temporary-format-autofix.yml'
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   format:
@@ -16,8 +16,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -31,13 +29,16 @@ jobs:
       - name: Format repository
         run: npx prettier --write .
 
-      - name: Remove temporary workflow from formatted branch
+      - name: Remove temporary workflow from exported workspace
         run: rm .github/workflows/temporary-format-autofix.yml
 
-      - name: Commit formatting branch
-        run: |
-          git config user.name "privacyOG"
-          git config user.email "privacyOG@users.noreply.github.com"
-          git add -A
-          git commit -m "style: apply repository formatting"
-          git push --force origin HEAD:v151-format-autofix
+      - name: Package formatted workspace
+        run: tar --exclude='.git' --exclude='node_modules' -czf /tmp/salahos-formatted.tar.gz .
+
+      - name: Upload formatted workspace
+        uses: actions/upload-artifact@v4
+        with:
+          name: salahos-formatted-workspace
+          path: /tmp/salahos-formatted.tar.gz
+          if-no-files-found: error
+          retention-days: 1
