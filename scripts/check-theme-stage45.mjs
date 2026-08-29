@@ -44,11 +44,10 @@ if (!visual.includes("ready: '.qibla-finder--v2'"))
   throw new Error('Qiblah visual matrix readiness selector is stale');
 if (!visual.includes('.map((element) =>'))
   throw new Error('Visual contrast sampling must map DOM nodes into serializable samples');
-if (
-  !visual.includes('resolveEffectiveBackground') ||
-  !visual.includes('compositeOver')
-)
-  throw new Error('Visual contrast sampling must resolve translucent backgrounds before comparison');
+if (!visual.includes('resolveEffectiveBackground') || !visual.includes('compositeOver'))
+  throw new Error(
+    'Visual contrast sampling must resolve translucent backgrounds before comparison',
+  );
 if (!visual.includes("backgroundStyle.backgroundImage !== 'none'"))
   throw new Error('Visual contrast sampling must avoid false precision on complex backgrounds');
 if (!visual.includes('const minimumRatio = largeText ? 3 : 4.5'))
