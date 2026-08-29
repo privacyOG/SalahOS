@@ -34,7 +34,7 @@ Keep this tracker compact. Mark an item `[x]` only after implementation and rele
 - [x] Add contrast, text-clipping, RTL and large-text acceptance where practical.
 - [x] Preserve regression fixtures for the reported Today and Qiblah readability failures.
 
-## Stage 5.1 — Hijri-aligned prayer calendar
+## Stage 5.1 — Hijri-aligned prayer calendar ✅
 
 - [x] Correct Hijri/Gregorian alignment using the Umm al-Qura calendar with the existing optional ±2-day local correction.
 - [x] Standardise English Hijri month names: Muharram, Safar, Rabi al-Awwal, Rabi al-Akhir, Jumada al-Ula, Jumada al-Akhirah, Rajab, Sha'ban, Ramadan, Shawwal, Dhu al-Qi'dah, Dhu al-Hijjah.
@@ -42,9 +42,9 @@ Keep this tracker compact. Mark an item `[x]` only after implementation and rele
 - [x] Add a separate Prayer Calendar route with Daily, Weekly, Monthly and Yearly views; do not alter the Today screen.
 - [x] Keep every calendar view derived from the same civil-date, Hijri and prayer-time calculation pipeline so views remain mutually aligned.
 - [x] Add responsive/RTL/accessibility styling and regression/acceptance coverage.
-- [ ] Validate Stage 5.1 on the exact final head and mark complete.
+- [x] Validate Stage 5.1 on the exact final head and mark complete.
 
-Stage 5.1 implementation: canonical Hijri presentation now emits `AH` explicitly rather than relying on an ambiguous era label; `src/domain/prayerCalendar.ts` derives date ranges and prayer rows from the same location/timezone/calculation settings as the app; `PrayerCalendarScreen` supplies Daily/Weekly/Monthly/Yearly views on a separate Calendar destination; `prayerCalendar.test.ts` locks the requested 2026 reference alignment and month names; `calendar:check` is enforced by the Quality Gate. Exact-head CI validation remains pending before this stage is marked complete.
+Stage 5.1 validation: Quality Gate run `33226532617` passed on main head `c7c1790c07df0f8dc3a82a9b20e980e1ad10ec8c`, including the dedicated `Hijri prayer calendar acceptance` step plus format, lint, typecheck, tests and production build. The final v1.5.1 reconciliation will re-run the gate after the remaining visual-only repair is promoted.
 
 ## Stage 6 — Instructions guide ✅
 
