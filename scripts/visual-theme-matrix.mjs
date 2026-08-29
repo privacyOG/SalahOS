@@ -35,7 +35,7 @@ const scenarios = [
   {
     name: 'qiblah-phone-dark',
     url: '/?view=qiblah',
-    ready: '.qiblah-v2',
+    ready: '.qibla-finder--v2',
     theme: 'dark',
     palette: 'midnight-gold',
     viewport: { width: 390, height: 844 },
@@ -85,15 +85,17 @@ const scenarios = [
   },
 ];
 function luminance(rgb) {
-  const c = rgb.map((v) => {
-    v /= 255;
-    return v <= 0.03928 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+  const c = rgb.map((value) => {
+    const normalized = value / 255;
+    return normalized <= 0.03928
+      ? normalized / 12.92
+      : ((normalized + 0.055) / 1.055) ** 2.4;
   });
   return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
 }
 function parseRgb(value) {
-  const m = value.match(/rgba?\((\d+)[, ]+\s*(\d+)[, ]+\s*(\d+)/);
-  return m ? [+m[1], +m[2], +m[3]] : null;
+  const values = value.match(/[\d.]+/g);
+  return values && values.length >= 3 ? values.slice(0, 3).map(Number) : null;
 }
 const browser = await chromium.launch({ headless: true });
 try {
@@ -105,56 +107,97 @@ try {
       serviceWorkers: 'block',
     });
     const page = await context.newPage();
-    await page.addInitScript(
-      ({ settings, largeText }) => {
-        localStorage.setItem('salahos.settings', JSON.stringify(settings));
-        if (largeText) document.documentElement.style.fontSize = '125%';
-      },
-      {
-        settings: { ...baseSettings, locale: s.locale ?? 'en', theme: s.theme, palette: s.palette },
-        largeText: !!s.largeText,
-      },
-    );
-    await page.goto(baseUrl + s.url, { waitUntil: 'networkidle' });
-    await page.locator(s.ready).first().waitFor({ state: 'visible' });
-    const root = await page.evaluate(() => ({
-      theme: document.documentElement.dataset.theme,
-      palette: document.documentElement.dataset.palette,
-      dir: document.documentElement.dir,
-      overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 2,
-    }));
-    if (root.palette !== s.palette) throw new Error(`${s.name}: palette did not apply`);
-    if (s.theme !== 'system' && root.theme !== s.theme)
-      throw new Error(`${s.name}: appearance did not apply`);
-    if (s.theme === 'system' && root.theme !== s.scheme)
-      throw new Error(`${s.name}: system appearance did not resolve`);
-    if ((s.locale ?? 'en') === 'ar' && root.dir !== 'rtl')
-      throw new Error(`${s.name}: rtl did not apply`);
-    if (root.overflow) throw new Error(`${s.name}: horizontal clipping detected`);
-    const failures = await page.locator('body *:visible').evaluateAll((els) =>
-      els
-        .filter((el) => {
-          const text = (el.textContent ?? '').trim();
-          if (!text || el.children.length > 0) return false;
-          const st = getComputedStyle(el),
-            bg = getComputedStyle(el.parentElement ?? el).backgroundColor;
-          return { fg: st.color, bg };
-        })
-        .slice(0, 250),
-    );
-    for (const item of failures) {
-      if (!item || typeof item !== 'object') continue;
-      const fg = parseRgb(item.fg),
-        bg = parseRgb(item.bg);
-      if (!fg || !bg) continue;
-      const l1 = luminance(fg),
-        l2 = luminance(bg),
-        ratio = (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
-      if (ratio < 3)
-        throw new Error(`${s.name}: visible text contrast below 3:1 (${ratio.toFixed(2)})`);
+    try {
+      await page.addInitScript(
+        ({ settings }) => {
+          localStorage.setItem('salahos.settings', JSON.stringify(settings));
+        },
+        {
+          settings: {
+            ...baseSettings,
+            locale: s.locale ?? 'en',
+            theme: s.theme,
+            palette: s.palette,
+          },
+        },
+      );
+      await page.goto(baseUrl + s.url, { waitUntil: 'networkidle' });
+      if (s.largeText) {
+        await page.evaluate(() => {
+          document.documentElement.style.fontSize = '125%';
+        });
+      }
+      await page.locator(s.ready).first().waitFor({ state: 'visible' });
+      const root = await page.evaluate(() => ({
+        theme: document.documentElement.dataset.theme,
+        palette: document.documentElement.dataset.palette,
+        dir: document.documentElement.dir,
+        overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 2,
+      }));
+      if (root.palette !== s.palette) throw new Error(`${s.name}: palette did not apply`);
+      if (s.theme !== 'system' && root.theme !== s.theme)
+        throw new Error(`${s.name}: appearance did not apply`);
+      if (s.theme === 'system' && root.theme !== s.scheme)
+        throw new Error(`${s.name}: system appearance did not resolve`);
+      if ((s.locale ?? 'en') === 'ar' && root.dir !== 'rtl')
+        throw new Error(`${s.name}: rtl did not apply`);
+      if (root.overflow) throw new Error(`${s.name}: horizontal clipping detected`);
+
+      const samples = await page.locator('body *:visible').evaluateAll((elements) =>
+        elements
+          .map((element) => {
+            const text = (element.textContent ?? '').trim();
+            if (!text || element.children.length > 0) return null;
+
+            const style = getComputedStyle(element);
+            let backgroundElement = element;
+            let backgroundStyle = getComputedStyle(backgroundElement);
+            let complexBackground = backgroundStyle.backgroundImage !== 'none';
+            while (
+              backgroundElement.parentElement !== null &&
+              (backgroundStyle.backgroundColor === 'rgba(0, 0, 0, 0)' ||
+                backgroundStyle.backgroundColor === 'transparent')
+            ) {
+              backgroundElement = backgroundElement.parentElement;
+              backgroundStyle = getComputedStyle(backgroundElement);
+              complexBackground ||= backgroundStyle.backgroundImage !== 'none';
+            }
+
+            const fontWeight = Number.parseInt(style.fontWeight, 10);
+            return {
+              fg: style.color,
+              bg: backgroundStyle.backgroundColor,
+              fontSize: Number.parseFloat(style.fontSize),
+              fontWeight: Number.isFinite(fontWeight) ? fontWeight : 400,
+              text: text.slice(0, 80),
+              complexBackground,
+            };
+          })
+          .filter((sample) => sample !== null)
+          .slice(0, 250),
+      );
+
+      for (const item of samples) {
+        if (item.complexBackground) continue;
+        const fg = parseRgb(item.fg);
+        const bg = parseRgb(item.bg);
+        if (!fg || !bg) continue;
+
+        const l1 = luminance(fg);
+        const l2 = luminance(bg);
+        const ratio = (Math.max(l1, l2) + 0.05) / (Math.min(l1, l2) + 0.05);
+        const largeText = item.fontSize >= 24 || (item.fontSize >= 18.66 && item.fontWeight >= 700);
+        const minimumRatio = largeText ? 3 : 4.5;
+        if (ratio < minimumRatio) {
+          throw new Error(
+            `${s.name}: visible text contrast below ${minimumRatio}:1 (${ratio.toFixed(2)}) for ${JSON.stringify(item.text)}`,
+          );
+        }
+      }
+      console.log(`theme matrix passed: ${s.name}`);
+    } finally {
+      await context.close();
     }
-    await context.close();
-    console.log(`theme matrix passed: ${s.name}`);
   }
 } finally {
   await browser.close();
