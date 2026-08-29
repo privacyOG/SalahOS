@@ -343,11 +343,7 @@ export function AustralianMosqueDirectoryPanel() {
           >
             OpenStreetMap
           </a>
-          <a
-            href={australianMosqueDirectory.source.osmLicenceUrl}
-            rel="noreferrer"
-            target="_blank"
-          >
+          <a href={australianMosqueDirectory.source.osmLicenceUrl} rel="noreferrer" target="_blank">
             ODbL 1.0
           </a>
           <a
