@@ -1,0 +1,45 @@
+name: Temporary mosque runtime validation
+on:
+  push:
+    branches:
+      - validation/australia-mosque-runtime-v2
+permissions:
+  contents: write
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: validation/australia-mosque-runtime-v2
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Apply migration
+        run: python3 scripts/temporary-migrate-mosque-runtime.py
+      - name: Format migration
+        run: npx prettier --write scripts/generate-mosque-directory-packs.mjs directory-service/server.mjs directory-service/server.acceptance.mjs package.json .github/workflows/ci.yml
+      - name: Generate packs
+        run: npm run mosques:packs:generate
+      - name: Validate runtime contract
+        run: node scripts/temporary-validate-mosque-runtime.mjs
+      - name: Run full repository checks
+        run: npm run check
+      - name: Verify generated outputs
+        run: npm run mosques:packs:check && git diff --check
+      - name: Commit validated migration
+        run: |
+          git config user.name privacyOG
+          git config user.email 102720550+privacyOG@users.noreply.github.com
+          git rm .github/workflows/temporary-validate-mosque-runtime.yml
+          git rm scripts/temporary-migrate-mosque-runtime.py
+          git rm scripts/temporary-validate-mosque-runtime.mjs
+          git add scripts/generate-mosque-directory-packs.mjs directory-service/server.mjs directory-service/server.acceptance.mjs package.json .github/workflows/ci.yml public/mosque-packs
+          git commit -m 'feat: wire combined Australian mosque directory runtime'
+          git push origin HEAD:validation/australia-mosque-runtime-v2
