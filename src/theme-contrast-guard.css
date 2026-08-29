@@ -1,9 +1,21 @@
 /*
- * SalahOS v1.5.1 Stage 1 — semantic contrast guard.
+ * SalahOS semantic contrast and directionality guard.
  *
- * This layer deliberately contains no feature-specific colours or semantic
- * token definitions. Authoritative semantic tokens live in design-system.css.
+ * Feature CSS may only bridge legacy surface names back to the authoritative
+ * semantic tokens in design-system.css. No independent theme colours live here.
  */
+
+/*
+ * Legacy feature surfaces must follow the active Light/Dark/System semantic
+ * theme instead of falling back to pale hard-coded backgrounds. This protects
+ * older feature styles (including Qiblah) anywhere they still consume these
+ * compatibility names.
+ */
+:root {
+  --surface: var(--salah-bg-surface);
+  --surface-elevated: var(--salah-bg-surface-raised);
+  --border-subtle: var(--salah-border-subtle);
+}
 
 /* Shared semantic surfaces must establish their own readable foreground. */
 .ds-surface,
@@ -14,8 +26,23 @@
 .settings-panel,
 .status-card,
 .prayer-panel,
-.hero {
+.hero,
+.qibla-finder,
+.qibla-primary-workspace,
+.qibla-bearing-summary,
+.qibla-turn-guidance,
+.qibla-location-bar,
+.qibla-location-tools,
+.knowledge-screen,
+.quran-offline-reader {
   color: var(--salah-fg-primary);
+}
+
+/* Qiblah secondary readouts must not depend on opacity over an unknown surface. */
+.qibla-bearing-summary small,
+.qibla-heading-readout {
+  color: var(--salah-fg-secondary);
+  opacity: 1;
 }
 
 /* Form controls and navigation inherit mode-safe semantic foregrounds. */
@@ -48,6 +75,25 @@ textarea,
 .ds-field__hint,
 .settings-panel summary {
   color: var(--salah-fg-tertiary);
+}
+
+/*
+ * Scripture direction is content-owned, not UI-locale-owned. Arabic Qur'an and
+ * Hadith text is always RTL/right aligned; English translations are always
+ * LTR/left aligned even while the surrounding application is Arabic/RTL.
+ */
+.knowledge-card__arabic[lang='ar'][dir='rtl'] {
+  direction: rtl;
+  text-align: right;
+  unicode-bidi: isolate;
+}
+
+[data-quran-translation],
+[data-hadith-translation],
+.quran-offline-ayah__translation {
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: isolate;
 }
 
 /* Theme status chips need an opaque semantic surface paired with their theme foreground. */
