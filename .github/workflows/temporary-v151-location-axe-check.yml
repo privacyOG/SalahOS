@@ -32,7 +32,9 @@ jobs:
           npm run format:check
           npm run lint
           npm run typecheck
-          npm run theme:check
+          npm run ui:theme-contrast
+          npm run ui:theme-architecture
+          npm run ui:theme-stage45
       - name: Build production application
         run: npm run build
       - name: Install Chromium harness
