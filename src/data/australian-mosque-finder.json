@@ -1,0 +1,5534 @@
+{
+  "schemaVersion": 1,
+  "source": {
+    "name": "Australian Mosque Finder",
+    "sourceKind": "organization-directory",
+    "baseUrl": "https://mosque-finder.com.au",
+    "sitemapUrl": "https://mosque-finder.com.au/mosque/sitemap.xml",
+    "retrievedAt": "2026-08-29T12:02:14.303Z",
+    "sitemapRecordCount": 178,
+    "recordCount": 176,
+    "failedRecordCount": 2,
+    "regionCodes": [
+      "AU-NSW",
+      "AU-NT",
+      "AU-QLD",
+      "AU-SA",
+      "AU-TAS",
+      "AU-VIC",
+      "AU-WA"
+    ],
+    "missingRegionCodes": [
+      "AU-ACT"
+    ]
+  },
+  "records": [
+    {
+      "id": "mosque-finder:adelaide-islamic-information-centre-of-sa",
+      "slug": "adelaide-islamic-information-centre-of-sa",
+      "name": "Adelaide - Islamic Information Centre of SA",
+      "type": "musalla",
+      "address": {
+        "line1": "19A Logan Street",
+        "locality": "Adelaide",
+        "state": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5000",
+        "formatted": "19A Logan Street, Adelaide, SA, 5000",
+        "countryCode": "AU"
+      },
+      "latitude": -34.93389,
+      "longitude": 138.59213,
+      "contact": {
+        "phone": "(08) 7226 6815"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [
+        "Car park"
+      ],
+      "facilities": [],
+      "services": [
+        "youth"
+      ],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/adelaide-islamic-information-centre-of-sa/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:adelaide-little-gilbert-street-mosque",
+      "slug": "adelaide-little-gilbert-street-mosque",
+      "name": "Adelaide - Little Gilbert Street Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "20 Little Gilbert Street",
+        "locality": "Adelaide",
+        "state": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5000",
+        "formatted": "20 Little Gilbert Street, Adelaide, SA, 5000",
+        "countryCode": "AU"
+      },
+      "latitude": -34.93419,
+      "longitude": 138.59173,
+      "contact": {
+        "phone": "+61 8 8231 6443"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [
+        "women-prayer-space"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/adelaide-little-gilbert-street-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:adelaide-university-of-adelaide-north-terrace-musalla",
+      "slug": "adelaide-university-of-adelaide-north-terrace-musalla",
+      "name": "Adelaide - University of Adelaide (North Terrace) Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Level 6, Union Building, Corner of Victoria Drive and Kintore Avenue",
+        "locality": "Adelaide",
+        "state": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5000",
+        "formatted": "Level 6, Union Building, Corner of Victoria Drive and Kintore Avenue, Adelaide, SA, 5000",
+        "countryCode": "AU"
+      },
+      "latitude": -34.91725,
+      "longitude": 138.60159,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/adelaide-university-of-adelaide-north-terrace-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:adelaide-university-of-south-australia-west-musalla",
+      "slug": "adelaide-university-of-south-australia-west-musalla",
+      "name": "Adelaide - University of South Australia (West) Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Sir George Kingston Building, Level 2, George Street",
+        "locality": "Adelaide",
+        "state": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5000",
+        "formatted": "Sir George Kingston Building, Level 2, George Street, Adelaide, SA, 5000",
+        "countryCode": "AU"
+      },
+      "latitude": -34.92274,
+      "longitude": 138.59083,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/adelaide-university-of-south-australia-west-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:adelaide-university-of-south-australia-east-musalla",
+      "slug": "adelaide-university-of-south-australia-east-musalla",
+      "name": "Adelaide – University of South Australia (East) Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Frome Road & North Terrace",
+        "locality": "Adelaide",
+        "state": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5000",
+        "formatted": "Frome Road & North Terrace, Adelaide, SA, 5000",
+        "countryCode": "AU"
+      },
+      "latitude": -34.92118,
+      "longitude": 138.60774,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/adelaide-university-of-south-australia-east-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:adelaide-airport-domestic-international-prayer-room",
+      "slug": "adelaide-airport-domestic-international-prayer-room",
+      "name": "Adelaide Airport - Domestic International Prayer room",
+      "type": "prayer-room",
+      "address": {
+        "line1": "Sir Richard Williams Avenue",
+        "locality": "Adelaide Airport",
+        "state": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5950",
+        "formatted": "Sir Richard Williams Avenue, Adelaide Airport, SA, 5950",
+        "countryCode": "AU"
+      },
+      "latitude": -34.9377,
+      "longitude": 138.53676,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/adelaide-airport-domestic-international-prayer-room/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:albanvale-station-road-deer-park-mosque",
+      "slug": "albanvale-station-road-deer-park-mosque",
+      "name": "Albanvale - Station Road - Deer Park Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "283 Station Road",
+        "locality": "Albanvale",
+        "state": "VIC",
+        "regionCode": "AU-VIC",
+        "postcode": "3025",
+        "formatted": "283 Station Road, Albanvale, VIC, 3025",
+        "countryCode": "AU"
+      },
+      "latitude": -37.74887,
+      "longitude": 144.77794,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/albanvale-station-road-deer-park-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:albany-serpentine-road-musalla",
+      "slug": "albany-serpentine-road-musalla",
+      "name": "Albany - Serpentine Road Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Unit 1, 166 Serpentine Road",
+        "locality": "Albany",
+        "state": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6330",
+        "formatted": "Unit 1, 166 Serpentine Road, Albany, WA, 6330",
+        "countryCode": "AU"
+      },
+      "latitude": -35.02029,
+      "longitude": 117.87782,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/albany-serpentine-road-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:albury-musallah-isaw",
+      "slug": "albury-musallah-isaw",
+      "name": "Albury Musallah ISAW",
+      "type": "musalla",
+      "address": {
+        "line1": "494 Wagga Road",
+        "locality": "Lavington",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2641",
+        "formatted": "494 Wagga Road, Lavington, NSW, 2641",
+        "countryCode": "AU"
+      },
+      "latitude": -36.04187,
+      "longitude": 146.95539,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:30 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/albury-musallah-isaw/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:albury-north-fairveiw-drive-musalla",
+      "slug": "albury-north-fairveiw-drive-musalla",
+      "name": "Albury North - Fairveiw drive Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "U1/978 Fairveiw drive",
+        "locality": "North Albury",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2640",
+        "formatted": "U1/978 Fairveiw drive, North Albury, NSW, 2640",
+        "countryCode": "AU"
+      },
+      "latitude": -36.05753,
+      "longitude": 146.92336,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/albury-north-fairveiw-drive-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:albury-wodonga-musallah",
+      "slug": "albury-wodonga-musallah",
+      "name": "Albury Wodonga Musallah",
+      "type": "mosque",
+      "address": {
+        "line1": "54 Kelly Street",
+        "locality": "Wodonga",
+        "state": "VIC",
+        "regionCode": "AU-VIC",
+        "postcode": "3690",
+        "formatted": "54 Kelly Street, Wodonga, VIC, 3690",
+        "countryCode": "AU"
+      },
+      "latitude": -36.11482,
+      "longitude": 146.87525,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/albury-wodonga-musallah/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:alice-springs-larapinta-lyndavale-drive-mosque",
+      "slug": "alice-springs-larapinta-lyndavale-drive-mosque",
+      "name": "Alice Springs - Larapinta Lyndavale Drive Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "101 Lyndavale Drive,. NT",
+        "locality": "Larapinta",
+        "state": "NT",
+        "regionCode": "AU-NT",
+        "postcode": "0870",
+        "formatted": "101 Lyndavale Drive,. NT, Larapinta, NT, 0870",
+        "countryCode": "AU"
+      },
+      "latitude": -23.69531,
+      "longitude": 133.8334,
+      "contact": {
+        "phone": "(08) 8955 1001"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/alice-springs-larapinta-lyndavale-drive-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:ararat-high-street-islamic-centre",
+      "slug": "ararat-high-street-islamic-centre",
+      "name": "Ararat - High Street Islamic Centre",
+      "type": "prayer-room",
+      "address": {
+        "line1": "High Street (Western Highway)",
+        "locality": "Ararat",
+        "state": "VIC",
+        "regionCode": "AU-VIC",
+        "postcode": "3377",
+        "formatted": "High Street (Western Highway), Ararat, VIC, 3377",
+        "countryCode": "AU"
+      },
+      "latitude": -37.28343,
+      "longitude": 142.94024,
+      "contact": {
+        "phone": "0422 625 971"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/ararat-high-street-islamic-centre/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:open-for-5-daily-prayers-walking-distance-to-ardeer-train-station",
+      "slug": "open-for-5-daily-prayers-walking-distance-to-ardeer-train-station",
+      "name": "Ardeer - Ballarat Road - Sunshine Masjid",
+      "type": "mosque",
+      "address": {
+        "line1": "618 Ballarat Road",
+        "locality": "Ardeer",
+        "state": "VIC",
+        "regionCode": "AU-VIC",
+        "postcode": "3022",
+        "formatted": "618 Ballarat Road, Ardeer, VIC, 3022",
+        "countryCode": "AU"
+      },
+      "latitude": -37.77121,
+      "longitude": 144.8014,
+      "contact": {
+        "website": "http://www.sunshinemosque.com.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "12:30 pm",
+          "label": "Jumu’ah"
+        },
+        {
+          "time": "1:30 pm",
+          "label": "Jumu’ah 2"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/open-for-5-daily-prayers-walking-distance-to-ardeer-train-station/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:arncliffe-mosque-masjid-fatima-al-zahrah-mosque",
+      "slug": "arncliffe-mosque-masjid-fatima-al-zahrah-mosque",
+      "name": "Arncliffe Mosque - Masjid Fatima Al Zahrah Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "3 - 5 Wollongong Rd",
+        "locality": "Arncliffe",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2205",
+        "formatted": "3 - 5 Wollongong Rd, Arncliffe, NSW, 2205",
+        "countryCode": "AU"
+      },
+      "latitude": -33.93235,
+      "longitude": 151.14876,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/arncliffe-mosque-masjid-fatima-al-zahrah-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:artarmon-hampden-road-mosque",
+      "slug": "artarmon-hampden-road-mosque",
+      "name": "Artarmon - Hampden Road Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "35 Hampden Road",
+        "locality": "Artarmon",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2064",
+        "formatted": "35 Hampden Road, Artarmon, NSW, 2064",
+        "countryCode": "AU"
+      },
+      "latitude": -33.80995,
+      "longitude": 151.18685,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Khutbah"
+        }
+      ],
+      "features": [
+        "Street parking",
+        "Wudu facility",
+        "Toilets",
+        "Educational facility",
+        "Non-muslim visit (by appointment)"
+      ],
+      "facilities": [
+        "wudu",
+        "toilets",
+        "parking"
+      ],
+      "services": [
+        "classes"
+      ],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/artarmon-hampden-road-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:ashfield-holden-street-musalla",
+      "slug": "ashfield-holden-street-musalla",
+      "name": "Ashfield - Holden Street Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Unit 1, 27 Holden Street",
+        "locality": "Ashfield",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2131",
+        "formatted": "Unit 1, 27 Holden Street, Ashfield, NSW, 2131",
+        "countryCode": "AU"
+      },
+      "latitude": -33.89122,
+      "longitude": 151.12515,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [
+        "Street parking",
+        "Toilets"
+      ],
+      "facilities": [
+        "toilets",
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/ashfield-holden-street-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:ashfield-liverpool-road-musalla",
+      "slug": "ashfield-liverpool-road-musalla",
+      "name": "Ashfield - Liverpool Road Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "241A Liverpool Road",
+        "locality": "Ashfield",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2131",
+        "formatted": "241A Liverpool Road, Ashfield, NSW, 2131",
+        "countryCode": "AU"
+      },
+      "latitude": -33.88899,
+      "longitude": 151.12561,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/ashfield-liverpool-road-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:asquith-hornsby-musalla",
+      "slug": "asquith-hornsby-musalla",
+      "name": "Asquith - Hornsby musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "75 Hunter St",
+        "locality": "Hornsby",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2077",
+        "formatted": "75 Hunter St, Hornsby, NSW, 2077",
+        "countryCode": "AU"
+      },
+      "latitude": -33.70078,
+      "longitude": 151.10085,
+      "contact": {
+        "phone": "0414507255"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Jumu’ah"
+        },
+        {
+          "time": "1:45 pm",
+          "label": "Jumu’ah 2"
+        }
+      ],
+      "features": [
+        "Street parking"
+      ],
+      "facilities": [
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/asquith-hornsby-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:auburn-bukhari-house-musalla",
+      "slug": "auburn-bukhari-house-musalla",
+      "name": "Auburn - Aswj Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "109 Auburn Road, Auburn",
+        "locality": "Auburn",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2144",
+        "formatted": "109 Auburn Road, Auburn, Auburn, NSW, 2144",
+        "countryCode": "AU"
+      },
+      "latitude": -33.85391,
+      "longitude": 151.03218,
+      "contact": {
+        "phone": "0431920320",
+        "website": "https://www.facebook.com/Aswjauburn"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [
+        "Educational facility"
+      ],
+      "facilities": [],
+      "services": [
+        "classes"
+      ],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/auburn-bukhari-house-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:auburn-gelibolu-parade-gallipoli-mosque",
+      "slug": "auburn-gelibolu-parade-gallipoli-mosque",
+      "name": "Auburn - Gelibolu Parade Gallipoli Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "15-19 Gelibolu Parade",
+        "locality": "Auburn",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2144",
+        "formatted": "15-19 Gelibolu Parade, Auburn, NSW, 2144",
+        "countryCode": "AU"
+      },
+      "latitude": -33.85234,
+      "longitude": 151.03598,
+      "contact": {
+        "phone": "(02) 9643 1758",
+        "website": "http://www.gallipolimosque.org.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Jumu’ah"
+        },
+        {
+          "time": "12:15 pm",
+          "label": "Jumu’ah 2"
+        }
+      ],
+      "features": [
+        "Car park",
+        "Street parking",
+        "Wudu facility",
+        "Disabled access",
+        "Toilets",
+        "Educational facility",
+        "Non-muslim visit (by appointment)"
+      ],
+      "facilities": [
+        "wudu",
+        "toilets",
+        "parking",
+        "wheelchair-accessible"
+      ],
+      "services": [
+        "classes"
+      ],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/auburn-gelibolu-parade-gallipoli-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:auburn-harrow-road-auburn-islamic-centre",
+      "slug": "auburn-harrow-road-auburn-islamic-centre",
+      "name": "Auburn - Harrow Road Auburn Islamic Centre",
+      "type": "mosque",
+      "address": {
+        "line1": "12 Harrow Road",
+        "locality": "Auburn",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2144",
+        "formatted": "12 Harrow Road, Auburn, NSW, 2144",
+        "countryCode": "AU"
+      },
+      "latitude": -33.85369,
+      "longitude": 151.031,
+      "contact": {
+        "phone": "(02) 9749 7204",
+        "website": "http://www.auburnislamiccentre.org.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "12:15 pm",
+          "label": "Jumu’ah"
+        },
+        {
+          "time": "1:15 pm",
+          "label": "winter"
+        }
+      ],
+      "features": [
+        "Street parking",
+        "Toilets"
+      ],
+      "facilities": [
+        "toilets",
+        "parking"
+      ],
+      "services": [
+        "classes",
+        "youth"
+      ],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/auburn-harrow-road-auburn-islamic-centre/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:auburn-masjid-abu-bakr-al-siddeeq",
+      "slug": "auburn-masjid-abu-bakr-al-siddeeq",
+      "name": "Auburn - Masjid Abu Bakr Al-Siddeeq",
+      "type": "mosque",
+      "address": {
+        "line1": "349 Chisholm Road",
+        "locality": "Auburn",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2144",
+        "formatted": "349 Chisholm Road, Auburn, NSW, 2144",
+        "countryCode": "AU"
+      },
+      "latitude": -33.87507,
+      "longitude": 151.01607,
+      "contact": {
+        "phone": "(02) 9738 7700",
+        "website": "http://masjidabubakr.org.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "12:15 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [
+        "Street parking"
+      ],
+      "facilities": [
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/auburn-masjid-abu-bakr-al-siddeeq/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:auburn-omar-mosque",
+      "slug": "auburn-omar-mosque",
+      "name": "Auburn - Omar Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "43 Harrow Road",
+        "locality": "Auburn",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2144",
+        "formatted": "43 Harrow Road, Auburn, NSW, 2144",
+        "countryCode": "AU"
+      },
+      "latitude": -33.85486,
+      "longitude": 151.03057,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [
+        "Street parking"
+      ],
+      "facilities": [
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/auburn-omar-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:auburn-town-hall-civic-centre-friday-prayer-only",
+      "slug": "auburn-town-hall-civic-centre-friday-prayer-only",
+      "name": "Auburn - Town Hall Civic Centre - Friday Prayer Only",
+      "type": "friday-prayer-only",
+      "address": {
+        "line1": "Civic Centre, 1 Susan Street",
+        "locality": "Auburn",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2144",
+        "formatted": "Civic Centre, 1 Susan Street, Auburn, NSW, 2144",
+        "countryCode": "AU"
+      },
+      "latitude": -33.85488,
+      "longitude": 151.03337,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "12:15 pm",
+          "label": "Jumu’ah"
+        },
+        {
+          "time": "1:15 pm",
+          "label": "winter"
+        }
+      ],
+      "features": [
+        "Street parking",
+        "Toilets"
+      ],
+      "facilities": [
+        "toilets",
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/auburn-town-hall-civic-centre-friday-prayer-only/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:avalon-cozens-road-ipdc-islamic-centre",
+      "slug": "avalon-cozens-road-ipdc-islamic-centre",
+      "name": "Avalon - Cozens Road - IPDC Islamic Centre",
+      "type": "prayer-room",
+      "address": {
+        "line1": "10 Cozens Road",
+        "locality": "Avalon",
+        "state": "VIC",
+        "regionCode": "AU-VIC",
+        "postcode": "3212",
+        "formatted": "10 Cozens Road, Avalon, VIC, 3212",
+        "countryCode": "AU"
+      },
+      "latitude": -38.04061,
+      "longitude": 144.42957,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/avalon-cozens-road-ipdc-islamic-centre/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:ballarat-elsworth-street-masjid",
+      "slug": "ballarat-elsworth-street-masjid",
+      "name": "Ballarat - Elsworth Street Masjid",
+      "type": "mosque",
+      "address": {
+        "line1": "116 Elsworth Street East, VIC",
+        "locality": "Ballarat",
+        "state": "VIC",
+        "regionCode": "AU-VIC",
+        "postcode": "3350",
+        "formatted": "116 Elsworth Street East, VIC, Ballarat, VIC, 3350",
+        "countryCode": "AU"
+      },
+      "latitude": -37.58446,
+      "longitude": 143.87679,
+      "contact": {
+        "website": "http://www.islamicsocietyballarat.org/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "12:30 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/ballarat-elsworth-street-masjid/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:ballarat-mount-helen-university-of-ballarat-musalla",
+      "slug": "ballarat-mount-helen-university-of-ballarat-musalla",
+      "name": "Ballarat - Mount Helen University of Ballarat Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Geology Building, East Terrace",
+        "locality": "Mount Helen",
+        "state": "VIC",
+        "regionCode": "AU-VIC",
+        "postcode": "3350",
+        "formatted": "Geology Building, East Terrace, Mount Helen, VIC, 3350",
+        "countryCode": "AU"
+      },
+      "latitude": -37.62826,
+      "longitude": 143.89409,
+      "contact": {
+        "website": "http://www.islamicsocietyballarat.org/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "12:30 pm",
+          "label": "Jumu’ah"
+        },
+        {
+          "time": "1:30 pm",
+          "label": "Jumu’ah 2"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/ballarat-mount-helen-university-of-ballarat-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:bankstown-daar-ibn-abbas-college-cross-street-musalla",
+      "slug": "bankstown-daar-ibn-abbas-college-cross-street-musalla",
+      "name": "Bankstown - Daar Ibn Abbas College - Cross Street Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "15-17 Cross Street",
+        "locality": "Bankstown",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2200",
+        "formatted": "15-17 Cross Street, Bankstown, NSW, 2200",
+        "countryCode": "AU"
+      },
+      "latitude": -33.92037,
+      "longitude": 151.0389,
+      "contact": {
+        "phone": "(02) 8008 0186",
+        "website": "http://ibnabbas.org.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [
+        "Car park",
+        "Street parking",
+        "Wudu facility",
+        "Toilets",
+        "Educational facility"
+      ],
+      "facilities": [
+        "wudu",
+        "toilets",
+        "parking",
+        "women-prayer-space"
+      ],
+      "services": [
+        "classes"
+      ],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/bankstown-daar-ibn-abbas-college-cross-street-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:bankstown-fitya-centre-musalla",
+      "slug": "bankstown-fitya-centre-musalla",
+      "name": "Bankstown - Fitya Centre Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "568 Hume Hwy",
+        "locality": "Yagoona",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2199",
+        "formatted": "568 Hume Hwy, Yagoona, NSW, 2199",
+        "countryCode": "AU"
+      },
+      "latitude": -33.90689,
+      "longitude": 151.02194,
+      "contact": {
+        "phone": "0408670560",
+        "website": "http://www.fityacentre.org/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [
+        "Street parking"
+      ],
+      "facilities": [
+        "parking"
+      ],
+      "services": [
+        "classes",
+        "youth"
+      ],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/bankstown-fitya-centre-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:bankstown-winspear-avenue-mosque",
+      "slug": "bankstown-winspear-avenue-mosque",
+      "name": "Bankstown - Masjid Abu Bakr - Winspear Avenue Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "2 Winspear Avenue",
+        "locality": "Bankstown",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2200",
+        "formatted": "2 Winspear Avenue, Bankstown, NSW, 2200",
+        "countryCode": "AU"
+      },
+      "latitude": -33.91667,
+      "longitude": 151.0282,
+      "contact": {
+        "phone": "(02) 9707 4842",
+        "website": "https://www.facebook.com/Masjid-Abu-Bakr-Bankstown-152854401458250/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [
+        "Street parking"
+      ],
+      "facilities": [
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/bankstown-winspear-avenue-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:bankstown-pcyc-jummah",
+      "slug": "bankstown-pcyc-jummah",
+      "name": "Bankstown - PCYC Jummah",
+      "type": "friday-prayer-only",
+      "address": {
+        "line1": "Cnr French Ave & Meredith Street",
+        "locality": "Bankstown",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2200",
+        "formatted": "Cnr French Ave & Meredith Street, Bankstown, NSW, 2200",
+        "countryCode": "AU"
+      },
+      "latitude": -33.91284,
+      "longitude": 151.03218,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/bankstown-pcyc-jummah/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:bathurst-al-sahabah-kelso-mosque",
+      "slug": "bathurst-al-sahabah-kelso-mosque",
+      "name": "Bathurst - Al Sahabah Kelso Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "75 Bonnor Street",
+        "locality": "Kelso",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2795",
+        "formatted": "75 Bonnor Street, Kelso, NSW, 2795",
+        "countryCode": "AU"
+      },
+      "latitude": -33.41519,
+      "longitude": 149.61981,
+      "contact": {
+        "phone": "0418496166 - Dr Solimon Gilany"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:30 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [
+        "wudu",
+        "women-prayer-space"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/bathurst-al-sahabah-kelso-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:castle-grand-jummah-only",
+      "slug": "castle-grand-jummah-only",
+      "name": "Baulkham Hills - Castle Grand - Jummah Only",
+      "type": "friday-prayer-only",
+      "address": {
+        "line1": "Castle Grand, 14 Pennant St",
+        "locality": "Castle Hill",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2154",
+        "formatted": "Castle Grand, 14 Pennant St, Castle Hill, NSW, 2154",
+        "countryCode": "AU"
+      },
+      "latitude": -33.73145,
+      "longitude": 151.00393,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [
+        "wudu",
+        "parking",
+        "women-prayer-space"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/castle-grand-jummah-only/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:beechboro-bosnian-and-hercegovnia-cultural-and-recreation-centre",
+      "slug": "beechboro-bosnian-and-hercegovnia-cultural-and-recreation-centre",
+      "name": "Beechboro - Bosnian & Hercegovnia Cultural & Recreation Centre",
+      "type": "prayer-room",
+      "address": {
+        "line1": "289 Beechboro Road, Beechboro",
+        "locality": "Morley",
+        "state": "WA",
+        "regionCode": "AU-WA",
+        "postcode": null,
+        "formatted": "289 Beechboro Road, Beechboro, Morley, WA",
+        "countryCode": "AU"
+      },
+      "latitude": -31.89076,
+      "longitude": 115.92383,
+      "contact": {
+        "phone": "(08) 9401 2375"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/beechboro-bosnian-and-hercegovnia-cultural-and-recreation-centre/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:belmore-al-azhar-mosque",
+      "slug": "belmore-al-azhar-mosque",
+      "name": "Belmore - Al-Azhar Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "172B Burwood Road",
+        "locality": "Belmore",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2192",
+        "formatted": "172B Burwood Road, Belmore, NSW, 2192",
+        "countryCode": "AU"
+      },
+      "latitude": -33.90935,
+      "longitude": 151.08453,
+      "contact": {
+        "phone": "0412 379 116",
+        "website": "http://www.alazhar.com.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/belmore-al-azhar-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:bentley-bentley-community-centre",
+      "slug": "bentley-bentley-community-centre",
+      "name": "Bentley - Bentley Community Centre",
+      "type": "prayer-room",
+      "address": {
+        "line1": "Nyamup Way",
+        "locality": "Bentley",
+        "state": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6102",
+        "formatted": "Nyamup Way, Bentley, WA, 6102",
+        "countryCode": "AU"
+      },
+      "latitude": -32.01089,
+      "longitude": 115.91067,
+      "contact": {
+        "phone": "(08) 9351 8593"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/bentley-bentley-community-centre/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:beresford-george-road-geraldton-masjid",
+      "slug": "beresford-george-road-geraldton-masjid",
+      "name": "Beresford - George Road Geraldton Masjid",
+      "type": "mosque",
+      "address": {
+        "line1": "172 Walter Street",
+        "locality": "Beresford",
+        "state": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6530",
+        "formatted": "172 Walter Street, Beresford, WA, 6530",
+        "countryCode": "AU"
+      },
+      "latitude": -28.75714,
+      "longitude": 114.62198,
+      "contact": {
+        "phone": "(08) 9964 1318"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/beresford-george-road-geraldton-masjid/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:blacktown-afghan-osman-mosque",
+      "slug": "blacktown-afghan-osman-mosque",
+      "name": "Blacktown - Afghan Osman Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "15 Prince Street",
+        "locality": "Blacktown",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2148",
+        "formatted": "15 Prince Street, Blacktown, NSW, 2148",
+        "countryCode": "AU"
+      },
+      "latitude": -33.76702,
+      "longitude": 150.91074,
+      "contact": {
+        "phone": "0408 862 846",
+        "website": "http://afghancsa.ning.com/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "12:15 pm",
+          "label": "Khutbah"
+        }
+      ],
+      "features": [
+        "Street parking"
+      ],
+      "facilities": [
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/blacktown-afghan-osman-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:box-hill-tafe-musalla",
+      "slug": "box-hill-tafe-musalla",
+      "name": "Box Hill - TAFE Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Box Hill institute of TAFE, 853 Whitehorse Road",
+        "locality": "Box Hill",
+        "state": "VIC",
+        "regionCode": "AU-VIC",
+        "postcode": "3128",
+        "formatted": "Box Hill institute of TAFE, 853 Whitehorse Road, Box Hill, VIC, 3128",
+        "countryCode": "AU"
+      },
+      "latitude": -37.81672,
+      "longitude": 145.11912,
+      "contact": {
+        "phone": "9286 9438"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [
+        "Wudu facility"
+      ],
+      "facilities": [
+        "wudu",
+        "women-prayer-space"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/box-hill-tafe-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:brighton-le-sands-bay-street-musalla",
+      "slug": "brighton-le-sands-bay-street-musalla",
+      "name": "Brighton Le Sands - Bay Street Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "283 Bay Street",
+        "locality": "Brighton-Le-Sands",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2216",
+        "formatted": "283 Bay Street, Brighton-Le-Sands, NSW, 2216",
+        "countryCode": "AU"
+      },
+      "latitude": -33.96001,
+      "longitude": 151.15353,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/brighton-le-sands-bay-street-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:broadmeadows-king-street-mosque",
+      "slug": "broadmeadows-king-street-mosque",
+      "name": "Broadmeadows - King Street Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "45-55 King Street",
+        "locality": "Broadmeadows (Dallas)",
+        "state": "VIC",
+        "regionCode": "AU-VIC",
+        "postcode": "3047",
+        "formatted": "45-55 King Street, Broadmeadows (Dallas), VIC, 3047",
+        "countryCode": "AU"
+      },
+      "latitude": -37.66844,
+      "longitude": 144.94163,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/broadmeadows-king-street-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:broken-hill-north-william-street-mosque",
+      "slug": "broken-hill-north-william-street-mosque",
+      "name": "Broken Hill North - William Street Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "Williams Street & Buck Street",
+        "locality": "Broken Hill North",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2880",
+        "formatted": "Williams Street & Buck Street, Broken Hill North, NSW, 2880",
+        "countryCode": "AU"
+      },
+      "latitude": -31.93734,
+      "longitude": 141.47753,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/broken-hill-north-william-street-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:burwood-george-street-musalla",
+      "slug": "burwood-george-street-musalla",
+      "name": "Burwood - George Street Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Unit 3, 20 George Street",
+        "locality": "Burwood",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2134",
+        "formatted": "Unit 3, 20 George Street, Burwood, NSW, 2134",
+        "countryCode": "AU"
+      },
+      "latitude": -33.87643,
+      "longitude": 151.10478,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/burwood-george-street-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:cabramatta-west-uthman-bin-affan-mosque",
+      "slug": "cabramatta-west-uthman-bin-affan-mosque",
+      "name": "Cabramatta West - Uthman Bin Affan Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "22 Water Street",
+        "locality": "Cabramatta West",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2166",
+        "formatted": "22 Water Street, Cabramatta West, NSW, 2166",
+        "countryCode": "AU"
+      },
+      "latitude": -33.8891,
+      "longitude": 150.91599,
+      "contact": {
+        "website": "https://www.facebook.com/OBA.MOSQUE/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/cabramatta-west-uthman-bin-affan-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:cairns-north-abou-bakr-asdeek-mosque",
+      "slug": "cairns-north-abou-bakr-asdeek-mosque",
+      "name": "Cairns North - Abou Bakr Asdeek Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "31 Dunn Street",
+        "locality": "Cairns North",
+        "state": "QLD",
+        "regionCode": "AU-QLD",
+        "postcode": "4870",
+        "formatted": "31 Dunn Street, Cairns North, QLD, 4870",
+        "countryCode": "AU"
+      },
+      "latitude": -16.9164,
+      "longitude": 145.76367,
+      "contact": {
+        "phone": "(07) 4041 3572",
+        "website": "http://www.cairnsmosque.com/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:10 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [
+        "Car park",
+        "Street parking",
+        "Wudu facility"
+      ],
+      "facilities": [
+        "wudu",
+        "parking",
+        "women-prayer-space"
+      ],
+      "services": [
+        "classes"
+      ],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/cairns-north-abou-bakr-asdeek-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:callaghan-newcastle-university-faith-centre-musalla",
+      "slug": "callaghan-newcastle-university-faith-centre-musalla",
+      "name": "Callaghan - Newcastle University Faith Centre Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Newcastle University, Callaghan Campus, University Drive",
+        "locality": "Callaghan",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2308",
+        "formatted": "Newcastle University, Callaghan Campus, University Drive, Callaghan, NSW, 2308",
+        "countryCode": "AU"
+      },
+      "latitude": -32.89664,
+      "longitude": 151.69749,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [
+        "Car park",
+        "Street parking",
+        "Toilets"
+      ],
+      "facilities": [
+        "toilets",
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/callaghan-newcastle-university-faith-centre-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:campbelltown-uws-macarthur-musalla",
+      "slug": "campbelltown-uws-macarthur-musalla",
+      "name": "Campbelltown - UWS Macarthur Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "University of western sydney, Macarthur Campus",
+        "locality": "Campbelltown",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2560",
+        "formatted": "University of western sydney, Macarthur Campus, Campbelltown, NSW, 2560",
+        "countryCode": "AU"
+      },
+      "latitude": -34.0697,
+      "longitude": 150.79347,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [
+        "Car park",
+        "Street parking",
+        "Toilets"
+      ],
+      "facilities": [
+        "toilets",
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/campbelltown-uws-macarthur-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:campbelltown-youth-centre-cyc-jummah",
+      "slug": "campbelltown-youth-centre-cyc-jummah",
+      "name": "Campbelltown - Youth Centre (CYC) Jummah",
+      "type": "friday-prayer-only",
+      "address": {
+        "line1": "Unit F1-F2, 5/7 Hepher Road",
+        "locality": "Campbelltown",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2560",
+        "formatted": "Unit F1-F2, 5/7 Hepher Road, Campbelltown, NSW, 2560",
+        "countryCode": "AU"
+      },
+      "latitude": -34.05473,
+      "longitude": 150.80809,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/campbelltown-youth-centre-cyc-jummah/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:campsie-wilfred-lane-musalla",
+      "slug": "campsie-wilfred-lane-musalla",
+      "name": "Campsie - Wilfred Lane Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Unit 1, 19-21 Wilfred Lane",
+        "locality": "Campsie",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2194",
+        "formatted": "Unit 1, 19-21 Wilfred Lane, Campsie, NSW, 2194",
+        "countryCode": "AU"
+      },
+      "latitude": -33.91061,
+      "longitude": 151.10005,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "winter"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/campsie-wilfred-lane-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:canning-vale-musalla",
+      "slug": "canning-vale-musalla",
+      "name": "Canning Vale Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "3/5 Hughes St,",
+        "locality": "Canning Vale",
+        "state": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6155",
+        "formatted": "3/5 Hughes St,, Canning Vale, WA, 6155",
+        "countryCode": "AU"
+      },
+      "latitude": -32.06705,
+      "longitude": 115.93156,
+      "contact": {},
+      "prayerTimes": {
+        "maghrib": "11:00 am"
+      },
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [
+        "women-prayer-space"
+      ],
+      "services": [
+        "classes"
+      ],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/canning-vale-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:central-coast-san-remo-brava-avenue-musalla-jumuah-only",
+      "slug": "central-coast-san-remo-brava-avenue-musalla-jumuah-only",
+      "name": "Central Coast - San Remo - Brava Avenue Musalla (Jumu’ah only)",
+      "type": "friday-prayer-only",
+      "address": {
+        "line1": "28 Brava Avenue",
+        "locality": "San Remo",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2262",
+        "formatted": "28 Brava Avenue, San Remo, NSW, 2262",
+        "countryCode": "AU"
+      },
+      "latitude": -33.21595,
+      "longitude": 151.51271,
+      "contact": {
+        "phone": "(04) 0448 6900"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/central-coast-san-remo-brava-avenue-musalla-jumuah-only/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:chester-hill-banool-street-jummah",
+      "slug": "chester-hill-banool-street-jummah",
+      "name": "Chester Hill - Banool Street Jummah",
+      "type": "friday-prayer-only",
+      "address": {
+        "line1": "Terry Lamb Complex, Banool St",
+        "locality": "Chester Hill",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2162",
+        "formatted": "Terry Lamb Complex, Banool St, Chester Hill, NSW, 2162",
+        "countryCode": "AU"
+      },
+      "latitude": -33.88089,
+      "longitude": 150.99646,
+      "contact": {
+        "website": "http://www.idca.org.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "12:15 pm",
+          "label": "Jumu’ah"
+        },
+        {
+          "time": "1:15 pm",
+          "label": "Jumu’ah 2"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/chester-hill-banool-street-jummah/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:clarkson-ainsbury-parade-musalla",
+      "slug": "clarkson-ainsbury-parade-musalla",
+      "name": "Clarkson - Ainsbury Parade Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Shop 2, 30 Ainsbury Parade",
+        "locality": "Clarkson",
+        "state": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6036",
+        "formatted": "Shop 2, 30 Ainsbury Parade, Clarkson, WA, 6036",
+        "countryCode": "AU"
+      },
+      "latitude": -31.67862,
+      "longitude": 115.71706,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/clarkson-ainsbury-parade-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:coffs-harbour-islamic-association-musalla",
+      "slug": "coffs-harbour-islamic-association-musalla",
+      "name": "Coffs Harbour - Islamic Association Musalla",
+      "type": "friday-prayer-only",
+      "address": {
+        "line1": "191 Harbour Drive",
+        "locality": "Coffs Harbour",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2450",
+        "formatted": "191 Harbour Drive, Coffs Harbour, NSW, 2450",
+        "countryCode": "AU"
+      },
+      "latitude": -30.29871,
+      "longitude": 153.11812,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:00 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/coffs-harbour-islamic-association-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:coffs-harbour-southern-cross-university-musalla",
+      "slug": "coffs-harbour-southern-cross-university-musalla",
+      "name": "Coffs Harbour - Southern Cross University Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Coffs Harbour Campus, Doug Knight Drive",
+        "locality": "Coffs Harbour",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2450",
+        "formatted": "Coffs Harbour Campus, Doug Knight Drive, Coffs Harbour, NSW, 2450",
+        "countryCode": "AU"
+      },
+      "latitude": -30.32585,
+      "longitude": 153.10123,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/coffs-harbour-southern-cross-university-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:coober-pedy-musalla",
+      "slug": "coober-pedy-musalla",
+      "name": "Coober Pedy Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Lot 1070 Traeger St",
+        "locality": "Coober Pedy",
+        "state": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5723",
+        "formatted": "Lot 1070 Traeger St, Coober Pedy, SA, 5723",
+        "countryCode": "AU"
+      },
+      "latitude": -29.00958,
+      "longitude": 134.7602,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:30 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/coober-pedy-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:crawley-university-of-western-australia-musalla",
+      "slug": "crawley-university-of-western-australia-musalla",
+      "name": "Crawley - University of Western Australia Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "35 Stirling Highway",
+        "locality": "Crawley",
+        "state": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6009",
+        "formatted": "35 Stirling Highway, Crawley, WA, 6009",
+        "countryCode": "AU"
+      },
+      "latitude": -31.98006,
+      "longitude": 115.81882,
+      "contact": {
+        "phone": "(08) 9380 3838",
+        "website": "http://www.cmss.uwa.edu.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/crawley-university-of-western-australia-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:cringila-illawarra-bilal-mosque",
+      "slug": "cringila-illawarra-bilal-mosque",
+      "name": "Cringila - Illawarra - Bilal Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "1 Bethlehem St",
+        "locality": "Cringila",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2502",
+        "formatted": "1 Bethlehem St, Cringila, NSW, 2502",
+        "countryCode": "AU"
+      },
+      "latitude": -34.46929,
+      "longitude": 150.87476,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [
+        "Street parking",
+        "Toilets"
+      ],
+      "facilities": [
+        "toilets",
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/cringila-illawarra-bilal-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:cumberland-university-of-sydney-musalla",
+      "slug": "cumberland-university-of-sydney-musalla",
+      "name": "Cumberland - University of Sydney Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Room 320/U319, Level 3, Old Teachers College, Sydney Uni, Manning Rd",
+        "locality": "Cumberland",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2006",
+        "formatted": "Room 320/U319, Level 3, Old Teachers College, Sydney Uni, Manning Rd, Cumberland, NSW, 2006",
+        "countryCode": "AU"
+      },
+      "latitude": -33.88849,
+      "longitude": 151.1871,
+      "contact": {
+        "website": "http://www.sumsa.org.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [
+        "women-prayer-space"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/cumberland-university-of-sydney-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:darul-imaan-wolli-creek-mosque",
+      "slug": "darul-imaan-wolli-creek-mosque",
+      "name": "Darul Imaan Wolli Creek Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "10 Eden Street",
+        "locality": "Wolli Creek",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2205",
+        "formatted": "10 Eden Street, Wolli Creek, NSW, 2205",
+        "countryCode": "AU"
+      },
+      "latitude": -33.93672,
+      "longitude": 151.14928,
+      "contact": {
+        "phone": "0295975966",
+        "website": "http://www.imaan.com.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:10 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [
+        "Street parking",
+        "Wudu facility",
+        "Toilets",
+        "Funeral services",
+        "Educational facility",
+        "Zakaat"
+      ],
+      "facilities": [
+        "wudu",
+        "toilets",
+        "parking"
+      ],
+      "services": [
+        "classes",
+        "funeral-services"
+      ],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/darul-imaan-wolli-creek-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:dee-why-manly-warringah-mosque",
+      "slug": "dee-why-manly-warringah-mosque",
+      "name": "Dee Why - Manly Warringah Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "12 South Creek Road",
+        "locality": "Dee Why,",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2099",
+        "formatted": "12 South Creek Road, Dee Why,, NSW, 2099",
+        "countryCode": "AU"
+      },
+      "latitude": -33.74359,
+      "longitude": 151.29325,
+      "contact": {
+        "website": "https://www.facebook.com/DeeWhyMasjid"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:30 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [
+        "Street parking"
+      ],
+      "facilities": [
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/dee-why-manly-warringah-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:dubbo-kotku-mosque",
+      "slug": "dubbo-kotku-mosque",
+      "name": "Dubbo - Kotku Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "71A Tamworth Street",
+        "locality": "Dubbo",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2830",
+        "formatted": "71A Tamworth Street, Dubbo, NSW, 2830",
+        "countryCode": "AU"
+      },
+      "latitude": -32.26092,
+      "longitude": 148.61064,
+      "contact": {
+        "website": "http://www.dubbomosque.org/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "2:00 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [
+        "Car park",
+        "Wudu facility",
+        "Toilets"
+      ],
+      "facilities": [
+        "wudu",
+        "toilets"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/dubbo-kotku-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:dural-old-northern-road-dural-iqama-musallah",
+      "slug": "dural-old-northern-road-dural-iqama-musallah",
+      "name": "Dural - old northern road Dural Iqama Musallah",
+      "type": "musalla",
+      "address": {
+        "line1": "937 Old Northern Rd",
+        "locality": "Dural",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2158",
+        "formatted": "937 Old Northern Rd, Dural, NSW, 2158",
+        "countryCode": "AU"
+      },
+      "latitude": -33.68233,
+      "longitude": 151.02836,
+      "contact": {
+        "phone": "0416 156 604"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [
+        "Street parking"
+      ],
+      "facilities": [
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/dural-old-northern-road-dural-iqama-musallah/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:edmondson-park-islamic-house-masjid",
+      "slug": "edmondson-park-islamic-house-masjid",
+      "name": "Edmondson Park - Islamic House Masjid",
+      "type": "mosque",
+      "address": {
+        "line1": "2094 Camden Valley Way",
+        "locality": "Edmondson Park",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2170",
+        "formatted": "2094 Camden Valley Way, Edmondson Park, NSW, 2170",
+        "countryCode": "AU"
+      },
+      "latitude": -33.95755,
+      "longitude": 150.86684,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "12:10 pm",
+          "label": "Khutbah"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/edmondson-park-islamic-house-masjid/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:elizabeth-grove-hogarth-road-elizabeth-mosque",
+      "slug": "elizabeth-grove-hogarth-road-elizabeth-mosque",
+      "name": "Elizabeth Grove - Hogarth Road Elizabeth Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "139-141 Hogarth Road",
+        "locality": "Elizabeth Grove",
+        "state": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5112",
+        "formatted": "139-141 Hogarth Road, Elizabeth Grove, SA, 5112",
+        "countryCode": "AU"
+      },
+      "latitude": -34.73954,
+      "longitude": 138.66297,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/elizabeth-grove-hogarth-road-elizabeth-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:erskineville-john-street-mosque",
+      "slug": "erskineville-john-street-mosque",
+      "name": "Erskineville - John Street Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "13 John Street",
+        "locality": "Erskineville",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2043",
+        "formatted": "13 John Street, Erskineville, NSW, 2043",
+        "countryCode": "AU"
+      },
+      "latitude": -33.89873,
+      "longitude": 151.1845,
+      "contact": {
+        "phone": "(02) 9516 3039"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/erskineville-john-street-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:gepps-cross-adelaide-turkish-islamic-and-cultural-centre",
+      "slug": "gepps-cross-adelaide-turkish-islamic-and-cultural-centre",
+      "name": "Gepps Cross - Adelaide Turkish Islamic and Cultural Centre",
+      "type": "musalla",
+      "address": {
+        "line1": "714 Main North Rd",
+        "locality": "Gepps Cross",
+        "state": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5094",
+        "formatted": "714 Main North Rd, Gepps Cross, SA, 5094",
+        "countryCode": "AU"
+      },
+      "latitude": -34.83982,
+      "longitude": 138.60614,
+      "contact": {
+        "phone": "(08) 8281 4639"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:30 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/gepps-cross-adelaide-turkish-islamic-and-cultural-centre/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:gilles-plains-abu-bakr-assiddiq-masjid",
+      "slug": "gilles-plains-abu-bakr-assiddiq-masjid",
+      "name": "Gilles Plains - Abu bakr Assiddiq Masjid",
+      "type": "mosque",
+      "address": {
+        "line1": "52-56 Wandana Avenue",
+        "locality": "Gilles Plains",
+        "state": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5086",
+        "formatted": "52-56 Wandana Avenue, Gilles Plains, SA, 5086",
+        "countryCode": "AU"
+      },
+      "latitude": -34.848,
+      "longitude": 138.65999,
+      "contact": {
+        "phone": "(08) 8369 0781",
+        "website": "http://www.islamicsocietysa.org.au/about-25"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/gilles-plains-abu-bakr-assiddiq-masjid/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:glendenning-al-tadhkeer-society-masjid-qubaa",
+      "slug": "glendenning-al-tadhkeer-society-masjid-qubaa",
+      "name": "Glendenning - Al Tadhkeer Society -Masjid Qubaa’",
+      "type": "mosque",
+      "address": {
+        "line1": "19 Sunblest Crescent",
+        "locality": "Mt Druitt",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2770",
+        "formatted": "19 Sunblest Crescent, Mt Druitt, NSW, 2770",
+        "countryCode": "AU"
+      },
+      "latitude": -33.76697,
+      "longitude": 150.80698,
+      "contact": {
+        "website": "http://al-tadhkeer.org.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/glendenning-al-tadhkeer-society-masjid-qubaa/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:glenfield-hall-jummah-only",
+      "slug": "glenfield-hall-jummah-only",
+      "name": "Glenfield Hall (Jummah only)",
+      "type": "friday-prayer-only",
+      "address": {
+        "line1": "Railway Pde Seddon Park",
+        "locality": "Glenfield",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2167",
+        "formatted": "Railway Pde Seddon Park, Glenfield, NSW, 2167",
+        "countryCode": "AU"
+      },
+      "latitude": -33.97581,
+      "longitude": 150.89096,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:20 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [
+        "wudu",
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/glenfield-hall-jummah-only/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:gosford-greenview-road-musalla",
+      "slug": "gosford-greenview-road-musalla",
+      "name": "Gosford - Greenview Road Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "13 Greenview road",
+        "locality": "Narara",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2250",
+        "formatted": "13 Greenview road, Narara, NSW, 2250",
+        "countryCode": "AU"
+      },
+      "latitude": -33.40526,
+      "longitude": 151.34072,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/gosford-greenview-road-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:gosnells-masjid-al-rahman-and-islamic-centre",
+      "slug": "gosnells-masjid-al-rahman-and-islamic-centre",
+      "name": "Gosnells - Masjid Al-Rahman & Islamic Centre",
+      "type": "mosque",
+      "address": {
+        "line1": "54 Mills Road West",
+        "locality": "Gosnells",
+        "state": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6110",
+        "formatted": "54 Mills Road West, Gosnells, WA, 6110",
+        "countryCode": "AU"
+      },
+      "latitude": -32.06713,
+      "longitude": 116.00413,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/gosnells-masjid-al-rahman-and-islamic-centre/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:granville-gya-the-avenue-musallah",
+      "slug": "granville-gya-the-avenue-musallah",
+      "name": "Granville - GYA The Avenue Musallah",
+      "type": "musalla",
+      "address": {
+        "line1": "20 The Avenue",
+        "locality": "Granville",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2142",
+        "formatted": "20 The Avenue, Granville, NSW, 2142",
+        "countryCode": "AU"
+      },
+      "latitude": -33.83185,
+      "longitude": 151.00724,
+      "contact": {
+        "website": "http://www.gya.org.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "12:20 pm",
+          "label": "Jumu’ah"
+        },
+        {
+          "time": "1:00 pm",
+          "label": "Jumu’ah 2"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/granville-gya-the-avenue-musallah/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:granville-gya-town-hall-jummah",
+      "slug": "granville-gya-town-hall-jummah",
+      "name": "Granville - GYA Town Hall Jummah",
+      "type": "friday-prayer-only",
+      "address": {
+        "line1": "10 Carlton St",
+        "locality": "Granville",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2142",
+        "formatted": "10 Carlton St, Granville, NSW, 2142",
+        "countryCode": "AU"
+      },
+      "latitude": -33.83291,
+      "longitude": 151.00934,
+      "contact": {
+        "website": "http://www.gya.org.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "12:20 pm",
+          "label": "Jumu’ah"
+        },
+        {
+          "time": "1:00 pm",
+          "label": "Jumu’ah 2"
+        }
+      ],
+      "features": [
+        "Street parking"
+      ],
+      "facilities": [
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/granville-gya-town-hall-jummah/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:granville-spring-garden-street-gya-musalla",
+      "slug": "granville-spring-garden-street-gya-musalla",
+      "name": "Granville - Spring Garden Street GYA Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "288 Clyde St",
+        "locality": "Granville",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2142",
+        "formatted": "288 Clyde St, Granville, NSW, 2142",
+        "countryCode": "AU"
+      },
+      "latitude": -33.85818,
+      "longitude": 151.01034,
+      "contact": {
+        "website": "http://www.gya.org.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "12:20 pm",
+          "label": "Jumu’ah"
+        },
+        {
+          "time": "1:00 pm",
+          "label": "Jumu’ah 2"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/granville-spring-garden-street-gya-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:granville-south-masjid-al-noor",
+      "slug": "granville-south-masjid-al-noor",
+      "name": "Granville South - Masjid Al Noor",
+      "type": "mosque",
+      "address": {
+        "line1": "1-3 Ferndell Street",
+        "locality": "South Granville",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2142",
+        "formatted": "1-3 Ferndell Street, South Granville, NSW, 2142",
+        "countryCode": "AU"
+      },
+      "latitude": -33.86391,
+      "longitude": 151.01,
+      "contact": {
+        "phone": "0455 777 557",
+        "website": "https://www.facebook.com/masjidalnoorsydney"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "12:15 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [
+        "Wudu facility"
+      ],
+      "facilities": [
+        "wudu",
+        "women-prayer-space"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/granville-south-masjid-al-noor/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:green-valley-wilson-road-green-valley-mosque",
+      "slug": "green-valley-wilson-road-green-valley-mosque",
+      "name": "Green Valley - Wilson Road Green Valley Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "264 Wilson Road",
+        "locality": "Green Valley",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2168",
+        "formatted": "264 Wilson Road, Green Valley, NSW, 2168",
+        "countryCode": "AU"
+      },
+      "latitude": -33.89847,
+      "longitude": 150.86731,
+      "contact": {
+        "phone": "02 9607 4047"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [
+        "Car park",
+        "Street parking",
+        "Wudu facility",
+        "Disabled access",
+        "Toilets"
+      ],
+      "facilities": [
+        "wudu",
+        "toilets",
+        "parking",
+        "wheelchair-accessible"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/green-valley-wilson-road-green-valley-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:greenacre-anzac-st-musalla",
+      "slug": "greenacre-anzac-st-musalla",
+      "name": "Greenacre - Anzac St Musalla",
+      "type": "mosque",
+      "address": {
+        "line1": "31/35 Anzac St",
+        "locality": "Greenacre",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2190",
+        "formatted": "31/35 Anzac St, Greenacre, NSW, 2190",
+        "countryCode": "AU"
+      },
+      "latitude": -33.90149,
+      "longitude": 151.04198,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/greenacre-anzac-st-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:greenacre",
+      "slug": "greenacre",
+      "name": "Greenacre - Boronia Road Musalah",
+      "type": "musalla",
+      "address": {
+        "line1": "12 Boronia Road",
+        "locality": "Greenacre",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2190",
+        "formatted": "12 Boronia Road, Greenacre, NSW, 2190",
+        "countryCode": "AU"
+      },
+      "latitude": -33.90672,
+      "longitude": 151.0567,
+      "contact": {
+        "phone": "0415 588 730"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [
+        "Street parking"
+      ],
+      "facilities": [
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/greenacre/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:griffith-kotku-riaz-mosque",
+      "slug": "griffith-kotku-riaz-mosque",
+      "name": "Griffith - Kotku Riaz Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "58 Benerembah St",
+        "locality": "Griffith",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2680",
+        "formatted": "58 Benerembah St, Griffith, NSW, 2680",
+        "countryCode": "AU"
+      },
+      "latitude": -34.28804,
+      "longitude": 146.03395,
+      "contact": {
+        "phone": "(02) 69634943"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [
+        "Street parking",
+        "Wudu facility"
+      ],
+      "facilities": [
+        "wudu",
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/griffith-kotku-riaz-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:guildford-bursill-street-jummah-only",
+      "slug": "guildford-bursill-street-jummah-only",
+      "name": "Guildford - Bursill Street - Jummah Only",
+      "type": "friday-prayer-only",
+      "address": {
+        "line1": "97 Bursill Street",
+        "locality": "Guildford",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2161",
+        "formatted": "97 Bursill Street, Guildford, NSW, 2161",
+        "countryCode": "AU"
+      },
+      "latitude": -33.85044,
+      "longitude": 150.98892,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "12:30 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/guildford-bursill-street-jummah-only/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:guildford-mountford-ave-mosque",
+      "slug": "guildford-mountford-ave-mosque",
+      "name": "Guildford - Mountford Ave Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "64 Mountford Avenue",
+        "locality": "Guildford",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2161",
+        "formatted": "64 Mountford Avenue, Guildford, NSW, 2161",
+        "countryCode": "AU"
+      },
+      "latitude": -33.85262,
+      "longitude": 150.98852,
+      "contact": {
+        "phone": "(02) 8034 7875",
+        "website": "https://www.facebook.com/GuildfordMosque"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [
+        "Street parking",
+        "Wudu facility"
+      ],
+      "facilities": [
+        "wudu",
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/guildford-mountford-ave-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:guildford-old-guildford-railway-st-mosque",
+      "slug": "guildford-old-guildford-railway-st-mosque",
+      "name": "Guildford - Old Guildford Railway St Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "3 Railway St",
+        "locality": "Old Guildford",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2161",
+        "formatted": "3 Railway St, Old Guildford, NSW, 2161",
+        "countryCode": "AU"
+      },
+      "latitude": -33.85812,
+      "longitude": 150.98271,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/guildford-old-guildford-railway-st-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:gwynneville-omar-masjid-wollongong",
+      "slug": "gwynneville-omar-masjid-wollongong",
+      "name": "Gwynneville - Omar Masjid Wollongong",
+      "type": "mosque",
+      "address": {
+        "line1": "9 Foley Street",
+        "locality": "Gwynneville",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2500",
+        "formatted": "9 Foley Street, Gwynneville, NSW, 2500",
+        "countryCode": "AU"
+      },
+      "latitude": -34.41318,
+      "longitude": 150.88626,
+      "contact": {
+        "website": "http://omarmosque.org.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:30 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [
+        "Street parking",
+        "Wudu facility",
+        "Toilets",
+        "Marriage services",
+        "Funeral services",
+        "Counselling services"
+      ],
+      "facilities": [
+        "wudu",
+        "toilets",
+        "parking"
+      ],
+      "services": [
+        "counselling",
+        "funeral-services"
+      ],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/gwynneville-omar-masjid-wollongong/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:gwynneville-university-of-wollongong-musalla",
+      "slug": "gwynneville-university-of-wollongong-musalla",
+      "name": "Gwynneville - University of Wollongong Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Building 50 & 56, University of Wollongong, Northfields Avenue",
+        "locality": "Gwynneville",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2500",
+        "formatted": "Building 50 & 56, University of Wollongong, Northfields Avenue, Gwynneville, NSW, 2500",
+        "countryCode": "AU"
+      },
+      "latitude": -34.40825,
+      "longitude": 150.87962,
+      "contact": {
+        "phone": "02 4221 5911",
+        "website": "https://clubs.uow.edu.au/clubs/muslim-association-of-wollongong-university-mawu-/home/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [
+        "Car park",
+        "Street parking",
+        "Wudu facility",
+        "Toilets"
+      ],
+      "facilities": [
+        "wudu",
+        "toilets",
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/gwynneville-university-of-wollongong-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:harris-park-grand-avenue-north-musalla",
+      "slug": "harris-park-grand-avenue-north-musalla",
+      "name": "Harris Park - Grand Avenue North Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Cnr Grand Avenue North and River Road West",
+        "locality": "Harris Park",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2150",
+        "formatted": "Cnr Grand Avenue North and River Road West, Harris Park, NSW, 2150",
+        "countryCode": "AU"
+      },
+      "latitude": -33.8163,
+      "longitude": 151.01995,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [
+        "Street parking"
+      ],
+      "facilities": [
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/harris-park-grand-avenue-north-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:hillsdale-beauchamp-road-musalla",
+      "slug": "hillsdale-beauchamp-road-musalla",
+      "name": "Hillsdale - Beauchamp Road Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "218 Beauchamp Road",
+        "locality": "Hillsdale",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2036",
+        "formatted": "218 Beauchamp Road, Hillsdale, NSW, 2036",
+        "countryCode": "AU"
+      },
+      "latitude": -33.95556,
+      "longitude": 151.22928,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/hillsdale-beauchamp-road-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:hobart-university-of-tasmania-tuu-musalla",
+      "slug": "hobart-university-of-tasmania-tuu-musalla",
+      "name": "Hobart - University of Tasmania- TUU Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Tasmania University Union, churchill avenue",
+        "locality": "sandy bay",
+        "state": "TAS",
+        "regionCode": "AU-TAS",
+        "postcode": "7005",
+        "formatted": "Tasmania University Union, churchill avenue, sandy bay, TAS, 7005",
+        "countryCode": "AU"
+      },
+      "latitude": -42.90486,
+      "longitude": 147.32598,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:00 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/hobart-university-of-tasmania-tuu-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:hoppers-crossing-al-taqwa-mosque",
+      "slug": "hoppers-crossing-al-taqwa-mosque",
+      "name": "Hoppers Crossing - Al Taqwa Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "201 Sayers Road",
+        "locality": "Truganina",
+        "state": "VIC",
+        "regionCode": "AU-VIC",
+        "postcode": "3029",
+        "formatted": "201 Sayers Road, Truganina, VIC, 3029",
+        "countryCode": "AU"
+      },
+      "latitude": -37.85472,
+      "longitude": 144.72186,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:30 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [
+        "Street parking",
+        "Educational facility"
+      ],
+      "facilities": [
+        "parking"
+      ],
+      "services": [
+        "classes",
+        "counselling",
+        "youth"
+      ],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/hoppers-crossing-al-taqwa-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:hoxton-park-masjid-bilal",
+      "slug": "hoxton-park-masjid-bilal",
+      "name": "Hoxton Park- Masjid Bilal",
+      "type": "mosque",
+      "address": {
+        "line1": "6 Wilson Road",
+        "locality": "Hinchinbrook",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2168",
+        "formatted": "6 Wilson Road, Hinchinbrook, NSW, 2168",
+        "countryCode": "AU"
+      },
+      "latitude": -33.92451,
+      "longitude": 150.86189,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "12:10 pm",
+          "label": "1st session"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/hoxton-park-masjid-bilal/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:hurstville-culwulla-street-musalla",
+      "slug": "hurstville-culwulla-street-musalla",
+      "name": "Hurstville - Culwulla Street Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "18 Culwulla Street",
+        "locality": "South Hurstville",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2221",
+        "formatted": "18 Culwulla Street, South Hurstville, NSW, 2221",
+        "countryCode": "AU"
+      },
+      "latitude": -33.97484,
+      "longitude": 151.10473,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/hurstville-culwulla-street-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:ingleburn-islamic-centre-musalla",
+      "slug": "ingleburn-islamic-centre-musalla",
+      "name": "Ingleburn - Islamic Centre musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "13-17 Eagleview Road",
+        "locality": "Minto",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2566",
+        "formatted": "13-17 Eagleview Road, Minto, NSW, 2566",
+        "countryCode": "AU"
+      },
+      "latitude": -34.01957,
+      "longitude": 150.86747,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [
+        "wudu",
+        "women-prayer-space"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/ingleburn-islamic-centre-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:ingleburn-lancaster-st-musalla",
+      "slug": "ingleburn-lancaster-st-musalla",
+      "name": "Ingleburn - Lancaster St Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "42 Lancaster St",
+        "locality": "Ingleburn",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2565",
+        "formatted": "42 Lancaster St, Ingleburn, NSW, 2565",
+        "countryCode": "AU"
+      },
+      "latitude": -33.9964,
+      "longitude": 150.85888,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [
+        "Car park",
+        "Street parking",
+        "Wudu facility",
+        "Toilets"
+      ],
+      "facilities": [
+        "wudu",
+        "toilets",
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/ingleburn-lancaster-st-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:ingleburn-ingleburn-community-hall-jummah-only",
+      "slug": "ingleburn-ingleburn-community-hall-jummah-only",
+      "name": "Ingleburn – Ingleburn Community Hall (Jummah only)",
+      "type": "friday-prayer-only",
+      "address": {
+        "line1": "Ingleburn Community Hall, Boots Lane",
+        "locality": "Ingleburn",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2565",
+        "formatted": "Ingleburn Community Hall, Boots Lane, Ingleburn, NSW, 2565",
+        "countryCode": "AU"
+      },
+      "latitude": -33.99955,
+      "longitude": 150.86748,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:00 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [
+        "wudu",
+        "toilets"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/ingleburn-ingleburn-community-hall-jummah-only/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:ington-masjid-al-sunnah",
+      "slug": "ington-masjid-al-sunnah",
+      "name": "ington - Masjid Al-Sunnah",
+      "type": "mosque",
+      "address": {
+        "line1": "Unit 1, 45 Kent Street",
+        "locality": "Cannington",
+        "state": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6107",
+        "formatted": "Unit 1, 45 Kent Street, Cannington, WA, 6107",
+        "countryCode": "AU"
+      },
+      "latitude": -32.01623,
+      "longitude": 115.92648,
+      "contact": {
+        "phone": "(08) 9258 4781 / (08) 9258 4791",
+        "website": "http://www.dawa.org.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/ington-masjid-al-sunnah/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:kensington-anzac-parade-musalla",
+      "slug": "kensington-anzac-parade-musalla",
+      "name": "Kensington - ANZAC Parade Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Unit 1, 178 ANZAC Parade,, NSW",
+        "locality": "Kensington",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2033",
+        "formatted": "Unit 1, 178 ANZAC Parade,, NSW, Kensington, NSW, 2033",
+        "countryCode": "AU"
+      },
+      "latitude": -33.90985,
+      "longitude": 151.22352,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/kensington-anzac-parade-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:kensington-university-of-nsw-musalla",
+      "slug": "kensington-university-of-nsw-musalla",
+      "name": "Kensington - University of NSW Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "UNSW, 3rd Floor, Square House",
+        "locality": "Kensington",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2052",
+        "formatted": "UNSW, 3rd Floor, Square House, Kensington, NSW, 2052",
+        "countryCode": "AU"
+      },
+      "latitude": -33.91722,
+      "longitude": 151.23023,
+      "contact": {
+        "website": "http://www.isoc-unsw.org.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:12 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [
+        "Street parking",
+        "Toilets",
+        "Wudu facility"
+      ],
+      "facilities": [
+        "wudu",
+        "toilets",
+        "parking",
+        "women-prayer-space"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/kensington-university-of-nsw-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:kingswood-bringelly-road-musallah-jummah-only",
+      "slug": "kingswood-bringelly-road-musallah-jummah-only",
+      "name": "Kingswood - Bringelly Road Musallah (Jummah only)",
+      "type": "friday-prayer-only",
+      "address": {
+        "line1": "19 Bringelly Road",
+        "locality": "Kingswood",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2747",
+        "formatted": "19 Bringelly Road, Kingswood, NSW, 2747",
+        "countryCode": "AU"
+      },
+      "latitude": -33.76125,
+      "longitude": 150.71935,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:20 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/kingswood-bringelly-road-musallah-jummah-only/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:kingswood-uws-nepean-musalla",
+      "slug": "kingswood-uws-nepean-musalla",
+      "name": "Kingswood - UWS Nepean Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "UWS Nepean Campus",
+        "locality": "Kingswood",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2747",
+        "formatted": "UWS Nepean Campus, Kingswood, NSW, 2747",
+        "countryCode": "AU"
+      },
+      "latitude": -33.76687,
+      "longitude": 150.74458,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/kingswood-uws-nepean-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:lakemba-ali-ibn-abu-taleb-mosque",
+      "slug": "lakemba-ali-ibn-abu-taleb-mosque",
+      "name": "Lakemba - Ali ibn Abu Taleb Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "65-67 Wangee Road",
+        "locality": "Lakemba",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2195",
+        "formatted": "65-67 Wangee Road, Lakemba, NSW, 2195",
+        "countryCode": "AU"
+      },
+      "latitude": -33.91261,
+      "longitude": 151.07414,
+      "contact": {
+        "website": "http://www.lma.org.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [
+        "Street parking",
+        "Wudu facility",
+        "Toilets",
+        "Funeral services",
+        "Non-muslim visit (by appointment)"
+      ],
+      "facilities": [
+        "wudu",
+        "toilets",
+        "parking",
+        "women-prayer-space"
+      ],
+      "services": [
+        "funeral-services"
+      ],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/lakemba-ali-ibn-abu-taleb-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:lakemba-ernest-street-mosque",
+      "slug": "lakemba-ernest-street-mosque",
+      "name": "Lakemba - Ernest Street Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "20 Ernest Street",
+        "locality": "Lakemba",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2195",
+        "formatted": "20 Ernest Street, Lakemba, NSW, 2195",
+        "countryCode": "AU"
+      },
+      "latitude": -33.92214,
+      "longitude": 151.07327,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "12:45 pm",
+          "label": "Jumu’ah"
+        },
+        {
+          "time": "1:45 pm",
+          "label": "Jumu’ah 2"
+        }
+      ],
+      "features": [],
+      "facilities": [
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/lakemba-ernest-street-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:lakemba-haldon-st-aswj-musalla",
+      "slug": "lakemba-haldon-st-aswj-musalla",
+      "name": "Lakemba - Haldon St - ASWJ Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "132 Haldon St",
+        "locality": "Lakemba",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2195",
+        "formatted": "132 Haldon St, Lakemba, NSW, 2195",
+        "countryCode": "AU"
+      },
+      "latitude": -33.92216,
+      "longitude": 151.07827,
+      "contact": {
+        "website": "http://www.aswj.com.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [
+        "Street parking"
+      ],
+      "facilities": [
+        "wudu",
+        "toilets",
+        "parking",
+        "women-prayer-space"
+      ],
+      "services": [
+        "classes"
+      ],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/lakemba-haldon-st-aswj-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:lakemba-islamic-centre",
+      "slug": "lakemba-islamic-centre",
+      "name": "Lakemba - Islamic Centre musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "9 Hampden Rd",
+        "locality": "Lakemba",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2195",
+        "formatted": "9 Hampden Rd, Lakemba, NSW, 2195",
+        "countryCode": "AU"
+      },
+      "latitude": -33.91732,
+      "longitude": 151.07484,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [
+        "wudu",
+        "women-prayer-space"
+      ],
+      "services": [
+        "classes"
+      ],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/lakemba-islamic-centre/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:lakemba-kca-centre-jummah-only",
+      "slug": "lakemba-kca-centre-jummah-only",
+      "name": "Lakemba - KCA Centre (Jummah only)",
+      "type": "friday-prayer-only",
+      "address": {
+        "line1": "1/925-941 Canterbury Rd",
+        "locality": "Lakemba",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2195",
+        "formatted": "1/925-941 Canterbury Rd, Lakemba, NSW, 2195",
+        "countryCode": "AU"
+      },
+      "latitude": -33.92655,
+      "longitude": 151.08298,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [
+        "Car park",
+        "Street parking",
+        "Wudu facility"
+      ],
+      "facilities": [
+        "wudu",
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/lakemba-kca-centre-jummah-only/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:lakemba-parry-park-ansc-jumuah-only",
+      "slug": "lakemba-parry-park-ansc-jumuah-only",
+      "name": "Lakemba - Parry Park ANSC (Jumu’ah only)",
+      "type": "friday-prayer-only",
+      "address": {
+        "line1": "571-577 Punchbowl Rd",
+        "locality": "Lakemba",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2196",
+        "formatted": "571-577 Punchbowl Rd, Lakemba, NSW, 2196",
+        "countryCode": "AU"
+      },
+      "latitude": -33.91389,
+      "longitude": 151.06982,
+      "contact": {
+        "website": "http://www.uma.org.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Jumu’ah"
+        },
+        {
+          "time": "1:45 pm",
+          "label": "Jumu’ah 2"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/lakemba-parry-park-ansc-jumuah-only/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:lakemba-railway-parade-musalla",
+      "slug": "lakemba-railway-parade-musalla",
+      "name": "Lakemba - Railway Parade Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "19 Haldon Street",
+        "locality": "Lakemba",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2195",
+        "formatted": "19 Haldon Street, Lakemba, NSW, 2195",
+        "countryCode": "AU"
+      },
+      "latitude": -33.92015,
+      "longitude": 151.07723,
+      "contact": {
+        "phone": "(02) 9750-3690"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Jumu’ah"
+        },
+        {
+          "time": "2:15 pm",
+          "label": "Jumu’ah 2"
+        }
+      ],
+      "features": [
+        "Street parking",
+        "Wudu facility"
+      ],
+      "facilities": [
+        "wudu",
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/lakemba-railway-parade-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:lakemba-uma-center-musalla-jummah-only",
+      "slug": "lakemba-uma-center-musalla-jummah-only",
+      "name": "Lakemba - UMA Center Musalla (Jummah Only)",
+      "type": "friday-prayer-only",
+      "address": {
+        "line1": "69 Croydon Street",
+        "locality": "Lakemba",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2195",
+        "formatted": "69 Croydon Street, Lakemba, NSW, 2195",
+        "countryCode": "AU"
+      },
+      "latitude": -33.92382,
+      "longitude": 151.07685,
+      "contact": {
+        "website": "http://www.uma.org.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Jumu’ah"
+        },
+        {
+          "time": "1:45 pm",
+          "label": "Jumu’ah 2"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/lakemba-uma-center-musalla-jummah-only/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:lalor-park-freeman-street-musalla-jummah-only",
+      "slug": "lalor-park-freeman-street-musalla-jummah-only",
+      "name": "Lalor Park - Freeman Street Musalla (Jummah only)",
+      "type": "friday-prayer-only",
+      "address": {
+        "line1": "2 Freeman St",
+        "locality": "Lalor Park",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2147",
+        "formatted": "2 Freeman St, Lalor Park, NSW, 2147",
+        "countryCode": "AU"
+      },
+      "latitude": -33.7615,
+      "longitude": 150.93061,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/lalor-park-freeman-street-musalla-jummah-only/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:launceston-university-of-tasmania-musalla",
+      "slug": "launceston-university-of-tasmania-musalla",
+      "name": "Launceston - University of Tasmania Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Building 3, School Road",
+        "locality": "Newnham",
+        "state": "TAS",
+        "regionCode": "AU-TAS",
+        "postcode": "7248",
+        "formatted": "Building 3, School Road, Newnham, TAS, 7248",
+        "countryCode": "AU"
+      },
+      "latitude": -41.39957,
+      "longitude": 147.12422,
+      "contact": {
+        "phone": "+61 3 6324 3787"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [
+        "wheelchair-accessible"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/launceston-university-of-tasmania-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:leumeah-campbelltown-masjid",
+      "slug": "leumeah-campbelltown-masjid",
+      "name": "Leumeah - Campbelltown Masjid",
+      "type": "mosque",
+      "address": {
+        "line1": "10 Kingsclare St",
+        "locality": "Leumeah",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2560",
+        "formatted": "10 Kingsclare St, Leumeah, NSW, 2560",
+        "countryCode": "AU"
+      },
+      "latitude": -34.05568,
+      "longitude": 150.82896,
+      "contact": {
+        "phone": "0433 998 344",
+        "website": "http://www.campbelltownmasjid.com.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "12:55 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [
+        "Street parking",
+        "Wudu facility"
+      ],
+      "facilities": [
+        "wudu",
+        "parking"
+      ],
+      "services": [
+        "classes"
+      ],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/leumeah-campbelltown-masjid/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:lismore-leycester-street-bp-musalla-jummah-only",
+      "slug": "lismore-leycester-street-bp-musalla-jummah-only",
+      "name": "Lismore - Leycester Street BP Musalla (Jummah only)",
+      "type": "friday-prayer-only",
+      "address": {
+        "line1": "2 Leycester Street",
+        "locality": "Lismore",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2480",
+        "formatted": "2 Leycester Street, Lismore, NSW, 2480",
+        "countryCode": "AU"
+      },
+      "latitude": -28.80475,
+      "longitude": 153.28466,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/lismore-leycester-street-bp-musalla-jummah-only/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:lismore-masallah",
+      "slug": "lismore-masallah",
+      "name": "Lismore Masallah",
+      "type": "musalla",
+      "address": {
+        "line1": "28 Molesworth St",
+        "locality": "Lismore",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2480",
+        "formatted": "28 Molesworth St, Lismore, NSW, 2480",
+        "countryCode": "AU"
+      },
+      "latitude": -28.80536,
+      "longitude": 153.27889,
+      "contact": {},
+      "prayerTimes": {
+        "isha": "1:15 pm"
+      },
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [
+        "Street parking",
+        "Disabled access",
+        "Toilets"
+      ],
+      "facilities": [
+        "toilets",
+        "parking",
+        "wheelchair-accessible"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/lismore-masallah/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:liverpool-whitlam-leisure-centre-musalla-jummah-only",
+      "slug": "liverpool-whitlam-leisure-centre-musalla-jummah-only",
+      "name": "Liverpool - Whitlam Leisure Centre Musalla (Jummah Only)",
+      "type": "friday-prayer-only",
+      "address": {
+        "line1": "Whitlam Leisure Centre, 90A Memorial Avenue",
+        "locality": "Liverpool",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2170",
+        "formatted": "Whitlam Leisure Centre, 90A Memorial Avenue, Liverpool, NSW, 2170",
+        "countryCode": "AU"
+      },
+      "latitude": -33.92585,
+      "longitude": 150.91482,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [
+        "Car park"
+      ],
+      "facilities": [
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/liverpool-whitlam-leisure-centre-musalla-jummah-only/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:liverpool-liverpool-hospital-don-everett-musalla",
+      "slug": "liverpool-liverpool-hospital-don-everett-musalla",
+      "name": "Liverpool – Liverpool Hospital ‘Don Everett’ Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Liverpool Hospital",
+        "locality": "Liverpool",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2170",
+        "formatted": "Liverpool Hospital, Liverpool, NSW, 2170",
+        "countryCode": "AU"
+      },
+      "latitude": -33.92018,
+      "longitude": 150.9291,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "12:20 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [
+        "wudu"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/liverpool-liverpool-hospital-don-everett-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:macquarie-fields-iec-glenquarie-musalla-jummah-only",
+      "slug": "macquarie-fields-iec-glenquarie-musalla-jummah-only",
+      "name": "Macquarie Fields- IEC Glenquarie Musalla (Jummah only)",
+      "type": "friday-prayer-only",
+      "address": {
+        "line1": "10 Brooks St",
+        "locality": "Macquarie Fields",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2564",
+        "formatted": "10 Brooks St, Macquarie Fields, NSW, 2564",
+        "countryCode": "AU"
+      },
+      "latitude": -33.98573,
+      "longitude": 150.89049,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/macquarie-fields-iec-glenquarie-musalla-jummah-only/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:macquarie-fields-islamic-education-centre",
+      "slug": "macquarie-fields-islamic-education-centre",
+      "name": "Macquarie Fields-Islamic Education Centre",
+      "type": "musalla",
+      "address": {
+        "line1": "50 Saywell Rd",
+        "locality": "Macquarie Fields",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2564",
+        "formatted": "50 Saywell Rd, Macquarie Fields, NSW, 2564",
+        "countryCode": "AU"
+      },
+      "latitude": -33.98989,
+      "longitude": 150.8829,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [
+        "wudu"
+      ],
+      "services": [
+        "classes"
+      ],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/macquarie-fields-islamic-education-centre/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:magill-university-of-south-australia-musalla",
+      "slug": "magill-university-of-south-australia-musalla",
+      "name": "Magill - University of South Australia Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Rooms 107 & 108, Block E, 27 Lorne Avenue",
+        "locality": "Magill",
+        "state": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5072",
+        "formatted": "Rooms 107 & 108, Block E, 27 Lorne Avenue, Magill, SA, 5072",
+        "countryCode": "AU"
+      },
+      "latitude": -34.90981,
+      "longitude": 138.67204,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/magill-university-of-south-australia-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:mareeba-walsh-street-mosque",
+      "slug": "mareeba-walsh-street-mosque",
+      "name": "Mareeba - Walsh Street Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "108 Walsh Street",
+        "locality": "Mareeba",
+        "state": "QLD",
+        "regionCode": "AU-QLD",
+        "postcode": "4880",
+        "formatted": "108 Walsh Street, Mareeba, QLD, 4880",
+        "countryCode": "AU"
+      },
+      "latitude": -16.98916,
+      "longitude": 145.42262,
+      "contact": {
+        "phone": "(07) 4775 7312"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/mareeba-walsh-street-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:marrickville-station-street-musalla",
+      "slug": "marrickville-station-street-musalla",
+      "name": "Marrickville - Station Street Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "2 Station Street",
+        "locality": "Marrickville",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2204",
+        "formatted": "2 Station Street, Marrickville, NSW, 2204",
+        "countryCode": "AU"
+      },
+      "latitude": -33.91451,
+      "longitude": 151.15345,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/marrickville-station-street-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:marrickville-town-hall-jummah-only",
+      "slug": "marrickville-town-hall-jummah-only",
+      "name": "Marrickville - Town Hall (Jummah only)",
+      "type": "friday-prayer-only",
+      "address": {
+        "line1": "Marrickville Town Hall. 303 Marrickville Road",
+        "locality": "Marrickville",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2204",
+        "formatted": "Marrickville Town Hall. 303 Marrickville Road, Marrickville, NSW, 2204",
+        "countryCode": "AU"
+      },
+      "latitude": -33.90903,
+      "longitude": 151.15418,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:00 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/marrickville-town-hall-jummah-only/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:mascot-botany-road-musalla",
+      "slug": "mascot-botany-road-musalla",
+      "name": "Mascot - Botany Road Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "2nd Floor, 1215 Botany Road",
+        "locality": "Mascot",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "1215",
+        "formatted": "2nd Floor, 1215 Botany Road, Mascot, NSW, 1215",
+        "countryCode": "AU"
+      },
+      "latitude": -33.93195,
+      "longitude": 151.1945,
+      "contact": {
+        "phone": "(02) 9662 4410"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/mascot-botany-road-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:erskineville",
+      "slug": "erskineville",
+      "name": "Matraville - Bunnerong Road Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "436 Bunnerong Rd",
+        "locality": "Matraville",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2036",
+        "formatted": "436 Bunnerong Rd, Matraville, NSW, 2036",
+        "countryCode": "AU"
+      },
+      "latitude": -33.95578,
+      "longitude": 151.23002,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/erskineville/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:new-mosque-page-2",
+      "slug": "new-mosque-page-2",
+      "name": "Mawson Lakes - University of South Australia Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Level 2, Building A, Cnr of Mawson Lakes Boulevard & Main St",
+        "locality": "Mawson Lakes",
+        "state": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5095",
+        "formatted": "Level 2, Building A, Cnr of Mawson Lakes Boulevard & Main St, Mawson Lakes, SA, 5095",
+        "countryCode": "AU"
+      },
+      "latitude": -34.81113,
+      "longitude": 138.61694,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/new-mosque-page-2/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:mayfield-islamic-centre-of-newcastle",
+      "slug": "mayfield-islamic-centre-of-newcastle",
+      "name": "Mayfield - Islamic Centre of Newcastle",
+      "type": "musalla",
+      "address": {
+        "line1": "3-5 Victoria Street",
+        "locality": "Mayfield",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2304",
+        "formatted": "3-5 Victoria Street, Mayfield, NSW, 2304",
+        "countryCode": "AU"
+      },
+      "latitude": -32.89817,
+      "longitude": 151.73882,
+      "contact": {
+        "website": "http://islamiccentre.org.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/mayfield-islamic-centre-of-newcastle/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:merrylands-miller-street-community-centre-jummah-only",
+      "slug": "merrylands-miller-street-community-centre-jummah-only",
+      "name": "Merrylands - Miller Street Community Centre (Jummah Only)",
+      "type": "friday-prayer-only",
+      "address": {
+        "line1": "L1, 17 Miller Street",
+        "locality": "Merrylands",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2160",
+        "formatted": "L1, 17 Miller Street, Merrylands, NSW, 2160",
+        "countryCode": "AU"
+      },
+      "latitude": -33.83772,
+      "longitude": 150.98963,
+      "contact": {
+        "phone": "(02) 9682 6280"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/merrylands-miller-street-community-centre-jummah-only/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:milperra-uws-bankstown-musalla",
+      "slug": "milperra-uws-bankstown-musalla",
+      "name": "Milperra - UWS Bankstown Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Bullecourt avenue",
+        "locality": "Milperra",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2214",
+        "formatted": "Bullecourt avenue, Milperra, NSW, 2214",
+        "countryCode": "AU"
+      },
+      "latitude": -33.94065,
+      "longitude": 150.99028,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:00 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/milperra-uws-bankstown-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:minto-suburban-islamic-centre-minto-masjid",
+      "slug": "minto-suburban-islamic-centre-minto-masjid",
+      "name": "Minto - Suburban Islamic Centre - Minto Masjid",
+      "type": "mosque",
+      "address": {
+        "line1": "44-48 Westmoreland Road, NSW",
+        "locality": "Minto",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": null,
+        "formatted": "44-48 Westmoreland Road, NSW, Minto, NSW",
+        "countryCode": "AU"
+      },
+      "latitude": -34.04349,
+      "longitude": 150.84716,
+      "contact": {
+        "phone": "(02) 9820 2536"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "12:45 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [
+        "Street parking"
+      ],
+      "facilities": [
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/minto-suburban-islamic-centre-minto-masjid/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:minto-mosque",
+      "slug": "minto-mosque",
+      "name": "Minto - Westmoreland Road Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "44 Westmoreland Road",
+        "locality": "Minto",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2560",
+        "formatted": "44 Westmoreland Road, Minto, NSW, 2560",
+        "countryCode": "AU"
+      },
+      "latitude": -34.04312,
+      "longitude": 150.84866,
+      "contact": {
+        "phone": "(02) 9820 2536",
+        "website": "https://www.facebook.com/MintoMosqueCampbelltown/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "12:45 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [
+        "Street parking",
+        "Wudu facility",
+        "Toilets"
+      ],
+      "facilities": [
+        "wudu",
+        "toilets",
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/minto-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:mirrabooka-masjid-al-taqwa",
+      "slug": "mirrabooka-masjid-al-taqwa",
+      "name": "Mirrabooka - Masjid Al Taqwa",
+      "type": "mosque",
+      "address": {
+        "line1": "Mirrabooka Village, 135 Boyare Avenue",
+        "locality": "Mirrabooka",
+        "state": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6061",
+        "formatted": "Mirrabooka Village, 135 Boyare Avenue, Mirrabooka, WA, 6061",
+        "countryCode": "AU"
+      },
+      "latitude": -31.85578,
+      "longitude": 115.8684,
+      "contact": {
+        "phone": "(08) 9248 8559"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:00 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/mirrabooka-masjid-al-taqwa/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:minto-mosque-2",
+      "slug": "minto-mosque-2",
+      "name": "Mount Druitt - Nepean Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "52 Hythe Street",
+        "locality": "Mt Druitt",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2770",
+        "formatted": "52 Hythe Street, Mt Druitt, NSW, 2770",
+        "countryCode": "AU"
+      },
+      "latitude": -33.76444,
+      "longitude": 150.82608,
+      "contact": {
+        "phone": "(02) 9832 2546"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "12:25 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [
+        "wudu",
+        "toilets",
+        "women-prayer-space"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/minto-mosque-2/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:mount-gambier-prayer-room",
+      "slug": "mount-gambier-prayer-room",
+      "name": "Mount Gambier - Prayer Room",
+      "type": "prayer-room",
+      "address": {
+        "line1": "Penola Road",
+        "locality": "Mount Gambier",
+        "state": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5290",
+        "formatted": "Penola Road, Mount Gambier, SA, 5290",
+        "countryCode": "AU"
+      },
+      "latitude": -37.81594,
+      "longitude": 140.78706,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/mount-gambier-prayer-room/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:mt-druitt-village-musalla-jummah-only",
+      "slug": "mt-druitt-village-musalla-jummah-only",
+      "name": "Mt Druitt Village Musalla (Jummah only)",
+      "type": "musalla",
+      "address": {
+        "line1": "87 Mt Druitt Road",
+        "locality": "Mt Druitt Village",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2770",
+        "formatted": "87 Mt Druitt Road, Mt Druitt Village, NSW, 2770",
+        "countryCode": "AU"
+      },
+      "latitude": -33.77314,
+      "longitude": 150.8112,
+      "contact": {
+        "phone": "0416 276 480"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "12:30 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/mt-druitt-village-musalla-jummah-only/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:mt-gravatt-griffith-university-mount-gravatt-musalla",
+      "slug": "mt-gravatt-griffith-university-mount-gravatt-musalla",
+      "name": "Mt. Gravatt - Griffith University - Mount Gravatt Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "176 Messines Ridge Road",
+        "locality": "Mt Gravatt",
+        "state": "QLD",
+        "regionCode": "AU-QLD",
+        "postcode": "4122",
+        "formatted": "176 Messines Ridge Road, Mt Gravatt, QLD, 4122",
+        "countryCode": "AU"
+      },
+      "latitude": -27.54324,
+      "longitude": 153.06464,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [
+        "wudu"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/mt-gravatt-griffith-university-mount-gravatt-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:mundingburra-ross-river-road-townsville-mosque",
+      "slug": "mundingburra-ross-river-road-townsville-mosque",
+      "name": "Mundingburra - Ross River Road - Townsville Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "183 Ross River Rd",
+        "locality": "Mundingburra",
+        "state": "QLD",
+        "regionCode": "AU-QLD",
+        "postcode": "4812",
+        "formatted": "183 Ross River Rd, Mundingburra, QLD, 4812",
+        "countryCode": "AU"
+      },
+      "latitude": -19.2954,
+      "longitude": 146.77832,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/mundingburra-ross-river-road-townsville-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:murdoch-murdoch-university-musalla",
+      "slug": "murdoch-murdoch-university-musalla",
+      "name": "Murdoch – Murdoch University Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Murdoch University, Broadwalk",
+        "locality": "Murdoch",
+        "state": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6150",
+        "formatted": "Murdoch University, Broadwalk, Murdoch, WA, 6150",
+        "countryCode": "AU"
+      },
+      "latitude": -32.071,
+      "longitude": 115.825,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [
+        "classes"
+      ],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/murdoch-murdoch-university-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:murray-bridge-old-swanport-road-mosque",
+      "slug": "murray-bridge-old-swanport-road-mosque",
+      "name": "Murray Bridge - Old Swanport Road Mosque",
+      "type": "musalla",
+      "address": {
+        "line1": "Lot 53, Old Swanport Road",
+        "locality": "Murray Bridge",
+        "state": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5253",
+        "formatted": "Lot 53, Old Swanport Road, Murray Bridge, SA, 5253",
+        "countryCode": "AU"
+      },
+      "latitude": -35.14405,
+      "longitude": 139.25431,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/murray-bridge-old-swanport-road-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:murry-bridge-masjid",
+      "slug": "murry-bridge-masjid",
+      "name": "Murry Bridge Masjid",
+      "type": "mosque",
+      "address": {
+        "line1": "83 Old Swanport Rd",
+        "locality": "Murray Bridge",
+        "state": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5253",
+        "formatted": "83 Old Swanport Rd, Murray Bridge, SA, 5253",
+        "countryCode": "AU"
+      },
+      "latitude": -35.14736,
+      "longitude": 139.26908,
+      "contact": {
+        "website": "http://www.islamicsocietysa.org.au/about-25"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/murry-bridge-masjid/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:nathan-kessels-road-griffith-university",
+      "slug": "nathan-kessels-road-griffith-university",
+      "name": "Nathan - Kessels Road - Griffith University",
+      "type": "musalla",
+      "address": {
+        "line1": "170 Kessels Road",
+        "locality": "Nathan",
+        "state": "QLD",
+        "regionCode": "AU-QLD",
+        "postcode": "4111",
+        "formatted": "170 Kessels Road, Nathan, QLD, 4111",
+        "countryCode": "AU"
+      },
+      "latitude": -27.55843,
+      "longitude": 153.05092,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:05 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/nathan-kessels-road-griffith-university/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:newcastle-metcalfe-street-mosque",
+      "slug": "newcastle-metcalfe-street-mosque",
+      "name": "Newcastle - Metcalfe Street Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "6 Metcalfe Street",
+        "locality": "Wallsend",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2287",
+        "formatted": "6 Metcalfe Street, Wallsend, NSW, 2287",
+        "countryCode": "AU"
+      },
+      "latitude": -32.9039,
+      "longitude": 151.6698,
+      "contact": {
+        "phone": "(02) 49500099"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:00 pm",
+          "label": "Khutbah"
+        },
+        {
+          "time": "1:40 pm",
+          "label": "Khutbah"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/newcastle-metcalfe-street-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:newman-abydos-way-musalla",
+      "slug": "newman-abydos-way-musalla",
+      "name": "Newman - Abydos Way Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "4 Abydos Way",
+        "locality": "Newman",
+        "state": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6753",
+        "formatted": "4 Abydos Way, Newman, WA, 6753",
+        "countryCode": "AU"
+      },
+      "latitude": -23.35522,
+      "longitude": 119.7389,
+      "contact": {
+        "phone": "08 9175 1597"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/newman-abydos-way-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:north-adelaide-women-and-childrens-hospital-prayer-room",
+      "slug": "north-adelaide-women-and-childrens-hospital-prayer-room",
+      "name": "North Adelaide - Women & Childrens Hospital (Prayer room)",
+      "type": "prayer-room",
+      "address": {
+        "line1": "Room 503, 5th Floor, Samuel Way Building - 72 King William Rd",
+        "locality": "North Adelaide",
+        "state": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5006",
+        "formatted": "Room 503, 5th Floor, Samuel Way Building - 72 King William Rd, North Adelaide, SA, 5006",
+        "countryCode": "AU"
+      },
+      "latitude": -34.91134,
+      "longitude": 138.59913,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/north-adelaide-women-and-childrens-hospital-prayer-room/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:north-ryde-macquarie-university-musalla",
+      "slug": "north-ryde-macquarie-university-musalla",
+      "name": "North Ryde - Macquarie University Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Ground Floor, International Building, Macquarie University, NSW",
+        "locality": "North Ryde",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2113",
+        "formatted": "Ground Floor, International Building, Macquarie University, NSW, North Ryde, NSW, 2113",
+        "countryCode": "AU"
+      },
+      "latitude": -32.9039,
+      "longitude": 151.6698,
+      "contact": {
+        "phone": "9850 7112"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:25 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [
+        "Car park",
+        "Educational facility"
+      ],
+      "facilities": [],
+      "services": [
+        "classes"
+      ],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/north-ryde-macquarie-university-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:north-ryde-macquarie-university-musalla-2",
+      "slug": "north-ryde-macquarie-university-musalla-2",
+      "name": "North Ryde - Macquarie University Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "McMahons Point Community Centre, 165 Blues Point Road",
+        "locality": "McMahons Point",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2060",
+        "formatted": "McMahons Point Community Centre, 165 Blues Point Road, McMahons Point, NSW, 2060",
+        "countryCode": "AU"
+      },
+      "latitude": -33.8431,
+      "longitude": 151.20522,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/north-ryde-macquarie-university-musalla-2/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:north-sydney-mcmahons-point-musalla",
+      "slug": "north-sydney-mcmahons-point-musalla",
+      "name": "North Sydney - McMahons Point Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "McMahons Point Community Centre, 165 Blues Point Road",
+        "locality": "McMahons Point",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": null,
+        "formatted": "McMahons Point Community Centre, 165 Blues Point Road, McMahons Point, NSW",
+        "countryCode": "AU"
+      },
+      "latitude": -33.8431,
+      "longitude": 151.20522,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/north-sydney-mcmahons-point-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:oxenford-movie-world-musalla",
+      "slug": "oxenford-movie-world-musalla",
+      "name": "Oxenford - Movie World Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Warner Bros. Movie World",
+        "locality": "Pacific Highway",
+        "state": "QLD",
+        "regionCode": "AU-QLD",
+        "postcode": "4210",
+        "formatted": "Warner Bros. Movie World, Pacific Highway, QLD, 4210",
+        "countryCode": "AU"
+      },
+      "latitude": -27.90622,
+      "longitude": 153.31249,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/oxenford-movie-world-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:oxley-douglas-street-darra-mosque",
+      "slug": "oxley-douglas-street-darra-mosque",
+      "name": "Oxley - Douglas Street - Darra Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "219 Douglas Street",
+        "locality": "Oxley",
+        "state": "QLD",
+        "regionCode": "AU-QLD",
+        "postcode": "4075",
+        "formatted": "219 Douglas Street, Oxley, QLD, 4075",
+        "countryCode": "AU"
+      },
+      "latitude": -27.56703,
+      "longitude": 152.97046,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/oxley-douglas-street-darra-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:padbury-al-majid-mosque",
+      "slug": "padbury-al-majid-mosque",
+      "name": "Padbury Al-Majid Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "64 Walter Padbury Blvd",
+        "locality": "Padbury",
+        "state": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6025",
+        "formatted": "64 Walter Padbury Blvd, Padbury, WA, 6025",
+        "countryCode": "AU"
+      },
+      "latitude": -31.81626,
+      "longitude": 115.77486,
+      "contact": {
+        "phone": "(08) 9403 7548"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/padbury-al-majid-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:parafield-gardens-masjid",
+      "slug": "parafield-gardens-masjid",
+      "name": "Parafield Gardens Masjid",
+      "type": "mosque",
+      "address": {
+        "line1": "92 Shepherdson Rd",
+        "locality": "Parafield Gardens",
+        "state": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5107",
+        "formatted": "92 Shepherdson Rd, Parafield Gardens, SA, 5107",
+        "countryCode": "AU"
+      },
+      "latitude": -34.78301,
+      "longitude": 138.6088,
+      "contact": {
+        "phone": "08 8182 5151",
+        "website": "http://www.iicsa.com.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [
+        "youth"
+      ],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/parafield-gardens-masjid/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:park-holme-masjid",
+      "slug": "park-holme-masjid",
+      "name": "Park Holme - Masjid",
+      "type": "mosque",
+      "address": {
+        "line1": "658 Marion Road",
+        "locality": "Park Holme",
+        "state": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5043",
+        "formatted": "658 Marion Road, Park Holme, SA, 5043",
+        "countryCode": "AU"
+      },
+      "latitude": -34.98884,
+      "longitude": 138.55629,
+      "contact": {
+        "phone": "(08) 8277 8725",
+        "website": "http://www.islamicsocietysa.org.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/park-holme-masjid/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:parkholme-masjid-omar-bin-al-khattab",
+      "slug": "parkholme-masjid-omar-bin-al-khattab",
+      "name": "Parkholme - Masjid Omar Bin Al-Khattab",
+      "type": "mosque",
+      "address": {
+        "line1": "658 Marion Rd",
+        "locality": "Parkholme",
+        "state": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5043",
+        "formatted": "658 Marion Rd, Parkholme, SA, 5043",
+        "countryCode": "AU"
+      },
+      "latitude": -34.98885,
+      "longitude": 138.55629,
+      "contact": {
+        "phone": "(08) 8277 8725",
+        "website": "http://www.iicsa.com.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/parkholme-masjid-omar-bin-al-khattab/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:parramatta-marsden-street-mosque",
+      "slug": "parramatta-marsden-street-mosque",
+      "name": "Parramatta - Marsden Street Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "150 Marsden Street",
+        "locality": "Parramatta",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2150",
+        "formatted": "150 Marsden Street, Parramatta, NSW, 2150",
+        "countryCode": "AU"
+      },
+      "latitude": -33.81355,
+      "longitude": 151.00199,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [
+        "Street parking"
+      ],
+      "facilities": [
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/parramatta-marsden-street-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:parramatta-uws-rydalmere-musalla",
+      "slug": "parramatta-uws-rydalmere-musalla",
+      "name": "Parramatta - UWS Rydalmere Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "Victoria Road",
+        "locality": "Rydalmere",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2116",
+        "formatted": "Victoria Road, Rydalmere, NSW, 2116",
+        "countryCode": "AU"
+      },
+      "latitude": -33.81206,
+      "longitude": 151.04013,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/parramatta-uws-rydalmere-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:penshurst-forest-road-mosque",
+      "slug": "penshurst-forest-road-mosque",
+      "name": "Penshurst - Forest Road Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "445 Forest Road",
+        "locality": "Penshurst",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2222",
+        "formatted": "445 Forest Road, Penshurst, NSW, 2222",
+        "countryCode": "AU"
+      },
+      "latitude": -33.96321,
+      "longitude": 151.08391,
+      "contact": {
+        "phone": "(02) 9580-3390"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/penshurst-forest-road-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:perth-city-perth-masjid",
+      "slug": "perth-city-perth-masjid",
+      "name": "Perth City - Perth Masjid",
+      "type": "mosque",
+      "address": {
+        "line1": "427 William Street",
+        "locality": "Perth",
+        "state": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6000",
+        "formatted": "427 William Street, Perth, WA, 6000",
+        "countryCode": "AU"
+      },
+      "latitude": -31.94365,
+      "longitude": 115.86246,
+      "contact": {
+        "phone": "(08) 9328 8535"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:00 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/perth-city-perth-masjid/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:port-headland-masjid-and-islamic-association",
+      "slug": "port-headland-masjid-and-islamic-association",
+      "name": "Port Headland - Masjid & Islamic Association",
+      "type": "musalla",
+      "address": {
+        "line1": "34 Trumpet Way",
+        "locality": "South Hedland",
+        "state": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6722",
+        "formatted": "34 Trumpet Way, South Hedland, WA, 6722",
+        "countryCode": "AU"
+      },
+      "latitude": -20.40627,
+      "longitude": 118.61063,
+      "contact": {
+        "phone": "(08) 9172 3914"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/port-headland-masjid-and-islamic-association/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:prospect-blacktown-road-musalla",
+      "slug": "prospect-blacktown-road-musalla",
+      "name": "Prospect - Blacktown Road Musalla",
+      "type": "musalla",
+      "address": {
+        "line1": "420 Blacktown Road",
+        "locality": "Prospect",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2148",
+        "formatted": "420 Blacktown Road, Prospect, NSW, 2148",
+        "countryCode": "AU"
+      },
+      "latitude": -33.80289,
+      "longitude": 150.92744,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/prospect-blacktown-road-musalla/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:queens-park-turkish-suleymaniye-masjid",
+      "slug": "queens-park-turkish-suleymaniye-masjid",
+      "name": "Queens Park – Turkish Suleymaniye Masjid",
+      "type": "mosque",
+      "address": {
+        "line1": "239 Welshpool Rd",
+        "locality": "Queens Park",
+        "state": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6107",
+        "formatted": "239 Welshpool Rd, Queens Park, WA, 6107",
+        "countryCode": "AU"
+      },
+      "latitude": -31.99739,
+      "longitude": 115.94756,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/queens-park-turkish-suleymaniye-masjid/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:renmark-fourteenth-street-mosque",
+      "slug": "renmark-fourteenth-street-mosque",
+      "name": "Renmark - Fourteenth Street Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "230 Fourteenth Street",
+        "locality": "Renmark",
+        "state": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5341",
+        "formatted": "230 Fourteenth Street, Renmark, SA, 5341",
+        "countryCode": "AU"
+      },
+      "latitude": -34.16898,
+      "longitude": 140.7462,
+      "contact": {
+        "phone": "08-85861229"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/renmark-fourteenth-street-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:riverwood-uma-center-musalla-jummah-only",
+      "slug": "riverwood-uma-center-musalla-jummah-only",
+      "name": "Riverwood- UMA Center Musalla (Jummah Only)",
+      "type": "musalla",
+      "address": {
+        "line1": "36 josephine st",
+        "locality": "riverwood",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2210",
+        "formatted": "36 josephine st, riverwood, NSW, 2210",
+        "countryCode": "AU"
+      },
+      "latitude": -33.94913,
+      "longitude": 151.05546,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Jumu’ah"
+        },
+        {
+          "time": "1:45 pm",
+          "label": "Jumu’ah 2"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/riverwood-uma-center-musalla-jummah-only/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:rockdale-masjid-al-hidaya",
+      "slug": "rockdale-masjid-al-hidaya",
+      "name": "Rockdale - Frederick Street - Masjid Al Hidaya",
+      "type": "mosque",
+      "address": {
+        "line1": "2 Frederick Street",
+        "locality": "Rockdale",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2216",
+        "formatted": "2 Frederick Street, Rockdale, NSW, 2216",
+        "countryCode": "AU"
+      },
+      "latitude": -33.95294,
+      "longitude": 151.13544,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Jumu’ah"
+        },
+        {
+          "time": "2:15 pm",
+          "label": "Jumu’ah 2"
+        }
+      ],
+      "features": [
+        "Car park",
+        "Street parking",
+        "Wudu facility",
+        "Toilets"
+      ],
+      "facilities": [
+        "wudu",
+        "toilets",
+        "parking",
+        "women-prayer-space"
+      ],
+      "services": [
+        "classes"
+      ],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/rockdale-masjid-al-hidaya/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:rockdale-senior-citizens-centre-jummah-only",
+      "slug": "rockdale-senior-citizens-centre-jummah-only",
+      "name": "Rockdale – Senior Citizen’s Centre Jummah only",
+      "type": "friday-prayer-only",
+      "address": {
+        "line1": "36 George St",
+        "locality": "Rockdale",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2216",
+        "formatted": "36 George St, Rockdale, NSW, 2216",
+        "countryCode": "AU"
+      },
+      "latitude": -33.9506,
+      "longitude": 151.14144,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:30 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/rockdale-senior-citizens-centre-jummah-only/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:royal-park-bosniaks-mosque",
+      "slug": "royal-park-bosniaks-mosque",
+      "name": "Royal Park - Bosniaks Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "1 Frederick Road",
+        "locality": "Royal Park",
+        "state": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5014",
+        "formatted": "1 Frederick Road, Royal Park, SA, 5014",
+        "countryCode": "AU"
+      },
+      "latitude": -34.86152,
+      "longitude": 138.50299,
+      "contact": {
+        "phone": "0403 298 687"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:00 pm",
+          "label": "Jumu’ah"
+        },
+        {
+          "time": "2:00 pm",
+          "label": "Jumu’ah 2"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/royal-park-bosniaks-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:southern-river-masjid-ibrahim",
+      "slug": "southern-river-masjid-ibrahim",
+      "name": "Southern River – Masjid Ibrahim",
+      "type": "mosque",
+      "address": {
+        "line1": "LOT 1526 Leslie St",
+        "locality": "Southern River",
+        "state": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6110",
+        "formatted": "LOT 1526 Leslie St, Southern River, WA, 6110",
+        "countryCode": "AU"
+      },
+      "latitude": -32.09783,
+      "longitude": 115.97658,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [
+        "Wudu facility"
+      ],
+      "facilities": [
+        "wudu",
+        "women-prayer-space"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/southern-river-masjid-ibrahim/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:southport-gcyc-southport-community-centre",
+      "slug": "southport-gcyc-southport-community-centre",
+      "name": "Southport - GCYC southport community centre",
+      "type": "prayer-room",
+      "address": {
+        "line1": "6 Lawson St",
+        "locality": "Southport",
+        "state": "QLD",
+        "regionCode": "AU-QLD",
+        "postcode": "4215",
+        "formatted": "6 Lawson St, Southport, QLD, 4215",
+        "countryCode": "AU"
+      },
+      "latitude": -27.97071,
+      "longitude": 153.41356,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:10 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [
+        "Car park",
+        "Street parking",
+        "Marriage services"
+      ],
+      "facilities": [
+        "parking"
+      ],
+      "services": [
+        "counselling",
+        "youth"
+      ],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/southport-gcyc-southport-community-centre/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:sydney-airport-prayer-room",
+      "slug": "sydney-airport-prayer-room",
+      "name": "Sydney Airport - Prayer room",
+      "type": "prayer-room",
+      "address": {
+        "line1": "T1, Cooks River Avenue",
+        "locality": "Wolli Creek",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2020",
+        "formatted": "T1, Cooks River Avenue, Wolli Creek, NSW, 2020",
+        "countryCode": "AU"
+      },
+      "latitude": -33.93195,
+      "longitude": 151.1945,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/sydney-airport-prayer-room/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:sydney-cbd-erskine-musallah",
+      "slug": "sydney-cbd-erskine-musallah",
+      "name": "Sydney CBD - Erskine Musallah",
+      "type": "musalla",
+      "address": {
+        "line1": "Level 1, 56-60 Erskine St",
+        "locality": "Sydney",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2000",
+        "formatted": "Level 1, 56-60 Erskine St, Sydney, NSW, 2000",
+        "countryCode": "AU"
+      },
+      "latitude": -33.86665,
+      "longitude": 151.204,
+      "contact": {
+        "website": "http://www.sydneycitymasjid.org.au/"
+      },
+      "prayerTimes": {
+        "dhuhr": "12:15 pm / 1:15 pm"
+      },
+      "jumuahTimes": [
+        {
+          "time": "12:15 pm",
+          "label": "Khutbah"
+        },
+        {
+          "time": "1:00 pm",
+          "label": "Khutbah"
+        },
+        {
+          "time": "1:40 pm",
+          "label": "Khutbah"
+        }
+      ],
+      "features": [
+        "Wudu facility",
+        "Toilets"
+      ],
+      "facilities": [
+        "wudu",
+        "toilets"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/sydney-cbd-erskine-musallah/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:sydney-cbd-millers-point-abraham-mott-hall-jummah-only",
+      "slug": "sydney-cbd-millers-point-abraham-mott-hall-jummah-only",
+      "name": "Sydney CBD - Millers Point - Abraham Mott Hall (Jummah Only)",
+      "type": "friday-prayer-only",
+      "address": {
+        "line1": "17 Argyle Place",
+        "locality": "Millers Point",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2000",
+        "formatted": "17 Argyle Place, Millers Point, NSW, 2000",
+        "countryCode": "AU"
+      },
+      "latitude": -33.85826,
+      "longitude": 151.20395,
+      "contact": {
+        "website": "http://www.sydneycitymasjid.org.au/"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Khutbah"
+        }
+      ],
+      "features": [
+        "Toilets"
+      ],
+      "facilities": [
+        "toilets"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/sydney-cbd-millers-point-abraham-mott-hall-jummah-only/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:tempe-al-hijrah-mosque",
+      "slug": "tempe-al-hijrah-mosque",
+      "name": "Tempe - Al Hijrah Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "45 Station Street",
+        "locality": "Tempe",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2044",
+        "formatted": "45 Station Street, Tempe, NSW, 2044",
+        "countryCode": "AU"
+      },
+      "latitude": -33.92535,
+      "longitude": 151.15937,
+      "contact": {
+        "phone": "(02) 9591 1593"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [
+        "women-prayer-space"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/tempe-al-hijrah-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:thornlie-masjid-and-australian-islamic-college",
+      "slug": "thornlie-masjid-and-australian-islamic-college",
+      "name": "Thornlie - Masjid & Australian Islamic College",
+      "type": "musalla",
+      "address": {
+        "line1": "7 Tonbridge Way",
+        "locality": "Thornlie",
+        "state": "WA",
+        "regionCode": "AU-WA",
+        "postcode": "6108",
+        "formatted": "7 Tonbridge Way, Thornlie, WA, 6108",
+        "countryCode": "AU"
+      },
+      "latitude": -32.0533,
+      "longitude": 115.96249,
+      "contact": {
+        "phone": "(08) 9493 2718"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/thornlie-masjid-and-australian-islamic-college/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:university-of-new-england-masque",
+      "slug": "university-of-new-england-masque",
+      "name": "University of New England Masque",
+      "type": "mosque",
+      "address": {
+        "line1": "Booloominbah Drive",
+        "locality": "Armidale",
+        "state": "NSW",
+        "regionCode": "AU-NSW",
+        "postcode": "2350",
+        "formatted": "Booloominbah Drive, Armidale, NSW, 2350",
+        "countryCode": "AU"
+      },
+      "latitude": -30.48954,
+      "longitude": 151.64586,
+      "contact": {
+        "website": "http://www.une.edu.au/current-students/support/student-services/muslim@une"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:15 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [
+        "Toilets",
+        "Educational facility",
+        "Car park"
+      ],
+      "facilities": [
+        "toilets"
+      ],
+      "services": [
+        "classes"
+      ],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/university-of-new-england-masque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:west-hobart-warwick-street-mosque",
+      "slug": "west-hobart-warwick-street-mosque",
+      "name": "West Hobart - Warwick Street Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "166 Warwick Street",
+        "locality": "West Hobart",
+        "state": "TAS",
+        "regionCode": "AU-TAS",
+        "postcode": "7001",
+        "formatted": "166 Warwick Street, West Hobart, TAS, 7001",
+        "countryCode": "AU"
+      },
+      "latitude": -42.88151,
+      "longitude": 147.31509,
+      "contact": {
+        "phone": "(03) 6234 6998",
+        "website": "https://www.facebook.com/HobartMosque/?fref=ts"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "1:20 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [
+        "Car park",
+        "Wudu facility",
+        "Toilets"
+      ],
+      "facilities": [
+        "wudu",
+        "toilets",
+        "parking"
+      ],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/west-hobart-warwick-street-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:whyalla-morris-crescent-mosque",
+      "slug": "whyalla-morris-crescent-mosque",
+      "name": "Whyalla - Morris Crescent Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "5 Morris Crescent",
+        "locality": "Whyalla Norrie",
+        "state": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5608",
+        "formatted": "5 Morris Crescent, Whyalla Norrie, SA, 5608",
+        "countryCode": "AU"
+      },
+      "latitude": -33.01938,
+      "longitude": 137.55082,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/whyalla-morris-crescent-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:whyalla-morris-crescent-mosque-2",
+      "slug": "whyalla-morris-crescent-mosque-2",
+      "name": "Whyalla - Morris Crescent Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "5 Morris Crescent",
+        "locality": "Whyalla Norrie",
+        "state": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5608",
+        "formatted": "5 Morris Crescent, Whyalla Norrie, SA, 5608",
+        "countryCode": "AU"
+      },
+      "latitude": -33.01938,
+      "longitude": 137.55082,
+      "contact": {
+        "phone": "08-85861229"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/whyalla-morris-crescent-mosque-2/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:wodonga-musallah-isaw",
+      "slug": "wodonga-musallah-isaw",
+      "name": "Wodonga Musallah ISAW",
+      "type": "musalla",
+      "address": {
+        "line1": "189 Melrose Drive",
+        "locality": "West Wodonga",
+        "state": "VIC",
+        "regionCode": "AU-VIC",
+        "postcode": "3690",
+        "formatted": "189 Melrose Drive, West Wodonga, VIC, 3690",
+        "countryCode": "AU"
+      },
+      "latitude": -36.13581,
+      "longitude": 146.86353,
+      "contact": {},
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/wodonga-musallah-isaw/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    },
+    {
+      "id": "mosque-finder:woodville-north-al-khalil-mosque",
+      "slug": "woodville-north-al-khalil-mosque",
+      "name": "Woodville North - Al-Khalil Mosque",
+      "type": "mosque",
+      "address": {
+        "line1": "Torrens Road & Audley Street",
+        "locality": "Woodville North",
+        "state": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5012",
+        "formatted": "Torrens Road & Audley Street, Woodville North, SA, 5012",
+        "countryCode": "AU"
+      },
+      "latitude": -34.86903,
+      "longitude": 138.53832,
+      "contact": {
+        "phone": "(08) 8268 1944"
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        {
+          "time": "12:30 pm",
+          "label": "Jumu’ah"
+        }
+      ],
+      "features": [],
+      "facilities": [],
+      "services": [],
+      "sourceUrl": "https://mosque-finder.com.au/mosque/woodville-north-al-khalil-mosque/index.html",
+      "observedAt": "2026-08-29T12:02:14.303Z"
+    }
+  ]
+}

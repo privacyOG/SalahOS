@@ -20,6 +20,49 @@ const REGION_CODES = Object.freeze([
   'AU-WA',
 ]);
 
+const FINDER_DUPLICATE_GROUPS = Object.freeze([
+  Object.freeze({
+    canonicalId: 'mosque-finder:minto-mosque',
+    duplicateIds: Object.freeze(['mosque-finder:minto-suburban-islamic-centre-minto-masjid']),
+    suppressDuplicateNameAliases: false,
+  }),
+  Object.freeze({
+    canonicalId: 'mosque-finder:whyalla-morris-crescent-mosque-2',
+    duplicateIds: Object.freeze(['mosque-finder:whyalla-morris-crescent-mosque']),
+    suppressDuplicateNameAliases: false,
+  }),
+  Object.freeze({
+    canonicalId: 'mosque-finder:parkholme-masjid-omar-bin-al-khattab',
+    duplicateIds: Object.freeze(['mosque-finder:park-holme-masjid']),
+    suppressDuplicateNameAliases: false,
+  }),
+  Object.freeze({
+    canonicalId: 'mosque-finder:north-sydney-mcmahons-point-musalla',
+    duplicateIds: Object.freeze(['mosque-finder:north-ryde-macquarie-university-musalla-2']),
+    suppressDuplicateNameAliases: true,
+  }),
+]);
+
+const FINDER_COORDINATE_EXCLUSIONS = Object.freeze(new Map([
+  ['mosque-finder:north-ryde-macquarie-university-musalla', 'source coordinates resolve to Newcastle rather than Macquarie University, North Ryde'],
+  ['mosque-finder:sydney-airport-prayer-room', 'source coordinates duplicate the separate Mascot Botany Road musalla rather than Sydney Airport T1'],
+]));
+
+const FORCED_MATCHES = Object.freeze(new Map([
+  ['mosque-finder:adelaide-little-gilbert-street-mosque', 'osm-node-1614034144'],
+  ['mosque-finder:minto-mosque', 'osm-node-2464887186'],
+  ['mosque-finder:gilles-plains-abu-bakr-assiddiq-masjid', 'osm-node-13919243601'],
+  ['mosque-finder:albanvale-station-road-deer-park-mosque', 'osm-way-1170477550'],
+  ['mosque-finder:blacktown-afghan-osman-mosque', 'osm-node-4243973889'],
+  ['mosque-finder:kensington-university-of-nsw-musalla', 'osm-node-7871916571'],
+]));
+
+const BLOCKED_MATCHES = Object.freeze(new Set([
+  'osm-way-1190951588|mosque-finder:ashfield-liverpool-road-musalla',
+  'osm-way-1126413889|mosque-finder:lakemba-islamic-centre',
+  'osm-node-1614034144|mosque-finder:adelaide-islamic-information-centre-of-sa',
+]));
+
 function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
@@ -67,32 +110,60 @@ function distanceKm(left, right) {
   return 6_371 * 2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
 }
 
-function matchScore(osm, finder) {
-  if (osm.regionCode !== finder.address.regionCode) return 0;
-  let score = 0;
+function scoreMatch(osm, finder) {
+  if (osm.address.regionCode !== finder.address.regionCode) {
+    return { score: 0, distanceKm: Number.POSITIVE_INFINITY, identitySignals: 0 };
+  }
   const distance = distanceKm(osm, finder);
-  if (distance <= 0.08) score += 0.45;
-  else if (distance <= 0.25) score += 0.34;
-  else if (distance <= 1) score += 0.18;
-  else return 0;
+  if (distance > 1) return { score: 0, distanceKm: distance, identitySignals: 0 };
 
-  const osmName = normalize(osm.name);
-  const finderName = normalize(finder.name);
-  if (osmName !== '' && osmName === finderName) score += 0.35;
-  else if (osmName !== '' && finderName !== '' && (osmName.includes(finderName) || finderName.includes(osmName))) score += 0.2;
+  let score = distance <= 0.08 ? 0.45 : distance <= 0.25 ? 0.34 : 0.18;
+  let identitySignals = 0;
+  const osmNames = unique([osm.name, ...(osm.aliases ?? [])]).map(normalize).filter(Boolean);
+  const finderNames = unique([finder.name, ...(finder.aliases ?? [])]).map(normalize).filter(Boolean);
+  const exactName = osmNames.some((left) => finderNames.includes(left));
+  const nameInclusion = !exactName && osmNames.some((left) => finderNames.some((right) => left.includes(right) || right.includes(left)));
+  if (exactName) {
+    score += 0.35;
+    identitySignals += 2;
+  } else if (nameInclusion) {
+    score += 0.2;
+    identitySignals += 1;
+  }
 
-  const osmAddress = normalize(osm.address);
+  const osmAddress = normalize(osm.address.formatted);
   const finderAddress = normalize(finder.address.formatted);
-  if (osmAddress !== '' && osmAddress === finderAddress) score += 0.25;
+  const exactAddress = osmAddress !== '' && osmAddress === finderAddress;
+  if (exactAddress) {
+    score += 0.25;
+    identitySignals += 2;
+  }
 
-  const osmPhone = normalizedPhone(osm.phone);
+  const osmPhone = normalizedPhone(osm.contact?.phone);
   const finderPhone = normalizedPhone(finder.contact?.phone);
-  if (osmPhone.length >= 8 && osmPhone === finderPhone) score += 0.3;
+  const exactPhone = osmPhone.length >= 8 && osmPhone === finderPhone;
+  if (exactPhone) {
+    score += 0.3;
+    identitySignals += 3;
+  }
 
-  const osmDomain = normalizedDomain(osm.website);
+  const osmDomain = normalizedDomain(osm.contact?.website);
   const finderDomain = normalizedDomain(finder.contact?.website);
-  if (osmDomain !== '' && osmDomain === finderDomain) score += 0.3;
-  return Math.min(1, Number(score.toFixed(3)));
+  const exactDomain = osmDomain !== '' && osmDomain === finderDomain;
+  if (exactDomain) {
+    score += 0.3;
+    identitySignals += 3;
+  }
+  return {
+    score: Math.min(1, Number(score.toFixed(3))),
+    distanceKm: distance,
+    identitySignals,
+    exactName,
+    nameInclusion,
+    exactAddress,
+    exactPhone,
+    exactDomain,
+  };
 }
 
 function postcodeFrom(value) {
@@ -100,7 +171,7 @@ function postcodeFrom(value) {
 }
 
 function osmFields(record) {
-  const fields = ['name', 'address', 'coordinates'];
+  const fields = ['name', 'aliases', 'address', 'coordinates'];
   if (record.nameAr) fields.push('aliases');
   if (record.phone) fields.push('phone');
   if (record.email) fields.push('email');
@@ -109,7 +180,7 @@ function osmFields(record) {
 }
 
 function finderFields(record) {
-  const fields = ['name', 'address', 'coordinates'];
+  const fields = ['name', 'aliases', 'address', 'coordinates'];
   if (record.contact?.phone) fields.push('phone');
   if (record.contact?.email) fields.push('email');
   if (record.contact?.website) fields.push('website');
@@ -255,6 +326,63 @@ function conflict(left, right) {
   return left && right && normalize(left) !== normalize(right) ? 1 : 0;
 }
 
+function mergeFinderDuplicate(primary, duplicate, suppressDuplicateNameAliases) {
+  const duplicateNameAliases = suppressDuplicateNameAliases ? [] : [duplicate.name];
+  const jumuahByKey = new Map(
+    [...primary.jumuahTimes, ...duplicate.jumuahTimes].map((item) => [`${item.time}|${item.label ?? ''}`, item]),
+  );
+  const conflictCount =
+    primary.conflictCount +
+    duplicate.conflictCount +
+    conflict(primary.address.formatted, duplicate.address.formatted) +
+    conflict(primary.contact.phone, duplicate.contact.phone) +
+    conflict(primary.contact.website, duplicate.contact.website) +
+    (primary.prayerTimes !== null && duplicate.prayerTimes !== null && JSON.stringify(primary.prayerTimes) !== JSON.stringify(duplicate.prayerTimes) ? 1 : 0) +
+    (primary.jumuahTimes.length > 0 && duplicate.jumuahTimes.length > 0 && JSON.stringify(primary.jumuahTimes) !== JSON.stringify(duplicate.jumuahTimes) ? 1 : 0);
+  return withQuality({
+    ...primary,
+    sourceRecordIds: unique([...primary.sourceRecordIds, ...duplicate.sourceRecordIds]),
+    aliases: unique([...primary.aliases, ...duplicate.aliases, ...duplicateNameAliases]),
+    contact: {
+      ...(primary.contact.phone ?? duplicate.contact.phone ? { phone: primary.contact.phone ?? duplicate.contact.phone } : {}),
+      ...(primary.contact.email ?? duplicate.contact.email ? { email: primary.contact.email ?? duplicate.contact.email } : {}),
+      ...(primary.contact.website ?? duplicate.contact.website ? { website: primary.contact.website ?? duplicate.contact.website } : {}),
+      social: [],
+    },
+    prayerTimes: primary.prayerTimes ?? duplicate.prayerTimes,
+    jumuahTimes: [...jumuahByKey.values()],
+    facilities: unique([...primary.facilities, ...duplicate.facilities]),
+    services: unique([...primary.services, ...duplicate.services]),
+    provenance: [...primary.provenance, ...duplicate.provenance],
+    conflictCount,
+    ...(primary.featureLabels || duplicate.featureLabels
+      ? { featureLabels: unique([...(primary.featureLabels ?? []), ...(duplicate.featureLabels ?? [])]) }
+      : {}),
+  });
+}
+
+function dedupeFinderRecords(records) {
+  const byId = new Map(records.map((record) => [record.id, record]));
+  const mergedDuplicateIds = new Set();
+  const evidence = [];
+  for (const group of FINDER_DUPLICATE_GROUPS) {
+    let primary = byId.get(group.canonicalId);
+    if (primary === undefined) continue;
+    for (const duplicateId of group.duplicateIds) {
+      const duplicate = byId.get(duplicateId);
+      if (duplicate === undefined || mergedDuplicateIds.has(duplicateId)) continue;
+      primary = mergeFinderDuplicate(primary, duplicate, group.suppressDuplicateNameAliases);
+      mergedDuplicateIds.add(duplicateId);
+      evidence.push({ canonicalId: group.canonicalId, duplicateId, matchType: 'audited-source-duplicate' });
+    }
+    byId.set(group.canonicalId, primary);
+  }
+  return {
+    records: [...byId.values()].filter((record) => !mergedDuplicateIds.has(record.id)),
+    evidence,
+  };
+}
+
 function mergeMatched(osmRecord, finderRecord) {
   const conflictCount =
     conflict(osmRecord.address.formatted, finderRecord.address.formatted) +
@@ -314,10 +442,18 @@ function validateCombined(directory) {
     assert(Number.isFinite(record.latitude) && Number.isFinite(record.longitude), `Invalid coordinates for ${record.id}`);
     assert(record.provenance.length > 0, `Missing provenance for ${record.id}`);
     assert(record.quality.provenanceCoveragePercent === 100, `Incomplete provenance coverage for ${record.id}`);
+    for (const excludedId of FINDER_COORDINATE_EXCLUSIONS.keys()) {
+      assert(!record.sourceRecordIds.includes(excludedId), `Coordinate-quarantined record leaked into combined directory: ${excludedId}`);
+    }
   }
   for (const region of REGION_CODES) assert(regions.has(region), `Combined directory missing ${region}`);
   assert(directory.source.mergedPairCount + directory.source.osmOnlyCount === directory.source.osmRecordCount, 'OSM merge accounting mismatch');
   assert(directory.source.mergedPairCount + directory.source.finderOnlyCount === directory.source.mosqueFinderRecordCount, 'Mosque Finder merge accounting mismatch');
+  assert(directory.source.forcedMatchCount + directory.source.automaticMatchCount === directory.source.mergedPairCount, 'Cross-source match accounting mismatch');
+  assert(
+    directory.source.mosqueFinderRawRecordCount - directory.source.finderInternalMergedPairCount - directory.source.coordinateExcludedCount === directory.source.mosqueFinderRecordCount,
+    'Mosque Finder preprocessing accounting mismatch',
+  );
 }
 
 async function generate() {
@@ -326,41 +462,85 @@ async function generate() {
   validateSource(osm, finder);
 
   const osmRecords = osm.records.map((record) => fromOsm(record, osm.source));
-  const finderRecords = finder.records.map((record) => fromFinder(record, finder.source));
+  const mappedFinderRecords = finder.records.map((record) => fromFinder(record, finder.source));
+  const finderDedup = dedupeFinderRecords(mappedFinderRecords);
+  const coordinateExclusions = [];
+  const finderRecords = finderDedup.records.filter((record) => {
+    const reason = FINDER_COORDINATE_EXCLUSIONS.get(record.id);
+    if (reason === undefined) return true;
+    coordinateExclusions.push({ finderId: record.id, reason });
+    return false;
+  });
+
+  const osmById = new Map(osmRecords.map((record) => [record.id, record]));
+  const finderById = new Map(finderRecords.map((record) => [record.id, record]));
   const usedOsmIds = new Set();
+  const usedFinderIds = new Set();
   const combined = [];
   const matchEvidence = [];
 
+  for (const [finderId, osmId] of FORCED_MATCHES) {
+    const finderRecord = finderById.get(finderId);
+    const osmRecord = osmById.get(osmId);
+    if (finderRecord === undefined || osmRecord === undefined) continue;
+    assert(!BLOCKED_MATCHES.has(`${osmId}|${finderId}`), `Forced match is also blocked: ${osmId} / ${finderId}`);
+    assert(!usedOsmIds.has(osmId) && !usedFinderIds.has(finderId), `Forced match reuses a record: ${osmId} / ${finderId}`);
+    const evidence = scoreMatch(osmRecord, finderRecord);
+    usedOsmIds.add(osmId);
+    usedFinderIds.add(finderId);
+    combined.push(mergeMatched(osmRecord, finderRecord));
+    matchEvidence.push({
+      osmId,
+      finderId,
+      matchType: 'audited-forced',
+      score: evidence.score,
+      distanceKm: Number(evidence.distanceKm.toFixed(3)),
+      identitySignals: evidence.identitySignals,
+    });
+  }
+
+  const candidates = [];
   for (const finderRecord of finderRecords) {
-    let best = null;
-    for (let index = 0; index < osmRecords.length; index += 1) {
-      const candidate = osmRecords[index];
-      if (usedOsmIds.has(candidate.id)) continue;
-      const score = matchScore(
-        osm.records[index],
-        finder.records.find((record) => record.id === finderRecord.id),
-      );
-      if (score < 0.65 || (best !== null && score <= best.score)) continue;
-      best = { index, score };
+    if (usedFinderIds.has(finderRecord.id)) continue;
+    for (const osmRecord of osmRecords) {
+      if (usedOsmIds.has(osmRecord.id)) continue;
+      if (BLOCKED_MATCHES.has(`${osmRecord.id}|${finderRecord.id}`)) continue;
+      const evidence = scoreMatch(osmRecord, finderRecord);
+      if (evidence.score < 0.65) continue;
+      candidates.push({ osmRecord, finderRecord, evidence });
     }
-    if (best === null) {
-      combined.push(finderRecord);
-      continue;
-    }
-    const osmRecord = osmRecords[best.index];
+  }
+  candidates.sort((left, right) =>
+    right.evidence.score - left.evidence.score ||
+    right.evidence.identitySignals - left.evidence.identitySignals ||
+    left.evidence.distanceKm - right.evidence.distanceKm ||
+    left.osmRecord.id.localeCompare(right.osmRecord.id) ||
+    left.finderRecord.id.localeCompare(right.finderRecord.id),
+  );
+
+  for (const candidate of candidates) {
+    const { osmRecord, finderRecord, evidence } = candidate;
+    if (usedOsmIds.has(osmRecord.id) || usedFinderIds.has(finderRecord.id)) continue;
     usedOsmIds.add(osmRecord.id);
+    usedFinderIds.add(finderRecord.id);
     combined.push(mergeMatched(osmRecord, finderRecord));
     matchEvidence.push({
       osmId: osmRecord.id,
       finderId: finderRecord.id,
-      score: best.score,
-      distanceKm: Number(distanceKm(osmRecord, finderRecord).toFixed(3)),
+      matchType: 'automatic',
+      score: evidence.score,
+      distanceKm: Number(evidence.distanceKm.toFixed(3)),
+      identitySignals: evidence.identitySignals,
     });
   }
 
+  for (const record of finderRecords) if (!usedFinderIds.has(record.id)) combined.push(record);
   for (const record of osmRecords) if (!usedOsmIds.has(record.id)) combined.push(record);
   combined.sort((left, right) => left.name.localeCompare(right.name, 'en-AU', { sensitivity: 'base' }));
+
   const mergedPairCount = matchEvidence.length;
+  const forcedMatchCount = matchEvidence.filter((entry) => entry.matchType === 'audited-forced').length;
+  const automaticMatchCount = mergedPairCount - forcedMatchCount;
   const directory = {
     schemaVersion: 2,
     source: {
@@ -369,10 +549,17 @@ async function generate() {
       recordCount: combined.length,
       regionCodes: REGION_CODES,
       osmRecordCount: osm.records.length,
-      mosqueFinderRecordCount: finder.records.length,
+      mosqueFinderRawRecordCount: finder.records.length,
+      finderInternalMergedPairCount: finderDedup.evidence.length,
+      coordinateExcludedCount: coordinateExclusions.length,
+      mosqueFinderRecordCount: finderRecords.length,
       mergedPairCount,
+      forcedMatchCount,
+      automaticMatchCount,
       osmOnlyCount: osm.records.length - mergedPairCount,
-      finderOnlyCount: finder.records.length - mergedPairCount,
+      finderOnlyCount: finderRecords.length - mergedPairCount,
+      finderInternalMergeEvidence: finderDedup.evidence,
+      coordinateExclusions,
       sources: [
         {
           name: osm.source.name,

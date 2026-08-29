@@ -295,9 +295,11 @@ export function validateDirectory(directory) {
   }
   assert(directory.source.recordCount === directory.records.length, 'Mosque Finder source count mismatch');
   assert(directory.source.sitemapRecordCount >= directory.records.length, 'Sitemap count cannot be below parsed record count');
-  for (const regionCode of Object.values(REGION_CODES)) {
-    assert(regions.has(regionCode), `Mosque Finder directory is missing ${regionCode}`);
-  }
+  assert(regions.size > 0, 'Mosque Finder directory has no regional coverage');
+  const declaredRegions = new Set(directory.source.regionCodes ?? []);
+  assert(declaredRegions.size === regions.size && [...regions].every((regionCode) => declaredRegions.has(regionCode)), 'Mosque Finder regional coverage metadata mismatch');
+  const missingRegions = new Set(directory.source.missingRegionCodes ?? []);
+  for (const regionCode of Object.values(REGION_CODES)) assert(regions.has(regionCode) !== missingRegions.has(regionCode), `Mosque Finder missing-region metadata mismatch for ${regionCode}`);
   return directory;
 }
 
@@ -323,8 +325,8 @@ async function requestText(url) {
 function sitemapUrls(xml) {
   return [...xml.matchAll(/<loc>([\s\S]*?)<\/loc>/giu)]
     .map((match) => decodeHtml(match[1]).trim())
-    .filter((url) => /^https:\/\/(?:www\.)?mosque-finder\.com\.au\/mosque\/[^/]+\/index\.html$/iu.test(url))
-    .map((url) => url.replace('https://www.mosque-finder.com.au', BASE_URL));
+    .filter((url) => /^https:\/\/(?:www\.)?mosque-finder\.com\.au\/mosque\/[^/?#]+(?:\/index\.html|\/?)$/iu.test(url))
+    .map((url) => { const normalized = url.replace('https://www.mosque-finder.com.au', BASE_URL).replace(/\/+$/u, ''); return normalized.endsWith('/index.html') ? normalized : `${normalized}/index.html`; });
 }
 
 async function fetchDirectory() {
@@ -363,6 +365,8 @@ async function fetchDirectory() {
       sitemapRecordCount: urls.length,
       recordCount: sorted.length,
       failedRecordCount: failures.length,
+      regionCodes: [...new Set(sorted.map((record) => record.address.regionCode))].sort(),
+      missingRegionCodes: Object.values(REGION_CODES).filter((regionCode) => !sorted.some((record) => record.address.regionCode === regionCode)),
     },
     records: sorted,
   };
