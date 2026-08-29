@@ -1,0 +1,75 @@
+name: Knowledge Navigation Preflight
+
+on:
+  push:
+    branches:
+      - preflight/visual-knowledge-nav-check
+
+permissions:
+  contents: read
+
+jobs:
+  knowledge-visual:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: /tmp/salahos-knowledge-pw
+      SALAHOS_VISUAL_PLAYWRIGHT_MODULE: /tmp/salahos-knowledge-harness/node_modules/playwright/index.mjs
+      SALAHOS_VISUAL_ARTIFACT_DIR: visual-artifacts
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install application dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Fast static preflight
+        run: |
+          npx prettier --check scripts/visual-islamic-knowledge.mjs
+          npm run lint
+          npm run typecheck
+
+      - name: Build production application
+        run: npm run build
+
+      - name: Install Chromium harness only
+        run: |
+          rm -rf /tmp/salahos-knowledge-harness
+          mkdir -p /tmp/salahos-knowledge-harness
+          cd /tmp/salahos-knowledge-harness
+          npm init -y >/dev/null 2>&1
+          npm install --ignore-scripts --save-exact playwright@1.62.0
+          npx playwright install --with-deps chromium
+
+      - name: Start local production server
+        run: |
+          python3 -m http.server 4173 --directory dist --bind 127.0.0.1 >/tmp/salahos-knowledge-http.log 2>&1 &
+          echo $! >/tmp/salahos-knowledge-server.pid
+          python3 - <<'PY'
+          import time
+          import urllib.request
+          for _ in range(50):
+              try:
+                  with urllib.request.urlopen('http://127.0.0.1:4173/', timeout=1) as response:
+                      if response.status == 200:
+                          raise SystemExit(0)
+              except Exception:
+                  time.sleep(0.1)
+          raise SystemExit('Local production server did not become ready')
+          PY
+
+      - name: Run Knowledge visual fixture
+        run: node scripts/visual-islamic-knowledge.mjs
+
+      - name: Stop local production server
+        if: always()
+        run: |
+          if [ -f /tmp/salahos-knowledge-server.pid ]; then
+            kill "$(cat /tmp/salahos-knowledge-server.pid)" 2>/dev/null || true
+          fi
