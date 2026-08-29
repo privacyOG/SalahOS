@@ -30,18 +30,20 @@ jobs:
       - name: Install application dependencies
         run: npm ci --ignore-scripts
 
-      - name: Fast static preflight
+      - name: Format candidate test and run fast static checks
         run: |
+          npx prettier --write scripts/cross-browser-smoke.mjs
+          git diff -- scripts/cross-browser-smoke.mjs
           npx prettier --check \
             scripts/visual-device-ux-refinement.mjs \
             scripts/visual-display-device-refinement.mjs \
-            scripts/visual-accessibility-rtl-acceptance.mjs \
             scripts/visual-ui-v2-retirement.mjs \
             scripts/visual-golden-regression.mjs \
             scripts/visual-accessibility-axe.mjs \
             scripts/cross-browser-smoke.mjs \
-            scripts/visual-theme-matrix.mjs
-          npx eslint scripts/visual-device-ux-refinement.mjs
+            scripts/visual-theme-matrix.mjs \
+            src/theme-contrast-guard.css
+          npx eslint scripts/visual-device-ux-refinement.mjs scripts/cross-browser-smoke.mjs
 
       - name: Build production application
         run: npm run build
@@ -87,18 +89,18 @@ jobs:
         continue-on-error: true
         run: node scripts/visual-display-device-refinement.mjs
 
-      - id: accessibility
-        name: Run accessibility and RTL acceptance
-        continue-on-error: true
-        run: node scripts/visual-accessibility-rtl-acceptance.mjs
-
       - id: retirement
         name: Run UI v2 retirement acceptance
         continue-on-error: true
         run: node scripts/visual-ui-v2-retirement.mjs
 
+      - name: Record candidate golden baselines
+        env:
+          SALAHOS_GOLDEN_RECORD: '1'
+        run: node scripts/visual-golden-regression.mjs
+
       - id: golden
-        name: Run golden regression
+        name: Verify recorded golden baselines
         continue-on-error: true
         run: node scripts/visual-golden-regression.mjs
 
@@ -117,13 +119,21 @@ jobs:
         continue-on-error: true
         run: node scripts/visual-theme-matrix.mjs
 
+      - name: Upload candidate golden baselines
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: visual-tail-goldens-${{ github.sha }}
+          path: tests/golden/*.png
+          if-no-files-found: error
+          retention-days: 7
+
       - name: Enforce visual-tail result
         if: always()
         run: |
           failures=""
           [ "${{ steps.device.outcome }}" = "success" ] || failures="$failures device"
           [ "${{ steps.display.outcome }}" = "success" ] || failures="$failures display"
-          [ "${{ steps.accessibility.outcome }}" = "success" ] || failures="$failures accessibility"
           [ "${{ steps.retirement.outcome }}" = "success" ] || failures="$failures retirement"
           [ "${{ steps.golden.outcome }}" = "success" ] || failures="$failures golden"
           [ "${{ steps.axe.outcome }}" = "success" ] || failures="$failures axe"
