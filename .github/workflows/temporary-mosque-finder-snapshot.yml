@@ -16,6 +16,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          rm -rf /tmp/mosque-finder-raw
           mkdir -p /tmp/mosque-finder-raw
           python3 - <<'PY'
           import hashlib
@@ -32,6 +33,7 @@ jobs:
           ROOT = pathlib.Path('/tmp/mosque-finder-raw')
           COOKIE = '/tmp/mosque-finder.cookies'
           UA = 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0 Safari/537.36'
+          DETAIL_PATH = re.compile(r'^/mosque/([A-Za-z0-9._%+-]+)/index\.html$')
 
           class LinkParser(HTMLParser):
               def __init__(self):
@@ -71,10 +73,11 @@ jobs:
               return data
 
           metadata = {'source': BASE, 'retrievedAt': '2026-08-29', 'states': {}, 'pages': []}
+          seen_urls = set()
 
           home = ROOT / 'index.html'
           fetch(BASE + 'index.html', home, BASE)
-          time.sleep(0.5)
+          time.sleep(0.3)
 
           for state in STATES:
               state_dir = ROOT / state
@@ -86,42 +89,39 @@ jobs:
               parser = LinkParser()
               parser.feed(index_text)
 
-              detail_urls = set()
+              detail_urls = {}
               for href in parser.links:
-                  absolute = urljoin(index_url, href)
+                  absolute = urljoin(index_url, href).split('#', 1)[0].split('?', 1)[0]
                   parsed = urlparse(absolute)
                   if parsed.netloc.lower() != 'www.mosque-finder.com.au':
                       continue
-                  path = parsed.path
-                  prefix = f'/{state}/'
-                  if not path.startswith(prefix):
+                  match = DETAIL_PATH.fullmatch(parsed.path)
+                  if not match:
                       continue
-                  tail = path[len(prefix):].strip('/')
-                  if not tail or tail.lower() in ('index.html', 'index'):
-                      continue
-                  if '/' in tail:
-                      continue
-                  if not re.fullmatch(r'[A-Za-z0-9._%+-]+(?:\.html)?', tail):
-                      continue
-                  detail_urls.add(absolute.split('#', 1)[0].split('?', 1)[0])
+                  detail_urls[absolute] = match.group(1)
 
               metadata['states'][state.upper()] = {'indexUrl': index_url, 'detailCount': len(detail_urls)}
               metadata['pages'].append({'state': state.upper(), 'kind': 'index', 'url': index_url, 'sha256': hashlib.sha256(index_bytes).hexdigest(), 'bytes': len(index_bytes)})
 
-              for number, url in enumerate(sorted(detail_urls), start=1):
-                  tail = pathlib.PurePosixPath(urlparse(url).path).name
-                  if not tail.lower().endswith('.html'):
-                      tail += '.html'
-                  destination = state_dir / tail
+              for number, (url, slug) in enumerate(sorted(detail_urls.items()), start=1):
+                  destination = state_dir / f'{slug}.html'
+                  if url in seen_urls:
+                      raise RuntimeError(f'duplicate detail URL appears in multiple state listings: {url}')
+                  seen_urls.add(url)
                   data = fetch(url, destination, index_url)
-                  metadata['pages'].append({'state': state.upper(), 'kind': 'detail', 'url': url, 'sha256': hashlib.sha256(data).hexdigest(), 'bytes': len(data)})
+                  metadata['pages'].append({'state': state.upper(), 'kind': 'detail', 'slug': slug, 'url': url, 'sha256': hashlib.sha256(data).hexdigest(), 'bytes': len(data)})
                   if number % 20 == 0:
                       print(f'{state.upper()}: fetched {number}/{len(detail_urls)} detail pages')
-                  time.sleep(0.12)
+                  time.sleep(0.08)
 
               print(f'{state.upper()}: {len(detail_urls)} detail pages')
 
+          total = sum(item['detailCount'] for item in metadata['states'].values())
+          metadata['detailCount'] = total
+          if total < 150:
+              raise RuntimeError(f'expected a nationwide directory snapshot; discovered only {total} detail pages')
           (ROOT / 'metadata.json').write_text(json.dumps(metadata, indent=2, ensure_ascii=False) + '\n', encoding='utf-8')
+          print(f'TOTAL: {total} detail pages')
           print(json.dumps(metadata['states'], indent=2))
           PY
 
