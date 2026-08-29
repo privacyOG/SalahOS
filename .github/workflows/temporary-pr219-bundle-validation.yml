@@ -1,0 +1,140 @@
+name: Temporary PR219 Bundle Validation
+
+on:
+  push:
+    branches: [agent/pr219-bundle-fix]
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Apply lightweight selected-mosque runtime candidate
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          panel = Path('src/ui/AustralianMosqueDirectoryPanel.tsx')
+          text = panel.read_text()
+          import_anchor = "import { getApplicationStorage } from '../platform/applicationStorage';\n"
+          import_replacement = import_anchor + "import { saveSelectedDirectoryMosqueContext } from '../platform/selectedDirectoryMosqueContext';\n"
+          if "saveSelectedDirectoryMosqueContext" not in text:
+              assert import_anchor in text
+              text = text.replace(import_anchor, import_replacement, 1)
+          old = """  const useMosque = (mosque: AustralianMosqueRecord) => {\n    const profile = australianMosqueToProfile(mosque);\n    const withProfile = upsertMosqueProfile(library, profile);\n    persistLibrary(selectMosqueProfile(withProfile, profile.id));\n  };\n"""
+          new = """  const useMosque = (mosque: AustralianMosqueRecord) => {\n    const profile = australianMosqueToProfile(mosque);\n    saveSelectedDirectoryMosqueContext(getApplicationStorage(), {\n      mosqueId: mosque.id,\n      mosqueName: mosque.name,\n      coordinates: profile.coordinates,\n      timeZone: profile.timeZone,\n      prayerTimes: mosque.enriched.prayerTimes,\n    });\n    const withProfile = upsertMosqueProfile(library, profile);\n    persistLibrary(selectMosqueProfile(withProfile, profile.id));\n  };\n"""
+          if old in text:
+              text = text.replace(old, new, 1)
+          else:
+              assert new in text
+          panel.write_text(text)
+
+          today = Path('src/ui/TodayScreen.tsx')
+          text = today.read_text()
+          old_import = """import {\n  australianMosques,\n  australianMosqueToProfile,\n  type AustralianMosqueRecord,\n} from '../domain/australianMosqueDirectoryCombined';\n"""
+          if old_import in text:
+              text = text.replace(old_import, '', 1)
+          profile_import = "import { loadMosqueProfileLibrary } from '../platform/mosqueProfileLibrary';\n"
+          context_import = """import {\n  loadSelectedDirectoryMosqueContext,\n  type SelectedDirectoryMosqueContext,\n} from '../platform/selectedDirectoryMosqueContext';\n"""
+          if "loadSelectedDirectoryMosqueContext" not in text:
+              assert profile_import in text
+              text = text.replace(profile_import, profile_import + context_import, 1)
+          old_fn = """function initialSelectedAustralianMosque(): AustralianMosqueRecord | null {\n  try {\n    const selectedProfileId = loadMosqueProfileLibrary(getApplicationStorage()).selectedProfileId;\n    if (selectedProfileId === null) return null;\n    return australianMosques.find((mosque) => mosque.id === selectedProfileId) ?? null;\n  } catch {\n    return null;\n  }\n}\n"""
+          new_fn = """function initialSelectedDirectoryMosqueContext(): SelectedDirectoryMosqueContext | null {\n  try {\n    const storage = getApplicationStorage();\n    const selectedProfileId = loadMosqueProfileLibrary(storage).selectedProfileId;\n    if (selectedProfileId === null) return null;\n    const context = loadSelectedDirectoryMosqueContext(storage);\n    return context?.mosqueId === selectedProfileId ? context : null;\n  } catch {\n    return null;\n  }\n}\n"""
+          if old_fn in text:
+              text = text.replace(old_fn, new_fn, 1)
+          else:
+              assert new_fn in text
+          old_state = """  const selectedDirectoryMosque = useMemo(initialSelectedAustralianMosque, []);\n  const activeDirectoryMosque =\n    selectedDirectoryMosque !== null && settings.prayerSourceMode !== 'local-mosque'\n      ? selectedDirectoryMosque\n      : null;\n  const directoryMosqueActive = activeDirectoryMosque !== null;\n  const selectedDirectoryProfile = useMemo(\n    () =>\n      activeDirectoryMosque === null ? null : australianMosqueToProfile(activeDirectoryMosque),\n    [activeDirectoryMosque],\n  );\n"""
+          new_state = """  const selectedDirectoryContext = useMemo(initialSelectedDirectoryMosqueContext, []);\n  const activeDirectoryMosque =\n    selectedDirectoryContext !== null && settings.prayerSourceMode !== 'local-mosque'\n      ? selectedDirectoryContext\n      : null;\n  const directoryMosqueActive = activeDirectoryMosque !== null;\n"""
+          if old_state in text:
+              text = text.replace(old_state, new_state, 1)
+          else:
+              assert new_state in text
+          old_location = """  const coordinates =\n    selectedDirectoryProfile?.coordinates ?? settings.location?.coordinates ?? null;\n  const timeZoneOverride =\n    selectedDirectoryProfile?.timeZone ?? settings.location?.timeZone ?? null;\n"""
+          new_location = """  const coordinates = activeDirectoryMosque?.coordinates ?? settings.location?.coordinates ?? null;\n  const timeZoneOverride = activeDirectoryMosque?.timeZone ?? settings.location?.timeZone ?? null;\n"""
+          if old_location in text:
+              text = text.replace(old_location, new_location, 1)
+          else:
+              assert new_location in text
+          text = text.replace(
+              "data-selected-directory-mosque-id={activeDirectoryMosque?.id}",
+              "data-selected-directory-mosque-id={activeDirectoryMosque?.mosqueId}",
+          )
+          old_published = """                    ? publishedAustralianMosqueCongregationMinutes(\n                        activeDirectoryMosque,\n                        prayer.name,\n                      )\n"""
+          new_published = """                    ? publishedAustralianMosqueCongregationMinutes(\n                        activeDirectoryMosque.prayerTimes,\n                        prayer.name,\n                      )\n"""
+          if old_published in text:
+              text = text.replace(old_published, new_published, 1)
+          else:
+              assert new_published in text
+          assert 'australianMosqueDirectoryCombined' not in text
+          assert 'australianMosques' not in text
+          assert 'australianMosqueToProfile' not in text
+          today.write_text(text)
+
+          prayer_test = Path('src/domain/australianMosquePrayerContext.test.ts')
+          text = prayer_test.read_text()
+          text = text.replace(
+              "publishedAustralianMosqueCongregationMinutes(record, 'dhuhr')",
+              "publishedAustralianMosqueCongregationMinutes(record.enriched.prayerTimes, 'dhuhr')",
+          )
+          text = text.replace(
+              "publishedAustralianMosqueCongregationMinutes(record, 'fajr')",
+              "publishedAustralianMosqueCongregationMinutes(record.enriched.prayerTimes, 'fajr')",
+          )
+          text = text.replace(
+              'hasPublishedAustralianMosqueCongregationTimes(record)',
+              'hasPublishedAustralianMosqueCongregationTimes(record.enriched.prayerTimes)',
+          )
+          text = text.replace(
+              'const enriched = applyAustralianMosqueCongregationTimes(calculated, record);',
+              """const enriched = applyAustralianMosqueCongregationTimes(calculated, {\n      mosqueName: record.name,\n      prayerTimes: record.enriched.prayerTimes,\n    });""",
+          )
+          prayer_test.write_text(text)
+          PY
+      - name: Format candidate
+        run: >-
+          npx prettier --write
+          src/domain/australianMosquePrayerContext.ts
+          src/domain/australianMosquePrayerContext.test.ts
+          src/platform/selectedDirectoryMosqueContext.ts
+          src/platform/selectedDirectoryMosqueContext.test.ts
+          src/ui/AustralianMosqueDirectoryPanel.tsx
+          src/ui/TodayScreen.tsx
+      - name: Validate source candidate
+        run: |
+          npm run format:check
+          npm run lint
+          npm run typecheck
+          npx vitest run src/domain/australianMosquePrayerContext.test.ts src/domain/australianMosqueDirectoryCombined.test.ts src/platform/selectedDirectoryMosqueContext.test.ts src/domain/sourcedDashboard.test.ts
+          npm run test
+          git diff --check
+      - name: Validate production bundle architecture
+        run: |
+          npm run build
+          npm run bundle:size
+      - name: Capture validated production bytes
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add \
+            src/domain/australianMosquePrayerContext.ts \
+            src/domain/australianMosquePrayerContext.test.ts \
+            src/platform/selectedDirectoryMosqueContext.ts \
+            src/platform/selectedDirectoryMosqueContext.test.ts \
+            src/ui/AustralianMosqueDirectoryPanel.tsx \
+            src/ui/TodayScreen.tsx
+          git commit -m 'fix: keep selected mosque context out of main bundle'
+          echo "VALIDATED_COMMIT=$(git rev-parse HEAD)"
+          git push
