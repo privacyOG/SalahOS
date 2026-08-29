@@ -15,6 +15,55 @@ text = replace_once(
     "const australianCataloguePath = resolve(repositoryRoot, 'src/data/australian-mosques-combined.json');",
     "legacy directory-service source path",
 )
+old_duplicate = r"""function findDuplicate(records, submission) {
+  const name = normalize(submission.name);
+  const address = normalize(submission.address);
+  return (
+    records.find((record) => {
+      const distance = distanceKm(submission, record);
+      return (
+        (normalize(record.name) === name && distance <= 1) ||
+        (normalize(record.address) === address && distance <= 0.25) ||
+        distance <= 0.08
+      );
+    }) ?? null
+  );
+}"""
+new_duplicate = r"""function nameSimilarity(left, right) {
+  const tokens = (value) =>
+    new Set(
+      normalize(value)
+        .split(' ')
+        .filter((token) => token.length > 2),
+    );
+  const leftTokens = tokens(left);
+  const rightTokens = tokens(right);
+  if (leftTokens.size === 0 || rightTokens.size === 0) return 0;
+  let shared = 0;
+  for (const token of leftTokens) {
+    if (rightTokens.has(token)) shared += 1;
+  }
+  return shared / Math.min(leftTokens.size, rightTokens.size);
+}
+
+function findDuplicate(records, submission) {
+  const name = normalize(submission.name);
+  const address = normalize(submission.address);
+  return (
+    records.find((record) => {
+      const distance = distanceKm(submission, record);
+      const exactName = normalize(record.name) === name;
+      const exactAddress = normalize(record.address) === address;
+      const similarNearbyName = nameSimilarity(record.name, submission.name) >= 0.6;
+      return (
+        (exactName && distance <= 1) ||
+        (exactAddress && distance <= 0.25) ||
+        (similarNearbyName && distance <= 0.08)
+      );
+    }) ?? null
+  );
+}"""
+text = replace_once(text, old_duplicate, new_duplicate, "legacy proximity-only duplicate detector")
 start = text.index("async function seedDatabase() {")
 end = text.index("\n\nasync function loadDatabase()", start)
 seed = r"""async function seedDatabase() {
