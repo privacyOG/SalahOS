@@ -71,9 +71,7 @@ for (const [engineName, engine] of engines) {
     await page.goto(`${baseUrl}/?view=today`, { waitUntil: 'networkidle' });
     await page.locator('.today-screen').waitFor({ state: 'visible' });
 
-    const visibleNavigation = page.locator(
-      '.congregation-nav > .congregation-nav-item:visible',
-    );
+    const visibleNavigation = page.locator('.congregation-nav > .congregation-nav-item:visible');
     const visibleNavigationIds = await visibleNavigation.evaluateAll((items) =>
       items.map((item) => item.getAttribute('data-navigation-id')),
     );
@@ -83,9 +81,7 @@ for (const [engineName, engine] of engines) {
     );
 
     await page
-      .locator(
-        '.congregation-nav > .congregation-nav-item[data-navigation-id="knowledge"]:visible',
-      )
+      .locator('.congregation-nav > .congregation-nav-item[data-navigation-id="knowledge"]:visible')
       .click();
     await page.locator('[data-knowledge-screen]').waitFor({ state: 'visible' });
     assert(
