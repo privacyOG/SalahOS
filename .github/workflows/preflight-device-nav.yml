@@ -1,4 +1,4 @@
-name: Device Navigation Preflight
+name: Visual Tail Preflight
 
 on:
   push:
@@ -9,12 +9,13 @@ permissions:
   contents: read
 
 jobs:
-  device-navigation:
+  visual-tail:
     runs-on: ubuntu-24.04
-    timeout-minutes: 12
+    timeout-minutes: 18
     env:
-      PLAYWRIGHT_BROWSERS_PATH: /tmp/salahos-device-nav-pw
-      SALAHOS_VISUAL_PLAYWRIGHT_MODULE: /tmp/salahos-device-nav-harness/node_modules/playwright/index.mjs
+      PLAYWRIGHT_BROWSERS_PATH: /tmp/salahos-visual-tail-pw
+      SALAHOS_VISUAL_PLAYWRIGHT_MODULE: /tmp/salahos-visual-tail-harness/node_modules/playwright/index.mjs
+      SALAHOS_VISUAL_HARNESS_ROOT: /tmp/salahos-visual-tail-harness
       SALAHOS_VISUAL_ARTIFACT_DIR: visual-artifacts
     steps:
       - name: Checkout
@@ -31,25 +32,38 @@ jobs:
 
       - name: Fast static preflight
         run: |
-          npx prettier --check scripts/visual-device-ux-refinement.mjs
+          npx prettier --check \
+            scripts/visual-device-ux-refinement.mjs \
+            scripts/visual-display-device-refinement.mjs \
+            scripts/visual-accessibility-rtl-acceptance.mjs \
+            scripts/visual-ui-v2-retirement.mjs \
+            scripts/visual-golden-regression.mjs \
+            scripts/visual-accessibility-axe.mjs \
+            scripts/cross-browser-smoke.mjs \
+            scripts/visual-theme-matrix.mjs
           npx eslint scripts/visual-device-ux-refinement.mjs
 
       - name: Build production application
         run: npm run build
 
-      - name: Install Chromium harness only
+      - name: Install isolated browser harness
         run: |
-          rm -rf /tmp/salahos-device-nav-harness
-          mkdir -p /tmp/salahos-device-nav-harness
-          cd /tmp/salahos-device-nav-harness
+          rm -rf /tmp/salahos-visual-tail-harness
+          mkdir -p /tmp/salahos-visual-tail-harness
+          cd /tmp/salahos-visual-tail-harness
           npm init -y >/dev/null 2>&1
-          npm install --ignore-scripts --save-exact playwright@1.62.0
-          npx playwright install --with-deps chromium
+          npm install --ignore-scripts --save-exact \
+            playwright@1.62.0 \
+            axe-core@4.10.3 \
+            pngjs@7.0.0 \
+            pixelmatch@7.1.0
+          npx playwright install --with-deps chromium firefox webkit
 
       - name: Start local production server
         run: |
-          python3 -m http.server 4173 --directory dist --bind 127.0.0.1 >/tmp/salahos-device-nav-http.log 2>&1 &
-          echo $! >/tmp/salahos-device-nav-server.pid
+          rm -rf visual-artifacts
+          python3 -m http.server 4173 --directory dist --bind 127.0.0.1 >/tmp/salahos-visual-tail-http.log 2>&1 &
+          echo $! >/tmp/salahos-visual-tail-server.pid
           python3 - <<'PY'
           import time
           import urllib.request
@@ -63,12 +77,66 @@ jobs:
           raise SystemExit('Local production server did not become ready')
           PY
 
-      - name: Run device navigation fixture
+      - id: device
+        name: Run device UX refinement
+        continue-on-error: true
         run: node scripts/visual-device-ux-refinement.mjs
+
+      - id: display
+        name: Run display device refinement
+        continue-on-error: true
+        run: node scripts/visual-display-device-refinement.mjs
+
+      - id: accessibility
+        name: Run accessibility and RTL acceptance
+        continue-on-error: true
+        run: node scripts/visual-accessibility-rtl-acceptance.mjs
+
+      - id: retirement
+        name: Run UI v2 retirement acceptance
+        continue-on-error: true
+        run: node scripts/visual-ui-v2-retirement.mjs
+
+      - id: golden
+        name: Run golden regression
+        continue-on-error: true
+        run: node scripts/visual-golden-regression.mjs
+
+      - id: axe
+        name: Run axe accessibility acceptance
+        continue-on-error: true
+        run: node scripts/visual-accessibility-axe.mjs
+
+      - id: cross_browser
+        name: Run cross-browser smoke
+        continue-on-error: true
+        run: node scripts/cross-browser-smoke.mjs
+
+      - id: theme
+        name: Run theme matrix
+        continue-on-error: true
+        run: node scripts/visual-theme-matrix.mjs
+
+      - name: Enforce visual-tail result
+        if: always()
+        run: |
+          failures=""
+          [ "${{ steps.device.outcome }}" = "success" ] || failures="$failures device"
+          [ "${{ steps.display.outcome }}" = "success" ] || failures="$failures display"
+          [ "${{ steps.accessibility.outcome }}" = "success" ] || failures="$failures accessibility"
+          [ "${{ steps.retirement.outcome }}" = "success" ] || failures="$failures retirement"
+          [ "${{ steps.golden.outcome }}" = "success" ] || failures="$failures golden"
+          [ "${{ steps.axe.outcome }}" = "success" ] || failures="$failures axe"
+          [ "${{ steps.cross_browser.outcome }}" = "success" ] || failures="$failures cross-browser"
+          [ "${{ steps.theme.outcome }}" = "success" ] || failures="$failures theme"
+          if [ -n "$failures" ]; then
+            echo "Visual-tail failures:$failures"
+            exit 1
+          fi
 
       - name: Stop local production server
         if: always()
         run: |
-          if [ -f /tmp/salahos-device-nav-server.pid ]; then
-            kill "$(cat /tmp/salahos-device-nav-server.pid)" 2>/dev/null || true
+          if [ -f /tmp/salahos-visual-tail-server.pid ]; then
+            kill "$(cat /tmp/salahos-visual-tail-server.pid)" 2>/dev/null || true
           fi
