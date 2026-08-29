@@ -5,10 +5,11 @@ on:
     branches: [agent/pr219-prettier-fix]
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   format:
+    if: github.event.head_commit.message != 'chore: capture prettier output'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -20,15 +21,15 @@ jobs:
       - run: npm ci --ignore-scripts
       - name: Format target files
         run: npx prettier --write src/ui/AustralianMosqueDirectoryPanel.tsx src/ui/TodayScreen.tsx
-      - name: Emit exact formatted files
+      - name: Commit exact formatted files
         shell: bash
         run: |
-          echo 'PANEL_BEGIN'
-          base64 -w0 src/ui/AustralianMosqueDirectoryPanel.tsx
-          echo
-          echo 'PANEL_END'
-          echo 'TODAY_BEGIN'
-          base64 -w0 src/ui/TodayScreen.tsx
-          echo
-          echo 'TODAY_END'
-          npx prettier --check src/ui/AustralianMosqueDirectoryPanel.tsx src/ui/TodayScreen.tsx
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/ui/AustralianMosqueDirectoryPanel.tsx src/ui/TodayScreen.tsx
+          if git diff --cached --quiet; then
+            echo 'No formatting changes to commit.'
+            exit 0
+          fi
+          git commit -m 'chore: capture prettier output'
+          git push
