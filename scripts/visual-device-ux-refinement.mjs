@@ -151,15 +151,47 @@ function assertPhoneMetrics(name, metrics) {
   if (metrics.contentScrollHeight <= metrics.contentClientHeight) {
     throw new Error(`${name} expected the Today surface to exercise the mobile scroll container`);
   }
-  if (metrics.navigationTargets.length !== 6) {
-    throw new Error(`${name} expected six route-capable primary navigation targets in the DOM`);
-  }
-  const visibleNavigationTargets = metrics.navigationTargets.filter((target) => target.visible);
-  if (visibleNavigationTargets.length !== 5) {
+
+  const expectedNavigationIds = [
+    'today',
+    'calendar',
+    'mosques',
+    'qiblah',
+    'knowledge',
+    'community',
+    'settings',
+  ];
+  const navigationIds = metrics.navigationTargets.map((target) => target.navigationId);
+  if (
+    navigationIds.length !== expectedNavigationIds.length ||
+    expectedNavigationIds.some((navigationId) => !navigationIds.includes(navigationId))
+  ) {
     throw new Error(
-      `${name} expected five visible mobile navigation targets: ${JSON.stringify(metrics.navigationTargets)}`,
+      `${name} primary navigation route contract changed unexpectedly: ${JSON.stringify(navigationIds)}`,
     );
   }
+
+  const visibleNavigationTargets = metrics.navigationTargets.filter((target) => target.visible);
+  const expectedVisibleNavigationIds = [
+    'today',
+    'calendar',
+    'mosques',
+    'qiblah',
+    'knowledge',
+    'settings',
+  ];
+  const visibleNavigationIds = visibleNavigationTargets.map((target) => target.navigationId);
+  if (
+    visibleNavigationIds.length !== expectedVisibleNavigationIds.length ||
+    expectedVisibleNavigationIds.some(
+      (navigationId) => !visibleNavigationIds.includes(navigationId),
+    )
+  ) {
+    throw new Error(
+      `${name} expected the six primary mobile navigation targets including Calendar and Knowledge: ${JSON.stringify(metrics.navigationTargets)}`,
+    );
+  }
+
   const communityTarget = metrics.navigationTargets.find(
     (target) => target.navigationId === 'community',
   );
