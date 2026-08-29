@@ -8,6 +8,10 @@ on:
 permissions:
   contents: write
 
+concurrency:
+  group: temporary-mosque-finder-refresh
+  cancel-in-progress: true
+
 jobs:
   refresh:
     if: github.actor != 'github-actions[bot]'
@@ -33,14 +37,12 @@ jobs:
           s = p.read_text()
           old = ".filter((url) => /^https:\\/\\/(?:www\\.)?mosque-finder\\.com\\.au\\/mosque\\/[^/]+\\/index\\.html$/iu.test(url))"
           new = ".filter((url) => /^https:\\/\\/(?:www\\.)?mosque-finder\\.com\\.au\\/mosque\\/[^/?#]+\\/?$/iu.test(url))"
-          if old not in s:
-              raise SystemExit('Expected sitemap filter not found')
-          s = s.replace(old, new)
+          if old in s:
+              s = s.replace(old, new)
           old_slug = ".pathname.split('/').filter(Boolean).at(-2) ?? '';"
           new_slug = ".pathname.split('/').filter(Boolean).at(-1) ?? '';"
-          if old_slug not in s:
-              raise SystemExit('Expected slug extraction not found')
-          s = s.replace(old_slug, new_slug)
+          if old_slug in s:
+              s = s.replace(old_slug, new_slug)
           p.write_text(s)
           PY
 
@@ -50,20 +52,28 @@ jobs:
       - name: Retrieve Australia-wide mosque directory
         run: node scripts/generate-australian-mosque-finder.mjs --fetch
 
-      - name: Validate generated snapshot
+      - name: Validate source snapshot
         run: node scripts/generate-australian-mosque-finder.mjs
 
-      - name: Commit importer and factual snapshot
+      - name: Merge OSM and Mosque Finder sources
+        run: node scripts/generate-australian-mosque-combined.mjs
+
+      - name: Validate merged directory
+        run: node scripts/generate-australian-mosque-combined.mjs --check
+
+      - name: Commit importer and directory snapshots
         shell: bash
         run: |
           set -euo pipefail
           git diff --check
           git config user.name privacyOG
           git config user.email kriptiik@proton.me
-          git add scripts/generate-australian-mosque-finder.mjs src/data/australian-mosque-finder.json
+          git add scripts/generate-australian-mosque-finder.mjs \
+            src/data/australian-mosque-finder.json \
+            src/data/australian-mosques-combined.json
           if git diff --cached --quiet; then
             echo 'Snapshot unchanged.'
             exit 0
           fi
-          git commit -m 'data: import Australian Mosque Finder directory'
+          git commit -m 'data: import Australia-wide mosque directory'
           git push origin HEAD:data/australia-mosque-finder
