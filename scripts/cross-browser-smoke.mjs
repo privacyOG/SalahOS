@@ -62,9 +62,45 @@ for (const [engineName, engine] of engines) {
 
     await page.goto(`${baseUrl}/?view=today`, { waitUntil: 'networkidle' });
     await page.locator('.today-screen').waitFor({ state: 'visible' });
+
+    const navigation = await page.locator('.congregation-nav-item').evaluateAll((items) =>
+      items.map((item) => {
+        const style = getComputedStyle(item);
+        const rect = item.getBoundingClientRect();
+        return {
+          id: item.getAttribute('data-navigation-id') ?? '',
+          visible: style.display !== 'none' && rect.width > 0 && rect.height > 0,
+        };
+      }),
+    );
+    const expectedRouteIds = [
+      'today',
+      'calendar',
+      'mosques',
+      'qiblah',
+      'knowledge',
+      'community',
+      'settings',
+    ];
+    const expectedVisibleIds = [
+      'today',
+      'calendar',
+      'mosques',
+      'qiblah',
+      'knowledge',
+      'settings',
+    ];
+    const routeIds = navigation.map(({ id }) => id);
+    const visibleIds = navigation.filter(({ visible }) => visible).map(({ id }) => id);
     assert(
-      (await page.locator('.congregation-nav-item').count()) === 6,
-      `${engineName}: nav mismatch`,
+      routeIds.length === expectedRouteIds.length &&
+        expectedRouteIds.every((id) => routeIds.includes(id)),
+      `${engineName}: route-capable nav mismatch: ${JSON.stringify(routeIds)}`,
+    );
+    assert(
+      visibleIds.length === expectedVisibleIds.length &&
+        expectedVisibleIds.every((id) => visibleIds.includes(id)),
+      `${engineName}: visible nav mismatch: ${JSON.stringify(visibleIds)}`,
     );
 
     await page.getByRole('button', { name: 'Knowledge', exact: true }).click();
