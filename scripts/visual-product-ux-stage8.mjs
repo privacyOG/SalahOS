@@ -52,15 +52,22 @@ try {
   await page.locator('.today-next').waitFor({ state: 'visible' });
 
   const visibleNavItems = page.locator('.congregation-nav > .congregation-nav-item:visible');
-  if ((await visibleNavItems.count()) !== 5) {
-    throw new Error(
-      `Expected 5 visible mobile navigation items, got ${String(await visibleNavItems.count())}`,
-    );
-  }
   const primaryNavLabels = await visibleNavItems
     .locator('.congregation-nav-label')
     .allTextContents();
-  const expectedPrimaryNavLabels = ['Today', 'Mosques', 'Qiblah', 'Knowledge', 'Settings'];
+  const expectedPrimaryNavLabels = [
+    'Today',
+    'Calendar',
+    'Mosques',
+    'Qiblah',
+    'Knowledge',
+    'Settings',
+  ];
+  if (primaryNavLabels.length !== expectedPrimaryNavLabels.length) {
+    throw new Error(
+      `Expected ${String(expectedPrimaryNavLabels.length)} visible mobile navigation items, got ${String(primaryNavLabels.length)}`,
+    );
+  }
   if (JSON.stringify(primaryNavLabels) !== JSON.stringify(expectedPrimaryNavLabels)) {
     throw new Error(`Unexpected mobile primary navigation: ${primaryNavLabels.join(', ')}`);
   }
@@ -90,7 +97,7 @@ try {
   await secondary.locator('summary').click();
   await page.locator('.today-quick-actions').waitFor({ state: 'visible' });
   await page
-    .locator('.congregation-nav > .congregation-nav-item[data-navigation-id=\"settings\"]')
+    .locator('.congregation-nav > .congregation-nav-item[data-navigation-id="settings"]')
     .click();
   await page.locator('.settings-category-grid').waitFor({ state: 'visible' });
   const categories = page.locator('.settings-category-card');
@@ -120,7 +127,11 @@ try {
     path: path.join(artifactDirectory, 'stage57-product-ux-phone.png'),
     fullPage: true,
   });
-  results.mobile = { visibleNavigationItems: 5, settingsCategories: categoryLabels };
+  results.mobile = {
+    visibleNavigationItems: expectedPrimaryNavLabels.length,
+    primaryNavigation: primaryNavLabels,
+    settingsCategories: categoryLabels,
+  };
   await context.close();
 
   const arabicContext = await browser.newContext({ viewport: { width: 390, height: 844 } });
@@ -139,8 +150,7 @@ try {
 
   await writeFile(
     path.join(artifactDirectory, 'stage57-product-ux-results.json'),
-    `${JSON.stringify(results, null, 2)}
-`,
+    `${JSON.stringify(results, null, 2)}\n`,
   );
   console.log('Stage 57 product UX acceptance passed.');
 } finally {
