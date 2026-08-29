@@ -1,0 +1,188 @@
+name: Temporary validate combined mosque runtime v2
+on:
+  push:
+    branches: [validation/australia-mosque-runtime-v2]
+permissions:
+  contents: write
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - name: Checkout validation branch
+        uses: actions/checkout@v4
+        with:
+          ref: validation/australia-mosque-runtime-v2
+          fetch-depth: 1
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Apply runtime and CI migration
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          server = Path('directory-service/server.mjs')
+          text = server.read_text()
+          old_path = "const australianCataloguePath = resolve(repositoryRoot, 'src/data/australian-mosques.json');"
+          new_path = "const australianCataloguePath = resolve(repositoryRoot, 'src/data/australian-mosques-combined.json');"
+          if old_path not in text:
+              raise SystemExit('Legacy directory-service source path was not found')
+          text = text.replace(old_path, new_path, 1)
+          start = text.index('async function seedDatabase() {')
+          end = text.index('\n\nasync function loadDatabase()', start)
+          seed = '''async function seedDatabase() {
+            const catalogue = JSON.parse(await readFile(australianCataloguePath, 'utf8'));
+            if (
+              catalogue.schemaVersion !== 2 ||
+              !Array.isArray(catalogue.records) ||
+              catalogue.source?.recordCount !== catalogue.records.length
+            ) {
+              throw new Error('Combined Australian mosque catalogue is invalid');
+            }
+            const updatedAt = catalogue.source.generatedAt ?? new Date().toISOString();
+            const records = catalogue.records.map((record) => {
+              if (
+                typeof record.name !== 'string' ||
+                typeof record.address?.formatted !== 'string' ||
+                !coordinatesValid(record.latitude, record.longitude)
+              ) {
+                throw new Error(`Combined Australian mosque record is invalid: ${String(record.id)}`);
+              }
+              return {
+                id: record.id,
+                name: record.name,
+                nameAr:
+                  record.aliases?.find(
+                    (alias) => typeof alias === 'string' && /[\\u0600-\\u06FF]/u.test(alias),
+                  ) ?? null,
+                address: record.address.formatted,
+                countryCode: 'AU',
+                latitude: record.latitude,
+                longitude: record.longitude,
+                timeZone: stateTimeZones[record.address.region] ?? 'Australia/Sydney',
+                website: record.contact?.website ?? null,
+                phone: record.contact?.phone ?? null,
+                source: record.sourceType ?? 'combined-directory',
+                verification: { state: 'unverified', verifiedAt: null, claimedAt: null },
+                revision: 1,
+                updatedAt,
+              };
+            });
+            return { schemaVersion: 1, records, contributions: [] };
+          }'''
+          server.write_text(text[:start] + seed + text[end:])
+
+          acceptance = Path('directory-service/server.acceptance.mjs')
+          text = acceptance.read_text()
+          moderator = "const moderatorToken = 'stage48-test-moderator';\n"
+          catalogue_check = """const combinedCatalogue = JSON.parse(\n  await readFile(join(process.cwd(), 'src/data/australian-mosques-combined.json'), 'utf8'),\n);\nassert.equal(combinedCatalogue.schemaVersion, 2);\nassert.ok(Array.isArray(combinedCatalogue.records));\nassert.equal(combinedCatalogue.source?.recordCount, combinedCatalogue.records.length);\nconst expectedSeedCount = combinedCatalogue.records.length;\n"""
+          if moderator not in text:
+              raise SystemExit('Acceptance moderator anchor was not found')
+          text = text.replace(moderator, moderator + catalogue_check, 1)
+          old_initial = """  assert.ok(initialSearch.body.some((record) => record.name === 'Adelaide Mosque'));
+
+  const seededRecord = initialSearch.body[0];"""
+          new_initial = """  const seededRecord = initialSearch.body.find(
+    (record) => record.id === 'osm-node-1614034144',
+  );
+  assert.ok(seededRecord, 'Expected audited Adelaide Mosque seed record');
+
+  const seededDatabase = JSON.parse(await readFile(databasePath, 'utf8'));
+  assert.equal(seededDatabase.records.length, expectedSeedCount);
+  assert.equal(seededDatabase.contributions.length, 0);"""
+          if old_initial not in text:
+              raise SystemExit('Acceptance Adelaide seed assertion was not found')
+          text = text.replace(old_initial, new_initial, 1)
+          old_final = '  assert.ok(database.records.length >= 107);'
+          if old_final not in text:
+              raise SystemExit('Acceptance final seed-count assertion was not found')
+          acceptance.write_text(text.replace(old_final, '  assert.equal(database.records.length, expectedSeedCount + 1);', 1))
+
+          package = Path('package.json')
+          text = package.read_text()
+          old_scripts = '    "mosques:australia:check": "node scripts/generate-australian-mosque-directory.mjs --check",\n'
+          if old_scripts not in text:
+              raise SystemExit('Package Australian mosque check anchor was not found')
+          text = text.replace(
+              old_scripts,
+              old_scripts + '    "mosques:australia:finder:check": "node scripts/generate-australian-mosque-finder.mjs",\n    "mosques:australia:combined:check": "node scripts/generate-australian-mosque-combined.mjs --check",\n',
+              1,
+          )
+          old_check = 'npm run knowledge:content:check && npm run mosques:australia:check && npm run mosques:packs:check'
+          new_check = 'npm run knowledge:content:check && npm run mosques:australia:check && npm run mosques:australia:finder:check && npm run mosques:australia:combined:check && npm run mosques:packs:check'
+          if old_check not in text:
+              raise SystemExit('Package aggregate check anchor was not found')
+          package.write_text(text.replace(old_check, new_check, 1))
+
+          ci = Path('.github/workflows/ci.yml')
+          text = ci.read_text()
+          old_ci = '      - name: Australian mosque directory reproducibility\n        run: npm run mosques:australia:check\n'
+          new_ci = '      - name: Australian mosque directory reproducibility\n        run: npm run mosques:australia:check && npm run mosques:australia:finder:check && npm run mosques:australia:combined:check\n'
+          if old_ci not in text:
+              raise SystemExit('CI Australian mosque reproducibility anchor was not found')
+          ci.write_text(text.replace(old_ci, new_ci, 1))
+          PY
+          npx prettier --write scripts/generate-mosque-directory-packs.mjs directory-service/server.mjs directory-service/server.acceptance.mjs package.json .github/workflows/ci.yml
+      - name: Generate combined runtime packs
+        run: npm run mosques:packs:generate
+      - name: Validate combined runtime contract
+        shell: bash
+        run: |
+          node --input-type=module <<'NODE'
+          import assert from 'node:assert/strict';
+          import { readFile } from 'node:fs/promises';
+          const readJson = async (path) => JSON.parse(await readFile(path, 'utf8'));
+          const combined = await readJson('src/data/australian-mosques-combined.json');
+          const manifest = await readJson('public/mosque-packs/manifest.json');
+          const country = await readJson('public/mosque-packs/au/au.json');
+          assert.equal(combined.source.recordCount, combined.records.length);
+          assert.equal(manifest.recordCount, combined.records.length);
+          assert.equal(manifest.countries[0].recordCount, combined.records.length);
+          assert.equal(country.recordCount, combined.records.length);
+          assert.equal(country.records.length, combined.records.length);
+          assert.equal(manifest.countries[0].regions.length, 8);
+          assert.equal(
+            manifest.countries[0].regions.reduce((sum, region) => sum + region.recordCount, 0),
+            combined.records.length,
+          );
+          const combinedById = new Map(combined.records.map((record) => [record.id, record]));
+          for (const packed of country.records) {
+            const source = combinedById.get(packed.id);
+            assert.ok(source);
+            assert.deepEqual(packed.sourceRecordIds, source.sourceRecordIds);
+            assert.deepEqual(packed.provenance, source.provenance);
+            assert.deepEqual(packed.coordinates, { latitude: source.latitude, longitude: source.longitude });
+          }
+          const merged = country.records.filter((record) => record.sourceType === 'merged');
+          assert.equal(merged.length, combined.source.mergedPairCount);
+          for (const record of merged) {
+            const kinds = new Set(record.provenance.map((entry) => entry.sourceKind));
+            assert.ok(kinds.has('openstreetmap'));
+            assert.ok(kinds.has('organization-directory'));
+          }
+          console.log(`Validated combined runtime contract: ${country.records.length} records, ${merged.length} cross-source merges.`);
+          NODE
+      - name: Run full repository checks
+        run: npm run check
+      - name: Verify generated outputs
+        shell: bash
+        run: |
+          npm run mosques:packs:check
+          git diff --check
+      - name: Commit validated migration
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name privacyOG
+          git config user.email 102720550+privacyOG@users.noreply.github.com
+          git rm .github/workflows/temporary-validate-combined-mosque-runtime-v2.yml
+          git add scripts/generate-mosque-directory-packs.mjs directory-service/server.mjs directory-service/server.acceptance.mjs package.json .github/workflows/ci.yml public/mosque-packs
+          git commit -m 'feat: wire combined Australian mosque directory runtime'
+          echo "VALIDATED_COMMIT=$(git rev-parse HEAD)"
+          git push origin HEAD:validation/australia-mosque-runtime-v2
