@@ -1,0 +1,1255 @@
+{
+  "schemaVersion": 1,
+  "packId": "au-sa",
+  "label": "South Australia",
+  "countryCode": "AU",
+  "regionCode": "AU-SA",
+  "recordCount": 25,
+  "generatedFrom": "2026-08-29T12:02:14.303Z",
+  "source": {
+    "name": "SalahOS Australian mosque directory",
+    "licence": "ODbL-1.0",
+    "attributionUrl": "https://www.openstreetmap.org/copyright",
+    "licenceUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "upstreamSources": [
+      {
+        "name": "OpenStreetMap contributors",
+        "sourceKind": "openstreetmap",
+        "licence": "ODbL-1.0",
+        "attributionUrl": "https://www.openstreetmap.org/copyright",
+        "licenceUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+        "observedAt": "2026-08-24T10:38:06Z"
+      },
+      {
+        "name": "Australian Mosque Finder",
+        "sourceKind": "organization-directory",
+        "attributionUrl": "https://mosque-finder.com.au",
+        "observedAt": "2026-08-29T12:02:14.303Z",
+        "factsOnly": true
+      }
+    ],
+    "accounting": {
+      "osmRecordCount": 106,
+      "mosqueFinderRawRecordCount": 176,
+      "finderInternalMergedPairCount": 4,
+      "coordinateExcludedCount": 2,
+      "mosqueFinderRecordCount": 170,
+      "mergedPairCount": 22,
+      "forcedMatchCount": 6,
+      "automaticMatchCount": 16,
+      "osmOnlyCount": 84,
+      "finderOnlyCount": 148
+    }
+  },
+  "records": [
+    {
+      "id": "mosque-finder:adelaide-islamic-information-centre-of-sa",
+      "sourceRecordIds": ["mosque-finder:adelaide-islamic-information-centre-of-sa"],
+      "name": "Adelaide - Islamic Information Centre of SA",
+      "aliases": [],
+      "address": {
+        "formatted": "19A Logan Street, Adelaide, SA, 5000",
+        "locality": "Adelaide",
+        "region": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5000",
+        "countryCode": "AU"
+      },
+      "contact": { "phone": "(08) 7226 6815", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": ["youth"],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:adelaide-islamic-information-centre-of-sa",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/adelaide-islamic-information-centre-of-sa/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "phone", "services"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "musalla",
+      "featureLabels": ["Car park"],
+      "quality": {
+        "score": 54,
+        "completenessPercent": 42,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -34.93389, "longitude": 138.59213 }
+    },
+    {
+      "id": "osm-node-1614034144",
+      "sourceRecordIds": [
+        "osm-node-1614034144",
+        "mosque-finder:adelaide-little-gilbert-street-mosque"
+      ],
+      "name": "Adelaide - Little Gilbert Street Mosque",
+      "aliases": ["Adelaide Mosque", "Adelaide - Little Gilbert Street Mosque"],
+      "address": {
+        "formatted": "20 Little Gilbert Street, Adelaide, SA, 5000",
+        "region": "SA",
+        "regionCode": "AU-SA",
+        "countryCode": "AU",
+        "locality": "Adelaide",
+        "postcode": "5000"
+      },
+      "contact": { "phone": "+61 8 8231 6443", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": ["women-prayer-space"],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:node:1614034144",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/node/1614034144",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        },
+        {
+          "sourceId": "mosque-finder:adelaide-little-gilbert-street-mosque",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/adelaide-little-gilbert-street-mosque/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "phone", "facilities"]
+        }
+      ],
+      "conflictCount": 1,
+      "sourceType": "merged",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 50,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 1
+      },
+      "locationType": "mosque",
+      "coordinates": { "latitude": -34.934145, "longitude": 138.5917962 }
+    },
+    {
+      "id": "mosque-finder:adelaide-university-of-adelaide-north-terrace-musalla",
+      "sourceRecordIds": ["mosque-finder:adelaide-university-of-adelaide-north-terrace-musalla"],
+      "name": "Adelaide - University of Adelaide (North Terrace) Musalla",
+      "aliases": [],
+      "address": {
+        "formatted": "Level 6, Union Building, Corner of Victoria Drive and Kintore Avenue, Adelaide, SA, 5000",
+        "locality": "Adelaide",
+        "region": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5000",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:adelaide-university-of-adelaide-north-terrace-musalla",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/adelaide-university-of-adelaide-north-terrace-musalla/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "musalla",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -34.91725, "longitude": 138.60159 }
+    },
+    {
+      "id": "mosque-finder:adelaide-university-of-south-australia-west-musalla",
+      "sourceRecordIds": ["mosque-finder:adelaide-university-of-south-australia-west-musalla"],
+      "name": "Adelaide - University of South Australia (West) Musalla",
+      "aliases": [],
+      "address": {
+        "formatted": "Sir George Kingston Building, Level 2, George Street, Adelaide, SA, 5000",
+        "locality": "Adelaide",
+        "region": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5000",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:adelaide-university-of-south-australia-west-musalla",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/adelaide-university-of-south-australia-west-musalla/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "musalla",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -34.92274, "longitude": 138.59083 }
+    },
+    {
+      "id": "mosque-finder:adelaide-university-of-south-australia-east-musalla",
+      "sourceRecordIds": ["mosque-finder:adelaide-university-of-south-australia-east-musalla"],
+      "name": "Adelaide – University of South Australia (East) Musalla",
+      "aliases": [],
+      "address": {
+        "formatted": "Frome Road & North Terrace, Adelaide, SA, 5000",
+        "locality": "Adelaide",
+        "region": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5000",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:adelaide-university-of-south-australia-east-musalla",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/adelaide-university-of-south-australia-east-musalla/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "musalla",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -34.92118, "longitude": 138.60774 }
+    },
+    {
+      "id": "mosque-finder:adelaide-airport-domestic-international-prayer-room",
+      "sourceRecordIds": ["mosque-finder:adelaide-airport-domestic-international-prayer-room"],
+      "name": "Adelaide Airport - Domestic International Prayer room",
+      "aliases": [],
+      "address": {
+        "formatted": "Sir Richard Williams Avenue, Adelaide Airport, SA, 5950",
+        "locality": "Adelaide Airport",
+        "region": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5950",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:adelaide-airport-domestic-international-prayer-room",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/adelaide-airport-domestic-international-prayer-room/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "prayer-room",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -34.9377, "longitude": 138.53676 }
+    },
+    {
+      "id": "mosque-finder:coober-pedy-musalla",
+      "sourceRecordIds": ["mosque-finder:coober-pedy-musalla"],
+      "name": "Coober Pedy Musalla",
+      "aliases": [],
+      "address": {
+        "formatted": "Lot 1070 Traeger St, Coober Pedy, SA, 5723",
+        "locality": "Coober Pedy",
+        "region": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5723",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [{ "time": "1:30 pm", "label": "Jumu’ah" }],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:coober-pedy-musalla",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/coober-pedy-musalla/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "jumuah-times"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "musalla",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -29.00958, "longitude": 134.7602 }
+    },
+    {
+      "id": "mosque-finder:elizabeth-grove-hogarth-road-elizabeth-mosque",
+      "sourceRecordIds": ["mosque-finder:elizabeth-grove-hogarth-road-elizabeth-mosque"],
+      "name": "Elizabeth Grove - Hogarth Road Elizabeth Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "139-141 Hogarth Road, Elizabeth Grove, SA, 5112",
+        "locality": "Elizabeth Grove",
+        "region": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5112",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:elizabeth-grove-hogarth-road-elizabeth-mosque",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/elizabeth-grove-hogarth-road-elizabeth-mosque/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "mosque",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -34.73954, "longitude": 138.66297 }
+    },
+    {
+      "id": "mosque-finder:gepps-cross-adelaide-turkish-islamic-and-cultural-centre",
+      "sourceRecordIds": ["mosque-finder:gepps-cross-adelaide-turkish-islamic-and-cultural-centre"],
+      "name": "Gepps Cross - Adelaide Turkish Islamic and Cultural Centre",
+      "aliases": [],
+      "address": {
+        "formatted": "714 Main North Rd, Gepps Cross, SA, 5094",
+        "locality": "Gepps Cross",
+        "region": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5094",
+        "countryCode": "AU"
+      },
+      "contact": { "phone": "(08) 8281 4639", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [{ "time": "1:30 pm", "label": "Jumu’ah" }],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:gepps-cross-adelaide-turkish-islamic-and-cultural-centre",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/gepps-cross-adelaide-turkish-islamic-and-cultural-centre/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "phone", "jumuah-times"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "musalla",
+      "quality": {
+        "score": 54,
+        "completenessPercent": 42,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -34.83982, "longitude": 138.60614 }
+    },
+    {
+      "id": "osm-node-13919243601",
+      "sourceRecordIds": [
+        "osm-node-13919243601",
+        "mosque-finder:gilles-plains-abu-bakr-assiddiq-masjid"
+      ],
+      "name": "Gilles Plains - Abu bakr Assiddiq Masjid",
+      "aliases": ["Wandana Mosque", "Gilles Plains - Abu bakr Assiddiq Masjid"],
+      "address": {
+        "formatted": "52-56 Wandana Avenue, Gilles Plains, SA, 5086",
+        "region": "SA",
+        "regionCode": "AU-SA",
+        "countryCode": "AU",
+        "locality": "Gilles Plains",
+        "postcode": "5086"
+      },
+      "contact": {
+        "phone": "(08) 8369 0781",
+        "email": "info@islamicsocietysa.org.au",
+        "website": "http://www.islamicsocietysa.org.au/about-25",
+        "social": []
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:node:13919243601",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/node/13919243601",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates", "phone", "email", "website"]
+        },
+        {
+          "sourceId": "mosque-finder:gilles-plains-abu-bakr-assiddiq-masjid",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/gilles-plains-abu-bakr-assiddiq-masjid/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "phone", "website"]
+        }
+      ],
+      "conflictCount": 3,
+      "sourceType": "merged",
+      "quality": {
+        "score": 37,
+        "completenessPercent": 58,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 3
+      },
+      "locationType": "mosque",
+      "coordinates": { "latitude": -34.8483584, "longitude": 138.6616618 }
+    },
+    {
+      "id": "mosque-finder:magill-university-of-south-australia-musalla",
+      "sourceRecordIds": ["mosque-finder:magill-university-of-south-australia-musalla"],
+      "name": "Magill - University of South Australia Musalla",
+      "aliases": [],
+      "address": {
+        "formatted": "Rooms 107 & 108, Block E, 27 Lorne Avenue, Magill, SA, 5072",
+        "locality": "Magill",
+        "region": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5072",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:magill-university-of-south-australia-musalla",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/magill-university-of-south-australia-musalla/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "musalla",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -34.90981, "longitude": 138.67204 }
+    },
+    {
+      "id": "osm-way-875065604",
+      "sourceRecordIds": ["osm-way-875065604"],
+      "name": "Mahmood Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "6-8 Toogood Avenue, Beverley, SA, 5009, Australia",
+        "region": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5009",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:875065604",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/875065604",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -34.8979415, "longitude": 138.5446914 }
+    },
+    {
+      "id": "osm-node-10806717920",
+      "sourceRecordIds": ["osm-node-10806717920"],
+      "name": "Maryam Masjid",
+      "aliases": [],
+      "address": {
+        "formatted": "South Australia, Australia",
+        "region": "South Australia",
+        "regionCode": "AU-SA",
+        "countryCode": "AU"
+      },
+      "contact": { "website": "https://maryammasjid.org.au/", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:node:10806717920",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/node/10806717920",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates", "website"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -34.9449895, "longitude": 138.5961579 }
+    },
+    {
+      "id": "mosque-finder:new-mosque-page-2",
+      "sourceRecordIds": ["mosque-finder:new-mosque-page-2"],
+      "name": "Mawson Lakes - University of South Australia Musalla",
+      "aliases": [],
+      "address": {
+        "formatted": "Level 2, Building A, Cnr of Mawson Lakes Boulevard & Main St, Mawson Lakes, SA, 5095",
+        "locality": "Mawson Lakes",
+        "region": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5095",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:new-mosque-page-2",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/new-mosque-page-2/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "musalla",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -34.81113, "longitude": 138.61694 }
+    },
+    {
+      "id": "mosque-finder:mount-gambier-prayer-room",
+      "sourceRecordIds": ["mosque-finder:mount-gambier-prayer-room"],
+      "name": "Mount Gambier - Prayer Room",
+      "aliases": [],
+      "address": {
+        "formatted": "Penola Road, Mount Gambier, SA, 5290",
+        "locality": "Mount Gambier",
+        "region": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5290",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:mount-gambier-prayer-room",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/mount-gambier-prayer-room/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "prayer-room",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.81594, "longitude": 140.78706 }
+    },
+    {
+      "id": "mosque-finder:murray-bridge-old-swanport-road-mosque",
+      "sourceRecordIds": ["mosque-finder:murray-bridge-old-swanport-road-mosque"],
+      "name": "Murray Bridge - Old Swanport Road Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "Lot 53, Old Swanport Road, Murray Bridge, SA, 5253",
+        "locality": "Murray Bridge",
+        "region": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5253",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:murray-bridge-old-swanport-road-mosque",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/murray-bridge-old-swanport-road-mosque/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "musalla",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -35.14405, "longitude": 139.25431 }
+    },
+    {
+      "id": "mosque-finder:murry-bridge-masjid",
+      "sourceRecordIds": ["mosque-finder:murry-bridge-masjid"],
+      "name": "Murry Bridge Masjid",
+      "aliases": [],
+      "address": {
+        "formatted": "83 Old Swanport Rd, Murray Bridge, SA, 5253",
+        "locality": "Murray Bridge",
+        "region": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5253",
+        "countryCode": "AU"
+      },
+      "contact": { "website": "http://www.islamicsocietysa.org.au/about-25", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:murry-bridge-masjid",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/murry-bridge-masjid/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "website"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "mosque",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -35.14736, "longitude": 139.26908 }
+    },
+    {
+      "id": "osm-way-552108333",
+      "sourceRecordIds": ["osm-way-552108333"],
+      "name": "Noor Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "28-30 Hillier Road, Morphett Vale, SA, 5162, Australia",
+        "region": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5162",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:552108333",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/552108333",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -35.1077866, "longitude": 138.5226791 }
+    },
+    {
+      "id": "mosque-finder:north-adelaide-women-and-childrens-hospital-prayer-room",
+      "sourceRecordIds": ["mosque-finder:north-adelaide-women-and-childrens-hospital-prayer-room"],
+      "name": "North Adelaide - Women & Childrens Hospital (Prayer room)",
+      "aliases": [],
+      "address": {
+        "formatted": "Room 503, 5th Floor, Samuel Way Building - 72 King William Rd, North Adelaide, SA, 5006",
+        "locality": "North Adelaide",
+        "region": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5006",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:north-adelaide-women-and-childrens-hospital-prayer-room",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/north-adelaide-women-and-childrens-hospital-prayer-room/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "prayer-room",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -34.91134, "longitude": 138.59913 }
+    },
+    {
+      "id": "mosque-finder:parafield-gardens-masjid",
+      "sourceRecordIds": ["mosque-finder:parafield-gardens-masjid"],
+      "name": "Parafield Gardens Masjid",
+      "aliases": [],
+      "address": {
+        "formatted": "92 Shepherdson Rd, Parafield Gardens, SA, 5107",
+        "locality": "Parafield Gardens",
+        "region": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5107",
+        "countryCode": "AU"
+      },
+      "contact": { "phone": "08 8182 5151", "website": "http://www.iicsa.com.au/", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": ["youth"],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:parafield-gardens-masjid",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/parafield-gardens-masjid/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "phone", "website", "services"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "mosque",
+      "quality": {
+        "score": 58,
+        "completenessPercent": 50,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -34.78301, "longitude": 138.6088 }
+    },
+    {
+      "id": "mosque-finder:parkholme-masjid-omar-bin-al-khattab",
+      "sourceRecordIds": [
+        "mosque-finder:parkholme-masjid-omar-bin-al-khattab",
+        "mosque-finder:park-holme-masjid"
+      ],
+      "name": "Parkholme - Masjid Omar Bin Al-Khattab",
+      "aliases": ["Park Holme - Masjid"],
+      "address": {
+        "formatted": "658 Marion Rd, Parkholme, SA, 5043",
+        "locality": "Parkholme",
+        "region": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5043",
+        "countryCode": "AU"
+      },
+      "contact": { "phone": "(08) 8277 8725", "website": "http://www.iicsa.com.au/", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:parkholme-masjid-omar-bin-al-khattab",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/parkholme-masjid-omar-bin-al-khattab/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "phone", "website"]
+        },
+        {
+          "sourceId": "mosque-finder:park-holme-masjid",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/park-holme-masjid/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "phone", "website"]
+        }
+      ],
+      "conflictCount": 2,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "mosque",
+      "quality": {
+        "score": 42,
+        "completenessPercent": 50,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 2
+      },
+      "coordinates": { "latitude": -34.98885, "longitude": 138.55629 }
+    },
+    {
+      "id": "mosque-finder:renmark-fourteenth-street-mosque",
+      "sourceRecordIds": ["mosque-finder:renmark-fourteenth-street-mosque"],
+      "name": "Renmark - Fourteenth Street Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "230 Fourteenth Street, Renmark, SA, 5341",
+        "locality": "Renmark",
+        "region": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5341",
+        "countryCode": "AU"
+      },
+      "contact": { "phone": "08-85861229", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:renmark-fourteenth-street-mosque",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/renmark-fourteenth-street-mosque/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "phone"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "mosque",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -34.16898, "longitude": 140.7462 }
+    },
+    {
+      "id": "mosque-finder:royal-park-bosniaks-mosque",
+      "sourceRecordIds": ["mosque-finder:royal-park-bosniaks-mosque"],
+      "name": "Royal Park - Bosniaks Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "1 Frederick Road, Royal Park, SA, 5014",
+        "locality": "Royal Park",
+        "region": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5014",
+        "countryCode": "AU"
+      },
+      "contact": { "phone": "0403 298 687", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        { "time": "1:00 pm", "label": "Jumu’ah" },
+        { "time": "2:00 pm", "label": "Jumu’ah 2" }
+      ],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:royal-park-bosniaks-mosque",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/royal-park-bosniaks-mosque/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "phone", "jumuah-times"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "mosque",
+      "quality": {
+        "score": 54,
+        "completenessPercent": 42,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -34.86152, "longitude": 138.50299 }
+    },
+    {
+      "id": "mosque-finder:whyalla-morris-crescent-mosque-2",
+      "sourceRecordIds": [
+        "mosque-finder:whyalla-morris-crescent-mosque-2",
+        "mosque-finder:whyalla-morris-crescent-mosque"
+      ],
+      "name": "Whyalla - Morris Crescent Mosque",
+      "aliases": ["Whyalla - Morris Crescent Mosque"],
+      "address": {
+        "formatted": "5 Morris Crescent, Whyalla Norrie, SA, 5608",
+        "locality": "Whyalla Norrie",
+        "region": "SA",
+        "regionCode": "AU-SA",
+        "postcode": "5608",
+        "countryCode": "AU"
+      },
+      "contact": { "phone": "08-85861229", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:whyalla-morris-crescent-mosque-2",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/whyalla-morris-crescent-mosque-2/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "phone"]
+        },
+        {
+          "sourceId": "mosque-finder:whyalla-morris-crescent-mosque",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/whyalla-morris-crescent-mosque/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "mosque",
+      "quality": {
+        "score": 54,
+        "completenessPercent": 42,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -33.01938, "longitude": 137.55082 }
+    },
+    {
+      "id": "osm-way-217511468",
+      "sourceRecordIds": ["osm-way-217511468", "mosque-finder:woodville-north-al-khalil-mosque"],
+      "name": "Woodville North - Al-Khalil Mosque",
+      "aliases": ["Al Khalil Mosque", "Woodville North - Al-Khalil Mosque"],
+      "address": {
+        "formatted": "Torrens Road & Audley Street, Woodville North, SA, 5012",
+        "region": "SA",
+        "regionCode": "AU-SA",
+        "countryCode": "AU",
+        "locality": "Woodville North",
+        "postcode": "5012"
+      },
+      "contact": { "phone": "(08) 8268 1944", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [{ "time": "12:30 pm", "label": "Jumu’ah" }],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:217511468",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/217511468",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        },
+        {
+          "sourceId": "mosque-finder:woodville-north-al-khalil-mosque",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/woodville-north-al-khalil-mosque/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "phone", "jumuah-times"]
+        }
+      ],
+      "conflictCount": 1,
+      "sourceType": "merged",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 50,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 1
+      },
+      "locationType": "mosque",
+      "coordinates": { "latitude": -34.8685595, "longitude": 138.5380333 }
+    }
+  ]
+}

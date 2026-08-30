@@ -99,6 +99,21 @@ async function capture(page, name) {
   });
 }
 
+async function assertPrayerRowContract(page, context) {
+  const obligatoryRows = page.locator(
+    '.today-prayer-row[data-today-prayer-name="fajr"], .today-prayer-row[data-today-prayer-name="dhuhr"], .today-prayer-row[data-today-prayer-name="asr"], .today-prayer-row[data-today-prayer-name="maghrib"], .today-prayer-row[data-today-prayer-name="isha"]',
+  );
+  if ((await obligatoryRows.count()) !== 5) {
+    throw new Error(`${context} altered the five obligatory prayer rows`);
+  }
+  if ((await page.locator('.today-prayer-row[data-today-prayer-name="sunrise"]').count()) !== 1) {
+    throw new Error(`${context} did not preserve one Sunrise/Fajr-end row`);
+  }
+  if ((await page.locator('.today-prayer-row.is-supplementary').count()) !== 0) {
+    throw new Error(`${context} duplicated Sunrise inside the prayer timetable`);
+  }
+}
+
 async function validateEnabledWeather(browser) {
   const context = await browser.newContext({
     viewport: { width: 390, height: 844 },
@@ -141,9 +156,7 @@ async function validateEnabledWeather(browser) {
       );
     }
     if (providerRequests < 1) throw new Error('Phone/Home weather provider was not contacted');
-    if ((await page.locator('.today-prayer-row:not(.today-prayer-row--header)').count()) !== 5) {
-      throw new Error('Phone/Home weather altered the five obligatory prayer rows');
-    }
+    await assertPrayerRowContract(page, 'Phone/Home weather');
     const localContextContract = await localContext.evaluate((element) => ({
       hasLocationConfidence: element.querySelector(':scope > .today-location-confidence') !== null,
       hasWeather: element.querySelector(':scope > .prayer-board-weather') !== null,
@@ -197,9 +210,7 @@ async function validateModuleOffNoRequest(browser) {
     if ((await page.locator('.today-local-context > .prayer-board-weather').count()) !== 0) {
       throw new Error('Phone/Home weather rendered while its module was disabled');
     }
-    if ((await page.locator('.today-prayer-row:not(.today-prayer-row--header)').count()) !== 5) {
-      throw new Error('Disabled Phone/Home weather affected the five-prayer timetable');
-    }
+    await assertPrayerRowContract(page, 'Disabled Phone/Home weather');
     return { moduleOffProviderRequests: providerRequests };
   } finally {
     await context.close();

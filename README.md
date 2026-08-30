@@ -47,6 +47,7 @@ SalahOS is designed around accurate prayer calculations, selectable calculation 
 - Qiblah Finder with local great-circle bearing, true-north live compass guidance, magnetic-declination and screen-orientation correction, calibration feedback, alignment haptics, saved/current/offline-city/map-pin location choices, and an immediately available map using configured Google satellite imagery or an OpenStreetMap fallback.
 - Ramadan mode with Suhur/Imsak and Iftar presentation plus Taraweeh timetable support.
 - Mosque announcements/events, configurable smart-display themes, and multiple mosque profiles.
+- Offline-first Australian mosque discovery backed by a 254-record deduplicated combined catalogue with OpenStreetMap and Australian Mosque Finder provenance, state/territory packs, nearby/search/favourite flows, selected-mosque Today context and source-published congregation/Iqamah data where available.
 - Managed-display remote administration, Home Assistant support, optional local-network API, calendar integrations, wearable companion exploration, and additional Turkish/Indonesian localisation.
 
 ## Downloads
@@ -69,6 +70,7 @@ See [Downloadable release assets](docs/RELEASE_ASSETS.md) for installation choic
 - [iOS/iPadOS build, install and signing](docs/IOS_BUILD_SIGNING.md)
 - [Qiblah Finder](docs/QIBLA_FINDER.md)
 - [Qiblah Google satellite configuration](docs/QIBLA_GOOGLE_MAPS.md)
+- [Australian mosque directory](docs/AUSTRALIAN_MOSQUE_DIRECTORY.md)
 - [Downloadable release assets](docs/RELEASE_ASSETS.md)
 - [Canonical branding](docs/BRANDING.md)
 - [Native permission review](docs/NATIVE_PERMISSIONS.md)

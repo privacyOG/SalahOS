@@ -1,0 +1,2015 @@
+{
+  "schemaVersion": 1,
+  "packId": "au-vic",
+  "label": "Victoria",
+  "countryCode": "AU",
+  "regionCode": "AU-VIC",
+  "recordCount": 44,
+  "generatedFrom": "2026-08-29T12:02:14.303Z",
+  "source": {
+    "name": "SalahOS Australian mosque directory",
+    "licence": "ODbL-1.0",
+    "attributionUrl": "https://www.openstreetmap.org/copyright",
+    "licenceUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "upstreamSources": [
+      {
+        "name": "OpenStreetMap contributors",
+        "sourceKind": "openstreetmap",
+        "licence": "ODbL-1.0",
+        "attributionUrl": "https://www.openstreetmap.org/copyright",
+        "licenceUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+        "observedAt": "2026-08-24T10:38:06Z"
+      },
+      {
+        "name": "Australian Mosque Finder",
+        "sourceKind": "organization-directory",
+        "attributionUrl": "https://mosque-finder.com.au",
+        "observedAt": "2026-08-29T12:02:14.303Z",
+        "factsOnly": true
+      }
+    ],
+    "accounting": {
+      "osmRecordCount": 106,
+      "mosqueFinderRawRecordCount": 176,
+      "finderInternalMergedPairCount": 4,
+      "coordinateExcludedCount": 2,
+      "mosqueFinderRecordCount": 170,
+      "mergedPairCount": 22,
+      "forcedMatchCount": 6,
+      "automaticMatchCount": 16,
+      "osmOnlyCount": 84,
+      "finderOnlyCount": 148
+    }
+  },
+  "records": [
+    {
+      "id": "osm-way-626179263",
+      "sourceRecordIds": ["osm-way-626179263"],
+      "name": "Ahlulbait Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "223 Broadhurst Avenue, Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "email": "asgp@live.com", "website": "https://www.shia.com.au/", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:626179263",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/626179263",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates", "email", "website"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 54,
+        "completenessPercent": 42,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.7069563, "longitude": 144.982933 }
+    },
+    {
+      "id": "osm-way-1324276313",
+      "sourceRecordIds": ["osm-way-1324276313"],
+      "name": "Al Imam College Musallah",
+      "aliases": [],
+      "address": {
+        "formatted": "Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:1324276313",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/1324276313",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.7056108, "longitude": 144.5652776 }
+    },
+    {
+      "id": "osm-way-1394519577",
+      "sourceRecordIds": ["osm-way-1394519577"],
+      "name": "Albanian Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "765-769 Drummond Street, Carlton North, Victoria, 3054, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "postcode": "3054",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:1394519577",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/1394519577",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.7866561, "longitude": 144.9704041 }
+    },
+    {
+      "id": "osm-way-437947142",
+      "sourceRecordIds": ["osm-way-437947142"],
+      "name": "Albanian Sakie Islamic Centre",
+      "aliases": [],
+      "address": {
+        "formatted": "Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:437947142",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/437947142",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.9940598, "longitude": 145.2085421 }
+    },
+    {
+      "id": "osm-way-1170477550",
+      "sourceRecordIds": [
+        "osm-way-1170477550",
+        "mosque-finder:albanvale-station-road-deer-park-mosque"
+      ],
+      "name": "Albanvale - Station Road - Deer Park Mosque",
+      "aliases": ["Deer Park Mosque", "Albanvale - Station Road - Deer Park Mosque"],
+      "address": {
+        "formatted": "283 Station Road, Albanvale, VIC, 3025",
+        "region": "VIC",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU",
+        "locality": "Albanvale",
+        "postcode": "3025"
+      },
+      "contact": { "website": "https://abicdp.org/", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:1170477550",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/1170477550",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates", "website"]
+        },
+        {
+          "sourceId": "mosque-finder:albanvale-station-road-deer-park-mosque",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/albanvale-station-road-deer-park-mosque/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 1,
+      "sourceType": "merged",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 42,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 1
+      },
+      "locationType": "mosque",
+      "coordinates": { "latitude": -37.7473004, "longitude": 144.7780613 }
+    },
+    {
+      "id": "mosque-finder:albury-wodonga-musallah",
+      "sourceRecordIds": ["mosque-finder:albury-wodonga-musallah"],
+      "name": "Albury Wodonga Musallah",
+      "aliases": [],
+      "address": {
+        "formatted": "54 Kelly Street, Wodonga, VIC, 3690",
+        "locality": "Wodonga",
+        "region": "VIC",
+        "regionCode": "AU-VIC",
+        "postcode": "3690",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:albury-wodonga-musallah",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/albury-wodonga-musallah/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "mosque",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -36.11482, "longitude": 146.87525 }
+    },
+    {
+      "id": "mosque-finder:ararat-high-street-islamic-centre",
+      "sourceRecordIds": ["mosque-finder:ararat-high-street-islamic-centre"],
+      "name": "Ararat - High Street Islamic Centre",
+      "aliases": [],
+      "address": {
+        "formatted": "High Street (Western Highway), Ararat, VIC, 3377",
+        "locality": "Ararat",
+        "region": "VIC",
+        "regionCode": "AU-VIC",
+        "postcode": "3377",
+        "countryCode": "AU"
+      },
+      "contact": { "phone": "0422 625 971", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:ararat-high-street-islamic-centre",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/ararat-high-street-islamic-centre/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "phone"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "prayer-room",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.28343, "longitude": 142.94024 }
+    },
+    {
+      "id": "mosque-finder:open-for-5-daily-prayers-walking-distance-to-ardeer-train-station",
+      "sourceRecordIds": [
+        "mosque-finder:open-for-5-daily-prayers-walking-distance-to-ardeer-train-station"
+      ],
+      "name": "Ardeer - Ballarat Road - Sunshine Masjid",
+      "aliases": [],
+      "address": {
+        "formatted": "618 Ballarat Road, Ardeer, VIC, 3022",
+        "locality": "Ardeer",
+        "region": "VIC",
+        "regionCode": "AU-VIC",
+        "postcode": "3022",
+        "countryCode": "AU"
+      },
+      "contact": { "website": "http://www.sunshinemosque.com.au/", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        { "time": "12:30 pm", "label": "Jumu’ah" },
+        { "time": "1:30 pm", "label": "Jumu’ah 2" }
+      ],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:open-for-5-daily-prayers-walking-distance-to-ardeer-train-station",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/open-for-5-daily-prayers-walking-distance-to-ardeer-train-station/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "website", "jumuah-times"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "mosque",
+      "quality": {
+        "score": 54,
+        "completenessPercent": 42,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.77121, "longitude": 144.8014 }
+    },
+    {
+      "id": "osm-way-694629037",
+      "sourceRecordIds": ["osm-way-694629037"],
+      "name": "Australia Light Foundation Mosque and Community Centre",
+      "aliases": [],
+      "address": {
+        "formatted": "291 Sunshine Road, Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:694629037",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/694629037",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.7978144, "longitude": 144.8406935 }
+    },
+    {
+      "id": "osm-way-438080062",
+      "sourceRecordIds": ["osm-way-438080062"],
+      "name": "Australian Islamic Centre",
+      "aliases": [],
+      "address": {
+        "formatted": "Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "website": "http://australianislamiccentre.com.au/details.html", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:438080062",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/438080062",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates", "website"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.8460962, "longitude": 144.8615374 }
+    },
+    {
+      "id": "mosque-finder:avalon-cozens-road-ipdc-islamic-centre",
+      "sourceRecordIds": ["mosque-finder:avalon-cozens-road-ipdc-islamic-centre"],
+      "name": "Avalon - Cozens Road - IPDC Islamic Centre",
+      "aliases": [],
+      "address": {
+        "formatted": "10 Cozens Road, Avalon, VIC, 3212",
+        "locality": "Avalon",
+        "region": "VIC",
+        "regionCode": "AU-VIC",
+        "postcode": "3212",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:avalon-cozens-road-ipdc-islamic-centre",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/avalon-cozens-road-ipdc-islamic-centre/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "prayer-room",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -38.04061, "longitude": 144.42957 }
+    },
+    {
+      "id": "osm-way-303946193",
+      "sourceRecordIds": ["osm-way-303946193"],
+      "name": "Bait-us-Salam",
+      "aliases": [],
+      "address": {
+        "formatted": "6 Leisureland Drive, Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:303946193",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/303946193",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -38.1708293, "longitude": 145.2118641 }
+    },
+    {
+      "id": "mosque-finder:ballarat-elsworth-street-masjid",
+      "sourceRecordIds": ["mosque-finder:ballarat-elsworth-street-masjid"],
+      "name": "Ballarat - Elsworth Street Masjid",
+      "aliases": [],
+      "address": {
+        "formatted": "116 Elsworth Street East, VIC, Ballarat, VIC, 3350",
+        "locality": "Ballarat",
+        "region": "VIC",
+        "regionCode": "AU-VIC",
+        "postcode": "3350",
+        "countryCode": "AU"
+      },
+      "contact": { "website": "http://www.islamicsocietyballarat.org/", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [{ "time": "12:30 pm", "label": "Jumu’ah" }],
+      "facilities": ["parking"],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:ballarat-elsworth-street-masjid",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/ballarat-elsworth-street-masjid/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": [
+            "name",
+            "aliases",
+            "address",
+            "coordinates",
+            "website",
+            "jumuah-times",
+            "facilities"
+          ]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "mosque",
+      "quality": {
+        "score": 58,
+        "completenessPercent": 50,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.58446, "longitude": 143.87679 }
+    },
+    {
+      "id": "mosque-finder:ballarat-mount-helen-university-of-ballarat-musalla",
+      "sourceRecordIds": ["mosque-finder:ballarat-mount-helen-university-of-ballarat-musalla"],
+      "name": "Ballarat - Mount Helen University of Ballarat Musalla",
+      "aliases": [],
+      "address": {
+        "formatted": "Geology Building, East Terrace, Mount Helen, VIC, 3350",
+        "locality": "Mount Helen",
+        "region": "VIC",
+        "regionCode": "AU-VIC",
+        "postcode": "3350",
+        "countryCode": "AU"
+      },
+      "contact": { "website": "http://www.islamicsocietyballarat.org/", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [
+        { "time": "12:30 pm", "label": "Jumu’ah" },
+        { "time": "1:30 pm", "label": "Jumu’ah 2" }
+      ],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:ballarat-mount-helen-university-of-ballarat-musalla",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/ballarat-mount-helen-university-of-ballarat-musalla/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "website", "jumuah-times"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "musalla",
+      "quality": {
+        "score": 54,
+        "completenessPercent": 42,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.62826, "longitude": 143.89409 }
+    },
+    {
+      "id": "osm-way-1117561290",
+      "sourceRecordIds": ["osm-way-1117561290"],
+      "name": "Bediuzzaman Said Nursi Cultural Foundation Central Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "128-146 Fitzroy Street, Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:1117561290",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/1117561290",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.8043857, "longitude": 144.9765529 }
+    },
+    {
+      "id": "osm-way-1307944489",
+      "sourceRecordIds": ["osm-way-1307944489"],
+      "name": "Bendigo Islamic Community Centre",
+      "aliases": [],
+      "address": {
+        "formatted": "9 Rowena Street, East Bendigo, VIC, 3550, Australia",
+        "region": "VIC",
+        "regionCode": "AU-VIC",
+        "postcode": "3550",
+        "countryCode": "AU"
+      },
+      "contact": { "website": "https://bicc.org.au/", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:1307944489",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/1307944489",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates", "website"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -36.7415833, "longitude": 144.3159978 }
+    },
+    {
+      "id": "mosque-finder:box-hill-tafe-musalla",
+      "sourceRecordIds": ["mosque-finder:box-hill-tafe-musalla"],
+      "name": "Box Hill - TAFE Musalla",
+      "aliases": [],
+      "address": {
+        "formatted": "Box Hill institute of TAFE, 853 Whitehorse Road, Box Hill, VIC, 3128",
+        "locality": "Box Hill",
+        "region": "VIC",
+        "regionCode": "AU-VIC",
+        "postcode": "3128",
+        "countryCode": "AU"
+      },
+      "contact": { "phone": "9286 9438", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": ["wudu", "women-prayer-space"],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:box-hill-tafe-musalla",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/box-hill-tafe-musalla/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "phone", "facilities"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "musalla",
+      "featureLabels": ["Wudu facility"],
+      "quality": {
+        "score": 54,
+        "completenessPercent": 42,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.81672, "longitude": 145.11912 }
+    },
+    {
+      "id": "mosque-finder:broadmeadows-king-street-mosque",
+      "sourceRecordIds": ["mosque-finder:broadmeadows-king-street-mosque"],
+      "name": "Broadmeadows - King Street Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "45-55 King Street, Broadmeadows (Dallas), VIC, 3047",
+        "locality": "Broadmeadows (Dallas)",
+        "region": "VIC",
+        "regionCode": "AU-VIC",
+        "postcode": "3047",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:broadmeadows-king-street-mosque",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/broadmeadows-king-street-mosque/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "mosque",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.66844, "longitude": 144.94163 }
+    },
+    {
+      "id": "osm-way-242710637",
+      "sourceRecordIds": ["osm-way-242710637"],
+      "name": "Broadmeadows Mosque (Cami)",
+      "aliases": [],
+      "address": {
+        "formatted": "Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:242710637",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/242710637",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.668516, "longitude": 144.9415932 }
+    },
+    {
+      "id": "osm-way-1433570091",
+      "sourceRecordIds": ["osm-way-1433570091"],
+      "name": "Campbellfield Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "46-48 Mason Street, Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:1433570091",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/1433570091",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.672438, "longitude": 144.9670767 }
+    },
+    {
+      "id": "osm-way-239315166",
+      "sourceRecordIds": ["osm-way-239315166"],
+      "name": "Coburg Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:239315166",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/239315166",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.7551737, "longitude": 144.9750617 }
+    },
+    {
+      "id": "osm-way-1308975525",
+      "sourceRecordIds": ["osm-way-1308975525"],
+      "name": "Emir Sultan Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "139 Cleeland Street, Dandenong, VIC, 3175, Australia",
+        "region": "VIC",
+        "regionCode": "AU-VIC",
+        "postcode": "3175",
+        "countryCode": "AU"
+      },
+      "contact": { "website": "https://www.emirsultanmosque.com/", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:1308975525",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/1308975525",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates", "website"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.9747385, "longitude": 145.2160677 }
+    },
+    {
+      "id": "osm-way-1394522710",
+      "sourceRecordIds": ["osm-way-1394522710"],
+      "name": "Fawkner Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:1394522710",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/1394522710",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.7049231, "longitude": 144.9721593 }
+    },
+    {
+      "id": "osm-node-12701769445",
+      "sourceRecordIds": ["osm-node-12701769445"],
+      "name": "G.V. Turkish Islamic Cultural Centre & Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "209 McLennan Street, Mooroopna, VIC, 3629, Australia",
+        "region": "VIC",
+        "regionCode": "AU-VIC",
+        "postcode": "3629",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:node:12701769445",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/node/12701769445",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -36.3969143, "longitude": 145.346232 }
+    },
+    {
+      "id": "osm-way-266743349",
+      "sourceRecordIds": ["osm-way-266743349"],
+      "name": "Geelong Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "47 Bostock Avenue, Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:266743349",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/266743349",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -38.1338634, "longitude": 144.3339977 }
+    },
+    {
+      "id": "osm-way-1394517464",
+      "sourceRecordIds": ["osm-way-1394517464"],
+      "name": "Golden Wattle Masjid",
+      "aliases": [],
+      "address": {
+        "formatted": "Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:1394517464",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/1394517464",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.8034178, "longitude": 144.6600491 }
+    },
+    {
+      "id": "osm-way-1324276139",
+      "sourceRecordIds": ["osm-way-1324276139"],
+      "name": "Hararian Organization Inc. Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:1324276139",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/1324276139",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.8144271, "longitude": 144.6402686 }
+    },
+    {
+      "id": "osm-way-1394521015",
+      "sourceRecordIds": ["osm-way-1394521015"],
+      "name": "Heidelberg Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:1394521015",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/1394521015",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.7442442, "longitude": 145.0515747 }
+    },
+    {
+      "id": "mosque-finder:hoppers-crossing-al-taqwa-mosque",
+      "sourceRecordIds": ["mosque-finder:hoppers-crossing-al-taqwa-mosque"],
+      "name": "Hoppers Crossing - Al Taqwa Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "201 Sayers Road, Truganina, VIC, 3029",
+        "locality": "Truganina",
+        "region": "VIC",
+        "regionCode": "AU-VIC",
+        "postcode": "3029",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [{ "time": "1:30 pm", "label": "Jumu’ah" }],
+      "facilities": ["parking"],
+      "services": ["classes", "counselling", "youth"],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:hoppers-crossing-al-taqwa-mosque",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/hoppers-crossing-al-taqwa-mosque/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": [
+            "name",
+            "aliases",
+            "address",
+            "coordinates",
+            "jumuah-times",
+            "facilities",
+            "services"
+          ]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "mosque",
+      "featureLabels": ["Street parking", "Educational facility"],
+      "quality": {
+        "score": 58,
+        "completenessPercent": 50,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.85472, "longitude": 144.72186 }
+    },
+    {
+      "id": "osm-node-10542405635",
+      "sourceRecordIds": ["osm-node-10542405635"],
+      "name": "ICMG Brunswick",
+      "aliases": [],
+      "address": {
+        "formatted": "660 Sydney Road, Brunswick, VIC, 3056, Australia",
+        "region": "VIC",
+        "regionCode": "AU-VIC",
+        "postcode": "3056",
+        "countryCode": "AU"
+      },
+      "contact": { "website": "https://www.icmg.org.au/branches/brunswick/", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:node:10542405635",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/node/10542405635",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates", "website"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.7619145, "longitude": 144.9631497 }
+    },
+    {
+      "id": "osm-way-282486880",
+      "sourceRecordIds": ["osm-way-282486880"],
+      "name": "Imam Ali Islamic Centre",
+      "aliases": [],
+      "address": {
+        "formatted": "Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:282486880",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/282486880",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.6979712, "longitude": 144.9650032 }
+    },
+    {
+      "id": "osm-way-615193480",
+      "sourceRecordIds": ["osm-way-615193480"],
+      "name": "Maidstone Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:615193480",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/615193480",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.7878118, "longitude": 144.879373 }
+    },
+    {
+      "id": "osm-way-242562000",
+      "sourceRecordIds": ["osm-way-242562000"],
+      "name": "Meadow Heights Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:242562000",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/242562000",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.6519595, "longitude": 144.9206129 }
+    },
+    {
+      "id": "osm-way-759957128",
+      "sourceRecordIds": ["osm-way-759957128"],
+      "name": "Melbourne Grand Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:759957128",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/759957128",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.854856, "longitude": 144.6613737 }
+    },
+    {
+      "id": "osm-node-748724107",
+      "sourceRecordIds": ["osm-node-748724107"],
+      "name": "Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:node:748724107",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/node/748724107",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.6338566, "longitude": 144.9166015 }
+    },
+    {
+      "id": "osm-way-1200979609",
+      "sourceRecordIds": ["osm-way-1200979609"],
+      "name": "Muslim chapel",
+      "aliases": [],
+      "address": {
+        "formatted": "Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:1200979609",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/1200979609",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.7176564, "longitude": 144.9567338 }
+    },
+    {
+      "id": "osm-way-539995719",
+      "sourceRecordIds": ["osm-way-539995719"],
+      "name": "Noble Park Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "18 Leonard Avenue, Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:539995719",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/539995719",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.9696978, "longitude": 145.1751631 }
+    },
+    {
+      "id": "osm-way-1324276152",
+      "sourceRecordIds": ["osm-way-1324276152"],
+      "name": "Oromo Resource Centre",
+      "aliases": [],
+      "address": {
+        "formatted": "Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:1324276152",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/1324276152",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.7919775, "longitude": 144.6427435 }
+    },
+    {
+      "id": "osm-way-1068898804",
+      "sourceRecordIds": ["osm-way-1068898804"],
+      "name": "Panjtan Centre",
+      "aliases": [],
+      "address": {
+        "formatted": "21-23 Adelaide Street, St Albans, VIC, 3021, Australia",
+        "region": "VIC",
+        "regionCode": "AU-VIC",
+        "postcode": "3021",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:1068898804",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/1068898804",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.7415837, "longitude": 144.7925449 }
+    },
+    {
+      "id": "osm-node-567835687",
+      "sourceRecordIds": ["osm-node-567835687"],
+      "name": "Reservoir Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:node:567835687",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/node/567835687",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.7319441, "longitude": 145.0313229 }
+    },
+    {
+      "id": "osm-way-439374142",
+      "sourceRecordIds": ["osm-way-439374142"],
+      "name": "Umar bin Al-Khattab Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "website": "http://www.prestonmosque.org/", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:way:439374142",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/way/439374142",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates", "website"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.7390551, "longitude": 144.9932136 }
+    },
+    {
+      "id": "osm-node-324210091",
+      "sourceRecordIds": ["osm-node-324210091"],
+      "name": "United Muslims Migrant Association (UMMA)",
+      "aliases": [],
+      "address": {
+        "formatted": "Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:node:324210091",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/node/324210091",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.7819232, "longitude": 145.1545641 }
+    },
+    {
+      "id": "osm-node-2397995277",
+      "sourceRecordIds": ["osm-node-2397995277"],
+      "name": "Westall Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "130 Rosebank Avenue, Victoria, Australia",
+        "region": "Victoria",
+        "regionCode": "AU-VIC",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-24T10:38:06Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "osm:node:2397995277",
+          "sourceKind": "openstreetmap",
+          "sourceLabel": "OpenStreetMap contributors",
+          "sourceUrl": "https://www.openstreetmap.org/node/2397995277",
+          "observedAt": "2026-08-24T10:38:06Z",
+          "confidence": 0.82,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "openstreetmap",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -37.940523, "longitude": 145.137975 }
+    },
+    {
+      "id": "mosque-finder:wodonga-musallah-isaw",
+      "sourceRecordIds": ["mosque-finder:wodonga-musallah-isaw"],
+      "name": "Wodonga Musallah ISAW",
+      "aliases": [],
+      "address": {
+        "formatted": "189 Melrose Drive, West Wodonga, VIC, 3690",
+        "locality": "West Wodonga",
+        "region": "VIC",
+        "regionCode": "AU-VIC",
+        "postcode": "3690",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:wodonga-musallah-isaw",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/wodonga-musallah-isaw/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "musalla",
+      "quality": {
+        "score": 46,
+        "completenessPercent": 25,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -36.13581, "longitude": 146.86353 }
+    }
+  ]
+}

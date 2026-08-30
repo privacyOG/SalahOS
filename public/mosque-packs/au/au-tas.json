@@ -1,0 +1,198 @@
+{
+  "schemaVersion": 1,
+  "packId": "au-tas",
+  "label": "Tasmania",
+  "countryCode": "AU",
+  "regionCode": "AU-TAS",
+  "recordCount": 3,
+  "generatedFrom": "2026-08-29T12:02:14.303Z",
+  "source": {
+    "name": "SalahOS Australian mosque directory",
+    "licence": "ODbL-1.0",
+    "attributionUrl": "https://www.openstreetmap.org/copyright",
+    "licenceUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+    "upstreamSources": [
+      {
+        "name": "OpenStreetMap contributors",
+        "sourceKind": "openstreetmap",
+        "licence": "ODbL-1.0",
+        "attributionUrl": "https://www.openstreetmap.org/copyright",
+        "licenceUrl": "https://opendatacommons.org/licenses/odbl/1-0/",
+        "observedAt": "2026-08-24T10:38:06Z"
+      },
+      {
+        "name": "Australian Mosque Finder",
+        "sourceKind": "organization-directory",
+        "attributionUrl": "https://mosque-finder.com.au",
+        "observedAt": "2026-08-29T12:02:14.303Z",
+        "factsOnly": true
+      }
+    ],
+    "accounting": {
+      "osmRecordCount": 106,
+      "mosqueFinderRawRecordCount": 176,
+      "finderInternalMergedPairCount": 4,
+      "coordinateExcludedCount": 2,
+      "mosqueFinderRecordCount": 170,
+      "mergedPairCount": 22,
+      "forcedMatchCount": 6,
+      "automaticMatchCount": 16,
+      "osmOnlyCount": 84,
+      "finderOnlyCount": 148
+    }
+  },
+  "records": [
+    {
+      "id": "mosque-finder:hobart-university-of-tasmania-tuu-musalla",
+      "sourceRecordIds": ["mosque-finder:hobart-university-of-tasmania-tuu-musalla"],
+      "name": "Hobart - University of Tasmania- TUU Musalla",
+      "aliases": [],
+      "address": {
+        "formatted": "Tasmania University Union, churchill avenue, sandy bay, TAS, 7005",
+        "locality": "sandy bay",
+        "region": "TAS",
+        "regionCode": "AU-TAS",
+        "postcode": "7005",
+        "countryCode": "AU"
+      },
+      "contact": { "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [{ "time": "1:00 pm", "label": "Jumu’ah" }],
+      "facilities": [],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:hobart-university-of-tasmania-tuu-musalla",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/hobart-university-of-tasmania-tuu-musalla/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "jumuah-times"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "musalla",
+      "quality": {
+        "score": 50,
+        "completenessPercent": 33,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -42.90486, "longitude": 147.32598 }
+    },
+    {
+      "id": "mosque-finder:launceston-university-of-tasmania-musalla",
+      "sourceRecordIds": ["mosque-finder:launceston-university-of-tasmania-musalla"],
+      "name": "Launceston - University of Tasmania Musalla",
+      "aliases": [],
+      "address": {
+        "formatted": "Building 3, School Road, Newnham, TAS, 7248",
+        "locality": "Newnham",
+        "region": "TAS",
+        "regionCode": "AU-TAS",
+        "postcode": "7248",
+        "countryCode": "AU"
+      },
+      "contact": { "phone": "+61 3 6324 3787", "social": [] },
+      "prayerTimes": null,
+      "jumuahTimes": [],
+      "facilities": ["wheelchair-accessible"],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:launceston-university-of-tasmania-musalla",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/launceston-university-of-tasmania-musalla/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": ["name", "aliases", "address", "coordinates", "phone", "facilities"]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "musalla",
+      "quality": {
+        "score": 54,
+        "completenessPercent": 42,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -41.39957, "longitude": 147.12422 }
+    },
+    {
+      "id": "mosque-finder:west-hobart-warwick-street-mosque",
+      "sourceRecordIds": ["mosque-finder:west-hobart-warwick-street-mosque"],
+      "name": "West Hobart - Warwick Street Mosque",
+      "aliases": [],
+      "address": {
+        "formatted": "166 Warwick Street, West Hobart, TAS, 7001",
+        "locality": "West Hobart",
+        "region": "TAS",
+        "regionCode": "AU-TAS",
+        "postcode": "7001",
+        "countryCode": "AU"
+      },
+      "contact": {
+        "phone": "(03) 6234 6998",
+        "website": "https://www.facebook.com/HobartMosque/?fref=ts",
+        "social": []
+      },
+      "prayerTimes": null,
+      "jumuahTimes": [{ "time": "1:20 pm", "label": "Jumu’ah" }],
+      "facilities": ["wudu", "toilets", "parking"],
+      "services": [],
+      "verification": {
+        "state": "unverified",
+        "verifiedAt": null,
+        "lastReviewedAt": "2026-08-29T12:02:14.303Z"
+      },
+      "provenance": [
+        {
+          "sourceId": "mosque-finder:west-hobart-warwick-street-mosque",
+          "sourceKind": "organization-directory",
+          "sourceLabel": "Australian Mosque Finder",
+          "sourceUrl": "https://mosque-finder.com.au/mosque/west-hobart-warwick-street-mosque/index.html",
+          "observedAt": "2026-08-29T12:02:14.303Z",
+          "confidence": 0.86,
+          "fields": [
+            "name",
+            "aliases",
+            "address",
+            "coordinates",
+            "phone",
+            "website",
+            "jumuah-times",
+            "facilities"
+          ]
+        }
+      ],
+      "conflictCount": 0,
+      "sourceType": "australian-mosque-finder",
+      "locationType": "mosque",
+      "featureLabels": ["Car park", "Wudu facility", "Toilets"],
+      "quality": {
+        "score": 61,
+        "completenessPercent": 58,
+        "provenanceCoveragePercent": 100,
+        "freshness": "fresh",
+        "conflictCount": 0
+      },
+      "coordinates": { "latitude": -42.88151, "longitude": 147.31509 }
+    }
+  ]
+}

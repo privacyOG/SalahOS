@@ -34,6 +34,7 @@ interface AustralianMosqueDirectoryCopy {
   noMatch: string;
   attribution: string;
   snapshot: string;
+  mosqueFinderSource: string;
 }
 
 export const australianMosqueDirectoryCopy = {
@@ -69,8 +70,10 @@ export const australianMosqueDirectoryCopy = {
     showAll: 'Show all results',
     showLess: 'Show fewer',
     noMatch: 'No Australian directory mosques match this search.',
-    attribution: 'Directory data © OpenStreetMap contributors, licensed under ODbL 1.0.',
-    snapshot: 'OSM snapshot',
+    attribution:
+      'Directory facts combine Australian Mosque Finder listings with OpenStreetMap contributor data; OSM-derived data remains licensed under ODbL 1.0.',
+    snapshot: 'Combined snapshot',
+    mosqueFinderSource: 'Australian Mosque Finder',
   },
   ar: {
     title: 'دليل المساجد الأسترالية',
@@ -104,8 +107,10 @@ export const australianMosqueDirectoryCopy = {
     showAll: 'عرض كل النتائج',
     showLess: 'عرض أقل',
     noMatch: 'لا توجد مساجد في دليل أستراليا تطابق هذا البحث.',
-    attribution: 'بيانات الدليل © مساهمو OpenStreetMap، مرخّصة بموجب ODbL 1.0.',
-    snapshot: 'لقطة OSM',
+    attribution:
+      'يجمع الدليل حقائق من دليل المساجد الأسترالية وبيانات مساهمي OpenStreetMap؛ وتظل البيانات المشتقة من OSM مرخّصة بموجب ODbL 1.0.',
+    snapshot: 'لقطة مدمجة',
+    mosqueFinderSource: 'دليل المساجد الأسترالية',
   },
   tr: {
     title: 'Avustralya cami dizini',
@@ -140,8 +145,10 @@ export const australianMosqueDirectoryCopy = {
     showAll: 'Tüm sonuçları göster',
     showLess: 'Daha az göster',
     noMatch: 'Bu aramayla eşleşen Avustralya dizini camisi yok.',
-    attribution: 'Dizin verileri © OpenStreetMap katkıcıları, ODbL 1.0 lisansı altındadır.',
-    snapshot: 'OSM anlık görüntüsü',
+    attribution:
+      'Dizin, Australian Mosque Finder kayıtlarını OpenStreetMap katkıcı verileriyle birleştirir; OSM türevi veriler ODbL 1.0 lisansı altında kalır.',
+    snapshot: 'Birleşik anlık görüntü',
+    mosqueFinderSource: 'Australian Mosque Finder',
   },
   id: {
     title: 'Direktori masjid Australia',
@@ -176,7 +183,9 @@ export const australianMosqueDirectoryCopy = {
     showAll: 'Tampilkan semua hasil',
     showLess: 'Tampilkan lebih sedikit',
     noMatch: 'Tidak ada masjid direktori Australia yang cocok dengan pencarian ini.',
-    attribution: 'Data direktori © kontributor OpenStreetMap, berlisensi ODbL 1.0.',
-    snapshot: 'Snapshot OSM',
+    attribution:
+      'Direktori menggabungkan fakta Australian Mosque Finder dengan data kontributor OpenStreetMap; data turunan OSM tetap berlisensi ODbL 1.0.',
+    snapshot: 'Snapshot gabungan',
+    mosqueFinderSource: 'Australian Mosque Finder',
   },
 } as const satisfies Readonly<Record<Locale, Readonly<AustralianMosqueDirectoryCopy>>>;

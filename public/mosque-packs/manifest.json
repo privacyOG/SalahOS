@@ -1,0 +1,64 @@
+{
+  "schemaVersion": 1,
+  "scope": "global",
+  "generatedFrom": "2026-08-29T12:02:14.303Z",
+  "recordCount": 254,
+  "countries": [
+    {
+      "countryCode": "AU",
+      "label": "Australia",
+      "recordCount": 254,
+      "countryPack": "/mosque-packs/au/au.json",
+      "regions": [
+        {
+          "regionCode": "AU-ACT",
+          "label": "Australian Capital Territory",
+          "recordCount": 5,
+          "path": "/mosque-packs/au/au-act.json"
+        },
+        {
+          "regionCode": "AU-NSW",
+          "label": "New South Wales",
+          "recordCount": 125,
+          "path": "/mosque-packs/au/au-nsw.json"
+        },
+        {
+          "regionCode": "AU-NT",
+          "label": "Northern Territory",
+          "recordCount": 3,
+          "path": "/mosque-packs/au/au-nt.json"
+        },
+        {
+          "regionCode": "AU-QLD",
+          "label": "Queensland",
+          "recordCount": 24,
+          "path": "/mosque-packs/au/au-qld.json"
+        },
+        {
+          "regionCode": "AU-SA",
+          "label": "South Australia",
+          "recordCount": 25,
+          "path": "/mosque-packs/au/au-sa.json"
+        },
+        {
+          "regionCode": "AU-TAS",
+          "label": "Tasmania",
+          "recordCount": 3,
+          "path": "/mosque-packs/au/au-tas.json"
+        },
+        {
+          "regionCode": "AU-VIC",
+          "label": "Victoria",
+          "recordCount": 44,
+          "path": "/mosque-packs/au/au-vic.json"
+        },
+        {
+          "regionCode": "AU-WA",
+          "label": "Western Australia",
+          "recordCount": 25,
+          "path": "/mosque-packs/au/au-wa.json"
+        }
+      ]
+    }
+  ]
+}

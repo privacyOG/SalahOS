@@ -143,12 +143,17 @@ async function validateTranslatedTheme(browser, scenario) {
         `${scenario.name} visible navigation order changed: ${JSON.stringify(visibleNavigationIds)}`,
       );
     }
-    if (
-      (await page
-        .locator('.today-prayer-row:not(.today-prayer-row--header):not(.is-supplementary)')
-        .count()) !== 5
-    ) {
+    const obligatoryPrayerRows = page.locator(
+      '.today-prayer-row[data-today-prayer-name="fajr"], .today-prayer-row[data-today-prayer-name="dhuhr"], .today-prayer-row[data-today-prayer-name="asr"], .today-prayer-row[data-today-prayer-name="maghrib"], .today-prayer-row[data-today-prayer-name="isha"]',
+    );
+    if ((await obligatoryPrayerRows.count()) !== 5) {
       throw new Error(`${scenario.name} did not preserve five obligatory prayer rows`);
+    }
+    if ((await page.locator('.today-prayer-row[data-today-prayer-name="sunrise"]').count()) !== 1) {
+      throw new Error(`${scenario.name} did not preserve one Sunrise/Fajr-end row`);
+    }
+    if ((await page.locator('.today-prayer-row.is-supplementary').count()) !== 0) {
+      throw new Error(`${scenario.name} duplicated Sunrise inside the prayer timetable`);
     }
     await assertNoHorizontalOverflow(page, scenario.name);
     await capture(page, scenario.name);

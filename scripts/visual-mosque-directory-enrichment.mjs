@@ -7,6 +7,7 @@ const playwrightModule = process.env.SALAHOS_VISUAL_PLAYWRIGHT_MODULE;
 const artifactDirectory = path.resolve(
   process.env.SALAHOS_VISUAL_ARTIFACT_DIR ?? 'visual-artifacts',
 );
+const expectedAustralianMosqueRecords = 254;
 
 if (!playwrightModule) {
   throw new Error('SALAHOS_VISUAL_PLAYWRIGHT_MODULE must point to the isolated Playwright module');
@@ -124,12 +125,18 @@ try {
   assert(packs.manifestStatus === 200, 'global mosque pack manifest was not deployable');
   assert(packs.countryStatus === 200, 'Australia mosque pack was not deployable');
   assert(packs.manifest.scope === 'global', 'mosque pack manifest did not use global scope');
-  assert(packs.manifest.recordCount === 106, 'mosque pack manifest record count drifted');
+  assert(
+    packs.manifest.recordCount === expectedAustralianMosqueRecords,
+    `mosque pack manifest record count drifted: expected ${String(expectedAustralianMosqueRecords)}, received ${String(packs.manifest.recordCount)}`,
+  );
   assert(
     packs.manifest.countries?.[0]?.regions?.length === 8,
     'regional AU pack index is incomplete',
   );
-  assert(packs.country.recordCount === 106, 'Australia mosque pack record count drifted');
+  assert(
+    packs.country.recordCount === expectedAustralianMosqueRecords,
+    `Australia mosque pack record count drifted: expected ${String(expectedAustralianMosqueRecords)}, received ${String(packs.country.recordCount)}`,
+  );
   assert(
     packs.country.records?.every((record) => Array.isArray(record.provenance)) === true,
     'downloadable mosque pack records are missing provenance',

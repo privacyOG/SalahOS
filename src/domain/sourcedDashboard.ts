@@ -52,6 +52,7 @@ interface NextCandidate {
 function findCurrentResolvedPrayer(
   currentLocalMinutes: number,
   today: Readonly<Record<ObligatoryPrayerName, ResolvedPrayerTime>>,
+  sunriseLocalMinutes: number | null,
 ): ObligatoryPrayerName | null {
   let current: ObligatoryPrayerName | null = null;
   let latestStart = Number.NEGATIVE_INFINITY;
@@ -66,6 +67,18 @@ function findCurrentResolvedPrayer(
       current = prayer;
       latestStart = localMinutes;
     }
+  }
+
+  // Fajr is the one obligatory prayer whose end boundary is a supplementary
+  // solar event rather than the start of the next obligatory prayer. Sunrise
+  // therefore ends the Fajr interval without itself becoming a "current" or
+  // "next" prayer.
+  if (
+    current === 'fajr' &&
+    sunriseLocalMinutes !== null &&
+    currentLocalMinutes >= sunriseLocalMinutes
+  ) {
+    return null;
   }
 
   return current;
@@ -126,7 +139,11 @@ export function applyPrayerSourceToDashboard(input: {
     input.dashboard.tomorrow,
     tomorrowMosqueDay,
   );
-  const current = findCurrentResolvedPrayer(input.dashboard.clock.localMinutes, resolvedToday);
+  const current = findCurrentResolvedPrayer(
+    input.dashboard.clock.localMinutes,
+    resolvedToday,
+    input.dashboard.today.prayers.sunrise.roundedLocalMinutes,
+  );
   const next = findNextResolvedPrayer(
     input.dashboard.clock.localMinutes,
     resolvedToday,
