@@ -1,0 +1,119 @@
+name: Temporary PR219 Final Visual Sweep
+
+on:
+  push:
+    branches: [agent/pr219-final-visual-sweep]
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: /tmp/salahos-pw-browsers-1.62.0
+      SALAHOS_VISUAL_PLAYWRIGHT_MODULE: /tmp/salahos-visual-harness/node_modules/playwright/index.mjs
+      SALAHOS_VISUAL_HARNESS_ROOT: /tmp/salahos-visual-harness
+      SALAHOS_VISUAL_ARTIFACT_DIR: visual-artifacts
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Apply weather prayer-row contract
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/visual-mobile-prayer-board-weather.mjs')
+          text = path.read_text()
+          anchor = "async function validateEnabledWeather(browser) {"
+          helper = '''async function assertPrayerRowContract(page, context) {
+            const obligatoryRows = page.locator(
+              '.today-prayer-row[data-today-prayer-name="fajr"], .today-prayer-row[data-today-prayer-name="dhuhr"], .today-prayer-row[data-today-prayer-name="asr"], .today-prayer-row[data-today-prayer-name="maghrib"], .today-prayer-row[data-today-prayer-name="isha"]',
+            );
+            if ((await obligatoryRows.count()) !== 5) {
+              throw new Error(`${context} altered the five obligatory prayer rows`);
+            }
+            if ((await page.locator('.today-prayer-row[data-today-prayer-name="sunrise"]').count()) !== 1) {
+              throw new Error(`${context} did not preserve one Sunrise/Fajr-end row`);
+            }
+            if ((await page.locator('.today-prayer-row.is-supplementary').count()) !== 0) {
+              throw new Error(`${context} duplicated Sunrise inside the prayer timetable`);
+            }
+          }
+
+          '''
+          assert anchor in text
+          text = text.replace(anchor, helper + anchor, 1)
+          old1 = """    if ((await page.locator('.today-prayer-row:not(.today-prayer-row--header)').count()) !== 5) {
+              throw new Error('Phone/Home weather altered the five obligatory prayer rows');
+            }
+          """
+          old1 = '\n'.join(line[10:] if line.startswith('          ') else line for line in old1.splitlines()) + '\n'
+          assert old1 in text
+          text = text.replace(old1, "    await assertPrayerRowContract(page, 'Phone/Home weather');\n", 1)
+          old2 = """    if ((await page.locator('.today-prayer-row:not(.today-prayer-row--header)').count()) !== 5) {
+              throw new Error('Disabled Phone/Home weather affected the five-prayer timetable');
+            }
+          """
+          old2 = '\n'.join(line[10:] if line.startswith('          ') else line for line in old2.splitlines()) + '\n'
+          assert old2 in text
+          text = text.replace(old2, "    await assertPrayerRowContract(page, 'Disabled Phone/Home weather');\n", 1)
+          path.write_text(text)
+          PY
+          npx prettier --write scripts/visual-mobile-prayer-board-weather.mjs
+          npm run format:check
+          npm run lint
+          git diff --check
+      - name: Build production application
+        run: npm run build
+      - name: Install isolated browser harness
+        shell: bash
+        run: |
+          rm -rf /tmp/salahos-visual-harness
+          mkdir -p /tmp/salahos-visual-harness
+          cd /tmp/salahos-visual-harness
+          npm init -y >/dev/null 2>&1
+          npm install --ignore-scripts --save-exact playwright@1.62.0 axe-core@4.10.3 pngjs@7.0.0 pixelmatch@7.1.0
+          npx playwright install --with-deps chromium firefox webkit
+      - name: Start local production server
+        shell: bash
+        run: |
+          rm -rf visual-artifacts
+          python3 -m http.server 4173 --directory dist --bind 127.0.0.1 >/tmp/salahos-visual-http.log 2>&1 &
+          echo $! >/tmp/salahos-visual-server.pid
+          python3 - <<'PY'
+          import time, urllib.request
+          for _ in range(50):
+              try:
+                  with urllib.request.urlopen('http://127.0.0.1:4173/', timeout=1) as response:
+                      if response.status == 200:
+                          raise SystemExit(0)
+              except Exception:
+                  time.sleep(0.1)
+          raise SystemExit('Local SalahOS production server did not become ready')
+          PY
+      - name: Validate weather visual directly
+        run: node scripts/visual-mobile-prayer-board-weather.mjs
+      - name: Run complete visual matrix
+        run: npm run visual:check
+      - name: Capture validated production bytes
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add scripts/visual-mobile-prayer-board-weather.mjs
+          git commit -m 'test: align weather visual rows with sunrise'
+          echo "VALIDATED_COMMIT=$(git rev-parse HEAD)"
+          git push
+      - name: Stop local production server
+        if: always()
+        shell: bash
+        run: |
+          if [ -f /tmp/salahos-visual-server.pid ]; then
+            kill "$(cat /tmp/salahos-visual-server.pid)" 2>/dev/null || true
+          fi
