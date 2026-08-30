@@ -105,8 +105,14 @@ async function phoneMetrics(page) {
       const rect = element.getBoundingClientRect();
       return { width: rect.width, height: rect.height, label: element.textContent?.trim() ?? '' };
     });
-    const prayerRows = prayerTable.querySelectorAll(
-      '.today-prayer-row:not(.today-prayer-row--header)',
+    const obligatoryPrayerRows = prayerTable.querySelectorAll(
+      '.today-prayer-row[data-today-prayer-name="fajr"], .today-prayer-row[data-today-prayer-name="dhuhr"], .today-prayer-row[data-today-prayer-name="asr"], .today-prayer-row[data-today-prayer-name="maghrib"], .today-prayer-row[data-today-prayer-name="isha"]',
+    );
+    const sunriseRows = prayerTable.querySelectorAll(
+      '.today-prayer-row[data-today-prayer-name="sunrise"]',
+    );
+    const supplementaryPrayerRows = prayerTable.querySelectorAll(
+      '.today-prayer-row.is-supplementary',
     );
 
     return {
@@ -122,7 +128,9 @@ async function phoneMetrics(page) {
       contentScrollHeight: content.scrollHeight,
       navigationTargets,
       quickTargets,
-      prayerRows: prayerRows.length,
+      obligatoryPrayerRows: obligatoryPrayerRows.length,
+      sunriseRows: sunriseRows.length,
+      supplementaryPrayerRows: supplementaryPrayerRows.length,
       prayerTableRole: prayerTable.getAttribute('role'),
     };
   });
@@ -173,9 +181,14 @@ function assertPhoneMetrics(name, metrics) {
       throw new Error(`${name} touch target below 44px: ${JSON.stringify(target)}`);
     }
   }
-  if (metrics.prayerRows !== 5 || metrics.prayerTableRole !== 'table') {
+  if (
+    metrics.obligatoryPrayerRows !== 5 ||
+    metrics.sunriseRows !== 1 ||
+    metrics.supplementaryPrayerRows !== 0 ||
+    metrics.prayerTableRole !== 'table'
+  ) {
     throw new Error(
-      `${name} prayer schedule is not one scan-friendly five-prayer table: ${JSON.stringify(metrics)}`,
+      `${name} prayer schedule did not preserve five obligatory prayers plus one Sunrise/Fajr-end row: ${JSON.stringify(metrics)}`,
     );
   }
 }
