@@ -27,6 +27,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 - <<'PY'
+          import json
           from pathlib import Path
 
           def replace_exact(path, old, new, expected_count=1):
@@ -38,7 +39,15 @@ jobs:
               p.write_text(text.replace(old, new))
 
           replace_exact('package.json', '"version": "1.5.1"', '"version": "1.5.2"')
-          replace_exact('package-lock.json', '"version": "1.5.1"', '"version": "1.5.2"', 2)
+
+          lock_path = Path('package-lock.json')
+          lock = json.loads(lock_path.read_text())
+          if lock.get('version') != '1.5.1' or lock.get('packages', {}).get('', {}).get('version') != '1.5.1':
+              raise SystemExit('package-lock.json: root versions are not both 1.5.1')
+          lock['version'] = '1.5.2'
+          lock['packages']['']['version'] = '1.5.2'
+          lock_path.write_text(json.dumps(lock, indent=2) + '\n')
+
           replace_exact('android/app/build.gradle', 'versionCode 8', 'versionCode 9')
           replace_exact('android/app/build.gradle', 'versionName "1.5.1"', 'versionName "1.5.2"')
           replace_exact('ios/App/App.xcodeproj/project.pbxproj', 'CURRENT_PROJECT_VERSION = 8;', 'CURRENT_PROJECT_VERSION = 9;', 2)
