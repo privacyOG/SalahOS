@@ -1,0 +1,165 @@
+name: Temporary PR219 Visual Prayer Row Sweep
+
+on:
+  push:
+    branches: [agent/pr219-visual-prayer-row-sweep]
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: /tmp/salahos-pw-browsers-1.62.0
+      SALAHOS_VISUAL_PLAYWRIGHT_MODULE: /tmp/salahos-visual-harness/node_modules/playwright/index.mjs
+      SALAHOS_VISUAL_ARTIFACT_DIR: visual-artifacts
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Apply remaining prayer-row visual contracts
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          extended = Path('scripts/visual-mobile-prayer-themes-extended.mjs')
+          text = extended.read_text()
+          old = """    if (
+              (await page
+                .locator('.today-prayer-row:not(.today-prayer-row--header):not(.is-supplementary)')
+                .count()) !== 5
+            ) {
+              throw new Error(`${scenario.name} did not preserve five obligatory prayer rows`);
+            }
+          """
+          old = '\n'.join(line[10:] if line.startswith('          ') else line for line in old.splitlines()) + '\n'
+          new = """    const obligatoryPrayerRows = page.locator(
+              '.today-prayer-row[data-today-prayer-name="fajr"], .today-prayer-row[data-today-prayer-name="dhuhr"], .today-prayer-row[data-today-prayer-name="asr"], .today-prayer-row[data-today-prayer-name="maghrib"], .today-prayer-row[data-today-prayer-name="isha"]',
+            );
+            if ((await obligatoryPrayerRows.count()) !== 5) {
+              throw new Error(`${scenario.name} did not preserve five obligatory prayer rows`);
+            }
+            if ((await page.locator('.today-prayer-row[data-today-prayer-name="sunrise"]').count()) !== 1) {
+              throw new Error(`${scenario.name} did not preserve one Sunrise/Fajr-end row`);
+            }
+            if ((await page.locator('.today-prayer-row.is-supplementary').count()) !== 0) {
+              throw new Error(`${scenario.name} duplicated Sunrise inside the prayer timetable`);
+            }
+          """
+          new = '\n'.join(line[10:] if line.startswith('          ') else line for line in new.splitlines()) + '\n'
+          assert old in text
+          extended.write_text(text.replace(old, new, 1))
+
+          device = Path('scripts/visual-device-ux-refinement.mjs')
+          text = device.read_text()
+          old = """    const prayerRows = prayerTable.querySelectorAll(
+              '.today-prayer-row:not(.today-prayer-row--header)',
+            );
+          """
+          old = '\n'.join(line[10:] if line.startswith('          ') else line for line in old.splitlines()) + '\n'
+          new = """    const obligatoryPrayerRows = prayerTable.querySelectorAll(
+              '.today-prayer-row[data-today-prayer-name="fajr"], .today-prayer-row[data-today-prayer-name="dhuhr"], .today-prayer-row[data-today-prayer-name="asr"], .today-prayer-row[data-today-prayer-name="maghrib"], .today-prayer-row[data-today-prayer-name="isha"]',
+            );
+            const sunriseRows = prayerTable.querySelectorAll(
+              '.today-prayer-row[data-today-prayer-name="sunrise"]',
+            );
+            const supplementaryPrayerRows = prayerTable.querySelectorAll('.today-prayer-row.is-supplementary');
+          """
+          new = '\n'.join(line[10:] if line.startswith('          ') else line for line in new.splitlines()) + '\n'
+          assert old in text
+          text = text.replace(old, new, 1)
+          old_metrics = """      prayerRows: prayerRows.length,
+              prayerTableRole: prayerTable.getAttribute('role'),
+          """
+          old_metrics = '\n'.join(line[10:] if line.startswith('          ') else line for line in old_metrics.splitlines()) + '\n'
+          new_metrics = """      obligatoryPrayerRows: obligatoryPrayerRows.length,
+              sunriseRows: sunriseRows.length,
+              supplementaryPrayerRows: supplementaryPrayerRows.length,
+              prayerTableRole: prayerTable.getAttribute('role'),
+          """
+          new_metrics = '\n'.join(line[10:] if line.startswith('          ') else line for line in new_metrics.splitlines()) + '\n'
+          assert old_metrics in text
+          text = text.replace(old_metrics, new_metrics, 1)
+          old_assert = """  if (metrics.prayerRows !== 5 || metrics.prayerTableRole !== 'table') {
+              throw new Error(
+                `${name} prayer schedule is not one scan-friendly five-prayer table: ${JSON.stringify(metrics)}`,
+              );
+            }
+          """
+          old_assert = '\n'.join(line[10:] if line.startswith('          ') else line for line in old_assert.splitlines()) + '\n'
+          new_assert = """  if (
+              metrics.obligatoryPrayerRows !== 5 ||
+              metrics.sunriseRows !== 1 ||
+              metrics.supplementaryPrayerRows !== 0 ||
+              metrics.prayerTableRole !== 'table'
+            ) {
+              throw new Error(
+                `${name} prayer schedule did not preserve five obligatory prayers plus one Sunrise/Fajr-end row: ${JSON.stringify(metrics)}`,
+              );
+            }
+          """
+          new_assert = '\n'.join(line[10:] if line.startswith('          ') else line for line in new_assert.splitlines()) + '\n'
+          assert old_assert in text
+          device.write_text(text.replace(old_assert, new_assert, 1))
+          PY
+      - name: Format and static checks
+        run: |
+          npx prettier --write scripts/visual-mobile-prayer-themes-extended.mjs scripts/visual-device-ux-refinement.mjs
+          npm run format:check
+          npm run lint
+          git diff --check
+      - name: Build production application
+        run: npm run build
+      - name: Install isolated Chromium harness
+        shell: bash
+        run: |
+          rm -rf /tmp/salahos-visual-harness
+          mkdir -p /tmp/salahos-visual-harness
+          cd /tmp/salahos-visual-harness
+          npm init -y >/dev/null 2>&1
+          npm install --ignore-scripts --save-exact playwright@1.62.0
+          npx playwright install --with-deps chromium
+      - name: Start local production server
+        shell: bash
+        run: |
+          rm -rf visual-artifacts
+          python3 -m http.server 4173 --directory dist --bind 127.0.0.1 >/tmp/salahos-visual-http.log 2>&1 &
+          echo $! >/tmp/salahos-visual-server.pid
+          python3 - <<'PY'
+          import time
+          import urllib.request
+          for _ in range(50):
+              try:
+                  with urllib.request.urlopen('http://127.0.0.1:4173/', timeout=1) as response:
+                      if response.status == 200:
+                          raise SystemExit(0)
+              except Exception:
+                  time.sleep(0.1)
+          raise SystemExit('Local SalahOS production server did not become ready')
+          PY
+      - name: Validate extended mobile themes
+        run: node scripts/visual-mobile-prayer-themes-extended.mjs
+      - name: Validate device UX prayer-row contract
+        run: node scripts/visual-device-ux-refinement.mjs
+      - name: Capture validated production bytes
+        shell: bash
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add scripts/visual-mobile-prayer-themes-extended.mjs scripts/visual-device-ux-refinement.mjs
+          git commit -m 'test: align visual prayer rows with sunrise'
+          echo "VALIDATED_COMMIT=$(git rev-parse HEAD)"
+          git push
+      - name: Stop local production server
+        if: always()
+        shell: bash
+        run: |
+          if [ -f /tmp/salahos-visual-server.pid ]; then
+            kill "$(cat /tmp/salahos-visual-server.pid)" 2>/dev/null || true
+          fi
