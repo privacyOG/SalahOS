@@ -29,10 +29,51 @@ jobs:
           from pathlib import Path
           path = Path('scripts/visual-mobile-prayer-themes.mjs')
           text = path.read_text()
-          old = "    const prayerRows = page.locator('.today-prayer-row:not(.today-prayer-row--header)');\n    if ((await prayerRows.count()) !== 5) {\n      throw new Error(`${scenario.name} did not preserve exactly five obligatory prayer rows`);\n    }\n    if ((await page.locator('.today-prayer-row.is-supplementary').count()) !== 0) {\n      throw new Error(`${scenario.name} left Sunrise duplicated inside the prayer timetable`);\n    }\n"
-          new = "    const obligatoryPrayerRows = page.locator(\n      '.today-prayer-row[data-today-prayer-name=\\\"fajr\\\"], .today-prayer-row[data-today-prayer-name=\\\"dhuhr\\\"], .today-prayer-row[data-today-prayer-name=\\\"asr\\\"], .today-prayer-row[data-today-prayer-name=\\\"maghrib\\\"], .today-prayer-row[data-today-prayer-name=\\\"isha\\\"]',\n    );\n    if ((await obligatoryPrayerRows.count()) !== 5) {\n      throw new Error(`${scenario.name} did not preserve exactly five obligatory prayer rows`);\n    }\n    const sunriseRows = page.locator('.today-prayer-row[data-today-prayer-name=\\\"sunrise\\\"]');\n    if ((await sunriseRows.count()) !== 1) {\n      throw new Error(`${scenario.name} did not preserve exactly one Sunrise/Fajr-end row`);\n    }\n    if ((await page.locator('.today-prayer-row.is-supplementary').count()) !== 0) {\n      throw new Error(`${scenario.name} left Sunrise duplicated inside the prayer timetable`);\n    }\n"
-          assert old in text
-          path.write_text(text.replace(old, new, 1))
+
+          boundary = """async function assertPrayerBoardDataBoundary(page, name) {
+            const today = page.locator('main.today-screen');
+            if ((await today.getAttribute('data-prayer-board-data-version')) !== '1') {
+              throw new Error(`${name} did not render through PrayerBoardData v1`);
+            }
+            if ((await today.getAttribute('data-prayer-board-source')) !== 'local-mosque') {
+              throw new Error(`${name} did not preserve the PrayerBoardData source mode`);
+            }
+          }
+          """
+          boundary = '\n'.join(line[10:] if line.startswith('          ') else line for line in boundary.splitlines()) + '\n'
+          helper = boundary + """
+          async function assertPrayerRowContract(page, name) {
+            const obligatoryPrayerRows = page.locator(
+              '.today-prayer-row[data-today-prayer-name="fajr"], .today-prayer-row[data-today-prayer-name="dhuhr"], .today-prayer-row[data-today-prayer-name="asr"], .today-prayer-row[data-today-prayer-name="maghrib"], .today-prayer-row[data-today-prayer-name="isha"]',
+            );
+            if ((await obligatoryPrayerRows.count()) !== 5) {
+              throw new Error(`${name} did not preserve exactly five obligatory prayer rows`);
+            }
+            const sunriseRows = page.locator('.today-prayer-row[data-today-prayer-name="sunrise"]');
+            if ((await sunriseRows.count()) !== 1) {
+              throw new Error(`${name} did not preserve exactly one Sunrise/Fajr-end row`);
+            }
+            if ((await page.locator('.today-prayer-row.is-supplementary').count()) !== 0) {
+              throw new Error(`${name} left Sunrise duplicated inside the prayer timetable`);
+            }
+          }
+          """
+          helper = '\n'.join(line[10:] if line.startswith('          ') else line for line in helper.splitlines()) + '\n'
+          assert boundary in text
+          text = text.replace(boundary, helper, 1)
+
+          old_theme = "    const prayerRows = page.locator('.today-prayer-row:not(.today-prayer-row--header)');\n    if ((await prayerRows.count()) !== 5) {\n      throw new Error(`${scenario.name} did not preserve exactly five obligatory prayer rows`);\n    }\n    if ((await page.locator('.today-prayer-row.is-supplementary').count()) !== 0) {\n      throw new Error(`${scenario.name} left Sunrise duplicated inside the prayer timetable`);\n    }\n"
+          assert old_theme in text
+          text = text.replace(old_theme, "    await assertPrayerRowContract(page, scenario.name);\n", 1)
+
+          old_modules = "    if ((await page.locator('.today-prayer-row:not(.today-prayer-row--header)').count()) !== 5) {\n      throw new Error('Optional module changes altered the core five-prayer timetable');\n    }\n"
+          assert old_modules in text
+          text = text.replace(
+              old_modules,
+              "    await assertPrayerRowContract(page, 'mobile-theme-modules-hidden-today-en');\n",
+              1,
+          )
+          path.write_text(text)
           PY
       - name: Format and static checks
         run: |
