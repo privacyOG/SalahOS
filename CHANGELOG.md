@@ -4,6 +4,8 @@ All notable SalahOS changes are recorded here.
 
 ## Unreleased
 
+## 1.5.2 — 2026-08-30
+
 ### Australian mosque directory
 
 - Expand the bundled Australian mosque catalogue from the former 106-record OpenStreetMap-only runtime to a 254-record deduplicated combined directory using reviewed OpenStreetMap and Australian Mosque Finder factual source snapshots.
@@ -11,6 +13,13 @@ All notable SalahOS changes are recorded here.
 - Wire the combined catalogue into the shared directory service, harden near-duplicate detection so proximity alone is insufficient, and enforce source/combined/pack reproducibility plus the 254-record visual acceptance contract in CI.
 - Make the visible Australian directory consume the combined catalogue, use a selected directory mosque as Today prayer-location context, and surface explicitly published mosque congregation times as Iqamah/Jama‘ah without inventing missing values.
 - Show Sunrise permanently in the Today schedule as the non-prayer boundary where Fajr ends, and prevent Fajr from remaining falsely marked current after sunrise.
+
+### Release packaging
+
+- Synchronise npm, package-lock, Android and iOS marketing versions at 1.5.2 and advance Android/iOS native build numbers together to 9.
+- Publish the persistently signed Android APK and AAB together with the Web/PWA ZIP, Raspberry Pi kiosk bundle, Windows x64 executable and portable SHA-256 manifest.
+- Preserve exact-current-main release preflight, persistent Android signing verification, archive-integrity checks, bundle budgets and exact-final-file-set validation before publication.
+- Keep consumer iOS/iPadOS IPA publication gated on Apple distribution signing/provisioning; Simulator acceptance remains release evidence rather than a consumer installer.
 
 ## 1.5.0 — 2026-08-26
 
