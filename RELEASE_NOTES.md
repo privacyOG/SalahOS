@@ -1,47 +1,55 @@
-# SalahOS v1.5.1 release notes
+# SalahOS v1.5.2 release notes
 
-SalahOS v1.5.1 is a focused quality, accessibility and usability update that completes the v1.5.1 theme and Prayer Calendar programme while preserving the release-verification contract established in v1.5.0.
+SalahOS v1.5.2 expands the Australian mosque experience and corrects the Fajr/Sunrise prayer-state boundary while preserving the exact-head quality, signing and packaging contract established in prior releases.
 
-## Theme, contrast and visual consistency
+## Australian mosque directory
 
-- Strengthens semantic foreground/background ownership so Light, Dark and System appearance modes remain readable and predictable.
-- Adds and validates eight curated palettes: Salah Classic, Midnight Gold, Emerald Mosque, Royal Blue, Desert Sand, Olive Heritage, Monochrome and High Contrast.
-- Keeps appearance mode independent from palette selection and persists the selected palette through Display settings.
-- Extends the shared theme contract across phone, tablet, Web/PWA and mosque/smart-display surfaces.
-- Strengthens display-oriented hierarchy for clock, next prayer, prayer/Iqamah rows, announcements and mosque branding without creating a separate styling system.
-- Expands representative theme-matrix contrast checks, RTL/large-text coverage and regression protection for the Today and Qiblah readability failure classes.
+- Expands the bundled Australian mosque catalogue from the former 106-record OpenStreetMap-only runtime to a **254-record deduplicated combined directory** built from reviewed OpenStreetMap and Australian Mosque Finder factual source snapshots.
+- Preserves source provenance and attribution through the combined catalogue and deployable country/region packs.
+- Uses audited and evidence-scored cross-source identity matching, coordinate quarantine for unsafe geospatial records and explicit protection against known false merges.
+- Keeps the directory offline-first and integrates the combined catalogue into the shared directory service and generated Australian state/territory packs.
+- Strengthens reproducibility and visual acceptance so source, combined and pack outputs must remain internally consistent with the 254-record contract.
 
-## Hijri-aligned Prayer Calendar
+## Selected mosque prayer and Iqamah context
 
-- Adds a dedicated Prayer Calendar destination with Daily, Weekly, Monthly and Yearly views without changing the Today screen.
-- Aligns Gregorian and Hijri presentation through the Umm al-Qura calendar while preserving the existing optional local Hijri correction of ±2 days.
-- Standardises English Hijri month names and explicitly displays the `AH` era.
-- Locks reference acceptance for 1 January 2026 = 12 Rajab 1447 AH and key 2026 Hijri month/year boundaries.
-- Keeps all calendar views on the same civil-date, location, timezone, calculation-method and prayer-time pipeline so views remain mutually consistent.
-- Adds responsive, RTL and accessibility coverage for the Prayer Calendar.
+- `Use mosque` now activates the selected directory mosque as the Today prayer-location context without overwriting the user's separately saved personal location.
+- Prayer starts continue to use SalahOS calculation settings at the selected mosque's coordinates and timezone unless an explicit authoritative local-mosque timetable is selected.
+- Explicit mosque-specific congregation times published by the Australian Mosque Finder listing are surfaced as Iqamah/Jama'ah times.
+- Multiple published congregation sessions remain visible rather than being collapsed to one value.
+- Missing congregation times are shown as **Not published**; SalahOS does not fabricate an Iqamah time.
+- Generic locality prayer calendars are not mislabelled as mosque-specific Iqamah data.
+- A separately configured full local-mosque timetable remains authoritative and is not overridden by directory metadata.
 
-## Instructions and operational guidance
+## Fajr and Sunrise correctness
 
-- Adds `Instructions guide.md` for ordinary users and mosque administrators.
-- Covers Android, iPhone/iPad, Web/PWA, Raspberry Pi and TV/kiosk operation.
-- Documents setup, location, prayer calculation and madhhab options, Iqamah, Qiblah, mosque features, Adhan/notifications, language/themes, offline use, display operation, updates, troubleshooting and reset.
+- Adds Sunrise permanently to the Today timetable as a distinct **non-prayer time** labelled as the point where **Fajr ends**.
+- Corrects current-prayer resolution so Fajr can no longer remain marked as current after Sunrise.
+- Between Sunrise and Dhuhr, Today reports the state as **Between prayer times** while Dhuhr remains the next obligatory prayer.
+- Sunrise is never treated as an obligatory prayer, current prayer or next obligatory prayer, and its Iqamah value is correctly shown as not applicable.
+- Updates mobile, tablet, accessibility, RTL, weather and device-UX visual contracts to preserve exactly five obligatory prayer rows plus the separate Sunrise boundary row.
+
+## Quality and release engineering
+
+- Preserves strict Prettier, ESLint and TypeScript checks with no suppressions added for this release.
+- Keeps the 254-record Australian source/combined/pack reproducibility checks and shared-directory acceptance in the permanent Quality Gate.
+- Keeps the main JavaScript chunk below the unchanged 550,000-byte architecture budget by persisting only a lightweight selected-mosque context rather than eagerly bundling the complete Australian catalogue into Today.
+- Preserves full unit/coverage, production-build, bundle-budget, visual-regression, Android emulator lifecycle, fresh iPhone/iPad Simulator and packaged Windows executable acceptance.
 
 ## Release reconciliation
 
-- Synchronises npm, package-lock, Android and iOS marketing versions at `1.5.1`.
-- Advances Android `versionCode` and iOS `CURRENT_PROJECT_VERSION` together to build `8`.
-- Preserves fail-closed exact-main release preflight, Android production-signing verification, archive integrity checks and final package verification.
-- Corrects the mobile device-UX acceptance contract so it matches the current seven route-capable destinations, with Community retained as a route but hidden from the six-item mobile primary navigation.
+- Synchronises npm, package-lock, Android and iOS marketing versions at `1.5.2`.
+- Advances Android `versionCode` and iOS `CURRENT_PROJECT_VERSION` together to build `9`.
+- Preserves fail-closed exact-current-main release preflight, persistent Android production-signing verification, archive integrity checks and exact-final-file-set verification.
 
-## Downloadable v1.5.1 assets
+## Downloadable v1.5.2 assets
 
-A successful v1.5.1 publication includes:
+A successful v1.5.2 publication includes:
 
-- `SalahOS-v1.5.1-android.apk` — persistently signed Android release APK for direct installation;
-- `SalahOS-v1.5.1-android.aab` — persistently signed Android App Bundle for Google Play/distribution workflows;
-- `SalahOS-v1.5.1-windows-x64.exe` — self-contained 64-bit Windows 10/11 desktop executable;
-- `SalahOS-v1.5.1-web-pwa.zip` — complete production Web/PWA package;
-- `SalahOS-v1.5.1-raspberry-pi-kiosk.tar.gz` — production Web/PWA files plus Raspberry Pi/Linux Chromium kiosk launch and autostart helpers;
+- `SalahOS-v1.5.2-android.apk` — persistently signed Android release APK for direct installation;
+- `SalahOS-v1.5.2-android.aab` — persistently signed Android App Bundle for Google Play/distribution workflows;
+- `SalahOS-v1.5.2-windows-x64.exe` — self-contained 64-bit Windows 10/11 desktop executable;
+- `SalahOS-v1.5.2-web-pwa.zip` — complete production Web/PWA package;
+- `SalahOS-v1.5.2-raspberry-pi-kiosk.tar.gz` — production Web/PWA files plus Raspberry Pi/Linux Chromium kiosk launch and autostart helpers;
 - `SHA256SUMS.txt` — SHA-256 hashes for all packaged release assets.
 
 The Windows executable includes its .NET runtime and expects the Microsoft Edge WebView2 Runtime, normally present on current Windows 10/11 installations. GitHub also exposes the standard source-code ZIP and tarball for the release tag.
@@ -54,11 +62,7 @@ The Windows executable includes its .NET runtime and expects the Microsoft Edge 
 
 ## Release gates
 
-The v1.5.1 release revision must be the exact current `main` commit and pass the permanent Quality Gate, Visual Regression, Android and iOS workflows. Stage 5.1 is accepted only when its calendar acceptance runs successfully on that exact final head. Stage 7 is accepted only after the complete v1.5.1 reconciliation is green.
-
-The core release-asset workflow reruns repository quality checks, verifies persistent Android signing, builds and verifies APK/AAB packages, validates Web/PWA and Raspberry Pi archives, checks the exact final file set and SHA-256 manifest, and only then creates or updates the GitHub release. The Windows release workflow independently self-tests the packaged executable and reconciles the published checksum manifest.
-
-Implementation and exact-head completion state are recorded in `TEMP_TODO_V1.5.1.md`. See `Instructions guide.md`, `docs/RELEASE_ASSETS.md`, `TESTING.md`, `TODO.md` and `docs/PLATFORM_STATUS.md` for detailed operation, validation and distribution boundaries.
+The v1.5.2 release revision must be the exact current `main` commit and pass the permanent Quality Gate, Visual Regression, Android, iOS and Windows workflows. The release-asset workflow reruns repository quality checks, verifies persistent Android signing, builds and verifies APK/AAB packages, validates Web/PWA and Raspberry Pi archives, checks the exact final file set and SHA-256 manifest, and only then creates or updates the GitHub release. The Windows workflow independently self-tests the packaged executable and reconciles its checksum into the published manifest.
 
 ## Author
 
