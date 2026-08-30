@@ -28,6 +28,7 @@ jobs:
         run: |
           python - <<'PY'
           from pathlib import Path
+
           path = Path('scripts/visual-mobile-prayer-board-weather.mjs')
           text = path.read_text()
           anchor = "async function validateEnabledWeather(browser) {"
@@ -49,18 +50,20 @@ jobs:
           '''
           assert anchor in text
           text = text.replace(anchor, helper + anchor, 1)
-          old1 = """    if ((await page.locator('.today-prayer-row:not(.today-prayer-row--header)').count()) !== 5) {
-              throw new Error('Phone/Home weather altered the five obligatory prayer rows');
-            }
-          """
-          old1 = '\n'.join(line[10:] if line.startswith('          ') else line for line in old1.splitlines()) + '\n'
+
+          old1 = (
+              "    if ((await page.locator('.today-prayer-row:not(.today-prayer-row--header)').count()) !== 5) {\n"
+              "      throw new Error('Phone/Home weather altered the five obligatory prayer rows');\n"
+              "    }\n"
+          )
           assert old1 in text
           text = text.replace(old1, "    await assertPrayerRowContract(page, 'Phone/Home weather');\n", 1)
-          old2 = """    if ((await page.locator('.today-prayer-row:not(.today-prayer-row--header)').count()) !== 5) {
-              throw new Error('Disabled Phone/Home weather affected the five-prayer timetable');
-            }
-          """
-          old2 = '\n'.join(line[10:] if line.startswith('          ') else line for line in old2.splitlines()) + '\n'
+
+          old2 = (
+              "    if ((await page.locator('.today-prayer-row:not(.today-prayer-row--header)').count()) !== 5) {\n"
+              "      throw new Error('Disabled Phone/Home weather affected the five-prayer timetable');\n"
+              "    }\n"
+          )
           assert old2 in text
           text = text.replace(old2, "    await assertPrayerRowContract(page, 'Disabled Phone/Home weather');\n", 1)
           path.write_text(text)
