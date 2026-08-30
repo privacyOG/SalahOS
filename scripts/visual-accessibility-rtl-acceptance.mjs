@@ -493,6 +493,13 @@ async function validateCongregationScenario(browser, scenario) {
         return rect.width > 0 && rect.height > 0;
       }).length,
       tableRows: document.querySelectorAll('.today-prayer-table [role="row"]').length,
+      obligatoryPrayerRows: document.querySelectorAll(
+        '.today-prayer-row[data-today-prayer-name="fajr"], .today-prayer-row[data-today-prayer-name="dhuhr"], .today-prayer-row[data-today-prayer-name="asr"], .today-prayer-row[data-today-prayer-name="maghrib"], .today-prayer-row[data-today-prayer-name="isha"]',
+      ).length,
+      sunriseRows: document.querySelectorAll('.today-prayer-row[data-today-prayer-name="sunrise"]')
+        .length,
+      supplementaryPrayerRows: document.querySelectorAll('.today-prayer-row.is-supplementary')
+        .length,
       currentStateText:
         document.querySelector('.today-prayer-row.is-current')?.textContent?.trim() ?? '',
       nextStateText: document.querySelector('.today-prayer-row.is-next')?.textContent?.trim() ?? '',
@@ -508,8 +515,15 @@ async function validateCongregationScenario(browser, scenario) {
       );
     }
     if (scenario.view === 'today') {
-      if (state.tableRows !== 6) {
-        throw new Error(`${scenario.name} expected prayer table header plus five prayer rows`);
+      if (
+        state.tableRows !== 7 ||
+        state.obligatoryPrayerRows !== 5 ||
+        state.sunriseRows !== 1 ||
+        state.supplementaryPrayerRows !== 0
+      ) {
+        throw new Error(
+          `${scenario.name} expected a header, five obligatory prayers, and one Sunrise/Fajr-end row: ${JSON.stringify(state)}`,
+        );
       }
       if (state.currentStateText.length === 0 || state.nextStateText.length === 0) {
         throw new Error(`${scenario.name} current/next prayer state lacks textual status`);
