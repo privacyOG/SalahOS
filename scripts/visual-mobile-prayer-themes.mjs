@@ -177,6 +177,22 @@ async function assertPrayerBoardDataBoundary(page, name) {
   }
 }
 
+async function assertPrayerRowContract(page, name) {
+  const obligatoryPrayerRows = page.locator(
+    '.today-prayer-row[data-today-prayer-name="fajr"], .today-prayer-row[data-today-prayer-name="dhuhr"], .today-prayer-row[data-today-prayer-name="asr"], .today-prayer-row[data-today-prayer-name="maghrib"], .today-prayer-row[data-today-prayer-name="isha"]',
+  );
+  if ((await obligatoryPrayerRows.count()) !== 5) {
+    throw new Error(`${name} did not preserve exactly five obligatory prayer rows`);
+  }
+  const sunriseRows = page.locator('.today-prayer-row[data-today-prayer-name="sunrise"]');
+  if ((await sunriseRows.count()) !== 1) {
+    throw new Error(`${name} did not preserve exactly one Sunrise/Fajr-end row`);
+  }
+  if ((await page.locator('.today-prayer-row.is-supplementary').count()) !== 0) {
+    throw new Error(`${name} left Sunrise duplicated inside the prayer timetable`);
+  }
+}
+
 async function validateTheme(browser, scenario) {
   const context = await browser.newContext({
     viewport: { width: scenario.width, height: scenario.height },
@@ -195,13 +211,7 @@ async function validateTheme(browser, scenario) {
       throw new Error(`${scenario.name} did not apply ${scenario.templateId}`);
     }
     await assertPrayerBoardDataBoundary(page, scenario.name);
-    const prayerRows = page.locator('.today-prayer-row:not(.today-prayer-row--header)');
-    if ((await prayerRows.count()) !== 5) {
-      throw new Error(`${scenario.name} did not preserve exactly five obligatory prayer rows`);
-    }
-    if ((await page.locator('.today-prayer-row.is-supplementary').count()) !== 0) {
-      throw new Error(`${scenario.name} left Sunrise duplicated inside the prayer timetable`);
-    }
+    await assertPrayerRowContract(page, scenario.name);
     const solarTimes = page.locator('.today-solar__times > div');
     if ((await solarTimes.count()) !== 2) {
       throw new Error(`${scenario.name} did not present distinct Sunrise and Sunset values`);
@@ -345,9 +355,7 @@ async function validateModuleFlow(browser) {
     ) {
       throw new Error('Today rendered a disabled optional module');
     }
-    if ((await page.locator('.today-prayer-row:not(.today-prayer-row--header)').count()) !== 5) {
-      throw new Error('Optional module changes altered the core five-prayer timetable');
-    }
+    await assertPrayerRowContract(page, 'mobile-theme-modules-hidden-today-en');
     await assertPrayerBoardDataBoundary(page, 'mobile-theme-modules-hidden-today-en');
     await capture(page, 'mobile-theme-modules-hidden-today-en');
     return { modulesApplied: ['dates:false', 'sunrise-sunset:false'] };
