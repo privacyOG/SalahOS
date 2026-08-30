@@ -1,0 +1,162 @@
+name: Temporary v1.5.2 Release Prep
+
+on:
+  push:
+    branches:
+      - release-prep/v1.5.2
+
+permissions:
+  contents: write
+
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Prepare v1.5.2 metadata and notes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          def replace_exact(path, old, new, expected_count=1):
+              p = Path(path)
+              text = p.read_text()
+              count = text.count(old)
+              if count != expected_count:
+                  raise SystemExit(f'{path}: expected {expected_count} occurrences of {old!r}, found {count}')
+              p.write_text(text.replace(old, new))
+
+          replace_exact('package.json', '"version": "1.5.1"', '"version": "1.5.2"')
+          replace_exact('package-lock.json', '"version": "1.5.1"', '"version": "1.5.2"', 2)
+          replace_exact('android/app/build.gradle', 'versionCode 8', 'versionCode 9')
+          replace_exact('android/app/build.gradle', 'versionName "1.5.1"', 'versionName "1.5.2"')
+          replace_exact('ios/App/App.xcodeproj/project.pbxproj', 'CURRENT_PROJECT_VERSION = 8;', 'CURRENT_PROJECT_VERSION = 9;', 2)
+          replace_exact('ios/App/App.xcodeproj/project.pbxproj', 'MARKETING_VERSION = 1.5.1;', 'MARKETING_VERSION = 1.5.2;', 2)
+
+          changelog = Path('CHANGELOG.md')
+          text = changelog.read_text()
+          marker = '## Unreleased\n\n### Australian mosque directory\n'
+          replacement = '## Unreleased\n\n## 1.5.2 — 2026-08-30\n\n### Australian mosque directory\n'
+          if marker not in text:
+              raise SystemExit('CHANGELOG.md: expected Unreleased Australian mosque section not found')
+          text = text.replace(marker, replacement, 1)
+          anchor = '- Show Sunrise permanently in the Today schedule as the non-prayer boundary where Fajr ends, and prevent Fajr from remaining falsely marked current after sunrise.\n\n## 1.5.0 — 2026-08-26\n'
+          packaging = '''- Show Sunrise permanently in the Today schedule as the non-prayer boundary where Fajr ends, and prevent Fajr from remaining falsely marked current after sunrise.\n\n### Release packaging\n\n- Synchronise npm, package-lock, Android and iOS marketing versions at 1.5.2 and advance Android/iOS native build numbers together to 9.\n- Publish the persistently signed Android APK and AAB together with the Web/PWA ZIP, Raspberry Pi kiosk bundle, Windows x64 executable and portable SHA-256 manifest.\n- Preserve exact-current-main release preflight, persistent Android signing verification, archive-integrity checks, bundle budgets and exact-final-file-set validation before publication.\n- Keep consumer iOS/iPadOS IPA publication gated on Apple distribution signing/provisioning; Simulator acceptance remains release evidence rather than a consumer installer.\n\n## 1.5.0 — 2026-08-26\n'''
+          if anchor not in text:
+              raise SystemExit('CHANGELOG.md: expected v1.5.2 insertion anchor not found')
+          changelog.write_text(text.replace(anchor, packaging, 1))
+          PY
+
+          cat > RELEASE_NOTES.md <<'EOF'
+          # SalahOS v1.5.2 release notes
+
+          SalahOS v1.5.2 expands the Australian mosque experience and corrects the Fajr/Sunrise prayer-state boundary while preserving the exact-head quality, signing and packaging contract established in prior releases.
+
+          ## Australian mosque directory
+
+          - Expands the bundled Australian mosque catalogue from the former 106-record OpenStreetMap-only runtime to a **254-record deduplicated combined directory** built from reviewed OpenStreetMap and Australian Mosque Finder factual source snapshots.
+          - Preserves source provenance and attribution through the combined catalogue and deployable country/region packs.
+          - Uses audited and evidence-scored cross-source identity matching, coordinate quarantine for unsafe geospatial records and explicit protection against known false merges.
+          - Keeps the directory offline-first and integrates the combined catalogue into the shared directory service and generated Australian state/territory packs.
+          - Strengthens reproducibility and visual acceptance so source, combined and pack outputs must remain internally consistent with the 254-record contract.
+
+          ## Selected mosque prayer and Iqamah context
+
+          - `Use mosque` now activates the selected directory mosque as the Today prayer-location context without overwriting the user's separately saved personal location.
+          - Prayer starts continue to use SalahOS calculation settings at the selected mosque's coordinates and timezone unless an explicit authoritative local-mosque timetable is selected.
+          - Explicit mosque-specific congregation times published by the Australian Mosque Finder listing are surfaced as Iqamah/Jama'ah times.
+          - Multiple published congregation sessions remain visible rather than being collapsed to one value.
+          - Missing congregation times are shown as **Not published**; SalahOS does not fabricate an Iqamah time.
+          - Generic locality prayer calendars are not mislabelled as mosque-specific Iqamah data.
+          - A separately configured full local-mosque timetable remains authoritative and is not overridden by directory metadata.
+
+          ## Fajr and Sunrise correctness
+
+          - Adds Sunrise permanently to the Today timetable as a distinct **non-prayer time** labelled as the point where **Fajr ends**.
+          - Corrects current-prayer resolution so Fajr can no longer remain marked as current after Sunrise.
+          - Between Sunrise and Dhuhr, Today reports the state as **Between prayer times** while Dhuhr remains the next obligatory prayer.
+          - Sunrise is never treated as an obligatory prayer, current prayer or next obligatory prayer, and its Iqamah value is correctly shown as not applicable.
+          - Updates mobile, tablet, accessibility, RTL, weather and device-UX visual contracts to preserve exactly five obligatory prayer rows plus the separate Sunrise boundary row.
+
+          ## Quality and release engineering
+
+          - Preserves strict Prettier, ESLint and TypeScript checks with no suppressions added for this release.
+          - Keeps the 254-record Australian source/combined/pack reproducibility checks and shared-directory acceptance in the permanent Quality Gate.
+          - Keeps the main JavaScript chunk below the unchanged 550,000-byte architecture budget by persisting only a lightweight selected-mosque context rather than eagerly bundling the complete Australian catalogue into Today.
+          - Preserves full unit/coverage, production-build, bundle-budget, visual-regression, Android emulator lifecycle, fresh iPhone/iPad Simulator and packaged Windows executable acceptance.
+
+          ## Release reconciliation
+
+          - Synchronises npm, package-lock, Android and iOS marketing versions at `1.5.2`.
+          - Advances Android `versionCode` and iOS `CURRENT_PROJECT_VERSION` together to build `9`.
+          - Preserves fail-closed exact-current-main release preflight, persistent Android production-signing verification, archive integrity checks and exact-final-file-set verification.
+
+          ## Downloadable v1.5.2 assets
+
+          A successful v1.5.2 publication includes:
+
+          - `SalahOS-v1.5.2-android.apk` — persistently signed Android release APK for direct installation;
+          - `SalahOS-v1.5.2-android.aab` — persistently signed Android App Bundle for Google Play/distribution workflows;
+          - `SalahOS-v1.5.2-windows-x64.exe` — self-contained 64-bit Windows 10/11 desktop executable;
+          - `SalahOS-v1.5.2-web-pwa.zip` — complete production Web/PWA package;
+          - `SalahOS-v1.5.2-raspberry-pi-kiosk.tar.gz` — production Web/PWA files plus Raspberry Pi/Linux Chromium kiosk launch and autostart helpers;
+          - `SHA256SUMS.txt` — SHA-256 hashes for all packaged release assets.
+
+          The Windows executable includes its .NET runtime and expects the Microsoft Edge WebView2 Runtime, normally present on current Windows 10/11 installations. GitHub also exposes the standard source-code ZIP and tarball for the release tag.
+
+          ## Distribution boundaries
+
+          - A consumer iOS/iPadOS `.ipa` is not published until Apple distribution signing/provisioning is configured and a distribution archive can be validated. iPhone/iPad Simulator acceptance is test evidence, not a consumer installer.
+          - No native macOS `.dmg` is published because SalahOS does not contain a native macOS application target.
+          - Physical Raspberry Pi, TV/panel, iPhone/iPad and broad Android OEM acceptance is not inferred from browser, emulator or Simulator evidence.
+
+          ## Release gates
+
+          The v1.5.2 release revision must be the exact current `main` commit and pass the permanent Quality Gate, Visual Regression, Android, iOS and Windows workflows. The release-asset workflow reruns repository quality checks, verifies persistent Android signing, builds and verifies APK/AAB packages, validates Web/PWA and Raspberry Pi archives, checks the exact final file set and SHA-256 manifest, and only then creates or updates the GitHub release. The Windows workflow independently self-tests the packaged executable and reconciles its checksum into the published manifest.
+
+          ## Author
+
+          privacyOG
+          EOF
+
+          rm .github/workflows/temporary-v1.5.2-release-prep.yml
+
+      - name: Validate release candidate
+        shell: bash
+        run: |
+          set -euo pipefail
+          PACKAGE_VERSION="$(node -p "require('./package.json').version")"
+          LOCK_VERSION="$(node -p "require('./package-lock.json').version")"
+          LOCK_ROOT_VERSION="$(node -p "require('./package-lock.json').packages[''].version")"
+          ANDROID_VERSION="$(sed -n 's/^[[:space:]]*versionName[[:space:]]*"\([^"]*\)".*/\1/p' android/app/build.gradle | head -1)"
+          ANDROID_VERSION_CODE="$(sed -n 's/^[[:space:]]*versionCode[[:space:]]*\([0-9][0-9]*\).*/\1/p' android/app/build.gradle | head -1)"
+          IOS_VERSION="$(sed -n 's/^[[:space:]]*MARKETING_VERSION = \([^;]*\);/\1/p' ios/App/App.xcodeproj/project.pbxproj | sort -u)"
+          IOS_BUILD_NUMBER="$(sed -n 's/^[[:space:]]*CURRENT_PROJECT_VERSION = \([^;]*\);/\1/p' ios/App/App.xcodeproj/project.pbxproj | sort -u)"
+          [[ "$PACKAGE_VERSION" == '1.5.2' ]]
+          [[ "$LOCK_VERSION" == "$PACKAGE_VERSION" && "$LOCK_ROOT_VERSION" == "$PACKAGE_VERSION" ]]
+          [[ "$ANDROID_VERSION" == "$PACKAGE_VERSION" && "$IOS_VERSION" == "$PACKAGE_VERSION" ]]
+          [[ "$ANDROID_VERSION_CODE" == '9' && "$IOS_BUILD_NUMBER" == '9' ]]
+          git diff --check
+          npm ci --ignore-scripts
+          npm run check
+
+      - name: Commit validated v1.5.2 preparation
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name privacyOG
+          git config user.email kriptiik@proton.me
+          git add package.json package-lock.json android/app/build.gradle ios/App/App.xcodeproj/project.pbxproj CHANGELOG.md RELEASE_NOTES.md .github/workflows/temporary-v1.5.2-release-prep.yml
+          git commit -m 'release: prepare v1.5.2'
+          git push origin HEAD:release-prep/v1.5.2
