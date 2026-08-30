@@ -135,11 +135,8 @@ jobs:
                   time.sleep(0.1)
           raise SystemExit('Local SalahOS production server did not become ready')
           PY
-      - name: Validate targeted visual contracts
-        shell: bash
-        run: |
-          node scripts/visual-mobile-prayer-board-weather.mjs
-          node scripts/visual-accessibility-rtl-acceptance.mjs
+      - name: Validate weather contract directly
+        run: node scripts/visual-mobile-prayer-board-weather.mjs
       - name: Run complete visual matrix
         run: npm run visual:check
       - name: Capture validated production bytes
