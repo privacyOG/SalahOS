@@ -30,81 +30,74 @@ jobs:
 
           extended = Path('scripts/visual-mobile-prayer-themes-extended.mjs')
           text = extended.read_text()
-          old = """    if (
-              (await page
-                .locator('.today-prayer-row:not(.today-prayer-row--header):not(.is-supplementary)')
-                .count()) !== 5
-            ) {
-              throw new Error(`${scenario.name} did not preserve five obligatory prayer rows`);
-            }
-          """
-          old = '\n'.join(line[10:] if line.startswith('          ') else line for line in old.splitlines()) + '\n'
-          new = """    const obligatoryPrayerRows = page.locator(
-              '.today-prayer-row[data-today-prayer-name="fajr"], .today-prayer-row[data-today-prayer-name="dhuhr"], .today-prayer-row[data-today-prayer-name="asr"], .today-prayer-row[data-today-prayer-name="maghrib"], .today-prayer-row[data-today-prayer-name="isha"]',
-            );
-            if ((await obligatoryPrayerRows.count()) !== 5) {
-              throw new Error(`${scenario.name} did not preserve five obligatory prayer rows`);
-            }
-            if ((await page.locator('.today-prayer-row[data-today-prayer-name="sunrise"]').count()) !== 1) {
-              throw new Error(`${scenario.name} did not preserve one Sunrise/Fajr-end row`);
-            }
-            if ((await page.locator('.today-prayer-row.is-supplementary').count()) !== 0) {
-              throw new Error(`${scenario.name} duplicated Sunrise inside the prayer timetable`);
-            }
-          """
-          new = '\n'.join(line[10:] if line.startswith('          ') else line for line in new.splitlines()) + '\n'
-          assert old in text
-          extended.write_text(text.replace(old, new, 1))
+          start_anchor = "    if (\n      (await page\n        .locator('.today-prayer-row:not(.today-prayer-row--header):not(.is-supplementary)')\n"
+          start = text.index(start_anchor)
+          end = text.index('    await assertNoHorizontalOverflow(page, scenario.name);', start)
+          replacement = (
+              "    const obligatoryPrayerRows = page.locator(\n"
+              "      '.today-prayer-row[data-today-prayer-name=\"fajr\"], .today-prayer-row[data-today-prayer-name=\"dhuhr\"], .today-prayer-row[data-today-prayer-name=\"asr\"], .today-prayer-row[data-today-prayer-name=\"maghrib\"], .today-prayer-row[data-today-prayer-name=\"isha\"]',\n"
+              "    );\n"
+              "    if ((await obligatoryPrayerRows.count()) !== 5) {\n"
+              "      throw new Error(`${scenario.name} did not preserve five obligatory prayer rows`);\n"
+              "    }\n"
+              "    if ((await page.locator('.today-prayer-row[data-today-prayer-name=\"sunrise\"]').count()) !== 1) {\n"
+              "      throw new Error(`${scenario.name} did not preserve one Sunrise/Fajr-end row`);\n"
+              "    }\n"
+              "    if ((await page.locator('.today-prayer-row.is-supplementary').count()) !== 0) {\n"
+              "      throw new Error(`${scenario.name} duplicated Sunrise inside the prayer timetable`);\n"
+              "    }\n"
+          )
+          text = text[:start] + replacement + text[end:]
+          extended.write_text(text)
 
           device = Path('scripts/visual-device-ux-refinement.mjs')
           text = device.read_text()
-          old = """    const prayerRows = prayerTable.querySelectorAll(
-              '.today-prayer-row:not(.today-prayer-row--header)',
-            );
-          """
-          old = '\n'.join(line[10:] if line.startswith('          ') else line for line in old.splitlines()) + '\n'
-          new = """    const obligatoryPrayerRows = prayerTable.querySelectorAll(
-              '.today-prayer-row[data-today-prayer-name="fajr"], .today-prayer-row[data-today-prayer-name="dhuhr"], .today-prayer-row[data-today-prayer-name="asr"], .today-prayer-row[data-today-prayer-name="maghrib"], .today-prayer-row[data-today-prayer-name="isha"]',
-            );
-            const sunriseRows = prayerTable.querySelectorAll(
-              '.today-prayer-row[data-today-prayer-name="sunrise"]',
-            );
-            const supplementaryPrayerRows = prayerTable.querySelectorAll('.today-prayer-row.is-supplementary');
-          """
-          new = '\n'.join(line[10:] if line.startswith('          ') else line for line in new.splitlines()) + '\n'
-          assert old in text
-          text = text.replace(old, new, 1)
-          old_metrics = """      prayerRows: prayerRows.length,
-              prayerTableRole: prayerTable.getAttribute('role'),
-          """
-          old_metrics = '\n'.join(line[10:] if line.startswith('          ') else line for line in old_metrics.splitlines()) + '\n'
-          new_metrics = """      obligatoryPrayerRows: obligatoryPrayerRows.length,
-              sunriseRows: sunriseRows.length,
-              supplementaryPrayerRows: supplementaryPrayerRows.length,
-              prayerTableRole: prayerTable.getAttribute('role'),
-          """
-          new_metrics = '\n'.join(line[10:] if line.startswith('          ') else line for line in new_metrics.splitlines()) + '\n'
+          old_rows = (
+              "    const prayerRows = prayerTable.querySelectorAll(\n"
+              "      '.today-prayer-row:not(.today-prayer-row--header)',\n"
+              "    );\n"
+          )
+          new_rows = (
+              "    const obligatoryPrayerRows = prayerTable.querySelectorAll(\n"
+              "      '.today-prayer-row[data-today-prayer-name=\"fajr\"], .today-prayer-row[data-today-prayer-name=\"dhuhr\"], .today-prayer-row[data-today-prayer-name=\"asr\"], .today-prayer-row[data-today-prayer-name=\"maghrib\"], .today-prayer-row[data-today-prayer-name=\"isha\"]',\n"
+              "    );\n"
+              "    const sunriseRows = prayerTable.querySelectorAll(\n"
+              "      '.today-prayer-row[data-today-prayer-name=\"sunrise\"]',\n"
+              "    );\n"
+              "    const supplementaryPrayerRows = prayerTable.querySelectorAll(\n"
+              "      '.today-prayer-row.is-supplementary',\n"
+              "    );\n"
+          )
+          assert old_rows in text
+          text = text.replace(old_rows, new_rows, 1)
+          old_metrics = "      prayerRows: prayerRows.length,\n      prayerTableRole: prayerTable.getAttribute('role'),\n"
+          new_metrics = (
+              "      obligatoryPrayerRows: obligatoryPrayerRows.length,\n"
+              "      sunriseRows: sunriseRows.length,\n"
+              "      supplementaryPrayerRows: supplementaryPrayerRows.length,\n"
+              "      prayerTableRole: prayerTable.getAttribute('role'),\n"
+          )
           assert old_metrics in text
           text = text.replace(old_metrics, new_metrics, 1)
-          old_assert = """  if (metrics.prayerRows !== 5 || metrics.prayerTableRole !== 'table') {
-              throw new Error(
-                `${name} prayer schedule is not one scan-friendly five-prayer table: ${JSON.stringify(metrics)}`,
-              );
-            }
-          """
-          old_assert = '\n'.join(line[10:] if line.startswith('          ') else line for line in old_assert.splitlines()) + '\n'
-          new_assert = """  if (
-              metrics.obligatoryPrayerRows !== 5 ||
-              metrics.sunriseRows !== 1 ||
-              metrics.supplementaryPrayerRows !== 0 ||
-              metrics.prayerTableRole !== 'table'
-            ) {
-              throw new Error(
-                `${name} prayer schedule did not preserve five obligatory prayers plus one Sunrise/Fajr-end row: ${JSON.stringify(metrics)}`,
-              );
-            }
-          """
-          new_assert = '\n'.join(line[10:] if line.startswith('          ') else line for line in new_assert.splitlines()) + '\n'
+          old_assert = (
+              "  if (metrics.prayerRows !== 5 || metrics.prayerTableRole !== 'table') {\n"
+              "    throw new Error(\n"
+              "      `${name} prayer schedule is not one scan-friendly five-prayer table: ${JSON.stringify(metrics)}`,\n"
+              "    );\n"
+              "  }\n"
+          )
+          new_assert = (
+              "  if (\n"
+              "    metrics.obligatoryPrayerRows !== 5 ||\n"
+              "    metrics.sunriseRows !== 1 ||\n"
+              "    metrics.supplementaryPrayerRows !== 0 ||\n"
+              "    metrics.prayerTableRole !== 'table'\n"
+              "  ) {\n"
+              "    throw new Error(\n"
+              "      `${name} prayer schedule did not preserve five obligatory prayers plus one Sunrise/Fajr-end row: ${JSON.stringify(metrics)}`,\n"
+              "    );\n"
+              "  }\n"
+          )
           assert old_assert in text
           device.write_text(text.replace(old_assert, new_assert, 1))
           PY
