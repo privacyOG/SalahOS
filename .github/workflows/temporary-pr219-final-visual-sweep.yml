@@ -23,14 +23,14 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci --ignore-scripts
-      - name: Apply weather prayer-row contract
+      - name: Apply remaining prayer-row visual contracts
         shell: bash
         run: |
           python - <<'PY'
           from pathlib import Path
 
-          path = Path('scripts/visual-mobile-prayer-board-weather.mjs')
-          text = path.read_text()
+          weather = Path('scripts/visual-mobile-prayer-board-weather.mjs')
+          text = weather.read_text()
           anchor = "async function validateEnabledWeather(browser) {"
           helper = '''async function assertPrayerRowContract(page, context) {
             const obligatoryRows = page.locator(
@@ -50,7 +50,6 @@ jobs:
           '''
           assert anchor in text
           text = text.replace(anchor, helper + anchor, 1)
-
           old1 = (
               "    if ((await page.locator('.today-prayer-row:not(.today-prayer-row--header)').count()) !== 5) {\n"
               "      throw new Error('Phone/Home weather altered the five obligatory prayer rows');\n"
@@ -58,7 +57,6 @@ jobs:
           )
           assert old1 in text
           text = text.replace(old1, "    await assertPrayerRowContract(page, 'Phone/Home weather');\n", 1)
-
           old2 = (
               "    if ((await page.locator('.today-prayer-row:not(.today-prayer-row--header)').count()) !== 5) {\n"
               "      throw new Error('Disabled Phone/Home weather affected the five-prayer timetable');\n"
@@ -66,9 +64,46 @@ jobs:
           )
           assert old2 in text
           text = text.replace(old2, "    await assertPrayerRowContract(page, 'Disabled Phone/Home weather');\n", 1)
-          path.write_text(text)
+          weather.write_text(text)
+
+          accessibility = Path('scripts/visual-accessibility-rtl-acceptance.mjs')
+          text = accessibility.read_text()
+          old_metric = "      tableRows: document.querySelectorAll('.today-prayer-table [role=\"row\"]').length,\n"
+          new_metrics = (
+              "      tableRows: document.querySelectorAll('.today-prayer-table [role=\"row\"]').length,\n"
+              "      obligatoryPrayerRows: document.querySelectorAll(\n"
+              "        '.today-prayer-row[data-today-prayer-name=\"fajr\"], .today-prayer-row[data-today-prayer-name=\"dhuhr\"], .today-prayer-row[data-today-prayer-name=\"asr\"], .today-prayer-row[data-today-prayer-name=\"maghrib\"], .today-prayer-row[data-today-prayer-name=\"isha\"]',\n"
+              "      ).length,\n"
+              "      sunriseRows: document.querySelectorAll(\n"
+              "        '.today-prayer-row[data-today-prayer-name=\"sunrise\"]',\n"
+              "      ).length,\n"
+              "      supplementaryPrayerRows: document.querySelectorAll(\n"
+              "        '.today-prayer-row.is-supplementary',\n"
+              "      ).length,\n"
+          )
+          assert old_metric in text
+          text = text.replace(old_metric, new_metrics, 1)
+          old_assert = (
+              "      if (state.tableRows !== 6) {\n"
+              "        throw new Error(`${scenario.name} expected prayer table header plus five prayer rows`);\n"
+              "      }\n"
+          )
+          new_assert = (
+              "      if (\n"
+              "        state.tableRows !== 7 ||\n"
+              "        state.obligatoryPrayerRows !== 5 ||\n"
+              "        state.sunriseRows !== 1 ||\n"
+              "        state.supplementaryPrayerRows !== 0\n"
+              "      ) {\n"
+              "        throw new Error(\n"
+              "          `${scenario.name} expected a header, five obligatory prayers, and one Sunrise/Fajr-end row: ${JSON.stringify(state)}`,\n"
+              "        );\n"
+              "      }\n"
+          )
+          assert old_assert in text
+          accessibility.write_text(text.replace(old_assert, new_assert, 1))
           PY
-          npx prettier --write scripts/visual-mobile-prayer-board-weather.mjs
+          npx prettier --write scripts/visual-mobile-prayer-board-weather.mjs scripts/visual-accessibility-rtl-acceptance.mjs
           npm run format:check
           npm run lint
           git diff --check
@@ -100,8 +135,11 @@ jobs:
                   time.sleep(0.1)
           raise SystemExit('Local SalahOS production server did not become ready')
           PY
-      - name: Validate weather visual directly
-        run: node scripts/visual-mobile-prayer-board-weather.mjs
+      - name: Validate targeted visual contracts
+        shell: bash
+        run: |
+          node scripts/visual-mobile-prayer-board-weather.mjs
+          node scripts/visual-accessibility-rtl-acceptance.mjs
       - name: Run complete visual matrix
         run: npm run visual:check
       - name: Capture validated production bytes
@@ -109,8 +147,8 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add scripts/visual-mobile-prayer-board-weather.mjs
-          git commit -m 'test: align weather visual rows with sunrise'
+          git add scripts/visual-mobile-prayer-board-weather.mjs scripts/visual-accessibility-rtl-acceptance.mjs
+          git commit -m 'test: align final prayer row visuals with sunrise'
           echo "VALIDATED_COMMIT=$(git rev-parse HEAD)"
           git push
       - name: Stop local production server
