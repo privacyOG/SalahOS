@@ -17,3 +17,5 @@ jobs:
         uses: actions/checkout@v4
       - name: Delete temporary validation tag
         run: git push origin :refs/tags/temp-v153-item4-generated
+
+# cleanup trigger
