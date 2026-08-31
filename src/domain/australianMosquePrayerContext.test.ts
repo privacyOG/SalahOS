@@ -89,12 +89,14 @@ describe('Australian mosque published congregation times', () => {
     ).toEqual([]);
   });
 
-  it('overlays the first plausible congregation time while keeping calculated prayer starts', () => {
+  it('overlays only the plausible Erskine session after its resolved 12:17 Dhuhr start', () => {
     const record = erskineMusallah();
     const base = buildPrayerDashboard({
       instant: new Date('2026-08-30T00:00:00.000Z'),
       coordinates: createCoordinates(record.latitude, record.longitude),
       timeZone: 'Australia/Sydney',
+      // Mirrors the resolved 12:17 Dhuhr start in the v1.5.3 acceptance fixture.
+      adjustments: { dhuhr: 21 },
     });
     const calculated = applyPrayerSourceToDashboard({
       dashboard: base,
@@ -109,8 +111,8 @@ describe('Australian mosque published congregation times', () => {
     expect(enriched.sourceMode).toBe('calculated');
     expect(enriched.mosqueName).toBe(record.name);
     expect(enriched.prayers.find((row) => row.name === 'dhuhr')).toMatchObject({
-      localMinutes: base.today.prayers.dhuhr.roundedLocalMinutes,
-      iqamahLocalMinutes: 795,
+      localMinutes: 12 * 60 + 17,
+      iqamahLocalMinutes: 13 * 60 + 15,
       source: 'calculated',
     });
     expect(enriched.prayers.find((row) => row.name === 'fajr')?.iqamahLocalMinutes).toBeNull();
