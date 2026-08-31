@@ -28,8 +28,11 @@ jobs:
         run: |
           python3 scripts/temp-build-v153-item7.py
           python3 scripts/temp-fix-v153-item7.py
-      - name: Format changed files
-        run: npx prettier src/ui/applicationRoute.ts src/ui/applicationRoute.test.ts src/ui/KnowledgeExperience.tsx src/ui/KnowledgeScreen.tsx src/ui/QuranOfflineReader.tsx src/ui/QuranReaderV153.test.tsx src/platform/quranReadingPreferences.ts src/platform/quranReadingPreferences.test.ts src/quran-offline-reader.css --write
+      - name: Format and lint-fix changed files
+        run: |
+          npx prettier src/ui/applicationRoute.ts src/ui/applicationRoute.test.ts src/ui/KnowledgeExperience.tsx src/ui/KnowledgeScreen.tsx src/ui/QuranOfflineReader.tsx src/ui/QuranReaderV153.test.tsx src/platform/quranReadingPreferences.ts src/platform/quranReadingPreferences.test.ts src/quran-offline-reader.css --write
+          npx eslint src/ui/QuranOfflineReader.tsx --fix
+          npx prettier src/ui/QuranOfflineReader.tsx --write
       - name: Validate Item 7
         run: npm run typecheck && npm run lint && npm run test && npm run knowledge:content:check
       - name: Commit generated result to temporary tag
