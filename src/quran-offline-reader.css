@@ -101,12 +101,8 @@
   margin-block: 1rem;
 }
 
-.knowledge-card__arabic--naskh {
-  font-family: 'Noto Naskh Arabic', 'Amiri', serif;
-}
-
-.knowledge-card__arabic--traditional {
-  font-family: 'Traditional Arabic', 'Scheherazade New', 'Noto Naskh Arabic', serif;
+.knowledge-card__arabic--amiri-quran {
+  font-family: 'Salah Amiri Quran', serif;
 }
 
 .knowledge-card__arabic--system {

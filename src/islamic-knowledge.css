@@ -237,12 +237,8 @@
   text-align: end;
 }
 
-.knowledge-card__arabic[data-quran-font='naskh'] {
-  font-family: 'Noto Naskh Arabic', 'Amiri', serif;
-}
-
-.knowledge-card__arabic[data-quran-font='traditional'] {
-  font-family: 'Traditional Arabic', 'Scheherazade New', 'Noto Naskh Arabic', serif;
+.knowledge-card__arabic[data-quran-font='amiri-quran'] {
+  font-family: 'Salah Amiri Quran', serif;
 }
 
 .knowledge-card__arabic[data-quran-font='system'] {

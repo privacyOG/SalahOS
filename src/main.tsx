@@ -46,6 +46,7 @@ import './qiblah-v2.css';
 import './qibla-permission-onboarding.css';
 import './mosques-community-v2.css';
 import './shared-mosque-directory.css';
+import './quran-fonts.css';
 import './islamic-knowledge.css';
 import './quran-offline-reader.css';
 import './accessibility-rtl-refinement.css';

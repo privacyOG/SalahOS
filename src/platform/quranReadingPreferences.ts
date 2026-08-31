@@ -3,7 +3,7 @@ import type { KeyValueStorage } from './settingsStorage';
 export const QURAN_READING_PREFERENCES_STORAGE_KEY = 'salahos.quran-reading-preferences.v1';
 export const QURAN_READING_PREFERENCES_CHANGE_EVENT = 'salahos:quran-reading-preferences-change';
 
-export type QuranArabicFont = 'naskh' | 'traditional' | 'system';
+export type QuranArabicFont = 'amiri-quran' | 'system';
 export type QuranFontScale = 'compact' | 'comfortable' | 'large' | 'xlarge';
 export type QuranTranslationMode = 'pickthall-1930' | 'none';
 
@@ -19,7 +19,7 @@ export interface QuranReadingPreferences {
 export const defaultQuranReadingPreferences: QuranReadingPreferences = Object.freeze({
   version: 1,
   translationMode: 'pickthall-1930',
-  arabicFont: 'naskh',
+  arabicFont: 'amiri-quran',
   fontScale: 'comfortable',
   bookmarkedAyahIds: Object.freeze([]),
   lastReadAyahId: null,
@@ -39,9 +39,9 @@ function translationMode(value: unknown): QuranTranslationMode {
 }
 
 function arabicFont(value: unknown): QuranArabicFont {
-  return value === 'naskh' || value === 'traditional' || value === 'system'
-    ? value
-    : defaultQuranReadingPreferences.arabicFont;
+  if (value === 'amiri-quran' || value === 'system') return value;
+  if (value === 'naskh' || value === 'traditional') return 'amiri-quran';
+  return defaultQuranReadingPreferences.arabicFont;
 }
 
 function fontScale(value: unknown): QuranFontScale {

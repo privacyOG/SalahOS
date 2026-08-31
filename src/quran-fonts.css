@@ -1,0 +1,10 @@
+@font-face {
+  font-family: 'Salah Amiri Quran';
+  src: url('/fonts/amiri-quran-arabic.woff2') format('woff2');
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  unicode-range:
+    U+0020, U+0600-06FF, U+0750-077F, U+0870-089F, U+08A0-08FF, U+FB50-FDFF, U+FE70-FEFF,
+    U+200C-200F, U+202A-202E, U+2066-2069, U+25CC, U+FD3E-FD3F;
+}

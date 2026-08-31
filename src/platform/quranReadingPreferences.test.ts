@@ -41,7 +41,7 @@ describe('Quran reading preferences', () => {
     const preferences = parseQuranReadingPreferences({
       version: 1,
       translationMode: 'none',
-      arabicFont: 'traditional',
+      arabicFont: 'system',
       fontScale: 'large',
       bookmarkedAyahIds: ['quran-prayer-remembrance', 'quran-prayer-remembrance'],
       lastReadAyahId: 'quran-patience-prayer',
@@ -52,6 +52,13 @@ describe('Quran reading preferences', () => {
       ...preferences,
       bookmarkedAyahIds: ['quran-prayer-remembrance'],
     });
+  });
+
+  it('migrates legacy unbundled font choices to the bundled Qur’anic face', () => {
+    expect(parseQuranReadingPreferences({ arabicFont: 'naskh' }).arabicFont).toBe('amiri-quran');
+    expect(parseQuranReadingPreferences({ arabicFont: 'traditional' }).arabicFont).toBe(
+      'amiri-quran',
+    );
   });
 
   it('toggles bookmarks without mutating the prior state', () => {

@@ -59,3 +59,11 @@ A package whose license cannot be confidently classified must remain blocked unt
 ## Release review boundary
 
 Passing this gate establishes that the exact dependency graph pinned by the committed npm lockfile declares only approved license expressions under this policy, with the current MPL-2.0 exception restricted to development-only tooling. Native Android/iOS dependencies, operating-system packages, browser/runtime licenses, externally hosted content, user-supplied files, and future platform integrations require their own review when those components are introduced.
+
+## Bundled Qur’anic font: Amiri Quran 1.003
+
+SalahOS self-hosts a subset of **Amiri Quran 1.003** from the upstream `aliftype/amiri` release. The upstream project distributes Amiri under the **SIL Open Font License 1.1 (OFL-1.1)**. The exact release asset is `Amiri-1.003.zip` (upstream SHA-256 `81af0aff7d2086d8af24cea7202f7546130997982534691373485cd96744d05e`).
+
+Release packaging keeps the upstream OFL text at `public/fonts/OFL-Amiri.txt`. The distributed webfont is `public/fonts/amiri-quran-arabic.woff2`, generated from `AmiriQuran.ttf` using FontTools subsetting with Arabic/Qur’anic Unicode coverage and WOFF2 output. FontTools/Brotli are build-time tooling used only to produce the committed asset; they are not added to the npm dependency graph.
+
+The CSS family name `Salah Amiri Quran` distinguishes the bundled application face from host-installed fonts while preserving the upstream notice. No KFGQPC font is bundled or offered by SalahOS in this release; if one is offered later it must remain optional/downloadable and its separate licence/notice restrictions must be reviewed before distribution.
