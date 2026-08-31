@@ -7,3 +7,8 @@ new = """    return surfaceScoped;\n  }, [module, query, scope]);\n"""
 if old not in text:
     raise SystemExit('expected scoped bookmark block not found')
 path.write_text(text.replace(old, new, 1), encoding='utf-8')
+
+reader = Path('src/ui/QuranOfflineReader.tsx')
+reader_text = reader.read_text(encoding='utf-8')
+reader_text = reader_text.replace('  type QuranReadingMode,\n', '', 1)
+reader.write_text(reader_text, encoding='utf-8')
