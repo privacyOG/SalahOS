@@ -277,7 +277,7 @@
       "name": "Canning Vale Musalla",
       "aliases": [],
       "address": {
-        "formatted": "3/5 Hughes St,, Canning Vale, WA, 6155",
+        "formatted": "3/5 Hughes St, Canning Vale, WA, 6155",
         "locality": "Canning Vale",
         "region": "WA",
         "regionCode": "AU-WA",
@@ -285,11 +285,7 @@
         "countryCode": "AU"
       },
       "contact": { "social": [] },
-      "prayerTimes": {
-        "maghrib": "11:00 am",
-        "sourceLabel": "Australian Mosque Finder",
-        "updatedAt": "2026-08-29T12:02:14.303Z"
-      },
+      "prayerTimes": null,
       "jumuahTimes": [],
       "facilities": ["women-prayer-space"],
       "services": ["classes"],
@@ -306,23 +302,15 @@
           "sourceUrl": "https://mosque-finder.com.au/mosque/canning-vale-musalla/index.html",
           "observedAt": "2026-08-29T12:02:14.303Z",
           "confidence": 0.86,
-          "fields": [
-            "name",
-            "aliases",
-            "address",
-            "coordinates",
-            "prayer-times",
-            "facilities",
-            "services"
-          ]
+          "fields": ["name", "aliases", "address", "coordinates", "facilities", "services"]
         }
       ],
       "conflictCount": 0,
       "sourceType": "australian-mosque-finder",
       "locationType": "musalla",
       "quality": {
-        "score": 58,
-        "completenessPercent": 50,
+        "score": 54,
+        "completenessPercent": 42,
         "provenanceCoveragePercent": 100,
         "freshness": "fresh",
         "conflictCount": 0

@@ -2250,7 +2250,7 @@
       "name": "Dee Why - Manly Warringah Mosque",
       "aliases": ["Dee Why Mosque", "Dee Why - Manly Warringah Mosque"],
       "address": {
-        "formatted": "12 South Creek Road, Dee Why,, NSW, 2099",
+        "formatted": "12 South Creek Road, Dee Why, NSW, 2099",
         "region": "NSW",
         "regionCode": "AU-NSW",
         "postcode": "2099",
@@ -3792,7 +3792,7 @@
       "name": "Kensington - ANZAC Parade Musalla",
       "aliases": [],
       "address": {
-        "formatted": "Unit 1, 178 ANZAC Parade,, NSW, Kensington, NSW, 2033",
+        "formatted": "Unit 1, 178 ANZAC Parade, NSW, Kensington, NSW, 2033",
         "locality": "Kensington",
         "region": "NSW",
         "regionCode": "AU-NSW",
@@ -4629,11 +4629,7 @@
         "countryCode": "AU"
       },
       "contact": { "social": [] },
-      "prayerTimes": {
-        "isha": "1:15 pm",
-        "sourceLabel": "Australian Mosque Finder",
-        "updatedAt": "2026-08-29T12:02:14.303Z"
-      },
+      "prayerTimes": null,
       "jumuahTimes": [{ "time": "1:15 pm", "label": "Jumu’ah" }],
       "facilities": ["toilets", "parking", "wheelchair-accessible"],
       "services": [],
@@ -4650,15 +4646,7 @@
           "sourceUrl": "https://mosque-finder.com.au/mosque/lismore-masallah/index.html",
           "observedAt": "2026-08-29T12:02:14.303Z",
           "confidence": 0.86,
-          "fields": [
-            "name",
-            "aliases",
-            "address",
-            "coordinates",
-            "prayer-times",
-            "jumuah-times",
-            "facilities"
-          ]
+          "fields": ["name", "aliases", "address", "coordinates", "jumuah-times", "facilities"]
         }
       ],
       "conflictCount": 0,
@@ -4666,8 +4654,8 @@
       "locationType": "musalla",
       "featureLabels": ["Street parking", "Disabled access", "Toilets"],
       "quality": {
-        "score": 58,
-        "completenessPercent": 50,
+        "score": 54,
+        "completenessPercent": 42,
         "provenanceCoveragePercent": 100,
         "freshness": "fresh",
         "conflictCount": 0
@@ -6114,7 +6102,7 @@
       },
       "contact": { "website": "http://www.sydneycitymasjid.org.au/", "social": [] },
       "prayerTimes": {
-        "dhuhr": "12:15 pm / 1:15 pm",
+        "dhuhr": "1:15 pm",
         "sourceLabel": "Australian Mosque Finder",
         "updatedAt": "2026-08-29T12:02:14.303Z"
       },

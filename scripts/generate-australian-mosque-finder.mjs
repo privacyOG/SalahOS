@@ -55,6 +55,14 @@ const PRAYER_NAMES = Object.freeze({
   esha: 'isha',
 });
 
+export const AUSTRALIAN_FARD_SANITY_WINDOWS = Object.freeze({
+  fajr: Object.freeze({ earliestMinutes: 0, latestMinutes: 600 }),
+  dhuhr: Object.freeze({ earliestMinutes: 600, latestMinutes: 1_020 }),
+  asr: Object.freeze({ earliestMinutes: 720, latestMinutes: 1_260 }),
+  maghrib: Object.freeze({ earliestMinutes: 900, latestMinutes: 1_439 }),
+  isha: Object.freeze({ earliestMinutes: 960, latestMinutes: 1_439 }),
+});
+
 function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
@@ -99,6 +107,67 @@ function normalizeClock(raw) {
   return `${String(hour)}:${String(minute).padStart(2, '0')} ${match[3]}`;
 }
 
+function clockMinutes(value) {
+  const normalized = normalizeClock(value);
+  if (normalized === null) return null;
+  const match = /^(\d{1,2}):(\d{2}) (am|pm)$/u.exec(normalized);
+  if (match === null) return null;
+  let hour = Number(match[1]) % 12;
+  if (match[3] === 'pm') hour += 12;
+  return hour * 60 + Number(match[2]);
+}
+
+function normalizeAddressPart(value) {
+  return cleanText(value)
+    .replace(/\s*,\s*,+/gu, ', ')
+    .replace(/\s+,/gu, ',')
+    .replace(/,\s*/gu, ', ')
+    .replace(/^,\s*|\s*,$/gu, '')
+    .replace(/\s+/gu, ' ')
+    .trim();
+}
+
+export function sanitizeDailyPrayerTimes(
+  recordId,
+  prayerTimes,
+  jumuahTimes,
+  report = console.warn,
+) {
+  if (prayerTimes === null) return null;
+  const jumuahClocks = new Set(
+    jumuahTimes.flatMap((entry) => {
+      const normalized = normalizeClock(entry.time);
+      return normalized === null ? [] : [normalized];
+    }),
+  );
+  const sanitized = {};
+  for (const [prayer, value] of Object.entries(prayerTimes)) {
+    const window = AUSTRALIAN_FARD_SANITY_WINDOWS[prayer];
+    if (window === undefined || typeof value !== 'string') continue;
+    const kept = [];
+    for (const candidate of value.split(' / ')) {
+      const normalized = normalizeClock(candidate);
+      if (normalized === null) continue;
+      if (jumuahClocks.has(normalized)) {
+        report(
+          `Australian Mosque Finder dropped ${recordId} ${prayer}=${normalized}: collides with published Jumu’ah session`,
+        );
+        continue;
+      }
+      const minutes = clockMinutes(normalized);
+      if (minutes === null || minutes < window.earliestMinutes || minutes > window.latestMinutes) {
+        report(
+          `Australian Mosque Finder dropped ${recordId} ${prayer}=${normalized}: outside Australian ${prayer} sanity window`,
+        );
+        continue;
+      }
+      if (!kept.includes(normalized)) kept.push(normalized);
+    }
+    if (kept.length > 0) sanitized[prayer] = kept.join(' / ');
+  }
+  return Object.keys(sanitized).length === 0 ? null : sanitized;
+}
+
 function clocksFromText(text) {
   const values = [];
   const matches = text.matchAll(/\b(?:1[0-2]|0?[1-9])(?:[:.]\d{2})?\s*(?:am|pm)\b/giu);
@@ -126,12 +195,14 @@ function parseRegion(value) {
 
 function parseAddress(addressHtml, fallbackState) {
   const directDivs = [...addressHtml.matchAll(/<div(?![^>]*class=)[^>]*>([\s\S]*?)<\/div>/giu)]
-    .map((match) => cleanText(match[1]))
+    .map((match) => normalizeAddressPart(match[1]))
     .filter(Boolean);
   const line1 = directDivs[0] ?? '';
   const localityLine = directDivs[1] ?? '';
   const localityMatch = /^(.*?),\s*([A-Za-z]{2,3})\s*-\s*(\d{4})$/u.exec(localityLine);
-  const locality = localityMatch?.[1]?.trim() || firstMatch(localityLine, /^(.*?)(?:,|$)/u) || '';
+  const locality = normalizeAddressPart(
+    localityMatch?.[1]?.trim() || firstMatch(localityLine, /^(.*?)(?:,|$)/u) || '',
+  );
   const state = (localityMatch?.[2] ?? fallbackState).toLocaleLowerCase('en-AU');
   const postcode = localityMatch?.[3] ?? /\b\d{4}\b/u.exec(localityLine)?.[0] ?? null;
   const regionCode = parseRegion(state);
@@ -144,7 +215,7 @@ function parseAddress(addressHtml, fallbackState) {
     state: state.toLocaleUpperCase('en-AU'),
     regionCode,
     postcode,
-    formatted: formattedParts.join(', '),
+    formatted: normalizeAddressPart(formattedParts.join(', ')),
     countryCode: 'AU',
   };
 }
@@ -239,7 +310,7 @@ function normalizedFacts(features, detailsText) {
   };
 }
 
-export function parseMosqueFinderPage(rawHtml, sourceUrl, retrievedAt) {
+export function parseMosqueFinderPage(rawHtml, sourceUrl, retrievedAt, report = console.warn) {
   const html = stripComments(rawHtml);
   const name = firstMatch(html, /<h1[^>]*>([\s\S]*?)<\/h1>/iu);
   if (name === null) return null;
@@ -265,12 +336,19 @@ export function parseMosqueFinderPage(rawHtml, sourceUrl, retrievedAt) {
   const detailsText = cleanText(sectionByHeading(html, 'h2', 'Details'));
   const features = parseFeatureList(html);
   const facts = normalizedFacts(features, detailsText);
-  const prayerTimes = parseDailyPrayerTimes(`${jumuahText}. ${detailsText}`);
   const slug = new URL(sourceUrl).pathname.split('/').filter(Boolean).at(-2) ?? '';
   if (slug.length === 0) return null;
+  const recordId = `mosque-finder:${slug}`;
+  const jumuahTimes = parseJumuah(jumuahText);
+  const prayerTimes = sanitizeDailyPrayerTimes(
+    recordId,
+    parseDailyPrayerTimes(`${jumuahText}. ${detailsText}`),
+    jumuahTimes,
+    report,
+  );
 
   return {
-    id: `mosque-finder:${slug}`,
+    id: recordId,
     slug,
     name,
     type: normalizeType(typeText),
@@ -279,7 +357,7 @@ export function parseMosqueFinderPage(rawHtml, sourceUrl, retrievedAt) {
     longitude: Number(longitude.toFixed(7)),
     contact: parseContact(addressHtml),
     prayerTimes,
-    jumuahTimes: parseJumuah(jumuahText),
+    jumuahTimes,
     features,
     facilities: facts.facilities,
     services: facts.services,
@@ -465,28 +543,28 @@ function selfTest() {
     <h1>Sydney CBD - Test Musallah</h1><figure>Sydney, nsw</figure>
     <div class="type"><span>Musalla</span></div>
     <section><header><h3>Address</h3></header><address>
-      <div>Level 1, 56-60 Example St</div><div>Sydney, nsw-2000</div><figure>
+      <div>Level 1, 56-60 Example St,, </div><div>Sydney, nsw-2000</div><figure>
       <div class="info"><i class="fa fa-mobile"></i><span>02 9000 0000</span></div>
       <div class="info"><i class="fa fa-globe"></i><a href="https://example.org/">example</a></div>
       <!--div class="info"><i class="fa fa-mobile"></i><span>818-832-5258</span></div-->
       </figure></address></section>
     <section><header><h3>Jummah Time</h3></header><div class="content">3 sessions Khutbah 12:15 pm, 1:00 pm & 1:40 pm. Dhuhr: 12:15 pm and 1:15 pm.</div></section>
-    <article><header><h2>Details</h2></header><p>Daily Prayers</p><ul><li>Dhuhr: 12:15 pm and 1:15 pm</li></ul></article>
+    <article><header><h2>Details</h2></header><p>Daily Prayers</p><ul><li>Dhuhr: 12:15 pm and 1:15 pm</li><li>Maghrib: 11:00 am</li></ul></article>
     <article><header><h2>Features</h2></header><ul class="bullets"><li>Wudu facility</li><li>Toilets</li></ul></article>
     <script>var state = "nsw"; var lat = -33.86; var lon = 151.20; var PT = new PrayTimes('MWL');</script>`;
   const record = parseMosqueFinderPage(
     fixture,
     `${BASE_URL}/mosque/test/index.html`,
     '2026-08-29T00:00:00.000Z',
+    () => {},
   );
   assert(record !== null, 'Self-test fixture did not parse');
   assert(record.type === 'musalla', 'Self-test type parsing failed');
   assert(record.contact.phone === '02 9000 0000', 'Self-test contact parsing failed');
   assert(record.jumuahTimes.length === 3, 'Self-test Jumu’ah parsing failed');
-  assert(
-    record.prayerTimes?.dhuhr === '12:15 pm / 1:15 pm',
-    'Self-test daily prayer parsing failed',
-  );
+  assert(record.prayerTimes?.dhuhr === '1:15 pm', 'Self-test daily prayer parsing failed');
+  assert(record.prayerTimes?.maghrib === undefined, 'Self-test prayer sanity filtering failed');
+  assert(!record.address.formatted.includes(',,'), 'Self-test address normalization failed');
   assert(
     record.facilities.includes('wudu') && record.facilities.includes('toilets'),
     'Self-test facility parsing failed',
