@@ -43,3 +43,5 @@ jobs:
           git commit -m '[item7-generated] rebuild Qur’an reading UX'
           git tag -f temp-v153-item7-generated
           git push --force origin refs/tags/temp-v153-item7-generated
+
+# rerun after stale import fix
