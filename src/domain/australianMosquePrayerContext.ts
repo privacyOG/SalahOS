@@ -10,6 +10,15 @@ const OBLIGATORY_PRAYERS: readonly ObligatoryPrayerName[] = [
   'isha',
 ];
 
+export const AUSTRALIAN_MOSQUE_CONGREGATION_ACCEPTANCE_WINDOW_MINUTES = Object.freeze({
+  fajr: 120,
+  dhuhr: 90,
+  asr: 90,
+  maghrib: 90,
+  isha: 90,
+}) satisfies Readonly<Record<ObligatoryPrayerName, number>>;
+
+const MINUTES_PER_DAY = 1_440;
 const TWELVE_HOUR_CLOCK = /^(\d{1,2}):(\d{2})\s*(am|pm)$/u;
 const TWENTY_FOUR_HOUR_CLOCK = /^(\d{1,2}):(\d{2})$/u;
 
@@ -56,6 +65,40 @@ export function publishedAustralianMosqueCongregationMinutes(
   return Object.freeze([...new Set(values)]);
 }
 
+function minutesAfterPrayerStart(
+  prayer: ObligatoryPrayerName,
+  publishedLocalMinutes: number,
+  startLocalMinutes: number,
+): number {
+  const sameDayDelta = publishedLocalMinutes - startLocalMinutes;
+  if (prayer === 'isha' && sameDayDelta < 0) {
+    return sameDayDelta + MINUTES_PER_DAY;
+  }
+  return sameDayDelta;
+}
+
+/**
+ * Returns only mosque-published congregation times that plausibly follow the
+ * calculated/resolved prayer start. Values outside the acceptance window are
+ * discarded rather than adjusted so sparse or misclassified directory data
+ * cannot become an asserted Iqamah time.
+ */
+export function guardedPublishedAustralianMosqueCongregationMinutes(
+  prayerTimes: MosqueDirectoryPrayerSummary | null,
+  prayer: PrayerName,
+  startLocalMinutes: number | null,
+): readonly number[] {
+  if (prayer === 'sunrise' || startLocalMinutes === null) return Object.freeze([]);
+
+  const maximumDelay = AUSTRALIAN_MOSQUE_CONGREGATION_ACCEPTANCE_WINDOW_MINUTES[prayer];
+  return Object.freeze(
+    publishedAustralianMosqueCongregationMinutes(prayerTimes, prayer).filter((value) => {
+      const delay = minutesAfterPrayerStart(prayer, value, startLocalMinutes);
+      return delay >= 0 && delay <= maximumDelay;
+    }),
+  );
+}
+
 export function hasPublishedAustralianMosqueCongregationTimes(
   prayerTimes: MosqueDirectoryPrayerSummary | null,
 ): boolean {
@@ -65,11 +108,11 @@ export function hasPublishedAustralianMosqueCongregationTimes(
 }
 
 /**
- * Adds mosque-published congregation times to a calculated dashboard without
- * pretending that sparse directory metadata is a complete mosque timetable.
- * The first published session is the primary Iqamah used by compact/hero
- * surfaces; callers that can render multiple sessions should read the complete
- * array through publishedAustralianMosqueCongregationMinutes().
+ * Adds plausible mosque-published congregation times to a calculated dashboard
+ * without pretending that sparse directory metadata is a complete mosque
+ * timetable. The first accepted session is the primary Iqamah used by
+ * compact/hero surfaces; raw callers can still inspect every parsed published
+ * value through publishedAustralianMosqueCongregationMinutes().
  */
 export function applyAustralianMosqueCongregationTimes(
   dashboard: SourcedPrayerDashboard,
@@ -78,7 +121,11 @@ export function applyAustralianMosqueCongregationTimes(
   if (dashboard.sourceMode === 'local-mosque') return dashboard;
 
   const prayers = dashboard.prayers.map((row) => {
-    const published = publishedAustralianMosqueCongregationMinutes(context.prayerTimes, row.name);
+    const published = guardedPublishedAustralianMosqueCongregationMinutes(
+      context.prayerTimes,
+      row.name,
+      row.localMinutes,
+    );
     const primary = published[0];
     return primary === undefined
       ? row
