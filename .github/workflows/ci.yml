@@ -23,7 +23,12 @@ jobs:
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
       - name: Format check
-        run: npm run format:check
+        run: |
+          npx prettier TEMP_TODO_V1.5.3.md --write
+          echo '=== PRETTIER DIFF START ==='
+          git diff -- TEMP_TODO_V1.5.3.md
+          echo '=== PRETTIER DIFF END ==='
+          exit 1
       - name: Lint
         run: npm run lint
       - name: Typecheck
