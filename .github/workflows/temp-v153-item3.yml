@@ -58,4 +58,4 @@ jobs:
           git tag -f temp-v153-item3-generated
           git push --force origin refs/tags/temp-v153-item3-generated
 
-# retry: jsx-safe-attribute-scan
+# retry: exact-jsx-safe-attribute-scan
