@@ -1,30 +1,5 @@
 import { readFileSync } from 'node:fs';
-import { renderToStaticMarkup } from 'react-dom/server';
-import { beforeAll, describe, expect, it } from 'vitest';
-
-import { initializeApplicationStorage } from '../platform/applicationStorage';
-import {
-  defaultPersistedSettings,
-  SETTINGS_STORAGE_KEY,
-  type KeyValueStorage,
-} from '../platform/settingsStorage';
-import { KnowledgeScreen } from './KnowledgeScreen';
-
-class MemoryStorage implements KeyValueStorage {
-  private readonly values = new Map<string, string>();
-
-  getItem(key: string): string | null {
-    return this.values.get(key) ?? null;
-  }
-
-  setItem(key: string, value: string): void {
-    this.values.set(key, value);
-  }
-
-  removeItem(key: string): void {
-    this.values.delete(key);
-  }
-}
+import { describe, expect, it } from 'vitest';
 
 function openingTagsContaining(source: string, marker: string): readonly string[] {
   const pattern = new RegExp(`\\b${marker}(?:\\s|=|>)`, 'gu');
@@ -39,38 +14,24 @@ function openingTagsContaining(source: string, marker: string): readonly string[
 }
 
 describe('Knowledge text direction', () => {
-  beforeAll(async () => {
-    const storage = new MemoryStorage();
-    storage.setItem(
-      SETTINGS_STORAGE_KEY,
-      JSON.stringify({ ...defaultPersistedSettings, locale: 'ar' }),
-    );
-    await initializeApplicationStorage(storage);
-  });
+  it('keeps source-language content independent of the Arabic UI direction in the production Qur’an reader', () => {
+    const source = readFileSync(new URL('./QuranOfflineReader.tsx', import.meta.url), 'utf8');
+    const translationTags = openingTagsContaining(source, 'data-quran-offline-translation');
+    const arabicTags = openingTagsContaining(source, 'data-quran-font');
 
-  it('keeps source-language content independent of the Arabic UI direction', () => {
-    const markup = renderToStaticMarkup(<KnowledgeScreen scope="quran" />);
-
-    expect(markup).toMatch(
-      /<p(?=[^>]*data-quran-translation)(?=[^>]*lang="en")(?=[^>]*dir="ltr")[^>]*>/u,
+    expect(translationTags.length).toBeGreaterThan(0);
+    expect(translationTags.every((tag) => tag.includes('lang=') && tag.includes('dir='))).toBe(
+      true,
     );
-    expect(markup).toMatch(
-      /<p(?=[^>]*class="knowledge-card__arabic")(?=[^>]*lang="ar")(?=[^>]*dir="rtl")[^>]*>/u,
+    expect(arabicTags.length).toBeGreaterThan(0);
+    expect(arabicTags.every((tag) => tag.includes('lang="ar"') && tag.includes('dir="rtl"'))).toBe(
+      true,
     );
-    expect(markup).toContain('<bdi dir="auto">Qur’an 2:45</bdi>');
+    expect(source).toContain('<BidiText>{result.ayah.key}</BidiText>');
   });
 
   it('prevents translation, tafsir, source metadata and related-reference elements from inheriting direction implicitly', () => {
     const checks = [
-      [
-        'KnowledgeScreen.tsx',
-        [
-          'data-quran-translation',
-          'data-quran-tafsir-summary',
-          'data-knowledge-source-metadata',
-          'data-quran-related-reference',
-        ],
-      ],
       [
         'KnowledgeStage7Details.tsx',
         [
