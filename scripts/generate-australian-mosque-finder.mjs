@@ -121,7 +121,7 @@ function normalizeAddressPart(value) {
   return cleanText(value)
     .replace(/\s*,\s*,+/gu, ', ')
     .replace(/\s+,/gu, ',')
-    .replace(/,\s*/gu, ', ')
+    .replace(/,\s+(?=[^.,])/gu, ', ')
     .replace(/^,\s*|\s*,$/gu, '')
     .replace(/\s+/gu, ' ')
     .trim();

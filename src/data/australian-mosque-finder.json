@@ -303,12 +303,12 @@
       "name": "Alice Springs - Larapinta Lyndavale Drive Mosque",
       "type": "mosque",
       "address": {
-        "line1": "101 Lyndavale Drive, . NT",
+        "line1": "101 Lyndavale Drive,. NT",
         "locality": "Larapinta",
         "state": "NT",
         "regionCode": "AU-NT",
         "postcode": "0870",
-        "formatted": "101 Lyndavale Drive, . NT, Larapinta, NT, 0870",
+        "formatted": "101 Lyndavale Drive,. NT, Larapinta, NT, 0870",
         "countryCode": "AU"
       },
       "latitude": -23.69531,
