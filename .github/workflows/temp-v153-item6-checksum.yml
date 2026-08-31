@@ -1,0 +1,39 @@
+name: Temporary v1.5.3 Item 6 Checksum
+
+on:
+  push:
+    branches: [v1.5.3-work-item-6]
+
+permissions:
+  contents: read
+
+jobs:
+  checksum:
+    if: contains(github.event.head_commit.message, '[item6-checksum]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Download pinned transliteration candidate
+        run: |
+          set -euo pipefail
+          curl -fL --retry 3 --retry-delay 2 \
+            https://raw.githubusercontent.com/risan/quran-json/v3.1.2/dist/quran_transliteration.json \
+            -o /tmp/quran_transliteration.json
+      - name: Report checksum and structure
+        run: |
+          set -euo pipefail
+          echo "BYTE_SIZE=$(wc -c < /tmp/quran_transliteration.json)"
+          echo "SHA256=$(sha256sum /tmp/quran_transliteration.json | awk '{print $1}')"
+          node - <<'NODE'
+          const fs = require('fs');
+          const data = JSON.parse(fs.readFileSync('/tmp/quran_transliteration.json', 'utf8'));
+          const chapters = Array.isArray(data) ? data.length : 0;
+          const verses = Array.isArray(data)
+            ? data.reduce((sum, chapter) => sum + (Array.isArray(chapter.verses) ? chapter.verses.length : 0), 0)
+            : 0;
+          console.log(`CHAPTERS=${chapters}`);
+          console.log(`VERSES=${verses}`);
+          if (chapters !== 114 || verses !== 6236) {
+            throw new Error(`Unexpected corpus shape: ${chapters} chapters / ${verses} verses`);
+          }
+          NODE
