@@ -1,0 +1,53 @@
+name: Temporary v1.5.3 Item 3 Patch
+
+on:
+  push:
+    branches: [v1.5.3-work-item-3]
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: contains(github.event.head_commit.message, '[item3-bootstrap]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: v1.5.3-work-item-3
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Apply Work Item 3 patch
+        run: node scripts/temp-v153-item3-patch.mjs
+      - name: Format changed files
+        run: >-
+          npx prettier
+          src/domain/textPresentation.ts
+          src/domain/islamicKnowledge.ts
+          src/domain/islamicKnowledgeStage7.ts
+          src/domain/islamicKnowledgeGovernance.ts
+          src/domain/quranOfflineLibrary.ts
+          src/data/islamic-knowledge-source-registry.json
+          src/data/quran-offline-manifest.json
+          src/ui/KnowledgeScreen.tsx
+          src/ui/KnowledgeStage7Details.tsx
+          src/ui/QuranOfflineReader.tsx
+          src/ui/KnowledgeTextDirection.test.tsx
+          --write
+      - name: Required Work Item 3 gate
+        run: npm run typecheck && npm run lint && npm run test
+      - name: Commit and publish generated patch tag
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/domain/textPresentation.ts src/domain/islamicKnowledge.ts src/domain/islamicKnowledgeStage7.ts src/domain/islamicKnowledgeGovernance.ts src/domain/quranOfflineLibrary.ts src/data/islamic-knowledge-source-registry.json src/data/quran-offline-manifest.json src/ui/KnowledgeScreen.tsx src/ui/KnowledgeStage7Details.tsx src/ui/QuranOfflineReader.tsx src/ui/KnowledgeTextDirection.test.tsx
+          git commit -m '[item3-generated] fix translation and metadata direction'
+          git tag -f temp-v153-item3-generated
+          git push --force origin refs/tags/temp-v153-item3-generated
