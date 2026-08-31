@@ -64,7 +64,7 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 ## Work Item 6 — Translation and transliteration licensing/research
 
 - [ ] Do not write product code until the licensing position is reported and a decision is approved.
-- [ ] Draft permission request for Mustafa Khattab's *The Clear Quran* to Al-Furqaan / Book of Signs.
+- [ ] Draft permission request for Mustafa Khattab's _The Clear Quran_ to Al-Furqaan / Book of Signs.
 - [ ] Prepare fallback licence requests for Bewley and Abdel Haleem.
 - [ ] Verify Talal Itani's current ClearQuran.com edition/licence as a neutral secondary option.
 - [ ] Source and provenance-pin a Tanzil-derived Latin transliteration; checksum it and budget proofreading.
