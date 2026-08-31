@@ -74,12 +74,14 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 ## Work Item 7 — Give the Qur'an its own route and rebuild reading UX
 
 ### 7a — Routing and information architecture
+
 - [ ] Add a deep-linkable Qur'an route using the existing routing/query-parameter system; add no router dependency.
 - [ ] Add Library / Qur'an / Hadith segmented navigation inside Knowledge, rendering only one at a time.
 - [ ] Move reading controls adjacent to the Qur'an text.
 - [ ] Preserve specific-ayah deep links and the existing six-destination phone bottom navigation.
 
 ### 7b — Ayah presentation
+
 - [ ] Add persistent List and Page/mushaf reading modes.
 - [ ] Replace Latin badges with Arabic-Indic end-of-ayah markers via `Intl.NumberFormat('ar-u-nu-arab')`.
 - [ ] Add surah header bands and correct basmala handling, including Al-Fatihah and At-Tawbah exceptions.
@@ -214,17 +216,20 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 ## Work Item 22 — Batched small corrections
 
 ### 22a — Hijri correction range
+
 - [ ] Widen correction from -2..2 to -3..3 in storage, settings controls, and tests.
 
 ### 22b — Midnight-to-Fajr current-prayer state
+
 - [ ] Replace ambiguous "Between prayer times" behavior with an explicitly documented/tested convention; do not silently choose fiqh semantics.
 
 ### 22c — Mount-time storage snapshots
+
 - [ ] Subscribe Today to mosque-profile changes and add an equivalent settings-change event using the existing location-event pattern.
 
 ### 22d — Eyebrow density
-- [ ] Keep uppercase/strong tracking for hero prayer/countdown labels only; convert lower hierarchy labels to sentence case/weight 600 while preserving RTL overrides.
 
+- [ ] Keep uppercase/strong tracking for hero prayer/countdown labels only; convert lower hierarchy labels to sentence case/weight 600 while preserving RTL overrides.
 - [ ] Gate for Item 22: `npm run check`.
 
 ## Product-decision backlog — DO NOT IMPLEMENT WITHOUT DIRECTION
