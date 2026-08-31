@@ -165,30 +165,25 @@ invocation = r'''            <KnowledgeEntryCard
               }}
             />'''
 text = text[:invoke_start] + invocation + text[invoke_end:]
-
 path.write_text(text, encoding='utf-8')
 
-test_path = Path('src/ui/KnowledgeTextDirection.test.tsx')
-test = test_path.read_text(encoding='utf-8')
-test = test.replace("import { renderToStaticMarkup } from 'react-dom/server';\n", '')
-test = test.replace("import { beforeAll, describe, expect, it } from 'vitest';\n", "import { describe, expect, it } from 'vitest';\n")
-imports_start = test.find("\nimport { initializeApplicationStorage }")
-imports_end = test.find("\n\nclass MemoryStorage", imports_start)
-if imports_start >= 0 and imports_end >= 0:
-    test = test[:imports_start] + test[imports_end:]
-class_start = test.find('class MemoryStorage')
-helper_start = test.find('function openingTagsContaining', class_start)
-if class_start >= 0 and helper_start >= 0:
-    test = test[:class_start] + test[helper_start:]
-before_start = test.find('  beforeAll(')
-first_test = test.find("  it('keeps source-language content", before_start)
-if before_start >= 0 and first_test >= 0:
-    test = test[:before_start] + test[first_test:]
-old_first_start = test.find("  it('keeps source-language content")
-second_test = test.find("  it('prevents translation", old_first_start)
-if old_first_start < 0 or second_test < 0:
-    raise SystemExit('directionality test blocks not found')
-new_first = r'''  it('keeps source-language content independent of the Arabic UI direction in the production Qur’an reader', () => {
+Path('src/ui/KnowledgeTextDirection.test.tsx').write_text(r'''import { readFileSync } from 'node:fs';
+import { describe, expect, it } from 'vitest';
+
+function openingTagsContaining(source: string, marker: string): readonly string[] {
+  const pattern = new RegExp(`\\b${marker}(?:\\s|=|>)`, 'gu');
+  return [...source.matchAll(pattern)]
+    .map((match) => {
+      const markerOffset = match.index;
+      const start = source.lastIndexOf('<', markerOffset);
+      const end = source.indexOf('>', markerOffset);
+      return start >= 0 && end > start ? source.slice(start, end + 1) : '';
+    })
+    .filter(Boolean);
+}
+
+describe('Knowledge text direction', () => {
+  it('keeps source-language content independent of the Arabic UI direction in the production Qur’an reader', () => {
     const source = readFileSync(new URL('./QuranOfflineReader.tsx', import.meta.url), 'utf8');
     const translationTags = openingTagsContaining(source, 'data-quran-offline-translation');
     const arabicTags = openingTagsContaining(source, 'data-quran-font');
@@ -202,11 +197,38 @@ new_first = r'''  it('keeps source-language content independent of the Arabic UI
     expect(source).toContain('<BidiText>{result.ayah.key}</BidiText>');
   });
 
-'''
-test = test[:old_first_start] + new_first + test[second_test:]
-knowledge_check_start = test.find("      [\n        'KnowledgeScreen.tsx',")
-knowledge_check_end = test.find("      ],\n", knowledge_check_start)
-if knowledge_check_start >= 0 and knowledge_check_end >= 0:
-    knowledge_check_end += len("      ],\n")
-    test = test[:knowledge_check_start] + test[knowledge_check_end:]
-test_path.write_text(test, encoding='utf-8')
+  it('prevents translation, tafsir, source metadata and related-reference elements from inheriting direction implicitly', () => {
+    const checks = [
+      [
+        'KnowledgeStage7Details.tsx',
+        [
+          'data-hadith-translation',
+          'data-knowledge-source-metadata',
+          'data-hadith-related-reference',
+        ],
+      ],
+      [
+        'QuranOfflineReader.tsx',
+        [
+          'data-quran-offline-translation',
+          'data-quran-tafsir-summary',
+          'data-knowledge-source-metadata',
+          'data-quran-related-reference',
+        ],
+      ],
+    ] as const;
+
+    for (const [file, markers] of checks) {
+      const source = readFileSync(new URL(`./${file}`, import.meta.url), 'utf8');
+      for (const marker of markers) {
+        const tags = openingTagsContaining(source, marker);
+        expect(tags.length, `${file} must render ${marker}`).toBeGreaterThan(0);
+        for (const tag of tags) {
+          expect(tag, `${file} ${marker} needs lang`).toContain('lang=');
+          expect(tag, `${file} ${marker} needs dir`).toContain('dir=');
+        }
+      }
+    }
+  });
+});
+''', encoding='utf-8')
