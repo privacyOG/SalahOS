@@ -13,17 +13,17 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - [ ] Preserve explicit provenance; never invent or imply unavailable prayer, mosque, Qur'an, or hadith data.
 - [ ] Keep Qur'an/hadith content consistent with the project's binding Ash'ari/Maturidi aqidah constraint.
 
-## Work Item 1 — Stop impossible mosque iqamah times — IN PROGRESS
+## Work Item 1 — Stop impossible mosque iqamah times — COMPLETE
 
-- [ ] Export named congregation-time acceptance-window constants: Fajr 0–120 minutes; Dhuhr/Asr/Maghrib/Isha 0–90 minutes.
-- [ ] Add a guarded accessor while preserving `publishedAustralianMosqueCongregationMinutes()` unchanged for raw callers.
-- [ ] Reject, rather than clamp or shift, published congregation values outside the accepted window after the calculated prayer start.
-- [ ] Handle Isha midnight wraparound.
-- [ ] Make `applyAustralianMosqueCongregationTimes()` use the guarded values and fall back to the existing unpublished state when rejected.
-- [ ] Add real-record fixtures for Lismore Masallah, Sydney CBD - Erskine Musallah, and Canning Vale Musalla.
-- [ ] Assert Lismore Isha and Canning Vale Maghrib are rejected; Erskine Dhuhr resolves to exactly 13:15 while 12:15 is rejected.
-- [ ] Do not modify the dataset or UI.
-- [ ] Gate: `npm run typecheck && npm run lint && npm run test`.
+- [x] Export named congregation-time acceptance-window constants: Fajr 0–120 minutes; Dhuhr/Asr/Maghrib/Isha 0–90 minutes.
+- [x] Add a guarded accessor while preserving `publishedAustralianMosqueCongregationMinutes()` unchanged for raw callers.
+- [x] Reject, rather than clamp or shift, published congregation values outside the accepted window after the calculated prayer start.
+- [x] Handle Isha midnight wraparound.
+- [x] Make `applyAustralianMosqueCongregationTimes()` use the guarded values and fall back to the existing unpublished state when rejected.
+- [x] Add real-record fixtures for Lismore Masallah, Sydney CBD - Erskine Musallah, and Canning Vale Musalla.
+- [x] Assert Lismore Isha and Canning Vale Maghrib are rejected; Erskine Dhuhr resolves to exactly 13:15 while 12:15 is rejected.
+- [x] Do not modify the dataset or UI.
+- [x] Gate: `npm run typecheck && npm run lint && npm run test`.
 
 ## Work Item 2 — Fix the scraper that caused Item 1
 
@@ -249,4 +249,4 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 
 ## Completion log
 
-- Work Item 1: in progress on branch `v1.5.3-work-item-1`.
+- Work Item 1: complete on branch `v1.5.3-work-item-1`; Quality Gate run 33362450657 passed including the required typecheck, lint, and test gate.
