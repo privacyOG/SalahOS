@@ -1,4 +1,4 @@
-name: Temporary v1.5.3 Item 6 Research
+name: Temporary v1.5.3 Item 6 Cleanup
 
 on:
   push:
@@ -8,54 +8,12 @@ permissions:
   contents: write
 
 jobs:
-  checkpoint:
-    if: contains(github.event.head_commit.message, '[item6-research]')
+  cleanup:
+    if: contains(github.event.head_commit.message, '[item6-cleanup]')
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: v1.5.3-work-item-6
-      - name: Mark completed research subtasks
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-          path = Path('TEMP_TODO_V1.5.3.md')
-          text = path.read_text()
-          before = '''## Work Item 6 — Translation and transliteration licensing/research
-
-          - [ ] Do not write product code until the licensing position is reported and a decision is approved.
-          - [ ] Draft permission request for Mustafa Khattab's _The Clear Quran_ to Al-Furqaan / Book of Signs.
-          - [ ] Prepare fallback licence requests for Bewley and Abdel Haleem.
-          - [ ] Verify Talal Itani's current ClearQuran.com edition/licence as a neutral secondary option.
-          - [ ] Source and provenance-pin a Tanzil-derived Latin transliteration; checksum it and budget proofreading.
-          - [ ] After any translation is licensed, plan multi-state translation preferences plus independent transliteration with per-stream `lang`/`dir`.
-          - [ ] Gate after approval: `npm run quran:offline:prepare && npm run quran:offline:check && npm run security:licenses && npm run test`.
-          '''
-          after = '''## Work Item 6 — Translation and transliteration licensing/research — APPROVAL BLOCKED
-
-          - [x] Do not write product code until the licensing position is reported and a decision is approved.
-          - [x] Draft permission request for Mustafa Khattab's _The Clear Quran_ to Al-Furqaan / Book of Signs.
-          - [x] Prepare fallback licence requests for Bewley and Abdel Haleem.
-          - [x] Verify Talal Itani's current ClearQuran.com edition/licence as a neutral secondary option.
-          - [x] Source and provenance-pin a Tanzil-derived Latin transliteration; checksum it and budget proofreading.
-          - [ ] After any translation is licensed, plan multi-state translation preferences plus independent transliteration with per-stream `lang`/`dir`.
-          - [ ] Gate after approval: `npm run quran:offline:prepare && npm run quran:offline:check && npm run security:licenses && npm run test`.
-          '''
-          if before not in text:
-              raise SystemExit('Work Item 6 tracker block not found')
-          text = text.replace(before, after, 1)
-          log = '- Work Item 6 research checkpoint: licensing matrix and permission-request drafts recorded in `docs/QURAN_TRANSLATION_TRANSLITERATION_LICENSING.md`; pinned `risan/quran-json` v3.1.2 transliteration at 2,214,403 bytes, SHA-256 `36369741f23fe2b64fdcca39d047659256dab7b40f1717aefcb6198c514313a0`, Git blob `7e2750a5b65306c9393b29e5a3ddfa264d33cc48`, 114 surahs/6,236 ayat. Product integration remains blocked pending owner approval and required rights clarification.\n'
-          if log not in text:
-              text = text.rstrip() + '\n' + log
-          path.write_text(text)
-          PY
-      - name: Commit checkpoint to temporary tag
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add TEMP_TODO_V1.5.3.md
-          git commit -m '[item6-generated] record licensing research checkpoint'
-          git tag -f temp-v153-item6-research
-          git push --force origin refs/tags/temp-v153-item6-research
+      - name: Delete temporary research tag
+        run: git push origin :refs/tags/temp-v153-item6-research
