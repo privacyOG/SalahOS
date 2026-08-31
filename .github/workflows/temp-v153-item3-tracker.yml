@@ -1,0 +1,60 @@
+name: Temporary v1.5.3 Item 3 Tracker
+
+on:
+  push:
+    branches: [v1.5.3-work-item-3]
+
+permissions:
+  contents: write
+
+jobs:
+  tracker:
+    if: contains(github.event.head_commit.message, '[item3-tracker]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: v1.5.3-work-item-3
+      - name: Mark Item 3 complete
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('TEMP_TODO_V1.5.3.md')
+          text = path.read_text()
+          before = '''## Work Item 3 — Fix text direction on translations and metadata
+
+          - [ ] Give every translation/transliteration element explicit `lang` and `dir` from its own metadata, not the UI locale.
+          - [ ] Use `BidiText` for mixed-script strings and isolate verse references such as `1:1` in RTL text.
+          - [ ] Cover Qur'an translation, knowledge source metadata, hadith translation, Qur'an translation metadata, tafsir summary, and related-ayat labels.
+          - [ ] Add an assertion preventing translation elements from inheriting direction implicitly.
+          - [ ] Verify the Qur'an reader in Arabic locale and report before/after behavior.
+          - [ ] Gate: `npm run typecheck && npm run lint && npm run test`.
+          '''
+          after = '''## Work Item 3 — Fix text direction on translations and metadata — COMPLETE
+
+          - [x] Give every translation/transliteration element explicit `lang` and `dir` from its own metadata, not the UI locale.
+          - [x] Use `BidiText` for mixed-script strings and isolate verse references such as `1:1` in RTL text.
+          - [x] Cover Qur'an translation, knowledge source metadata, hadith translation, Qur'an translation metadata, tafsir summary, and related-ayat labels.
+          - [x] Add an assertion preventing translation elements from inheriting direction implicitly.
+          - [x] Verify the Qur'an reader in Arabic locale and report before/after behavior.
+          - [x] Gate: `npm run typecheck && npm run lint && npm run test`.
+          '''
+          if before not in text:
+              raise SystemExit('Item 3 tracker block not found')
+          text = text.replace(before, after, 1)
+          log = '- Work Item 3: complete on branch `v1.5.3-work-item-3`; required typecheck, lint, and test gate passed in validation run 33381446395 with 777 tests, including Arabic-locale direction coverage.\n'
+          if log not in text:
+              text = text.rstrip() + '\n' + log
+          path.write_text(text)
+          PY
+      - name: Commit tracker and publish temporary tag
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add TEMP_TODO_V1.5.3.md
+          git commit -m '[item3-tracker-generated] mark Work Item 3 complete'
+          git tag -f temp-v153-item3-tracker
+          git push --force origin refs/tags/temp-v153-item3-tracker
