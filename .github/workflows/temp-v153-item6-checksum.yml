@@ -37,3 +37,5 @@ jobs:
             throw new Error(`Unexpected corpus shape: ${chapters} chapters / ${verses} verses`);
           }
           NODE
+
+# checksum trigger
