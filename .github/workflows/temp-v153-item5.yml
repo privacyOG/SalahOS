@@ -68,3 +68,5 @@ jobs:
           git commit -m '[item5-generated] unify Qur’an typography selectors'
           git tag -f temp-v153-item5-generated
           git push --force origin refs/tags/temp-v153-item5-generated
+
+# bootstrap trigger
