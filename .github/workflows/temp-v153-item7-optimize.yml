@@ -44,3 +44,5 @@ jobs:
           git commit -m '[item7-optimized] remove retired curated Qur’an path'
           git tag -f temp-v153-item7-optimized
           git push --force origin refs/tags/temp-v153-item7-optimized
+
+# hardened rerun
