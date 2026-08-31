@@ -61,13 +61,13 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - [x] Delete dead modifier selectors and remove import-order dependence.
 - [x] Gate: `npm run ui:theme-contrast && npm run ui:theme-architecture && npm run ui:design-system-ownership && npm run format:check`.
 
-## Work Item 6 — Translation and transliteration licensing/research
+## Work Item 6 — Translation and transliteration licensing/research — APPROVAL BLOCKED
 
-- [ ] Do not write product code until the licensing position is reported and a decision is approved.
-- [ ] Draft permission request for Mustafa Khattab's _The Clear Quran_ to Al-Furqaan / Book of Signs.
-- [ ] Prepare fallback licence requests for Bewley and Abdel Haleem.
-- [ ] Verify Talal Itani's current ClearQuran.com edition/licence as a neutral secondary option.
-- [ ] Source and provenance-pin a Tanzil-derived Latin transliteration; checksum it and budget proofreading.
+- [x] Do not write product code until the licensing position is reported and a decision is approved.
+- [x] Draft permission request for Mustafa Khattab's _The Clear Quran_ to Al-Furqaan / Book of Signs.
+- [x] Prepare fallback licence requests for Bewley and Abdel Haleem.
+- [x] Verify Talal Itani's current ClearQuran.com edition/licence as a neutral secondary option.
+- [x] Source and provenance-pin a Tanzil-derived Latin transliteration; checksum it and budget proofreading.
 - [ ] After any translation is licensed, plan multi-state translation preferences plus independent transliteration with per-stream `lang`/`dir`.
 - [ ] Gate after approval: `npm run quran:offline:prepare && npm run quran:offline:check && npm run security:licenses && npm run test`.
 
@@ -254,3 +254,4 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - Work Item 3: complete on branch `v1.5.3-work-item-3`; required typecheck, lint, and test gate passed in validation run 33381446395 with 777 tests, including Arabic-locale direction coverage.
 - Work Item 4: complete on branch `v1.5.3-work-item-4`; bundled Amiri Quran 1.003 as a 48320-byte WOFF2 subset (SHA-256 `b4550498a71ed77bddb93bb7c24608a2c40d706f8843178ed17420a4fd860a7d`), preserved OFL-1.1 notice, reduced the picker to bundled Amiri Quran/system, and passed the required licence/build/bundle gate.
 - Work Item 5: complete on branch `v1.5.3-work-item-5`; unified both Qur’an reader surfaces on data-attribute font/scale state, removed duplicate modifier selectors and typography `!important`, added explicit Arabic shaping/spacing and scale-specific line heights, and passed the required theme/architecture/ownership/format gate.
+- Work Item 6 research checkpoint: licensing matrix and permission-request drafts recorded in `docs/QURAN_TRANSLATION_TRANSLITERATION_LICENSING.md`; pinned `risan/quran-json` v3.1.2 transliteration at 2,214,403 bytes, SHA-256 `36369741f23fe2b64fdcca39d047659256dab7b40f1717aefcb6198c514313a0`, Git blob `7e2750a5b65306c9393b29e5a3ddfa264d33cc48`, 114 surahs/6,236 ayat. Product integration remains blocked pending owner approval and required rights clarification.
