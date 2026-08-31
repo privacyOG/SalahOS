@@ -48,8 +48,7 @@ type KnowledgeCopy = Readonly<{
   pickthall: string;
   arabicOnly: string;
   arabicFont: string;
-  fontNaskh: string;
-  fontTraditional: string;
+  fontAmiri: string;
   fontSystem: string;
   fontSize: string;
   sizeCompact: string;
@@ -102,8 +101,7 @@ const copy: Readonly<Record<Locale, KnowledgeCopy>> = {
     pickthall: 'M. M. Pickthall (1930)',
     arabicOnly: 'Arabic only',
     arabicFont: 'Arabic font',
-    fontNaskh: 'Naskh',
-    fontTraditional: 'Traditional Arabic',
+    fontAmiri: 'Amiri Quran',
     fontSystem: 'System Arabic',
     fontSize: 'Arabic size',
     sizeCompact: 'Compact',
@@ -152,8 +150,7 @@ const copy: Readonly<Record<Locale, KnowledgeCopy>> = {
     pickthall: 'م. م. بكتال (1930)',
     arabicOnly: 'العربية فقط',
     arabicFont: 'الخط العربي',
-    fontNaskh: 'نسخ',
-    fontTraditional: 'عربي تقليدي',
+    fontAmiri: 'أميري قرآن',
     fontSystem: 'خط النظام',
     fontSize: 'حجم العربية',
     sizeCompact: 'مضغوط',
@@ -202,8 +199,7 @@ const copy: Readonly<Record<Locale, KnowledgeCopy>> = {
     pickthall: 'M. M. Pickthall (1930)',
     arabicOnly: 'Yalnızca Arapça',
     arabicFont: 'Arapça yazı tipi',
-    fontNaskh: 'Nesih',
-    fontTraditional: 'Geleneksel Arapça',
+    fontAmiri: 'Amiri Quran',
     fontSystem: 'Sistem Arapçası',
     fontSize: 'Arapça boyutu',
     sizeCompact: 'Kompakt',
@@ -252,8 +248,7 @@ const copy: Readonly<Record<Locale, KnowledgeCopy>> = {
     pickthall: 'M. M. Pickthall (1930)',
     arabicOnly: 'Arab saja',
     arabicFont: 'Font Arab',
-    fontNaskh: 'Naskh',
-    fontTraditional: 'Arab tradisional',
+    fontAmiri: 'Amiri Quran',
     fontSystem: 'Arab sistem',
     fontSize: 'Ukuran Arab',
     sizeCompact: 'Ringkas',
@@ -724,8 +719,7 @@ export function KnowledgeScreen() {
                   setArabicFont(event.target.value as QuranArabicFont);
                 }}
               >
-                <option value="naskh">{labels.fontNaskh}</option>
-                <option value="traditional">{labels.fontTraditional}</option>
+                <option value="amiri-quran">{labels.fontAmiri}</option>
                 <option value="system">{labels.fontSystem}</option>
               </select>
             </label>

@@ -43,15 +43,15 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - [x] Verify the Qur'an reader in Arabic locale and report before/after behavior.
 - [x] Gate: `npm run typecheck && npm run lint && npm run test`.
 
-## Work Item 4 — Bundle a real Arabic Qur'anic font
+## Work Item 4 — Bundle a real Arabic Qur'anic font — COMPLETE
 
-- [ ] Bundle/self-host Amiri Quran (SIL OFL 1.1) as the default; optionally bundle Scheherazade New.
-- [ ] Subset to required Arabic ranges, produce WOFF2, and report byte size.
-- [ ] Add `@font-face` with `font-display: swap` and Arabic-only `unicode-range`.
-- [ ] Keep KFGQPC Uthmanic HAFS optional/downloadable only if offered, with its notice and licence restrictions.
-- [ ] Record font licence/provenance in `docs/DEPENDENCY_LICENSE_REVIEW.md`.
-- [ ] Reduce the font picker to genuinely present/distinct faces.
-- [ ] Gate: `npm run security:licenses && npm run build && npm run bundle:size`.
+- [x] Bundle/self-host Amiri Quran (SIL OFL 1.1) as the default; optionally bundle Scheherazade New.
+- [x] Subset to required Arabic ranges, produce WOFF2, and report byte size.
+- [x] Add `@font-face` with `font-display: swap` and Arabic-only `unicode-range`.
+- [x] Keep KFGQPC Uthmanic HAFS optional/downloadable only if offered, with its notice and licence restrictions.
+- [x] Record font licence/provenance in `docs/DEPENDENCY_LICENSE_REVIEW.md`.
+- [x] Reduce the font picker to genuinely present/distinct faces.
+- [x] Gate: `npm run security:licenses && npm run build && npm run bundle:size`.
 
 ## Work Item 5 — Fix Arabic typography and unify selector systems
 
@@ -252,3 +252,4 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - Work Item 1: complete on branch `v1.5.3-work-item-1`; Quality Gate run 33362450657 passed including the required typecheck, lint, and test gate.
 - Work Item 2: complete on branch `v1.5.3-work-item-2`; Finder and combined `prayerTimes` coverage reduced from 3 records to 1 after collision/sanity cleanup. Quality Gate run 33379143204 passed the required Australian directory and mosque-pack reproducibility gates after dependency installation; stale dataset expectations found later in the broader suite were updated without weakening the Item 1 guard fixtures.
 - Work Item 3: complete on branch `v1.5.3-work-item-3`; required typecheck, lint, and test gate passed in validation run 33381446395 with 777 tests, including Arabic-locale direction coverage.
+- Work Item 4: complete on branch `v1.5.3-work-item-4`; bundled Amiri Quran 1.003 as a 48320-byte WOFF2 subset (SHA-256 `b4550498a71ed77bddb93bb7c24608a2c40d706f8843178ed17420a4fd860a7d`), preserved OFL-1.1 notice, reduced the picker to bundled Amiri Quran/system, and passed the required licence/build/bundle gate.
