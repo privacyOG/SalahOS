@@ -1,5 +1,6 @@
 import sourceRegistryJson from '../data/islamic-knowledge-source-registry.json';
 import type { IslamicKnowledgeEntry, Madhhab } from './islamicKnowledge';
+import type { TextPresentationMetadata } from './textPresentation';
 
 export type ScholarlySourceKind =
   'quran-text' | 'quran-translation' | 'quran-tafsir' | 'hadith-collection' | 'fiqh' | 'creed';
@@ -15,6 +16,7 @@ export interface ScholarlySourceRecord {
   readonly translator: string | null;
   readonly citation: string;
   readonly provenance: string;
+  readonly displayPresentation: TextPresentationMetadata;
   readonly reviewStatus: ScholarlySourceReviewStatus;
   readonly trustTier: string;
   readonly reviewedAt: string;
@@ -87,6 +89,14 @@ function validateSourceRegistry(issues: IslamicKnowledgeGovernanceIssue[]): void
         source.id,
         'source-provenance-missing',
         `Source ${source.id} must retain title and author/provenance metadata.`,
+      );
+    }
+    if (source.displayPresentation.lang.trim().length === 0) {
+      pushIssue(
+        issues,
+        source.id,
+        'source-display-presentation-invalid',
+        `Source ${source.id} must define valid display language and direction metadata.`,
       );
     }
     if (source.edition.trim().length === 0 || source.citation.trim().length === 0) {

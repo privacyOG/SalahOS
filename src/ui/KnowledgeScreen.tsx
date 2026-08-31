@@ -9,6 +9,7 @@ import {
 } from '../domain/islamicKnowledge';
 import { getIslamicKnowledgeSource } from '../domain/islamicKnowledgeGovernance';
 import { FiqhStage7Details, HadithStage7Details } from './KnowledgeStage7Details';
+import { BidiText } from './BidiText';
 import type { Locale } from '../i18n/translations';
 import { getApplicationStorage } from '../platform/applicationStorage';
 import {
@@ -333,6 +334,8 @@ function QuranEntryCard({
 }>) {
   const bookmarked = preferences.bookmarkedAyahIds.includes(entry.id);
   const showTranslation = preferences.translationMode !== 'none';
+  const arabicSource = getIslamicKnowledgeSource(entry.arabicSourceId);
+  const translationSource = getIslamicKnowledgeSource(entry.translationSourceId);
   const tafsirSource = getIslamicKnowledgeSource(entry.tafsirSourceId);
   const related = entry.relatedAyahIds
     .map((id) => getIslamicKnowledgeEntryById(id))
@@ -359,7 +362,15 @@ function QuranEntryCard({
       >
         {entry.arabic}
       </p>
-      {showTranslation ? <p data-quran-translation>{entry.translation}</p> : null}
+      {showTranslation ? (
+        <p
+          data-quran-translation
+          lang={entry.translationPresentation.lang}
+          dir={entry.translationPresentation.dir}
+        >
+          {entry.translation}
+        </p>
+      ) : null}
 
       <div className="knowledge-quran-actions" aria-label={entry.reference}>
         <button
@@ -401,20 +412,57 @@ function QuranEntryCard({
       <dl className="knowledge-source-list">
         <div>
           <dt>{labels.source}</dt>
-          <dd>
-            {entry.reference} · Arabic Uthmani text
-            {showTranslation ? ` · ${labels.pickthall}` : ''}
+          <dd
+            data-knowledge-source-metadata
+            lang={entry.referencePresentation.lang}
+            dir={entry.referencePresentation.dir}
+          >
+            <BidiText>{entry.reference}</BidiText> ·{' '}
+            <span
+              lang={arabicSource?.displayPresentation.lang ?? entry.referencePresentation.lang}
+              dir={arabicSource?.displayPresentation.dir ?? entry.referencePresentation.dir}
+            >
+              {arabicSource?.title ?? entry.arabicSourceId}
+            </span>
+            {showTranslation ? (
+              <>
+                {' · '}
+                <span
+                  lang={
+                    translationSource?.displayPresentation.lang ??
+                    entry.translationPresentation.lang
+                  }
+                  dir={
+                    translationSource?.displayPresentation.dir ?? entry.translationPresentation.dir
+                  }
+                >
+                  {translationSource?.title ?? entry.translationSourceId}
+                </span>
+              </>
+            ) : null}
           </dd>
         </div>
         <div>
           <dt>{labels.tafsir}</dt>
-          <dd>{tafsirSource?.title ?? entry.tafsirSourceId}</dd>
+          <dd
+            data-knowledge-source-metadata
+            lang={tafsirSource?.displayPresentation.lang ?? entry.tafsirSummaryPresentation.lang}
+            dir={tafsirSource?.displayPresentation.dir ?? entry.tafsirSummaryPresentation.dir}
+          >
+            {tafsirSource?.title ?? entry.tafsirSourceId}
+          </dd>
         </div>
       </dl>
 
       <section className="knowledge-tafsir" data-quran-tafsir>
         <h4>{labels.tafsirSummary}</h4>
-        <p>{entry.tafsirSummary}</p>
+        <p
+          data-quran-tafsir-summary
+          lang={entry.tafsirSummaryPresentation.lang}
+          dir={entry.tafsirSummaryPresentation.dir}
+        >
+          {entry.tafsirSummary}
+        </p>
       </section>
 
       <div className="knowledge-topics" data-quran-topics>
@@ -432,8 +480,11 @@ function QuranEntryCard({
               onClick={() => {
                 onOpenRelated(relatedEntry.id);
               }}
+              data-quran-related-reference
+              lang={relatedEntry.referencePresentation.lang}
+              dir={relatedEntry.referencePresentation.dir}
             >
-              {relatedEntry.reference}
+              <BidiText>{relatedEntry.reference}</BidiText>
             </button>
           ))}
         </div>
@@ -644,7 +695,7 @@ export function KnowledgeScreen() {
                     setQuery(resumeEntry.reference.replace('Qur’an ', ''));
                   }}
                 >
-                  {labels.resume}: {resumeEntry.reference}
+                  {labels.resume}: <BidiText>{resumeEntry.reference}</BidiText>
                 </button>
               ) : null}
             </div>

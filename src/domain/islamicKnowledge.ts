@@ -1,4 +1,5 @@
 import { stage7SearchText } from './islamicKnowledgeStage7';
+import { englishTextPresentation, type TextPresentationMetadata } from './textPresentation';
 
 export type IslamicKnowledgeModule = 'quran' | 'hadith' | 'qa';
 export type IslamicKnowledgeContentType = 'quran' | 'hadith' | 'fiqh' | 'creed' | 'general';
@@ -11,13 +12,16 @@ export interface QuranKnowledgeEntry {
   readonly title: string;
   readonly arabic: string;
   readonly translation: string;
+  readonly translationPresentation: TextPresentationMetadata;
   readonly reference: string;
+  readonly referencePresentation: TextPresentationMetadata;
   readonly source: string;
   readonly sourceIds: readonly string[];
   readonly arabicSourceId: string;
   readonly translationSourceId: string;
   readonly tafsirSourceId: string;
   readonly tafsirSummary: string;
+  readonly tafsirSummaryPresentation: TextPresentationMetadata;
   readonly relatedAyahIds: readonly string[];
   readonly topics: readonly string[];
   readonly tags: readonly string[];
@@ -29,8 +33,11 @@ export interface HadithKnowledgeEntry {
   readonly contentType: 'hadith';
   readonly title: string;
   readonly text: string;
+  readonly translationPresentation: TextPresentationMetadata;
   readonly collection: string;
   readonly reference: string;
+  readonly referencePresentation: TextPresentationMetadata;
+  readonly metadataPresentation: TextPresentationMetadata;
   readonly grade: string;
   readonly grader: string;
   readonly sourceIds: readonly string[];
@@ -45,6 +52,7 @@ export interface QaKnowledgeEntry {
   readonly contentType: 'fiqh' | 'creed' | 'general';
   readonly question: string;
   readonly answer: string;
+  readonly metadataPresentation: TextPresentationMetadata;
   readonly scholar: string;
   readonly sourceTitle: string;
   readonly sourceNote: string;
@@ -85,6 +93,9 @@ export const islamicKnowledgeEntries = Object.freeze([
     sourceIds: quranReadingSources,
     arabicSourceId: 'quran-uthmani-text',
     translationSourceId: 'quran-pickthall-1930',
+    translationPresentation: englishTextPresentation,
+    referencePresentation: englishTextPresentation,
+    tafsirSummaryPresentation: englishTextPresentation,
     tafsirSourceId: 'quran-tafsir-jalalayn',
     tafsirSummary:
       'Tafsir al-Jalalayn connects the command to establish prayer here directly with remembrance of Allah. This is a concise SalahOS summary, not a quotation.',
@@ -105,6 +116,9 @@ export const islamicKnowledgeEntries = Object.freeze([
     sourceIds: quranReadingSources,
     arabicSourceId: 'quran-uthmani-text',
     translationSourceId: 'quran-pickthall-1930',
+    translationPresentation: englishTextPresentation,
+    referencePresentation: englishTextPresentation,
+    tafsirSummaryPresentation: englishTextPresentation,
     tafsirSourceId: 'quran-tafsir-jalalayn',
     tafsirSummary:
       'Tafsir al-Jalalayn explains seeking help through patience and prayer in the context of obedience and humility before Allah. This is a concise SalahOS summary, not a quotation.',
@@ -126,6 +140,9 @@ export const islamicKnowledgeEntries = Object.freeze([
     sourceIds: quranReadingSources,
     arabicSourceId: 'quran-uthmani-text',
     translationSourceId: 'quran-pickthall-1930',
+    translationPresentation: englishTextPresentation,
+    referencePresentation: englishTextPresentation,
+    tafsirSummaryPresentation: englishTextPresentation,
     tafsirSourceId: 'quran-tafsir-jalalayn',
     tafsirSummary:
       'Tafsir al-Jalalayn explains the Friday call as a command to proceed to Allah’s remembrance and leave trade for the prayer. This is a concise SalahOS summary, not a quotation.',
@@ -145,6 +162,9 @@ export const islamicKnowledgeEntries = Object.freeze([
     grader: 'Imam al-Bukhari',
     sourceIds: ['hadith-bukhari'],
     gradingAuthoritySourceId: 'hadith-bukhari',
+    translationPresentation: englishTextPresentation,
+    referencePresentation: englishTextPresentation,
+    metadataPresentation: englishTextPresentation,
     sourceNote:
       'Concise English rendering; the cited collection and hadith number remain authoritative.',
     tags: ['intention', 'worship', 'sincerity'],
@@ -161,6 +181,9 @@ export const islamicKnowledgeEntries = Object.freeze([
     grader: 'Imam Muslim',
     sourceIds: ['hadith-muslim'],
     gradingAuthoritySourceId: 'hadith-muslim',
+    translationPresentation: englishTextPresentation,
+    referencePresentation: englishTextPresentation,
+    metadataPresentation: englishTextPresentation,
     sourceNote:
       'Concise English rendering; the cited collection and hadith number remain authoritative.',
     tags: ['prayer', 'purification', 'faith'],
@@ -177,6 +200,9 @@ export const islamicKnowledgeEntries = Object.freeze([
     grader: 'Imam al-Bukhari',
     sourceIds: ['hadith-bukhari'],
     gradingAuthoritySourceId: 'hadith-bukhari',
+    translationPresentation: englishTextPresentation,
+    referencePresentation: englishTextPresentation,
+    metadataPresentation: englishTextPresentation,
     sourceNote:
       'Concise English rendering; the cited collection and hadith number remain authoritative.',
     tags: ['congregation', 'mosque', 'prayer'],
@@ -186,6 +212,7 @@ export const islamicKnowledgeEntries = Object.freeze([
     module: 'qa',
     contentType: 'fiqh',
     question: 'What does intention mean in worship?',
+    metadataPresentation: englishTextPresentation,
     answer:
       'Intention is the resolve of the heart to perform an act of worship for Allah. It is not dependent on reciting a fixed verbal formula. The essential matter is knowing what act you are performing and directing it to Allah.',
     scholar: 'Classical Hanafi, Maliki, Shafi‘i and Hanbali sources',
@@ -204,6 +231,7 @@ export const islamicKnowledgeEntries = Object.freeze([
     module: 'qa',
     contentType: 'fiqh',
     question: 'What should I do if I am unsure how many rak‘ahs I prayed?',
+    metadataPresentation: englishTextPresentation,
     answer:
       'When genuine doubt remains, build on what is certain and complete the prayer, then perform the prescribed prostrations of forgetfulness. Detailed placement of sujud al-sahw differs across schools, so follow the method taught by your madhhab or trusted local scholar.',
     scholar: 'Classical Hanafi, Maliki, Shafi‘i and Hanbali sources',
@@ -222,6 +250,7 @@ export const islamicKnowledgeEntries = Object.freeze([
     module: 'qa',
     contentType: 'fiqh',
     question: 'May an obligatory prayer be shortened while travelling?',
+    metadataPresentation: englishTextPresentation,
     answer:
       'Islamic law permits shortening the four-rak‘ah obligatory prayers during qualifying travel. The precise distance, duration and conditions differ between legal schools, so the traveller should apply the rules of the madhhab they follow or consult a qualified scholar for their circumstances.',
     scholar: 'Classical Hanafi, Maliki, Shafi‘i and Hanbali sources',

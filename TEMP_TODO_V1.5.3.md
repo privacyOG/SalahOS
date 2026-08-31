@@ -34,14 +34,14 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - [x] Normalize formatted addresses by collapsing repeated commas and whitespace.
 - [x] Gate: `npm run mosques:australia:check` then `npm run mosques:packs:check` after `npm ci`.
 
-## Work Item 3 — Fix text direction on translations and metadata
+## Work Item 3 — Fix text direction on translations and metadata — COMPLETE
 
-- [ ] Give every translation/transliteration element explicit `lang` and `dir` from its own metadata, not the UI locale.
-- [ ] Use `BidiText` for mixed-script strings and isolate verse references such as `1:1` in RTL text.
-- [ ] Cover Qur'an translation, knowledge source metadata, hadith translation, Qur'an translation metadata, tafsir summary, and related-ayat labels.
-- [ ] Add an assertion preventing translation elements from inheriting direction implicitly.
-- [ ] Verify the Qur'an reader in Arabic locale and report before/after behavior.
-- [ ] Gate: `npm run typecheck && npm run lint && npm run test`.
+- [x] Give every translation/transliteration element explicit `lang` and `dir` from its own metadata, not the UI locale.
+- [x] Use `BidiText` for mixed-script strings and isolate verse references such as `1:1` in RTL text.
+- [x] Cover Qur'an translation, knowledge source metadata, hadith translation, Qur'an translation metadata, tafsir summary, and related-ayat labels.
+- [x] Add an assertion preventing translation elements from inheriting direction implicitly.
+- [x] Verify the Qur'an reader in Arabic locale and report before/after behavior.
+- [x] Gate: `npm run typecheck && npm run lint && npm run test`.
 
 ## Work Item 4 — Bundle a real Arabic Qur'anic font
 
@@ -251,3 +251,4 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 
 - Work Item 1: complete on branch `v1.5.3-work-item-1`; Quality Gate run 33362450657 passed including the required typecheck, lint, and test gate.
 - Work Item 2: complete on branch `v1.5.3-work-item-2`; Finder and combined `prayerTimes` coverage reduced from 3 records to 1 after collision/sanity cleanup. Quality Gate run 33379143204 passed the required Australian directory and mosque-pack reproducibility gates after dependency installation; stale dataset expectations found later in the broader suite were updated without weakening the Item 1 guard fixtures.
+- Work Item 3: complete on branch `v1.5.3-work-item-3`; required typecheck, lint, and test gate passed in validation run 33381446395 with 777 tests, including Arabic-locale direction coverage.

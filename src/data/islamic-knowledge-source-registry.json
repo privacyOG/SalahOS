@@ -17,7 +17,11 @@
       "reviewedAt": "2026-08-26",
       "madhhabs": [],
       "creedTraditions": [],
-      "approvedModules": ["quran"]
+      "approvedModules": ["quran"],
+      "displayPresentation": {
+        "lang": "en",
+        "dir": "ltr"
+      }
     },
     {
       "id": "quran-pickthall-1930",
@@ -33,7 +37,11 @@
       "reviewedAt": "2026-08-26",
       "madhhabs": [],
       "creedTraditions": [],
-      "approvedModules": ["quran"]
+      "approvedModules": ["quran"],
+      "displayPresentation": {
+        "lang": "en",
+        "dir": "ltr"
+      }
     },
     {
       "id": "quran-tafsir-jalalayn",
@@ -49,7 +57,11 @@
       "reviewedAt": "2026-08-26",
       "madhhabs": [],
       "creedTraditions": [],
-      "approvedModules": ["quran"]
+      "approvedModules": ["quran"],
+      "displayPresentation": {
+        "lang": "en",
+        "dir": "ltr"
+      }
     },
     {
       "id": "hadith-bukhari",
@@ -65,7 +77,11 @@
       "reviewedAt": "2026-08-26",
       "madhhabs": [],
       "creedTraditions": [],
-      "approvedModules": ["hadith", "qa"]
+      "approvedModules": ["hadith", "qa"],
+      "displayPresentation": {
+        "lang": "en",
+        "dir": "ltr"
+      }
     },
     {
       "id": "hadith-muslim",
@@ -81,7 +97,11 @@
       "reviewedAt": "2026-08-26",
       "madhhabs": [],
       "creedTraditions": [],
-      "approvedModules": ["hadith", "qa"]
+      "approvedModules": ["hadith", "qa"],
+      "displayPresentation": {
+        "lang": "en",
+        "dir": "ltr"
+      }
     },
     {
       "id": "fiqh-hanafi-hidayah",
@@ -97,7 +117,11 @@
       "reviewedAt": "2026-08-26",
       "madhhabs": ["hanafi"],
       "creedTraditions": [],
-      "approvedModules": ["qa"]
+      "approvedModules": ["qa"],
+      "displayPresentation": {
+        "lang": "en",
+        "dir": "ltr"
+      }
     },
     {
       "id": "fiqh-maliki-risalah",
@@ -113,7 +137,11 @@
       "reviewedAt": "2026-08-26",
       "madhhabs": ["maliki"],
       "creedTraditions": [],
-      "approvedModules": ["qa"]
+      "approvedModules": ["qa"],
+      "displayPresentation": {
+        "lang": "en",
+        "dir": "ltr"
+      }
     },
     {
       "id": "fiqh-shafii-majmu",
@@ -129,7 +157,11 @@
       "reviewedAt": "2026-08-26",
       "madhhabs": ["shafii"],
       "creedTraditions": [],
-      "approvedModules": ["qa"]
+      "approvedModules": ["qa"],
+      "displayPresentation": {
+        "lang": "en",
+        "dir": "ltr"
+      }
     },
     {
       "id": "fiqh-hanbali-mughni",
@@ -145,7 +177,11 @@
       "reviewedAt": "2026-08-26",
       "madhhabs": ["hanbali"],
       "creedTraditions": [],
-      "approvedModules": ["qa"]
+      "approvedModules": ["qa"],
+      "displayPresentation": {
+        "lang": "en",
+        "dir": "ltr"
+      }
     },
     {
       "id": "creed-ashari-juwayni-irshad",
@@ -161,7 +197,11 @@
       "reviewedAt": "2026-08-26",
       "madhhabs": [],
       "creedTraditions": ["ashari"],
-      "approvedModules": ["qa"]
+      "approvedModules": ["qa"],
+      "displayPresentation": {
+        "lang": "en",
+        "dir": "ltr"
+      }
     },
     {
       "id": "creed-maturidi-kitab-tawhid",
@@ -177,7 +217,11 @@
       "reviewedAt": "2026-08-26",
       "madhhabs": [],
       "creedTraditions": ["maturidi"],
-      "approvedModules": ["qa"]
+      "approvedModules": ["qa"],
+      "displayPresentation": {
+        "lang": "en",
+        "dir": "ltr"
+      }
     }
   ]
 }
