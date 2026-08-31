@@ -1,0 +1,40 @@
+name: Temporary v1.5.3 Item 7 Build
+
+on:
+  push:
+    branches: [v1.5.3-work-item-7]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    if: contains(github.event.head_commit.message, '[item7-build]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: v1.5.3-work-item-7
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Generate Item 7 implementation
+        run: python3 scripts/temp-build-v153-item7.py
+      - name: Format changed files
+        run: npx prettier src/ui/applicationRoute.ts src/ui/applicationRoute.test.ts src/ui/KnowledgeExperience.tsx src/ui/KnowledgeScreen.tsx src/ui/QuranOfflineReader.tsx src/ui/QuranReaderV153.test.tsx src/platform/quranReadingPreferences.ts src/platform/quranReadingPreferences.test.ts src/quran-offline-reader.css --write
+      - name: Validate Item 7
+        run: npm run typecheck && npm run lint && npm run test && npm run knowledge:content:check
+      - name: Commit generated result to temporary tag
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/ui/applicationRoute.ts src/ui/applicationRoute.test.ts src/ui/KnowledgeExperience.tsx src/ui/KnowledgeScreen.tsx src/ui/QuranOfflineReader.tsx src/ui/QuranReaderV153.test.tsx src/platform/quranReadingPreferences.ts src/platform/quranReadingPreferences.test.ts src/quran-offline-reader.css
+          git commit -m '[item7-generated] rebuild Qur’an reading UX'
+          git tag -f temp-v153-item7-generated
+          git push --force origin refs/tags/temp-v153-item7-generated
