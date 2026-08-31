@@ -11,7 +11,7 @@ const after = `function openingTagsContaining(source: string, marker: string): r
   const pattern = new RegExp(\`\\\\b\${marker}(?:\\\\s|=|>)\`, 'gu');
   return [...source.matchAll(pattern)]
     .map((match) => {
-      const markerOffset = match.index ?? 0;
+      const markerOffset = match.index;
       const start = source.lastIndexOf('<', markerOffset);
       const end = source.indexOf('>', markerOffset);
       return start >= 0 && end > start ? source.slice(start, end + 1) : '';
