@@ -25,7 +25,7 @@ describe('combined Australian mosque directory', () => {
       id: 'mosque-finder:sydney-cbd-erskine-musallah',
       name: 'Sydney CBD - Erskine Musallah',
     });
-    expect(results[0]?.enriched.prayerTimes?.dhuhr).toBe('12:15 pm / 1:15 pm');
+    expect(results[0]?.enriched.prayerTimes?.dhuhr).toBe('1:15 pm');
   });
 
   it('creates a timezone-aware mosque profile and retains private local distance ordering', () => {

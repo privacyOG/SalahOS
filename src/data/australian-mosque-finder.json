@@ -1466,15 +1466,13 @@
         "state": "WA",
         "regionCode": "AU-WA",
         "postcode": "6155",
-        "formatted": "3/5 Hughes St,, Canning Vale, WA, 6155",
+        "formatted": "3/5 Hughes St, Canning Vale, WA, 6155",
         "countryCode": "AU"
       },
       "latitude": -32.06705,
       "longitude": 115.93156,
       "contact": {},
-      "prayerTimes": {
-        "maghrib": "11:00 am"
-      },
+      "prayerTimes": null,
       "jumuahTimes": [],
       "features": [],
       "facilities": ["women-prayer-space"],
@@ -1801,7 +1799,7 @@
         "state": "NSW",
         "regionCode": "AU-NSW",
         "postcode": "2099",
-        "formatted": "12 South Creek Road, Dee Why,, NSW, 2099",
+        "formatted": "12 South Creek Road, Dee Why, NSW, 2099",
         "countryCode": "AU"
       },
       "latitude": -33.74359,
@@ -2816,12 +2814,12 @@
       "name": "Kensington - ANZAC Parade Musalla",
       "type": "musalla",
       "address": {
-        "line1": "Unit 1, 178 ANZAC Parade,, NSW",
+        "line1": "Unit 1, 178 ANZAC Parade, NSW",
         "locality": "Kensington",
         "state": "NSW",
         "regionCode": "AU-NSW",
         "postcode": "2033",
-        "formatted": "Unit 1, 178 ANZAC Parade,, NSW, Kensington, NSW, 2033",
+        "formatted": "Unit 1, 178 ANZAC Parade, NSW, Kensington, NSW, 2033",
         "countryCode": "AU"
       },
       "latitude": -33.90985,
@@ -3316,9 +3314,7 @@
       "latitude": -28.80536,
       "longitude": 153.27889,
       "contact": {},
-      "prayerTimes": {
-        "isha": "1:15 pm"
-      },
+      "prayerTimes": null,
       "jumuahTimes": [
         {
           "time": "1:15 pm",
@@ -4840,7 +4836,7 @@
         "website": "http://www.sydneycitymasjid.org.au/"
       },
       "prayerTimes": {
-        "dhuhr": "12:15 pm / 1:15 pm"
+        "dhuhr": "1:15 pm"
       },
       "jumuahTimes": [
         {

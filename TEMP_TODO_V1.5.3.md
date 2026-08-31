@@ -25,14 +25,14 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - [x] Do not modify the dataset or UI.
 - [x] Gate: `npm run typecheck && npm run lint && npm run test`.
 
-## Work Item 2 — Fix the scraper that caused Item 1
+## Work Item 2 — Fix the scraper that caused Item 1 — COMPLETE
 
-- [ ] Trace and report how scraped values reach `record.prayerTimes` in both Australian mosque generators before changing code.
-- [ ] Drop normalized fard candidates that collide with a record's Jumu'ah times; log record id and field.
-- [ ] Add named coarse sanity guards for impossible Australian fard times, including Maghrib before 15:00 and Isha before 16:00.
-- [ ] Regenerate the dataset and packs; report before/after record counts carrying `prayerTimes`.
-- [ ] Normalize formatted addresses by collapsing repeated commas and whitespace.
-- [ ] Gate: `npm run mosques:australia:check` then `npm run mosques:packs:check` after `npm ci`.
+- [x] Trace and report how scraped values reach `record.prayerTimes` in both Australian mosque generators before changing code.
+- [x] Drop normalized fard candidates that collide with a record's Jumu'ah times; log record id and field.
+- [x] Add named coarse sanity guards for impossible Australian fard times, including Maghrib before 15:00 and Isha before 16:00.
+- [x] Regenerate the dataset and packs; report before/after record counts carrying `prayerTimes`.
+- [x] Normalize formatted addresses by collapsing repeated commas and whitespace.
+- [x] Gate: `npm run mosques:australia:check` then `npm run mosques:packs:check` after `npm ci`.
 
 ## Work Item 3 — Fix text direction on translations and metadata
 
@@ -250,3 +250,4 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 ## Completion log
 
 - Work Item 1: complete on branch `v1.5.3-work-item-1`; Quality Gate run 33362450657 passed including the required typecheck, lint, and test gate.
+- Work Item 2: complete on branch `v1.5.3-work-item-2`; Finder and combined `prayerTimes` coverage reduced from 3 records to 1 after collision/sanity cleanup. Quality Gate run 33379143204 passed the required Australian directory and mosque-pack reproducibility gates after dependency installation; stale dataset expectations found later in the broader suite were updated without weakening the Item 1 guard fixtures.
