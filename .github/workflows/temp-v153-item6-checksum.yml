@@ -24,6 +24,7 @@ jobs:
           set -euo pipefail
           echo "BYTE_SIZE=$(wc -c < /tmp/quran_transliteration.json)"
           echo "SHA256=$(sha256sum /tmp/quran_transliteration.json | awk '{print $1}')"
+          echo "GIT_BLOB=$(git hash-object /tmp/quran_transliteration.json)"
           node - <<'NODE'
           const fs = require('fs');
           const data = JSON.parse(fs.readFileSync('/tmp/quran_transliteration.json', 'utf8'));
@@ -38,4 +39,4 @@ jobs:
           }
           NODE
 
-# checksum trigger
+# blob-identity trigger
