@@ -1,0 +1,46 @@
+name: Temporary v1.5.3 Item 7 Optimize
+
+on:
+  push:
+    branches:
+      - v1.5.3-work-item-7
+
+permissions:
+  contents: write
+
+jobs:
+  optimize:
+    if: contains(github.event.head_commit.message, '[item7-optimize]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: v1.5.3-work-item-7
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Remove retired Knowledge Qur'an path
+        run: python3 scripts/temp-optimize-v153-item7.py
+      - name: Format and validate
+        run: |
+          npx prettier src/ui/KnowledgeScreen.tsx src/ui/KnowledgeTextDirection.test.tsx --write
+          npm run typecheck
+          npm run lint
+          npm run test
+          npm run knowledge:content:check
+          npm run build
+          npm run bundle:size
+      - name: Publish optimized commit tag
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/ui/KnowledgeScreen.tsx src/ui/KnowledgeTextDirection.test.tsx
+          git commit -m '[item7-optimized] remove retired curated Qur’an path'
+          git tag -f temp-v153-item7-optimized
+          git push --force origin refs/tags/temp-v153-item7-optimized
