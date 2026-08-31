@@ -1,5 +1,5 @@
-import { readFile, writeFile } from 'node:fs/promises';
 import { execFileSync } from 'node:child_process';
+import { readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
@@ -34,8 +34,8 @@ generator = replaceOnce(
 
 generator = replaceOnce(
   generator,
-  ".map((match) => cleanText(match[1]))\n    .filter(Boolean);",
-  ".map((match) => normalizeAddressPart(match[1]))\n    .filter(Boolean);",
+  `  const directDivs = [...addressHtml.matchAll(/<div(?![^>]*class=)[^>]*>([\\s\\S]*?)<\\/div>/giu)]\n    .map((match) => cleanText(match[1]))\n    .filter(Boolean);`,
+  `  const directDivs = [...addressHtml.matchAll(/<div(?![^>]*class=)[^>]*>([\\s\\S]*?)<\\/div>/giu)]\n    .map((match) => normalizeAddressPart(match[1]))\n    .filter(Boolean);`,
   'address div normalization',
 );
 
@@ -69,10 +69,10 @@ generator = replaceOnce(
 
 generator = replaceOnce(
   generator,
-  "    id: `mosque-finder:${slug}` ,",
-  "    id: recordId,",
+  "    id: `mosque-finder:${slug}`,",
+  '    id: recordId,',
   'record id reuse',
-).replace("    id: `mosque-finder:${slug}`,", "    id: recordId,");
+);
 
 generator = replaceOnce(
   generator,
@@ -81,21 +81,29 @@ generator = replaceOnce(
   'jumuah reuse',
 );
 
-generator = generator.replace(
+generator = replaceOnce(
+  generator,
   '<div>Level 1, 56-60 Example St</div><div>Sydney, nsw-2000</div>',
   '<div>Level 1, 56-60 Example St,, </div><div>Sydney, nsw-2000</div>',
+  'self-test address fixture',
 );
-generator = generator.replace(
+generator = replaceOnce(
+  generator,
   '<article><header><h2>Details</h2></header><p>Daily Prayers</p><ul><li>Dhuhr: 12:15 pm and 1:15 pm</li></ul></article>',
   '<article><header><h2>Details</h2></header><p>Daily Prayers</p><ul><li>Dhuhr: 12:15 pm and 1:15 pm</li><li>Maghrib: 11:00 am</li></ul></article>',
+  'self-test prayer fixture',
 );
-generator = generator.replace(
+generator = replaceOnce(
+  generator,
   "    '2026-08-29T00:00:00.000Z',\n  );",
   "    '2026-08-29T00:00:00.000Z',\n    () => {},\n  );",
+  'self-test silent reporter',
 );
-generator = generator.replace(
+generator = replaceOnce(
+  generator,
   "    record.prayerTimes?.dhuhr === '12:15 pm / 1:15 pm',",
   "    record.prayerTimes?.dhuhr === '1:15 pm',",
+  'self-test collision expectation',
 );
 generator = replaceOnce(
   generator,
