@@ -28,6 +28,8 @@ jobs:
         run: node scripts/temp-v153-item3-fix-patcher.mjs
       - name: Apply Work Item 3 patch
         run: node scripts/temp-v153-item3-patch.mjs
+      - name: Remove redundant typed guard
+        run: node scripts/temp-v153-item3-lint-fix.mjs
       - name: Format changed files
         run: >-
           npx prettier
