@@ -1,0 +1,62 @@
+name: Temporary v1.5.3 Item 6 Approval
+
+on:
+  push:
+    branches: [v1.5.3-work-item-6-rights]
+
+permissions:
+  contents: write
+
+jobs:
+  approval:
+    if: contains(github.event.head_commit.message, '[item6-approval]')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: v1.5.3-work-item-6-rights
+      - name: Record owner approval and outreach state
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          tracker = Path('TEMP_TODO_V1.5.3.md')
+          text = tracker.read_text()
+          text = text.replace(
+              '## Work Item 6 — Translation and transliteration licensing/research — APPROVAL BLOCKED',
+              '## Work Item 6 — Translation and transliteration licensing/research — RIGHTS PENDING',
+              1,
+          )
+          marker = '- [x] Source and provenance-pin a Tanzil-derived Latin transliteration; checksum it and budget proofreading.\n'
+          addition = (
+              marker
+              + '- [x] Project owner approved the documented rights strategy on 2026-09-01: The Clear Quran primary; Bewley/Abdel Haleem fallbacks; Talal Itani conditional on licence clarification; Tanzil transliteration clearance required.\n'
+              + '- [ ] Obtain actual written permission/compatible licence before bundling any new translation or transliteration content.\n'
+          )
+          if marker in text and 'Project owner approved the documented rights strategy' not in text:
+              text = text.replace(marker, addition, 1)
+          tracker.write_text(text)
+
+          doc = Path('docs/QURAN_TRANSLATION_TRANSLITERATION_LICENSING.md')
+          d = doc.read_text()
+          d = d.replace(
+              'Status: **research checkpoint only — no product integration is approved**',
+              'Status: **rights strategy approved by project owner — rights acquisition pending; no new translation/transliteration corpus is cleared for product integration**',
+              1,
+          )
+          approval = '''\n## Owner decision — 2026-09-01\n\nThe project owner explicitly approved the recommended rights strategy:\n\n1. pursue written permission for **The Clear Quran** as the primary English translation;\n2. pursue **Bewley** and **Abdel Haleem** as fallback translations;\n3. keep **Talal Itani / ClearQuran** conditional on written resolution of the conflicting licence statements; and\n4. obtain explicit clearance for the pinned **Tanzil-derived Latin transliteration** before redistribution.\n\nApproval of the strategy is **not** evidence that any copyright holder has granted SalahOS permission. Product integration remains blocked until the relevant permission or compatible licence is actually obtained and recorded.\n\n### Outreach state\n\n- Al-Furqaan / The Clear Quran: a Gmail draft was created for review on 2026-09-01; it has **not** been recorded as sent.\n- Diwan / Bewley: request remains prepared but unsent because the connected Gmail write path was not authorized for the second draft attempt.\n- Abdel Haleem / OUP and Ta-Ha: substantial-content permissions are routed through publisher permissions systems/PLS Clear rather than being treated as email-cleared.\n- Talal Itani / ClearQuran and Tanzil: direct clarification requests remain prepared but unsent.\n\n'''
+          if '## Owner decision — 2026-09-01' not in d:
+              d = d.replace('## Approval boundary\n', approval + '## Approval boundary\n', 1)
+          doc.write_text(d)
+          PY
+      - name: Format docs
+        run: npx --yes prettier@3.6.2 TEMP_TODO_V1.5.3.md docs/QURAN_TRANSLATION_TRANSLITERATION_LICENSING.md --write
+      - name: Commit approval checkpoint
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add TEMP_TODO_V1.5.3.md docs/QURAN_TRANSLATION_TRANSLITERATION_LICENSING.md
+          git commit -m '[item6-generated] record approved rights strategy'
+          git push origin HEAD:v1.5.3-work-item-6-rights
