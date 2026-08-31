@@ -25,7 +25,9 @@ jobs:
       - name: Install dependencies
         run: npm ci --ignore-scripts
       - name: Generate Item 7 implementation
-        run: python3 scripts/temp-build-v153-item7.py
+        run: |
+          python3 scripts/temp-build-v153-item7.py
+          python3 scripts/temp-fix-v153-item7.py
       - name: Format changed files
         run: npx prettier src/ui/applicationRoute.ts src/ui/applicationRoute.test.ts src/ui/KnowledgeExperience.tsx src/ui/KnowledgeScreen.tsx src/ui/QuranOfflineReader.tsx src/ui/QuranReaderV153.test.tsx src/platform/quranReadingPreferences.ts src/platform/quranReadingPreferences.test.ts src/quran-offline-reader.css --write
       - name: Validate Item 7
