@@ -2,7 +2,8 @@ name: Temporary v1.5.3 Item 7 Finalize
 
 on:
   push:
-    branches: [v1.5.3-work-item-7]
+    branches:
+      - v1.5.3-work-item-7
 
 permissions:
   contents: write
@@ -18,60 +19,18 @@ jobs:
         with:
           ref: v1.5.3-work-item-7
           fetch-depth: 0
-      - name: Finalize tracker and remove temporary tooling
-        run: |
-          python3 - <<'PY'
-          from pathlib import Path
-
-          path = Path('TEMP_TODO_V1.5.3.md')
-          text = path.read_text(encoding='utf-8')
-          old = '''## Work Item 7 — Give the Qur'an its own route and rebuild reading UX
-
-### 7a — Routing and information architecture
-
-- [ ] Add a deep-linkable Qur'an route using the existing routing/query-parameter system; add no router dependency.
-- [ ] Add Library / Qur'an / Hadith segmented navigation inside Knowledge, rendering only one at a time.
-- [ ] Move reading controls adjacent to the Qur'an text.
-- [ ] Preserve specific-ayah deep links and the existing six-destination phone bottom navigation.
-
-### 7b — Ayah presentation
-
-- [ ] Add persistent List and Page/mushaf reading modes.
-- [ ] Replace Latin badges with Arabic-Indic end-of-ayah markers via `Intl.NumberFormat('ar-u-nu-arab')`.
-- [ ] Add surah header bands and correct basmala handling, including Al-Fatihah and At-Tawbah exceptions.
-- [ ] Move bookmark/last-read/share actions out of the reading flow.
-- [ ] Move repeated provenance to a surah footer/info surface and remove the duplicate reader heading.
-- [ ] Preserve search, bookmarks, last-read, share, tafsir, related ayat, and offline behavior.
-- [ ] Gate: `npm run typecheck && npm run lint && npm run test && npm run knowledge:content:check`.
-'''
-          new = '''## Work Item 7 — Give the Qur'an its own route and rebuild reading UX — COMPLETE
-
-### 7a — Routing and information architecture
-
-- [x] Add a deep-linkable Qur'an route using the existing routing/query-parameter system; add no router dependency.
-- [x] Add Library / Qur'an / Hadith segmented navigation inside Knowledge, rendering only one at a time.
-- [x] Move reading controls adjacent to the Qur'an text.
-- [x] Preserve specific-ayah deep links and the existing six-destination phone bottom navigation.
-
-### 7b — Ayah presentation
-
-- [x] Add persistent List and Page/mushaf reading modes.
-- [x] Replace Latin badges with Arabic-Indic end-of-ayah markers via `Intl.NumberFormat('ar-u-nu-arab')`.
-- [x] Add surah header bands and correct basmala handling, including Al-Fatihah and At-Tawbah exceptions.
-- [x] Move bookmark/last-read/share actions out of the reading flow.
-- [x] Move repeated provenance to a surah footer/info surface and remove the duplicate reader heading.
-- [x] Preserve search, bookmarks, last-read, share, tafsir, related ayat, and offline behavior.
-- [x] Gate: `npm run typecheck && npm run lint && npm run test && npm run knowledge:content:check`.
-'''
-          if old not in text:
-              raise SystemExit('Item 7 tracker block not found')
-          path.write_text(text.replace(old, new, 1), encoding='utf-8')
-          PY
-          npx --yes prettier@3.6.2 TEMP_TODO_V1.5.3.md --write
-          rm -f scripts/temp-build-v153-item7.py scripts/temp-fix-v153-item7.py
-          rm -f .github/workflows/temp-v153-item7-build.yml
-          rm -f .github/workflows/temp-v153-item7-finalize.yml
-      - name: Commit finalized result to temporary tag
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Finalize files
+        run: python3 scripts/temp-finalize-v153-item7.py
+      - name: Format tracker
+        run: npx prettier TEMP_TODO_V1.5.3.md --write
+      - name: Publish finalized commit tag
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
