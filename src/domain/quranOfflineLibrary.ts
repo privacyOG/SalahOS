@@ -1,6 +1,32 @@
 import manifest from '../data/quran-offline-manifest.json';
+import { textPresentationMetadata, type TextPresentationMetadata } from './textPresentation';
 
 export type QuranOfflineTranslationId = 'pickthall-1930';
+
+function presentationMetadata(
+  value: Readonly<{ lang: string; dir: string }>,
+): TextPresentationMetadata {
+  if (value.dir !== 'ltr' && value.dir !== 'rtl') {
+    throw new TypeError(`Unsupported text direction: ${value.dir}`);
+  }
+  return textPresentationMetadata(value.lang, value.dir);
+}
+
+export const quranOfflineArabicPresentation = presentationMetadata(
+  manifest.textPresentation.arabic,
+);
+export const quranOfflineReferencePresentation = presentationMetadata(
+  manifest.textPresentation.reference,
+);
+export const quranOfflineTransliterationPresentation = presentationMetadata(
+  manifest.textPresentation.transliteration,
+);
+
+export function getQuranOfflineTranslationPresentation(
+  translationId: QuranOfflineTranslationId,
+): TextPresentationMetadata {
+  return presentationMetadata(manifest.textPresentation.translations[translationId]);
+}
 
 export interface QuranOfflineAyah {
   readonly ayah: number;

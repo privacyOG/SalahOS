@@ -18,5 +18,25 @@
     "path": "fixtures/en/pickthall/source.json",
     "translator": "Mohammed Marmaduke Pickthall",
     "edition": "1930 English translation"
+  },
+  "textPresentation": {
+    "arabic": {
+      "lang": "ar",
+      "dir": "rtl"
+    },
+    "reference": {
+      "lang": "en",
+      "dir": "ltr"
+    },
+    "transliteration": {
+      "lang": "en-Latn",
+      "dir": "ltr"
+    },
+    "translations": {
+      "pickthall-1930": {
+        "lang": "en",
+        "dir": "ltr"
+      }
+    }
   }
 }

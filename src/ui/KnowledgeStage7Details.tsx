@@ -1,4 +1,5 @@
 import type { Locale } from '../i18n/translations';
+import { BidiText } from './BidiText';
 import {
   getIslamicKnowledgeEntryById,
   type HadithKnowledgeEntry,
@@ -114,7 +115,12 @@ export function HadithStage7Details({
 }>) {
   const copy = labels[locale];
   const metadata = getHadithStage7Metadata(entry.id);
-  if (!metadata) return <p>{entry.text}</p>;
+  if (!metadata)
+    return (
+      <p lang={entry.translationPresentation.lang} dir={entry.translationPresentation.dir}>
+        {entry.text}
+      </p>
+    );
   const related = metadata.relatedHadithIds
     .map((entryId) => getIslamicKnowledgeEntryById(entryId))
     .filter((candidate): candidate is HadithKnowledgeEntry => candidate?.module === 'hadith');
@@ -129,33 +135,65 @@ export function HadithStage7Details({
       >
         {metadata.arabicExcerpt}
       </p>
-      <p data-hadith-translation>{entry.text}</p>
+      <p
+        data-hadith-translation
+        lang={entry.translationPresentation.lang}
+        dir={entry.translationPresentation.dir}
+      >
+        {entry.text}
+      </p>
       <dl className="knowledge-source-list" data-hadith-metadata>
         <div>
           <dt>{copy.book}</dt>
-          <dd data-hadith-book>
+          <dd
+            data-hadith-book
+            data-knowledge-source-metadata
+            lang={metadata.displayPresentation.lang}
+            dir={metadata.displayPresentation.dir}
+          >
             {metadata.bookNumber} · {metadata.bookTitle}
           </dd>
         </div>
         <div>
           <dt>{copy.chapter}</dt>
-          <dd data-hadith-chapter>
+          <dd
+            data-hadith-chapter
+            data-knowledge-source-metadata
+            lang={metadata.displayPresentation.lang}
+            dir={metadata.displayPresentation.dir}
+          >
             {metadata.chapterNumber} · {metadata.chapterTitle}
           </dd>
         </div>
         <div>
           <dt>{copy.hadithNumber}</dt>
-          <dd>
-            {entry.collection} · {entry.reference} · {metadata.inBookReference}
+          <dd
+            data-knowledge-source-metadata
+            lang={metadata.displayPresentation.lang}
+            dir={metadata.displayPresentation.dir}
+          >
+            {entry.collection} · <BidiText>{entry.reference}</BidiText> · {metadata.inBookReference}
           </dd>
         </div>
         <div>
           <dt>{copy.grade}</dt>
-          <dd>{entry.grade}</dd>
+          <dd
+            data-knowledge-source-metadata
+            lang={entry.metadataPresentation.lang}
+            dir={entry.metadataPresentation.dir}
+          >
+            {entry.grade}
+          </dd>
         </div>
         <div>
           <dt>{copy.gradingAuthority}</dt>
-          <dd>{entry.grader}</dd>
+          <dd
+            data-knowledge-source-metadata
+            lang={entry.metadataPresentation.lang}
+            dir={entry.metadataPresentation.dir}
+          >
+            {entry.grader}
+          </dd>
         </div>
       </dl>
       <div className="knowledge-topics" data-hadith-topics>
@@ -185,13 +223,22 @@ export function HadithStage7Details({
               onClick={() => {
                 onNavigateHadith(relatedEntry.id);
               }}
+              data-hadith-related-reference
+              lang={relatedEntry.referencePresentation.lang}
+              dir={relatedEntry.referencePresentation.dir}
             >
-              {relatedEntry.reference}
+              <BidiText>{relatedEntry.reference}</BidiText>
             </button>
           ))}
         </div>
       </div>
-      <p className="knowledge-card__source-note">{entry.sourceNote}</p>
+      <p
+        className="knowledge-card__source-note"
+        lang={entry.metadataPresentation.lang}
+        dir={entry.metadataPresentation.dir}
+      >
+        {entry.sourceNote}
+      </p>
     </>
   );
 }
@@ -202,30 +249,69 @@ export function FiqhStage7Details({
 }: Readonly<{ entry: QaKnowledgeEntry; locale: Locale }>) {
   const copy = labels[locale];
   const metadata = getFiqhStage7Metadata(entry.id);
-  if (!metadata) return <p>{entry.answer}</p>;
+  if (!metadata)
+    return (
+      <p lang={entry.metadataPresentation.lang} dir={entry.metadataPresentation.dir}>
+        {entry.answer}
+      </p>
+    );
   return (
     <>
-      <p>{entry.answer}</p>
+      <p lang={entry.metadataPresentation.lang} dir={entry.metadataPresentation.dir}>
+        {entry.answer}
+      </p>
       <dl className="knowledge-source-list" data-fiqh-audit>
         <div>
           <dt>{copy.scholar}</dt>
-          <dd>{entry.scholar}</dd>
+          <dd
+            data-knowledge-source-metadata
+            lang={entry.metadataPresentation.lang}
+            dir={entry.metadataPresentation.dir}
+          >
+            {entry.scholar}
+          </dd>
         </div>
         <div>
           <dt>{copy.originalSources}</dt>
-          <dd>{entry.sourceTitle}</dd>
+          <dd
+            data-knowledge-source-metadata
+            lang={entry.metadataPresentation.lang}
+            dir={entry.metadataPresentation.dir}
+          >
+            {entry.sourceTitle}
+          </dd>
         </div>
         <div>
           <dt>{copy.topic}</dt>
-          <dd data-fiqh-topic>{metadata.topic}</dd>
+          <dd
+            data-fiqh-topic
+            data-knowledge-source-metadata
+            lang={entry.metadataPresentation.lang}
+            dir={entry.metadataPresentation.dir}
+          >
+            {metadata.topic}
+          </dd>
         </div>
         <div>
           <dt>{copy.reviewed}</dt>
-          <dd>{metadata.reviewedAt}</dd>
+          <dd
+            data-knowledge-source-metadata
+            lang={entry.metadataPresentation.lang}
+            dir={entry.metadataPresentation.dir}
+          >
+            {metadata.reviewedAt}
+          </dd>
         </div>
         <div>
           <dt>{copy.supporting}</dt>
-          <dd data-fiqh-supporting>{metadata.supportingReferences.join(' · ')}</dd>
+          <dd
+            data-fiqh-supporting
+            data-knowledge-source-metadata
+            lang={entry.metadataPresentation.lang}
+            dir={entry.metadataPresentation.dir}
+          >
+            {metadata.supportingReferences.join(' · ')}
+          </dd>
         </div>
       </dl>
       <section className="knowledge-fiqh" data-fiqh-four-madhhab>
@@ -236,8 +322,15 @@ export function FiqhStage7Details({
             return (
               <article key={position.madhhab} data-fiqh-madhhab={position.madhhab}>
                 <strong>{madhhabNames[position.madhhab]}</strong>
-                <p>{position.summary}</p>
-                <small>{source?.title ?? position.sourceId}</small>
+                <p lang={entry.metadataPresentation.lang} dir={entry.metadataPresentation.dir}>
+                  {position.summary}
+                </p>
+                <small
+                  lang={source?.displayPresentation.lang ?? entry.metadataPresentation.lang}
+                  dir={source?.displayPresentation.dir ?? entry.metadataPresentation.dir}
+                >
+                  {source?.title ?? position.sourceId}
+                </small>
               </article>
             );
           })}
@@ -246,10 +339,18 @@ export function FiqhStage7Details({
       {entry.disagreementNote ? (
         <div className="knowledge-disagreement" data-fiqh-disagreement>
           <strong>{copy.disagreement}</strong>
-          <p>{entry.disagreementNote}</p>
+          <p lang={entry.metadataPresentation.lang} dir={entry.metadataPresentation.dir}>
+            {entry.disagreementNote}
+          </p>
         </div>
       ) : null}
-      <p className="knowledge-card__source-note">{entry.sourceNote}</p>
+      <p
+        className="knowledge-card__source-note"
+        lang={entry.metadataPresentation.lang}
+        dir={entry.metadataPresentation.dir}
+      >
+        {entry.sourceNote}
+      </p>
     </>
   );
 }

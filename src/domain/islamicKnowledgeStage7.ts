@@ -1,8 +1,10 @@
 import type { Madhhab } from './islamicKnowledge';
+import { englishTextPresentation, type TextPresentationMetadata } from './textPresentation';
 
 export interface HadithStage7Metadata {
   readonly entryId: string;
   readonly sourceId: string;
+  readonly displayPresentation: TextPresentationMetadata;
   readonly bookNumber: number;
   readonly bookTitle: string;
   readonly chapterNumber: number;
@@ -32,6 +34,7 @@ export const hadithStage7Metadata = Object.freeze([
   {
     entryId: 'hadith-intentions',
     sourceId: 'hadith-bukhari',
+    displayPresentation: englishTextPresentation,
     bookNumber: 1,
     bookTitle: 'Revelation',
     chapterNumber: 1,
@@ -45,6 +48,7 @@ export const hadithStage7Metadata = Object.freeze([
   {
     entryId: 'hadith-prayer-light',
     sourceId: 'hadith-muslim',
+    displayPresentation: englishTextPresentation,
     bookNumber: 2,
     bookTitle: 'The Book of Purification',
     chapterNumber: 1,
@@ -58,6 +62,7 @@ export const hadithStage7Metadata = Object.freeze([
   {
     entryId: 'hadith-congregation',
     sourceId: 'hadith-bukhari',
+    displayPresentation: englishTextPresentation,
     bookNumber: 10,
     bookTitle: 'Call to Prayers (Adhaan)',
     chapterNumber: 30,

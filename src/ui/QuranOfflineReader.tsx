@@ -2,9 +2,13 @@ import { useEffect, useMemo, useState } from 'react';
 
 import {
   getQuranOfflineAyah,
+  getQuranOfflineTranslationPresentation,
   getQuranOfflineSurah,
   loadQuranOfflinePack,
   parseQuranVerseKey,
+  quranOfflineArabicPresentation,
+  quranOfflineReferencePresentation,
+  quranOfflineTransliterationPresentation,
   searchQuranOfflinePack,
   type QuranOfflinePack,
   type QuranOfflineSearchResult,
@@ -16,6 +20,7 @@ import {
 } from '../domain/islamicKnowledge';
 import { getIslamicKnowledgeSource } from '../domain/islamicKnowledgeGovernance';
 import type { Locale } from '../i18n/translations';
+import { BidiText } from './BidiText';
 import {
   setQuranLastRead,
   toggleQuranBookmark,
@@ -47,6 +52,8 @@ type QuranReaderCopy = Readonly<{
   noResults: string;
   resultLimit: string;
 }>;
+
+const pickthallPresentation = getQuranOfflineTranslationPresentation('pickthall-1930');
 
 const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
   en: {
@@ -298,7 +305,10 @@ export function QuranOfflineReader({
                 jumpToVerse(`${String(lastRead.surah)}:${String(lastRead.ayah)}`);
               }}
             >
-              {labels.resume}: {String(lastRead.surah)}:{String(lastRead.ayah)}
+              {labels.resume}:{' '}
+              <BidiText>
+                {String(lastRead.surah)}:{String(lastRead.ayah)}
+              </BidiText>
             </button>
           ) : null}
         </div>
@@ -341,8 +351,22 @@ export function QuranOfflineReader({
                 }}
               >
                 {pack.surahs.map((surah) => (
-                  <option key={surah.surah} value={surah.surah}>
-                    {String(surah.surah)}. {surah.nameTransliteration} · {surah.nameArabic}
+                  <option
+                    key={surah.surah}
+                    value={surah.surah}
+                    lang={
+                      locale === 'ar'
+                        ? quranOfflineArabicPresentation.lang
+                        : quranOfflineTransliterationPresentation.lang
+                    }
+                    dir={
+                      locale === 'ar'
+                        ? quranOfflineArabicPresentation.dir
+                        : quranOfflineTransliterationPresentation.dir
+                    }
+                  >
+                    {String(surah.surah)}.{' '}
+                    {locale === 'ar' ? surah.nameArabic : surah.nameTransliteration}
                   </option>
                 ))}
               </select>
@@ -372,10 +396,20 @@ export function QuranOfflineReader({
                     data-quran-offline-ayah={result.ayah.key}
                   >
                     <div className="knowledge-card__meta-row">
-                      <span className="knowledge-badge">
-                        {result.surah.nameTransliteration} · {result.ayah.key}
+                      <span
+                        className="knowledge-badge"
+                        lang={quranOfflineTransliterationPresentation.lang}
+                        dir={quranOfflineTransliterationPresentation.dir}
+                      >
+                        {result.surah.nameTransliteration} · <BidiText>{result.ayah.key}</BidiText>
                       </span>
-                      <span className="knowledge-offline">Juz {String(result.ayah.juz)}</span>
+                      <span
+                        className="knowledge-offline"
+                        lang={quranOfflineReferencePresentation.lang}
+                        dir={quranOfflineReferencePresentation.dir}
+                      >
+                        Juz {String(result.ayah.juz)}
+                      </span>
                     </div>
                     <p
                       className={`knowledge-card__arabic knowledge-card__arabic--${preferences.arabicFont} knowledge-card__arabic--${preferences.fontScale}`}
@@ -385,24 +419,44 @@ export function QuranOfflineReader({
                       {result.ayah.arabic}
                     </p>
                     {preferences.translationMode === 'pickthall-1930' ? (
-                      <p className="quran-offline-ayah__translation">
+                      <p
+                        className="quran-offline-ayah__translation"
+                        data-quran-offline-translation
+                        lang={pickthallPresentation.lang}
+                        dir={pickthallPresentation.dir}
+                      >
                         {result.ayah.translations['pickthall-1930']}
                       </p>
                     ) : null}
                     <dl className="knowledge-source-list">
                       <div>
                         <dt>{labels.source}</dt>
-                        <dd>
-                          Qur’an {result.ayah.key} · Uthmani Arabic · M. M. Pickthall (1930) · Page{' '}
-                          {String(result.ayah.page)}
+                        <dd
+                          data-knowledge-source-metadata
+                          lang={pickthallPresentation.lang}
+                          dir={pickthallPresentation.dir}
+                        >
+                          Qur’an <BidiText>{result.ayah.key}</BidiText> · Uthmani Arabic · M. M.
+                          Pickthall (1930) · Page {String(result.ayah.page)}
                         </dd>
                       </div>
                     </dl>
                     {curated && tafsirSource ? (
                       <div className="quran-offline-ayah__tafsir">
                         <strong>{labels.tafsir}</strong>
-                        <p>{curated.tafsirSummary}</p>
-                        <small>{tafsirSource.title}</small>
+                        <p
+                          data-quran-tafsir-summary
+                          lang={curated.tafsirSummaryPresentation.lang}
+                          dir={curated.tafsirSummaryPresentation.dir}
+                        >
+                          {curated.tafsirSummary}
+                        </p>
+                        <small
+                          lang={tafsirSource.displayPresentation.lang}
+                          dir={tafsirSource.displayPresentation.dir}
+                        >
+                          {tafsirSource.title}
+                        </small>
                       </div>
                     ) : null}
                     <div className="knowledge-card__actions">
@@ -453,8 +507,11 @@ export function QuranOfflineReader({
                               onClick={() => {
                                 jumpToVerse(verseKey);
                               }}
+                              data-quran-related-reference
+                              lang={quranOfflineReferencePresentation.lang}
+                              dir={quranOfflineReferencePresentation.dir}
                             >
-                              Qur’an {verseKey}
+                              Qur’an <BidiText>{verseKey}</BidiText>
                             </button>
                           ))}
                         </div>
