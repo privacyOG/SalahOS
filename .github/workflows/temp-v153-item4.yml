@@ -1,4 +1,4 @@
-name: Temporary v1.5.3 Item 4
+name: Temporary v1.5.3 Item 4 Cleanup
 
 on:
   push:
@@ -8,107 +8,12 @@ permissions:
   contents: write
 
 jobs:
-  build-font:
-    if: contains(github.event.head_commit.message, '[item4-bootstrap]')
+  cleanup:
+    if: contains(github.event.head_commit.message, '[item4-cleanup]')
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
+    timeout-minutes: 5
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          ref: v1.5.3-work-item-4
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - name: Install JavaScript dependencies
-        run: npm ci --ignore-scripts
-      - name: Install font subsetting tools
-        run: python3 -m pip install --disable-pip-version-check fonttools brotli
-      - name: Apply source patch
-        run: python3 scripts/temp-v153-item4-patch.py
-      - name: Download pinned Amiri release
-        run: |
-          curl -fL --retry 3 -o /tmp/Amiri-1.003.zip https://github.com/aliftype/amiri/releases/download/1.003/Amiri-1.003.zip
-          echo '81af0aff7d2086d8af24cea7202f7546130997982534691373485cd96744d05e  /tmp/Amiri-1.003.zip' | sha256sum -c -
-          rm -rf /tmp/amiri && mkdir -p /tmp/amiri public/fonts
-          unzip -q /tmp/Amiri-1.003.zip -d /tmp/amiri
-          FONT_PATH="$(find /tmp/amiri -type f -name AmiriQuran.ttf -print -quit)"
-          LICENSE_PATH="$(find /tmp/amiri -type f -name OFL.txt -print -quit)"
-          test -n "$FONT_PATH" && test -n "$LICENSE_PATH"
-          pyftsubset "$FONT_PATH" \
-            --output-file=public/fonts/amiri-quran-arabic.woff2 \
-            --flavor=woff2 \
-            --unicodes='U+0020,U+0600-06FF,U+0750-077F,U+0870-089F,U+08A0-08FF,U+FB50-FDFF,U+FE70-FEFF,U+200C-200F,U+202A-202E,U+2066-2069,U+25CC,U+FD3E-FD3F' \
-            --layout-features='*' \
-            --name-IDs='*' \
-            --name-languages='*' \
-            --notdef-glyph \
-            --notdef-outline \
-            --recommended-glyphs
-          cp "$LICENSE_PATH" public/fonts/OFL-Amiri.txt
-          test -s public/fonts/amiri-quran-arabic.woff2
-          wc -c public/fonts/amiri-quran-arabic.woff2 | tee /tmp/item4-font-size.txt
-          sha256sum public/fonts/amiri-quran-arabic.woff2 | tee /tmp/item4-font-sha.txt
-      - name: Format source changes
-        run: >-
-          npx prettier
-          src/platform/quranReadingPreferences.ts
-          src/platform/quranReadingPreferences.test.ts
-          src/ui/KnowledgeScreen.tsx
-          src/quran-fonts.css
-          src/main.tsx
-          src/islamic-knowledge.css
-          src/quran-offline-reader.css
-          docs/DEPENDENCY_LICENSE_REVIEW.md
-          --write
-      - name: Validate application behavior
-        run: npm run typecheck && npm run test
-      - name: Required Work Item 4 gate
-        run: npm run security:licenses && npm run build && npm run bundle:size
-      - name: Mark Work Item 4 complete
-        run: |
-          FONT_SIZE="$(cut -d' ' -f1 /tmp/item4-font-size.txt)"
-          FONT_SHA="$(cut -d' ' -f1 /tmp/item4-font-sha.txt)"
-          python3 - "$FONT_SIZE" "$FONT_SHA" <<'PY'
-          from pathlib import Path
-          import sys
-          size, sha = sys.argv[1], sys.argv[2]
-          path = Path('TEMP_TODO_V1.5.3.md')
-          text = path.read_text()
-          before = '''## Work Item 4 — Bundle a real Arabic Qur'anic font
-
-          - [ ] Bundle/self-host Amiri Quran (SIL OFL 1.1) as the default; optionally bundle Scheherazade New.
-          - [ ] Subset to required Arabic ranges, produce WOFF2, and report byte size.
-          - [ ] Add `@font-face` with `font-display: swap` and Arabic-only `unicode-range`.
-          - [ ] Keep KFGQPC Uthmanic HAFS optional/downloadable only if offered, with its notice and licence restrictions.
-          - [ ] Record font licence/provenance in `docs/DEPENDENCY_LICENSE_REVIEW.md`.
-          - [ ] Reduce the font picker to genuinely present/distinct faces.
-          - [ ] Gate: `npm run security:licenses && npm run build && npm run bundle:size`.
-          '''
-          after = '''## Work Item 4 — Bundle a real Arabic Qur'anic font — COMPLETE
-
-          - [x] Bundle/self-host Amiri Quran (SIL OFL 1.1) as the default; optionally bundle Scheherazade New.
-          - [x] Subset to required Arabic ranges, produce WOFF2, and report byte size.
-          - [x] Add `@font-face` with `font-display: swap` and Arabic-only `unicode-range`.
-          - [x] Keep KFGQPC Uthmanic HAFS optional/downloadable only if offered, with its notice and licence restrictions.
-          - [x] Record font licence/provenance in `docs/DEPENDENCY_LICENSE_REVIEW.md`.
-          - [x] Reduce the font picker to genuinely present/distinct faces.
-          - [x] Gate: `npm run security:licenses && npm run build && npm run bundle:size`.
-          '''
-          if before not in text:
-              raise SystemExit('Work Item 4 tracker block not found')
-          text = text.replace(before, after, 1)
-          log = f'- Work Item 4: complete on branch `v1.5.3-work-item-4`; bundled Amiri Quran 1.003 as a {size}-byte WOFF2 subset (SHA-256 `{sha}`), preserved OFL-1.1 notice, reduced the picker to bundled Amiri Quran/system, and passed the required licence/build/bundle gate.\n'
-          text = text.rstrip() + '\n' + log
-          path.write_text(text)
-          PY
-      - name: Commit generated result to temporary tag
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add TEMP_TODO_V1.5.3.md docs/DEPENDENCY_LICENSE_REVIEW.md public/fonts src/main.tsx src/quran-fonts.css src/islamic-knowledge.css src/quran-offline-reader.css src/platform/quranReadingPreferences.ts src/platform/quranReadingPreferences.test.ts src/ui/KnowledgeScreen.tsx
-          git commit -m '[item4-generated] bundle Amiri Quran font'
-          git tag -f temp-v153-item4-generated
-          git push --force origin refs/tags/temp-v153-item4-generated
+      - name: Delete temporary validation tag
+        run: git push origin :refs/tags/temp-v153-item4-generated
