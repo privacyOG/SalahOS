@@ -112,3 +112,5 @@ Release packaging keeps the upstream OFL text at `public/fonts/OFL-Amiri.txt`. T
 The CSS family name `Salah Amiri Quran` distinguishes the bundled application face from host-installed fonts while preserving the upstream notice. No KFGQPC font is bundled or offered by SalahOS in this release; if one is offered later it must remain optional/downloadable and its separate licence/notice restrictions must be reviewed before distribution.
 """ + '\n'
 write(p, s)
+
+# item4 bootstrap trigger
