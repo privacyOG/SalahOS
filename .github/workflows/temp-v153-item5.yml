@@ -26,6 +26,8 @@ jobs:
         run: npm ci --ignore-scripts
       - name: Apply Work Item 5 patch
         run: python3 scripts/temp-v153-item5-patch.py
+      - name: Make typography assertion formatting-safe
+        run: python3 scripts/temp-v153-item5-test-fix.py
       - name: Format changes
         run: npx prettier src/islamic-knowledge.css src/quran-offline-reader.css src/ui/QuranOfflineReader.tsx src/ui/QuranTypographyArchitecture.test.tsx --write
       - name: Validate changed behavior
@@ -69,4 +71,4 @@ jobs:
           git tag -f temp-v153-item5-generated
           git push --force origin refs/tags/temp-v153-item5-generated
 
-# bootstrap trigger
+# bootstrap retry
