@@ -53,13 +53,13 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - [x] Reduce the font picker to genuinely present/distinct faces.
 - [x] Gate: `npm run security:licenses && npm run build && npm run bundle:size`.
 
-## Work Item 5 — Fix Arabic typography and unify selector systems
+## Work Item 5 — Fix Arabic typography and unify selector systems — COMPLETE
 
-- [ ] Remove conflicting `!important` typography declarations and set line-height per size step.
-- [ ] Use Qur'anic justification where it remains readable; add `letter-spacing: 0` and required ligature/font-feature settings.
-- [ ] Standardize on data-attribute state selectors for Qur'an font/scale and migrate both reader surfaces.
-- [ ] Delete dead modifier selectors and remove import-order dependence.
-- [ ] Gate: `npm run ui:theme-contrast && npm run ui:theme-architecture && npm run ui:design-system-ownership && npm run format:check`.
+- [x] Remove conflicting `!important` typography declarations and set line-height per size step.
+- [x] Use Qur'anic justification where it remains readable; add `letter-spacing: 0` and required ligature/font-feature settings.
+- [x] Standardize on data-attribute state selectors for Qur'an font/scale and migrate both reader surfaces.
+- [x] Delete dead modifier selectors and remove import-order dependence.
+- [x] Gate: `npm run ui:theme-contrast && npm run ui:theme-architecture && npm run ui:design-system-ownership && npm run format:check`.
 
 ## Work Item 6 — Translation and transliteration licensing/research
 
@@ -253,3 +253,4 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - Work Item 2: complete on branch `v1.5.3-work-item-2`; Finder and combined `prayerTimes` coverage reduced from 3 records to 1 after collision/sanity cleanup. Quality Gate run 33379143204 passed the required Australian directory and mosque-pack reproducibility gates after dependency installation; stale dataset expectations found later in the broader suite were updated without weakening the Item 1 guard fixtures.
 - Work Item 3: complete on branch `v1.5.3-work-item-3`; required typecheck, lint, and test gate passed in validation run 33381446395 with 777 tests, including Arabic-locale direction coverage.
 - Work Item 4: complete on branch `v1.5.3-work-item-4`; bundled Amiri Quran 1.003 as a 48320-byte WOFF2 subset (SHA-256 `b4550498a71ed77bddb93bb7c24608a2c40d706f8843178ed17420a4fd860a7d`), preserved OFL-1.1 notice, reduced the picker to bundled Amiri Quran/system, and passed the required licence/build/bundle gate.
+- Work Item 5: complete on branch `v1.5.3-work-item-5`; unified both Qur’an reader surfaces on data-attribute font/scale state, removed duplicate modifier selectors and typography `!important`, added explicit Arabic shaping/spacing and scale-specific line heights, and passed the required theme/architecture/ownership/format gate.
