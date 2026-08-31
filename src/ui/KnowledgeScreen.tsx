@@ -565,10 +565,14 @@ function KnowledgeEntryCard({
   );
 }
 
-export function KnowledgeScreen() {
+export function KnowledgeScreen({
+  scope = 'library',
+}: Readonly<{ scope?: 'library' | 'quran' | 'hadith' }>) {
   const locale = currentLocale();
   const labels = copy[locale];
-  const [module, setModule] = useState<KnowledgeFilter>('all');
+  const [module, setModule] = useState<KnowledgeFilter>(() =>
+    scope === 'hadith' ? 'hadith' : scope === 'quran' ? 'quran' : 'all',
+  );
   const [query, setQuery] = useState('');
   const [bookmarksOnly, setBookmarksOnly] = useState(false);
   const [shareStatus, setShareStatus] = useState('');
@@ -582,11 +586,14 @@ export function KnowledgeScreen() {
       module === 'fiqh'
         ? filtered.filter((entry) => entry.module === 'qa' && entry.contentType === 'fiqh')
         : filtered;
-    if (!bookmarksOnly) return scoped;
-    return scoped.filter(
-      (entry) => entry.module === 'quran' && quranPreferences.bookmarkedAyahIds.includes(entry.id),
-    );
-  }, [bookmarksOnly, module, query, quranPreferences.bookmarkedAyahIds]);
+    const surfaceScoped =
+      scope === 'hadith'
+        ? scoped.filter((entry) => entry.module === 'hadith')
+        : scope === 'quran'
+          ? scoped.filter((entry) => entry.module === 'quran')
+          : scoped.filter((entry) => entry.module !== 'quran' && entry.module !== 'hadith');
+    return surfaceScoped;
+  }, [module, query, scope]);
 
   const persistQuranPreferences = (next: QuranReadingPreferences): void => {
     setQuranPreferences(next);
@@ -606,13 +613,14 @@ export function KnowledgeScreen() {
   const filters: readonly Readonly<{
     id: KnowledgeFilter;
     label: string;
-  }>[] = [
-    { id: 'all', label: labels.all },
-    { id: 'quran', label: labels.quran },
-    { id: 'hadith', label: labels.hadith },
-    { id: 'fiqh', label: labels.fiqh },
-    { id: 'qa', label: labels.qa },
-  ];
+  }>[] =
+    scope === 'hadith' || scope === 'quran'
+      ? []
+      : [
+          { id: 'all', label: labels.all },
+          { id: 'fiqh', label: labels.fiqh },
+          { id: 'qa', label: labels.qa },
+        ];
 
   const resumeEntry = quranPreferences.lastReadAyahId
     ? getIslamicKnowledgeEntryById(quranPreferences.lastReadAyahId)
@@ -643,22 +651,24 @@ export function KnowledgeScreen() {
             }}
           />
         </label>
-        <div className="knowledge-filter" role="group" aria-label={labels.eyebrow}>
-          {filters.map((filter) => (
-            <button
-              type="button"
-              key={filter.id}
-              aria-pressed={module === filter.id}
-              data-knowledge-filter={filter.id}
-              onClick={() => {
-                setModule(filter.id);
-                if (filter.id !== 'quran') setBookmarksOnly(false);
-              }}
-            >
-              {filter.label}
-            </button>
-          ))}
-        </div>
+        {filters.length > 0 ? (
+          <div className="knowledge-filter" role="group" aria-label={labels.eyebrow}>
+            {filters.map((filter) => (
+              <button
+                type="button"
+                key={filter.id}
+                aria-pressed={module === filter.id}
+                data-knowledge-filter={filter.id}
+                onClick={() => {
+                  setModule(filter.id);
+                  if (filter.id !== 'quran') setBookmarksOnly(false);
+                }}
+              >
+                {filter.label}
+              </button>
+            ))}
+          </div>
+        ) : null}
       </section>
 
       {module === 'quran' ? (

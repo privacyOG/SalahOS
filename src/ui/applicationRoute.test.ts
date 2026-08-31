@@ -3,10 +3,13 @@ import { describe, expect, it } from 'vitest';
 import {
   readAdminDestination,
   readCongregationDestination,
+  readKnowledgeView,
   readProductSurface,
+  readQuranVerseKey,
   readSettingsCategory,
   searchForAdminDestination,
   searchForCongregationDestination,
+  searchForKnowledgeView,
   searchForSettingsCategory,
 } from './applicationRoute';
 
@@ -20,6 +23,7 @@ describe('applicationRoute', () => {
   it('reads every supported congregation destination from a reloadable URL', () => {
     for (const destination of [
       'today',
+      'calendar',
       'mosques',
       'qiblah',
       'knowledge',
@@ -36,12 +40,37 @@ describe('applicationRoute', () => {
       'knowledge',
     );
     const params = new URLSearchParams(search);
-
     expect(params.get('view')).toBe('knowledge');
     expect(params.get('debug')).toBe('1');
     expect(params.has('surface')).toBe(false);
     expect(params.has('adminView')).toBe(false);
     expect(params.has('settingsView')).toBe(false);
+  });
+
+  it('creates deep-linkable Knowledge sections and Qur’an ayah routes', () => {
+    const quran = searchForKnowledgeView('?view=knowledge&debug=1', 'quran', '2:255');
+    expect(readCongregationDestination(quran)).toBe('knowledge');
+    expect(readKnowledgeView(quran)).toBe('quran');
+    expect(readQuranVerseKey(quran)).toBe('2:255');
+    expect(new URLSearchParams(quran).get('debug')).toBe('1');
+
+    const hadith = searchForKnowledgeView(quran, 'hadith');
+    expect(readKnowledgeView(hadith)).toBe('hadith');
+    expect(readQuranVerseKey(hadith)).toBeNull();
+
+    expect(readKnowledgeView('?view=knowledge&knowledgeView=unknown')).toBe('library');
+    expect(readQuranVerseKey('?view=knowledge&knowledgeView=quran&ayah=not-an-ayah')).toBeNull();
+  });
+
+  it('clears Knowledge-specific state when leaving Knowledge', () => {
+    const search = searchForCongregationDestination(
+      '?view=knowledge&knowledgeView=quran&ayah=2%3A255&debug=1',
+      'today',
+    );
+    const params = new URLSearchParams(search);
+    expect(params.has('knowledgeView')).toBe(false);
+    expect(params.has('ayah')).toBe(false);
+    expect(params.get('debug')).toBe('1');
   });
 
   it('creates, reads and clears reloadable Settings category links', () => {
@@ -106,7 +135,6 @@ describe('applicationRoute', () => {
         destination,
       );
       const params = new URLSearchParams(search);
-
       expect(readProductSurface(search)).toBe('admin');
       expect(readAdminDestination(search)).toBe(destination);
       expect(params.get('debug')).toBe('1');

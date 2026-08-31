@@ -49,7 +49,7 @@ describe('Knowledge text direction', () => {
   });
 
   it('keeps source-language content independent of the Arabic UI direction', () => {
-    const markup = renderToStaticMarkup(<KnowledgeScreen />);
+    const markup = renderToStaticMarkup(<KnowledgeScreen scope="quran" />);
 
     expect(markup).toMatch(
       /<p(?=[^>]*data-quran-translation)(?=[^>]*lang="en")(?=[^>]*dir="ltr")[^>]*>/u,
