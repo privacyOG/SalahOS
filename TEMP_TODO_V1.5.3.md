@@ -61,13 +61,15 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - [x] Delete dead modifier selectors and remove import-order dependence.
 - [x] Gate: `npm run ui:theme-contrast && npm run ui:theme-architecture && npm run ui:design-system-ownership && npm run format:check`.
 
-## Work Item 6 — Translation and transliteration licensing/research — APPROVAL BLOCKED
+## Work Item 6 — Translation and transliteration licensing/research — RIGHTS PENDING
 
 - [x] Do not write product code until the licensing position is reported and a decision is approved.
 - [x] Draft permission request for Mustafa Khattab's _The Clear Quran_ to Al-Furqaan / Book of Signs.
 - [x] Prepare fallback licence requests for Bewley and Abdel Haleem.
 - [x] Verify Talal Itani's current ClearQuran.com edition/licence as a neutral secondary option.
 - [x] Source and provenance-pin a Tanzil-derived Latin transliteration; checksum it and budget proofreading.
+- [x] Project owner approved the documented rights strategy on 2026-09-01: The Clear Quran primary; Bewley/Abdel Haleem fallbacks; Talal Itani conditional on licence clarification; Tanzil transliteration clearance required.
+- [ ] Obtain actual written permission/compatible licence before bundling any new translation or transliteration content.
 - [ ] After any translation is licensed, plan multi-state translation preferences plus independent transliteration with per-stream `lang`/`dir`.
 - [ ] Gate after approval: `npm run quran:offline:prepare && npm run quran:offline:check && npm run security:licenses && npm run test`.
 

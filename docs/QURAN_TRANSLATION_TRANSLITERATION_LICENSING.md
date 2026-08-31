@@ -1,6 +1,6 @@
 # Qur'an translation and transliteration licensing research
 
-Status: **research checkpoint only — no product integration is approved**
+Status: **rights strategy approved by project owner — rights acquisition pending; no new translation/transliteration corpus is cleared for product integration**
 
 Checked: 2026-09-01 (Australia/Sydney)
 
@@ -144,6 +144,24 @@ No code is authorized by this section. Once a translation licence is approved:
 7. Preserve the `BidiText`/isolation boundaries established in V1.5.3 Work Item 3 for mixed-script labels and verse references.
 8. Keep source/version, checksum, licence/permission record and required attribution adjacent to the packaged corpus manifest so release validation can prove exactly what was distributed.
 9. Run the Work Item 6 post-approval gate only after the approved corpus and notices are integrated.
+
+## Owner decision — 2026-09-01
+
+The project owner explicitly approved the recommended rights strategy:
+
+1. pursue written permission for **The Clear Quran** as the primary English translation;
+2. pursue **Bewley** and **Abdel Haleem** as fallback translations;
+3. keep **Talal Itani / ClearQuran** conditional on written resolution of the conflicting licence statements; and
+4. obtain explicit clearance for the pinned **Tanzil-derived Latin transliteration** before redistribution.
+
+Approval of the strategy is **not** evidence that any copyright holder has granted SalahOS permission. Product integration remains blocked until the relevant permission or compatible licence is actually obtained and recorded.
+
+### Outreach state
+
+- Al-Furqaan / The Clear Quran: a Gmail draft was created for review on 2026-09-01; it has **not** been recorded as sent.
+- Diwan / Bewley: request remains prepared but unsent because the connected Gmail write path was not authorized for the second draft attempt.
+- Abdel Haleem / OUP and Ta-Ha: substantial-content permissions are routed through publisher permissions systems/PLS Clear rather than being treated as email-cleared.
+- Talal Itani / ClearQuran and Tanzil: direct clarification requests remain prepared but unsent.
 
 ## Approval boundary
 
