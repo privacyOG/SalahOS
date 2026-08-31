@@ -101,30 +101,6 @@
   margin-block: 1rem;
 }
 
-.knowledge-card__arabic--amiri-quran {
-  font-family: 'Salah Amiri Quran', serif;
-}
-
-.knowledge-card__arabic--system {
-  font-family: system-ui, sans-serif;
-}
-
-.knowledge-card__arabic--compact {
-  font-size: clamp(1.15rem, 2.5vw, 1.45rem);
-}
-
-.knowledge-card__arabic--comfortable {
-  font-size: clamp(1.35rem, 3vw, 1.8rem);
-}
-
-.knowledge-card__arabic--large {
-  font-size: clamp(1.65rem, 4vw, 2.15rem);
-}
-
-.knowledge-card__arabic--xlarge {
-  font-size: clamp(1.95rem, 5vw, 2.55rem);
-}
-
 .quran-offline-ayah__translation {
   color: var(--salah-fg-secondary);
   line-height: 1.7;

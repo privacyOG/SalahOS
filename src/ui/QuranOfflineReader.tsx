@@ -412,9 +412,11 @@ export function QuranOfflineReader({
                       </span>
                     </div>
                     <p
-                      className={`knowledge-card__arabic knowledge-card__arabic--${preferences.arabicFont} knowledge-card__arabic--${preferences.fontScale}`}
+                      className="knowledge-card__arabic"
                       lang="ar"
                       dir="rtl"
+                      data-quran-font={preferences.arabicFont}
+                      data-quran-scale={preferences.fontScale}
                     >
                       {result.ayah.arabic}
                     </p>

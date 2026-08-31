@@ -231,10 +231,18 @@
 
 .knowledge-card__arabic {
   margin-block: 1rem;
-  color: var(--salah-fg-primary) !important;
+  color: var(--salah-fg-primary);
   font-size: clamp(1.35rem, 3vw, 1.8rem);
-  line-height: 1.9 !important;
-  text-align: end;
+  line-height: 1.85;
+  letter-spacing: 0;
+  font-variant-ligatures: common-ligatures contextual;
+  font-feature-settings:
+    'rlig' 1,
+    'calt' 1,
+    'liga' 1,
+    'kern' 1;
+  text-align: justify;
+  text-align-last: end;
 }
 
 .knowledge-card__arabic[data-quran-font='amiri-quran'] {
@@ -247,18 +255,22 @@
 
 .knowledge-card__arabic[data-quran-scale='compact'] {
   font-size: clamp(1.15rem, 2.5vw, 1.45rem);
+  line-height: 1.75;
 }
 
 .knowledge-card__arabic[data-quran-scale='comfortable'] {
   font-size: clamp(1.35rem, 3vw, 1.8rem);
+  line-height: 1.85;
 }
 
 .knowledge-card__arabic[data-quran-scale='large'] {
   font-size: clamp(1.65rem, 4vw, 2.15rem);
+  line-height: 1.9;
 }
 
 .knowledge-card__arabic[data-quran-scale='xlarge'] {
   font-size: clamp(1.95rem, 5vw, 2.55rem);
+  line-height: 1.95;
 }
 
 .knowledge-quran-actions {
