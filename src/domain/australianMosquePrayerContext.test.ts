@@ -30,35 +30,39 @@ describe('Australian mosque published congregation times', () => {
 
     expect(
       publishedAustralianMosqueCongregationMinutes(record.enriched.prayerTimes, 'dhuhr'),
-    ).toEqual([735, 795]);
+    ).toEqual([795]);
     expect(
       publishedAustralianMosqueCongregationMinutes(record.enriched.prayerTimes, 'fajr'),
     ).toEqual([]);
     expect(hasPublishedAustralianMosqueCongregationTimes(record.enriched.prayerTimes)).toBe(true);
   });
 
-  it('rejects impossible congregation values from the three affected real records', () => {
+  it('rejects legacy impossible values using the three affected real-record fixtures', () => {
     const lismore = mosqueByName('Lismore Masallah');
     const canningVale = mosqueByName('Canning Vale Musalla');
     const erskine = erskineMusallah();
 
+    expect(lismore.enriched.prayerTimes).toBeNull();
+    expect(canningVale.enriched.prayerTimes).toBeNull();
+    expect(erskine.enriched.prayerTimes?.dhuhr).toBe('1:15 pm');
+
     expect(
       guardedPublishedAustralianMosqueCongregationMinutes(
-        lismore.enriched.prayerTimes,
+        { isha: '1:15 pm' },
         'isha',
         18 * 60 + 46,
       ),
     ).toEqual([]);
     expect(
       guardedPublishedAustralianMosqueCongregationMinutes(
-        canningVale.enriched.prayerTimes,
+        { maghrib: '11:00 am' },
         'maghrib',
         17 * 60 + 58,
       ),
     ).toEqual([]);
     expect(
       guardedPublishedAustralianMosqueCongregationMinutes(
-        erskine.enriched.prayerTimes,
+        { dhuhr: '12:15 pm / 1:15 pm' },
         'dhuhr',
         12 * 60 + 17,
       ),
