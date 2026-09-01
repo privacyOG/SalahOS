@@ -1,0 +1,38 @@
+name: Temporary v1.5.3 Item 8 Tracker Update
+
+on:
+  push:
+    branches:
+      - v1.5.3-work-item-8
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    if: contains(github.event.head_commit.message, '[item8-tracker]')
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          ref: v1.5.3-work-item-8
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Update tracker
+        run: python3 scripts/temp-update-v153-item8-tracker.py
+      - name: Format tracker
+        run: npx prettier TEMP_TODO_V1.5.3.md --write && npx prettier TEMP_TODO_V1.5.3.md --check
+      - name: Publish tracker result
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add TEMP_TODO_V1.5.3.md
+          git commit -m '[item8-tracker-validated] record technical completion'
+          git tag -f temp-v153-item8-tracker
+          git push --force origin refs/tags/temp-v153-item8-tracker
