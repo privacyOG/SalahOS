@@ -73,24 +73,24 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - [ ] After any translation is licensed, plan multi-state translation preferences plus independent transliteration with per-stream `lang`/`dir`.
 - [ ] Gate after approval: `npm run quran:offline:prepare && npm run quran:offline:check && npm run security:licenses && npm run test`.
 
-## Work Item 7 — Give the Qur'an its own route and rebuild reading UX
+## Work Item 7 — Give the Qur'an its own route and rebuild reading UX — COMPLETE
 
 ### 7a — Routing and information architecture
 
-- [ ] Add a deep-linkable Qur'an route using the existing routing/query-parameter system; add no router dependency.
-- [ ] Add Library / Qur'an / Hadith segmented navigation inside Knowledge, rendering only one at a time.
-- [ ] Move reading controls adjacent to the Qur'an text.
-- [ ] Preserve specific-ayah deep links and the existing six-destination phone bottom navigation.
+- [x] Add a deep-linkable Qur'an route using the existing routing/query-parameter system; add no router dependency.
+- [x] Add Library / Qur'an / Hadith segmented navigation inside Knowledge, rendering only one at a time.
+- [x] Move reading controls adjacent to the Qur'an text.
+- [x] Preserve specific-ayah deep links and the existing six-destination phone bottom navigation.
 
 ### 7b — Ayah presentation
 
-- [ ] Add persistent List and Page/mushaf reading modes.
-- [ ] Replace Latin badges with Arabic-Indic end-of-ayah markers via `Intl.NumberFormat('ar-u-nu-arab')`.
-- [ ] Add surah header bands and correct basmala handling, including Al-Fatihah and At-Tawbah exceptions.
-- [ ] Move bookmark/last-read/share actions out of the reading flow.
-- [ ] Move repeated provenance to a surah footer/info surface and remove the duplicate reader heading.
-- [ ] Preserve search, bookmarks, last-read, share, tafsir, related ayat, and offline behavior.
-- [ ] Gate: `npm run typecheck && npm run lint && npm run test && npm run knowledge:content:check`.
+- [x] Add persistent List and Page/mushaf reading modes.
+- [x] Replace Latin badges with Arabic-Indic end-of-ayah markers via `Intl.NumberFormat('ar-u-nu-arab')`.
+- [x] Add surah header bands and correct basmala handling, including Al-Fatihah and At-Tawbah exceptions.
+- [x] Move bookmark/last-read/share actions out of the reading flow.
+- [x] Move repeated provenance to a surah footer/info surface and remove the duplicate reader heading.
+- [x] Preserve search, bookmarks, last-read, share, tafsir, related ayat, and offline behavior.
+- [x] Gate: `npm run typecheck && npm run lint && npm run test && npm run knowledge:content:check`.
 
 ## Work Item 8 — Hadith honesty, typography, and scope
 
