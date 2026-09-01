@@ -1,4 +1,4 @@
-name: Temporary v1.5.3 Item 8 Finalize
+name: Temporary v1.5.3 Item 8 Cleanup
 
 on:
   push:
@@ -9,21 +9,15 @@ permissions:
   contents: write
 
 jobs:
-  finalize:
-    if: contains(github.event.head_commit.message, '[item8-finalize]')
+  cleanup:
+    if: contains(github.event.head_commit.message, '[item8-cleanup]')
     runs-on: ubuntu-24.04
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
           ref: v1.5.3-work-item-8
-      - name: Finalize tracker
-        run: python3 scripts/temp-finalize-v153-item8.py
-      - name: Publish finalized tracker
-        run: |
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add TEMP_TODO_V1.5.3.md
-          git commit -m '[item8-finalized] record owner corpus decision'
-          git tag -f temp-v153-item8-finalized
-          git push --force origin refs/tags/temp-v153-item8-finalized
+      - name: Delete temporary finalization tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: git push https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git :refs/tags/temp-v153-item8-finalized
