@@ -13,6 +13,8 @@ jobs:
     if: contains(github.event.head_commit.message, '[item8-tag-cleanup]')
     runs-on: ubuntu-24.04
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
       - name: Delete temporary validation tag
         env:
           GH_TOKEN: ${{ github.token }}
