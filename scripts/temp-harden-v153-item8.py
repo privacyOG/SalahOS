@@ -28,7 +28,7 @@ export function hadithFullTextUrl(reference: string): string {
   if (!SUNNAH_REFERENCE_PATTERN.test(reference)) {
     throw new Error(`Unsupported hadith full-text reference: ${reference}`);
   }
-  return new URL(reference, SUNNAH_HADITH_BASE_URL).toString();
+  return `${SUNNAH_HADITH_BASE_URL}${reference}`;
 }
 """, encoding='utf-8')
 
