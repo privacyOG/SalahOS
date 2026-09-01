@@ -25,11 +25,8 @@ jobs:
           cache: npm
       - name: Install dependencies
         run: npm ci --ignore-scripts
-      - name: Apply Item 8 implementation
-        run: |
-          python3 scripts/temp-implement-v153-item8.py
-          python3 scripts/temp-fix-v153-item8.py
-          python3 scripts/temp-harden-v153-item8.py
+      - name: Apply lean Item 8 implementation
+        run: python3 scripts/temp-implement-v153-item8-lean.py
       - name: Format
         run: npx prettier src/domain/islamicKnowledgeStage7.ts src/domain/islamicKnowledgeStage7.test.ts src/platform/hadithExternalActions.ts src/platform/hadithExternalActions.test.ts src/ui/KnowledgeStage7Details.tsx src/ui/KnowledgeScreen.tsx src/ui/HadithHonestyV153.test.tsx src/islamic-knowledge.css scripts/check-remote-network-policy.mjs --write
       - name: Required Item 8 gate
@@ -44,5 +41,3 @@ jobs:
           git commit -m '[item8-validated] Hadith honesty typography and scope'
           git tag -f temp-v153-item8-validated
           git push --force origin refs/tags/temp-v153-item8-validated
-
-# canonical URL construction rerun
