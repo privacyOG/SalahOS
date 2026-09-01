@@ -45,4 +45,4 @@ jobs:
           git tag -f temp-v153-item8-validated
           git push --force origin refs/tags/temp-v153-item8-validated
 
-# literal-safe hardening rerun
+# canonical URL construction rerun
