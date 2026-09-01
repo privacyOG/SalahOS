@@ -92,16 +92,16 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - [x] Preserve search, bookmarks, last-read, share, tafsir, related ayat, and offline behavior.
 - [x] Gate: `npm run typecheck && npm run lint && npm run test && npm run knowledge:content:check`.
 
-## Work Item 8 — Hadith honesty, typography, and scope
+## Work Item 8 — Hadith honesty, typography, and scope — OWNER DECISION PENDING
 
-- [ ] Label partial Arabic matn excerpts honestly and link to full text where available.
-- [ ] Give hadith Arabic a visually distinct treatment from Qur'anic text.
-- [ ] Surface isnad, grade, and grading authority adjacent to the text.
-- [ ] Replace silent metadata fallback with an explicit state.
-- [ ] Right-size the 12-entry information architecture and surface the scholar disclaimer clearly.
+- [x] Label partial Arabic matn excerpts honestly and link to full text where available.
+- [x] Give hadith Arabic a visually distinct treatment from Qur'anic text.
+- [x] Surface isnad, grade, and grading authority adjacent to the text.
+- [x] Replace silent metadata fallback with an explicit state.
+- [x] Right-size the current 9-entry information architecture and surface the scholar disclaimer clearly.
 - [ ] Decide corpus expansion path with the project owner before implementing expansion.
-- [ ] Apply tanzih notes to divine-attribute hadith where required by the project aqidah constraint.
-- [ ] Gate: `npm run knowledge:content:check && npm run typecheck && npm run lint && npm run test`.
+- [x] Audit the current hadith corpus for divine-attribute reports requiring tanzih notes under the project aqidah constraint; none of the current three hadith requires such a note, and any future corpus expansion must repeat this audit.
+- [x] Gate: `npm run knowledge:content:check && npm run typecheck && npm run lint && npm run test`.
 
 ## Work Item 9 — Style the sunrise row
 
@@ -257,3 +257,4 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - Work Item 4: complete on branch `v1.5.3-work-item-4`; bundled Amiri Quran 1.003 as a 48320-byte WOFF2 subset (SHA-256 `b4550498a71ed77bddb93bb7c24608a2c40d706f8843178ed17420a4fd860a7d`), preserved OFL-1.1 notice, reduced the picker to bundled Amiri Quran/system, and passed the required licence/build/bundle gate.
 - Work Item 5: complete on branch `v1.5.3-work-item-5`; unified both Qur’an reader surfaces on data-attribute font/scale state, removed duplicate modifier selectors and typography `!important`, added explicit Arabic shaping/spacing and scale-specific line heights, and passed the required theme/architecture/ownership/format gate.
 - Work Item 6 research checkpoint: licensing matrix and permission-request drafts recorded in `docs/QURAN_TRANSLATION_TRANSLITERATION_LICENSING.md`; pinned `risan/quran-json` v3.1.2 transliteration at 2,214,403 bytes, SHA-256 `36369741f23fe2b64fdcca39d047659256dab7b40f1717aefcb6198c514313a0`, Git blob `7e2750a5b65306c9393b29e5a3ddfa264d33cc48`, 114 surahs/6,236 ayat. Product integration remains blocked pending owner approval and required rights clarification.
+- Work Item 8 technical implementation: lean validation run `33497792180` passed Knowledge governance, typecheck, lint, 788 tests across 180 files, theme/design ownership, production build, and bundle architecture at 1,249,350 total JavaScript bytes (650 bytes below the 1,250,000-byte cap). The current three-hadith corpus contains no divine-attribute report requiring a tanzih note. Corpus expansion remains owner-decision pending before Item 8 can be closed.
