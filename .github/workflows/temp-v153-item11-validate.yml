@@ -1,4 +1,4 @@
-name: Temporary v1.5.3 Item 11 Validation
+name: Temporary v1.5.3 Item 11 Cleanup
 
 on:
   push:
@@ -9,41 +9,13 @@ permissions:
   contents: write
 
 jobs:
-  validate:
-    if: contains(github.event.head_commit.message, '[item11-validate]')
+  cleanup:
+    if: contains(github.event.head_commit.message, '[item11-cleanup]')
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@v4
         with:
-          ref: v1.5.3-work-item-11
           fetch-depth: 0
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: npm
-      - name: Install dependencies
-        run: npm ci --ignore-scripts
-      - name: Apply Item 11 implementation
-        run: |
-          python3 scripts/temp-implement-v153-item11.py
-          python3 scripts/temp-compact-v153-item11-v3.py
-      - name: Format changed files
-        run: npx prettier --write TEMP_TODO_V1.5.3.md src/domain/greatCircleDistance.ts src/domain/greatCircleDistance.test.ts src/domain/australianMosqueDirectory.ts src/domain/australianMosqueDirectoryCombined.ts src/ui/MosqueRelocationGuardV153.test.ts src/ui/TodayScreen.tsx src/ui/MosquesScreen.tsx
-      - name: Required Item 11 gate
-        run: npm run typecheck && npm run lint && npm run test
-      - name: Build and bundle regression
-        run: npm run build && npm run bundle:size
-      - name: Publish validated result
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add TEMP_TODO_V1.5.3.md src/domain/greatCircleDistance.ts src/domain/greatCircleDistance.test.ts src/domain/australianMosqueDirectory.ts src/domain/australianMosqueDirectoryCombined.ts src/ui/MosqueRelocationGuardV153.test.ts src/ui/TodayScreen.tsx src/ui/MosquesScreen.tsx
-          git commit -m "v1.5.3 Item 11: guard mosque-driven relocation"
-          git tag -f temp-v153-item11-validated
-          git push origin refs/tags/temp-v153-item11-validated --force
-
-# Temporary validation only; remove before PR.
-# Consolidated distance-runtime validation.
+      - name: Remove temporary validation tag
+        run: git push origin :refs/tags/temp-v153-item11-validated
