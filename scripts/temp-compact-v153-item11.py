@@ -69,8 +69,8 @@ describe('v1.5.3 selected-mosque relocation guard', () => {
     expect(todaySource).toContain("data-selected-mosque-distance={selectedMosqueFarAway ? 'far' : 'near'}");
   });
 
-  it('renders selected-mosque distance in the locale-aware Today surface', () => {
-    expect(todaySource).toContain('.toLocaleString(localeClockTag(locale))');
+  it('renders selected-mosque distance in every supported UI locale', () => {
+    expect(todaySource).toContain('Math.round(selectedMosqueDistanceKilometers)');
     for (const locale of ['en', 'ar', 'tr', 'id']) expect(todaySource).toContain(`${locale}: {`);
   });
 });
@@ -102,7 +102,7 @@ old_distance = """  const selectedMosqueDistance =
 new_distance = """  const selectedMosqueDistance =
     selectedMosqueDistanceKilometers === null
       ? null
-      : `${Math.round(selectedMosqueDistanceKilometers).toLocaleString(localeClockTag(locale))} km`;
+      : `${Math.round(selectedMosqueDistanceKilometers)} km`;
 """
 if old_distance not in text:
     raise SystemExit('Missing selected mosque distance block')
