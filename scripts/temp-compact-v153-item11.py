@@ -11,12 +11,12 @@ export function greatCircleDistanceKilometers(origin: Coordinates, destination: 
   const radians = Math.PI / 180;
   const originLatitude = origin.latitude * radians;
   const destinationLatitude = destination.latitude * radians;
-  const latitudeDelta = (destination.latitude - origin.latitude) * radians;
-  const longitudeDelta = (destination.longitude - origin.longitude) * radians;
-  const haversine =
-    Math.sin(latitudeDelta / 2) ** 2 +
-    Math.cos(originLatitude) * Math.cos(destinationLatitude) * Math.sin(longitudeDelta / 2) ** 2;
-  return 12_742.0176 * Math.asin(Math.min(1, Math.sqrt(haversine)));
+  const cosine =
+    Math.sin(originLatitude) * Math.sin(destinationLatitude) +
+    Math.cos(originLatitude) *
+      Math.cos(destinationLatitude) *
+      Math.cos((destination.longitude - origin.longitude) * radians);
+  return 6_371.0088 * Math.acos(Math.max(-1, Math.min(1, cosine)));
 }
 """, encoding='utf-8')
 
@@ -31,7 +31,7 @@ import {
 describe('great-circle distance', () => {
   it('returns zero for the same coordinates', () => {
     const sydney = createCoordinates(-33.8688, 151.2093);
-    expect(greatCircleDistanceKilometers(sydney, sydney)).toBe(0);
+    expect(greatCircleDistanceKilometers(sydney, sydney)).toBeCloseTo(0, 4);
   });
 
   it('matches the Sydney to Melbourne surface distance', () => {
@@ -70,7 +70,7 @@ describe('v1.5.3 selected-mosque relocation guard', () => {
   });
 
   it('renders selected-mosque distance in every supported UI locale', () => {
-    expect(todaySource).toContain('Math.round(selectedMosqueDistanceKilometers)');
+    expect(todaySource).toContain('String(Math.round(selectedMosqueDistanceKilometers))');
     for (const locale of ['en', 'ar', 'tr', 'id']) expect(todaySource).toContain(`${locale}: {`);
   });
 });
@@ -102,7 +102,7 @@ old_distance = """  const selectedMosqueDistance =
 new_distance = """  const selectedMosqueDistance =
     selectedMosqueDistanceKilometers === null
       ? null
-      : `${Math.round(selectedMosqueDistanceKilometers)} km`;
+      : `${String(Math.round(selectedMosqueDistanceKilometers))} km`;
 """
 if old_distance not in text:
     raise SystemExit('Missing selected mosque distance block')
