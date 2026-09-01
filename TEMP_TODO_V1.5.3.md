@@ -111,12 +111,12 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - [x] Verify dark/light themes and logical properties; do not touch mobile-prayer theme or smart-display overrides.
 - [x] Gate: `npm run ui:theme-contrast && npm run ui:theme-architecture && npm run ui:design-system-ownership && npm run format:check`.
 
-## Work Item 10 — Style selected-mosque location state
+## Work Item 10 — Style selected-mosque location state — COMPLETE
 
-- [ ] Add distinct mosque-state border/background using existing tokens/color-mix.
-- [ ] Add quiet approximate-location warning treatment; leave saved/precise neutral.
-- [ ] Reuse the existing mosque icon from `SalahIcon.tsx`.
-- [ ] Gate: `npm run ui:theme-contrast && npm run ui:theme-architecture && npm run ui:design-system-ownership`.
+- [x] Add distinct mosque-state border/background using existing tokens/color-mix.
+- [x] Add quiet approximate-location warning treatment; leave saved/precise neutral.
+- [x] Reuse the existing mosque icon from `SalahIcon.tsx`.
+- [x] Gate: `npm run ui:theme-contrast && npm run ui:theme-architecture && npm run ui:design-system-ownership`.
 
 ## Work Item 11 — Guard mosque-driven relocation
 

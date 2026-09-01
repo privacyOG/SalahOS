@@ -589,6 +589,36 @@
   text-transform: uppercase;
 }
 
+.today-location-confidence > div:first-child strong {
+  display: flex;
+  align-items: center;
+  gap: var(--salah-space-2);
+}
+
+.today-location-confidence__mosque-icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  flex: 0 0 auto;
+  color: var(--salah-fg-accent);
+}
+
+.today-location-confidence[data-location-confidence='mosque'] {
+  border-color: color-mix(in srgb, var(--salah-fg-accent) 42%, var(--salah-border-subtle));
+  background: color-mix(in srgb, var(--salah-fg-accent) 6%, var(--salah-bg-surface));
+}
+
+.today-location-confidence[data-location-confidence='approximate'] {
+  border-color: color-mix(in srgb, var(--salah-fg-secondary) 28%, var(--salah-border-subtle));
+  border-style: dashed;
+  background: color-mix(in srgb, var(--salah-fg-secondary) 3%, var(--salah-bg-surface));
+}
+
+.today-location-confidence[data-location-confidence='approximate']
+  .today-location-confidence__meta
+  > span:first-child {
+  color: var(--salah-fg-secondary);
+}
+
 .today-location-confidence__meta {
   display: flex;
   min-width: 0;
