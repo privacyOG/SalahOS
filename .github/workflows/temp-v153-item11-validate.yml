@@ -46,3 +46,4 @@ jobs:
           git push origin refs/tags/temp-v153-item11-validated --force
 
 # Temporary validation only; remove before PR.
+# Compact great-circle validation rerun.
