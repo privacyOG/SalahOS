@@ -44,3 +44,5 @@ jobs:
           git commit -m '[item8-validated] Hadith honesty typography and scope'
           git tag -f temp-v153-item8-validated
           git push --force origin refs/tags/temp-v153-item8-validated
+
+# literal-safe hardening rerun
