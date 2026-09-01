@@ -7,6 +7,7 @@ import {
 } from '../domain/islamicKnowledge';
 import { getIslamicKnowledgeSource } from '../domain/islamicKnowledgeGovernance';
 import { getFiqhStage7Metadata, getHadithStage7Metadata } from '../domain/islamicKnowledgeStage7';
+import { hadithFullTextUrl } from '../platform/hadithExternalActions';
 
 const labels: Readonly<
   Record<
@@ -95,6 +96,13 @@ const labels: Readonly<
   },
 };
 
+const hadithCopy = {
+  en: ['Isnad', 'Partial Arabic matn', 'Full text', 'Metadata unavailable'],
+  ar: ['الإسناد', 'متن عربي جزئي', 'النص الكامل', 'البيانات غير متاحة'],
+  tr: ['İsnad', 'Kısmi Arapça metin', 'Tam metin', 'Meta veri yok'],
+  id: ['Isnad', 'Matan Arab sebagian', 'Teks lengkap', 'Metadata tidak ada'],
+} as const satisfies Readonly<Record<Locale, readonly [string, string, string, string]>>;
+
 const madhhabNames = {
   hanafi: 'Hanafi',
   maliki: 'Maliki',
@@ -117,16 +125,36 @@ export function HadithStage7Details({
   const metadata = getHadithStage7Metadata(entry.id);
   if (!metadata)
     return (
-      <p lang={entry.translationPresentation.lang} dir={entry.translationPresentation.dir}>
-        {entry.text}
-      </p>
+      <>
+        <p lang={entry.translationPresentation.lang} dir={entry.translationPresentation.dir}>
+          {entry.text}
+        </p>
+        <p
+          className="knowledge-hadith-metadata-state"
+          role="note"
+          data-hadith-metadata-state="unavailable"
+        >
+          {hadithCopy[locale][3]}
+        </p>
+      </>
     );
   const related = metadata.relatedHadithIds
     .map((entryId) => getIslamicKnowledgeEntryById(entryId))
     .filter((candidate): candidate is HadithKnowledgeEntry => candidate?.module === 'hadith');
+  const [isnadLabel, excerptLabel, fullTextLabel] = hadithCopy[locale];
 
   return (
     <>
+      <p className="knowledge-hadith-excerpt-heading">
+        <span data-hadith-arabic-scope="partial-matn">{excerptLabel}</span>
+        <a
+          href={hadithFullTextUrl(metadata.sourceId, metadata.hadithNumber)}
+          rel="noreferrer"
+          data-hadith-full-text
+        >
+          {fullTextLabel}
+        </a>
+      </p>
       <p
         className="knowledge-card__arabic knowledge-card__arabic--hadith"
         lang="ar"
@@ -143,6 +171,12 @@ export function HadithStage7Details({
         {entry.text}
       </p>
       <dl className="knowledge-source-list" data-hadith-metadata>
+        <div>
+          <dt>{isnadLabel}</dt>
+          <dd data-hadith-isnad data-knowledge-source-metadata lang="en" dir="ltr">
+            {metadata.narrator} → Muhammad ﷺ
+          </dd>
+        </div>
         <div>
           <dt>{copy.book}</dt>
           <dd

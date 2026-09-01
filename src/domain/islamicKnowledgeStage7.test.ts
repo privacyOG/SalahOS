@@ -25,6 +25,7 @@ describe('Stage 7 Hadith and Fiqh knowledge metadata', () => {
       expect(metadata).not.toBeNull();
       if (!metadata) throw new Error(`Missing Stage 7 Hadith metadata for ${entry.id}`);
       expect(metadata.arabicExcerpt.trim().length).toBeGreaterThan(10);
+      expect(metadata.narrator.trim().length).toBeGreaterThan(5);
       expect(metadata.bookNumber).toBeGreaterThan(0);
       expect(metadata.bookTitle.trim().length).toBeGreaterThan(3);
       expect(metadata.chapterNumber).toBeGreaterThan(0);
