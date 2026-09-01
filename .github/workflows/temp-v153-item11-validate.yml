@@ -29,9 +29,9 @@ jobs:
       - name: Apply Item 11 implementation
         run: |
           python3 scripts/temp-implement-v153-item11.py
-          python3 scripts/temp-compact-v153-item11.py
+          python3 scripts/temp-compact-v153-item11-v2.py
       - name: Format changed files
-        run: npx prettier --write TEMP_TODO_V1.5.3.md src/domain/greatCircleDistance.ts src/domain/greatCircleDistance.test.ts src/ui/MosqueRelocationGuardV153.test.ts src/ui/TodayScreen.tsx
+        run: npx prettier --write TEMP_TODO_V1.5.3.md src/domain/greatCircleDistance.ts src/domain/greatCircleDistance.test.ts src/domain/australianMosqueDirectory.ts src/ui/MosqueRelocationGuardV153.test.ts src/ui/TodayScreen.tsx
       - name: Required Item 11 gate
         run: npm run typecheck && npm run lint && npm run test
       - name: Build and bundle regression
@@ -40,10 +40,10 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add TEMP_TODO_V1.5.3.md src/domain/greatCircleDistance.ts src/domain/greatCircleDistance.test.ts src/ui/MosqueRelocationGuardV153.test.ts src/ui/TodayScreen.tsx
+          git add TEMP_TODO_V1.5.3.md src/domain/greatCircleDistance.ts src/domain/greatCircleDistance.test.ts src/domain/australianMosqueDirectory.ts src/ui/MosqueRelocationGuardV153.test.ts src/ui/TodayScreen.tsx
           git commit -m "v1.5.3 Item 11: guard mosque-driven relocation"
           git tag -f temp-v153-item11-validated
           git push origin refs/tags/temp-v153-item11-validated --force
 
 # Temporary validation only; remove before PR.
-# Compact great-circle validation rerun.
+# Shared-distance deduplication validation.
