@@ -29,8 +29,9 @@ jobs:
         run: |
           python3 scripts/temp-implement-v153-item8.py
           python3 scripts/temp-fix-v153-item8.py
+          python3 scripts/temp-harden-v153-item8.py
       - name: Format
-        run: npx prettier src/domain/islamicKnowledgeStage7.ts src/domain/islamicKnowledgeStage7.test.ts src/ui/KnowledgeStage7Details.tsx src/ui/KnowledgeScreen.tsx src/ui/HadithHonestyV153.test.tsx src/islamic-knowledge.css --write
+        run: npx prettier src/domain/islamicKnowledgeStage7.ts src/domain/islamicKnowledgeStage7.test.ts src/platform/hadithExternalActions.ts src/platform/hadithExternalActions.test.ts src/ui/KnowledgeStage7Details.tsx src/ui/KnowledgeScreen.tsx src/ui/HadithHonestyV153.test.tsx src/islamic-knowledge.css scripts/check-remote-network-policy.mjs --write
       - name: Required Item 8 gate
         run: npm run knowledge:content:check && npm run typecheck && npm run lint && npm run test
       - name: Theme and bundle regression
@@ -39,7 +40,7 @@ jobs:
         run: |
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add src/domain/islamicKnowledgeStage7.ts src/domain/islamicKnowledgeStage7.test.ts src/ui/KnowledgeStage7Details.tsx src/ui/KnowledgeScreen.tsx src/ui/HadithHonestyV153.test.tsx src/islamic-knowledge.css
+          git add src/domain/islamicKnowledgeStage7.ts src/domain/islamicKnowledgeStage7.test.ts src/platform/hadithExternalActions.ts src/platform/hadithExternalActions.test.ts src/ui/KnowledgeStage7Details.tsx src/ui/KnowledgeScreen.tsx src/ui/HadithHonestyV153.test.tsx src/islamic-knowledge.css scripts/check-remote-network-policy.mjs
           git commit -m '[item8-validated] Hadith honesty typography and scope'
           git tag -f temp-v153-item8-validated
           git push --force origin refs/tags/temp-v153-item8-validated
