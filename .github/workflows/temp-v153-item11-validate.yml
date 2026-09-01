@@ -27,7 +27,24 @@ jobs:
       - name: Install dependencies
         run: npm ci --ignore-scripts
       - name: Apply Item 11 implementation
-        run: python3 scripts/temp-implement-v153-item11.py
+        run: |
+          python3 scripts/temp-implement-v153-item11.py
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('src/ui/TodayScreen.tsx')
+          text = path.read_text(encoding='utf-8')
+          text = text.replace(
+              'directoryMosqueLocationAdopted && activeDirectoryMosque !== null\n      ? activeDirectoryMosque.coordinates',
+              'directoryMosqueLocationAdopted\n      ? activeDirectoryMosque.coordinates',
+              1,
+          )
+          text = text.replace(
+              'directoryMosqueLocationAdopted && activeDirectoryMosque !== null\n      ? activeDirectoryMosque.timeZone',
+              'directoryMosqueLocationAdopted\n      ? activeDirectoryMosque.timeZone',
+              1,
+          )
+          path.write_text(text, encoding='utf-8')
+          PY
       - name: Format changed files
         run: npx prettier --write TEMP_TODO_V1.5.3.md src/domain/greatCircleDistance.ts src/domain/greatCircleDistance.test.ts src/ui/MosqueRelocationGuardV153.test.ts src/ui/TodayScreen.tsx
       - name: Required Item 11 gate
