@@ -1,5 +1,6 @@
 import rawDirectory from '../data/australian-mosques-combined.json';
 import { createCoordinates, type Coordinates } from './coordinates';
+import { greatCircleDistanceKilometers } from './greatCircleDistance';
 import {
   createEnrichedMosqueDirectoryRecord,
   type EnrichedMosqueDirectoryRecord,
@@ -369,15 +370,7 @@ export function australianMosqueDistanceKm(
   from: Coordinates,
   mosque: Pick<AustralianMosqueRecord, 'latitude' | 'longitude'>,
 ): number {
-  const radians = (degrees: number) => (degrees * Math.PI) / 180;
-  const latitudeDelta = radians(mosque.latitude - from.latitude);
-  const longitudeDelta = radians(mosque.longitude - from.longitude);
-  const fromLatitude = radians(from.latitude);
-  const toLatitude = radians(mosque.latitude);
-  const haversine =
-    Math.sin(latitudeDelta / 2) ** 2 +
-    Math.cos(fromLatitude) * Math.cos(toLatitude) * Math.sin(longitudeDelta / 2) ** 2;
-  return 6_371 * 2 * Math.atan2(Math.sqrt(haversine), Math.sqrt(1 - haversine));
+  return greatCircleDistanceKilometers(from, mosque);
 }
 
 export function searchAustralianMosques(
