@@ -92,14 +92,14 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - [x] Preserve search, bookmarks, last-read, share, tafsir, related ayat, and offline behavior.
 - [x] Gate: `npm run typecheck && npm run lint && npm run test && npm run knowledge:content:check`.
 
-## Work Item 8 — Hadith honesty, typography, and scope — OWNER DECISION PENDING
+## Work Item 8 — Hadith honesty, typography, and scope — COMPLETE
 
 - [x] Label partial Arabic matn excerpts honestly and link to full text where available.
 - [x] Give hadith Arabic a visually distinct treatment from Qur'anic text.
 - [x] Surface isnad, grade, and grading authority adjacent to the text.
 - [x] Replace silent metadata fallback with an explicit state.
 - [x] Right-size the current 9-entry information architecture and surface the scholar disclaimer clearly.
-- [ ] Decide corpus expansion path with the project owner before implementing expansion.
+- [x] Project owner decision: keep the current curated 3-hadith corpus for v1.5.3 and defer corpus expansion to a separately governed follow-up.
 - [x] Audit the current hadith corpus for divine-attribute reports requiring tanzih notes under the project aqidah constraint; none of the current three hadith requires such a note, and any future corpus expansion must repeat this audit.
 - [x] Gate: `npm run knowledge:content:check && npm run typecheck && npm run lint && npm run test`.
 
