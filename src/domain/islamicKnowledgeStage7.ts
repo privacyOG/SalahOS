@@ -12,6 +12,7 @@ export interface HadithStage7Metadata {
   readonly hadithNumber: number;
   readonly inBookReference: string;
   readonly arabicExcerpt: string;
+  readonly narrator: string;
   readonly topics: readonly string[];
   readonly relatedHadithIds: readonly string[];
 }
@@ -42,6 +43,7 @@ export const hadithStage7Metadata = Object.freeze([
     hadithNumber: 1,
     inBookReference: 'Book 1, Hadith 1',
     arabicExcerpt: 'إِنَّمَا الأَعْمَالُ بِالنِّيَّاتِ، وَإِنَّمَا لِكُلِّ امْرِئٍ مَا نَوَى',
+    narrator: '‘Umar ibn al-Khattab',
     topics: ['intention', 'sincerity', 'worship', 'migration'],
     relatedHadithIds: ['hadith-prayer-light'],
   },
@@ -56,6 +58,7 @@ export const hadithStage7Metadata = Object.freeze([
     hadithNumber: 223,
     inBookReference: 'Book 2, Hadith 1',
     arabicExcerpt: 'الطُّهُورُ شَطْرُ الإِيمَانِ، وَالصَّلَاةُ نُورٌ',
+    narrator: 'Abu Malik al-Ash‘ari',
     topics: ['purification', 'prayer', 'faith', 'remembrance'],
     relatedHadithIds: ['hadith-congregation', 'hadith-intentions'],
   },
@@ -70,6 +73,7 @@ export const hadithStage7Metadata = Object.freeze([
     hadithNumber: 645,
     inBookReference: 'Book 10, Hadith 42',
     arabicExcerpt: 'صَلَاةُ الْجَمَاعَةِ تَفْضُلُ صَلَاةَ الْفَذِّ بِسَبْعٍ وَعِشْرِينَ دَرَجَةً',
+    narrator: '‘Abdullah ibn ‘Umar',
     topics: ['congregation', 'mosque', 'prayer', 'community'],
     relatedHadithIds: ['hadith-prayer-light'],
   },

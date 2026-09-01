@@ -409,8 +409,18 @@
 }
 
 /* Stage 56 — Hadith and Fiqh knowledge expansion */
-.knowledge-card--hadith .knowledge-card__arabic--hadith {
+.knowledge-card__arabic--hadith {
   margin-block-end: 0.6rem;
+  padding: 0.8rem 0.9rem;
+  border-inline-start: 3px solid var(--salah-border-default);
+  border-radius: var(--salah-radius-md);
+  background: color-mix(in srgb, var(--salah-fg-primary) 4%, var(--salah-bg-surface));
+  font-family: system-ui, sans-serif;
+  font-size: clamp(1.2rem, 2.6vw, 1.55rem);
+  font-weight: 600;
+  line-height: 1.9;
+  text-align: start;
+  text-align-last: auto;
 }
 .knowledge-chip-row {
   display: flex;
@@ -466,4 +476,44 @@
   .knowledge-fiqh-grid {
     grid-template-columns: minmax(0, 1fr);
   }
+}
+
+.knowledge-hadith-excerpt-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 0.5rem;
+  color: var(--salah-fg-tertiary);
+  font-size: var(--salah-text-xs);
+  font-weight: 750;
+}
+
+.knowledge-hadith-excerpt-heading a {
+  color: var(--salah-fg-accent);
+}
+
+.knowledge-hadith-metadata-state,
+.knowledge-scholar-disclaimer {
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-md);
+  background: var(--salah-bg-surface);
+  color: var(--salah-fg-secondary);
+  padding: 0.8rem 0.9rem;
+}
+
+.knowledge-hadith-metadata-state {
+  font-size: var(--salah-text-sm);
+}
+
+.knowledge-hero__scope {
+  color: var(--salah-fg-tertiary);
+  font-size: var(--salah-text-sm);
+  font-weight: 700;
+}
+
+.knowledge-scholar-disclaimer {
+  margin-block: 1rem;
+  border-inline-start: 3px solid var(--salah-border-default);
+  font-size: var(--salah-text-sm);
+  font-weight: 700;
+  line-height: 1.55;
 }

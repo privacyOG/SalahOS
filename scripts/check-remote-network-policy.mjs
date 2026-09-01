@@ -9,6 +9,7 @@ const reviewedRemoteNetworkFiles = new Map([
   ['src/platform/managedAdminTransport.ts', 'managed display administration'],
   ['src/platform/prayerBoardWeather.ts', 'explicitly configured prayer-board weather'],
   ['src/platform/qiblaGoogleMaps.ts', 'interactive Qiblah Google Maps provider'],
+  ['src/platform/hadithExternalActions.ts', 'user-initiated canonical hadith navigation'],
   [
     'src/platform/mosqueDirectoryExternalActions.ts',
     'user-initiated mosque directions and external navigation',

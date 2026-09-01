@@ -23,7 +23,6 @@ type KnowledgeCopy = Readonly<{
   qa: string;
   offline: string;
   noResults: string;
-  guidance: string;
 }>;
 
 type KnowledgeFilter = IslamicKnowledgeModule | 'fiqh' | 'all';
@@ -42,8 +41,6 @@ const copy: Readonly<Record<Locale, KnowledgeCopy>> = {
     qa: 'Q&A',
     offline: 'Available offline',
     noResults: 'No knowledge entries match this search.',
-    guidance:
-      'Q&A summaries preserve source and scholar attribution and call out juristic variation where it matters.',
   },
   ar: {
     eyebrow: 'المعرفة الإسلامية',
@@ -58,8 +55,6 @@ const copy: Readonly<Record<Locale, KnowledgeCopy>> = {
     qa: 'سؤال وجواب',
     offline: 'متاح دون اتصال',
     noResults: 'لا توجد نتائج مطابقة للبحث.',
-    guidance:
-      'تحافظ ملخصات الأسئلة والأجوبة على نسبة المصدر والعالم وتوضح مواضع اختلاف الفقهاء عند الحاجة.',
   },
   tr: {
     eyebrow: 'İslami Bilgi',
@@ -74,8 +69,6 @@ const copy: Readonly<Record<Locale, KnowledgeCopy>> = {
     qa: 'Soru & Cevap',
     offline: 'Çevrimdışı kullanılabilir',
     noResults: 'Bu aramayla eşleşen bilgi kaydı yok.',
-    guidance:
-      'Soru-cevap özetleri kaynak ve âlim atfını korur, gerektiğinde fıkhî ihtilafı açıkça belirtir.',
   },
   id: {
     eyebrow: 'Pengetahuan Islam',
@@ -90,8 +83,6 @@ const copy: Readonly<Record<Locale, KnowledgeCopy>> = {
     qa: 'Tanya & Jawab',
     offline: 'Tersedia luring',
     noResults: 'Tidak ada entri yang cocok dengan pencarian ini.',
-    guidance:
-      'Ringkasan tanya-jawab mempertahankan atribusi sumber dan ulama serta menandai perbedaan fikih bila relevan.',
   },
 };
 
@@ -199,13 +190,17 @@ export function KnowledgeScreen({ scope = 'library' }: Readonly<{ scope?: 'libra
       <header className="knowledge-hero">
         <p className="knowledge-hero__eyebrow">{labels.eyebrow}</p>
         <h1>{labels.title}</h1>
-        <p>{labels.intro}</p>
-        <div className="knowledge-hero__status" role="note">
-          <span>{labels.offline}</span>
-          <span aria-hidden="true">•</span>
-          <span>{labels.guidance}</span>
-        </div>
+        <p
+          className="knowledge-hero__scope"
+          data-knowledge-curated-size={filterIslamicKnowledge('all', '').length}
+        >
+          {filterIslamicKnowledge('all', '').length} · {labels.offline}
+        </p>
       </header>
+
+      <aside className="knowledge-scholar-disclaimer" role="note" data-scholar-disclaimer>
+        {labels.intro}
+      </aside>
 
       <section className="knowledge-controls" aria-label={labels.search}>
         <label className="knowledge-search">
