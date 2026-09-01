@@ -41,6 +41,7 @@ import { BidiText } from './BidiText';
 import { TodayContextualSections } from './TodayContextualSections';
 import { useMobilePrayerThemeConfig, useMobilePrayerWeather } from './MobilePrayerThemeSurface';
 import { PrayerBoardWeatherModule } from './PrayerBoardWeatherModule';
+import { SalahIcon } from './SalahIcon';
 import { searchForCongregationDestination, type CongregationDestination } from './applicationRoute';
 
 const prayerTranslationKeys: Readonly<Record<PrayerName, TranslationKey>> = {
@@ -506,7 +507,12 @@ export function TodayScreen() {
             >
               <div>
                 <span>{uxCopy.localContext}</span>
-                <strong>{locationSourceLabel}</strong>
+                <strong>
+                  {directoryMosqueActive && (
+                    <SalahIcon name="mosques" className="today-location-confidence__mosque-icon" />
+                  )}
+                  {locationSourceLabel}
+                </strong>
               </div>
               <div className="today-location-confidence__meta">
                 <span>{locationConfidenceLabel}</span>
