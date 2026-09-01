@@ -280,6 +280,32 @@
   background: color-mix(in srgb, var(--salah-fg-accent) 7%, var(--salah-bg-surface));
 }
 
+.today-prayer-row--sunrise {
+  border-block-start-color: var(--salah-border-default);
+  color: var(--salah-fg-secondary);
+  background: color-mix(in srgb, var(--salah-fg-primary) 2%, var(--salah-bg-surface));
+}
+
+.today-prayer-row.today-prayer-row--sunrise.is-current {
+  box-shadow: none;
+}
+
+.today-prayer-row.today-prayer-row--sunrise.is-next {
+  background: color-mix(in srgb, var(--salah-fg-primary) 2%, var(--salah-bg-surface));
+}
+
+.today-prayer-row--sunrise .today-prayer-row__name > strong,
+.today-prayer-row--sunrise .today-prayer-row__time {
+  color: var(--salah-fg-secondary);
+  font-weight: 600;
+}
+
+.today-prayer-row--sunrise .today-prayer-row__iqamah {
+  color: var(--salah-fg-tertiary);
+  font-size: var(--salah-text-xs);
+  font-weight: 600;
+}
+
 .today-prayer-row.is-supplementary {
   color: var(--salah-fg-secondary);
 }
