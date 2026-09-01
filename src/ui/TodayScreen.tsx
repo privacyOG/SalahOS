@@ -8,6 +8,10 @@ import {
 } from '../domain/australianMosquePrayerContext';
 import { buildPrayerDashboardResult } from '../domain/dashboardResult';
 import { displayedHighLatitudeRuleApplied } from '../domain/highLatitudeIndicators';
+import {
+  greatCircleDistanceKilometers,
+  MOSQUE_LOCATION_ADOPTION_THRESHOLD_KILOMETERS,
+} from '../domain/greatCircleDistance';
 import { calculationMethods } from '../domain/methods';
 import { buildPrayerBoardData, type PrayerBoardData } from '../domain/prayerBoardTemplate';
 import { isSupplementaryPrayer } from '../domain/prayerPresentation';
@@ -70,12 +74,12 @@ const highLatitudeRuleTranslationKeys: Readonly<
 };
 
 const destinationLabels: Readonly<
-  Record<Locale, Readonly<Record<'mosques' | 'qiblah' | 'settings', string>>>
+  Record<Locale, Readonly<Record<'mosques' | 'qiblah' | 'settings' | 'far', string>>>
 > = {
-  en: { mosques: 'Mosques', qiblah: 'Qiblah', settings: 'Settings' },
-  ar: { mosques: 'المساجد', qiblah: 'القبلة', settings: 'الإعدادات' },
-  tr: { mosques: 'Camiler', qiblah: 'Kıble', settings: 'Ayarlar' },
-  id: { mosques: 'Masjid', qiblah: 'Kiblat', settings: 'Pengaturan' },
+  en: { mosques: 'Mosques', qiblah: 'Qiblah', settings: 'Settings', far: 'Far' },
+  ar: { mosques: 'المساجد', qiblah: 'القبلة', settings: 'الإعدادات', far: 'بعيد' },
+  tr: { mosques: 'Camiler', qiblah: 'Kıble', settings: 'Ayarlar', far: 'Uzak' },
+  id: { mosques: 'Masjid', qiblah: 'Kiblat', settings: 'Pengaturan', far: 'Jauh' },
 };
 
 const stage8TodayCopy: Readonly<
@@ -251,8 +255,24 @@ export function TodayScreen() {
   const locale = settings.locale;
   const contextualCopy = todayContextCopy[locale];
   const uxCopy = stage8TodayCopy[locale];
-  const coordinates = activeDirectoryMosque?.coordinates ?? settings.location?.coordinates ?? null;
-  const timeZoneOverride = activeDirectoryMosque?.timeZone ?? settings.location?.timeZone ?? null;
+  const selectedMosqueDistanceKilometers =
+    activeDirectoryMosque !== null && settings.location !== null
+      ? greatCircleDistanceKilometers(
+          settings.location.coordinates,
+          activeDirectoryMosque.coordinates,
+        )
+      : null;
+  const selectedMosqueFarAway =
+    selectedMosqueDistanceKilometers !== null &&
+    selectedMosqueDistanceKilometers > MOSQUE_LOCATION_ADOPTION_THRESHOLD_KILOMETERS;
+  const directoryMosqueLocationAdopted =
+    activeDirectoryMosque !== null && (settings.location === null || !selectedMosqueFarAway);
+  const coordinates = directoryMosqueLocationAdopted
+    ? activeDirectoryMosque.coordinates
+    : (settings.location?.coordinates ?? null);
+  const timeZoneOverride = directoryMosqueLocationAdopted
+    ? activeDirectoryMosque.timeZone
+    : (settings.location?.timeZone ?? null);
   const [now, setNow] = useState<Date | null>(() => readSystemTime());
   const [online, setOnline] = useState(() => navigator.onLine);
 
@@ -354,11 +374,14 @@ export function TodayScreen() {
         ? uxCopy.iqamahNotPublished
         : translate(locale, 'noIqamah')
       : formatLocalTime(nextPrayerIqamahMinutes, locale, settings.timeFormat);
-  const contextLabel =
-    prayerBoardData?.mosqueName ??
-    prayerBoardData?.timeZone ??
-    settings.location?.timeZone ??
-    translate(locale, 'notConfigured');
+  const contextLabel = selectedMosqueFarAway
+    ? (prayerBoardData?.timeZone ??
+      settings.location?.timeZone ??
+      translate(locale, 'notConfigured'))
+    : (prayerBoardData?.mosqueName ??
+      prayerBoardData?.timeZone ??
+      settings.location?.timeZone ??
+      translate(locale, 'notConfigured'));
   const quickLabels = destinationLabels[locale];
   const currentPrayer =
     prayerBoardData?.prayers.find(
@@ -371,33 +394,39 @@ export function TodayScreen() {
         ? uxCopy.betweenPrayerTimes
         : translate(locale, prayerTranslationKeys[currentPrayer.name]);
   const recentLocation = useMemo(() => {
-    if (coordinates === null || directoryMosqueActive) return null;
+    if (coordinates === null || directoryMosqueLocationAdopted) return null;
     try {
       return loadRecentBestAvailableLocation(getApplicationStorage());
     } catch {
       return null;
     }
-  }, [coordinates, directoryMosqueActive]);
-  const locationSourceLabel = directoryMosqueActive
+  }, [coordinates, directoryMosqueLocationAdopted]);
+  const locationSourceLabel = directoryMosqueLocationAdopted
     ? uxCopy.selectedMosque
     : recentLocation?.freshness === 'live'
       ? uxCopy.liveLocation
       : recentLocation !== null
         ? uxCopy.recentLocation
         : uxCopy.savedLocation;
-  const locationConfidenceLabel = directoryMosqueActive
+  const locationConfidenceLabel = directoryMosqueLocationAdopted
     ? uxCopy.mosqueLocation
     : recentLocation?.isApproximate === true
       ? uxCopy.approximate
       : uxCopy.precise;
   const locationAccuracyMeters =
-    directoryMosqueActive || recentLocation === null ? null : recentLocation.accuracyMeters;
+    directoryMosqueLocationAdopted || recentLocation === null
+      ? null
+      : recentLocation.accuracyMeters;
   const locationAccuracyLabel =
     locationAccuracyMeters === null
       ? null
       : locationAccuracyMeters < 1_000
         ? `±${String(Math.round(locationAccuracyMeters))} m`
         : `±${(locationAccuracyMeters / 1_000).toFixed(1)} km`;
+  const selectedMosqueDistance =
+    selectedMosqueDistanceKilometers === null
+      ? null
+      : `${String(Math.round(selectedMosqueDistanceKilometers))} km${selectedMosqueFarAway ? ` · ${destinationLabels[locale].far}` : ''}`;
 
   return (
     <main
@@ -496,7 +525,7 @@ export function TodayScreen() {
             <div
               className="today-location-confidence"
               data-location-confidence={
-                directoryMosqueActive
+                directoryMosqueLocationAdopted
                   ? 'mosque'
                   : recentLocation?.isApproximate === true
                     ? 'approximate'
@@ -508,7 +537,7 @@ export function TodayScreen() {
               <div>
                 <span>{uxCopy.localContext}</span>
                 <strong>
-                  {directoryMosqueActive && (
+                  {directoryMosqueLocationAdopted && (
                     <SalahIcon name="mosques" className="today-location-confidence__mosque-icon" />
                   )}
                   {locationSourceLabel}
@@ -556,6 +585,12 @@ export function TodayScreen() {
                 {directoryMosqueActive && (
                   <small data-mosque-iqamah-source="directory-published">
                     {uxCopy.mosquePublishedIqamah}
+                  </small>
+                )}
+                {activeDirectoryMosque !== null && selectedMosqueDistance !== null && (
+                  <small data-selected-mosque-distance={selectedMosqueFarAway ? 'far' : 'near'}>
+                    <BidiText>{activeDirectoryMosque.mosqueName}</BidiText> ·{' '}
+                    {selectedMosqueDistance}
                   </small>
                 )}
               </span>

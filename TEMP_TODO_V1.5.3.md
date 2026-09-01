@@ -118,14 +118,14 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - [x] Reuse the existing mosque icon from `SalahIcon.tsx`.
 - [x] Gate: `npm run ui:theme-contrast && npm run ui:theme-architecture && npm run ui:design-system-ownership`.
 
-## Work Item 11 — Guard mosque-driven relocation
+## Work Item 11 — Guard mosque-driven relocation — COMPLETE
 
-- [ ] Add pure great-circle distance logic in `src/domain/` using existing coordinate conventions.
-- [ ] Beyond a named 150 km threshold, retain the user's own coordinates/timezone rather than relocating prayer calculation to the mosque.
-- [ ] Still show far-away mosque congregation/Jumu'ah data, clearly labelled.
-- [ ] Show selected-mosque distance in all four locales.
-- [ ] Preserve mosque-coordinate adoption when no user location exists.
-- [ ] Gate: `npm run typecheck && npm run lint && npm run test`.
+- [x] Add pure great-circle distance logic in `src/domain/` using existing coordinate conventions.
+- [x] Beyond a named 150 km threshold, retain the user's own coordinates/timezone rather than relocating prayer calculation to the mosque.
+- [x] Still show far-away mosque congregation/Jumu'ah data, clearly labelled.
+- [x] Show selected-mosque distance in all four locales.
+- [x] Preserve mosque-coordinate adoption when no user location exists.
+- [x] Gate: `npm run typecheck && npm run lint && npm run test`.
 
 ## Work Item 12 — First-run calculation method and Asr convention
 
