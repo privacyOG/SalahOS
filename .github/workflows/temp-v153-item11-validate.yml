@@ -44,3 +44,5 @@ jobs:
           git commit -m "v1.5.3 Item 11: guard mosque-driven relocation"
           git tag -f temp-v153-item11-validated
           git push origin refs/tags/temp-v153-item11-validated --force
+
+# Temporary validation only; remove before PR.
