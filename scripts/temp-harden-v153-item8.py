@@ -51,12 +51,11 @@ path.write_text(text, encoding='utf-8')
 # Domain test validates provider refs; UI test still checks rendered canonical URLs.
 path = Path('src/domain/islamicKnowledgeStage7.test.ts')
 text = path.read_text(encoding='utf-8')
-text = re.sub(
-    r"      expect\(metadata\.fullTextUrl\)\.toMatch\([^\n]+\);",
-    "      expect(metadata.fullTextReference).toMatch(/^(?:bukhari|muslim):\\d+$/u);",
-    text,
-    count=1,
-)
+pattern = re.compile(r"      expect\(metadata\.fullTextUrl\)\.toMatch\([^\n]+\);")
+replacement = "      expect(metadata.fullTextReference).toMatch(/^(?:bukhari|muslim):\\d+$/u);"
+text, count = pattern.subn(lambda _match: replacement, text, count=1)
+if count != 1:
+    raise SystemExit(f'Domain test URL assertion: expected one match, found {count}')
 if 'fullTextUrl' in text:
     raise SystemExit('Domain test still refers to fullTextUrl')
 path.write_text(text, encoding='utf-8')
@@ -123,11 +122,8 @@ replacement = """.knowledge-card__arabic--hadith {
   text-align-last: auto;
 }
 """
-first_start = matches[0].start()
-# Remove all rule instances, then insert standardized rule at the first one's location.
 cleaned = pattern.sub('', text)
-# first_start remains safe enough near original insertion region; use marker-based insertion instead.
-marker = '.knowledge-card__arabic[data-quran-font='
+marker = ".knowledge-card__arabic[data-quran-font='"
 idx = cleaned.find(marker)
 if idx < 0:
     raise SystemExit('Could not find Quran font rule insertion marker')
