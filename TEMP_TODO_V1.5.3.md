@@ -103,13 +103,13 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - [x] Audit the current hadith corpus for divine-attribute reports requiring tanzih notes under the project aqidah constraint; none of the current three hadith requires such a note, and any future corpus expansion must repeat this audit.
 - [x] Gate: `npm run knowledge:content:check && npm run typecheck && npm run lint && npm run test`.
 
-## Work Item 9 — Style the sunrise row
+## Work Item 9 — Style the sunrise row — COMPLETE
 
-- [ ] Define `today-prayer-row--sunrise` using design tokens only.
-- [ ] Reduce name/time weight and use secondary foreground; render "Not applicable" at tertiary/xs styling.
-- [ ] Add boundary/hairline treatment and defensively suppress current/next highlighting.
-- [ ] Verify dark/light themes and logical properties; do not touch mobile-prayer theme or smart-display overrides.
-- [ ] Gate: `npm run ui:theme-contrast && npm run ui:theme-architecture && npm run ui:design-system-ownership && npm run format:check`.
+- [x] Define `today-prayer-row--sunrise` using design tokens only.
+- [x] Reduce name/time weight and use secondary foreground; render "Not applicable" at tertiary/xs styling.
+- [x] Add boundary/hairline treatment and defensively suppress current/next highlighting.
+- [x] Verify dark/light themes and logical properties; do not touch mobile-prayer theme or smart-display overrides.
+- [x] Gate: `npm run ui:theme-contrast && npm run ui:theme-architecture && npm run ui:design-system-ownership && npm run format:check`.
 
 ## Work Item 10 — Style selected-mosque location state
 

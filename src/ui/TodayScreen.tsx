@@ -613,8 +613,8 @@ export function TodayScreen() {
                       : formatLocalTime(prayer.iqamahLocalMinutes, locale, settings.timeFormat);
                 return (
                   <div
-                    className={`today-prayer-row${prayer.isCurrent ? ' is-current' : ''}${
-                      prayer.isNext ? ' is-next' : ''
+                    className={`today-prayer-row${!isSunrise && prayer.isCurrent ? ' is-current' : ''}${
+                      !isSunrise && prayer.isNext ? ' is-next' : ''
                     }${isSunrise ? ' today-prayer-row--sunrise' : ''}`}
                     role="row"
                     data-today-prayer-name={prayer.name}
