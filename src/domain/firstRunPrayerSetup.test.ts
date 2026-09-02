@@ -12,6 +12,7 @@ describe('first-run calculation method suggestions', () => {
     expect(suggestedCalculationMethodForCountry('eg')).toBe('egyptian');
     expect(suggestedCalculationMethodForCountry('PK')).toBe('karachi');
     expect(suggestedCalculationMethodForCountry('US')).toBe('isna');
+    expect(suggestedCalculationMethodForCountry('CA')).toBe('isna');
     expect(suggestedCalculationMethodForCountry('TR')).toBe('diyanet');
     expect(suggestedCalculationMethodForCountry('SG')).toBe('muis');
     expect(suggestedCalculationMethodForCountry('AE')).toBe('dubai');
@@ -21,6 +22,7 @@ describe('first-run calculation method suggestions', () => {
 
   it('uses Muslim World League as the documented fallback', () => {
     expect(suggestedCalculationMethodForCountry('AU')).toBe('muslim-world-league');
+    expect(suggestedCalculationMethodForCountry('NZ')).toBe('muslim-world-league');
     expect(suggestedCalculationMethodForCountry('ZZ')).toBe('muslim-world-league');
     expect(suggestedCalculationMethodForCountry(null)).toBe('muslim-world-league');
   });
