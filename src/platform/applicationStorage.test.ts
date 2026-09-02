@@ -51,10 +51,7 @@ describe('native application storage', () => {
       QIBLA_PERMISSION_ONBOARDING_STORAGE_KEY,
       '{"version":1,"completed":true}',
     );
-    preferences.values.set(
-      PRAYER_SETUP_ONBOARDING_STORAGE_KEY,
-      '{"version":1,"completed":true}',
-    );
+    preferences.values.set(PRAYER_SETUP_ONBOARDING_STORAGE_KEY, '{"version":1,"completed":true}');
 
     const storage = await createNativePreferencesStorage(preferences);
 
