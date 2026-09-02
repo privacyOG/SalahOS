@@ -85,7 +85,10 @@ try {
 
   await finalAyah.click();
   await page.waitForFunction(() => {
-    return document.querySelector('[data-quran-offline-ayah="114:6"]')?.getAttribute('data-active') === 'true';
+    return (
+      document.querySelector('[data-quran-offline-ayah="114:6"]')?.getAttribute('data-active') ===
+      'true'
+    );
   });
   await reader.locator('[data-quran-offline-bookmark="114:6"]').click();
   await reader.locator('[data-quran-offline-last-read="114:6"]').click();
