@@ -70,8 +70,9 @@ try {
     let screen = page.locator('[data-knowledge-screen]');
     await screen.waitFor({ state: 'visible' });
     assert(
-      (await screen.locator('[data-knowledge-curated-size]').getAttribute('data-knowledge-curated-size')) ===
-        '9',
+      (await screen
+        .locator('[data-knowledge-curated-size]')
+        .getAttribute('data-knowledge-curated-size')) === '9',
       'Governed Knowledge catalogue size is not nine entries',
     );
     assert(
@@ -114,9 +115,10 @@ try {
     await screen.getByText('May an obligatory prayer be shortened while travelling?').waitFor();
 
     await experience.locator('[data-knowledge-view-select="hadith"]').click();
-    await page.waitForFunction(() =>
-      document.querySelector('[data-knowledge-experience]')?.getAttribute('data-knowledge-view') ===
-      'hadith',
+    await page.waitForFunction(
+      () =>
+        document.querySelector('[data-knowledge-experience]')?.getAttribute('data-knowledge-view') ===
+        'hadith',
     );
     screen = page.locator('[data-knowledge-screen]');
     await screen.waitFor({ state: 'visible' });
