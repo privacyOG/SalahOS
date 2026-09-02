@@ -32,7 +32,7 @@
 }
 
 .prayer-setup-onboarding__content h2 {
-  font-size: var(--salah-text-2xl);
+  font-size: var(--salah-text-xl);
   line-height: 1.15;
 }
 
@@ -107,7 +107,7 @@
 
 .prayer-setup-onboarding__preview h3 {
   margin: 0;
-  font-size: var(--salah-text-base);
+  font-size: var(--salah-text-md);
 }
 
 .prayer-setup-onboarding__preview p,
@@ -165,7 +165,7 @@
 
 .prayer-setup-onboarding__actions .prayer-setup-onboarding__primary {
   border-color: var(--salah-fg-accent);
-  color: var(--salah-bg-surface);
+  color: var(--salah-fg-on-accent);
   background: var(--salah-fg-accent);
 }
 
