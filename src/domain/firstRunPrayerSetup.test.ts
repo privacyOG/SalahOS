@@ -44,8 +44,11 @@ describe('first-run Asr convention preview', () => {
 
     expect(preview.standardLocalMinutes).not.toBeNull();
     expect(preview.hanafiLocalMinutes).not.toBeNull();
-    expect(preview.standardLocalMinutes!).toBeLessThan(preview.hanafiLocalMinutes!);
-    expect(preview.hanafiLocalMinutes! - preview.standardLocalMinutes!).toBeGreaterThan(20);
+    if (preview.standardLocalMinutes === null || preview.hanafiLocalMinutes === null) {
+      throw new Error('Expected both Asr preview times to be available');
+    }
+    expect(preview.standardLocalMinutes).toBeLessThan(preview.hanafiLocalMinutes);
+    expect(preview.hanafiLocalMinutes - preview.standardLocalMinutes).toBeGreaterThan(20);
   });
 
   it('applies the selected calculation method Asr adjustment to both previews', () => {
@@ -62,7 +65,15 @@ describe('first-run Asr convention preview', () => {
       methodId: 'dubai',
     });
 
-    expect(dubai.standardLocalMinutes).toBe(base.standardLocalMinutes! + 3);
-    expect(dubai.hanafiLocalMinutes).toBe(base.hanafiLocalMinutes! + 3);
+    if (
+      base.standardLocalMinutes === null ||
+      base.hanafiLocalMinutes === null ||
+      dubai.standardLocalMinutes === null ||
+      dubai.hanafiLocalMinutes === null
+    ) {
+      throw new Error('Expected Asr preview times for both calculation methods');
+    }
+    expect(dubai.standardLocalMinutes).toBe(base.standardLocalMinutes + 3);
+    expect(dubai.hanafiLocalMinutes).toBe(base.hanafiLocalMinutes + 3);
   });
 });
