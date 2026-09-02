@@ -83,8 +83,21 @@ try {
     'Complete reader did not render the configured translation for Qur’an 114:6',
   );
 
-  await finalAyah.locator('[data-quran-offline-bookmark="114:6"]').click();
-  await finalAyah.locator('[data-quran-offline-last-read="114:6"]').click();
+  await finalAyah.click();
+  await page.waitForFunction(() => {
+    return document.querySelector('[data-quran-offline-ayah="114:6"]')?.getAttribute('data-active') === 'true';
+  });
+  await reader.locator('[data-quran-offline-bookmark="114:6"]').click();
+  await reader.locator('[data-quran-offline-last-read="114:6"]').click();
+  await page.waitForFunction(() => {
+    const persistedPreferences = JSON.parse(
+      localStorage.getItem('salahos.quran-reading-preferences.v1') ?? '{}',
+    );
+    return (
+      persistedPreferences.bookmarkedAyahIds?.includes('114:6') === true &&
+      persistedPreferences.lastReadAyahId === '114:6'
+    );
+  });
   const persisted = await page.evaluate(() =>
     JSON.parse(localStorage.getItem('salahos.quran-reading-preferences.v1') ?? '{}'),
   );
