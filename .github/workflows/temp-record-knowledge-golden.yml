@@ -1,0 +1,71 @@
+name: Temp record Knowledge golden
+
+on:
+  push:
+    branches:
+      - fix/australian-mosque-visual-sanitized-dhuhr
+
+permissions:
+  contents: write
+
+jobs:
+  record:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: /tmp/salahos-pw-browsers-1.62.0
+      SALAHOS_VISUAL_PLAYWRIGHT_MODULE: /tmp/salahos-visual-harness/node_modules/playwright/index.mjs
+      SALAHOS_VISUAL_HARNESS_ROOT: /tmp/salahos-visual-harness
+      SALAHOS_VISUAL_ARTIFACT_DIR: visual-artifacts
+      SALAHOS_GOLDEN_RECORD: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npm run build
+      - name: Install deterministic Chromium harness
+        run: |
+          rm -rf /tmp/salahos-visual-harness
+          mkdir -p /tmp/salahos-visual-harness
+          cd /tmp/salahos-visual-harness
+          npm init -y >/dev/null 2>&1
+          npm install --ignore-scripts --save-exact playwright@1.62.0
+          npx playwright install --with-deps chromium
+      - name: Start production server
+        run: |
+          python3 -m http.server 4173 --directory dist --bind 127.0.0.1 >/tmp/salahos-golden-http.log 2>&1 &
+          echo $! >/tmp/salahos-golden-server.pid
+          python3 - <<'PY'
+          import time
+          import urllib.request
+          for _ in range(50):
+              try:
+                  with urllib.request.urlopen('http://127.0.0.1:4173/', timeout=1) as response:
+                      if response.status == 200:
+                          raise SystemExit(0)
+              except Exception:
+                  time.sleep(0.1)
+          raise SystemExit('Local SalahOS production server did not become ready')
+          PY
+      - name: Record current golden render
+        run: node scripts/visual-golden-regression.mjs
+      - name: Commit only Knowledge golden and publish temporary tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          git config user.name privacyOG
+          git config user.email kriptiik@proton.me
+          git add tests/golden/knowledge-phone-ar-dark.png
+          git diff --cached --quiet && { echo 'Knowledge golden did not change'; exit 1; }
+          git commit -m 'test: refresh segmented Knowledge Arabic golden'
+          git tag -f temp-v153-knowledge-golden-validated
+          git push --force https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git refs/tags/temp-v153-knowledge-golden-validated
+      - name: Stop production server
+        if: always()
+        run: |
+          if [ -f /tmp/salahos-golden-server.pid ]; then
+            kill "$(cat /tmp/salahos-golden-server.pid)" 2>/dev/null || true
+          fi
