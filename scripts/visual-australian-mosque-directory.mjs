@@ -180,8 +180,12 @@ try {
     );
     const dhuhrText = (await dhuhr.textContent()) ?? '';
     assert(
-      dhuhrText.includes('12:15') && dhuhrText.includes('13:15'),
-      'Multiple published Dhuhr congregation sessions were not exposed on Today',
+      dhuhrText.includes('13:15'),
+      'Sanitized published Dhuhr congregation time was not exposed on Today',
+    );
+    assert(
+      !dhuhrText.includes('12:15'),
+      'Jumu’ah-colliding 12:15 value leaked back into the daily Dhuhr congregation row',
     );
 
     await page.screenshot({
@@ -195,7 +199,7 @@ try {
       ...metrics,
       selectedMosqueToday: 'mosque-finder:sydney-cbd-erskine-musallah',
       sunriseBoundary: true,
-      publishedDhuhrSessions: true,
+      sanitizedPublishedDhuhr: '13:15',
     });
     await context.close();
   }
