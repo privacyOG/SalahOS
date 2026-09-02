@@ -44,12 +44,8 @@ describe('first-run Asr convention preview', () => {
 
     expect(preview.standardLocalMinutes).not.toBeNull();
     expect(preview.hanafiLocalMinutes).not.toBeNull();
-    expect(preview.standardLocalMinutes as number).toBeLessThan(
-      preview.hanafiLocalMinutes as number,
-    );
-    expect(
-      (preview.hanafiLocalMinutes as number) - (preview.standardLocalMinutes as number),
-    ).toBeGreaterThan(20);
+    expect(preview.standardLocalMinutes!).toBeLessThan(preview.hanafiLocalMinutes!);
+    expect(preview.hanafiLocalMinutes! - preview.standardLocalMinutes!).toBeGreaterThan(20);
   });
 
   it('applies the selected calculation method Asr adjustment to both previews', () => {
@@ -66,7 +62,7 @@ describe('first-run Asr convention preview', () => {
       methodId: 'dubai',
     });
 
-    expect(dubai.standardLocalMinutes).toBe((base.standardLocalMinutes as number) + 3);
-    expect(dubai.hanafiLocalMinutes).toBe((base.hanafiLocalMinutes as number) + 3);
+    expect(dubai.standardLocalMinutes).toBe(base.standardLocalMinutes! + 3);
+    expect(dubai.hanafiLocalMinutes).toBe(base.hanafiLocalMinutes! + 3);
   });
 });
