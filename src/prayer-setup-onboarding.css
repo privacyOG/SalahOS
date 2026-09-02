@@ -1,0 +1,200 @@
+.prayer-setup-onboarding {
+  width: min(38rem, calc(100vw - var(--salah-space-6)));
+  max-width: none;
+  max-height: calc(100dvh - var(--salah-space-6));
+  padding: 0;
+  border: 1px solid var(--salah-border-default);
+  border-radius: var(--salah-radius-lg);
+  color: var(--salah-fg-primary);
+  background: var(--salah-bg-surface-raised);
+}
+
+.prayer-setup-onboarding::backdrop {
+  background: color-mix(in srgb, var(--salah-fg-primary) 56%, transparent);
+}
+
+.prayer-setup-onboarding__content {
+  display: grid;
+  gap: var(--salah-space-4);
+  padding: var(--salah-space-6);
+}
+
+.prayer-setup-onboarding__content > * {
+  margin: 0;
+}
+
+.prayer-setup-onboarding__eyebrow {
+  color: var(--salah-fg-accent);
+  font-size: var(--salah-text-xs);
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.prayer-setup-onboarding__content h2 {
+  font-size: var(--salah-text-xl);
+  line-height: 1.15;
+}
+
+.prayer-setup-onboarding__field {
+  display: grid;
+  gap: var(--salah-space-2);
+  font-weight: 750;
+}
+
+.prayer-setup-onboarding__field select {
+  width: 100%;
+  min-height: 2.9rem;
+  padding-block: var(--salah-space-2);
+  padding-inline: var(--salah-space-3);
+  border: 1px solid var(--salah-border-default);
+  border-radius: var(--salah-radius-sm);
+  color: var(--salah-fg-primary);
+  background: var(--salah-bg-control);
+  font: inherit;
+}
+
+.prayer-setup-onboarding__hint {
+  color: var(--salah-fg-secondary);
+  font-size: var(--salah-text-sm);
+}
+
+.prayer-setup-onboarding__asr {
+  display: grid;
+  gap: var(--salah-space-2);
+  padding: 0;
+  border: 0;
+}
+
+.prayer-setup-onboarding__asr legend {
+  margin-block-end: var(--salah-space-2);
+  font-weight: 800;
+}
+
+.prayer-setup-onboarding__asr label {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: start;
+  gap: var(--salah-space-3);
+  padding: var(--salah-space-3);
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-md);
+  background: var(--salah-bg-surface);
+}
+
+.prayer-setup-onboarding__asr input {
+  margin-block-start: var(--salah-space-1);
+  accent-color: var(--salah-fg-accent);
+}
+
+.prayer-setup-onboarding__asr span {
+  display: grid;
+  gap: var(--salah-space-1);
+}
+
+.prayer-setup-onboarding__asr small {
+  color: var(--salah-fg-secondary);
+}
+
+.prayer-setup-onboarding__preview {
+  display: grid;
+  gap: var(--salah-space-2);
+  padding: var(--salah-space-3);
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-md);
+  background: var(--salah-bg-subtle);
+}
+
+.prayer-setup-onboarding__preview h3 {
+  margin: 0;
+  font-size: var(--salah-text-md);
+}
+
+.prayer-setup-onboarding__preview p,
+.prayer-setup-onboarding__preview dl {
+  margin: 0;
+}
+
+.prayer-setup-onboarding__preview p {
+  color: var(--salah-fg-secondary);
+  font-size: var(--salah-text-sm);
+}
+
+.prayer-setup-onboarding__preview dl {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--salah-space-2);
+}
+
+.prayer-setup-onboarding__preview dl > div {
+  display: grid;
+  gap: var(--salah-space-1);
+}
+
+.prayer-setup-onboarding__preview dt {
+  color: var(--salah-fg-secondary);
+  font-size: var(--salah-text-xs);
+}
+
+.prayer-setup-onboarding__preview dd {
+  margin: 0;
+  font-size: var(--salah-text-lg);
+  font-weight: 800;
+  font-variant-numeric: tabular-nums;
+}
+
+.prayer-setup-onboarding__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--salah-space-2);
+  justify-content: flex-end;
+}
+
+.prayer-setup-onboarding__actions button {
+  min-height: 2.8rem;
+  padding-block: var(--salah-space-2);
+  padding-inline: var(--salah-space-4);
+  border: 1px solid var(--salah-border-default);
+  border-radius: var(--salah-radius-sm);
+  color: var(--salah-fg-primary);
+  background: var(--salah-bg-control);
+  font: inherit;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.prayer-setup-onboarding__actions .prayer-setup-onboarding__primary {
+  border-color: var(--salah-fg-accent);
+  color: var(--salah-fg-on-accent);
+  background: var(--salah-fg-accent);
+}
+
+.prayer-setup-onboarding__field select:focus-visible,
+.prayer-setup-onboarding__asr input:focus-visible,
+.prayer-setup-onboarding__actions button:focus-visible {
+  outline: 3px solid var(--salah-focus-ring);
+  outline-offset: 2px;
+}
+
+@media (max-width: 35rem) {
+  .prayer-setup-onboarding {
+    width: calc(100vw - var(--salah-space-4));
+    max-height: calc(100dvh - var(--salah-space-4));
+  }
+
+  .prayer-setup-onboarding__content {
+    padding: var(--salah-space-4);
+  }
+
+  .prayer-setup-onboarding__preview dl {
+    grid-template-columns: 1fr;
+  }
+
+  .prayer-setup-onboarding__actions {
+    flex-direction: column;
+  }
+
+  .prayer-setup-onboarding__actions button {
+    width: 100%;
+  }
+}

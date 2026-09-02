@@ -4,6 +4,7 @@ import {
   PERSISTED_APPLICATION_KEYS,
   type PreferencesStore,
 } from './applicationStorage';
+import { PRAYER_SETUP_ONBOARDING_STORAGE_KEY } from './prayerSetupOnboarding';
 import { QIBLA_PERMISSION_ONBOARDING_STORAGE_KEY } from './qiblaPermissionOnboarding';
 
 class MemoryPreferences implements PreferencesStore {
@@ -50,6 +51,7 @@ describe('native application storage', () => {
       QIBLA_PERMISSION_ONBOARDING_STORAGE_KEY,
       '{"version":1,"completed":true}',
     );
+    preferences.values.set(PRAYER_SETUP_ONBOARDING_STORAGE_KEY, '{"version":1,"completed":true}');
 
     const storage = await createNativePreferencesStorage(preferences);
 
@@ -65,6 +67,9 @@ describe('native application storage', () => {
     );
     expect(storage.getItem(PERSISTED_APPLICATION_KEYS[6])).toContain('"displayId":"display:lobby"');
     expect(storage.getItem(QIBLA_PERMISSION_ONBOARDING_STORAGE_KEY)).toBe(
+      '{"version":1,"completed":true}',
+    );
+    expect(storage.getItem(PRAYER_SETUP_ONBOARDING_STORAGE_KEY)).toBe(
       '{"version":1,"completed":true}',
     );
   });
