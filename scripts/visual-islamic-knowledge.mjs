@@ -117,8 +117,9 @@ try {
     await experience.locator('[data-knowledge-view-select="hadith"]').click();
     await page.waitForFunction(
       () =>
-        document.querySelector('[data-knowledge-experience]')?.getAttribute('data-knowledge-view') ===
-        'hadith',
+        document
+          .querySelector('[data-knowledge-experience]')
+          ?.getAttribute('data-knowledge-view') === 'hadith',
     );
     screen = page.locator('[data-knowledge-screen]');
     await screen.waitFor({ state: 'visible' });
