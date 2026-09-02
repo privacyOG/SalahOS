@@ -1,0 +1,45 @@
+name: Temporary Item 12 formatter
+
+on:
+  push:
+    branches:
+      - v1.5.3/item-12-prayer-setup-onboarding
+    paths:
+      - .github/workflows/temp-item12-format.yml
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout Item 12 branch
+        uses: actions/checkout@v4
+        with:
+          ref: v1.5.3/item-12-prayer-setup-onboarding
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Format Item 12 UI
+        run: npx prettier --write src/ui/PrayerSetupOnboarding.tsx
+
+      - name: Commit exact formatter output
+        shell: bash
+        run: |
+          if git diff --quiet -- src/ui/PrayerSetupOnboarding.tsx; then
+            echo "No formatter changes required."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/ui/PrayerSetupOnboarding.tsx
+          git commit -m "Format prayer setup onboarding with pinned Prettier"
+          git push origin HEAD:v1.5.3/item-12-prayer-setup-onboarding
