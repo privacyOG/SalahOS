@@ -7,12 +7,14 @@ import {
 } from './platform/applicationStorage';
 import { installAutomaticLocationSync } from './platform/automaticLocationSync';
 import { LOCATION_CONTEXT_CHANGE_EVENT } from './platform/bestAvailableLocation';
+import { PRAYER_SETUP_ONBOARDING_COMPLETE_EVENT } from './platform/prayerSetupOnboarding';
 import { installPrivacyDiagnostics } from './platform/privacyDiagnostics';
 import { loadPersistedSettings } from './platform/settingsStorage';
 import { installThemePreference } from './platform/themePreference';
 import { applyThemePalette } from './platform/themePalette';
 import { CongregationShell } from './ui/CongregationShell';
 import { MobilePrayerThemeSurface } from './ui/MobilePrayerThemeSurface';
+import { PrayerSetupOnboarding } from './ui/PrayerSetupOnboarding';
 import { QiblaPermissionOnboarding } from './ui/QiblaPermissionOnboarding';
 import { TodayScreen } from './ui/TodayScreen';
 import { readTouchDisplayFixtureConfig, TouchDisplayFixture } from './ui/TouchDisplayFixture';
@@ -44,6 +46,7 @@ import './qibla-compass.css';
 import './qibla-compass-premium.css';
 import './qiblah-v2.css';
 import './qibla-permission-onboarding.css';
+import './prayer-setup-onboarding.css';
 import './mosques-community-v2.css';
 import './shared-mosque-directory.css';
 import './quran-fonts.css';
@@ -150,24 +153,27 @@ function CongregationRoute({ destination }: Readonly<{ destination: Congregation
 }
 
 function CongregationApplication() {
-  const [locationRevision, setLocationRevision] = useState(0);
+  const [applicationRevision, setApplicationRevision] = useState(0);
 
   useEffect(() => {
-    const handleLocationChange = () => {
-      setLocationRevision((current) => current + 1);
+    const refreshApplication = () => {
+      setApplicationRevision((current) => current + 1);
     };
-    window.addEventListener(LOCATION_CONTEXT_CHANGE_EVENT, handleLocationChange);
+    window.addEventListener(LOCATION_CONTEXT_CHANGE_EVENT, refreshApplication);
+    window.addEventListener(PRAYER_SETUP_ONBOARDING_COMPLETE_EVENT, refreshApplication);
     const stopAutomaticLocationSync = installAutomaticLocationSync();
     return () => {
       stopAutomaticLocationSync();
-      window.removeEventListener(LOCATION_CONTEXT_CHANGE_EVENT, handleLocationChange);
+      window.removeEventListener(LOCATION_CONTEXT_CHANGE_EVENT, refreshApplication);
+      window.removeEventListener(PRAYER_SETUP_ONBOARDING_COMPLETE_EVENT, refreshApplication);
     };
   }, []);
 
   return (
     <>
       <QiblaPermissionOnboarding />
-      <CongregationShell key={locationRevision}>
+      <PrayerSetupOnboarding />
+      <CongregationShell key={applicationRevision}>
         {(destination) => <CongregationRoute destination={destination} />}
       </CongregationShell>
     </>
