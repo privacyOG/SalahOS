@@ -1,0 +1,21 @@
+name: Temp delete Knowledge golden tag
+
+on:
+  push:
+    branches:
+      - fix/australian-mosque-visual-sanitized-dhuhr
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: fix/australian-mosque-visual-sanitized-dhuhr
+      - name: Delete temporary validation tag
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: git push https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git :refs/tags/temp-v153-knowledge-golden-validated
