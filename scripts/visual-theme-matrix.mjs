@@ -92,6 +92,10 @@ function luminance(rgb) {
   return 0.2126 * c[0] + 0.7152 * c[1] + 0.0722 * c[2];
 }
 function parseRgb(value) {
+  const srgb = value.match(
+    /^color\(srgb\s+([+-]?(?:\d*\.?\d+))\s+([+-]?(?:\d*\.?\d+))\s+([+-]?(?:\d*\.?\d+))(?:\s*\/\s*([+-]?(?:\d*\.?\d+)))?\)$/i,
+  );
+  if (srgb) return srgb.slice(1, 4).map((component) => Number(component) * 255);
   const values = value.match(/[\d.]+/g);
   return values && values.length >= 3 ? values.slice(0, 3).map(Number) : null;
 }
@@ -144,6 +148,17 @@ try {
 
       const samples = await page.locator('body *:visible').evaluateAll((elements) => {
         const parseCssColor = (value) => {
+          const srgb = value.match(
+            /^color\(srgb\s+([+-]?(?:\d*\.?\d+))\s+([+-]?(?:\d*\.?\d+))\s+([+-]?(?:\d*\.?\d+))(?:\s*\/\s*([+-]?(?:\d*\.?\d+)))?\)$/i,
+          );
+          if (srgb) {
+            return {
+              r: Number(srgb[1]) * 255,
+              g: Number(srgb[2]) * 255,
+              b: Number(srgb[3]) * 255,
+              a: srgb[4] === undefined ? 1 : Number(srgb[4]),
+            };
+          }
           const values = value.match(/[\d.]+/g);
           if (!values || values.length < 3) return null;
           return {
@@ -219,7 +234,7 @@ try {
         const minimumRatio = largeText ? 3 : 4.5;
         if (ratio < minimumRatio) {
           contrastFailures.push(
-            `${s.name}: visible text contrast below ${minimumRatio}:1 (${ratio.toFixed(2)}) for ${JSON.stringify(item.text)}`,
+            `${s.name}: visible text contrast below ${minimumRatio}:1 (${ratio.toFixed(2)}) for ${JSON.stringify(item.text)}; fg=${item.fg}; parsedFg=${JSON.stringify(fg)}; bg=${JSON.stringify(bg)}`,
           );
         }
       }

@@ -53,7 +53,14 @@ try {
   await page.addInitScript((settings) => {
     localStorage.setItem('salahos.settings', JSON.stringify(settings));
   }, persistedSettings());
-  await page.goto(`${baseUrl}/?view=knowledge`, { waitUntil: 'networkidle' });
+  await page.goto(`${baseUrl}/?view=knowledge&knowledgeView=quran`, { waitUntil: 'networkidle' });
+
+  const experience = page.locator('[data-knowledge-experience]');
+  await experience.waitFor({ state: 'visible' });
+  assert(
+    (await experience.getAttribute('data-knowledge-view')) === 'quran',
+    'Direct Qur’an Knowledge route did not activate the reader section',
+  );
 
   const reader = page.locator('[data-quran-offline-reader]');
   await reader.waitFor({ state: 'visible' });
@@ -76,8 +83,24 @@ try {
     'Complete reader did not render the configured translation for Qur’an 114:6',
   );
 
-  await finalAyah.locator('[data-quran-offline-bookmark="114:6"]').click();
-  await finalAyah.locator('[data-quran-offline-last-read="114:6"]').click();
+  await finalAyah.click();
+  await page.waitForFunction(() => {
+    return (
+      document.querySelector('[data-quran-offline-ayah="114:6"]')?.getAttribute('data-active') ===
+      'true'
+    );
+  });
+  await reader.locator('[data-quran-offline-bookmark="114:6"]').click();
+  await reader.locator('[data-quran-offline-last-read="114:6"]').click();
+  await page.waitForFunction(() => {
+    const persistedPreferences = JSON.parse(
+      localStorage.getItem('salahos.quran-reading-preferences.v1') ?? '{}',
+    );
+    return (
+      persistedPreferences.bookmarkedAyahIds?.includes('114:6') === true &&
+      persistedPreferences.lastReadAyahId === '114:6'
+    );
+  });
   const persisted = await page.evaluate(() =>
     JSON.parse(localStorage.getItem('salahos.quran-reading-preferences.v1') ?? '{}'),
   );
@@ -94,9 +117,7 @@ try {
   await reader.locator('[data-quran-offline-resume]').click();
   await finalAyah.waitFor({ state: 'visible' });
 
-  const knowledge = page.locator('[data-knowledge-screen]');
-  await knowledge.locator('[data-knowledge-filter="quran"]').click();
-  await knowledge.locator('[data-quran-translation-mode]').selectOption('none');
+  await reader.locator('[data-quran-translation-mode]').selectOption('none');
   await page.waitForFunction(() => {
     const serialized = localStorage.getItem('salahos.quran-reading-preferences.v1');
     return serialized ? JSON.parse(serialized).translationMode === 'none' : false;
@@ -106,19 +127,19 @@ try {
     'Complete reader did not synchronize Arabic-only mode',
   );
 
-  await knowledge.locator('[data-quran-font-select]').selectOption('traditional');
-  await knowledge.locator('[data-quran-size-select]').selectOption('xlarge');
+  await reader.locator('[data-quran-font-select]').selectOption('amiri-quran');
+  await reader.locator('[data-quran-size-select]').selectOption('xlarge');
   await page.waitForFunction(() => {
     const ayah = document.querySelector(
       '[data-quran-offline-ayah="114:6"] .knowledge-card__arabic',
     );
     return (
-      ayah?.classList.contains('knowledge-card__arabic--traditional') === true &&
-      ayah.classList.contains('knowledge-card__arabic--xlarge') === true
+      ayah?.getAttribute('data-quran-font') === 'amiri-quran' &&
+      ayah.getAttribute('data-quran-scale') === 'xlarge'
     );
   });
 
-  await knowledge.locator('[data-quran-translation-mode]').selectOption('pickthall-1930');
+  await reader.locator('[data-quran-translation-mode]').selectOption('pickthall-1930');
   await search.fill('20:14');
   const curatedAyah = reader.locator('[data-quran-offline-ayah="20:14"]');
   await curatedAyah.waitFor({ state: 'visible' });
