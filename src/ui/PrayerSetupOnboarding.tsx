@@ -51,8 +51,7 @@ const copy: Readonly<Record<Locale, PrayerSetupCopy>> = {
   en: {
     eyebrow: 'SalahOS · Prayer setup',
     title: 'Choose your calculation defaults',
-    body:
-      'Set the calculation method and Asr convention used for calculated prayer times. You can change both later in Settings.',
+    body: 'Set the calculation method and Asr convention used for calculated prayer times. You can change both later in Settings.',
     methodLabel: 'Calculation method',
     suggested: 'Suggested from your offline regional setting',
     fallback: 'MWL is used when no unambiguous offline country hint is available.',
@@ -69,8 +68,7 @@ const copy: Readonly<Record<Locale, PrayerSetupCopy>> = {
   ar: {
     eyebrow: 'SalahOS · إعداد الصلاة',
     title: 'اختر إعدادات الحساب الافتراضية',
-    body:
-      'حدّد طريقة الحساب ومذهب وقت العصر للمواقيت المحسوبة. يمكنك تغييرهما لاحقاً من الإعدادات.',
+    body: 'حدّد طريقة الحساب ومذهب وقت العصر للمواقيت المحسوبة. يمكنك تغييرهما لاحقاً من الإعدادات.',
     methodLabel: 'طريقة الحساب',
     suggested: 'اقتراح مبني على الإعداد الإقليمي دون اتصال بالإنترنت',
     fallback: 'يُستخدم منهج رابطة العالم الإسلامي عند عدم توفر دلالة بلد محلية واضحة.',
@@ -87,8 +85,7 @@ const copy: Readonly<Record<Locale, PrayerSetupCopy>> = {
   tr: {
     eyebrow: 'SalahOS · Namaz ayarı',
     title: 'Hesaplama varsayılanlarını seçin',
-    body:
-      'Hesaplanan namaz vakitleri için hesaplama yöntemini ve ikindi yaklaşımını seçin. İkisini de daha sonra Ayarlar’dan değiştirebilirsiniz.',
+    body: 'Hesaplanan namaz vakitleri için hesaplama yöntemini ve ikindi yaklaşımını seçin. İkisini de daha sonra Ayarlar’dan değiştirebilirsiniz.',
     methodLabel: 'Hesaplama yöntemi',
     suggested: 'Çevrimdışı bölgesel ayarınıza göre öneri',
     fallback: 'Kesin bir çevrimdışı ülke ipucu yoksa MWL kullanılır.',
@@ -105,8 +102,7 @@ const copy: Readonly<Record<Locale, PrayerSetupCopy>> = {
   id: {
     eyebrow: 'SalahOS · Pengaturan salat',
     title: 'Pilih default perhitungan',
-    body:
-      'Pilih metode perhitungan dan konvensi Asar untuk waktu salat yang dihitung. Keduanya dapat diubah nanti di Pengaturan.',
+    body: 'Pilih metode perhitungan dan konvensi Asar untuk waktu salat yang dihitung. Keduanya dapat diubah nanti di Pengaturan.',
     methodLabel: 'Metode perhitungan',
     suggested: 'Disarankan dari pengaturan regional offline Anda',
     fallback: 'MWL digunakan bila petunjuk negara offline yang jelas tidak tersedia.',
