@@ -1,0 +1,24 @@
+name: Temp visual fix formatter
+
+on:
+  push:
+    branches:
+      - fix/australian-mosque-visual-sanitized-dhuhr
+
+permissions:
+  contents: read
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Print canonical Prettier diff
+        run: |
+          npx prettier --write scripts/visual-australian-mosque-directory.mjs scripts/visual-islamic-knowledge.mjs scripts/visual-quran-offline-reader.mjs
+          git diff -- scripts/visual-australian-mosque-directory.mjs scripts/visual-islamic-knowledge.mjs scripts/visual-quran-offline-reader.mjs
