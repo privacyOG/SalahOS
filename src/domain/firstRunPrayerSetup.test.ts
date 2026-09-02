@@ -44,8 +44,12 @@ describe('first-run Asr convention preview', () => {
 
     expect(preview.standardLocalMinutes).not.toBeNull();
     expect(preview.hanafiLocalMinutes).not.toBeNull();
-    expect(preview.standardLocalMinutes as number).toBeLessThan(preview.hanafiLocalMinutes as number);
-    expect((preview.hanafiLocalMinutes as number) - (preview.standardLocalMinutes as number)).toBeGreaterThan(20);
+    expect(preview.standardLocalMinutes as number).toBeLessThan(
+      preview.hanafiLocalMinutes as number,
+    );
+    expect(
+      (preview.hanafiLocalMinutes as number) - (preview.standardLocalMinutes as number),
+    ).toBeGreaterThan(20);
   });
 
   it('applies the selected calculation method Asr adjustment to both previews', () => {
