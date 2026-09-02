@@ -60,123 +60,35 @@ try {
     await seed(page);
     await page.goto(`${baseUrl}/?view=knowledge`, { waitUntil: 'networkidle' });
 
-    const screen = page.locator('[data-knowledge-screen]');
-    await screen.waitFor({ state: 'visible' });
+    const experience = page.locator('[data-knowledge-experience]');
+    await experience.waitFor({ state: 'visible' });
     assert(
-      (await screen.locator('.knowledge-card').count()) === 9,
-      'Expected nine offline entries',
-    );
-    assert(
-      (await screen.locator('[data-knowledge-module="quran"]').count()) === 3,
-      'Qur’an module missing',
-    );
-    assert(
-      (await screen.locator('[data-knowledge-module="hadith"]').count()) === 3,
-      'Hadith module missing',
-    );
-    assert(
-      (await screen.locator('[data-knowledge-module="qa"]').count()) === 3,
-      'Q&A module missing',
+      (await experience.getAttribute('data-knowledge-view')) === 'library',
+      'Knowledge did not open on the Library section',
     );
 
-    await screen.getByText('M. M. Pickthall (1930)', { exact: false }).first().waitFor();
-    await screen.getByText('Sahih al-Bukhari').first().waitFor();
-    await screen.getByText('Sahih').first().waitFor();
-    await screen.getByText('Imam al-Bukhari').first().waitFor();
+    let screen = page.locator('[data-knowledge-screen]');
+    await screen.waitFor({ state: 'visible' });
+    assert(
+      (await screen.locator('[data-knowledge-curated-size]').getAttribute('data-knowledge-curated-size')) ===
+        '9',
+      'Governed Knowledge catalogue size is not nine entries',
+    );
+    assert(
+      (await screen.locator('.knowledge-card').count()) === 3 &&
+        (await screen.locator('[data-knowledge-module="qa"]').count()) === 3,
+      'Library section did not expose the three governed Q&A/Fiqh entries',
+    );
+    assert(
+      (await screen.locator('[data-knowledge-module="hadith"]').count()) === 0,
+      'Hadith entries leaked into the segmented Library section',
+    );
+    await screen.locator('[data-scholar-disclaimer]').waitFor();
     await screen
       .getByText('Classical Hanafi, Maliki, Shafi‘i and Hanbali sources')
       .first()
       .waitFor();
     await screen.getByText('al-Hidayah', { exact: false }).first().waitFor();
-
-    await screen.locator('[data-knowledge-filter="quran"]').click();
-    await screen.locator('[data-quran-reading-controls]').waitFor();
-    assert(
-      (await screen.locator('[data-quran-tafsir]').count()) === 3,
-      'Qur’an tafsir summaries are not visible',
-    );
-    await screen.getByText('Tafsir al-Jalalayn', { exact: true }).first().waitFor();
-
-    await screen.getByRole('searchbox').fill('humility');
-    assert(
-      (await screen.locator('[data-knowledge-module="quran"]').count()) === 1,
-      'Qur’an topic search did not isolate the expected ayah',
-    );
-    await screen.getByRole('searchbox').fill('');
-
-    const firstAyah = screen.locator('[data-quran-ayah-id]').first();
-    await firstAyah.locator('[data-quran-bookmark]').click();
-    assert(
-      (await firstAyah.getAttribute('data-quran-bookmarked')) === 'true',
-      'Qur’an bookmark state did not update',
-    );
-    await firstAyah.locator('[data-quran-last-read]').click();
-
-    await screen.locator('[data-quran-translation-mode]').selectOption('none');
-    assert(
-      (await screen.locator('[data-quran-translation]').count()) === 0,
-      'Arabic-only mode still rendered the translation',
-    );
-    await screen.locator('[data-quran-size-select]').selectOption('xlarge');
-    assert(
-      (await firstAyah.locator('[data-quran-scale]').getAttribute('data-quran-scale')) === 'xlarge',
-      'Qur’an Arabic font scale did not update',
-    );
-
-    const persistedReader = await page.evaluate(() =>
-      JSON.parse(localStorage.getItem('salahos.quran-reading-preferences.v1') ?? '{}'),
-    );
-    assert(
-      persistedReader.bookmarkedAyahIds?.includes('quran-prayer-remembrance'),
-      'Qur’an bookmark did not persist',
-    );
-    assert(
-      persistedReader.lastReadAyahId === 'quran-prayer-remembrance',
-      'Qur’an last-read position did not persist',
-    );
-    assert(persistedReader.translationMode === 'none', 'Qur’an translation mode did not persist');
-    assert(persistedReader.fontScale === 'xlarge', 'Qur’an font scale did not persist');
-
-    await firstAyah.locator('[data-quran-related] button').first().click();
-    assert(
-      (await screen.locator('[data-knowledge-module="quran"]').count()) === 1,
-      'Related ayah navigation did not isolate the selected ayah',
-    );
-    await screen.getByRole('searchbox').fill('');
-
-    await screen.locator('[data-quran-bookmarks-only]').click();
-    assert(
-      (await screen.locator('[data-knowledge-module="quran"]').count()) === 1,
-      'Bookmark-only mode did not isolate bookmarked ayat',
-    );
-    await screen.locator('[data-quran-bookmarks-only]').click();
-
-    await screen.locator('[data-knowledge-filter="hadith"]').click();
-    assert(
-      (await screen.locator('.knowledge-card').count()) === 3,
-      'Hadith filter did not isolate entries',
-    );
-    assert(
-      (await screen.locator('[data-hadith-arabic]').count()) === 3,
-      'Hadith Arabic excerpts are missing',
-    );
-    assert(
-      (await screen.locator('[data-hadith-book]').count()) === 3 &&
-        (await screen.locator('[data-hadith-chapter]').count()) === 3,
-      'Hadith book/chapter metadata is missing',
-    );
-    await screen.locator('[data-hadith-topic="intention"]').click();
-    assert(
-      (await screen.locator('[data-knowledge-module="hadith"]').count()) === 1,
-      'Hadith topic navigation did not isolate the intention entry',
-    );
-    await screen.getByRole('searchbox').fill('');
-    await screen.locator('[data-hadith-related] button').first().click();
-    assert(
-      (await screen.locator('[data-knowledge-module="hadith"]').count()) === 1,
-      'Related Hadith navigation did not isolate its target',
-    );
-    await screen.getByRole('searchbox').fill('');
 
     await screen.locator('[data-knowledge-filter="fiqh"]').click();
     assert(
@@ -201,6 +113,62 @@ try {
     );
     await screen.getByText('May an obligatory prayer be shortened while travelling?').waitFor();
 
+    await experience.locator('[data-knowledge-view-select="hadith"]').click();
+    await page.waitForFunction(() =>
+      document.querySelector('[data-knowledge-experience]')?.getAttribute('data-knowledge-view') ===
+      'hadith',
+    );
+    screen = page.locator('[data-knowledge-screen]');
+    await screen.waitFor({ state: 'visible' });
+    assert(
+      (await screen.locator('.knowledge-card').count()) === 3 &&
+        (await screen.locator('[data-knowledge-module="hadith"]').count()) === 3,
+      'Hadith section did not expose the three governed entries',
+    );
+    assert(
+      (await screen.locator('[data-hadith-arabic]').count()) === 3 &&
+        (await screen.locator('[data-hadith-arabic-scope="partial-matn"]').count()) === 3,
+      'Hadith Arabic excerpts are missing or not labelled as partial matn',
+    );
+    assert(
+      (await screen.locator('[data-hadith-book]').count()) === 3 &&
+        (await screen.locator('[data-hadith-chapter]').count()) === 3 &&
+        (await screen.locator('[data-hadith-isnad]').count()) === 3,
+      'Hadith book/chapter/isnad metadata is incomplete',
+    );
+    assert(
+      (await screen.locator('[data-hadith-full-text]').count()) === 3,
+      'Reviewed full-text Hadith links are missing',
+    );
+    await screen.getByText('Sahih al-Bukhari').first().waitFor();
+    await screen.getByText('Sahih').first().waitFor();
+    await screen.getByText('Imam al-Bukhari').first().waitFor();
+    await screen.locator('[data-hadith-topic="intention"]').click();
+    assert(
+      (await screen.locator('[data-knowledge-module="hadith"]').count()) === 1,
+      'Hadith topic navigation did not isolate the intention entry',
+    );
+    await screen.getByRole('searchbox').fill('');
+    await screen.locator('[data-hadith-related] button').first().click();
+    assert(
+      (await screen.locator('[data-knowledge-module="hadith"]').count()) === 1,
+      'Related Hadith navigation did not isolate its target',
+    );
+    await screen.getByRole('searchbox').fill('');
+
+    await experience.locator('[data-knowledge-view-select="quran"]').click();
+    const reader = page.locator('[data-quran-offline-reader]');
+    await reader.waitFor({ state: 'visible' });
+    await reader.getByText('114 surahs · 6,236 ayat', { exact: false }).waitFor();
+    assert(
+      (await experience.getAttribute('data-knowledge-view')) === 'quran',
+      'Qur’an segment did not activate the complete offline reader',
+    );
+    await reader.locator('[data-quran-offline-search]').fill('20:14');
+    const curatedAyah = reader.locator('[data-quran-offline-ayah="20:14"]');
+    await curatedAyah.waitFor({ state: 'visible' });
+    await curatedAyah.getByText('Tafsir al-Jalalayn', { exact: true }).waitFor();
+
     const visibleNavigation = page.locator('.congregation-nav > .congregation-nav-item:visible');
     const visibleNavigationIds = await visibleNavigation.evaluateAll((items) =>
       items.map((item) => item.getAttribute('data-navigation-id')),
@@ -224,7 +192,7 @@ try {
       fullPage: true,
       animations: 'disabled',
     });
-    results.push({ name: 'quran-expansion-mobile', visibleNavigationIds, ...metrics });
+    results.push({ name: 'segmented-knowledge-mobile', visibleNavigationIds, ...metrics });
     await context.close();
   }
 
@@ -238,14 +206,16 @@ try {
     await seed(page, 'ar');
     await page.goto(`${baseUrl}/?view=knowledge`, { waitUntil: 'networkidle' });
 
+    const experience = page.locator('[data-knowledge-experience]');
     const screen = page.locator('[data-knowledge-screen]');
     await screen.waitFor({ state: 'visible' });
     await screen.getByText('المعرفة الإسلامية').waitFor();
-    await screen.locator('[data-knowledge-filter="quran"]').click();
-    await screen.locator('[data-quran-reading-controls]').waitFor();
-    await screen.getByText('إعدادات قراءة القرآن').waitFor();
-    await screen.locator('[data-quran-font-select]').selectOption('traditional');
-    await screen.locator('[data-quran-size-select]').selectOption('large');
+    await experience.locator('[data-knowledge-view-select="quran"]').click();
+    const reader = page.locator('[data-quran-offline-reader]');
+    await reader.waitFor({ state: 'visible' });
+    await reader.getByText('القرآن الكامل دون اتصال').waitFor();
+    await reader.locator('[data-quran-font-select]').selectOption('amiri-quran');
+    await reader.locator('[data-quran-size-select]').selectOption('large');
 
     const metrics = await page.evaluate(() => ({
       htmlDir: document.documentElement.dir,
@@ -263,7 +233,7 @@ try {
       fullPage: true,
       animations: 'disabled',
     });
-    results.push({ name: 'quran-expansion-rtl', ...metrics });
+    results.push({ name: 'segmented-knowledge-rtl', ...metrics });
     await context.close();
   }
 
