@@ -6,19 +6,19 @@ SalahOS v1.5.3 adds a second first-run step after location. It asks only for the
 
 The suggestion is completely offline. SalahOS first derives a conservative ISO 3166-1 alpha-2 country hint from a known IANA timezone when the relationship is unambiguous, then applies the explicit table below. Unknown countries and ambiguous/unknown timezones use **Muslim World League (MWL)** as the fallback.
 
-| ISO country | Suggested method |
-| --- | --- |
-| AU, NZ | Muslim World League |
-| SA | Umm al-Qura / Makkah |
-| EG | Egyptian General Authority of Survey |
-| PK, IN, BD, AF | University of Islamic Sciences, Karachi |
-| US, CA | Islamic Society of North America |
-| TR | Diyanet / Turkey |
-| SG | MUIS / Singapore |
-| AE | Dubai |
-| KW | Kuwait |
-| QA | Qatar |
-| Any other/unknown country | Muslim World League |
+| ISO country               | Suggested method                        |
+| ------------------------- | --------------------------------------- |
+| AU, NZ                    | Muslim World League                     |
+| SA                        | Umm al-Qura / Makkah                    |
+| EG                        | Egyptian General Authority of Survey    |
+| PK, IN, BD, AF            | University of Islamic Sciences, Karachi |
+| US, CA                    | Islamic Society of North America        |
+| TR                        | Diyanet / Turkey                        |
+| SG                        | MUIS / Singapore                        |
+| AE                        | Dubai                                   |
+| KW                        | Kuwait                                  |
+| QA                        | Qatar                                   |
+| Any other/unknown country | Muslim World League                     |
 
 This is a starter recommendation, not a claim that every mosque or authority in a country follows one method. Users can choose any built-in method during onboarding and change it later in Settings. A mosque timetable, where deliberately selected, remains a separate prayer-source choice.
 
