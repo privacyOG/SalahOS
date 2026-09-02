@@ -1,0 +1,77 @@
+name: Temporary V1.5.3 Item 12 validation
+
+on:
+  push:
+    branches: [v1.5.3-work-item-12]
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    runs-on: [self-hosted, Linux, X64]
+    timeout-minutes: 20
+    steps:
+      - name: Checkout Item 12 staging branch
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies from lockfile
+        run: npm ci --ignore-scripts
+      - name: Generate Item 12 implementation
+        run: python3 scripts/temp-implement-v153-item12.py
+      - name: Format intended files
+        run: >-
+          npx prettier --write
+          src/domain/prayerOnboarding.ts
+          src/domain/prayerOnboarding.test.ts
+          src/platform/qiblaPermissionOnboarding.ts
+          src/platform/qiblaPermissionOnboarding.test.ts
+          src/ui/QiblaPermissionOnboarding.tsx
+          src/main.tsx
+          src/platform/bestAvailableLocation.ts
+          src/qibla-permission-onboarding.css
+          docs/PRAYER_METHOD_REFERENCES.md
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Lint
+        run: npm run lint
+      - name: Test
+        run: npm run test
+      - name: Format check
+        run: npm run format:check
+      - name: Theme and design-system architecture
+        run: npm run ui:theme-architecture && npm run ui:design-system-ownership
+      - name: Production build
+        run: npm run build
+      - name: Bundle architecture budget
+        run: npm run bundle:size
+      - name: Finalize tracker after successful gates
+        run: python3 scripts/temp-finalize-v153-item12.py
+      - name: Verify final diff
+        run: git diff --check && git status --short
+      - name: Create validated production commit and tag
+        env:
+          TAG: temp-v153-item12-validated
+        run: |
+          git config user.name privacyOG
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            src/domain/prayerOnboarding.ts \
+            src/domain/prayerOnboarding.test.ts \
+            src/platform/qiblaPermissionOnboarding.ts \
+            src/platform/qiblaPermissionOnboarding.test.ts \
+            src/ui/QiblaPermissionOnboarding.tsx \
+            src/main.tsx \
+            src/platform/bestAvailableLocation.ts \
+            src/qibla-permission-onboarding.css \
+            docs/PRAYER_METHOD_REFERENCES.md \
+            TEMP_TODO_V1.5.3.md
+          git commit -m "Complete V1.5.3 work item 12"
+          git tag -f "$TAG"
+          git push --force origin "refs/tags/$TAG"
