@@ -1,0 +1,53 @@
+name: Temporary xmldom lock fix
+
+on:
+  push:
+    branches:
+      - v1.5.3/item-12-prayer-setup-onboarding
+    paths:
+      - .github/workflows/temp-xmldom-lock-fix.yml
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout current main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install locked dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Apply npm audit lockfile fix
+        run: npm audit fix --package-lock-only --ignore-scripts
+
+      - name: Verify scope and patched xmldom
+        shell: bash
+        run: |
+          changed="$(git diff --name-only)"
+          test "$changed" = "package-lock.json"
+          node -e "const lock=require('./package-lock.json'); const v=lock.packages['node_modules/@xmldom/xmldom']?.version; if(v!=='0.9.12') throw new Error('Expected @xmldom/xmldom 0.9.12, got '+v);"
+          npm audit --audit-level=moderate
+          git --no-pager diff -- package-lock.json
+
+      - name: Push review branch
+        shell: bash
+        run: |
+          branch="security/xmldom-0.9.12"
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git switch -c "$branch"
+          git add package-lock.json
+          git commit -m "Update xmldom transitive dependency to 0.9.12"
+          git push --force-with-lease origin "HEAD:$branch"
