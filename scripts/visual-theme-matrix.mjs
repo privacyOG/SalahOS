@@ -234,7 +234,7 @@ try {
         const minimumRatio = largeText ? 3 : 4.5;
         if (ratio < minimumRatio) {
           contrastFailures.push(
-            `${s.name}: visible text contrast below ${minimumRatio}:1 (${ratio.toFixed(2)}) for ${JSON.stringify(item.text)}`,
+            `${s.name}: visible text contrast below ${minimumRatio}:1 (${ratio.toFixed(2)}) for ${JSON.stringify(item.text)}; fg=${item.fg}; parsedFg=${JSON.stringify(fg)}; bg=${JSON.stringify(bg)}`,
           );
         }
       }
