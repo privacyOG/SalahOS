@@ -108,6 +108,23 @@ textarea,
   opacity: 1;
 }
 
+/*
+ * The explicit high-contrast palette is authoritative even inside a selected
+ * mobile prayer template. Templates normally own their local decorative colour
+ * system, but that must not override the user's accessibility palette.
+ */
+:root[data-palette='high-contrast'] .mobile-prayer-theme-surface {
+  --mobile-theme-fg: var(--salah-fg-primary);
+  --mobile-theme-secondary: var(--salah-fg-secondary);
+  --mobile-theme-tertiary: var(--salah-fg-tertiary);
+  --mobile-theme-surface: var(--salah-bg-surface);
+  --mobile-theme-raised: var(--salah-bg-surface-raised);
+  --mobile-theme-soft: var(--salah-bg-accent-soft);
+  --mobile-theme-border: var(--salah-border-default);
+  --mobile-theme-accent: var(--salah-fg-accent);
+  color-scheme: inherit;
+}
+
 /* Filled accent controls require the authoritative on-accent semantic token. */
 .ds-button--primary {
   color: var(--salah-fg-on-accent);
