@@ -164,7 +164,8 @@ export const australianMosqueDirectoryCopy = {
       'Lokasi masjid dan musala yang dimuat sebelumnya dan tersedia luring di seluruh Australia.',
     offline: 'Luring',
     loading: 'Memuat direktori Australia yang telah dimuat sebelumnya…',
-    loadError: 'Direktori Australia yang telah dimuat sebelumnya tidak dapat dibuka di perangkat ini.',
+    loadError:
+      'Direktori Australia yang telah dimuat sebelumnya tidak dapat dibuka di perangkat ini.',
     search: 'Cari direktori Australia',
     searchPlaceholder: 'Masjid, kawasan, alamat, atau negara bagian',
     nearest: 'Terdekat dahulu',

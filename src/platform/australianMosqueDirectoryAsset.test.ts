@@ -15,16 +15,12 @@ describe('Australian mosque directory asset', () => {
       }),
     );
     vi.stubGlobal('fetch', fetchMock);
-    const {
-      AUSTRALIAN_MOSQUE_DIRECTORY_ASSET_URL,
-      loadAustralianMosqueDirectoryAsset,
-    } = await import('./australianMosqueDirectoryAsset');
+    const { AUSTRALIAN_MOSQUE_DIRECTORY_ASSET_URL, loadAustralianMosqueDirectoryAsset } =
+      await import('./australianMosqueDirectoryAsset');
 
     const directory = await loadAustralianMosqueDirectoryAsset();
 
-    expect(AUSTRALIAN_MOSQUE_DIRECTORY_ASSET_URL).toBe(
-      '/data/australian-mosques-combined.json',
-    );
+    expect(AUSTRALIAN_MOSQUE_DIRECTORY_ASSET_URL).toBe('/data/australian-mosques-combined.json');
     expect(directory.source.recordCount).toBe(254);
     expect(directory.records).toHaveLength(254);
     expect(fetchMock).toHaveBeenCalledWith(AUSTRALIAN_MOSQUE_DIRECTORY_ASSET_URL, {
@@ -35,9 +31,7 @@ describe('Australian mosque directory asset', () => {
 
   it('fails closed when the packaged catalogue cannot be read', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(null, { status: 503 })));
-    const { loadAustralianMosqueDirectoryAsset } = await import(
-      './australianMosqueDirectoryAsset'
-    );
+    const { loadAustralianMosqueDirectoryAsset } = await import('./australianMosqueDirectoryAsset');
 
     await expect(loadAustralianMosqueDirectoryAsset()).rejects.toThrow('HTTP 503');
   });

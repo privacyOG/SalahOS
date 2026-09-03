@@ -3,8 +3,7 @@ import {
   type AustralianMosqueDirectory,
 } from '../domain/australianMosqueDirectoryCombined';
 
-export const AUSTRALIAN_MOSQUE_DIRECTORY_ASSET_URL =
-  '/data/australian-mosques-combined.json';
+export const AUSTRALIAN_MOSQUE_DIRECTORY_ASSET_URL = '/data/australian-mosques-combined.json';
 
 let pendingDirectory: Promise<AustralianMosqueDirectory> | null = null;
 

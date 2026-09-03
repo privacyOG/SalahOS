@@ -439,4 +439,3 @@ export function australianMosqueToProfile(record: AustralianMosqueRecord): Mosqu
     logo: null,
   });
 }
-
