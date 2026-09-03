@@ -228,6 +228,20 @@ try {
       'First-run onboarding did not request browser orientation permission from the user gesture',
     );
 
+    const prayerSetupDialog = page.locator('[data-prayer-setup-onboarding]');
+    await prayerSetupDialog.waitFor({ state: 'visible' });
+    await prayerSetupDialog.getByRole('button', { name: 'Use defaults' }).click();
+    await prayerSetupDialog.waitFor({ state: 'detached' });
+
+    const prayerSetupState = await page.evaluate(() => {
+      const serialized = localStorage.getItem('salahos.prayer-setup-onboarding');
+      return serialized === null ? null : JSON.parse(serialized);
+    });
+    assert(
+      prayerSetupState?.version === 1 && prayerSetupState.completed === true,
+      'First-run prayer setup completion was not persisted before Qiblah navigation',
+    );
+
     const qiblahNavigation = page.locator('.congregation-nav button').filter({ hasText: 'Qiblah' });
     await qiblahNavigation.click();
     const finder = page.locator('.qibla-finder');
@@ -254,7 +268,11 @@ try {
       fullPage: true,
       animations: 'disabled',
     });
-    results.push({ name: 'first-run-permission-to-live-qiblah', ...onboardingState });
+    results.push({
+      name: 'first-run-permission-to-live-qiblah',
+      ...onboardingState,
+      prayerSetupState,
+    });
     await context.close();
   }
 
