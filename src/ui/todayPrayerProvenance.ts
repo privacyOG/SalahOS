@@ -1,9 +1,6 @@
 import { asrConventionPresentation } from '../domain/asrConventionPresentation';
 import type { CalculationMethodId } from '../domain/methods';
-import {
-  hasManualPrayerAdjustments,
-  type PrayerAdjustments,
-} from '../domain/prayerAdjustments';
+import { hasManualPrayerAdjustments, type PrayerAdjustments } from '../domain/prayerAdjustments';
 import type { AsrConvention } from '../domain/prayerEngine';
 import type { Locale } from '../i18n/translations';
 
@@ -75,8 +72,7 @@ export function todayPrayerProvenancePresentation(input: {
 }): TodayPrayerProvenancePresentation {
   const copy = provenanceCopy[input.locale];
   const asr = asrConventionPresentation(input.asrConvention);
-  const asrLabel =
-    asr.madhhabAssociation === 'hanafi' ? copy.hanafiAsr : copy.standardAsr;
+  const asrLabel = asr.madhhabAssociation === 'hanafi' ? copy.hanafiAsr : copy.standardAsr;
   const hasManualAdjustments = hasManualPrayerAdjustments(input.prayerAdjustments);
   const adjustedLabel = hasManualAdjustments ? copy.adjusted : null;
   const visibleParts = [methodShortLabels[input.methodId], asrLabel];
