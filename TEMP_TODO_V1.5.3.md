@@ -137,13 +137,13 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - [x] Add domain tests for country mapping and Asr preview computation.
 - [x] Gate: `npm run typecheck && npm run lint && npm run test && npm run format:check`.
 
-## Work Item 13 — Persistent method/madhhab provenance chip
+## Work Item 13 — Persistent method/madhhab provenance chip — COMPLETE
 
-- [ ] Add a 44px-minimum tappable Today chip such as `MWL · Standard Asr` linked to Settings → Prayer.
-- [ ] Reuse `asrConventionPresentation.ts` and support all four locales.
-- [ ] Indicate manual prayer adjustments in the chip.
-- [ ] Remove duplicated method/Asr lines from the collapsed provenance footer.
-- [ ] Gate: `npm run typecheck && npm run lint && npm run test`.
+- [x] Add a 44px-minimum tappable Today chip such as `MWL · Standard Asr` linked to Settings → Prayer.
+- [x] Reuse `asrConventionPresentation.ts` and support all four locales.
+- [x] Indicate manual prayer adjustments in the chip.
+- [x] Remove duplicated method/Asr lines from the collapsed provenance footer.
+- [x] Gate: `npm run typecheck && npm run lint && npm run test`.
 
 ## Work Item 14 — Promote Friday Jumu'ah
 
