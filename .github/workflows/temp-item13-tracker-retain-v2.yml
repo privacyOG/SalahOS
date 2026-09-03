@@ -50,4 +50,4 @@ jobs:
           git add TEMP_TODO_V1.5.3.md
           git commit -m 'Mark V1.5.3 Item 13 complete'
           echo "RETAINED_COMMIT=$(git rev-parse HEAD)"
-          git push origin HEAD:v1.5.3/item-13-tracker-reconcile || true
+          git push origin HEAD:refs/heads/v1.5.3/item-13-tracker-reconcile || true
