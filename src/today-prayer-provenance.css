@@ -1,0 +1,55 @@
+.today-prayer-provenance {
+  display: flex;
+  justify-content: flex-end;
+  margin-block-start: var(--salah-space-3);
+}
+
+.today-prayer-provenance__chip {
+  display: inline-flex;
+  min-height: 2.75rem;
+  max-width: 100%;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: var(--salah-space-1) var(--salah-space-2);
+  padding: var(--salah-space-2) var(--salah-space-3);
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: 999px;
+  color: var(--salah-fg-secondary);
+  background: var(--salah-bg-surface);
+  font-size: var(--salah-text-sm);
+  font-weight: 720;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+}
+
+.today-prayer-provenance__chip[data-manual-adjustments='true'] {
+  border-color: color-mix(in srgb, var(--salah-fg-accent) 38%, var(--salah-border-subtle));
+  background: color-mix(in srgb, var(--salah-fg-accent) 5%, var(--salah-bg-surface));
+}
+
+.today-prayer-provenance__chip:hover {
+  color: var(--salah-fg-primary);
+  background: var(--salah-bg-accent-soft);
+}
+
+.today-prayer-provenance__chip:focus-visible {
+  outline: 3px solid var(--salah-focus-ring);
+  outline-offset: 3px;
+}
+
+@media (max-width: 720px) {
+  .today-prayer-provenance {
+    justify-content: flex-start;
+  }
+}
+
+@media (forced-colors: active) {
+  .today-prayer-provenance__chip,
+  .today-prayer-provenance__chip[data-manual-adjustments='true'] {
+    border-color: CanvasText;
+    color: CanvasText;
+    background: Canvas;
+  }
+}
