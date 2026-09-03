@@ -16,7 +16,7 @@ OpenStreetMap attribution and licence references remain attached to the combined
 
 The SalahOS source-code licence does not replace or relicense the bundled OpenStreetMap-derived data. The Australian Mosque Finder integration is limited to factual directory data and records its own source provenance separately from OpenStreetMap provenance.
 
-The committed OpenStreetMap snapshot is `data/osm/australian-muslim-places-of-worship.overpass.json`. The legacy OSM-only generated catalogue is `src/data/australian-mosques.json`. The Australian Mosque Finder parsed snapshot is `src/data/australian-mosque-finder.json`, and the runtime integrated catalogue is `src/data/australian-mosques-combined.json`.
+The committed OpenStreetMap snapshot is `data/osm/australian-muslim-places-of-worship.overpass.json`. The legacy OSM-only generated catalogue is `src/data/australian-mosques.json`. The Australian Mosque Finder parsed snapshot is `src/data/australian-mosque-finder.json`, and the runtime integrated catalogue is `public/data/australian-mosques-combined.json`.
 
 ## Current integrated snapshot
 

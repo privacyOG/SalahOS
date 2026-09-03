@@ -1,12 +1,15 @@
+import rawDirectory from '../../public/data/australian-mosques-combined.json';
 import { describe, expect, it } from 'vitest';
 import {
-  australianMosqueDirectory,
   australianMosqueToProfile,
-  australianMosques,
+  parseAustralianMosqueDirectory,
   searchAustralianMosques,
   sortAustralianMosquesByDistance,
 } from './australianMosqueDirectoryCombined';
 import { createCoordinates } from './coordinates';
+
+const australianMosqueDirectory = parseAustralianMosqueDirectory(rawDirectory);
+const australianMosques = australianMosqueDirectory.records;
 
 describe('combined Australian mosque directory', () => {
   it('exposes the deduplicated 254-record combined snapshot across all regions', () => {

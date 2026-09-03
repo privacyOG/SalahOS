@@ -3,6 +3,7 @@ const CACHE_NAME = `${CACHE_PREFIX}v4`;
 const SHELL_URLS = [
   '/',
   '/manifest.webmanifest',
+  '/data/australian-mosques-combined.json',
   '/icons/salahos-192.png',
   '/icons/salahos-512.png',
   '/icons/salahos-maskable-192.png',

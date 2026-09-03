@@ -1,4 +1,3 @@
-import rawDirectory from '../data/australian-mosques-combined.json';
 import { createCoordinates, type Coordinates } from './coordinates';
 import { greatCircleDistanceKilometers } from './greatCircleDistance';
 import {
@@ -298,7 +297,7 @@ function parseCombinedRecord(value: unknown): AustralianMosqueRecord {
   });
 }
 
-function parseDirectory(value: unknown): AustralianMosqueDirectory {
+export function parseAustralianMosqueDirectory(value: unknown): AustralianMosqueDirectory {
   if (
     !isRecord(value) ||
     value.schemaVersion !== 2 ||
@@ -441,5 +440,3 @@ export function australianMosqueToProfile(record: AustralianMosqueRecord): Mosqu
   });
 }
 
-export const australianMosqueDirectory = parseDirectory(rawDirectory);
-export const australianMosques = australianMosqueDirectory.records;

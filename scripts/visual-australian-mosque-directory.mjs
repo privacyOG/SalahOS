@@ -69,6 +69,13 @@ try {
 
     const panel = page.locator('.australian-mosque-directory');
     await panel.waitFor({ state: 'visible' });
+    await page.waitForFunction(
+      (expectedCount) =>
+        document
+          .querySelector('.australian-mosque-directory')
+          ?.getAttribute('data-directory-record-count') === String(expectedCount),
+      expectedAustralianMosqueRecords,
+    );
     assert(
       (await panel.getAttribute('data-directory-record-count')) ===
         String(expectedAustralianMosqueRecords),
