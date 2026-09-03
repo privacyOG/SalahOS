@@ -1,0 +1,36 @@
+name: TEMP validate bundle recovery exact head
+
+on:
+  push:
+    branches:
+      - temp/bundle-validate-isolated
+
+permissions:
+  contents: read
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact bundle recovery head
+        uses: actions/checkout@v4
+        with:
+          ref: release/bundle-budget-recovery
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Format lint and typecheck
+        run: npm run format:check && npm run lint && npm run typecheck
+      - name: Australian catalogue reproducibility
+        run: npm run mosques:australia:combined:check && npm run mosques:packs:check
+      - name: Same-origin network policy
+        run: npm run security:remote-network
+      - name: Focused and full tests
+        run: npm run test
+      - name: Production build and unchanged bundle budget
+        run: npm run build && npm run bundle:size && npm run verify:web-build
