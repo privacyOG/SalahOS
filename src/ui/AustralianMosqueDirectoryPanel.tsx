@@ -2,11 +2,10 @@ import { useEffect, useMemo, useState } from 'react';
 
 import '../australian-mosque-directory.css';
 import {
-  australianMosqueDirectory,
-  australianMosques,
   australianMosqueToProfile,
   searchAustralianMosques,
   sortAustralianMosquesByDistance,
+  type AustralianMosqueDirectory,
   type AustralianMosqueRecord,
 } from '../domain/australianMosqueDirectoryCombined';
 import type { EnrichedMosqueDirectoryRecord } from '../domain/mosqueDirectoryEnrichment';
@@ -14,6 +13,7 @@ import { localeTag } from '../i18n/i18n';
 import { australianMosqueDirectoryCopy } from '../i18n/australianMosqueDirectoryTranslations';
 import type { Locale } from '../i18n/translations';
 import { getApplicationStorage } from '../platform/applicationStorage';
+import { loadAustralianMosqueDirectoryAsset } from '../platform/australianMosqueDirectoryAsset';
 import { saveSelectedDirectoryMosqueContext } from '../platform/selectedDirectoryMosqueContext';
 import { MOSQUE_PROFILE_LIBRARY_CHANGE_EVENT } from '../platform/mosqueProfileEvents';
 import {
@@ -31,6 +31,7 @@ import {
 } from '../platform/settingsStorage';
 
 const COLLAPSED_RESULT_LIMIT = 24;
+const EMPTY_AUSTRALIAN_MOSQUES: readonly AustralianMosqueRecord[] = Object.freeze([]);
 
 function readSettings(): PersistedSettings {
   try {
@@ -96,6 +97,8 @@ function freshnessLabel(
 export function AustralianMosqueDirectoryPanel() {
   const [settings, setSettings] = useState<PersistedSettings>(readSettings);
   const [library, setLibrary] = useState<MosqueProfileLibraryState>(readMosques);
+  const [directory, setDirectory] = useState<AustralianMosqueDirectory | null>(null);
+  const [directoryLoadFailed, setDirectoryLoadFailed] = useState(false);
   const [query, setQuery] = useState('');
   const [sortByDistance, setSortByDistance] = useState(false);
   const [expanded, setExpanded] = useState(false);
@@ -106,6 +109,22 @@ export function AustralianMosqueDirectoryPanel() {
     () => new Set<string>(library.profiles.map((profile) => profile.id)),
     [library.profiles],
   );
+
+  useEffect(() => {
+    let active = true;
+    void loadAustralianMosqueDirectoryAsset()
+      .then((loadedDirectory) => {
+        if (!active) return;
+        setDirectory(loadedDirectory);
+        setDirectoryLoadFailed(false);
+      })
+      .catch(() => {
+        if (active) setDirectoryLoadFailed(true);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useEffect(() => {
     const refresh = () => {
@@ -124,7 +143,10 @@ export function AustralianMosqueDirectoryPanel() {
     setExpanded(false);
   }, [query, sortByDistance]);
 
-  const matchingMosques = useMemo(() => searchAustralianMosques(australianMosques, query), [query]);
+  const matchingMosques = useMemo(
+    () => searchAustralianMosques(directory?.records ?? EMPTY_AUSTRALIAN_MOSQUES, query),
+    [directory, query],
+  );
   const rankedMosques = useMemo(() => {
     if (!sortByDistance || savedCoordinates === null) {
       return matchingMosques.map((mosque) => ({ mosque, distanceKm: null }));
@@ -132,6 +154,33 @@ export function AustralianMosqueDirectoryPanel() {
     return sortAustralianMosquesByDistance(matchingMosques, savedCoordinates);
   }, [matchingMosques, savedCoordinates, sortByDistance]);
   const visibleMosques = expanded ? rankedMosques : rankedMosques.slice(0, COLLAPSED_RESULT_LIMIT);
+
+  if (directory === null) {
+    return (
+      <section
+        className="australian-mosque-directory"
+        aria-labelledby="australian-mosque-directory-title"
+        dir={locale === 'ar' ? 'rtl' : 'ltr'}
+        data-directory-record-count={0}
+      >
+        <header className="australian-mosque-directory__header">
+          <div>
+            <div className="australian-mosque-directory__title-row">
+              <h2 id="australian-mosque-directory-title">{text.title}</h2>
+              <span>{text.offline}</span>
+            </div>
+            <p>{text.subtitle}</p>
+          </div>
+          <strong>…</strong>
+        </header>
+        <p className="australian-mosque-directory__privacy-note" role="status">
+          {directoryLoadFailed ? text.loadError : text.loading}
+        </p>
+      </section>
+    );
+  }
+
+  const australianMosqueDirectory = directory;
 
   const persistLibrary = (next: MosqueProfileLibraryState) => {
     saveMosqueProfileLibrary(getApplicationStorage(), next);

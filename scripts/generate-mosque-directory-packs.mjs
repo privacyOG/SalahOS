@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 import { format, resolveConfig } from 'prettier';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const sourcePath = path.join(root, 'src', 'data', 'australian-mosques-combined.json');
+const sourcePath = path.join(root, 'public', 'data', 'australian-mosques-combined.json');
 const publicRoot = path.join(root, 'public', 'mosque-packs');
 const checkOnly = process.argv.includes('--check');
 

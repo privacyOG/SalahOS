@@ -10,7 +10,7 @@ const port = 48788;
 const baseUrl = `http://127.0.0.1:${String(port)}`;
 const moderatorToken = 'stage48-test-moderator';
 const combinedCatalogue = JSON.parse(
-  await readFile(join(process.cwd(), 'src/data/australian-mosques-combined.json'), 'utf8'),
+  await readFile(join(process.cwd(), 'public/data/australian-mosques-combined.json'), 'utf8'),
 );
 assert.equal(combinedCatalogue.schemaVersion, 2);
 assert.ok(Array.isArray(combinedCatalogue.records));

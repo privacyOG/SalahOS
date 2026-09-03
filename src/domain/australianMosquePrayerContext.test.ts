@@ -1,6 +1,7 @@
+import rawDirectory from '../../public/data/australian-mosques-combined.json';
 import { describe, expect, it } from 'vitest';
 import {
-  australianMosques,
+  parseAustralianMosqueDirectory,
   type AustralianMosqueRecord,
 } from './australianMosqueDirectoryCombined';
 import {
@@ -13,6 +14,8 @@ import {
 import { createCoordinates } from './coordinates';
 import { buildPrayerDashboard } from './dashboard';
 import { applyPrayerSourceToDashboard } from './sourcedDashboard';
+
+const australianMosques = parseAustralianMosqueDirectory(rawDirectory).records;
 
 function mosqueByName(name: string): AustralianMosqueRecord {
   const record = australianMosques.find((candidate) => candidate.name === name);

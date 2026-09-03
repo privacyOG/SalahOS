@@ -4,6 +4,8 @@ interface AustralianMosqueDirectoryCopy {
   title: string;
   subtitle: string;
   offline: string;
+  loading: string;
+  loadError: string;
   search: string;
   searchPlaceholder: string;
   nearest: string;
@@ -42,6 +44,8 @@ export const australianMosqueDirectoryCopy = {
     title: 'Australian mosque directory',
     subtitle: 'Preloaded mosque and musalla locations available offline across Australia.',
     offline: 'Offline',
+    loading: 'Loading the preloaded Australian directory…',
+    loadError: 'The preloaded Australian directory could not be opened on this device.',
     search: 'Search the Australian directory',
     searchPlaceholder: 'Mosque, suburb, address or state',
     nearest: 'Nearest first',
@@ -79,6 +83,8 @@ export const australianMosqueDirectoryCopy = {
     title: 'دليل المساجد الأسترالية',
     subtitle: 'مواقع مساجد ومصليات محمّلة مسبقاً ومتاحة دون اتصال في أنحاء أستراليا.',
     offline: 'دون اتصال',
+    loading: 'جارٍ تحميل دليل أستراليا المحمّل مسبقاً…',
+    loadError: 'تعذّر فتح دليل أستراليا المحمّل مسبقاً على هذا الجهاز.',
     search: 'البحث في دليل أستراليا',
     searchPlaceholder: 'المسجد أو الضاحية أو العنوان أو الولاية',
     nearest: 'الأقرب أولاً',
@@ -117,6 +123,8 @@ export const australianMosqueDirectoryCopy = {
     subtitle:
       'Avustralya genelinde çevrimdışı kullanılabilen önceden yüklenmiş cami ve mescit konumları.',
     offline: 'Çevrimdışı',
+    loading: 'Önceden yüklenmiş Avustralya dizini yükleniyor…',
+    loadError: 'Önceden yüklenmiş Avustralya dizini bu cihazda açılamadı.',
     search: 'Avustralya dizininde ara',
     searchPlaceholder: 'Cami, semt, adres veya eyalet',
     nearest: 'En yakın önce',
@@ -155,6 +163,9 @@ export const australianMosqueDirectoryCopy = {
     subtitle:
       'Lokasi masjid dan musala yang dimuat sebelumnya dan tersedia luring di seluruh Australia.',
     offline: 'Luring',
+    loading: 'Memuat direktori Australia yang telah dimuat sebelumnya…',
+    loadError:
+      'Direktori Australia yang telah dimuat sebelumnya tidak dapat dibuka di perangkat ini.',
     search: 'Cari direktori Australia',
     searchPlaceholder: 'Masjid, kawasan, alamat, atau negara bagian',
     nearest: 'Terdekat dahulu',

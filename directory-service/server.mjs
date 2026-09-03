@@ -7,7 +7,7 @@ import { fileURLToPath } from 'node:url';
 const repositoryRoot = fileURLToPath(new URL('..', import.meta.url));
 const australianCataloguePath = resolve(
   repositoryRoot,
-  'src/data/australian-mosques-combined.json',
+  'public/data/australian-mosques-combined.json',
 );
 const databasePath = resolve(
   process.env.SALAHOS_DIRECTORY_DB_PATH ??

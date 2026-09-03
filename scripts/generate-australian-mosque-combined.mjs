@@ -6,7 +6,7 @@ import { fileURLToPath } from 'node:url';
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const osmPath = path.join(root, 'src', 'data', 'australian-mosques.json');
 const finderPath = path.join(root, 'src', 'data', 'australian-mosque-finder.json');
-const outputPath = path.join(root, 'src', 'data', 'australian-mosques-combined.json');
+const outputPath = path.join(root, 'public', 'data', 'australian-mosques-combined.json');
 const checkOnly = process.argv.includes('--check');
 
 const REGION_CODES = Object.freeze([
