@@ -3,7 +3,7 @@ name: TEMP externalize Australian mosque runtime catalogue v6
 on:
   push:
     branches:
-      - release/bundle-budget-recovery
+      - temp/bundle-retain-isolated
 
 permissions:
   contents: write
