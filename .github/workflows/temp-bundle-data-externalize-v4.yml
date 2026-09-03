@@ -1,0 +1,85 @@
+name: TEMP externalize Australian mosque runtime catalogue v4
+
+on:
+  push:
+    branches:
+      - release/bundle-budget-recovery
+
+permissions:
+  contents: write
+
+jobs:
+  patch-and-validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: release/bundle-budget-recovery
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Execute corrected v3 transformation
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import textwrap
+
+          workflow = Path('.github/workflows/temp-bundle-data-externalize-v3.yml').read_text(encoding='utf-8')
+          start_marker = "          python3 - <<'PY'\n"
+          end_marker = "\n          PY\n\n      - name: Install dependencies"
+          start = workflow.index(start_marker) + len(start_marker)
+          end = workflow.index(end_marker, start)
+          patch = textwrap.dedent(workflow[start:end])
+          old = 'patch, count = pattern.subn(replacement, patch, count=1)'
+          new = 'patch, count = pattern.subn(lambda _: replacement, patch, count=1)'
+          if patch.count(old) != 1:
+              raise SystemExit('v3 replacement implementation changed unexpectedly')
+          patch = patch.replace(old, new, 1)
+          exec(compile(patch, 'temp-bundle-data-externalize-v3-corrected.py', 'exec'))
+          PY
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Format changed text sources
+        run: |
+          npx prettier --write \
+            vite.config.ts \
+            src/domain/australianMosqueDirectoryCombined.ts \
+            src/domain/australianMosqueDirectoryCombined.test.ts \
+            src/domain/australianMosquePrayerContext.test.ts \
+            src/platform/australianMosqueDirectoryAsset.ts \
+            src/platform/australianMosqueDirectoryAsset.test.ts \
+            src/ui/AustralianMosqueDirectoryPanel.tsx \
+            src/i18n/australianMosqueDirectoryTranslations.ts \
+            scripts/generate-mosque-directory-packs.mjs \
+            scripts/generate-australian-mosque-combined.mjs \
+            scripts/check-remote-network-policy.mjs \
+            scripts/visual-australian-mosque-directory.mjs \
+            directory-service/server.mjs \
+            directory-service/server.acceptance.mjs \
+            public/sw.js \
+            docs/AUSTRALIAN_MOSQUE_DIRECTORY.md
+
+      - name: Create retained corrective commit
+        shell: bash
+        run: |
+          git config user.name 'privacyOG'
+          git config user.email 'kriptiik@proton.me'
+          git add -A
+          git commit -m 'Externalize Australian mosque catalogue from JavaScript bundle'
+          echo "RETAINED_COMMIT=$(git rev-parse HEAD)"
+          git push origin HEAD:release/bundle-budget-recovery || true
+
+      - name: Validate source gates
+        run: npm run format:check && npm run lint && npm run typecheck && npm run test
+
+      - name: Validate production bundle budget
+        run: npm run build && npm run bundle:size
