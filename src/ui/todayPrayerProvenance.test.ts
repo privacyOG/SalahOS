@@ -45,8 +45,9 @@ describe('Today prayer provenance presentation', () => {
       tr: ['Standart ikindi', 'Ayarlı'],
       id: ['Asar standar', 'Disesuaikan'],
     };
+    const locales: readonly Locale[] = ['en', 'ar', 'tr', 'id'];
 
-    for (const locale of Object.keys(expected) as Locale[]) {
+    for (const locale of locales) {
       const presentation = todayPrayerProvenancePresentation({
         locale,
         methodId: 'muslim-world-league',
