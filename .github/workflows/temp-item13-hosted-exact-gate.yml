@@ -1,0 +1,28 @@
+name: TEMP V1.5.3 Item 13 hosted exact gate
+
+on:
+  push:
+    branches:
+      - temp/item13-hosted-exact-gate
+
+permissions:
+  contents: read
+
+jobs:
+  item13-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout exact Item 13 merge candidate
+        uses: actions/checkout@v4
+        with:
+          ref: 580f77802dcd9959873e0efdfd17affd2b9d3876
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies without audit network call
+        run: npm ci --ignore-scripts --no-audit
+      - name: Item 13 gate
+        run: npm run typecheck && npm run lint && npm run test
