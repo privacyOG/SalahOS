@@ -127,15 +127,15 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - [x] Preserve mosque-coordinate adoption when no user location exists.
 - [x] Gate: `npm run typecheck && npm run lint && npm run test`.
 
-## Work Item 12 — First-run calculation method and Asr convention
+## Work Item 12 — First-run calculation method and Asr convention — COMPLETE
 
-- [ ] Add a second onboarding step after location with only calculation method and Asr convention.
-- [ ] Suggest calculation method from an explicit offline ISO-country mapping with documented MWL fallback.
-- [ ] Show today's Standard and Hanafi Asr preview times at the user's location.
-- [ ] Keep "Use defaults" fully available and persist through existing settings storage.
-- [ ] Reuse the existing completion-flag onboarding pattern; do not show again after completion.
-- [ ] Add domain tests for country mapping and Asr preview computation.
-- [ ] Gate: `npm run typecheck && npm run lint && npm run test && npm run format:check`.
+- [x] Add a second onboarding step after location with only calculation method and Asr convention.
+- [x] Suggest calculation method from an explicit offline ISO-country mapping with documented MWL fallback.
+- [x] Show today's Standard and Hanafi Asr preview times at the user's location.
+- [x] Keep "Use defaults" fully available and persist through existing settings storage.
+- [x] Reuse the existing completion-flag onboarding pattern; do not show again after completion.
+- [x] Add domain tests for country mapping and Asr preview computation.
+- [x] Gate: `npm run typecheck && npm run lint && npm run test && npm run format:check`.
 
 ## Work Item 13 — Persistent method/madhhab provenance chip
 
@@ -258,3 +258,4 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - Work Item 5: complete on branch `v1.5.3-work-item-5`; unified both Qur’an reader surfaces on data-attribute font/scale state, removed duplicate modifier selectors and typography `!important`, added explicit Arabic shaping/spacing and scale-specific line heights, and passed the required theme/architecture/ownership/format gate.
 - Work Item 6 research checkpoint: licensing matrix and permission-request drafts recorded in `docs/QURAN_TRANSLATION_TRANSLITERATION_LICENSING.md`; pinned `risan/quran-json` v3.1.2 transliteration at 2,214,403 bytes, SHA-256 `36369741f23fe2b64fdcca39d047659256dab7b40f1717aefcb6198c514313a0`, Git blob `7e2750a5b65306c9393b29e5a3ddfa264d33cc48`, 114 surahs/6,236 ayat. Product integration remains blocked pending owner approval and required rights clarification.
 - Work Item 8 technical implementation: lean validation run `33497792180` passed Knowledge governance, typecheck, lint, 788 tests across 180 files, theme/design ownership, production build, and bundle architecture at 1,249,350 total JavaScript bytes (650 bytes below the 1,250,000-byte cap). The current three-hadith corpus contains no divine-attribute report requiring a tanzih note. Corpus expansion remains owner-decision pending before Item 8 can be closed.
+- Work Item 12: complete via PR #234, merged as `05240f6aaf5cbcfc56d06f6163c3e5dff6ce3727`; exact-head Quality Gate run 33678029000 passed the required format, lint, typecheck, and unit-test steps before merge.
