@@ -1,0 +1,46 @@
+name: TEMP format bundle recovery candidate
+
+on:
+  push:
+    branches:
+      - temp/bundle-format-isolated
+
+permissions:
+  contents: write
+
+jobs:
+  retain-format:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact bundle recovery head
+        uses: actions/checkout@v4
+        with:
+          ref: release/bundle-budget-recovery
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Format only candidate source files
+        run: |
+          npx prettier --write \
+            src/domain/australianMosqueDirectoryCombined.ts \
+            src/i18n/australianMosqueDirectoryTranslations.ts \
+            src/platform/australianMosqueDirectoryAsset.ts \
+            src/platform/australianMosqueDirectoryAsset.test.ts
+          npm run format:check
+          git diff --check
+      - name: Retain formatted commit
+        run: |
+          git config user.name 'privacyOG'
+          git config user.email 'kriptiik@proton.me'
+          git add src/domain/australianMosqueDirectoryCombined.ts \
+            src/i18n/australianMosqueDirectoryTranslations.ts \
+            src/platform/australianMosqueDirectoryAsset.ts \
+            src/platform/australianMosqueDirectoryAsset.test.ts
+          git commit -m 'Format Australian mosque bundle recovery sources'
+          echo "RETAINED_COMMIT=$(git rev-parse HEAD)"
+          git push origin HEAD:release/bundle-budget-recovery || true
