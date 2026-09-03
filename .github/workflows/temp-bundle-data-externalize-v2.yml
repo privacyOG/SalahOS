@@ -1,0 +1,530 @@
+name: TEMP externalize Australian mosque runtime catalogue v2
+
+on:
+  push:
+    branches:
+      - release/bundle-budget-recovery
+
+permissions:
+  contents: write
+
+jobs:
+  patch-and-validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout branch
+        uses: actions/checkout@v4
+        with:
+          ref: release/bundle-budget-recovery
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Apply deterministic catalogue externalization
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import re
+
+          def read(path):
+              return Path(path).read_text(encoding='utf-8')
+
+          def write(path, content):
+              target = Path(path)
+              target.parent.mkdir(parents=True, exist_ok=True)
+              target.write_text(content, encoding='utf-8')
+
+          def replace_exact(content, old, new, label, count=1):
+              found = content.count(old)
+              if found != count:
+                  raise SystemExit(f'{label}: expected {count} match(es), found {found}')
+              return content.replace(old, new, count)
+
+          # Revert the rejected Rolldown experiment.
+          write(
+              'vite.config.ts',
+              """import { defineConfig } from 'vite';
+          import react from '@vitejs/plugin-react';
+
+          export default defineConfig({
+            plugins: [react()],
+            build: {
+              target: 'es2022',
+            },
+          });
+          """,
+          )
+
+          # Move the exact canonical catalogue blob to a fixed packaged asset path.
+          source = Path('src/data/australian-mosques-combined.json')
+          target = Path('public/data/australian-mosques-combined.json')
+          if not source.exists():
+              raise SystemExit('canonical source catalogue is missing')
+          if target.exists():
+              raise SystemExit('public catalogue path already exists before migration')
+          target.parent.mkdir(parents=True, exist_ok=True)
+          source.replace(target)
+
+          domain_path = 'src/domain/australianMosqueDirectoryCombined.ts'
+          domain = read(domain_path)
+          domain = replace_exact(
+              domain,
+              "import rawDirectory from '../data/australian-mosques-combined.json';\n",
+              '',
+              'domain raw import',
+          )
+          domain = replace_exact(
+              domain,
+              'function parseDirectory(value: unknown): AustralianMosqueDirectory {',
+              'export function parseAustralianMosqueDirectory(value: unknown): AustralianMosqueDirectory {',
+              'domain parser export',
+          )
+          domain = replace_exact(
+              domain,
+              "\nexport const australianMosqueDirectory = parseDirectory(rawDirectory);\nexport const australianMosques = australianMosqueDirectory.records;",
+              '',
+              'domain eager exports',
+          )
+          write(domain_path, domain)
+
+          write(
+              'src/platform/australianMosqueDirectoryAsset.ts',
+              """import {
+            parseAustralianMosqueDirectory,
+            type AustralianMosqueDirectory,
+          } from '../domain/australianMosqueDirectoryCombined';
+
+          export const AUSTRALIAN_MOSQUE_DIRECTORY_ASSET_URL =
+            '/data/australian-mosques-combined.json';
+
+          let pendingDirectory: Promise<AustralianMosqueDirectory> | null = null;
+
+          async function fetchAustralianMosqueDirectory(): Promise<AustralianMosqueDirectory> {
+            const response = await fetch(AUSTRALIAN_MOSQUE_DIRECTORY_ASSET_URL, {
+              cache: 'force-cache',
+              credentials: 'same-origin',
+            });
+            if (!response.ok) {
+              throw new Error(
+                `Australian mosque directory asset failed with HTTP ${String(response.status)}`,
+              );
+            }
+            return parseAustralianMosqueDirectory((await response.json()) as unknown);
+          }
+
+          export function loadAustralianMosqueDirectoryAsset(): Promise<AustralianMosqueDirectory> {
+            pendingDirectory ??= fetchAustralianMosqueDirectory().catch((error: unknown) => {
+              pendingDirectory = null;
+              throw error;
+            });
+            return pendingDirectory;
+          }
+          """,
+          )
+
+          write(
+              'src/platform/australianMosqueDirectoryAsset.test.ts',
+              """import rawDirectory from '../../public/data/australian-mosques-combined.json';
+          import { afterEach, describe, expect, it, vi } from 'vitest';
+
+          afterEach(() => {
+            vi.unstubAllGlobals();
+            vi.resetModules();
+          });
+
+          describe('Australian mosque directory asset', () => {
+            it('loads and validates the fixed same-origin offline catalogue', async () => {
+              const fetchMock = vi.fn().mockResolvedValue(
+                new Response(JSON.stringify(rawDirectory), {
+                  status: 200,
+                  headers: { 'content-type': 'application/json' },
+                }),
+              );
+              vi.stubGlobal('fetch', fetchMock);
+              const {
+                AUSTRALIAN_MOSQUE_DIRECTORY_ASSET_URL,
+                loadAustralianMosqueDirectoryAsset,
+              } = await import('./australianMosqueDirectoryAsset');
+
+              const directory = await loadAustralianMosqueDirectoryAsset();
+
+              expect(AUSTRALIAN_MOSQUE_DIRECTORY_ASSET_URL).toBe(
+                '/data/australian-mosques-combined.json',
+              );
+              expect(directory.source.recordCount).toBe(254);
+              expect(directory.records).toHaveLength(254);
+              expect(fetchMock).toHaveBeenCalledWith(AUSTRALIAN_MOSQUE_DIRECTORY_ASSET_URL, {
+                cache: 'force-cache',
+                credentials: 'same-origin',
+              });
+            });
+
+            it('fails closed when the packaged catalogue cannot be read', async () => {
+              vi.stubGlobal('fetch', vi.fn().mockResolvedValue(new Response(null, { status: 503 })));
+              const { loadAustralianMosqueDirectoryAsset } = await import(
+                './australianMosqueDirectoryAsset'
+              );
+
+              await expect(loadAustralianMosqueDirectoryAsset()).rejects.toThrow('HTTP 503');
+            });
+          });
+          """,
+          )
+
+          panel_path = 'src/ui/AustralianMosqueDirectoryPanel.tsx'
+          panel = read(panel_path)
+          panel = replace_exact(
+              panel,
+              """import {
+            australianMosqueDirectory,
+            australianMosques,
+            australianMosqueToProfile,
+            searchAustralianMosques,
+            sortAustralianMosquesByDistance,
+            type AustralianMosqueRecord,
+          } from '../domain/australianMosqueDirectoryCombined';""",
+              """import {
+            australianMosqueToProfile,
+            searchAustralianMosques,
+            sortAustralianMosquesByDistance,
+            type AustralianMosqueDirectory,
+            type AustralianMosqueRecord,
+          } from '../domain/australianMosqueDirectoryCombined';""",
+              'panel domain import',
+          )
+          panel = replace_exact(
+              panel,
+              "import { getApplicationStorage } from '../platform/applicationStorage';",
+              "import { getApplicationStorage } from '../platform/applicationStorage';\nimport { loadAustralianMosqueDirectoryAsset } from '../platform/australianMosqueDirectoryAsset';",
+              'panel asset import',
+          )
+          panel = replace_exact(
+              panel,
+              'const COLLAPSED_RESULT_LIMIT = 24;',
+              "const COLLAPSED_RESULT_LIMIT = 24;\nconst EMPTY_AUSTRALIAN_MOSQUES: readonly AustralianMosqueRecord[] = Object.freeze([]);",
+              'panel empty records',
+          )
+          panel = replace_exact(
+              panel,
+              """  const [library, setLibrary] = useState<MosqueProfileLibraryState>(readMosques);
+            const [query, setQuery] = useState('');""",
+              """  const [library, setLibrary] = useState<MosqueProfileLibraryState>(readMosques);
+            const [directory, setDirectory] = useState<AustralianMosqueDirectory | null>(null);
+            const [directoryLoadFailed, setDirectoryLoadFailed] = useState(false);
+            const [query, setQuery] = useState('');""",
+              'panel state',
+          )
+          panel = replace_exact(
+              panel,
+              """  useEffect(() => {
+              const refresh = () => {""",
+              """  useEffect(() => {
+              let active = true;
+              void loadAustralianMosqueDirectoryAsset()
+                .then((loadedDirectory) => {
+                  if (!active) return;
+                  setDirectory(loadedDirectory);
+                  setDirectoryLoadFailed(false);
+                })
+                .catch(() => {
+                  if (active) setDirectoryLoadFailed(true);
+                });
+              return () => {
+                active = false;
+              };
+            }, []);
+
+            useEffect(() => {
+              const refresh = () => {""",
+              'panel load effect',
+          )
+          panel = replace_exact(
+              panel,
+              '  const matchingMosques = useMemo(() => searchAustralianMosques(australianMosques, query), [query]);',
+              """  const australianMosques = directory?.records ?? EMPTY_AUSTRALIAN_MOSQUES;
+            const matchingMosques = useMemo(
+              () => searchAustralianMosques(australianMosques, query),
+              [australianMosques, query],
+            );""",
+              'panel matching records',
+          )
+          panel = replace_exact(
+              panel,
+              'data-directory-record-count={australianMosqueDirectory.source.recordCount}',
+              'data-directory-record-count={directory?.source.recordCount ?? 0}',
+              'panel record data attribute',
+          )
+          panel = replace_exact(
+              panel,
+              '<strong>{australianMosqueDirectory.source.recordCount}</strong>',
+              "<strong>{directory?.source.recordCount ?? '…'}</strong>",
+              'panel record count',
+          )
+          panel = replace_exact(
+              panel,
+              """      </header>
+
+                <div className=\"australian-mosque-directory__controls\">""",
+              """      </header>
+
+                {directory === null && (
+                  <p className=\"australian-mosque-directory__privacy-note\" role=\"status\">
+                    {directoryLoadFailed ? text.loadError : text.loading}
+                  </p>
+                )}
+
+                <div className=\"australian-mosque-directory__controls\">""",
+              'panel loading status',
+          )
+          panel = replace_exact(
+              panel,
+              """            type=\"search\"
+                    value={query}""",
+              """            type=\"search\"
+                    value={query}
+                    disabled={directory === null}""",
+              'panel search disabled state',
+          )
+          panel = replace_exact(
+              panel,
+              """            aria-pressed={!sortByDistance}
+                    onClick={() => {""",
+              """            aria-pressed={!sortByDistance}
+                    disabled={directory === null}
+                    onClick={() => {""",
+              'panel alphabetical disabled state',
+          )
+          panel = replace_exact(
+              panel,
+              'disabled={savedCoordinates === null}',
+              'disabled={directory === null || savedCoordinates === null}',
+              'panel nearest disabled state',
+          )
+
+          result_pattern = re.compile(
+              r'(?m)^(?P<i>\s*)<p className="australian-mosque-directory__result-count" role="status">\n'
+              r'\s*\{new Intl\.NumberFormat\(localeTag\(locale\)\)\.format\(matchingMosques\.length\)\} \{text\.results\}\n'
+              r'\s*</p>'
+          )
+          match = result_pattern.search(panel)
+          if match is None:
+              raise SystemExit('panel result count block was not found by regex')
+          indent = match.group('i')
+          result_replacement = (
+              f'{indent}{{directory !== null && (\n'
+              f'{indent}  <p className="australian-mosque-directory__result-count" role="status">\n'
+              f'{indent}    {{new Intl.NumberFormat(localeTag(locale)).format(matchingMosques.length)}} {{text.results}}\n'
+              f'{indent}  </p>\n'
+              f'{indent})}}'
+          )
+          panel = result_pattern.sub(result_replacement, panel, count=1)
+          panel = replace_exact(
+              panel,
+              '{visibleMosques.length === 0 ? (',
+              '{directory === null ? null : visibleMosques.length === 0 ? (',
+              'panel result loading branch',
+          )
+          panel = replace_exact(
+              panel,
+              '<footer className="australian-mosque-directory__source">',
+              '{directory !== null && (\n        <footer className="australian-mosque-directory__source">',
+              'panel footer guard',
+          )
+          panel = panel.replace('australianMosqueDirectory.source.', 'directory.source.')
+          panel = replace_exact(
+              panel,
+              """      </footer>
+            </section>""",
+              """        </footer>
+              )}
+            </section>""",
+              'panel footer close',
+          )
+          write(panel_path, panel)
+
+          translations_path = 'src/i18n/australianMosqueDirectoryTranslations.ts'
+          translations = read(translations_path)
+          translations = replace_exact(
+              translations,
+              '  offline: string;\n',
+              '  offline: string;\n  loading: string;\n  loadError: string;\n',
+              'translation type',
+          )
+          for old, new, label in [
+              ("    offline: 'Offline',\n", "    offline: 'Offline',\n    loading: 'Loading the preloaded Australian directory…',\n    loadError: 'The preloaded Australian directory could not be opened on this device.',\n", 'en copy'),
+              ("    offline: 'دون اتصال',\n", "    offline: 'دون اتصال',\n    loading: 'جارٍ تحميل دليل أستراليا المحمّل مسبقاً…',\n    loadError: 'تعذّر فتح دليل أستراليا المحمّل مسبقاً على هذا الجهاز.',\n", 'ar copy'),
+              ("    offline: 'Çevrimdışı',\n", "    offline: 'Çevrimdışı',\n    loading: 'Önceden yüklenmiş Avustralya dizini yükleniyor…',\n    loadError: 'Önceden yüklenmiş Avustralya dizini bu cihazda açılamadı.',\n", 'tr copy'),
+              ("    offline: 'Luring',\n", "    offline: 'Luring',\n    loading: 'Memuat direktori Australia yang telah dimuat sebelumnya…',\n    loadError: 'Direktori Australia yang telah dimuat sebelumnya tidak dapat dibuka di perangkat ini.',\n", 'id copy'),
+          ]:
+              translations = replace_exact(translations, old, new, label)
+          write(translations_path, translations)
+
+          combined_test_path = 'src/domain/australianMosqueDirectoryCombined.test.ts'
+          combined_test = read(combined_test_path)
+          combined_test = replace_exact(
+              combined_test,
+              "import { describe, expect, it } from 'vitest';\n",
+              "import rawDirectory from '../../public/data/australian-mosques-combined.json';\nimport { describe, expect, it } from 'vitest';\n",
+              'combined test fixture import',
+          )
+          combined_test = replace_exact(combined_test, '  australianMosqueDirectory,\n', '', 'combined test directory export')
+          combined_test = replace_exact(combined_test, '  australianMosques,\n', '', 'combined test records export')
+          combined_test = replace_exact(
+              combined_test,
+              '  australianMosqueToProfile,\n',
+              '  australianMosqueToProfile,\n  parseAustralianMosqueDirectory,\n',
+              'combined test parser import',
+          )
+          combined_test = replace_exact(
+              combined_test,
+              "import { createCoordinates } from './coordinates';\n",
+              "import { createCoordinates } from './coordinates';\n\nconst australianMosqueDirectory = parseAustralianMosqueDirectory(rawDirectory);\nconst australianMosques = australianMosqueDirectory.records;\n",
+              'combined test parsed fixture',
+          )
+          write(combined_test_path, combined_test)
+
+          prayer_test_path = 'src/domain/australianMosquePrayerContext.test.ts'
+          prayer_test = read(prayer_test_path)
+          prayer_test = replace_exact(
+              prayer_test,
+              "import { describe, expect, it } from 'vitest';\n",
+              "import rawDirectory from '../../public/data/australian-mosques-combined.json';\nimport { describe, expect, it } from 'vitest';\n",
+              'prayer test fixture import',
+          )
+          prayer_test = replace_exact(
+              prayer_test,
+              """import {
+            australianMosques,
+            type AustralianMosqueRecord,
+          } from './australianMosqueDirectoryCombined';""",
+              """import {
+            parseAustralianMosqueDirectory,
+            type AustralianMosqueRecord,
+          } from './australianMosqueDirectoryCombined';""",
+              'prayer test parser import',
+          )
+          prayer_test = replace_exact(
+              prayer_test,
+              "import { applyPrayerSourceToDashboard } from './sourcedDashboard';\n",
+              "import { applyPrayerSourceToDashboard } from './sourcedDashboard';\n\nconst australianMosques = parseAustralianMosqueDirectory(rawDirectory).records;\n",
+              'prayer test parsed fixture',
+          )
+          write(prayer_test_path, prayer_test)
+
+          path_replacements = {
+              'scripts/generate-mosque-directory-packs.mjs': (
+                  "path.join(root, 'src', 'data', 'australian-mosques-combined.json')",
+                  "path.join(root, 'public', 'data', 'australian-mosques-combined.json')",
+              ),
+              'scripts/generate-australian-mosque-combined.mjs': (
+                  "path.join(root, 'src', 'data', 'australian-mosques-combined.json')",
+                  "path.join(root, 'public', 'data', 'australian-mosques-combined.json')",
+              ),
+              'directory-service/server.mjs': (
+                  "'src/data/australian-mosques-combined.json'",
+                  "'public/data/australian-mosques-combined.json'",
+              ),
+              'directory-service/server.acceptance.mjs': (
+                  "'src/data/australian-mosques-combined.json'",
+                  "'public/data/australian-mosques-combined.json'",
+              ),
+          }
+          for path, (old, new) in path_replacements.items():
+              content = read(path)
+              if old not in content:
+                  raise SystemExit(f'{path}: canonical source path was not found')
+              write(path, content.replace(old, new))
+
+          docs_path = 'docs/AUSTRALIAN_MOSQUE_DIRECTORY.md'
+          docs = read(docs_path)
+          if '`src/data/australian-mosques-combined.json`' not in docs:
+              raise SystemExit('directory docs canonical path was not found')
+          write(docs_path, docs.replace('`src/data/australian-mosques-combined.json`', '`public/data/australian-mosques-combined.json`'))
+
+          sw_path = 'public/sw.js'
+          sw = read(sw_path)
+          sw = replace_exact(
+              sw,
+              "  '/manifest.webmanifest',\n",
+              "  '/manifest.webmanifest',\n  '/data/australian-mosques-combined.json',\n",
+              'service-worker precache',
+          )
+          write(sw_path, sw)
+
+          policy_path = 'scripts/check-remote-network-policy.mjs'
+          policy = read(policy_path)
+          policy = replace_exact(
+              policy,
+              "const reviewedRemoteNetworkFiles = new Map([\n",
+              "const reviewedRemoteNetworkFiles = new Map([\n  [\n    'src/platform/australianMosqueDirectoryAsset.ts',\n    'same-origin packaged Australian mosque directory asset',\n  ],\n",
+              'remote-network review entry',
+          )
+          write(policy_path, policy)
+
+          visual_path = 'scripts/visual-australian-mosque-directory.mjs'
+          visual = read(visual_path)
+          visual = replace_exact(
+              visual,
+              """    await panel.waitFor({ state: 'visible' });
+              assert(
+                (await panel.getAttribute('data-directory-record-count')) ===
+                  String(expectedAustralianMosqueRecords),""",
+              """    await panel.waitFor({ state: 'visible' });
+              await page.waitForFunction(
+                (expectedCount) =>
+                  document
+                    .querySelector('.australian-mosque-directory')
+                    ?.getAttribute('data-directory-record-count') === String(expectedCount),
+                expectedAustralianMosqueRecords,
+              );
+              assert(
+                (await panel.getAttribute('data-directory-record-count')) ===
+                  String(expectedAustralianMosqueRecords),""",
+              'visual async directory readiness',
+          )
+          write(visual_path, visual)
+          PY
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Format changed text sources
+        run: |
+          npx prettier --write \
+            vite.config.ts \
+            src/domain/australianMosqueDirectoryCombined.ts \
+            src/domain/australianMosqueDirectoryCombined.test.ts \
+            src/domain/australianMosquePrayerContext.test.ts \
+            src/platform/australianMosqueDirectoryAsset.ts \
+            src/platform/australianMosqueDirectoryAsset.test.ts \
+            src/ui/AustralianMosqueDirectoryPanel.tsx \
+            src/i18n/australianMosqueDirectoryTranslations.ts \
+            scripts/generate-mosque-directory-packs.mjs \
+            scripts/generate-australian-mosque-combined.mjs \
+            scripts/check-remote-network-policy.mjs \
+            scripts/visual-australian-mosque-directory.mjs \
+            directory-service/server.mjs \
+            directory-service/server.acceptance.mjs \
+            public/sw.js \
+            docs/AUSTRALIAN_MOSQUE_DIRECTORY.md
+
+      - name: Create retained corrective commit
+        shell: bash
+        run: |
+          git config user.name 'privacyOG'
+          git config user.email 'kriptiik@proton.me'
+          git add -A
+          git commit -m 'Externalize Australian mosque catalogue from JavaScript bundle'
+          echo "RETAINED_COMMIT=$(git rev-parse HEAD)"
+          git push origin HEAD:release/bundle-budget-recovery || true
+
+      - name: Validate source gates
+        run: npm run format:check && npm run lint && npm run typecheck && npm run test
+
+      - name: Validate production bundle budget
+        run: npm run build && npm run bundle:size
