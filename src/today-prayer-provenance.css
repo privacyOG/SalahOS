@@ -14,7 +14,7 @@
   gap: var(--salah-space-1) var(--salah-space-2);
   padding: var(--salah-space-2) var(--salah-space-3);
   border: 1px solid var(--salah-border-subtle);
-  border-radius: 999px;
+  border-radius: var(--salah-radius-pill);
   color: var(--salah-fg-secondary);
   background: var(--salah-bg-surface);
   font-size: var(--salah-text-sm);
