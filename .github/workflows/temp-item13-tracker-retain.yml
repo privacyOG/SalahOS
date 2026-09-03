@@ -1,0 +1,61 @@
+name: TEMP retain V1.5.3 Item 13 tracker completion
+
+on:
+  push:
+    branches:
+      - temp/item13-tracker-retain
+
+permissions:
+  contents: write
+
+jobs:
+  retain-tracker:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact post-Item-13 main
+        uses: actions/checkout@v4
+        with:
+          ref: db328a6c35a8561a56dfa3de341e8f9f7df00863
+          fetch-depth: 0
+      - name: Mark Item 13 complete only
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('TEMP_TODO_V1.5.3.md')
+          text = path.read_text(encoding='utf-8')
+          old = """## Work Item 13 — Persistent method/madhhab provenance chip
+
+- [ ] Add a 44px-minimum tappable Today chip such as `MWL · Standard Asr` linked to Settings → Prayer.
+- [ ] Reuse `asrConventionPresentation.ts` and support all four locales.
+- [ ] Indicate manual prayer adjustments in the chip.
+- [ ] Remove duplicated method/Asr lines from the collapsed provenance footer.
+- [ ] Gate: `npm run typecheck && npm run lint && npm run test`.
+"""
+          new = """## Work Item 13 — Persistent method/madhhab provenance chip — COMPLETE
+
+- [x] Add a 44px-minimum tappable Today chip such as `MWL · Standard Asr` linked to Settings → Prayer.
+- [x] Reuse `asrConventionPresentation.ts` and support all four locales.
+- [x] Indicate manual prayer adjustments in the chip.
+- [x] Remove duplicated method/Asr lines from the collapsed provenance footer.
+- [x] Gate: `npm run typecheck && npm run lint && npm run test`.
+"""
+          if text.count(old) != 1:
+              raise SystemExit(f'expected one Item 13 block, found {text.count(old)}')
+          updated = text.replace(old, new, 1)
+          if '## Work Item 14 — Promote Friday Jumu\'ah\n\n- [ ]' not in updated:
+              raise SystemExit('Item 14 was unexpectedly altered')
+          path.write_text(updated, encoding='utf-8')
+          PY
+          git diff --check
+          git diff -- TEMP_TODO_V1.5.3.md
+      - name: Retain tracker commit
+        shell: bash
+        run: |
+          git config user.name 'privacyOG'
+          git config user.email 'kriptiik@proton.me'
+          git add TEMP_TODO_V1.5.3.md
+          git commit -m 'Mark V1.5.3 Item 13 complete'
+          echo "RETAINED_COMMIT=$(git rev-parse HEAD)"
+          git push origin HEAD:v1.5.3/item-13-tracker-reconcile || true
