@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from 'react';
 
 import '../today-contextual-v2.css';
+import '../today-prayer-provenance.css';
 
 import {
   applyAustralianMosqueCongregationTimes,
@@ -46,7 +47,12 @@ import { TodayContextualSections } from './TodayContextualSections';
 import { useMobilePrayerThemeConfig, useMobilePrayerWeather } from './MobilePrayerThemeSurface';
 import { PrayerBoardWeatherModule } from './PrayerBoardWeatherModule';
 import { SalahIcon } from './SalahIcon';
-import { searchForCongregationDestination, type CongregationDestination } from './applicationRoute';
+import {
+  searchForCongregationDestination,
+  searchForSettingsCategory,
+  type CongregationDestination,
+} from './applicationRoute';
+import { todayPrayerProvenancePresentation } from './todayPrayerProvenance';
 
 const prayerTranslationKeys: Readonly<Record<PrayerName, TranslationKey>> = {
   fajr: 'prayerFajr',
@@ -204,6 +210,11 @@ function destinationHref(destination: CongregationDestination): string {
   return `${window.location.pathname}${search}${window.location.hash}`;
 }
 
+function prayerSettingsHref(): string {
+  const search = searchForSettingsCategory(window.location.search, 'prayer');
+  return `${window.location.pathname}${search}${window.location.hash}`;
+}
+
 function localeClockTag(locale: Locale): string {
   switch (locale) {
     case 'ar':
@@ -255,6 +266,12 @@ export function TodayScreen() {
   const locale = settings.locale;
   const contextualCopy = todayContextCopy[locale];
   const uxCopy = stage8TodayCopy[locale];
+  const prayerProvenance = todayPrayerProvenancePresentation({
+    locale,
+    methodId: settings.calculationMethodId,
+    asrConvention: settings.asrConvention,
+    prayerAdjustments: settings.prayerAdjustments,
+  });
   const selectedMosqueDistanceKilometers =
     activeDirectoryMosque !== null && settings.location !== null
       ? greatCircleDistanceKilometers(
@@ -521,6 +538,26 @@ export function TodayScreen() {
               </div>
             </dl>
           </section>
+
+          <div className="today-prayer-provenance">
+            <a
+              className="today-prayer-provenance__chip"
+              href={prayerSettingsHref()}
+              aria-label={prayerProvenance.ariaLabel}
+              data-manual-adjustments={prayerProvenance.hasManualAdjustments ? 'true' : 'false'}
+            >
+              <BidiText>{prayerProvenance.methodLabel}</BidiText>
+              <span aria-hidden="true">·</span>
+              <span>{prayerProvenance.asrLabel}</span>
+              {prayerProvenance.adjustedLabel !== null && (
+                <>
+                  <span aria-hidden="true">·</span>
+                  <span>{prayerProvenance.adjustedLabel}</span>
+                </>
+              )}
+            </a>
+          </div>
+
           <section className="today-local-context" aria-label={uxCopy.localContext}>
             <div
               className="today-location-confidence"
@@ -792,10 +829,6 @@ export function TodayScreen() {
               </nav>
 
               <footer className="today-provenance">
-                <span>
-                  {translate(locale, 'method')}:{' '}
-                  <BidiText>{sourcedDashboard.base.method.name}</BidiText>
-                </span>
                 <span>
                   {translate(locale, 'timezone')}: <BidiText>{prayerBoardData.timeZone}</BidiText>
                 </span>
