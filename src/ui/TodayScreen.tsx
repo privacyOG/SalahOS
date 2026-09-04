@@ -314,7 +314,7 @@ export function TodayScreen() {
     try {
       return resolvePrayerDashboardTimeZone(
         coordinates,
-        timeZoneOverride === null ? undefined : timeZoneOverride,
+        timeZoneOverride ?? undefined,
       );
     } catch {
       return null;
