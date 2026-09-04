@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { createCoordinates } from './coordinates';
-import { buildPrayerDashboard, localClockParts } from './dashboard';
+import {
+  buildPrayerDashboard,
+  buildPrayerDashboardSchedule,
+  derivePrayerDashboard,
+  localClockParts,
+} from './dashboard';
 import { calculationMethods } from './methods';
 
 describe('shared prayer dashboard model', () => {
@@ -85,5 +90,44 @@ describe('shared prayer dashboard model', () => {
       configured.prayers.find((prayer) => prayer.name === 'fajr')?.manualAdjustmentMinutes,
     ).toBe(2);
     expect(configured.hasManualAdjustments).toBe(true);
+  });
+
+  it('derives live current and countdown state from one reusable civil-date schedule', () => {
+    const schedule = buildPrayerDashboardSchedule({
+      civilDate: new Date('2026-08-16T00:00:00.000Z'),
+      coordinates: sydney,
+      timeZone: 'Australia/Sydney',
+    });
+    const first = derivePrayerDashboard(schedule, new Date('2026-08-16T00:00:00.000Z'));
+    const tenMinutesLater = derivePrayerDashboard(
+      schedule,
+      new Date('2026-08-16T00:10:00.000Z'),
+    );
+
+    expect(first.today).toBe(schedule.today);
+    expect(first.tomorrow).toBe(schedule.tomorrow);
+    expect(tenMinutesLater.today).toBe(schedule.today);
+    expect(tenMinutesLater.tomorrow).toBe(schedule.tomorrow);
+    expect(tenMinutesLater.nextPrayer).toBe(first.nextPrayer);
+    expect(first.secondsUntilNextPrayer).not.toBeNull();
+    expect(tenMinutesLater.secondsUntilNextPrayer).not.toBeNull();
+    if (
+      first.secondsUntilNextPrayer !== null &&
+      tenMinutesLater.secondsUntilNextPrayer !== null
+    ) {
+      expect(first.secondsUntilNextPrayer - tenMinutesLater.secondsUntilNextPrayer).toBe(600);
+    }
+  });
+
+  it('rejects live derivation after the schedule civil date boundary', () => {
+    const schedule = buildPrayerDashboardSchedule({
+      civilDate: new Date('2026-08-16T00:00:00.000Z'),
+      coordinates: sydney,
+      timeZone: 'Australia/Sydney',
+    });
+
+    expect(() => derivePrayerDashboard(schedule, new Date('2026-08-16T14:00:00.000Z'))).toThrow(
+      /civil date/u,
+    );
   });
 });
