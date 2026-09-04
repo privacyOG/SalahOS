@@ -813,15 +813,13 @@ export function TodayScreen() {
                 </section>
               )}
 
-              {modules.jumuah &&
-                !promoteFridayJumuah &&
-                todayJumuahSessions.length > 0 && (
-                  <TodayJumuahSection
-                    sessions={todayJumuahSessions}
-                    locale={locale}
-                    timeFormat={settings.timeFormat}
-                  />
-                )}
+              {modules.jumuah && !promoteFridayJumuah && todayJumuahSessions.length > 0 && (
+                <TodayJumuahSection
+                  sessions={todayJumuahSessions}
+                  locale={locale}
+                  timeFormat={settings.timeFormat}
+                />
+              )}
 
               <nav className="today-quick-actions" aria-label={translate(locale, 'today')}>
                 <a href={destinationHref('qiblah')}>{quickLabels.qiblah}</a>

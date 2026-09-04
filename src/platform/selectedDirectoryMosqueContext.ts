@@ -61,7 +61,9 @@ function parseJumuahTimes(value: unknown): readonly MosqueDirectoryJumuahTime[] 
   return Object.freeze(
     value.map((entry, index) => {
       if (!isRecord(entry)) {
-        throw new TypeError(`Selected directory mosque Jumuah time ${String(index + 1)} is invalid`);
+        throw new TypeError(
+          `Selected directory mosque Jumuah time ${String(index + 1)} is invalid`,
+        );
       }
       const time = normalizedString(entry.time, 'Selected directory mosque Jumuah time');
       const label = optionalString(entry, 'label');

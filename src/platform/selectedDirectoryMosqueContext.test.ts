@@ -33,10 +33,7 @@ describe('selected Australian directory mosque context', () => {
         dhuhr: '12:15 pm / 1:15 pm',
         sourceLabel: 'Australian Mosque Finder',
       },
-      jumuahTimes: [
-        { time: '1:15 pm', label: "Jumu'ah 1" },
-        { time: '2:00 pm' },
-      ],
+      jumuahTimes: [{ time: '1:15 pm', label: "Jumu'ah 1" }, { time: '2:00 pm' }],
     });
 
     const raw = storage.getItem(SELECTED_DIRECTORY_MOSQUE_CONTEXT_STORAGE_KEY);
@@ -53,10 +50,7 @@ describe('selected Australian directory mosque context', () => {
         dhuhr: '12:15 pm / 1:15 pm',
         sourceLabel: 'Australian Mosque Finder',
       },
-      jumuahTimes: [
-        { time: '1:15 pm', label: "Jumu'ah 1" },
-        { time: '2:00 pm' },
-      ],
+      jumuahTimes: [{ time: '1:15 pm', label: "Jumu'ah 1" }, { time: '2:00 pm' }],
     });
   });
 
