@@ -1,0 +1,40 @@
+name: TEMP Item 15 format
+
+on:
+  push:
+    branches:
+      - temp/item15-format
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact Item 15 head
+        uses: actions/checkout@v4
+        with:
+          ref: d3783b21d3ff29e75678bcca965d0deb9eac8b19
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies without audit network call
+        run: npm ci --ignore-scripts --no-audit
+      - name: Format only reported Item 15 files
+        run: |
+          npx prettier --write src/platform/selectedDirectoryMosqueContext.ts src/platform/selectedDirectoryMosqueContext.test.ts src/ui/TodayScreen.tsx
+          git diff --check
+          git diff -- src/platform/selectedDirectoryMosqueContext.ts src/platform/selectedDirectoryMosqueContext.test.ts src/ui/TodayScreen.tsx
+      - name: Retain formatted Item 15 commit
+        shell: bash
+        run: |
+          git config user.name 'privacyOG'
+          git config user.email 'kriptiik@proton.me'
+          git add src/platform/selectedDirectoryMosqueContext.ts src/platform/selectedDirectoryMosqueContext.test.ts src/ui/TodayScreen.tsx
+          git commit -m 'Format Item 15 directory Jumuah files'
+          echo "RETAINED_COMMIT=$(git rev-parse HEAD)"
+          git push origin HEAD:refs/heads/v1.5.3/item-15-directory-jumuah || true
