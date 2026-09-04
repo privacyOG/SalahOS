@@ -1,0 +1,72 @@
+name: TEMP Item 14 Today patch
+
+on:
+  push:
+    branches:
+      - temp/item14-today-patch
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact Item 14 head
+        uses: actions/checkout@v4
+        with:
+          ref: 03a29f60d4b95ef187fbc3eebb3df02abb19d832
+          fetch-depth: 0
+      - name: Promote Friday Jumuah in Today
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('src/ui/TodayScreen.tsx')
+          text = path.read_text(encoding='utf-8')
+
+          old = "import { buildPrayerDashboardResult } from '../domain/dashboardResult';\nimport { displayedHighLatitudeRuleApplied } from '../domain/highLatitudeIndicators';"
+          new = "import { buildPrayerDashboardResult } from '../domain/dashboardResult';\nimport { shouldPromoteFridayJumuah } from '../domain/fridayJumuahPromotion';\nimport { displayedHighLatitudeRuleApplied } from '../domain/highLatitudeIndicators';"
+          if text.count(old) != 1:
+              raise SystemExit('unexpected domain import anchor')
+          text = text.replace(old, new, 1)
+
+          old = "import { TodayContextualSections } from './TodayContextualSections';\nimport { useMobilePrayerThemeConfig, useMobilePrayerWeather } from './MobilePrayerThemeSurface';"
+          new = "import { TodayContextualSections } from './TodayContextualSections';\nimport { TodayJumuahSection } from './TodayJumuahSection';\nimport { useMobilePrayerThemeConfig, useMobilePrayerWeather } from './MobilePrayerThemeSurface';"
+          if text.count(old) != 1:
+              raise SystemExit('unexpected Today component import anchor')
+          text = text.replace(old, new, 1)
+
+          old = "    [online, sourcedDashboard],\n  );\n\n  const currentClock ="
+          new = "    [online, sourcedDashboard],\n  );\n  const promoteFridayJumuah =\n    prayerBoardData !== null &&\n    modules.jumuah &&\n    shouldPromoteFridayJumuah({\n      civilDateIso: prayerBoardData.civilDateIso,\n      jumuahSessions: prayerBoardData.jumuahSessions,\n    });\n\n  const currentClock ="
+          if text.count(old) != 1:
+              raise SystemExit('unexpected prayer-board data anchor')
+          text = text.replace(old, new, 1)
+
+          old = '          </section>\n\n          <div className="today-prayer-provenance">'
+          new = '''          </section>\n\n          {promoteFridayJumuah && (\n            <TodayJumuahSection\n              sessions={prayerBoardData.jumuahSessions}\n              locale={locale}\n              timeFormat={settings.timeFormat}\n              promoted\n            />\n          )}\n\n          <div className="today-prayer-provenance">'''
+          if text.count(old) != 1:
+              raise SystemExit(f'unexpected hero anchor count: {text.count(old)}')
+          text = text.replace(old, new, 1)
+
+          start_marker = '              {modules.jumuah && prayerBoardData.jumuahSessions.length > 0 && ('
+          end_marker = '\n\n              <nav className="today-quick-actions"'
+          start = text.index(start_marker)
+          end = text.index(end_marker, start)
+          replacement = '''              {modules.jumuah &&\n                !promoteFridayJumuah &&\n                prayerBoardData.jumuahSessions.length > 0 && (\n                  <TodayJumuahSection\n                    sessions={prayerBoardData.jumuahSessions}\n                    locale={locale}\n                    timeFormat={settings.timeFormat}\n                  />\n                )}'''
+          text = text[:start] + replacement + text[end:]
+
+          path.write_text(text, encoding='utf-8')
+          PY
+          git diff --check
+          git diff -- src/ui/TodayScreen.tsx
+      - name: Retain Item 14 Today commit
+        shell: bash
+        run: |
+          git config user.name 'privacyOG'
+          git config user.email 'kriptiik@proton.me'
+          git add src/ui/TodayScreen.tsx
+          git commit -m 'Promote Friday Jumuah on Today'
+          echo "RETAINED_COMMIT=$(git rev-parse HEAD)"
+          git push origin HEAD:refs/heads/v1.5.3/item-14-friday-jumuah || true
