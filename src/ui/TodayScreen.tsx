@@ -8,6 +8,7 @@ import {
   publishedAustralianMosqueCongregationMinutes,
 } from '../domain/australianMosquePrayerContext';
 import { buildPrayerDashboardResult } from '../domain/dashboardResult';
+import { shouldPromoteFridayJumuah } from '../domain/fridayJumuahPromotion';
 import { displayedHighLatitudeRuleApplied } from '../domain/highLatitudeIndicators';
 import {
   greatCircleDistanceKilometers,
@@ -44,6 +45,7 @@ import {
 import { readSystemTime } from '../platform/systemTime';
 import { BidiText } from './BidiText';
 import { TodayContextualSections } from './TodayContextualSections';
+import { TodayJumuahSection } from './TodayJumuahSection';
 import { useMobilePrayerThemeConfig, useMobilePrayerWeather } from './MobilePrayerThemeSurface';
 import { PrayerBoardWeatherModule } from './PrayerBoardWeatherModule';
 import { SalahIcon } from './SalahIcon';
@@ -363,6 +365,13 @@ export function TodayScreen() {
           }),
     [online, sourcedDashboard],
   );
+  const promoteFridayJumuah =
+    prayerBoardData !== null &&
+    modules.jumuah &&
+    shouldPromoteFridayJumuah({
+      civilDateIso: prayerBoardData.civilDateIso,
+      jumuahSessions: prayerBoardData.jumuahSessions,
+    });
 
   const currentClock =
     now === null
@@ -538,6 +547,15 @@ export function TodayScreen() {
               </div>
             </dl>
           </section>
+
+          {promoteFridayJumuah && (
+            <TodayJumuahSection
+              sessions={prayerBoardData.jumuahSessions}
+              locale={locale}
+              timeFormat={settings.timeFormat}
+              promoted
+            />
+          )}
 
           <div className="today-prayer-provenance">
             <a
@@ -790,37 +808,15 @@ export function TodayScreen() {
                 </section>
               )}
 
-              {modules.jumuah && prayerBoardData.jumuahSessions.length > 0 && (
-                <section className="today-jumuah" aria-labelledby="today-jumuah-title">
-                  <div className="today-section-heading">
-                    <div>
-                      <p>{translate(locale, 'today')}</p>
-                      <h2 id="today-jumuah-title">{translate(locale, 'jumuah')}</h2>
-                    </div>
-                  </div>
-                  <div className="today-jumuah__sessions">
-                    {prayerBoardData.jumuahSessions.map((session) => (
-                      <div key={session.label}>
-                        <strong>
-                          <BidiText>{session.label}</BidiText>
-                        </strong>
-                        <span>
-                          {translate(locale, 'khutbah')} ·{' '}
-                          {formatLocalTime(
-                            session.khutbahLocalMinutes,
-                            locale,
-                            settings.timeFormat,
-                          )}
-                        </span>
-                        <span>
-                          {translate(locale, 'salah')} ·{' '}
-                          {formatLocalTime(session.salahLocalMinutes, locale, settings.timeFormat)}
-                        </span>
-                      </div>
-                    ))}
-                  </div>
-                </section>
-              )}
+              {modules.jumuah &&
+                !promoteFridayJumuah &&
+                prayerBoardData.jumuahSessions.length > 0 && (
+                  <TodayJumuahSection
+                    sessions={prayerBoardData.jumuahSessions}
+                    locale={locale}
+                    timeFormat={settings.timeFormat}
+                  />
+                )}
 
               <nav className="today-quick-actions" aria-label={translate(locale, 'today')}>
                 <a href={destinationHref('qiblah')}>{quickLabels.qiblah}</a>
