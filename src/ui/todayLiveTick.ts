@@ -35,7 +35,10 @@ export function countdownTargetEpochMilliseconds(
   return generatedAt.getTime() + Math.max(0, secondsUntilNextPrayer) * 1_000;
 }
 
-export function remainingCountdownSeconds(targetEpochMilliseconds: number | null, now: Date): number | null {
+export function remainingCountdownSeconds(
+  targetEpochMilliseconds: number | null,
+  now: Date,
+): number | null {
   if (targetEpochMilliseconds === null || !Number.isFinite(now.getTime())) return null;
   return Math.max(0, Math.ceil((targetEpochMilliseconds - now.getTime()) / 1_000));
 }

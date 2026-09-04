@@ -54,14 +54,8 @@ describe('buildPrayerDashboardResult', () => {
     });
 
     expect(scheduleResult.ok).toBe(true);
-    const first = derivePrayerDashboardResult(
-      scheduleResult,
-      new Date('2026-08-16T00:00:00.000Z'),
-    );
-    const later = derivePrayerDashboardResult(
-      scheduleResult,
-      new Date('2026-08-16T00:10:00.000Z'),
-    );
+    const first = derivePrayerDashboardResult(scheduleResult, new Date('2026-08-16T00:00:00.000Z'));
+    const later = derivePrayerDashboardResult(scheduleResult, new Date('2026-08-16T00:10:00.000Z'));
 
     expect(first.ok).toBe(true);
     expect(later.ok).toBe(true);

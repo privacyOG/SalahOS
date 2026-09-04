@@ -310,25 +310,23 @@ export function TodayScreen() {
   }, []);
 
   const resolvedPrayerTimeZone = useMemo(() => {
-  if (coordinates === null) return null;
-  try {
-    return resolvePrayerDashboardTimeZone(
-      coordinates,
-      timeZoneOverride === null ? undefined : timeZoneOverride,
-    );
-  } catch {
-    return null;
-  }
-}, [coordinates, timeZoneOverride]);
+    if (coordinates === null) return null;
+    try {
+      return resolvePrayerDashboardTimeZone(
+        coordinates,
+        timeZoneOverride === null ? undefined : timeZoneOverride,
+      );
+    } catch {
+      return null;
+    }
+  }, [coordinates, timeZoneOverride]);
   const scheduleCivilDateIso =
     now === null || resolvedPrayerTimeZone === null
       ? null
       : todayPrayerCivilDateIso(now, resolvedPrayerTimeZone);
   const scheduleCivilDate = useMemo(
     () =>
-      scheduleCivilDateIso === null
-        ? null
-        : new Date(`${scheduleCivilDateIso}T00:00:00.000Z`),
+      scheduleCivilDateIso === null ? null : new Date(`${scheduleCivilDateIso}T00:00:00.000Z`),
     [scheduleCivilDateIso],
   );
   const scheduleResult = useMemo(
@@ -502,11 +500,11 @@ export function TodayScreen() {
         </div>
         <div className="today-appbar__meta">
           <TodayAppBarClock
-          locale={locale}
-          timeFormat={settings.timeFormat}
-          timeZone={prayerBoardData?.timeZone ?? resolvedPrayerTimeZone}
-          ariaLabel={translate(locale, 'currentTime')}
-        />
+            locale={locale}
+            timeFormat={settings.timeFormat}
+            timeZone={prayerBoardData?.timeZone ?? resolvedPrayerTimeZone}
+            ariaLabel={translate(locale, 'currentTime')}
+          />
           <a href={destinationHref('settings')} aria-label={translate(locale, 'language')}>
             {locale.toUpperCase()}
           </a>
@@ -550,11 +548,11 @@ export function TodayScreen() {
             <div className="today-next__countdown">
               <span>{translate(locale, 'countdown')}</span>
               <TodayCountdown
-              generatedAt={sourcedDashboard.base.generatedAt}
-              secondsUntilNextPrayer={prayerBoardData.nextPrayer?.secondsUntil ?? null}
-              locale={locale}
-              onElapsed={refreshNow}
-            />
+                generatedAt={sourcedDashboard.base.generatedAt}
+                secondsUntilNextPrayer={prayerBoardData.nextPrayer?.secondsUntil ?? null}
+                locale={locale}
+                onElapsed={refreshNow}
+              />
             </div>
             <dl className="today-next__times">
               <div>

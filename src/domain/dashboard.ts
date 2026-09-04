@@ -285,8 +285,7 @@ export function derivePrayerDashboard(
     nextPrayer: next?.prayer ?? null,
     nextPrayerDayOffset: next?.dayOffset ?? null,
     nextPrayerLocalMinutes: next?.localMinutes ?? null,
-    secondsUntilNextPrayer:
-      next === null ? null : Math.max(0, Math.round(next.minutesUntil * 60)),
+    secondsUntilNextPrayer: next === null ? null : Math.max(0, Math.round(next.minutesUntil * 60)),
     hasHighLatitudeFallback: schedule.hasHighLatitudeFallback,
     hasManualAdjustments: schedule.hasManualAdjustments,
   };
@@ -301,9 +300,7 @@ export function buildPrayerDashboard(input: PrayerDashboardInput): PrayerDashboa
     timeZone,
     ...(input.method === undefined ? {} : { method: input.method }),
     ...(input.asrConvention === undefined ? {} : { asrConvention: input.asrConvention }),
-    ...(input.highLatitudeRule === undefined
-      ? {}
-      : { highLatitudeRule: input.highLatitudeRule }),
+    ...(input.highLatitudeRule === undefined ? {} : { highLatitudeRule: input.highLatitudeRule }),
     ...(input.adjustments === undefined ? {} : { adjustments: input.adjustments }),
     ...(input.hijriCorrectionDays === undefined
       ? {}
