@@ -10,6 +10,7 @@ import {
   guardedPublishedAustralianMosqueCongregationMinutes,
   hasPublishedAustralianMosqueCongregationTimes,
   publishedAustralianMosqueCongregationMinutes,
+  publishedAustralianMosqueJumuahSessions,
 } from './australianMosquePrayerContext';
 import { createCoordinates } from './coordinates';
 import { buildPrayerDashboard } from './dashboard';
@@ -123,5 +124,32 @@ describe('Australian mosque published congregation times', () => {
       source: 'calculated',
     });
     expect(enriched.prayers.find((row) => row.name === 'fajr')?.iqamahLocalMinutes).toBeNull();
+  });
+});
+
+describe('Australian directory Jumuah presentation mapping', () => {
+  it('maps 12-hour and 24-hour published Salah times while leaving khutbah explicitly unknown', () => {
+    expect(
+      publishedAustralianMosqueJumuahSessions([
+        { time: '1:00 pm', label: 'Jumu’ah' },
+        { time: '14:15' },
+      ]),
+    ).toEqual([
+      { label: 'Jumu’ah', khutbahLocalMinutes: null, salahLocalMinutes: 13 * 60 },
+      { label: null, khutbahLocalMinutes: null, salahLocalMinutes: 14 * 60 + 15 },
+    ]);
+  });
+
+  it('preserves every valid configured session in order and skips only invalid clock values', () => {
+    expect(
+      publishedAustralianMosqueJumuahSessions([
+        { time: '12:30 pm', label: ' First   Jumuah ' },
+        { time: 'not-a-time', label: 'Invalid' },
+        { time: '12:30 pm', label: 'Second session' },
+      ]),
+    ).toEqual([
+      { label: 'First Jumuah', khutbahLocalMinutes: null, salahLocalMinutes: 12 * 60 + 30 },
+      { label: 'Second session', khutbahLocalMinutes: null, salahLocalMinutes: 12 * 60 + 30 },
+    ]);
   });
 });
