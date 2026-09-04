@@ -1,0 +1,50 @@
+name: TEMP retain Item 15 tracker
+
+on:
+  push:
+    branches:
+      - temp/item15-tracker-retain
+
+permissions:
+  contents: write
+
+jobs:
+  retain:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact post-Item-15 main
+        uses: actions/checkout@v4
+        with:
+          ref: b2aa8f3b21c8f153a596c8009a161e5061653379
+          fetch-depth: 0
+      - name: Mark only Item 15 complete
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('TEMP_TODO_V1.5.3.md')
+          text = path.read_text(encoding='utf-8')
+          start = text.index("## Work Item 15 — Ship directory Jumu'ah times")
+          end = text.index('## Work Item 16 —', start)
+          block = text[start:end]
+          if block.count('- [ ]') != 5:
+              raise SystemExit(f'Item 15 expected 5 unchecked boxes, found {block.count("- [ ]")}')
+          block = block.replace(
+              "## Work Item 15 — Ship directory Jumu'ah times",
+              "## Work Item 15 — Ship directory Jumu'ah times — COMPLETE",
+              1,
+          ).replace('- [ ]', '- [x]')
+          path.write_text(text[:start] + block + text[end:], encoding='utf-8')
+          PY
+          git diff --check
+          git diff -- TEMP_TODO_V1.5.3.md
+      - name: Retain tracker commit
+        shell: bash
+        run: |
+          git config user.name 'privacyOG'
+          git config user.email 'kriptiik@proton.me'
+          git add TEMP_TODO_V1.5.3.md
+          git commit -m 'Mark V1.5.3 Item 15 complete'
+          echo "RETAINED_COMMIT=$(git rev-parse HEAD)"
+          git push origin HEAD:refs/heads/v1.5.3/item-15-tracker-reconcile || true
