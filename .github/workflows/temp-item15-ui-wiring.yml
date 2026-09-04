@@ -1,0 +1,71 @@
+name: TEMP Item 15 UI wiring
+
+on:
+  push:
+    branches:
+      - temp/item15-ui-wiring
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact Item 15 head
+        uses: actions/checkout@v4
+        with:
+          ref: 63b27a8343b60608f683d5e1e442cfe68da0c0c8
+          fetch-depth: 0
+      - name: Persist and present directory Jumuah
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          panel = Path('src/ui/AustralianMosqueDirectoryPanel.tsx')
+          panel_text = panel.read_text(encoding='utf-8')
+          old = "      prayerTimes: mosque.enriched.prayerTimes,\n    });"
+          new = "      prayerTimes: mosque.enriched.prayerTimes,\n      jumuahTimes: mosque.enriched.jumuahTimes,\n    });"
+          if panel_text.count(old) != 1:
+              raise SystemExit(f'unexpected directory persistence anchor count: {panel_text.count(old)}')
+          panel.write_text(panel_text.replace(old, new, 1), encoding='utf-8')
+
+          today = Path('src/ui/TodayScreen.tsx')
+          text = today.read_text(encoding='utf-8')
+
+          old = "  applyAustralianMosqueCongregationTimes,\n  publishedAustralianMosqueCongregationMinutes,\n} from '../domain/australianMosquePrayerContext';"
+          new = "  applyAustralianMosqueCongregationTimes,\n  publishedAustralianMosqueCongregationMinutes,\n  publishedAustralianMosqueJumuahSessions,\n} from '../domain/australianMosquePrayerContext';"
+          if text.count(old) != 1:
+              raise SystemExit('unexpected Australian mosque prayer-context import anchor')
+          text = text.replace(old, new, 1)
+
+          old = "    [online, sourcedDashboard],\n  );\n  const promoteFridayJumuah =\n    prayerBoardData !== null &&\n    modules.jumuah &&\n    shouldPromoteFridayJumuah({\n      civilDateIso: prayerBoardData.civilDateIso,\n      jumuahSessions: prayerBoardData.jumuahSessions,\n    });"
+          new = "    [online, sourcedDashboard],\n  );\n  const todayJumuahSessions =\n    activeDirectoryMosque === null\n      ? (prayerBoardData?.jumuahSessions ?? [])\n      : publishedAustralianMosqueJumuahSessions(activeDirectoryMosque.jumuahTimes);\n  const promoteFridayJumuah =\n    prayerBoardData !== null &&\n    modules.jumuah &&\n    shouldPromoteFridayJumuah({\n      civilDateIso: prayerBoardData.civilDateIso,\n      jumuahSessions: todayJumuahSessions,\n    });"
+          if text.count(old) != 1:
+              raise SystemExit('unexpected Today Jumuah derivation anchor')
+          text = text.replace(old, new, 1)
+
+          if text.count('sessions={prayerBoardData.jumuahSessions}') != 2:
+              raise SystemExit('expected exactly two Today Jumuah session render anchors')
+          text = text.replace('sessions={prayerBoardData.jumuahSessions}', 'sessions={todayJumuahSessions}')
+
+          old = "                prayerBoardData.jumuahSessions.length > 0 && ("
+          new = "                todayJumuahSessions.length > 0 && ("
+          if text.count(old) != 1:
+              raise SystemExit('unexpected collapsed Jumuah length anchor')
+          text = text.replace(old, new, 1)
+
+          today.write_text(text, encoding='utf-8')
+          PY
+          git diff --check
+          git diff -- src/ui/AustralianMosqueDirectoryPanel.tsx src/ui/TodayScreen.tsx
+      - name: Retain Item 15 UI wiring commit
+        shell: bash
+        run: |
+          git config user.name 'privacyOG'
+          git config user.email 'kriptiik@proton.me'
+          git add src/ui/AustralianMosqueDirectoryPanel.tsx src/ui/TodayScreen.tsx
+          git commit -m 'Wire directory Jumuah into Today'
+          echo "RETAINED_COMMIT=$(git rev-parse HEAD)"
+          git push origin HEAD:refs/heads/v1.5.3/item-15-directory-jumuah || true
