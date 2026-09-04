@@ -1,0 +1,197 @@
+name: TEMP Item 16 Today runtime v2
+
+on:
+  push:
+    branches:
+      - temp/item16-today-patch-v2
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact Item 16 head
+        uses: actions/checkout@v4
+        with:
+          ref: b92dc3a52676ccab0f91c15357f9592fd05e1a31
+          fetch-depth: 0
+
+      - name: Wire civil-date schedule and leaf live ticks
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('src/ui/TodayScreen.tsx')
+          text = path.read_text(encoding='utf-8')
+
+          replacements = [
+              (
+                  "import { useEffect, useMemo, useState } from 'react';",
+                  "import { useCallback, useEffect, useMemo, useState } from 'react';",
+              ),
+              (
+                  "import { buildPrayerDashboardResult } from '../domain/dashboardResult';",
+                  "import { resolvePrayerDashboardTimeZone } from '../domain/dashboard';\nimport {\n  buildPrayerDashboardScheduleResult,\n  derivePrayerDashboardResult,\n} from '../domain/dashboardResult';",
+              ),
+              (
+                  "  formatCountdown,\n  formatGregorianCivilDate,",
+                  "  formatGregorianCivilDate,",
+              ),
+              (
+                  "import { TodayJumuahSection } from './TodayJumuahSection';",
+                  "import { TodayJumuahSection } from './TodayJumuahSection';\nimport { TodayAppBarClock, TodayCountdown } from './TodayLiveTick';",
+              ),
+              (
+                  "import { todayPrayerProvenancePresentation } from './todayPrayerProvenance';",
+                  "import { todayPrayerProvenancePresentation } from './todayPrayerProvenance';\nimport { millisecondsUntilNextMinute, todayPrayerCivilDateIso } from './todayLiveTick';",
+              ),
+          ]
+          for old, new in replacements:
+              if text.count(old) != 1:
+                  raise SystemExit(f'unexpected Today import anchor count for {old!r}: {text.count(old)}')
+              text = text.replace(old, new, 1)
+
+          start = text.index('function localeClockTag')
+          end = text.index('function prayerBoardCivilDate', start)
+          text = text[:start] + text[end:]
+
+          start = text.index('  const [now, setNow] = useState<Date | null>(() => readSystemTime());')
+          end = text.index('  useEffect(() => {\n    const markOnline', start)
+          new_timer = """  const [now, setNow] = useState<Date | null>(() => readSystemTime());
+            const [online, setOnline] = useState(() => navigator.onLine);
+            const refreshNow = useCallback(() => {
+              setNow(readSystemTime());
+            }, []);
+
+            useEffect(() => {
+              const current = readSystemTime();
+              const delay = current === null ? 60_000 : millisecondsUntilNextMinute(current);
+              let minuteTimer: number | null = null;
+              const boundaryTimer = window.setTimeout(() => {
+                refreshNow();
+                minuteTimer = window.setInterval(refreshNow, 60_000);
+              }, delay);
+              const removeRuntimeListeners = installRuntimeRefreshListeners(
+                { windowTarget: window, documentTarget: document },
+                refreshNow,
+              );
+              return () => {
+                window.clearTimeout(boundaryTimer);
+                if (minuteTimer !== null) window.clearInterval(minuteTimer);
+                removeRuntimeListeners();
+              };
+            }, [refreshNow]);
+
+          """
+          text = text[:start] + new_timer + text[end:]
+
+          start = text.index('  const dashboardResult = useMemo(')
+          end = text.index('  const dashboard =', start)
+          new_dashboard = """  const resolvedPrayerTimeZone = useMemo(() => {
+            if (coordinates === null) return null;
+            try {
+              return resolvePrayerDashboardTimeZone(
+                coordinates,
+                timeZoneOverride === null ? undefined : timeZoneOverride,
+              );
+            } catch {
+              return null;
+            }
+          }, [coordinates, timeZoneOverride]);
+            const scheduleCivilDateIso =
+              now === null || resolvedPrayerTimeZone === null
+                ? null
+                : todayPrayerCivilDateIso(now, resolvedPrayerTimeZone);
+            const scheduleCivilDate = useMemo(
+              () =>
+                scheduleCivilDateIso === null
+                  ? null
+                  : new Date(`${scheduleCivilDateIso}T00:00:00.000Z`),
+              [scheduleCivilDateIso],
+            );
+            const scheduleResult = useMemo(
+              () =>
+                coordinates === null
+                  ? null
+                  : resolvedPrayerTimeZone === null || scheduleCivilDate === null
+                    ? ({ ok: false, reason: 'calculation-unavailable' } as const)
+                    : buildPrayerDashboardScheduleResult({
+                        civilDate: scheduleCivilDate,
+                        coordinates,
+                        timeZone: resolvedPrayerTimeZone,
+                        method: calculationMethods[settings.calculationMethodId],
+                        asrConvention: settings.asrConvention,
+                        highLatitudeRule: settings.highLatitudeRule,
+                        adjustments: settings.prayerAdjustments,
+                        hijriCorrectionDays: settings.hijriCorrectionDays,
+                      }),
+              [
+                coordinates,
+                resolvedPrayerTimeZone,
+                scheduleCivilDate,
+                settings.asrConvention,
+                settings.calculationMethodId,
+                settings.highLatitudeRule,
+                settings.hijriCorrectionDays,
+                settings.prayerAdjustments,
+              ],
+            );
+            const dashboardResult = useMemo(
+              () =>
+                scheduleResult === null || now === null
+                  ? null
+                  : derivePrayerDashboardResult(scheduleResult, now),
+              [now, scheduleResult],
+            );
+          """
+          text = text[:start] + new_dashboard + text[end:]
+
+          start = text.index('  const currentClock =')
+          end = text.index('  const nextPrayerLabel =', start)
+          text = text[:start] + text[end:]
+
+          old = """          <span className=\"today-appbar__clock\" aria-label={translate(locale, 'currentTime')}>
+                    {currentClock}
+                  </span>"""
+          new = """          <TodayAppBarClock
+                    locale={locale}
+                    timeFormat={settings.timeFormat}
+                    timeZone={prayerBoardData?.timeZone ?? resolvedPrayerTimeZone}
+                    ariaLabel={translate(locale, 'currentTime')}
+                  />"""
+          if text.count(old) != 1:
+              raise SystemExit(f'unexpected app-bar clock render count: {text.count(old)}')
+          text = text.replace(old, new, 1)
+
+          old = """              <strong>
+                        {prayerBoardData.nextPrayer === null
+                          ? '—'
+                          : formatCountdown(prayerBoardData.nextPrayer.secondsUntil, locale)}
+                      </strong>"""
+          new = """              <TodayCountdown
+                        generatedAt={sourcedDashboard.base.generatedAt}
+                        secondsUntilNextPrayer={prayerBoardData.nextPrayer?.secondsUntil ?? null}
+                        locale={locale}
+                        onElapsed={refreshNow}
+                      />"""
+          if text.count(old) != 1:
+              raise SystemExit(f'unexpected countdown render count: {text.count(old)}')
+          text = text.replace(old, new, 1)
+
+          path.write_text(text, encoding='utf-8')
+          PY
+          git diff --check
+          git diff -- src/ui/TodayScreen.tsx
+
+      - name: Retain Item 16 Today commit
+        shell: bash
+        run: |
+          git config user.name 'privacyOG'
+          git config user.email 'kriptiik@proton.me'
+          git add src/ui/TodayScreen.tsx
+          git commit -m 'Memoize Today astronomy by civil date'
+          echo "RETAINED_COMMIT=$(git rev-parse HEAD)"
+          git push origin HEAD:refs/heads/v1.5.3/item-16-dashboard-performance || true
