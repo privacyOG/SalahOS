@@ -1,0 +1,43 @@
+name: TEMP Item 16 format after lint
+
+on:
+  push:
+    branches:
+      - temp/item16-format-after-lint
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact Item 16 head
+        uses: actions/checkout@v4
+        with:
+          ref: f4d8d61b234b35417fb43cd6b7b958365e124878
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies without audit network call
+        run: npm ci --ignore-scripts --no-audit
+      - name: Format Today screen
+        run: |
+          npx prettier --write src/ui/TodayScreen.tsx
+          git diff --check
+          git diff -- src/ui/TodayScreen.tsx
+      - name: Retain formatted commit
+        run: |
+          git config user.name 'privacyOG'
+          git config user.email 'kriptiik@proton.me'
+          git add src/ui/TodayScreen.tsx
+          if git diff --cached --quiet; then
+            echo "RETAINED_COMMIT=$(git rev-parse HEAD)"
+          else
+            git commit -m 'Format Item 16 lint fix'
+            echo "RETAINED_COMMIT=$(git rev-parse HEAD)"
+          fi
+          git push origin HEAD:refs/heads/v1.5.3/item-16-dashboard-performance || true
