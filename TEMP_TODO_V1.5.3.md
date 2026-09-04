@@ -145,13 +145,13 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - [x] Remove duplicated method/Asr lines from the collapsed provenance footer.
 - [x] Gate: `npm run typecheck && npm run lint && npm run test`.
 
-## Work Item 14 — Promote Friday Jumu'ah
+## Work Item 14 — Promote Friday Jumu'ah — COMPLETE
 
-- [ ] On Friday with sessions, render Jumu'ah directly beneath the hero and above the prayer table.
-- [ ] Render every configured session.
-- [ ] Derive Friday from `PrayerBoardData.civilDateIso` in the calculation timezone, not device-local `Date`.
-- [ ] Add a pure tested domain predicate including timezone/date-boundary disagreement coverage.
-- [ ] Gate: `npm run typecheck && npm run lint && npm run test`.
+- [x] On Friday with sessions, render Jumu'ah directly beneath the hero and above the prayer table.
+- [x] Render every configured session.
+- [x] Derive Friday from `PrayerBoardData.civilDateIso` in the calculation timezone, not device-local `Date`.
+- [x] Add a pure tested domain predicate including timezone/date-boundary disagreement coverage.
+- [x] Gate: `npm run typecheck && npm run lint && npm run test`.
 
 ## Work Item 15 — Ship directory Jumu'ah times
 
