@@ -312,10 +312,7 @@ export function TodayScreen() {
   const resolvedPrayerTimeZone = useMemo(() => {
     if (coordinates === null) return null;
     try {
-      return resolvePrayerDashboardTimeZone(
-        coordinates,
-        timeZoneOverride ?? undefined,
-      );
+      return resolvePrayerDashboardTimeZone(coordinates, timeZoneOverride ?? undefined);
     } catch {
       return null;
     }
