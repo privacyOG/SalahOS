@@ -10,7 +10,7 @@ import {
   remainingCountdownSeconds,
   TODAY_CLOCK_HIDDEN_MEDIA_QUERY,
   todayCountdownTickMilliseconds,
-} from './todayLiveTick';
+} from './todayLiveTickModel';
 
 function localeClockTag(locale: Locale): string {
   switch (locale) {

@@ -10,7 +10,7 @@ import {
   TODAY_SLOW_TICK_MILLISECONDS,
   todayCountdownTickMilliseconds,
   todayPrayerCivilDateIso,
-} from './todayLiveTick';
+} from './todayLiveTickModel';
 
 afterEach(() => {
   vi.restoreAllMocks();

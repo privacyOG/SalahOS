@@ -60,7 +60,7 @@ import {
   type CongregationDestination,
 } from './applicationRoute';
 import { todayPrayerProvenancePresentation } from './todayPrayerProvenance';
-import { millisecondsUntilNextMinute, todayPrayerCivilDateIso } from './todayLiveTick';
+import { millisecondsUntilNextMinute, todayPrayerCivilDateIso } from './todayLiveTickModel';
 
 const prayerTranslationKeys: Readonly<Record<PrayerName, TranslationKey>> = {
   fajr: 'prayerFajr',
