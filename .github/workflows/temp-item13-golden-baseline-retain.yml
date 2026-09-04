@@ -1,0 +1,55 @@
+name: TEMP Item 13 Today golden baseline retain
+
+on:
+  push:
+    branches:
+      - temp/item13-golden-baseline-retain
+
+permissions:
+  actions: read
+  contents: read
+
+jobs:
+  retain:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout clean post-Item-15 main baseline
+        uses: actions/checkout@v4
+        with:
+          ref: 1065b1d7564d4f2a67f67ec183373190199b4da3
+          fetch-depth: 0
+
+      - name: Download deterministic Item 13 visual evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          curl --fail --location \
+            --header "Authorization: Bearer ${GH_TOKEN}" \
+            --header "Accept: application/vnd.github+json" \
+            --header "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/${GITHUB_REPOSITORY}/actions/artifacts/9917880542/zip" \
+            --output /tmp/item13-visual.zip
+          rm -rf /tmp/item13-visual
+          mkdir -p /tmp/item13-visual
+          unzip -q /tmp/item13-visual.zip -d /tmp/item13-visual
+          test -f /tmp/item13-visual/golden-today-phone-en-light-actual.png
+          echo "Item 13 actual:"
+          sha256sum /tmp/item13-visual/golden-today-phone-en-light-actual.png
+          test "$(sha256sum /tmp/item13-visual/golden-today-phone-en-light-actual.png | awk '{print $1}')" = "53b351ccc3695ddfa17b35df0dfd112b6947ca98c73b41b93f7f417a6a2f7c37"
+
+      - name: Replace stale committed golden
+        run: |
+          set -euo pipefail
+          cp /tmp/item13-visual/golden-today-phone-en-light-actual.png tests/golden/today-phone-en-light.png
+          test "$(sha256sum tests/golden/today-phone-en-light.png | awk '{print $1}')" = "53b351ccc3695ddfa17b35df0dfd112b6947ca98c73b41b93f7f417a6a2f7c37"
+          git diff --stat -- tests/golden/today-phone-en-light.png
+
+      - name: Retain baseline correction commit
+        run: |
+          set -euo pipefail
+          git config user.name 'privacyOG'
+          git config user.email 'kriptiik@proton.me'
+          git add tests/golden/today-phone-en-light.png
+          git commit -m 'Refresh Today golden for Item 13 provenance layout'
+          echo "RETAINED_COMMIT=$(git rev-parse HEAD)"
