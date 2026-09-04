@@ -1,0 +1,29 @@
+name: TEMP V1.5.3 Item 15 hosted exact gate v2
+
+on:
+  push:
+    branches:
+      - temp/item15-hosted-exact-gate-v2
+
+permissions:
+  contents: read
+
+jobs:
+  item15-gate:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact formatted Item 15 head
+        uses: actions/checkout@v4
+        with:
+          ref: 04c27a76d679947807287e6b997e1e787c4a7810
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies without audit network call
+        run: npm ci --ignore-scripts --no-audit
+      - name: Format check
+        run: npm run format:check
+      - name: Item 15 gate
+        run: npm run typecheck && npm run lint && npm run test
