@@ -9,10 +9,12 @@ function validCivilDate(civilDateIso: string): Date | null {
     : null;
 }
 
-export function shouldPromoteFridayJumuah(input: Readonly<{
-  civilDateIso: string;
-  jumuahSessions: readonly JumuahSession[];
-}>): boolean {
+export function shouldPromoteFridayJumuah(
+  input: Readonly<{
+    civilDateIso: string;
+    jumuahSessions: readonly JumuahSession[];
+  }>,
+): boolean {
   if (input.jumuahSessions.length === 0) return false;
 
   const civilDate = validCivilDate(input.civilDateIso);

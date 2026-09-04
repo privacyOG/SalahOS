@@ -64,11 +64,11 @@ describe('Friday Jumuah promotion', () => {
   });
 
   it('rejects malformed or impossible civil dates', () => {
-    expect(shouldPromoteFridayJumuah({ civilDateIso: '2026-02-30', jumuahSessions: sessions })).toBe(
-      false,
-    );
-    expect(shouldPromoteFridayJumuah({ civilDateIso: '2026/09/04', jumuahSessions: sessions })).toBe(
-      false,
-    );
+    expect(
+      shouldPromoteFridayJumuah({ civilDateIso: '2026-02-30', jumuahSessions: sessions }),
+    ).toBe(false);
+    expect(
+      shouldPromoteFridayJumuah({ civilDateIso: '2026/09/04', jumuahSessions: sessions }),
+    ).toBe(false);
   });
 });
