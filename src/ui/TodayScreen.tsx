@@ -6,6 +6,7 @@ import '../today-prayer-provenance.css';
 import {
   applyAustralianMosqueCongregationTimes,
   publishedAustralianMosqueCongregationMinutes,
+  publishedAustralianMosqueJumuahSessions,
 } from '../domain/australianMosquePrayerContext';
 import { buildPrayerDashboardResult } from '../domain/dashboardResult';
 import { shouldPromoteFridayJumuah } from '../domain/fridayJumuahPromotion';
@@ -365,12 +366,16 @@ export function TodayScreen() {
           }),
     [online, sourcedDashboard],
   );
+  const todayJumuahSessions =
+    activeDirectoryMosque === null
+      ? (prayerBoardData?.jumuahSessions ?? [])
+      : publishedAustralianMosqueJumuahSessions(activeDirectoryMosque.jumuahTimes);
   const promoteFridayJumuah =
     prayerBoardData !== null &&
     modules.jumuah &&
     shouldPromoteFridayJumuah({
       civilDateIso: prayerBoardData.civilDateIso,
-      jumuahSessions: prayerBoardData.jumuahSessions,
+      jumuahSessions: todayJumuahSessions,
     });
 
   const currentClock =
@@ -550,7 +555,7 @@ export function TodayScreen() {
 
           {promoteFridayJumuah && (
             <TodayJumuahSection
-              sessions={prayerBoardData.jumuahSessions}
+              sessions={todayJumuahSessions}
               locale={locale}
               timeFormat={settings.timeFormat}
               promoted
@@ -810,9 +815,9 @@ export function TodayScreen() {
 
               {modules.jumuah &&
                 !promoteFridayJumuah &&
-                prayerBoardData.jumuahSessions.length > 0 && (
+                todayJumuahSessions.length > 0 && (
                   <TodayJumuahSection
-                    sessions={prayerBoardData.jumuahSessions}
+                    sessions={todayJumuahSessions}
                     locale={locale}
                     timeFormat={settings.timeFormat}
                   />
