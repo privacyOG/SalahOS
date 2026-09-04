@@ -1,0 +1,40 @@
+name: TEMP Item 14 format
+
+on:
+  push:
+    branches:
+      - temp/item14-format
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact Item 14 head
+        uses: actions/checkout@v4
+        with:
+          ref: 64370f1e8f6d652cd0931d7f99ae3acff2ba9e1d
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies without audit network call
+        run: npm ci --ignore-scripts --no-audit
+      - name: Format only Item 14 domain files
+        run: |
+          npx prettier --write src/domain/fridayJumuahPromotion.ts src/domain/fridayJumuahPromotion.test.ts
+          git diff --check
+          git diff -- src/domain/fridayJumuahPromotion.ts src/domain/fridayJumuahPromotion.test.ts
+      - name: Retain formatted Item 14 commit
+        shell: bash
+        run: |
+          git config user.name 'privacyOG'
+          git config user.email 'kriptiik@proton.me'
+          git add src/domain/fridayJumuahPromotion.ts src/domain/fridayJumuahPromotion.test.ts
+          git commit -m 'Format Friday Jumuah promotion domain files'
+          echo "RETAINED_COMMIT=$(git rev-parse HEAD)"
+          git push origin HEAD:refs/heads/v1.5.3/item-14-friday-jumuah || true
