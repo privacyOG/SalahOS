@@ -1,0 +1,59 @@
+name: TEMP Item 16 format
+
+on:
+  push:
+    branches:
+      - temp/item16-format
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact Item 16 head
+        uses: actions/checkout@v4
+        with:
+          ref: 43204c5fbfbdd2f4fc61d404c58e5c579377c835
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies without audit network call
+        run: npm ci --ignore-scripts --no-audit
+      - name: Format Item 16 files
+        run: |
+          npx prettier --write \
+            src/domain/dashboard.ts \
+            src/domain/dashboardResult.ts \
+            src/domain/dashboard.test.ts \
+            src/domain/dashboardResult.test.ts \
+            src/ui/todayLiveTick.ts \
+            src/ui/TodayLiveTick.tsx \
+            src/ui/todayLiveTick.test.ts \
+            src/ui/TodayScreen.tsx
+          git diff --check
+          git diff --stat
+      - name: Retain formatted Item 16 commit
+        run: |
+          git config user.name 'privacyOG'
+          git config user.email 'kriptiik@proton.me'
+          git add \
+            src/domain/dashboard.ts \
+            src/domain/dashboardResult.ts \
+            src/domain/dashboard.test.ts \
+            src/domain/dashboardResult.test.ts \
+            src/ui/todayLiveTick.ts \
+            src/ui/TodayLiveTick.tsx \
+            src/ui/todayLiveTick.test.ts \
+            src/ui/TodayScreen.tsx
+          if git diff --cached --quiet; then
+            echo "RETAINED_COMMIT=$(git rev-parse HEAD)"
+          else
+            git commit -m 'Format Item 16 dashboard performance files'
+            echo "RETAINED_COMMIT=$(git rev-parse HEAD)"
+          fi
+          git push origin HEAD:refs/heads/v1.5.3/item-16-dashboard-performance || true
