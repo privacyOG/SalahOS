@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import '../today-contextual-v2.css';
 import '../today-prayer-provenance.css';
@@ -8,7 +8,11 @@ import {
   publishedAustralianMosqueCongregationMinutes,
   publishedAustralianMosqueJumuahSessions,
 } from '../domain/australianMosquePrayerContext';
-import { buildPrayerDashboardResult } from '../domain/dashboardResult';
+import { resolvePrayerDashboardTimeZone } from '../domain/dashboard';
+import {
+  buildPrayerDashboardScheduleResult,
+  derivePrayerDashboardResult,
+} from '../domain/dashboardResult';
 import { shouldPromoteFridayJumuah } from '../domain/fridayJumuahPromotion';
 import { displayedHighLatitudeRuleApplied } from '../domain/highLatitudeIndicators';
 import {
@@ -22,7 +26,6 @@ import { displayedManualPrayerAdjustmentMinutes } from '../domain/prayerAdjustme
 import type { PrayerName } from '../domain/prayerEngine';
 import { applyPrayerSourceToDashboard } from '../domain/sourcedDashboard';
 import {
-  formatCountdown,
   formatGregorianCivilDate,
   formatHijriCivilDate,
   formatLocalTime,
@@ -47,6 +50,7 @@ import { readSystemTime } from '../platform/systemTime';
 import { BidiText } from './BidiText';
 import { TodayContextualSections } from './TodayContextualSections';
 import { TodayJumuahSection } from './TodayJumuahSection';
+import { TodayAppBarClock, TodayCountdown } from './TodayLiveTick';
 import { useMobilePrayerThemeConfig, useMobilePrayerWeather } from './MobilePrayerThemeSurface';
 import { PrayerBoardWeatherModule } from './PrayerBoardWeatherModule';
 import { SalahIcon } from './SalahIcon';
@@ -56,6 +60,7 @@ import {
   type CongregationDestination,
 } from './applicationRoute';
 import { todayPrayerProvenancePresentation } from './todayPrayerProvenance';
+import { millisecondsUntilNextMinute, todayPrayerCivilDateIso } from './todayLiveTickModel';
 
 const prayerTranslationKeys: Readonly<Record<PrayerName, TranslationKey>> = {
   fajr: 'prayerFajr',
@@ -218,35 +223,6 @@ function prayerSettingsHref(): string {
   return `${window.location.pathname}${search}${window.location.hash}`;
 }
 
-function localeClockTag(locale: Locale): string {
-  switch (locale) {
-    case 'ar':
-      return 'ar';
-    case 'tr':
-      return 'tr-TR';
-    case 'id':
-      return 'id-ID';
-    case 'en':
-    default:
-      return 'en-AU';
-  }
-}
-
-function formatPrayerBoardClock(
-  clock: PrayerBoardData['clock'],
-  locale: Locale,
-  hourCycle: PersistedSettings['timeFormat'],
-): string {
-  const instant = new Date(Date.UTC(2000, 0, 1, clock.hour, clock.minute, clock.second));
-  return new Intl.DateTimeFormat(localeClockTag(locale), {
-    timeZone: 'UTC',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hourCycle,
-  }).format(instant);
-}
-
 function prayerBoardCivilDate(data: PrayerBoardData): Date {
   const value = new Date(`${data.civilDateIso}T00:00:00.000Z`);
   if (!Number.isFinite(value.getTime())) {
@@ -295,21 +271,28 @@ export function TodayScreen() {
     : (settings.location?.timeZone ?? null);
   const [now, setNow] = useState<Date | null>(() => readSystemTime());
   const [online, setOnline] = useState(() => navigator.onLine);
+  const refreshNow = useCallback(() => {
+    setNow(readSystemTime());
+  }, []);
 
   useEffect(() => {
-    const refreshNow = () => {
-      setNow(readSystemTime());
-    };
-    const timer = window.setInterval(refreshNow, 1_000);
+    const current = readSystemTime();
+    const delay = current === null ? 60_000 : millisecondsUntilNextMinute(current);
+    let minuteTimer: number | null = null;
+    const boundaryTimer = window.setTimeout(() => {
+      refreshNow();
+      minuteTimer = window.setInterval(refreshNow, 60_000);
+    }, delay);
     const removeRuntimeListeners = installRuntimeRefreshListeners(
       { windowTarget: window, documentTarget: document },
       refreshNow,
     );
     return () => {
-      window.clearInterval(timer);
+      window.clearTimeout(boundaryTimer);
+      if (minuteTimer !== null) window.clearInterval(minuteTimer);
       removeRuntimeListeners();
     };
-  }, []);
+  }, [refreshNow]);
 
   useEffect(() => {
     const markOnline = () => {
@@ -326,21 +309,56 @@ export function TodayScreen() {
     };
   }, []);
 
+  const resolvedPrayerTimeZone = useMemo(() => {
+    if (coordinates === null) return null;
+    try {
+      return resolvePrayerDashboardTimeZone(coordinates, timeZoneOverride ?? undefined);
+    } catch {
+      return null;
+    }
+  }, [coordinates, timeZoneOverride]);
+  const scheduleCivilDateIso =
+    now === null || resolvedPrayerTimeZone === null
+      ? null
+      : todayPrayerCivilDateIso(now, resolvedPrayerTimeZone);
+  const scheduleCivilDate = useMemo(
+    () =>
+      scheduleCivilDateIso === null ? null : new Date(`${scheduleCivilDateIso}T00:00:00.000Z`),
+    [scheduleCivilDateIso],
+  );
+  const scheduleResult = useMemo(
+    () =>
+      coordinates === null
+        ? null
+        : resolvedPrayerTimeZone === null || scheduleCivilDate === null
+          ? ({ ok: false, reason: 'calculation-unavailable' } as const)
+          : buildPrayerDashboardScheduleResult({
+              civilDate: scheduleCivilDate,
+              coordinates,
+              timeZone: resolvedPrayerTimeZone,
+              method: calculationMethods[settings.calculationMethodId],
+              asrConvention: settings.asrConvention,
+              highLatitudeRule: settings.highLatitudeRule,
+              adjustments: settings.prayerAdjustments,
+              hijriCorrectionDays: settings.hijriCorrectionDays,
+            }),
+    [
+      coordinates,
+      resolvedPrayerTimeZone,
+      scheduleCivilDate,
+      settings.asrConvention,
+      settings.calculationMethodId,
+      settings.highLatitudeRule,
+      settings.hijriCorrectionDays,
+      settings.prayerAdjustments,
+    ],
+  );
   const dashboardResult = useMemo(
     () =>
-      coordinates === null || now === null
+      scheduleResult === null || now === null
         ? null
-        : buildPrayerDashboardResult({
-            instant: now,
-            coordinates,
-            ...(timeZoneOverride === null ? {} : { timeZone: timeZoneOverride }),
-            method: calculationMethods[settings.calculationMethodId],
-            asrConvention: settings.asrConvention,
-            highLatitudeRule: settings.highLatitudeRule,
-            adjustments: settings.prayerAdjustments,
-            hijriCorrectionDays: settings.hijriCorrectionDays,
-          }),
-    [coordinates, now, settings, timeZoneOverride],
+        : derivePrayerDashboardResult(scheduleResult, now),
+    [now, scheduleResult],
   );
   const dashboard = dashboardResult?.ok === true ? dashboardResult.dashboard : null;
   const calculationUnavailable = dashboardResult?.ok === false;
@@ -377,18 +395,6 @@ export function TodayScreen() {
       civilDateIso: prayerBoardData.civilDateIso,
       jumuahSessions: todayJumuahSessions,
     });
-
-  const currentClock =
-    now === null
-      ? '—'
-      : prayerBoardData === null
-        ? new Intl.DateTimeFormat(localeClockTag(locale), {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hourCycle: settings.timeFormat,
-          }).format(now)
-        : formatPrayerBoardClock(prayerBoardData.clock, locale, settings.timeFormat);
 
   const nextPrayerLabel =
     prayerBoardData?.nextPrayer === null || prayerBoardData?.nextPrayer === undefined
@@ -490,9 +496,12 @@ export function TodayScreen() {
           </div>
         </div>
         <div className="today-appbar__meta">
-          <span className="today-appbar__clock" aria-label={translate(locale, 'currentTime')}>
-            {currentClock}
-          </span>
+          <TodayAppBarClock
+            locale={locale}
+            timeFormat={settings.timeFormat}
+            timeZone={prayerBoardData?.timeZone ?? resolvedPrayerTimeZone}
+            ariaLabel={translate(locale, 'currentTime')}
+          />
           <a href={destinationHref('settings')} aria-label={translate(locale, 'language')}>
             {locale.toUpperCase()}
           </a>
@@ -535,11 +544,12 @@ export function TodayScreen() {
             </div>
             <div className="today-next__countdown">
               <span>{translate(locale, 'countdown')}</span>
-              <strong>
-                {prayerBoardData.nextPrayer === null
-                  ? '—'
-                  : formatCountdown(prayerBoardData.nextPrayer.secondsUntil, locale)}
-              </strong>
+              <TodayCountdown
+                generatedAt={sourcedDashboard.base.generatedAt}
+                secondsUntilNextPrayer={prayerBoardData.nextPrayer?.secondsUntil ?? null}
+                locale={locale}
+                onElapsed={refreshNow}
+              />
             </div>
             <dl className="today-next__times">
               <div>

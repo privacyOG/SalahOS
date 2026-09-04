@@ -9,7 +9,9 @@ const contextualSource = readFileSync(
 
 describe('Stage 22.3 Today contextual experience', () => {
   it('keeps the prayer-first Today screen authoritative and composes context beneath it', () => {
-    expect(todaySource).toContain('buildPrayerDashboardResult');
+    expect(todaySource).toContain('buildPrayerDashboardScheduleResult');
+    expect(todaySource).toContain('derivePrayerDashboardResult');
+    expect(todaySource).not.toContain('buildPrayerDashboardResult');
     expect(todaySource).toContain('applyPrayerSourceToDashboard');
     expect(todaySource).toContain('<TodayContextualSections');
     expect(todaySource).toContain('dashboard={sourcedDashboard}');
