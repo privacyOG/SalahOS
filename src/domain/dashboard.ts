@@ -1,6 +1,5 @@
 import { calendarDate } from './calendar';
 import type { Coordinates } from './coordinates';
-import { createLocationPrayerContext } from './locationPrayerContext';
 import { calculationMethods } from './methods';
 import type { CalculationMethod } from './methods';
 import { findNextPrayer } from './nextPrayer';
@@ -12,7 +11,12 @@ import type {
   PrayerName,
   PrayerSchedule,
 } from './prayerEngine';
-import { utcOffsetMinutesAt } from './timezone';
+import {
+  assertIanaTimeZone,
+  civilDateInTimeZone,
+  resolveIanaTimeZone,
+  utcOffsetMinutesAt,
+} from './timezone';
 
 const DAY_MS = 86_400_000;
 const PRAYER_ORDER: readonly PrayerName[] = ['fajr', 'sunrise', 'dhuhr', 'asr', 'maghrib', 'isha'];
@@ -30,6 +34,29 @@ export interface DashboardPrayerRow {
   readonly isNext: boolean;
   readonly highLatitudeRuleApplied: boolean;
   readonly manualAdjustmentMinutes: number;
+}
+
+export interface PrayerDashboardSchedulePrayerRow {
+  readonly name: PrayerName;
+  readonly localMinutes: number | null;
+  readonly highLatitudeRuleApplied: boolean;
+  readonly manualAdjustmentMinutes: number;
+}
+
+export interface PrayerDashboardScheduleModel {
+  readonly coordinates: Coordinates;
+  readonly timeZone: string;
+  readonly civilDate: Date;
+  readonly gregorian: ReturnType<typeof calendarDate>['gregorian'];
+  readonly hijri: ReturnType<typeof calendarDate>['hijri'];
+  readonly method: CalculationMethod;
+  readonly asrConvention: AsrConvention;
+  readonly highLatitudeRule: HighLatitudeRule;
+  readonly today: PrayerSchedule;
+  readonly tomorrow: PrayerSchedule;
+  readonly prayers: readonly PrayerDashboardSchedulePrayerRow[];
+  readonly hasHighLatitudeFallback: boolean;
+  readonly hasManualAdjustments: boolean;
 }
 
 export interface PrayerDashboardModel {
@@ -53,6 +80,28 @@ export interface PrayerDashboardModel {
   readonly secondsUntilNextPrayer: number | null;
   readonly hasHighLatitudeFallback: boolean;
   readonly hasManualAdjustments: boolean;
+}
+
+export interface PrayerDashboardScheduleInput {
+  readonly civilDate: Date;
+  readonly coordinates: Coordinates;
+  readonly timeZone?: string;
+  readonly method?: CalculationMethod;
+  readonly asrConvention?: AsrConvention;
+  readonly highLatitudeRule?: HighLatitudeRule;
+  readonly adjustments?: Readonly<Partial<Record<PrayerName, number>>>;
+  readonly hijriCorrectionDays?: number;
+}
+
+export interface PrayerDashboardInput {
+  readonly instant: Date;
+  readonly coordinates: Coordinates;
+  readonly timeZone?: string;
+  readonly method?: CalculationMethod;
+  readonly asrConvention?: AsrConvention;
+  readonly highLatitudeRule?: HighLatitudeRule;
+  readonly adjustments?: Readonly<Partial<Record<PrayerName, number>>>;
+  readonly hijriCorrectionDays?: number;
 }
 
 function numericPart(parts: Intl.DateTimeFormatPart[], type: Intl.DateTimeFormatPartTypes): number {
@@ -97,6 +146,16 @@ function addCivilDays(civilDate: Date, days: number): Date {
   return new Date(civilDate.getTime() + days * DAY_MS);
 }
 
+function normalizedCivilDate(civilDate: Date): Date {
+  if (!Number.isFinite(civilDate.getTime())) {
+    throw new RangeError('Civil date must be valid');
+  }
+
+  return new Date(
+    Date.UTC(civilDate.getUTCFullYear(), civilDate.getUTCMonth(), civilDate.getUTCDate()),
+  );
+}
+
 function offsetForCivilDate(civilDate: Date, timeZone: string): number {
   const representativeInstant = new Date(civilDate.getTime() + 12 * 60 * 60 * 1_000);
   return utcOffsetMinutesAt(representativeInstant, timeZone);
@@ -123,65 +182,58 @@ function scheduleFor(
   });
 }
 
-export function buildPrayerDashboard(input: {
-  readonly instant: Date;
-  readonly coordinates: Coordinates;
-  readonly timeZone?: string;
-  readonly method?: CalculationMethod;
-  readonly asrConvention?: AsrConvention;
-  readonly highLatitudeRule?: HighLatitudeRule;
-  readonly adjustments?: Readonly<Partial<Record<PrayerName, number>>>;
-  readonly hijriCorrectionDays?: number;
-}): PrayerDashboardModel {
+export function resolvePrayerDashboardTimeZone(
+  coordinates: Coordinates,
+  persistedTimeZone?: string,
+): string {
+  return persistedTimeZone === undefined
+    ? resolveIanaTimeZone(coordinates).timeZone
+    : assertIanaTimeZone(persistedTimeZone);
+}
+
+export function buildPrayerDashboardSchedule(
+  input: PrayerDashboardScheduleInput,
+): PrayerDashboardScheduleModel {
   const method = input.method ?? calculationMethods['muslim-world-league'];
   const asrConvention = input.asrConvention ?? 'standard';
   const highLatitudeRule = input.highLatitudeRule ?? 'angle-based';
   const adjustments = input.adjustments ?? {};
-  const context = createLocationPrayerContext(input.instant, input.coordinates, input.timeZone);
-  const clock = localClockParts(input.instant, context.timeZone);
+  const civilDate = normalizedCivilDate(input.civilDate);
+  const timeZone = resolvePrayerDashboardTimeZone(input.coordinates, input.timeZone);
   const today = scheduleFor(
-    context.civilDate,
+    civilDate,
     input.coordinates,
-    context.utcOffsetMinutes,
+    offsetForCivilDate(civilDate, timeZone),
     method,
     asrConvention,
     highLatitudeRule,
     adjustments,
   );
-  const tomorrowCivilDate = addCivilDays(context.civilDate, 1);
+  const tomorrowCivilDate = addCivilDays(civilDate, 1);
   const tomorrow = scheduleFor(
     tomorrowCivilDate,
     input.coordinates,
-    offsetForCivilDate(tomorrowCivilDate, context.timeZone),
+    offsetForCivilDate(tomorrowCivilDate, timeZone),
     method,
     asrConvention,
     highLatitudeRule,
     adjustments,
   );
-  const next = findNextPrayer(clock.localMinutes, today, tomorrow);
-  const calendar = calendarDate(context.civilDate, input.hijriCorrectionDays ?? 0);
-  const prayers = PRAYER_ORDER.map((name): DashboardPrayerRow => {
+  const calendar = calendarDate(civilDate, input.hijriCorrectionDays ?? 0);
+  const prayers = PRAYER_ORDER.map((name): PrayerDashboardSchedulePrayerRow => {
     const prayer = today.prayers[name];
     return {
       name,
       localMinutes: prayer.roundedLocalMinutes,
-      isNext: next?.dayOffset === 0 && next.prayer === name,
       highLatitudeRuleApplied: prayer.provenance.highLatitudeRuleApplied,
       manualAdjustmentMinutes: prayer.provenance.manualAdjustmentMinutes,
     };
   });
-  const hasHighLatitudeFallback = prayers.some((prayer) => prayer.highLatitudeRuleApplied);
-  const hasManualAdjustments = prayers.some((prayer) => prayer.manualAdjustmentMinutes !== 0);
-  const secondsUntilNextPrayer =
-    next === null ? null : Math.max(0, Math.round(next.minutesUntil * 60));
 
   return {
-    generatedAt: new Date(input.instant.getTime()),
     coordinates: input.coordinates,
-    timeZone: context.timeZone,
-    utcOffsetMinutes: context.utcOffsetMinutes,
-    civilDate: context.civilDate,
-    clock,
+    timeZone,
+    civilDate,
     gregorian: calendar.gregorian,
     hijri: calendar.hijri,
     method,
@@ -190,11 +242,73 @@ export function buildPrayerDashboard(input: {
     today,
     tomorrow,
     prayers,
+    hasHighLatitudeFallback: prayers.some((prayer) => prayer.highLatitudeRuleApplied),
+    hasManualAdjustments: prayers.some((prayer) => prayer.manualAdjustmentMinutes !== 0),
+  };
+}
+
+export function derivePrayerDashboard(
+  schedule: PrayerDashboardScheduleModel,
+  instant: Date,
+): PrayerDashboardModel {
+  if (!Number.isFinite(instant.getTime())) {
+    throw new RangeError('Instant must be valid');
+  }
+
+  const currentCivilDate = civilDateInTimeZone(instant, schedule.timeZone);
+  if (currentCivilDate.getTime() !== schedule.civilDate.getTime()) {
+    throw new RangeError('Prayer dashboard schedule does not match the current civil date');
+  }
+
+  const clock = localClockParts(instant, schedule.timeZone);
+  const next = findNextPrayer(clock.localMinutes, schedule.today, schedule.tomorrow);
+  const prayers = schedule.prayers.map((prayer): DashboardPrayerRow => ({
+    ...prayer,
+    isNext: next?.dayOffset === 0 && next.prayer === prayer.name,
+  }));
+
+  return {
+    generatedAt: new Date(instant.getTime()),
+    coordinates: schedule.coordinates,
+    timeZone: schedule.timeZone,
+    utcOffsetMinutes: utcOffsetMinutesAt(instant, schedule.timeZone),
+    civilDate: schedule.civilDate,
+    clock,
+    gregorian: schedule.gregorian,
+    hijri: schedule.hijri,
+    method: schedule.method,
+    asrConvention: schedule.asrConvention,
+    highLatitudeRule: schedule.highLatitudeRule,
+    today: schedule.today,
+    tomorrow: schedule.tomorrow,
+    prayers,
     nextPrayer: next?.prayer ?? null,
     nextPrayerDayOffset: next?.dayOffset ?? null,
     nextPrayerLocalMinutes: next?.localMinutes ?? null,
-    secondsUntilNextPrayer,
-    hasHighLatitudeFallback,
-    hasManualAdjustments,
+    secondsUntilNextPrayer:
+      next === null ? null : Math.max(0, Math.round(next.minutesUntil * 60)),
+    hasHighLatitudeFallback: schedule.hasHighLatitudeFallback,
+    hasManualAdjustments: schedule.hasManualAdjustments,
   };
+}
+
+export function buildPrayerDashboard(input: PrayerDashboardInput): PrayerDashboardModel {
+  const timeZone = resolvePrayerDashboardTimeZone(input.coordinates, input.timeZone);
+  const civilDate = civilDateInTimeZone(input.instant, timeZone);
+  const schedule = buildPrayerDashboardSchedule({
+    civilDate,
+    coordinates: input.coordinates,
+    timeZone,
+    ...(input.method === undefined ? {} : { method: input.method }),
+    ...(input.asrConvention === undefined ? {} : { asrConvention: input.asrConvention }),
+    ...(input.highLatitudeRule === undefined
+      ? {}
+      : { highLatitudeRule: input.highLatitudeRule }),
+    ...(input.adjustments === undefined ? {} : { adjustments: input.adjustments }),
+    ...(input.hijriCorrectionDays === undefined
+      ? {}
+      : { hijriCorrectionDays: input.hijriCorrectionDays }),
+  });
+
+  return derivePrayerDashboard(schedule, input.instant);
 }
