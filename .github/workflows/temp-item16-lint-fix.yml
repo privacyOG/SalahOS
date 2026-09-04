@@ -1,0 +1,43 @@
+name: TEMP Item 16 lint fix
+
+on:
+  push:
+    branches:
+      - temp/item16-lint-fix
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact Item 16 head
+        uses: actions/checkout@v4
+        with:
+          ref: 459863cf8aa14403d3963bb89579349c6ba22873
+          fetch-depth: 0
+      - name: Apply nullish-coalescing lint fix
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('src/ui/TodayScreen.tsx')
+          text = path.read_text(encoding='utf-8')
+          old = 'timeZoneOverride === null ? undefined : timeZoneOverride'
+          new = 'timeZoneOverride ?? undefined'
+          if text.count(old) != 1:
+              raise SystemExit(f'expected one lint anchor, found {text.count(old)}')
+          path.write_text(text.replace(old, new, 1), encoding='utf-8')
+          PY
+          git diff --check
+          git diff -- src/ui/TodayScreen.tsx
+      - name: Retain lint-fix commit
+        shell: bash
+        run: |
+          git config user.name 'privacyOG'
+          git config user.email 'kriptiik@proton.me'
+          git add src/ui/TodayScreen.tsx
+          git commit -m 'Fix Item 16 nullish timezone fallback lint'
+          echo "RETAINED_COMMIT=$(git rev-parse HEAD)"
+          git push origin HEAD:refs/heads/v1.5.3/item-16-dashboard-performance || true
