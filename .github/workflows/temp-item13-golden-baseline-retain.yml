@@ -7,7 +7,7 @@ on:
 
 permissions:
   actions: read
-  contents: read
+  contents: write
 
 jobs:
   retain:
@@ -34,8 +34,6 @@ jobs:
           mkdir -p /tmp/item13-visual
           unzip -q /tmp/item13-visual.zip -d /tmp/item13-visual
           test -f /tmp/item13-visual/golden-today-phone-en-light-actual.png
-          echo "Item 13 actual:"
-          sha256sum /tmp/item13-visual/golden-today-phone-en-light-actual.png
           test "$(sha256sum /tmp/item13-visual/golden-today-phone-en-light-actual.png | awk '{print $1}')" = "53b351ccc3695ddfa17b35df0dfd112b6947ca98c73b41b93f7f417a6a2f7c37"
 
       - name: Replace stale committed golden
@@ -52,4 +50,7 @@ jobs:
           git config user.email 'kriptiik@proton.me'
           git add tests/golden/today-phone-en-light.png
           git commit -m 'Refresh Today golden for Item 13 provenance layout'
-          echo "RETAINED_COMMIT=$(git rev-parse HEAD)"
+          retained_commit="$(git rev-parse HEAD)"
+          echo "RETAINED_COMMIT=${retained_commit}"
+          git tag -f temp-item13-golden-baseline-retained "${retained_commit}"
+          git push --force origin refs/tags/temp-item13-golden-baseline-retained
