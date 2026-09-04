@@ -1,0 +1,33 @@
+name: TEMP Item 16 live tick case fix v2
+
+on:
+  push:
+    branches:
+      - temp/item16-live-tick-case-fix-v2
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout exact Item 16 head
+        uses: actions/checkout@v4
+        with:
+          ref: f0208e7176d64d6b1481ed7029da859570f0b2c6
+          fetch-depth: 0
+      - name: Remove case-only filename collision
+        run: |
+          git mv src/ui/todayLiveTick.ts src/ui/todayLiveTickModel.ts
+          sed -i "s|'./todayLiveTick'|'./todayLiveTickModel'|g" src/ui/TodayLiveTick.tsx src/ui/TodayScreen.tsx src/ui/todayLiveTick.test.ts
+          git diff --check
+          git diff -- src/ui/TodayLiveTick.tsx src/ui/TodayScreen.tsx src/ui/todayLiveTick.test.ts src/ui/todayLiveTickModel.ts
+      - name: Retain case-fix commit
+        run: |
+          git config user.name 'privacyOG'
+          git config user.email 'kriptiik@proton.me'
+          git add -A src/ui
+          git commit -m 'Avoid Item 16 live tick filename collision'
+          echo "RETAINED_COMMIT=$(git rev-parse HEAD)"
+          git push origin HEAD:refs/heads/v1.5.3/item-16-dashboard-performance || true
