@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import { createCoordinates } from './coordinates';
-import { buildPrayerDashboardResult } from './dashboardResult';
+import {
+  buildPrayerDashboardResult,
+  buildPrayerDashboardScheduleResult,
+  derivePrayerDashboardResult,
+} from './dashboardResult';
 import { calculationMethods } from './methods';
 
 describe('buildPrayerDashboardResult', () => {
@@ -40,5 +44,43 @@ describe('buildPrayerDashboardResult', () => {
     });
 
     expect(result).toEqual({ ok: false, reason: 'calculation-unavailable' });
+  });
+
+  it('builds astronomy once for a civil date and derives later live state from that schedule', () => {
+    const scheduleResult = buildPrayerDashboardScheduleResult({
+      civilDate: new Date('2026-08-16T00:00:00.000Z'),
+      coordinates: createCoordinates(-33.8688, 151.2093),
+      timeZone: 'Australia/Sydney',
+    });
+
+    expect(scheduleResult.ok).toBe(true);
+    const first = derivePrayerDashboardResult(
+      scheduleResult,
+      new Date('2026-08-16T00:00:00.000Z'),
+    );
+    const later = derivePrayerDashboardResult(
+      scheduleResult,
+      new Date('2026-08-16T00:10:00.000Z'),
+    );
+
+    expect(first.ok).toBe(true);
+    expect(later.ok).toBe(true);
+    if (first.ok && later.ok) {
+      expect(first.dashboard.today).toBe(later.dashboard.today);
+      expect(first.dashboard.tomorrow).toBe(later.dashboard.tomorrow);
+      expect(first.unavailablePrayers).toEqual(later.unavailablePrayers);
+    }
+  });
+
+  it('turns a stale schedule derivation into an unavailable result at the civil-date boundary', () => {
+    const scheduleResult = buildPrayerDashboardScheduleResult({
+      civilDate: new Date('2026-08-16T00:00:00.000Z'),
+      coordinates: createCoordinates(-33.8688, 151.2093),
+      timeZone: 'Australia/Sydney',
+    });
+
+    expect(
+      derivePrayerDashboardResult(scheduleResult, new Date('2026-08-16T14:00:00.000Z')),
+    ).toEqual({ ok: false, reason: 'calculation-unavailable' });
   });
 });
