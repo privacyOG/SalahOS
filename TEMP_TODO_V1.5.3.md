@@ -153,13 +153,13 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - [x] Add a pure tested domain predicate including timezone/date-boundary disagreement coverage.
 - [x] Gate: `npm run typecheck && npm run lint && npm run test`.
 
-## Work Item 15 — Ship directory Jumu'ah times
+## Work Item 15 — Ship directory Jumu'ah times — COMPLETE
 
-- [ ] Extend selected-directory mosque context to persist `jumuahTimes`; bump schema and migrate v1 reads.
-- [ ] Map directory Jumu'ah into the existing Today Jumu'ah presentation without inventing khutbah times.
-- [ ] Keep Jumu'ah out of the main fard prayer table.
-- [ ] Test mapping in domain/platform, not the component.
-- [ ] Gate: `npm run typecheck && npm run lint && npm run test`.
+- [x] Extend selected-directory mosque context to persist `jumuahTimes`; bump schema and migrate v1 reads.
+- [x] Map directory Jumu'ah into the existing Today Jumu'ah presentation without inventing khutbah times.
+- [x] Keep Jumu'ah out of the main fard prayer table.
+- [x] Test mapping in domain/platform, not the component.
+- [x] Gate: `npm run typecheck && npm run lint && npm run test`.
 
 ## Work Item 16 — Stop recomputing astronomy every second
 
