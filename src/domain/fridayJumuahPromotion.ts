@@ -1,5 +1,3 @@
-import type { JumuahSession } from './mosqueTimetable';
-
 function validCivilDate(civilDateIso: string): Date | null {
   if (!/^\d{4}-\d{2}-\d{2}$/u.test(civilDateIso)) return null;
 
@@ -12,7 +10,7 @@ function validCivilDate(civilDateIso: string): Date | null {
 export function shouldPromoteFridayJumuah(
   input: Readonly<{
     civilDateIso: string;
-    jumuahSessions: readonly JumuahSession[];
+    jumuahSessions: readonly unknown[];
   }>,
 ): boolean {
   if (input.jumuahSessions.length === 0) return false;

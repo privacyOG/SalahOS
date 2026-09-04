@@ -196,6 +196,7 @@ export function AustralianMosqueDirectoryPanel() {
       coordinates: profile.coordinates,
       timeZone: profile.timeZone,
       prayerTimes: mosque.enriched.prayerTimes,
+      jumuahTimes: mosque.enriched.jumuahTimes,
     });
     const withProfile = upsertMosqueProfile(library, profile);
     persistLibrary(selectMosqueProfile(withProfile, profile.id));

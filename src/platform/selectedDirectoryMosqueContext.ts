@@ -1,11 +1,14 @@
 import { createCoordinates, type Coordinates } from '../domain/coordinates';
-import type { MosqueDirectoryPrayerSummary } from '../domain/mosqueDirectoryEnrichment';
+import type {
+  MosqueDirectoryJumuahTime,
+  MosqueDirectoryPrayerSummary,
+} from '../domain/mosqueDirectoryEnrichment';
 import { assertIanaTimeZone } from '../domain/timezone';
 import type { KeyValueStorage } from './settingsStorage';
 
 export const SELECTED_DIRECTORY_MOSQUE_CONTEXT_STORAGE_KEY =
   'salahos.selectedDirectoryMosqueContext';
-export const SELECTED_DIRECTORY_MOSQUE_CONTEXT_SCHEMA_VERSION = 1;
+export const SELECTED_DIRECTORY_MOSQUE_CONTEXT_SCHEMA_VERSION = 2;
 
 export interface SelectedDirectoryMosqueContext {
   readonly mosqueId: string;
@@ -13,6 +16,7 @@ export interface SelectedDirectoryMosqueContext {
   readonly coordinates: Coordinates;
   readonly timeZone: string;
   readonly prayerTimes: MosqueDirectoryPrayerSummary | null;
+  readonly jumuahTimes: readonly MosqueDirectoryJumuahTime[];
 }
 
 type JsonRecord = Record<string, unknown>;
@@ -49,6 +53,25 @@ function parsePrayerTimes(value: unknown): MosqueDirectoryPrayerSummary | null {
   return Object.freeze(output as MosqueDirectoryPrayerSummary);
 }
 
+function parseJumuahTimes(value: unknown): readonly MosqueDirectoryJumuahTime[] {
+  if (!Array.isArray(value)) {
+    throw new TypeError('Selected directory mosque Jumuah times are invalid');
+  }
+
+  return Object.freeze(
+    value.map((entry, index) => {
+      if (!isRecord(entry)) {
+        throw new TypeError(
+          `Selected directory mosque Jumuah time ${String(index + 1)} is invalid`,
+        );
+      }
+      const time = normalizedString(entry.time, 'Selected directory mosque Jumuah time');
+      const label = optionalString(entry, 'label');
+      return Object.freeze({ time, ...(label === undefined ? {} : { label }) });
+    }),
+  );
+}
+
 function normalizeContext(value: unknown): SelectedDirectoryMosqueContext {
   if (!isRecord(value)) throw new TypeError('Selected directory mosque context must be an object');
   if (!isRecord(value.coordinates)) {
@@ -66,12 +89,19 @@ function normalizeContext(value: unknown): SelectedDirectoryMosqueContext {
       normalizedString(value.timeZone, 'Selected directory mosque timezone'),
     ),
     prayerTimes: parsePrayerTimes(value.prayerTimes),
+    jumuahTimes: parseJumuahTimes(value.jumuahTimes),
   });
 }
 
 export function parseSelectedDirectoryMosqueContext(raw: string): SelectedDirectoryMosqueContext {
   const parsed: unknown = JSON.parse(raw);
-  if (!isRecord(parsed) || parsed.version !== SELECTED_DIRECTORY_MOSQUE_CONTEXT_SCHEMA_VERSION) {
+  if (!isRecord(parsed)) {
+    throw new RangeError('Unsupported selected-directory-mosque context schema version');
+  }
+  if (parsed.version === 1) {
+    return normalizeContext({ ...parsed, jumuahTimes: [] });
+  }
+  if (parsed.version !== SELECTED_DIRECTORY_MOSQUE_CONTEXT_SCHEMA_VERSION) {
     throw new RangeError('Unsupported selected-directory-mosque context schema version');
   }
   return normalizeContext(parsed);

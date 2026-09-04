@@ -1,4 +1,7 @@
-import type { MosqueDirectoryPrayerSummary } from './mosqueDirectoryEnrichment';
+import type {
+  MosqueDirectoryJumuahTime,
+  MosqueDirectoryPrayerSummary,
+} from './mosqueDirectoryEnrichment';
 import type { ObligatoryPrayerName, PrayerName } from './prayerEngine';
 import type { SourcedPrayerDashboard } from './sourcedDashboard';
 
@@ -27,6 +30,12 @@ export interface PublishedMosqueCongregationContext {
   readonly prayerTimes: MosqueDirectoryPrayerSummary | null;
 }
 
+export interface PublishedAustralianMosqueJumuahSession {
+  readonly label: string | null;
+  readonly khutbahLocalMinutes: null;
+  readonly salahLocalMinutes: number;
+}
+
 function parseClock(value: string): number | null {
   const normalized = value.trim().toLocaleLowerCase('en-AU');
   const twelveHour = TWELVE_HOUR_CLOCK.exec(normalized);
@@ -48,6 +57,30 @@ function parseClock(value: string): number | null {
   const minute = Number.parseInt(minuteText, 10);
   if (hour < 0 || hour > 23 || minute < 0 || minute > 59) return null;
   return hour * 60 + minute;
+}
+
+function normalizedOptionalLabel(value: string | undefined): string | null {
+  if (value === undefined) return null;
+  const normalized = value.trim().replace(/\s+/gu, ' ');
+  return normalized.length === 0 ? null : normalized;
+}
+
+export function publishedAustralianMosqueJumuahSessions(
+  jumuahTimes: readonly MosqueDirectoryJumuahTime[],
+): readonly PublishedAustralianMosqueJumuahSession[] {
+  return Object.freeze(
+    jumuahTimes.flatMap((entry) => {
+      const salahLocalMinutes = parseClock(entry.time);
+      if (salahLocalMinutes === null) return [];
+      return [
+        Object.freeze({
+          label: normalizedOptionalLabel(entry.label),
+          khutbahLocalMinutes: null,
+          salahLocalMinutes,
+        }),
+      ];
+    }),
+  );
 }
 
 export function publishedAustralianMosqueCongregationMinutes(
