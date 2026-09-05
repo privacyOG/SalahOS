@@ -20,6 +20,15 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
+function normalizeRevelationPlace(value, surahNumber) {
+  const normalized = String(value ?? '').trim().toLowerCase();
+  assert(
+    normalized === 'meccan' || normalized === 'medinan',
+    `Surah ${String(surahNumber)} has unsupported revelation type ${String(value)}.`,
+  );
+  return normalized;
+}
+
 function validatePack(pack) {
   assert(pack?.schemaVersion === 1, 'Offline Qur’an pack schema version is invalid.');
   assert(pack?.counts?.surahs === manifest.surahs, 'Offline Qur’an surah count is invalid.');
@@ -31,6 +40,10 @@ function validatePack(pack) {
   let ayahCount = 0;
   for (const surah of pack.surahs) {
     assert(Number.isInteger(surah.surah), 'Offline Qur’an surah number is invalid.');
+    assert(
+      surah.revelationPlace === 'meccan' || surah.revelationPlace === 'medinan',
+      `Surah ${String(surah.surah)} revelation place is invalid.`,
+    );
     assert(Array.isArray(surah.ayahs), `Surah ${String(surah.surah)} has no ayah collection.`);
     for (const ayah of surah.ayahs) {
       const expectedKey = `${String(surah.surah)}:${String(ayah.ayah)}`;
@@ -131,6 +144,7 @@ function buildPack(arabic, pickthall) {
       nameArabic: String(surah.name_arabic),
       nameTransliteration: String(surah.name_transliteration),
       nameEnglish: String(surah.name_english),
+      revelationPlace: normalizeRevelationPlace(surah.revelation?.type, surahNumber),
       ayahs,
     };
   });
