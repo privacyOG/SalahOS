@@ -1,0 +1,107 @@
+name: TEMP Item 16 Wire Today
+
+on:
+  push:
+    branches:
+      - v1.5.3/item-16-dashboard-tick-scheduling
+    paths:
+      - .github/workflows/temp-item16-wire-today.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch-today:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Wire cached schedule and leaf tick components
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('src/ui/TodayScreen.tsx')
+          text = path.read_text()
+
+          def replace_once(old: str, new: str) -> None:
+              global text
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'Expected exactly one match, found {count}: {old[:100]!r}')
+              text = text.replace(old, new, 1)
+
+          replace_once(
+              "import {\n  formatCountdown,\n  formatGregorianCivilDate,\n  formatHijriCivilDate,\n  formatLocalTime,\n  translate,\n} from '../i18n/i18n';",
+              "import {\n  formatGregorianCivilDate,\n  formatHijriCivilDate,\n  formatLocalTime,\n  translate,\n} from '../i18n/i18n';",
+          )
+
+          replace_once(
+              "import { TodayContextualSections } from './TodayContextualSections';\nimport { TodayJumuahSection } from './TodayJumuahSection';",
+              "import { TodayAppBarClock } from './TodayAppBarClock';\nimport { TodayContextualSections } from './TodayContextualSections';\nimport { TodayJumuahSection } from './TodayJumuahSection';\nimport { TodayPrayerCountdown } from './TodayPrayerCountdown';",
+          )
+
+          replace_once(
+              "import { todayPrayerProvenancePresentation } from './todayPrayerProvenance';",
+              "import {\n  TODAY_SCHEDULE_STATE_REFRESH_MS,\n  createTodayPrayerDashboardResolver,\n} from './todayPrayerDashboardScheduler';\nimport { todayPrayerProvenancePresentation } from './todayPrayerProvenance';",
+          )
+
+          replace_once(
+              "function localeClockTag(locale: Locale): string {\n  switch (locale) {\n    case 'ar':\n      return 'ar';\n    case 'tr':\n      return 'tr-TR';\n    case 'id':\n      return 'id-ID';\n    case 'en':\n    default:\n      return 'en-AU';\n  }\n}\n\nfunction formatPrayerBoardClock(\n  clock: PrayerBoardData['clock'],\n  locale: Locale,\n  hourCycle: PersistedSettings['timeFormat'],\n): string {\n  const instant = new Date(Date.UTC(2000, 0, 1, clock.hour, clock.minute, clock.second));\n  return new Intl.DateTimeFormat(localeClockTag(locale), {\n    timeZone: 'UTC',\n    hour: '2-digit',\n    minute: '2-digit',\n    second: '2-digit',\n    hourCycle,\n  }).format(instant);\n}\n\n",
+              "",
+          )
+
+          replace_once(
+              "  const [now, setNow] = useState<Date | null>(() => readSystemTime());\n  const [online, setOnline] = useState(() => navigator.onLine);",
+              "  const resolvePrayerDashboard = useMemo(\n    () => createTodayPrayerDashboardResolver(buildPrayerDashboardResult),\n    [],\n  );\n  const [scheduleNow, setScheduleNow] = useState<Date | null>(() => readSystemTime());\n  const [online, setOnline] = useState(() => navigator.onLine);",
+          )
+
+          replace_once(
+              "  useEffect(() => {\n    const refreshNow = () => {\n      setNow(readSystemTime());\n    };\n    const timer = window.setInterval(refreshNow, 1_000);\n    const removeRuntimeListeners = installRuntimeRefreshListeners(\n      { windowTarget: window, documentTarget: document },\n      refreshNow,\n    );\n    return () => {\n      window.clearInterval(timer);\n      removeRuntimeListeners();\n    };\n  }, []);",
+              "  useEffect(() => {\n    const refreshScheduleState = () => {\n      setScheduleNow(readSystemTime());\n    };\n    const timer = window.setInterval(\n      refreshScheduleState,\n      TODAY_SCHEDULE_STATE_REFRESH_MS,\n    );\n    const removeRuntimeListeners = installRuntimeRefreshListeners(\n      { windowTarget: window, documentTarget: document },\n      refreshScheduleState,\n    );\n    return () => {\n      window.clearInterval(timer);\n      removeRuntimeListeners();\n    };\n  }, []);",
+          )
+
+          replace_once(
+              "  const dashboardResult = useMemo(\n    () =>\n      coordinates === null || now === null\n        ? null\n        : buildPrayerDashboardResult({\n            instant: now,\n            coordinates,\n            ...(timeZoneOverride === null ? {} : { timeZone: timeZoneOverride }),\n            method: calculationMethods[settings.calculationMethodId],\n            asrConvention: settings.asrConvention,\n            highLatitudeRule: settings.highLatitudeRule,\n            adjustments: settings.prayerAdjustments,\n            hijriCorrectionDays: settings.hijriCorrectionDays,\n          }),\n    [coordinates, now, settings, timeZoneOverride],\n  );",
+              "  const dashboardResult = useMemo(\n    () =>\n      coordinates === null || scheduleNow === null\n        ? null\n        : resolvePrayerDashboard({\n            instant: scheduleNow,\n            coordinates,\n            ...(timeZoneOverride === null ? {} : { timeZone: timeZoneOverride }),\n            method: calculationMethods[settings.calculationMethodId],\n            asrConvention: settings.asrConvention,\n            highLatitudeRule: settings.highLatitudeRule,\n            adjustments: settings.prayerAdjustments,\n            hijriCorrectionDays: settings.hijriCorrectionDays,\n          }),\n    [coordinates, resolvePrayerDashboard, scheduleNow, settings, timeZoneOverride],\n  );",
+          )
+
+          replace_once(
+              "  const currentClock =\n    now === null\n      ? '—'\n      : prayerBoardData === null\n        ? new Intl.DateTimeFormat(localeClockTag(locale), {\n            hour: '2-digit',\n            minute: '2-digit',\n            second: '2-digit',\n            hourCycle: settings.timeFormat,\n          }).format(now)\n        : formatPrayerBoardClock(prayerBoardData.clock, locale, settings.timeFormat);\n\n",
+              "",
+          )
+
+          replace_once(
+              "          <span className=\"today-appbar__clock\" aria-label={translate(locale, 'currentTime')}>\n            {currentClock}\n          </span>",
+              "          <TodayAppBarClock\n            locale={locale}\n            timeFormat={settings.timeFormat}\n            timeZone={prayerBoardData?.timeZone ?? timeZoneOverride}\n            visible={modules['current-time']}\n          />",
+          )
+
+          replace_once("      {now === null ? (", "      {scheduleNow === null ? (")
+
+          replace_once(
+              "              <strong>\n                {prayerBoardData.nextPrayer === null\n                  ? '—'\n                  : formatCountdown(prayerBoardData.nextPrayer.secondsUntil, locale)}\n              </strong>",
+              "              <TodayPrayerCountdown\n                secondsUntilNextPrayer={prayerBoardData.nextPrayer?.secondsUntil ?? null}\n                generatedAt={sourcedDashboard.base.generatedAt}\n                locale={locale}\n                clockVisible={modules['current-time']}\n              />",
+          )
+
+          replace_once("            now={now}", "            now={scheduleNow}")
+
+          path.write_text(text)
+          PY
+
+      - name: Check patch whitespace
+        run: git diff --check
+
+      - name: Create retained Item 16 wiring commit
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/ui/TodayScreen.tsx
+          git commit -m "V1.5.3 Item 16: isolate Today live ticks"
+          echo "ITEM16_RETAINED_COMMIT=$(git rev-parse HEAD)"
+
+      - name: Push retained commit
+        run: git push origin HEAD:${GITHUB_REF_NAME}
