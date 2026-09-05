@@ -161,14 +161,14 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - [x] Test mapping in domain/platform, not the component.
 - [x] Gate: `npm run typecheck && npm run lint && npm run test`.
 
-## Work Item 16 — Stop recomputing astronomy every second
+## Work Item 16 — Stop recomputing astronomy every second — COMPLETE
 
-- [ ] Split schedule computation from per-second current/next/countdown derivation.
-- [ ] Memoize schedule by civil date, settings, and coordinates so astronomical work changes at date/settings/location boundaries only.
-- [ ] Isolate countdown and app-bar clock into leaf tick components.
-- [ ] Tick every 60s when countdown is >1 hour and the clock is hidden; restore 1s inside the final hour.
-- [ ] Measure `buildPrayerDashboardResult` calls over a simulated 10-minute window before/after and add regression coverage.
-- [ ] Gate: `npm run typecheck && npm run lint && npm run test`.
+- [x] Split schedule computation from per-second current/next/countdown derivation.
+- [x] Memoize schedule by civil date, settings, and coordinates so astronomical work changes at date/settings/location boundaries only.
+- [x] Isolate countdown and app-bar clock into leaf tick components.
+- [x] Tick every 60s when countdown is >1 hour and the clock is hidden; restore 1s inside the final hour.
+- [x] Measure `buildPrayerDashboardResult` calls over a simulated 10-minute window before/after and add regression coverage.
+- [x] Gate: `npm run typecheck && npm run lint && npm run test`.
 
 ## Work Item 17 — Make 6,236 ayat navigable
 
