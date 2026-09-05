@@ -2,6 +2,7 @@ import manifest from '../data/quran-offline-manifest.json';
 import { textPresentationMetadata, type TextPresentationMetadata } from './textPresentation';
 
 export type QuranOfflineTranslationId = 'pickthall-1930';
+export type QuranRevelationPlace = 'meccan' | 'medinan';
 
 function presentationMetadata(
   value: Readonly<{ lang: string; dir: string }>,
@@ -42,7 +43,16 @@ export interface QuranOfflineSurah {
   readonly nameArabic: string;
   readonly nameTransliteration: string;
   readonly nameEnglish: string;
+  readonly revelationPlace: QuranRevelationPlace;
   readonly ayahs: readonly QuranOfflineAyah[];
+}
+
+export interface QuranOfflineSurahSummary {
+  readonly surah: number;
+  readonly nameArabic: string;
+  readonly nameTransliteration: string;
+  readonly ayahCount: number;
+  readonly revelationPlace: QuranRevelationPlace;
 }
 
 export interface QuranOfflinePack {
@@ -106,6 +116,10 @@ export function validateQuranOfflinePack(value: unknown): QuranOfflinePack {
   const verseKeys = new Set<string>();
   for (const surah of surahs) {
     assertPack(Number.isInteger(surah.surah), 'Offline Qur’an surah number is invalid.');
+    assertPack(
+      surah.revelationPlace === 'meccan' || surah.revelationPlace === 'medinan',
+      `Surah ${String(surah.surah)} revelation place is invalid.`,
+    );
     assertPack(surah.ayahs.length > 0, `Surah ${String(surah.surah)} has no ayat.`);
     for (const ayah of surah.ayahs) {
       const key = `${String(surah.surah)}:${String(ayah.ayah)}`;
@@ -167,6 +181,61 @@ export function getQuranOfflineAyah(
   const surah = getQuranOfflineSurah(pack, parsed.surah);
   const ayah = surah?.ayahs.find((candidate) => candidate.ayah === parsed.ayah);
   return surah && ayah ? { surah, ayah } : null;
+}
+
+export function listQuranOfflineSurahSummaries(
+  pack: QuranOfflinePack,
+): readonly QuranOfflineSurahSummary[] {
+  return Object.freeze(
+    pack.surahs.map((surah) => ({
+      surah: surah.surah,
+      nameArabic: surah.nameArabic,
+      nameTransliteration: surah.nameTransliteration,
+      ayahCount: surah.ayahs.length,
+      revelationPlace: surah.revelationPlace,
+    })),
+  );
+}
+
+export function searchQuranOfflineSurahs(
+  pack: QuranOfflinePack,
+  query: string,
+): readonly QuranOfflineSurahSummary[] {
+  const summaries = listQuranOfflineSurahSummaries(pack);
+  const normalized = query.trim().toLocaleLowerCase();
+  if (normalized.length === 0) return summaries;
+  return Object.freeze(
+    summaries.filter((surah) =>
+      [String(surah.surah), surah.nameArabic, surah.nameTransliteration]
+        .join(' ')
+        .toLocaleLowerCase()
+        .includes(normalized),
+    ),
+  );
+}
+
+export function firstQuranOfflineAyahInJuz(
+  pack: QuranOfflinePack,
+  juz: number,
+): QuranOfflineSearchResult | null {
+  if (!Number.isInteger(juz) || juz < 1 || juz > 30) return null;
+  for (const surah of pack.surahs) {
+    const ayah = surah.ayahs.find((candidate) => candidate.juz === juz);
+    if (ayah) return { surah, ayah };
+  }
+  return null;
+}
+
+export function firstQuranOfflineAyahOnPage(
+  pack: QuranOfflinePack,
+  page: number,
+): QuranOfflineSearchResult | null {
+  if (!Number.isInteger(page) || page < 1 || page > 604) return null;
+  for (const surah of pack.surahs) {
+    const ayah = surah.ayahs.find((candidate) => candidate.page === page);
+    if (ayah) return { surah, ayah };
+  }
+  return null;
 }
 
 function searchableAyahText(surah: QuranOfflineSurah, ayah: QuranOfflineAyah): string {
