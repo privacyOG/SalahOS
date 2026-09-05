@@ -1,0 +1,128 @@
+name: TEMP Item 17 Wire Reader
+
+on:
+  push:
+    branches:
+      - v1.5.3/item-17-quran-navigation
+    paths:
+      - .github/workflows/temp-item17-wire-reader.yml
+
+permissions:
+  contents: write
+
+jobs:
+  wire-reader:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Wire Item 17 reader navigation and virtualization
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('src/ui/QuranOfflineReader.tsx')
+          text = path.read_text()
+
+          def replace_once(old: str, new: str) -> None:
+              global text
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'Expected one match, found {count}: {old[:120]!r}')
+              text = text.replace(old, new, 1)
+
+          replace_once(
+              "  getQuranOfflineAyah,\n  getQuranOfflineTranslationPresentation,",
+              "  firstQuranOfflineAyahInJuz,\n  firstQuranOfflineAyahOnPage,\n  getQuranOfflineAyah,\n  getQuranOfflineTranslationPresentation,",
+          )
+          replace_once(
+              "import { BidiText } from './BidiText';",
+              "import {\n  persistQuranScrollPosition,\n  quranScrollPositionForSurah,\n} from '../platform/quranScrollPositions';\nimport { BidiText } from './BidiText';\nimport { QuranSurahIndex } from './QuranSurahIndex';\nimport { QuranVirtualizedAyahList } from './QuranVirtualizedAyahList';",
+          )
+          replace_once(
+              "  surah: string;\n  showMore: string;",
+              "  surah: string;\n  surahSearch: string;\n  surahSearchPlaceholder: string;\n  ayatLabel: string;\n  meccan: string;\n  medinan: string;\n  juz: string;\n  mushafPage: string;\n  go: string;\n  virtualListLabel: string;\n  showMore: string;",
+          )
+
+          locale_values = {
+              "    surah: 'Surah',": "    surah: 'Surah',\n    surahSearch: 'Find a surah',\n    surahSearchPlaceholder: 'Number, Arabic or transliterated name…',\n    ayatLabel: 'ayat',\n    meccan: 'Meccan',\n    medinan: 'Medinan',\n    juz: 'Juz',\n    mushafPage: 'Mushaf page',\n    go: 'Go',\n    virtualListLabel: 'Continuous surah reading',",
+              "    surah: 'السورة',": "    surah: 'السورة',\n    surahSearch: 'ابحث عن سورة',\n    surahSearchPlaceholder: 'الرقم أو الاسم العربي أو المنقول…',\n    ayatLabel: 'آيات',\n    meccan: 'مكية',\n    medinan: 'مدنية',\n    juz: 'الجزء',\n    mushafPage: 'صفحة المصحف',\n    go: 'انتقال',\n    virtualListLabel: 'قراءة السورة المتواصلة',",
+              "    surah: 'Sure',": "    surah: 'Sure',\n    surahSearch: 'Sure bul',\n    surahSearchPlaceholder: 'Numara, Arapça veya latin harfli ad…',\n    ayatLabel: 'ayet',\n    meccan: 'Mekkî',\n    medinan: 'Medenî',\n    juz: 'Cüz',\n    mushafPage: 'Mushaf sayfası',\n    go: 'Git',\n    virtualListLabel: 'Kesintisiz sure okuma',",
+              "    surah: 'Surah',\n    showMore: 'Tampilkan ayat lainnya',": "    surah: 'Surah',\n    surahSearch: 'Cari surah',\n    surahSearchPlaceholder: 'Nomor, nama Arab, atau transliterasi…',\n    ayatLabel: 'ayat',\n    meccan: 'Makkiyah',\n    medinan: 'Madaniyah',\n    juz: 'Juz',\n    mushafPage: 'Halaman mushaf',\n    go: 'Buka',\n    virtualListLabel: 'Bacaan surah berkelanjutan',\n    showMore: 'Tampilkan ayat lainnya',",
+          }
+          for old, new in locale_values.items():
+              replace_once(old, new)
+
+          replace_once(
+              "  const [selectedSurah, setSelectedSurah] = useState(initialParsed?.surah ?? 1);\n  const [visibleAyahCount, setVisibleAyahCount] = useState(Math.max(20, initialParsed?.ayah ?? 1));\n  const [search, setSearch] = useState('');",
+              "  const [selectedSurah, setSelectedSurah] = useState(initialParsed?.surah ?? 1);\n  const [virtualTargetAyahKey, setVirtualTargetAyahKey] = useState<string | null>(\n    initialVerse(preferences, initialVerseKey),\n  );\n  const [resumeHighlightKey, setResumeHighlightKey] = useState<string | null>(null);\n  const [juzJump, setJuzJump] = useState(1);\n  const [mushafPageJump, setMushafPageJump] = useState(1);\n  const [search, setSearch] = useState('');",
+          )
+          text = text.replace("          setVisibleAyahCount(Math.max(20, parsed?.ayah ?? 1));\n", "          setVirtualTargetAyahKey(target.ayah.key);\n")
+          text = text.replace("    setVisibleAyahCount(Math.max(20, parsed?.ayah ?? 1));\n", "    setVirtualTargetAyahKey(initialVerseKey);\n")
+          replace_once(
+              "    setSelectedSurah(parsed.surah);\n    setVisibleAyahCount(Math.max(20, parsed.ayah));\n    setActiveAyahKey(verseKey);",
+              "    setSelectedSurah(parsed.surah);\n    setVirtualTargetAyahKey(verseKey);\n    setResumeHighlightKey(null);\n    setActiveAyahKey(verseKey);",
+          )
+          replace_once(
+              "    setSelectedSurah(surahNumber);\n    setVisibleAyahCount(20);\n    setBookmarksOnly(false);",
+              "    setSelectedSurah(surahNumber);\n    setVirtualTargetAyahKey(null);\n    setResumeHighlightKey(null);\n    setBookmarksOnly(false);",
+          )
+          replace_once(
+              "  const selectedResults: readonly QuranOfflineSearchResult[] = selected\n    ? selected.ayahs.slice(0, visibleAyahCount).map((ayah) => ({ surah: selected, ayah }))\n    : [];",
+              "  const selectedResults: readonly QuranOfflineSearchResult[] = selected\n    ? selected.ayahs.map((ayah) => ({ surah: selected, ayah }))\n    : [];",
+          )
+          replace_once(
+              "                jumpToVerse(`${String(lastRead.surah)}:${String(lastRead.ayah)}`);",
+              "                const verseKey = `${String(lastRead.surah)}:${String(lastRead.ayah)}`;\n                jumpToVerse(verseKey);\n                setResumeHighlightKey(verseKey);",
+          )
+
+          native_select = '''            <label>\n              <span>{labels.surah}</span>\n              <select\n                data-quran-surah-select\n                value={selectedSurah}\n                onChange={(event) => {\n                  selectSurah(Number(event.target.value));\n                }}\n              >\n                {pack.surahs.map((surah) => (\n                  <option\n                    key={surah.surah}\n                    value={surah.surah}\n                    lang={\n                      locale === 'ar'\n                        ? quranOfflineArabicPresentation.lang\n                        : quranOfflineTransliterationPresentation.lang\n                    }\n                    dir={\n                      locale === 'ar'\n                        ? quranOfflineArabicPresentation.dir\n                        : quranOfflineTransliterationPresentation.dir\n                    }\n                  >\n                    {String(surah.surah)}.{' '}\n                    {locale === 'ar' ? surah.nameArabic : surah.nameTransliteration}\n                  </option>\n                ))}\n              </select>\n            </label>'''
+          surah_index = '''            <QuranSurahIndex\n              pack={pack}\n              selectedSurah={selectedSurah}\n              searchLabel={labels.surahSearch}\n              searchPlaceholder={labels.surahSearchPlaceholder}\n              ayahCountLabel={labels.ayatLabel}\n              revelationLabel={{ meccan: labels.meccan, medinan: labels.medinan }}\n              onSelect={selectSurah}\n            />'''
+          replace_once(native_select, surah_index)
+
+          navigation_anchor = '''          </div>\n\n          <div className="quran-offline-reader__reading-controls" data-quran-reading-controls>'''
+          navigation_replacement = '''          </div>\n\n          <div className="quran-jump-navigation" data-quran-jump-navigation>\n            <label>\n              <span>{labels.juz}</span>\n              <input\n                type="number"\n                min={1}\n                max={30}\n                value={juzJump}\n                onChange={(event) => { setJuzJump(Number(event.target.value)); }}\n              />\n              <button\n                type="button"\n                onClick={() => {\n                  const target = firstQuranOfflineAyahInJuz(pack, juzJump);\n                  if (target) jumpToVerse(target.ayah.key);\n                }}\n              >\n                {labels.go}\n              </button>\n            </label>\n            <label>\n              <span>{labels.mushafPage}</span>\n              <input\n                type="number"\n                min={1}\n                max={604}\n                value={mushafPageJump}\n                onChange={(event) => { setMushafPageJump(Number(event.target.value)); }}\n              />\n              <button\n                type="button"\n                onClick={() => {\n                  const target = firstQuranOfflineAyahOnPage(pack, mushafPageJump);\n                  if (target) jumpToVerse(target.ayah.key);\n                }}\n              >\n                {labels.go}\n              </button>\n            </label>\n          </div>\n\n          <div className="quran-offline-reader__reading-controls" data-quran-reading-controls>'''
+          replace_once(navigation_anchor, navigation_replacement)
+
+          article_marker = '''  const renderSurahBand = (result: QuranOfflineSearchResult) => {'''
+          if article_marker not in text:
+              raise SystemExit('renderSurahBand anchor missing')
+
+          start_marker = '''          {results.length === 0 ? ('''
+          end_marker = '''\n\n          {normalBrowsing &&\n          preferences.readingMode === 'list' &&\n          selected &&\n          visibleAyahCount < selected.ayahs.length ? ('''
+          start = text.index(start_marker)
+          end = text.index(end_marker, start)
+
+          render_block = '''          {results.length === 0 ? (\n            <p className="knowledge-empty" role="status">\n              {labels.noResults}\n            </p>\n          ) : normalBrowsing && preferences.readingMode === 'list' && selected ? (\n            <>\n              {selectedResults[0] ? renderSurahBand(selectedResults[0]) : null}\n              <QuranVirtualizedAyahList\n                items={selectedResults}\n                surahNumber={selected.surah}\n                initialScrollTop={quranScrollPositionForSurah(selected.surah)}\n                targetAyahKey={virtualTargetAyahKey}\n                ariaLabel={labels.virtualListLabel}\n                onScrollTopChange={(scrollTop) => {\n                  persistQuranScrollPosition(selected.surah, scrollTop);\n                }}\n                renderItem={(result) => {\n                  const parsed = parseQuranVerseKey(result.ayah.key);\n                  const curated = curatedEntryForVerseKey(result.ayah.key);\n                  const tafsirSource = curated\n                    ? getIslamicKnowledgeSource(curated.tafsirSourceId)\n                    : null;\n                  return (\n                    <article\n                      className="quran-offline-ayah"\n                      data-quran-offline-ayah={result.ayah.key}\n                      data-active={activeAyahKey === result.ayah.key ? 'true' : undefined}\n                      data-resume-highlight={\n                        resumeHighlightKey === result.ayah.key ? 'true' : undefined\n                      }\n                      onClick={() => {\n                        setActiveAyahKey(result.ayah.key);\n                        setResumeHighlightKey(null);\n                        onVerseNavigate?.(result.ayah.key);\n                      }}\n                    >\n                      <p\n                        className="knowledge-card__arabic"\n                        lang="ar"\n                        dir="rtl"\n                        data-quran-font={preferences.arabicFont}\n                        data-quran-scale={preferences.fontScale}\n                      >\n                        {result.ayah.arabic}{' '}\n                        <span\n                          className="quran-offline-ayah__marker"\n                          aria-label={`${labels.ayah} ${String(parsed?.ayah ?? '')}`}\n                        >\n                          ۝ {formatQuranAyahNumber(parsed?.ayah ?? 1)}\n                        </span>\n                      </p>\n                      {preferences.translationMode === 'pickthall-1930' ? (\n                        <p\n                          className="quran-offline-ayah__translation"\n                          data-quran-offline-translation\n                          lang={pickthallPresentation.lang}\n                          dir={pickthallPresentation.dir}\n                        >\n                          {result.ayah.translations['pickthall-1930']}\n                        </p>\n                      ) : null}\n                      {curated && tafsirSource ? (\n                        <div className="quran-offline-ayah__tafsir">\n                          <strong>{labels.tafsir}</strong>\n                          <p\n                            data-quran-tafsir-summary\n                            lang={curated.tafsirSummaryPresentation.lang}\n                            dir={curated.tafsirSummaryPresentation.dir}\n                          >\n                            {curated.tafsirSummary}\n                          </p>\n                          <small\n                            lang={tafsirSource.displayPresentation.lang}\n                            dir={tafsirSource.displayPresentation.dir}\n                          >\n                            {tafsirSource.title}\n                          </small>\n                        </div>\n                      ) : null}\n                      {curated ? (\n                        <div className="quran-offline-ayah__related">\n                          <strong>{labels.related}</strong>\n                          <div>\n                            {relatedVerseKeys(curated).map((verseKey) => (\n                              <button\n                                type="button"\n                                key={verseKey}\n                                onClick={(event) => {\n                                  event.stopPropagation();\n                                  jumpToVerse(verseKey);\n                                }}\n                                data-quran-related-reference\n                                lang={quranOfflineReferencePresentation.lang}\n                                dir={quranOfflineReferencePresentation.dir}\n                              >\n                                {labels.quran} <BidiText>{verseKey}</BidiText>\n                              </button>\n                            ))}\n                          </div>\n                        </div>\n                      ) : null}\n                    </article>\n                  );\n                }}\n              />\n            </>\n          ) : (\n            <div\n              className={`quran-offline-reader__ayat quran-offline-reader__ayat--${preferences.readingMode}`}\n              aria-live="polite"\n            >\n              {results.map((result) => {\n                const parsed = parseQuranVerseKey(result.ayah.key);\n                const curated = curatedEntryForVerseKey(result.ayah.key);\n                const tafsirSource = curated\n                  ? getIslamicKnowledgeSource(curated.tafsirSourceId)\n                  : null;\n                const showPageSurahBand =\n                  normalBrowsing && preferences.readingMode === 'page' && parsed?.ayah === 1;\n                return (\n                  <Fragment key={result.ayah.key}>\n                    {showPageSurahBand ? renderSurahBand(result) : null}\n                    <article\n                      className="quran-offline-ayah"\n                      data-quran-offline-ayah={result.ayah.key}\n                      data-active={activeAyahKey === result.ayah.key ? 'true' : undefined}\n                      data-resume-highlight={resumeHighlightKey === result.ayah.key ? 'true' : undefined}\n                      onClick={() => {\n                        setActiveAyahKey(result.ayah.key);\n                        setResumeHighlightKey(null);\n                        onVerseNavigate?.(result.ayah.key);\n                      }}\n                    >\n                      {!normalBrowsing ? (\n                        <p\n                          className="quran-offline-ayah__reference"\n                          lang={quranOfflineTransliterationPresentation.lang}\n                          dir={quranOfflineTransliterationPresentation.dir}\n                        >\n                          {result.surah.nameTransliteration} ·{' '}\n                          <BidiText>{result.ayah.key}</BidiText> · Juz {String(result.ayah.juz)}\n                        </p>\n                      ) : null}\n                      <p\n                        className="knowledge-card__arabic"\n                        lang="ar"\n                        dir="rtl"\n                        data-quran-font={preferences.arabicFont}\n                        data-quran-scale={preferences.fontScale}\n                      >\n                        {result.ayah.arabic}{' '}\n                        <span\n                          className="quran-offline-ayah__marker"\n                          aria-label={`${labels.ayah} ${String(parsed?.ayah ?? '')}`}\n                        >\n                          ۝ {formatQuranAyahNumber(parsed?.ayah ?? 1)}\n                        </span>\n                      </p>\n                      {preferences.translationMode === 'pickthall-1930' ? (\n                        <p\n                          className="quran-offline-ayah__translation"\n                          data-quran-offline-translation\n                          lang={pickthallPresentation.lang}\n                          dir={pickthallPresentation.dir}\n                        >\n                          {result.ayah.translations['pickthall-1930']}\n                        </p>\n                      ) : null}\n                      {curated && tafsirSource ? (\n                        <div className="quran-offline-ayah__tafsir">\n                          <strong>{labels.tafsir}</strong>\n                          <p\n                            data-quran-tafsir-summary\n                            lang={curated.tafsirSummaryPresentation.lang}\n                            dir={curated.tafsirSummaryPresentation.dir}\n                          >\n                            {curated.tafsirSummary}\n                          </p>\n                          <small\n                            lang={tafsirSource.displayPresentation.lang}\n                            dir={tafsirSource.displayPresentation.dir}\n                          >\n                            {tafsirSource.title}\n                          </small>\n                        </div>\n                      ) : null}\n                      {curated ? (\n                        <div className="quran-offline-ayah__related">\n                          <strong>{labels.related}</strong>\n                          <div>\n                            {relatedVerseKeys(curated).map((verseKey) => (\n                              <button\n                                type="button"\n                                key={verseKey}\n                                onClick={(event) => {\n                                  event.stopPropagation();\n                                  jumpToVerse(verseKey);\n                                }}\n                                data-quran-related-reference\n                                lang={quranOfflineReferencePresentation.lang}\n                                dir={quranOfflineReferencePresentation.dir}\n                              >\n                                {labels.quran} <BidiText>{verseKey}</BidiText>\n                              </button>\n                            ))}\n                          </div>\n                        </div>\n                      ) : null}\n                    </article>\n                  </Fragment>\n                );\n              })}\n            </div>\n          )}'''
+          text = text[:start] + render_block + text[end:]
+
+          show_more_start = text.index(end_marker.strip())
+          footer_marker = '''\n\n          {normalBrowsing ? ('''
+          show_more_end = text.index(footer_marker, show_more_start)
+          text = text[:show_more_start] + text[show_more_end:]
+
+          path.write_text(text)
+
+          css = Path('src/quran-offline-reader.css')
+          css_text = css.read_text()
+          css_text += '''\n\n/* V1.5.3 Item 17: scalable Qur’an navigation and continuous virtual reading. */\n.quran-surah-index {\n  display: grid;\n  gap: var(--salah-space-2);\n  min-width: 0;\n}\n\n.quran-surah-index__search {\n  display: grid;\n  gap: var(--salah-space-1);\n}\n\n.quran-surah-index__results {\n  display: grid;\n  gap: var(--salah-space-1);\n  max-block-size: 18rem;\n  overflow-y: auto;\n  padding: var(--salah-space-1);\n  border: 1px solid var(--salah-border-subtle);\n  border-radius: var(--salah-radius-md);\n  background: var(--salah-bg-muted);\n}\n\n.quran-surah-index__option {\n  display: grid;\n  grid-template-columns: auto minmax(0, 1fr);\n  gap: var(--salah-space-1) var(--salah-space-2);\n  align-items: center;\n  min-block-size: 44px;\n  padding: var(--salah-space-2);\n  border: 1px solid transparent;\n  border-radius: var(--salah-radius-md);\n  background: var(--salah-bg-surface);\n  color: var(--salah-fg-primary);\n  text-align: start;\n}\n\n.quran-surah-index__option[aria-selected='true'] {\n  border-color: var(--salah-border-default);\n  background: var(--salah-bg-accent-soft);\n}\n\n.quran-surah-index__number {\n  grid-row: 1 / span 2;\n  color: var(--salah-fg-accent);\n  font-weight: 800;\n}\n\n.quran-surah-index__names {\n  display: flex;\n  flex-wrap: wrap;\n  gap: var(--salah-space-2);\n  justify-content: space-between;\n}\n\n.quran-surah-index__meta {\n  color: var(--salah-fg-tertiary);\n  font-size: var(--salah-text-xs);\n}\n\n.quran-jump-navigation {\n  display: grid;\n  grid-template-columns: repeat(2, minmax(0, 1fr));\n  gap: var(--salah-space-3);\n  margin-block: var(--salah-space-3);\n  padding: var(--salah-space-3);\n  border: 1px solid var(--salah-border-subtle);\n  border-radius: var(--salah-radius-md);\n  background: var(--salah-bg-muted);\n}\n\n.quran-jump-navigation label {\n  display: grid;\n  grid-template-columns: minmax(0, 1fr) auto;\n  gap: var(--salah-space-2);\n  align-items: end;\n  color: var(--salah-fg-secondary);\n  font-size: var(--salah-text-sm);\n  font-weight: 750;\n}\n\n.quran-jump-navigation label > span {\n  grid-column: 1 / -1;\n}\n\n.quran-jump-navigation button {\n  min-block-size: 44px;\n}\n\n.quran-offline-reader__virtual-scroll {\n  block-size: min(72vh, 52rem);\n  overflow-y: auto;\n  overscroll-behavior: contain;\n  scrollbar-gutter: stable;\n  padding-inline: var(--salah-space-1);\n}\n\n.quran-offline-reader__virtual-scroll [data-quran-virtual-key] {\n  padding-block-end: var(--salah-space-3);\n}\n\n.quran-offline-ayah[data-resume-highlight='true'] {\n  outline: 3px solid var(--salah-fg-accent);\n  outline-offset: 2px;\n  background: var(--salah-bg-accent-soft);\n}\n\n@media (max-width: 760px) {\n  .quran-jump-navigation {\n    grid-template-columns: minmax(0, 1fr);\n  }\n\n  .quran-offline-reader__virtual-scroll {\n    block-size: 68vh;\n  }\n}\n'''
+          css.write_text(css_text)
+          PY
+
+      - name: Check patch whitespace
+        run: git diff --check
+
+      - name: Commit retained reader wiring
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/ui/QuranOfflineReader.tsx src/quran-offline-reader.css
+          git commit -m "V1.5.3 Item 17: wire scalable Qur’an navigation"
+          echo "ITEM17_READER_COMMIT=$(git rev-parse HEAD)"
+
+      - name: Push retained commit
+        run: git push origin HEAD:${GITHUB_REF_NAME}
