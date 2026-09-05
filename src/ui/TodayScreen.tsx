@@ -22,7 +22,6 @@ import { displayedManualPrayerAdjustmentMinutes } from '../domain/prayerAdjustme
 import type { PrayerName } from '../domain/prayerEngine';
 import { applyPrayerSourceToDashboard } from '../domain/sourcedDashboard';
 import {
-  formatCountdown,
   formatGregorianCivilDate,
   formatHijriCivilDate,
   formatLocalTime,
@@ -45,8 +44,10 @@ import {
 } from '../platform/settingsStorage';
 import { readSystemTime } from '../platform/systemTime';
 import { BidiText } from './BidiText';
+import { TodayAppBarClock } from './TodayAppBarClock';
 import { TodayContextualSections } from './TodayContextualSections';
 import { TodayJumuahSection } from './TodayJumuahSection';
+import { TodayPrayerCountdown } from './TodayPrayerCountdown';
 import { useMobilePrayerThemeConfig, useMobilePrayerWeather } from './MobilePrayerThemeSurface';
 import { PrayerBoardWeatherModule } from './PrayerBoardWeatherModule';
 import { SalahIcon } from './SalahIcon';
@@ -55,6 +56,10 @@ import {
   searchForSettingsCategory,
   type CongregationDestination,
 } from './applicationRoute';
+import {
+  TODAY_SCHEDULE_STATE_REFRESH_MS,
+  createTodayPrayerDashboardResolver,
+} from './todayPrayerDashboardScheduler';
 import { todayPrayerProvenancePresentation } from './todayPrayerProvenance';
 
 const prayerTranslationKeys: Readonly<Record<PrayerName, TranslationKey>> = {
@@ -218,35 +223,6 @@ function prayerSettingsHref(): string {
   return `${window.location.pathname}${search}${window.location.hash}`;
 }
 
-function localeClockTag(locale: Locale): string {
-  switch (locale) {
-    case 'ar':
-      return 'ar';
-    case 'tr':
-      return 'tr-TR';
-    case 'id':
-      return 'id-ID';
-    case 'en':
-    default:
-      return 'en-AU';
-  }
-}
-
-function formatPrayerBoardClock(
-  clock: PrayerBoardData['clock'],
-  locale: Locale,
-  hourCycle: PersistedSettings['timeFormat'],
-): string {
-  const instant = new Date(Date.UTC(2000, 0, 1, clock.hour, clock.minute, clock.second));
-  return new Intl.DateTimeFormat(localeClockTag(locale), {
-    timeZone: 'UTC',
-    hour: '2-digit',
-    minute: '2-digit',
-    second: '2-digit',
-    hourCycle,
-  }).format(instant);
-}
-
 function prayerBoardCivilDate(data: PrayerBoardData): Date {
   const value = new Date(`${data.civilDateIso}T00:00:00.000Z`);
   if (!Number.isFinite(value.getTime())) {
@@ -293,17 +269,24 @@ export function TodayScreen() {
   const timeZoneOverride = directoryMosqueLocationAdopted
     ? activeDirectoryMosque.timeZone
     : (settings.location?.timeZone ?? null);
-  const [now, setNow] = useState<Date | null>(() => readSystemTime());
+  const resolvePrayerDashboard = useMemo(
+    () => createTodayPrayerDashboardResolver(buildPrayerDashboardResult),
+    [],
+  );
+  const [scheduleNow, setScheduleNow] = useState<Date | null>(() => readSystemTime());
   const [online, setOnline] = useState(() => navigator.onLine);
 
   useEffect(() => {
-    const refreshNow = () => {
-      setNow(readSystemTime());
+    const refreshScheduleState = () => {
+      setScheduleNow(readSystemTime());
     };
-    const timer = window.setInterval(refreshNow, 1_000);
+    const timer = window.setInterval(
+      refreshScheduleState,
+      TODAY_SCHEDULE_STATE_REFRESH_MS,
+    );
     const removeRuntimeListeners = installRuntimeRefreshListeners(
       { windowTarget: window, documentTarget: document },
-      refreshNow,
+      refreshScheduleState,
     );
     return () => {
       window.clearInterval(timer);
@@ -328,10 +311,10 @@ export function TodayScreen() {
 
   const dashboardResult = useMemo(
     () =>
-      coordinates === null || now === null
+      coordinates === null || scheduleNow === null
         ? null
-        : buildPrayerDashboardResult({
-            instant: now,
+        : resolvePrayerDashboard({
+            instant: scheduleNow,
             coordinates,
             ...(timeZoneOverride === null ? {} : { timeZone: timeZoneOverride }),
             method: calculationMethods[settings.calculationMethodId],
@@ -340,7 +323,7 @@ export function TodayScreen() {
             adjustments: settings.prayerAdjustments,
             hijriCorrectionDays: settings.hijriCorrectionDays,
           }),
-    [coordinates, now, settings, timeZoneOverride],
+    [coordinates, resolvePrayerDashboard, scheduleNow, settings, timeZoneOverride],
   );
   const dashboard = dashboardResult?.ok === true ? dashboardResult.dashboard : null;
   const calculationUnavailable = dashboardResult?.ok === false;
@@ -377,18 +360,6 @@ export function TodayScreen() {
       civilDateIso: prayerBoardData.civilDateIso,
       jumuahSessions: todayJumuahSessions,
     });
-
-  const currentClock =
-    now === null
-      ? '—'
-      : prayerBoardData === null
-        ? new Intl.DateTimeFormat(localeClockTag(locale), {
-            hour: '2-digit',
-            minute: '2-digit',
-            second: '2-digit',
-            hourCycle: settings.timeFormat,
-          }).format(now)
-        : formatPrayerBoardClock(prayerBoardData.clock, locale, settings.timeFormat);
 
   const nextPrayerLabel =
     prayerBoardData?.nextPrayer === null || prayerBoardData?.nextPrayer === undefined
@@ -490,16 +461,19 @@ export function TodayScreen() {
           </div>
         </div>
         <div className="today-appbar__meta">
-          <span className="today-appbar__clock" aria-label={translate(locale, 'currentTime')}>
-            {currentClock}
-          </span>
+          <TodayAppBarClock
+            locale={locale}
+            timeFormat={settings.timeFormat}
+            timeZone={prayerBoardData?.timeZone ?? timeZoneOverride}
+            visible={modules['current-time']}
+          />
           <a href={destinationHref('settings')} aria-label={translate(locale, 'language')}>
             {locale.toUpperCase()}
           </a>
         </div>
       </header>
 
-      {now === null ? (
+      {scheduleNow === null ? (
         <section className="today-state" role="alert">
           <p>{translate(locale, 'currentTime')}</p>
           <h1>{translate(locale, 'systemTimeInvalid')}</h1>
@@ -535,11 +509,12 @@ export function TodayScreen() {
             </div>
             <div className="today-next__countdown">
               <span>{translate(locale, 'countdown')}</span>
-              <strong>
-                {prayerBoardData.nextPrayer === null
-                  ? '—'
-                  : formatCountdown(prayerBoardData.nextPrayer.secondsUntil, locale)}
-              </strong>
+              <TodayPrayerCountdown
+                secondsUntilNextPrayer={prayerBoardData.nextPrayer?.secondsUntil ?? null}
+                generatedAt={sourcedDashboard.base.generatedAt}
+                locale={locale}
+                clockVisible={modules['current-time']}
+              />
             </div>
             <dl className="today-next__times">
               <div>
@@ -764,7 +739,7 @@ export function TodayScreen() {
             dashboard={sourcedDashboard}
             unavailablePrayers={unavailablePrayers}
             online={!prayerBoardData.offline}
-            now={now}
+            now={scheduleNow}
             communityHref={destinationHref('community')}
             mosquesHref={destinationHref('mosques')}
             showCommunity={modules.announcements}
