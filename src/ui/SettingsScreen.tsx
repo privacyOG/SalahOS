@@ -416,9 +416,9 @@ function PrayerSettingsForm({
             }));
           }}
         >
-          {[-2, -1, 0, 1, 2].map((day) => (
+          {[-3, -2, -1, 0, 1, 2, 3].map((day) => (
             <option key={day} value={day}>
-              {day > 0 ? `+${String(day)}` : day}
+              {day > 0 ? `+${number.format(day)}` : number.format(day)}
             </option>
           ))}
         </select>
