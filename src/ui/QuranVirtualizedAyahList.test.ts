@@ -1,10 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import type { QuranOfflineSearchResult } from '../domain/quranOfflineLibrary';
-import {
-  QURAN_VIRTUAL_ESTIMATED_ROW_HEIGHT,
-  quranVirtualWindow,
-} from './QuranVirtualizedAyahList';
+import { QURAN_VIRTUAL_ESTIMATED_ROW_HEIGHT, quranVirtualWindow } from './QuranVirtualizedAyahList';
 
 function fixtureResults(count: number): readonly QuranOfflineSearchResult[] {
   return Array.from({ length: count }, (_, index) => ({

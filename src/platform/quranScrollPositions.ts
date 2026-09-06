@@ -46,7 +46,9 @@ export function quranScrollPositionForSurah(
 ): number {
   if (!Number.isInteger(surah) || surah < 1 || surah > 114 || storage === null) return 0;
   try {
-    return parseScrollPositions(storage.getItem(QURAN_SCROLL_POSITIONS_STORAGE_KEY))[String(surah)] ?? 0;
+    return (
+      parseScrollPositions(storage.getItem(QURAN_SCROLL_POSITIONS_STORAGE_KEY))[String(surah)] ?? 0
+    );
   } catch {
     return 0;
   }

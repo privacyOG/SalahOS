@@ -8,7 +8,6 @@ import {
   getQuranOfflineSurah,
   loadQuranOfflinePack,
   parseQuranVerseKey,
-  quranOfflineArabicPresentation,
   quranOfflineReferencePresentation,
   quranOfflineTransliterationPresentation,
   searchQuranOfflinePack,
@@ -402,7 +401,6 @@ export function QuranOfflineReader({
         setPack(loaded);
         const target = getQuranOfflineAyah(loaded, initialVerse(preferences, initialVerseKey));
         if (target) {
-          const parsed = parseQuranVerseKey(target.ayah.key);
           setSelectedSurah(target.surah.surah);
           setVirtualTargetAyahKey(target.ayah.key);
           setCurrentPage(target.ayah.page);
@@ -421,7 +419,6 @@ export function QuranOfflineReader({
     if (!pack || !initialVerseKey) return;
     const target = getQuranOfflineAyah(pack, initialVerseKey);
     if (!target) return;
-    const parsed = parseQuranVerseKey(initialVerseKey);
     setBookmarksOnly(false);
     setSearch('');
     setSelectedSurah(target.surah.surah);

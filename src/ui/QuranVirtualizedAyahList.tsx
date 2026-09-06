@@ -1,11 +1,4 @@
-import {
-  type ReactNode,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react';
+import { type ReactNode, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react';
 
 import type { QuranOfflineSearchResult } from '../domain/quranOfflineLibrary';
 
@@ -75,15 +68,17 @@ export function quranVirtualWindow(
   return { start, end, beforeHeight, afterHeight };
 }
 
-export function QuranVirtualizedAyahList(props: Readonly<{
-  items: readonly QuranOfflineSearchResult[];
-  surahNumber: number;
-  initialScrollTop: number;
-  targetAyahKey: string | null;
-  ariaLabel: string;
-  onScrollTopChange: (scrollTop: number) => void;
-  renderItem: (result: QuranOfflineSearchResult) => ReactNode;
-}>) {
+export function QuranVirtualizedAyahList(
+  props: Readonly<{
+    items: readonly QuranOfflineSearchResult[];
+    surahNumber: number;
+    initialScrollTop: number;
+    targetAyahKey: string | null;
+    ariaLabel: string;
+    onScrollTopChange: (scrollTop: number) => void;
+    renderItem: (result: QuranOfflineSearchResult) => ReactNode;
+  }>,
+) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const measuredHeightsRef = useRef(new Map<string, number>());
   const [scrollTop, setScrollTop] = useState(props.initialScrollTop);
@@ -91,13 +86,7 @@ export function QuranVirtualizedAyahList(props: Readonly<{
   const [measurementVersion, setMeasurementVersion] = useState(0);
 
   const window = useMemo(
-    () =>
-      quranVirtualWindow(
-        props.items,
-        scrollTop,
-        viewportHeight,
-        measuredHeightsRef.current,
-      ),
+    () => quranVirtualWindow(props.items, scrollTop, viewportHeight, measuredHeightsRef.current),
     [measurementVersion, props.items, scrollTop, viewportHeight],
   );
   const visible = props.items.slice(window.start, window.end);
@@ -127,7 +116,7 @@ export function QuranVirtualizedAyahList(props: Readonly<{
       for (const entry of entries) {
         const element = entry.target as HTMLElement;
         const key = element.dataset.quranVirtualKey;
-        const height = entry.borderBoxSize[0]?.blockSize ?? entry.getBoundingClientRect().height;
+        const height = entry.borderBoxSize[0]?.blockSize ?? element.getBoundingClientRect().height;
         if (!key || !Number.isFinite(height) || height <= 0) continue;
         if (Math.abs((measuredHeightsRef.current.get(key) ?? 0) - height) < 1) continue;
         measuredHeightsRef.current.set(key, height);

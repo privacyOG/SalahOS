@@ -21,7 +21,9 @@ function assert(condition, message) {
 }
 
 function normalizeRevelationPlace(value, surahNumber) {
-  const normalized = String(value ?? '').trim().toLowerCase();
+  const normalized = String(value ?? '')
+    .trim()
+    .toLowerCase();
   assert(
     normalized === 'meccan' || normalized === 'medinan',
     `Surah ${String(surahNumber)} has unsupported revelation type ${String(value)}.`,

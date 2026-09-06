@@ -6,20 +6,19 @@ import {
   type QuranRevelationPlace,
 } from '../domain/quranOfflineLibrary';
 
-export function QuranSurahIndex(props: Readonly<{
-  pack: QuranOfflinePack;
-  selectedSurah: number;
-  searchLabel: string;
-  searchPlaceholder: string;
-  ayahCountLabel: string;
-  revelationLabel: Readonly<Record<QuranRevelationPlace, string>>;
-  onSelect: (surah: number) => void;
-}>) {
+export function QuranSurahIndex(
+  props: Readonly<{
+    pack: QuranOfflinePack;
+    selectedSurah: number;
+    searchLabel: string;
+    searchPlaceholder: string;
+    ayahCountLabel: string;
+    revelationLabel: Readonly<Record<QuranRevelationPlace, string>>;
+    onSelect: (surah: number) => void;
+  }>,
+) {
   const [query, setQuery] = useState('');
-  const results = useMemo(
-    () => searchQuranOfflineSurahs(props.pack, query),
-    [props.pack, query],
-  );
+  const results = useMemo(() => searchQuranOfflineSurahs(props.pack, query), [props.pack, query]);
 
   return (
     <section className="quran-surah-index" data-quran-surah-index>
@@ -50,8 +49,12 @@ export function QuranSurahIndex(props: Readonly<{
           >
             <span className="quran-surah-index__number">{String(surah.surah)}</span>
             <span className="quran-surah-index__names">
-              <strong lang="ar" dir="rtl">{surah.nameArabic}</strong>
-              <span lang="en-Latn" dir="ltr">{surah.nameTransliteration}</span>
+              <strong lang="ar" dir="rtl">
+                {surah.nameArabic}
+              </strong>
+              <span lang="en-Latn" dir="ltr">
+                {surah.nameTransliteration}
+              </span>
             </span>
             <span className="quran-surah-index__meta">
               {String(surah.ayahCount)} {props.ayahCountLabel} ·{' '}
