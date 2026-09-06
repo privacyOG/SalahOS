@@ -1,0 +1,18 @@
+name: TEMP Item 17 Pack Hash
+
+on:
+  push:
+    branches:
+      - v1.5.3/item-17-quran-navigation
+    paths:
+      - .github/workflows/temp-item17-pack-hash.yml
+
+jobs:
+  hash:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Regenerate pack to reveal deterministic Item 17 digest
+        run: |
+          rm -f public/data/quran/quran-offline-pack.json
+          node scripts/prepare-quran-offline-pack.mjs
