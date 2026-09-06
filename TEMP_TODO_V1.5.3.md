@@ -170,15 +170,15 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - [x] Measure `buildPrayerDashboardResult` calls over a simulated 10-minute window before/after and add regression coverage.
 - [x] Gate: `npm run typecheck && npm run lint && npm run test`.
 
-## Work Item 17 — Make 6,236 ayat navigable
+## Work Item 17 — Make 6,236 ayat navigable — COMPLETE
 
-- [ ] Replace the 114-option native select with a searchable surah index showing number, Arabic/transliterated name, ayah count, and revelation place.
-- [ ] Add Juz and mushaf-page navigation.
-- [ ] Replace "Show more ayat" with continuous virtualized surah scrolling, without a new dependency if reasonably possible.
-- [ ] Persist/restore scroll position per surah.
-- [ ] Make "Resume last read" jump and highlight.
-- [ ] Report Al-Baqarah render timing before/after.
-- [ ] Gate: `npm run typecheck && npm run lint && npm run test && npm run bundle:size`.
+- [x] Replace the 114-option native select with a searchable surah index showing number, Arabic/transliterated name, ayah count, and revelation place.
+- [x] Add Juz and mushaf-page navigation.
+- [x] Replace "Show more ayat" with continuous virtualized surah scrolling, without a new dependency if reasonably possible.
+- [x] Persist/restore scroll position per surah.
+- [x] Make "Resume last read" jump and highlight.
+- [x] Report Al-Baqarah render timing before/after.
+- [x] Gate: `npm run typecheck && npm run lint && npm run test && npm run bundle:size`.
 
 ## Work Item 18 — Consolidate bottom navigation and label overflow
 
@@ -259,3 +259,4 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - Work Item 6 research checkpoint: licensing matrix and permission-request drafts recorded in `docs/QURAN_TRANSLATION_TRANSLITERATION_LICENSING.md`; pinned `risan/quran-json` v3.1.2 transliteration at 2,214,403 bytes, SHA-256 `36369741f23fe2b64fdcca39d047659256dab7b40f1717aefcb6198c514313a0`, Git blob `7e2750a5b65306c9393b29e5a3ddfa264d33cc48`, 114 surahs/6,236 ayat. Product integration remains blocked pending owner approval and required rights clarification.
 - Work Item 8 technical implementation: lean validation run `33497792180` passed Knowledge governance, typecheck, lint, 788 tests across 180 files, theme/design ownership, production build, and bundle architecture at 1,249,350 total JavaScript bytes (650 bytes below the 1,250,000-byte cap). The current three-hadith corpus contains no divine-attribute report requiring a tanzih note. Corpus expansion remains owner-decision pending before Item 8 can be closed.
 - Work Item 12: complete via PR #234, merged as `05240f6aaf5cbcfc56d06f6163c3e5dff6ce3727`; exact-head Quality Gate run 33678029000 passed the required format, lint, typecheck, and unit-test steps before merge.
+- Work Item 17: complete via PR #250, merged as `088c3ba8abd49ab6807f5cf153056391411e87d0`; final head `133bcfa5c8abd2c9d629215d31e6a0fc15f46f86` passed Quality, Visual, Android, iOS, and Windows gates. Five-iteration Al-Baqarah browser benchmark measured 20.1 ms → 23.6 ms selection latency while reducing the chapter DOM from 286 rows to a 7–9 row virtual window and the full-chapter navigation path from 273.6 ms expand-all to 32.3 ms virtual scroll-to-bottom.
