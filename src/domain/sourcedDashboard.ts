@@ -97,11 +97,13 @@ function currentPrayerState(
 ): CurrentPrayerState {
   if (current !== null) return 'active';
 
-  const firstStart = OBLIGATORY_PRAYERS.reduce<number | null>((earliest, prayer) => {
+  let firstStart: number | null = null;
+  for (const prayer of OBLIGATORY_PRAYERS) {
     const start = today[prayer].startLocalMinutes;
-    if (start === null) return earliest;
-    return earliest === null ? start : Math.min(earliest, start);
-  }, null);
+    if (start !== null && (firstStart === null || start < firstStart)) {
+      firstStart = start;
+    }
+  }
 
   // This is a civil-day schedule state only. It deliberately does not infer
   // whether any previous prayer remains valid according to a fiqh convention.
