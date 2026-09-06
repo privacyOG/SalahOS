@@ -31,22 +31,14 @@ jobs:
           from pathlib import Path
           path = Path('scripts/visual-regression.mjs')
           text = path.read_text()
-          old = """      const isFormControl =
-        element instanceof HTMLInputElement ||
-        element instanceof HTMLSelectElement ||
-        element instanceof HTMLTextAreaElement ||
-        element instanceof HTMLButtonElement;
-      const visiblyOverflowsOwnBox =
-        !isFormControl &&
-        element.clientWidth > 0 &&
-        element.scrollWidth > element.clientWidth + tolerance &&
-        style.overflowX === 'visible';
-
-      if (!outsideViewport && !visiblyOverflowsOwnBox) continue;"""
-          new = """      if (!outsideViewport) continue;"""
-          if text.count(old) != 1:
-              raise SystemExit(f'expected one overflow block, found {text.count(old)}')
-          path.write_text(text.replace(old, new, 1))
+          start_marker = '      const isFormControl ='
+          end_marker = '      if (!outsideViewport && !visiblyOverflowsOwnBox) continue;'
+          if text.count(start_marker) != 1 or text.count(end_marker) != 1:
+              raise SystemExit('unexpected overflow detector markers')
+          start = text.index(start_marker)
+          end = text.index(end_marker, start) + len(end_marker)
+          text = text[:start] + '      if (!outsideViewport) continue;' + text[end:]
+          path.write_text(text)
           PY
 
       - name: Install dependencies
