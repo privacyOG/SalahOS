@@ -93,12 +93,18 @@ async function phoneMetrics(page) {
     const navigationTargets = [...nav.querySelectorAll('button')].map((element) => {
       const rect = element.getBoundingClientRect();
       const style = getComputedStyle(element);
+      const labelElement = element.querySelector('.congregation-nav-label');
+      const labelStyle =
+        labelElement instanceof HTMLElement ? getComputedStyle(labelElement) : null;
       return {
         width: rect.width,
         height: rect.height,
         label: element.textContent?.trim() ?? '',
         navigationId: element.dataset.navigationId ?? '',
         visible: style.display !== 'none' && rect.width > 0 && rect.height > 0,
+        labelOverflowX: labelStyle?.overflowX ?? '',
+        labelTextOverflow: labelStyle?.textOverflow ?? '',
+        labelWhiteSpace: labelStyle?.whiteSpace ?? '',
       };
     });
     const quickTargets = [...document.querySelectorAll('.today-quick-actions a')].map((element) => {
@@ -167,6 +173,27 @@ function assertPhoneMetrics(name, metrics) {
     throw new Error(
       `${name} expected six visible mobile navigation targets: ${JSON.stringify(metrics.navigationTargets)}`,
     );
+  }
+  const visibleWidths = visibleNavigationTargets.map((target) => target.width);
+  if (Math.max(...visibleWidths) - Math.min(...visibleWidths) > 1.1) {
+    throw new Error(
+      `${name} mobile navigation targets are not equal width: ${JSON.stringify(visibleWidths)}`,
+    );
+  }
+  for (const target of visibleNavigationTargets) {
+    if (
+      target.labelOverflowX !== 'hidden' ||
+      target.labelTextOverflow !== 'ellipsis' ||
+      target.labelWhiteSpace !== 'nowrap'
+    ) {
+      throw new Error(`${name} navigation label lacks ellipsis safety: ${JSON.stringify(target)}`);
+    }
+  }
+  if (
+    name.includes('-id') &&
+    visibleNavigationTargets.find((target) => target.navigationId === 'knowledge')?.label !== 'Ilmu'
+  ) {
+    throw new Error(`${name} expected Indonesian Knowledge label to be Ilmu`);
   }
   const communityTarget = metrics.navigationTargets.find(
     (target) => target.navigationId === 'community',
@@ -318,6 +345,7 @@ async function validateWide(browser, scenario) {
       return {
         shellColumns,
         navPosition: navStyle.position,
+        navWidth: nav.getBoundingClientRect().width,
         contentWidth: contentRect.width,
         viewportWidth: innerWidth,
         widestParagraph: readableBlocks.length > 0 ? Math.max(...readableBlocks) : 0,
@@ -334,6 +362,14 @@ async function validateWide(browser, scenario) {
     if (metrics.widestParagraph > 900) {
       throw new Error(
         `${scenario.name} paragraph line length stretched excessively: ${metrics.widestParagraph}px`,
+      );
+    }
+    if (
+      scenario.expectedNavWidth !== undefined &&
+      Math.abs(metrics.navWidth - scenario.expectedNavWidth) > 2
+    ) {
+      throw new Error(
+        `${scenario.name} navigation transition width mismatch: expected ${scenario.expectedNavWidth}px, got ${metrics.navWidth}px`,
       );
     }
     await page.screenshot({
@@ -371,6 +407,24 @@ try {
 
   const wide = [];
   for (const scenario of [
+    {
+      name: 'item18-sidebar-800-ar-knowledge',
+      width: 800,
+      height: 1000,
+      locale: 'ar',
+      theme: 'dark',
+      view: 'knowledge',
+      expectedNavWidth: 104,
+    },
+    {
+      name: 'item18-sidebar-1200-id-knowledge',
+      width: 1200,
+      height: 900,
+      locale: 'id',
+      theme: 'light',
+      view: 'knowledge',
+      expectedNavWidth: 208,
+    },
     {
       name: 'stage25-tablet-1024-ar-community',
       width: 1024,

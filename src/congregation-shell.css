@@ -77,8 +77,7 @@
 .congregation-nav {
   position: relative;
   z-index: 20;
-  display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  display: flex;
   flex: 0 0 auto;
   gap: var(--salah-space-1);
   padding: var(--salah-space-2) max(var(--salah-space-2), env(safe-area-inset-right))
@@ -93,6 +92,7 @@
 .congregation-nav-item {
   display: grid;
   min-width: 0;
+  flex: 1 1 0;
   min-height: 3.4rem;
   place-items: center;
   gap: 0.2rem;
@@ -121,8 +121,11 @@
 
 .congregation-nav-label {
   display: block;
+  width: 100%;
   max-width: 100%;
+  overflow: hidden;
   overflow-wrap: normal;
+  text-overflow: ellipsis;
   white-space: nowrap;
 }
 
@@ -155,6 +158,7 @@
   .congregation-nav {
     position: sticky;
     inset: auto;
+    display: grid;
     top: 0;
     grid-column: 1;
     grid-row: 1;
@@ -246,7 +250,7 @@
   }
 }
 
-/* v1.5 Stage 8: keep the phone prayer bar to five focused destinations. */
+/* Keep Community route-capable but off the phone bar; six visible destinations share the available width equally. */
 @media (max-width: 799px) {
   .congregation-nav-item[data-navigation-id='community'] {
     display: none;

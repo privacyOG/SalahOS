@@ -347,12 +347,6 @@
   text-align: center;
 }
 
-@media (max-width: 799px) {
-  .congregation-nav {
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-  }
-}
-
 @media (max-width: 760px) {
   .knowledge-screen {
     width: min(100% - 1rem, 1180px);
