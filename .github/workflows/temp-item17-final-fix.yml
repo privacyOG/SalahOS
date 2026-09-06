@@ -1,0 +1,90 @@
+name: TEMP Item 17 Final Fix
+
+on:
+  push:
+    branches:
+      - v1.5.3/item-17-quran-navigation
+    paths:
+      - .github/workflows/temp-item17-final-fix.yml
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - name: Apply final Item 17 source fixes and formatting
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          reader = Path('src/ui/QuranOfflineReader.tsx')
+          text = reader.read_text()
+          text = text.replace('  quranOfflineArabicPresentation,\n', '')
+          text = text.replace(
+              '          const parsed = parseQuranVerseKey(target.ayah.key);\n          setSelectedSurah(target.surah.surah);',
+              '          setSelectedSurah(target.surah.surah);',
+          )
+          text = text.replace(
+              '    const parsed = parseQuranVerseKey(initialVerseKey);\n    setBookmarksOnly(false);',
+              '    setBookmarksOnly(false);',
+          )
+          reader.write_text(text)
+
+          virtual = Path('src/ui/QuranVirtualizedAyahList.tsx')
+          text = virtual.read_text().replace(
+              'entry.borderBoxSize[0]?.blockSize ?? entry.getBoundingClientRect().height',
+              'entry.borderBoxSize[0]?.blockSize ?? element.getBoundingClientRect().height',
+          )
+          virtual.write_text(text)
+
+          library = Path('src/domain/quranOfflineLibrary.ts')
+          text = library.read_text().replace(
+              "      surah.revelationPlace === 'meccan' || surah.revelationPlace === 'medinan',",
+              "      ['meccan', 'medinan'].includes(String(surah.revelationPlace)),",
+          )
+          library.write_text(text)
+          PY
+          npx prettier --write \
+            scripts/prepare-quran-offline-pack.mjs \
+            scripts/visual-quran-offline-reader.mjs \
+            src/data/quran-offline-manifest.json \
+            src/domain/quranOfflineLibrary.test.ts \
+            src/domain/quranOfflineLibrary.ts \
+            src/platform/quranScrollPositions.test.ts \
+            src/platform/quranScrollPositions.ts \
+            src/quran-offline-reader.css \
+            src/ui/QuranOfflineReader.tsx \
+            src/ui/QuranSurahIndex.tsx \
+            src/ui/QuranVirtualizedAyahList.test.ts \
+            src/ui/QuranVirtualizedAyahList.tsx
+          git diff --check
+      - name: Create and upload retained commit object
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/prepare-quran-offline-pack.mjs scripts/visual-quran-offline-reader.mjs src/data/quran-offline-manifest.json src/domain/quranOfflineLibrary.test.ts src/domain/quranOfflineLibrary.ts src/platform/quranScrollPositions.test.ts src/platform/quranScrollPositions.ts src/quran-offline-reader.css src/ui/QuranOfflineReader.tsx src/ui/QuranSurahIndex.tsx src/ui/QuranVirtualizedAyahList.test.ts src/ui/QuranVirtualizedAyahList.tsx
+          git commit -m "V1.5.3 Item 17: finalize Qur'an navigation"
+          echo "ITEM17_FINAL_FIX_COMMIT=$(git rev-parse HEAD)"
+          git push origin HEAD:${GITHUB_REF_NAME} || true
+      - name: Format check
+        run: npm run format:check
+      - name: Lint
+        run: npm run lint
+      - name: Typecheck
+        run: npm run typecheck
+      - name: Test
+        run: npm run test
+      - name: Build and bundle budget
+        run: npm run build && npm run bundle:size
