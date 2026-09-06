@@ -137,6 +137,7 @@ function dashboard(
       },
     ],
     currentPrayer: 'fajr',
+    currentPrayerState: 'active',
     nextPrayer: 'dhuhr',
     nextPrayerDayOffset: 0,
     nextPrayerLocalMinutes: 720,
