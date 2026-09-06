@@ -67,9 +67,9 @@ describe('v1.5.3 Qur’an reader architecture', () => {
     expect(readerSource).toContain('data-quran-related-label');
   });
 
-  it('shows Tanzil attribution and its required in-app link', () => {
+  it('shows Tanzil attribution and routes its in-app link through the reviewed platform boundary', () => {
     expect(readerSource).toContain('data-quran-tanzil-attribution');
-    expect(readerSource).toContain('href="https://tanzil.net"');
+    expect(readerSource).toContain('href={quranTanzilSourceUrl()}');
     expect(readerSource).toContain('tanzilSource:');
   });
 
