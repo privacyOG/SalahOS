@@ -49,6 +49,8 @@ function configuredSettings(): PersistedSettings {
     calculationMethodId: 'umm-al-qura',
     asrConvention: 'hanafi',
     highLatitudeRule: 'one-seventh',
+    nightEndConvention: 'sunrise',
+    ishraqMinutesAfterSunrise: 20,
     hijriCorrectionDays: 1,
     prayerAdjustments: { fajr: 2, isha: -3 },
     prayerSourceMode: 'local-mosque',
@@ -112,6 +114,8 @@ describe('versioned settings persistence', () => {
       timeZone: 'Asia/Riyadh',
     });
     expect(migrated.calculationMethodId).toBe('muslim-world-league');
+    expect(migrated.nightEndConvention).toBe('fajr');
+    expect(migrated.ishraqMinutesAfterSunrise).toBeNull();
     expect(migrated.notifications).toEqual(defaultPersistedSettings.notifications);
   });
 
@@ -141,8 +145,32 @@ describe('versioned settings persistence', () => {
     expect(migrated.theme).toBe('dark');
     expect(migrated.calculationMethodId).toBe('umm-al-qura');
     expect(migrated.prayerAdjustments).toEqual({ fajr: 2 });
+    expect(migrated.nightEndConvention).toBe('fajr');
+    expect(migrated.ishraqMinutesAfterSunrise).toBeNull();
     expect(migrated.location?.timeZone).toBe('Australia/Sydney');
     expect(migrated.notifications).toEqual(defaultPersistedSettings.notifications);
+  });
+
+  it('validates night-end convention and the optional Ishraq offset', () => {
+    const configured = importPersistedSettings(
+      JSON.stringify({
+        version: 2,
+        nightEndConvention: 'sunrise',
+        ishraqMinutesAfterSunrise: 15,
+      }),
+    );
+    expect(configured.nightEndConvention).toBe('sunrise');
+    expect(configured.ishraqMinutesAfterSunrise).toBe(15);
+
+    const invalid = importPersistedSettings(
+      JSON.stringify({
+        version: 2,
+        nightEndConvention: 'invalid',
+        ishraqMinutesAfterSunrise: 241,
+      }),
+    );
+    expect(invalid.nightEndConvention).toBe('fajr');
+    expect(invalid.ishraqMinutesAfterSunrise).toBeNull();
   });
 
   it('rejects unsupported future schema versions', () => {
