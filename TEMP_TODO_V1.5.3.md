@@ -180,13 +180,13 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - [x] Report Al-Baqarah render timing before/after.
 - [x] Gate: `npm run typecheck && npm run lint && npm run test && npm run bundle:size`.
 
-## Work Item 18 — Consolidate bottom navigation and label overflow
+## Work Item 18 — Consolidate bottom navigation and label overflow — COMPLETE
 
-- [ ] Remove the Knowledge stylesheet's six-column nav override and make the shell derive equal columns from item count.
-- [ ] Correct the stale five-destination comment.
-- [ ] Add label overflow/ellipsis safety and shorten Indonesian `Pengetahuan` to `Ilmu` at source.
-- [ ] Verify 320/360/390/430px, LTR/RTL, and 44px touch targets; verify 800/1200px sidebar transitions.
-- [ ] Gate: `npm run ui:design-system-ownership && npm run ui:theme-architecture && npm run format:check`.
+- [x] Remove the Knowledge stylesheet's six-column nav override and make the shell derive equal columns from item count.
+- [x] Correct the stale five-destination comment.
+- [x] Add label overflow/ellipsis safety and shorten Indonesian `Pengetahuan` to `Ilmu` at source.
+- [x] Verify 320/360/390/430px, LTR/RTL, and 44px touch targets; verify 800/1200px sidebar transitions.
+- [x] Gate: `npm run ui:design-system-ownership && npm run ui:theme-architecture && npm run format:check`.
 
 ## Work Item 19 — Wire up Tahajjud, Islamic midnight, and Ishraq
 
@@ -260,3 +260,4 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - Work Item 8 technical implementation: lean validation run `33497792180` passed Knowledge governance, typecheck, lint, 788 tests across 180 files, theme/design ownership, production build, and bundle architecture at 1,249,350 total JavaScript bytes (650 bytes below the 1,250,000-byte cap). The current three-hadith corpus contains no divine-attribute report requiring a tanzih note. Corpus expansion remains owner-decision pending before Item 8 can be closed.
 - Work Item 12: complete via PR #234, merged as `05240f6aaf5cbcfc56d06f6163c3e5dff6ce3727`; exact-head Quality Gate run 33678029000 passed the required format, lint, typecheck, and unit-test steps before merge.
 - Work Item 17: complete via PR #250, merged as `088c3ba8abd49ab6807f5cf153056391411e87d0`; final head `133bcfa5c8abd2c9d629215d31e6a0fc15f46f86` passed Quality, Visual, Android, iOS, and Windows gates. Five-iteration Al-Baqarah browser benchmark measured 20.1 ms → 23.6 ms selection latency while reducing the chapter DOM from 286 rows to a 7–9 row virtual window and the full-chapter navigation path from 273.6 ms expand-all to 32.3 ms virtual scroll-to-bottom.
+- Work Item 18: complete via PR #252, merged as `372c2d1c8ceff5bb0dfa8416e1a6a8047759068f`; final head `cd26766d6cf5f26c457f042fd2c58563973f1bbc` passed Quality and Visual Regression, including 320/360/390/430px phone coverage, LTR/RTL, 44px touch targets, equal-width six-destination phone navigation, ellipsis safety, Indonesian `Ilmu`, and 800/1200px sidebar transition acceptance.
