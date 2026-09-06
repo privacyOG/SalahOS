@@ -1,0 +1,134 @@
+name: TEMP Item 18 Navigation Implementation
+
+on:
+  push:
+    branches:
+      - v1.5.3/item-18-navigation-consolidation
+    paths:
+      - .github/workflows/temp-item18-implement.yml
+
+permissions:
+  contents: write
+
+jobs:
+  implement:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v1.5.3/item-18-navigation-consolidation
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Apply Item 18 changes
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          def replace_once(path, old, new):
+              p = Path(path)
+              text = p.read_text()
+              if text.count(old) != 1:
+                  raise SystemExit(f'{path}: expected one exact match, found {text.count(old)}')
+              p.write_text(text.replace(old, new, 1))
+
+          replace_once(
+              'src/congregation-shell.css',
+              """.congregation-nav {\n  position: relative;\n  z-index: 20;\n  display: grid;\n  grid-template-columns: repeat(5, minmax(0, 1fr));\n  flex: 0 0 auto;""",
+              """.congregation-nav {\n  position: relative;\n  z-index: 20;\n  display: flex;\n  flex: 0 0 auto;""",
+          )
+          replace_once(
+              'src/congregation-shell.css',
+              """.congregation-nav-item {\n  display: grid;\n  min-width: 0;""",
+              """.congregation-nav-item {\n  display: grid;\n  min-width: 0;\n  flex: 1 1 0;""",
+          )
+          replace_once(
+              'src/congregation-shell.css',
+              """.congregation-nav-label {\n  display: block;\n  max-width: 100%;\n  overflow-wrap: normal;\n  white-space: nowrap;\n}""",
+              """.congregation-nav-label {\n  display: block;\n  width: 100%;\n  max-width: 100%;\n  overflow: hidden;\n  overflow-wrap: normal;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n}""",
+          )
+          replace_once(
+              'src/congregation-shell.css',
+              """  .congregation-nav {\n    position: sticky;\n    inset: auto;""",
+              """  .congregation-nav {\n    position: sticky;\n    inset: auto;\n    display: grid;""",
+          )
+          replace_once(
+              'src/congregation-shell.css',
+              """/* v1.5 Stage 8: keep the phone prayer bar to five focused destinations. */""",
+              """/* Keep Community route-capable but off the phone bar; six visible destinations share the available width equally. */""",
+          )
+
+          knowledge = Path('src/islamic-knowledge.css')
+          text = knowledge.read_text()
+          block = """@media (max-width: 799px) {\n  .congregation-nav {\n    grid-template-columns: repeat(6, minmax(0, 1fr));\n  }\n}\n\n"""
+          if text.count(block) != 1:
+              raise SystemExit(f'islamic-knowledge.css: expected one route nav override, found {text.count(block)}')
+          knowledge.write_text(text.replace(block, '', 1))
+
+          replace_once(
+              'src/ui/CongregationShell.tsx',
+              "knowledge: 'Pengetahuan',",
+              "knowledge: 'Ilmu',",
+          )
+
+          visual = Path('scripts/visual-device-ux-refinement.mjs')
+          text = visual.read_text()
+          old = """    const navigationTargets = [...nav.querySelectorAll('button')].map((element) => {\n      const rect = element.getBoundingClientRect();\n      const style = getComputedStyle(element);\n      return {\n        width: rect.width,\n        height: rect.height,\n        label: element.textContent?.trim() ?? '',\n        navigationId: element.dataset.navigationId ?? '',\n        visible: style.display !== 'none' && rect.width > 0 && rect.height > 0,\n      };\n    });"""
+          new = """    const navigationTargets = [...nav.querySelectorAll('button')].map((element) => {\n      const rect = element.getBoundingClientRect();\n      const style = getComputedStyle(element);\n      const labelElement = element.querySelector('.congregation-nav-label');\n      const labelStyle = labelElement instanceof HTMLElement ? getComputedStyle(labelElement) : null;\n      return {\n        width: rect.width,\n        height: rect.height,\n        label: element.textContent?.trim() ?? '',\n        navigationId: element.dataset.navigationId ?? '',\n        visible: style.display !== 'none' && rect.width > 0 && rect.height > 0,\n        labelOverflowX: labelStyle?.overflowX ?? '',\n        labelTextOverflow: labelStyle?.textOverflow ?? '',\n        labelWhiteSpace: labelStyle?.whiteSpace ?? '',\n      };\n    });"""
+          if text.count(old) != 1:
+              raise SystemExit(f'visual-device-ux-refinement.mjs: navigation target block match count {text.count(old)}')
+          text = text.replace(old, new, 1)
+
+          old = """  const visibleNavigationTargets = metrics.navigationTargets.filter((target) => target.visible);\n  if (visibleNavigationTargets.length !== 6) {\n    throw new Error(\n      `${name} expected six visible mobile navigation targets: ${JSON.stringify(metrics.navigationTargets)}`,\n    );\n  }"""
+          new = """  const visibleNavigationTargets = metrics.navigationTargets.filter((target) => target.visible);\n  if (visibleNavigationTargets.length !== 6) {\n    throw new Error(\n      `${name} expected six visible mobile navigation targets: ${JSON.stringify(metrics.navigationTargets)}`,\n    );\n  }\n  const visibleWidths = visibleNavigationTargets.map((target) => target.width);\n  if (Math.max(...visibleWidths) - Math.min(...visibleWidths) > 1.1) {\n    throw new Error(\n      `${name} mobile navigation targets are not equal width: ${JSON.stringify(visibleWidths)}`,\n    );\n  }\n  for (const target of visibleNavigationTargets) {\n    if (\n      target.labelOverflowX !== 'hidden' ||\n      target.labelTextOverflow !== 'ellipsis' ||\n      target.labelWhiteSpace !== 'nowrap'\n    ) {\n      throw new Error(`${name} navigation label lacks ellipsis safety: ${JSON.stringify(target)}`);\n    }\n  }\n  if (name.includes('-id') && visibleNavigationTargets.find((target) => target.navigationId === 'knowledge')?.label !== 'Ilmu') {\n    throw new Error(`${name} expected Indonesian Knowledge label to be Ilmu`);\n  }"""
+          if text.count(old) != 1:
+              raise SystemExit(f'visual-device-ux-refinement.mjs: mobile assertion block match count {text.count(old)}')
+          text = text.replace(old, new, 1)
+
+          old = """      return {\n        shellColumns,\n        navPosition: navStyle.position,\n        contentWidth: contentRect.width,\n        viewportWidth: innerWidth,\n        widestParagraph: readableBlocks.length > 0 ? Math.max(...readableBlocks) : 0,\n      };"""
+          new = """      return {\n        shellColumns,\n        navPosition: navStyle.position,\n        navWidth: nav.getBoundingClientRect().width,\n        contentWidth: contentRect.width,\n        viewportWidth: innerWidth,\n        widestParagraph: readableBlocks.length > 0 ? Math.max(...readableBlocks) : 0,\n      };"""
+          if text.count(old) != 1:
+              raise SystemExit(f'visual-device-ux-refinement.mjs: wide metrics block match count {text.count(old)}')
+          text = text.replace(old, new, 1)
+
+          old = """    if (metrics.widestParagraph > 900) {\n      throw new Error(\n        `${scenario.name} paragraph line length stretched excessively: ${metrics.widestParagraph}px`,\n      );\n    }"""
+          new = """    if (metrics.widestParagraph > 900) {\n      throw new Error(\n        `${scenario.name} paragraph line length stretched excessively: ${metrics.widestParagraph}px`,\n      );\n    }\n    if (scenario.expectedNavWidth !== undefined && Math.abs(metrics.navWidth - scenario.expectedNavWidth) > 2) {\n      throw new Error(\n        `${scenario.name} navigation transition width mismatch: expected ${scenario.expectedNavWidth}px, got ${metrics.navWidth}px`,\n      );\n    }"""
+          if text.count(old) != 1:
+              raise SystemExit(f'visual-device-ux-refinement.mjs: wide assertion block match count {text.count(old)}')
+          text = text.replace(old, new, 1)
+
+          marker = """  for (const scenario of [\n    {\n      name: 'stage25-tablet-1024-ar-community',"""
+          replacement = """  for (const scenario of [\n    {\n      name: 'item18-sidebar-800-ar-knowledge',\n      width: 800,\n      height: 1000,\n      locale: 'ar',\n      theme: 'dark',\n      view: 'knowledge',\n      expectedNavWidth: 104,\n    },\n    {\n      name: 'item18-sidebar-1200-id-knowledge',\n      width: 1200,\n      height: 900,\n      locale: 'id',\n      theme: 'light',\n      view: 'knowledge',\n      expectedNavWidth: 208,\n    },\n    {\n      name: 'stage25-tablet-1024-ar-community',"""
+          if text.count(marker) != 1:
+              raise SystemExit(f'visual-device-ux-refinement.mjs: wide scenario marker count {text.count(marker)}')
+          text = text.replace(marker, replacement, 1)
+          visual.write_text(text)
+          PY
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Format Item 18 files
+        run: npx prettier --write src/congregation-shell.css src/islamic-knowledge.css src/ui/CongregationShell.tsx scripts/visual-device-ux-refinement.mjs
+
+      - name: Validate Item 18 gate
+        run: npm run ui:design-system-ownership && npm run ui:theme-architecture && npm run format:check
+
+      - name: Validate browser script syntax
+        run: node --check scripts/visual-device-ux-refinement.mjs
+
+      - name: Retain clean Item 18 commit
+        shell: bash
+        run: |
+          rm .github/workflows/temp-item18-implement.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/congregation-shell.css src/islamic-knowledge.css src/ui/CongregationShell.tsx scripts/visual-device-ux-refinement.mjs .github/workflows/temp-item18-implement.yml
+          git commit -m "Consolidate responsive primary navigation"
+          echo "ITEM18_RETAINED_COMMIT=$(git rev-parse HEAD)"
+          git push origin HEAD:v1.5.3/item-18-navigation-consolidation
