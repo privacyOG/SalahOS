@@ -20,7 +20,7 @@ jobs:
           path: baseline
       - uses: actions/checkout@v4
         with:
-          ref: 20402fb8138794d3b398899b10850fbd29fc7566
+          ref: b90c66b96d76b7303a2a526317fb19cc94af2de3
           path: candidate
       - uses: actions/setup-node@v4
         with:
@@ -144,7 +144,7 @@ jobs:
           const candidateDomCounts = [];
           for (let i = 0; i < 5; i += 1) {
             const { context, page } = await newPage('http://127.0.0.1:4174');
-            await page.locator('[data-quran-surah-search]').fill('Al-Baqarah');
+            await page.locator('[data-quran-surah-search]').fill('Baqarah');
             await page.locator('[data-quran-surah-option="2"]').waitFor({ state: 'visible' });
             const selected = await page.evaluate(async () => {
               const option = document.querySelector('[data-quran-surah-option="2"]');
