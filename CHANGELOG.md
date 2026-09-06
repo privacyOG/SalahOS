@@ -4,6 +4,34 @@ All notable SalahOS changes are recorded here.
 
 ## Unreleased
 
+## 1.5.3 — 2026-09-06
+
+### Prayer correctness and mosque context
+
+- Reject implausible published mosque congregation times and harden the Australian mosque generators against Jumu’ah collisions and coarse impossible fard-time candidates.
+- Keep far-away selected mosques from silently relocating prayer calculation beyond the named 150 km guard while retaining their published congregation and Jumu’ah information.
+- Promote every available Friday Jumu’ah session on Today, carry directory-published Jumu’ah through selected-mosque context, and add a Night section for Islamic midnight, final-third/Tahajjud start and optional configured Ishraq/Duha.
+- Widen Hijri correction from ±2 to ±3 days and replace ambiguous current-prayer gaps with explicit civil-day schedule states, including a documented pre-Fajr state that does not imply a fiqh ruling.
+
+### Qur’an, Knowledge and onboarding
+
+- Add focused first-run calculation-method/Asr setup and explicit notification opt-in onboarding with permission requests only after opt-in, no automatic re-prompt after decline, Android exact-alarm fallback and reboot restoration preserved.
+- Give the Qur’an a dedicated deep-linkable route, bundle Amiri Quran under SIL OFL 1.1, improve Arabic/RTL metadata and typography, and add searchable surah, Juz and mushaf-page navigation with virtualised 6,236-ayah browsing and last-read restoration.
+- Move Qur’an `aria-live` behavior to concise result status, localise Juz/page/reference/source labels and numbers, and keep Tanzil attribution visible through the reviewed external-link boundary.
+- Keep the current curated hadith scope explicit about partial matn, isnad, grading authority and unavailable metadata; no rights-pending new Qur’an translation/transliteration content is bundled.
+
+### UX and performance
+
+- Add persistent calculation-method/Asr provenance, selected-mosque/location-state styling, Sunrise hierarchy refinement, equal-width six-destination phone navigation and safer label overflow handling.
+- Reduce lower-hierarchy Today eyebrow density while retaining strong hero prayer/countdown emphasis and RTL overrides.
+- Split stable astronomical schedule computation from live countdown derivation and memoise work across unchanged date/settings/location inputs.
+
+### Release packaging
+
+- Synchronise npm, package-lock, Android and iOS marketing versions at 1.5.3 and advance Android/iOS native build numbers together to 10.
+- Preserve exact-current-main release preflight, persistent Android signing verification, archive-integrity checks, Quality/Visual/Android/iOS/Windows acceptance, bundle budgets and exact-final-file-set validation.
+- Keep consumer iOS/iPadOS IPA publication gated on Apple distribution signing/provisioning; Simulator acceptance remains release evidence rather than a consumer installer.
+
 ## 1.5.2 — 2026-08-30
 
 ### Australian mosque directory
