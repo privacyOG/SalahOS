@@ -84,6 +84,7 @@ describe('selected prayer source dashboard', () => {
 
     expect(base.clock.localMinutes).toBe(1_125);
     expect(sourced.currentPrayer).toBe('maghrib');
+    expect(sourced.currentPrayerState).toBe('active');
     expect(sourced.prayers.find((row) => row.name === 'maghrib')?.isCurrent).toBe(true);
     expect(sourced.prayers.find((row) => row.name === 'isha')?.isNext).toBe(true);
     expect(sourced.prayers.find((row) => row.name === 'sunrise')?.isCurrent).toBe(false);
@@ -108,6 +109,7 @@ describe('selected prayer source dashboard', () => {
     });
 
     expect(sourced.currentPrayer).toBe('fajr');
+    expect(sourced.currentPrayerState).toBe('active');
     expect(sourced.prayers.find((row) => row.name === 'fajr')?.isCurrent).toBe(true);
     expect(sourced.prayers.find((row) => row.name === 'sunrise')?.isCurrent).toBe(false);
   });
@@ -131,6 +133,7 @@ describe('selected prayer source dashboard', () => {
     });
 
     expect(sourced.currentPrayer).toBeNull();
+    expect(sourced.currentPrayerState).toBe('no-current-obligatory-prayer');
     expect(sourced.prayers.some((row) => row.isCurrent)).toBe(false);
     expect(sourced.nextPrayer).toBe('dhuhr');
     expect(sourced.prayers.find((row) => row.name === 'dhuhr')?.isNext).toBe(true);
@@ -152,13 +155,14 @@ describe('selected prayer source dashboard', () => {
     });
 
     expect(sourced.currentPrayer).toBe('isha');
+    expect(sourced.currentPrayerState).toBe('active');
     expect(sourced.prayers.find((row) => row.name === 'isha')?.isCurrent).toBe(true);
     expect(sourced.nextPrayer).toBe('fajr');
     expect(sourced.nextPrayerDayOffset).toBe(1);
     expect(sourced.nextPrayerLocalMinutes).toBe(329);
   });
 
-  it('has no current prayer before the first available obligatory prayer of the civil day', () => {
+  it('classifies midnight-to-Fajr as before the civil day first obligatory prayer', () => {
     const base = buildPrayerDashboard({
       instant: new Date('2026-08-15T18:30:00.000Z'),
       coordinates: sydney,
@@ -171,6 +175,7 @@ describe('selected prayer source dashboard', () => {
 
     expect(base.clock.localMinutes).toBe(270);
     expect(sourced.currentPrayer).toBeNull();
+    expect(sourced.currentPrayerState).toBe('before-first-obligatory-prayer');
     expect(sourced.prayers.some((row) => row.isCurrent)).toBe(false);
     expect(sourced.nextPrayer).toBe('fajr');
   });
