@@ -1017,8 +1017,9 @@ export function QuranOfflineReader({
                           <span lang={quranOfflineTransliterationPresentation.lang} dir="ltr">
                             {result.surah.nameTransliteration}
                           </span>{' '}
-                          · <BidiText>{formatQuranVerseReference(result.ayah.key, locale)}</BidiText> ·{' '}
-                          {labels.juz} {formatQuranUiNumber(result.ayah.juz, locale)}
+                          ·{' '}
+                          <BidiText>{formatQuranVerseReference(result.ayah.key, locale)}</BidiText>{' '}
+                          · {labels.juz} {formatQuranUiNumber(result.ayah.juz, locale)}
                         </p>
                       ) : null}
                       <p
@@ -1105,11 +1106,7 @@ export function QuranOfflineReader({
                     ? ` · ${labels.surah} ${formatQuranUiNumber(selected.surah, locale)}`
                     : ''}
               </p>
-              <p
-                data-quran-tanzil-attribution
-                lang={locale}
-                dir={locale === 'ar' ? 'rtl' : 'ltr'}
-              >
+              <p data-quran-tanzil-attribution lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
                 {labels.tanzilSource}{' '}
                 <a href="https://tanzil.net" target="_blank" rel="noreferrer">
                   Tanzil
