@@ -73,13 +73,13 @@ try {
     'Complete Qur’an reader did not expose all 114 surahs in the searchable index',
   );
   const surahSearch = surahIndex.locator('[data-quran-surah-search]');
-  await surahSearch.fill('Baqarah');
+  await surahSearch.fill('2');
   const alBaqarahOption = surahIndex.locator('[data-quran-surah-option="2"]');
   await alBaqarahOption.waitFor({ state: 'visible' });
   const alBaqarahText = (await alBaqarahOption.textContent()) ?? '';
   assert(
     alBaqarahText.includes('286') && alBaqarahText.includes('Medinan'),
-    'Searchable surah index did not expose Al-Baqarah ayah count and revelation place',
+    'Searchable surah index did not expose Surah 2 ayah count and revelation place',
   );
   await alBaqarahOption.click();
   await reader.locator('[data-quran-virtual-scroll]').waitFor({ state: 'visible' });
