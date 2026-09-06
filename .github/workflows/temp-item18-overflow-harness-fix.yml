@@ -24,39 +24,28 @@ jobs:
           node-version: 22
           cache: npm
 
-      - name: Correct overflow detector for intentional ellipsis
+      - name: Patch overflow detector
         shell: bash
         run: |
           python3 - <<'PY'
           from pathlib import Path
-
           path = Path('scripts/visual-regression.mjs')
           text = path.read_text()
-          old = """      const explicitlyClipsContent =
-        !isFormControl &&
-        element.clientWidth > 0 &&
-        element.scrollWidth > element.clientWidth + tolerance &&
-        (style.overflowX === 'hidden' || style.overflowX === 'clip');
-
-      if (!outsideViewport && !explicitlyClipsContent) continue;"""
-          new = """      const visiblyOverflowsOwnBox =
-        !isFormControl &&
-        element.clientWidth > 0 &&
-        element.scrollWidth > element.clientWidth + tolerance &&
-        style.overflowX === 'visible';
-
-      // Hidden/clip overflow is intentional truncation (for example nav-label ellipsis),
-      // not page-level horizontal overflow. Outside-viewport boxes still fail below.
-      if (!outsideViewport && !visiblyOverflowsOwnBox) continue;"""
+          if text.count('explicitlyClipsContent') != 2:
+              raise SystemExit('unexpected overflow predicate count')
+          text = text.replace('explicitlyClipsContent', 'visiblyOverflowsOwnBox')
+          old = "(style.overflowX === 'hidden' || style.overflowX === 'clip');"
           if text.count(old) != 1:
-              raise SystemExit(f'expected one overflow detector block, found {text.count(old)}')
-          path.write_text(text.replace(old, new, 1))
+              raise SystemExit('unexpected overflow criterion count')
+          text = text.replace(old, "style.overflowX === 'visible';", 1)
+          path.write_text(text)
           PY
 
       - name: Install dependencies
         run: npm ci --ignore-scripts
 
-      - name: Format and validate Item 18 gate
+      - name: Validate Item 18
+        shell: bash
         run: |
           npx prettier --write scripts/visual-regression.mjs
           npm run ui:design-system-ownership
@@ -65,7 +54,7 @@ jobs:
           node --check scripts/visual-regression.mjs
           node --check scripts/visual-device-ux-refinement.mjs
 
-      - name: Retain clean final Item 18 commit
+      - name: Retain clean commit
         shell: bash
         run: |
           rm .github/workflows/temp-item18-overflow-harness-fix.yml
