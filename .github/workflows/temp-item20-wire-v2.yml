@@ -1,0 +1,245 @@
+name: TEMP Item 20 Wire v2
+
+on:
+  push:
+    branches:
+      - v1.5.3/item-20-notification-onboarding
+    paths:
+      - .github/workflows/temp-item20-wire-v2.yml
+
+permissions:
+  contents: write
+
+jobs:
+  wire:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v1.5.3/item-20-notification-onboarding
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Wire onboarding into shell and settings
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          def insert_before(path, anchor, insertion):
+              p = Path(path)
+              text = p.read_text()
+              if insertion.strip() in text:
+                  return
+              if text.count(anchor) != 1:
+                  raise SystemExit(f'{path}: anchor count for {anchor!r} is {text.count(anchor)}')
+              p.write_text(text.replace(anchor, insertion + anchor, 1))
+
+          def insert_after(path, anchor, insertion):
+              p = Path(path)
+              text = p.read_text()
+              if insertion.strip() in text:
+                  return
+              if text.count(anchor) != 1:
+                  raise SystemExit(f'{path}: anchor count for {anchor!r} is {text.count(anchor)}')
+              p.write_text(text.replace(anchor, anchor + insertion, 1))
+
+          insert_before(
+              'src/main.tsx',
+              "import { installPrivacyDiagnostics } from './platform/privacyDiagnostics';\n",
+              "import {\n  initializeNotificationOnboarding,\n  NOTIFICATION_ONBOARDING_COMPLETE_EVENT,\n} from './platform/notificationOnboarding';\n",
+          )
+          insert_after(
+              'src/main.tsx',
+              "import { MobilePrayerThemeSurface } from './ui/MobilePrayerThemeSurface';\n",
+              "import { NotificationOnboarding } from './ui/NotificationOnboarding';\n",
+          )
+          insert_after(
+              'src/main.tsx',
+              "    window.addEventListener(PRAYER_SETUP_ONBOARDING_COMPLETE_EVENT, refreshApplication);\n",
+              "    window.addEventListener(NOTIFICATION_ONBOARDING_COMPLETE_EVENT, refreshApplication);\n",
+          )
+          insert_after(
+              'src/main.tsx',
+              "      window.removeEventListener(PRAYER_SETUP_ONBOARDING_COMPLETE_EVENT, refreshApplication);\n",
+              "      window.removeEventListener(NOTIFICATION_ONBOARDING_COMPLETE_EVENT, refreshApplication);\n",
+          )
+          insert_after(
+              'src/main.tsx',
+              "      <PrayerSetupOnboarding />\n",
+              "      <NotificationOnboarding />\n",
+          )
+          insert_before(
+              'src/main.tsx',
+              "  installPrivacyDiagnostics(getApplicationStorage());\n",
+              "  initializeNotificationOnboarding(getApplicationStorage());\n",
+          )
+
+          insert_after(
+              'src/ui/SettingsScreen.tsx',
+              "import { MobilePrayerThemeSettings } from './MobilePrayerThemeSettings';\n",
+              "import { NotificationOnboardingSettingsEntry } from './NotificationOnboardingSettingsEntry';\n",
+          )
+
+          settings = Path('src/ui/SettingsScreen.tsx')
+          text = settings.read_text()
+          if '<NotificationOnboardingSettingsEntry locale={settings.locale} />' not in text:
+              start_marker = "      {category === 'adhan' && ("
+              end_marker = "\n\n      {category === 'mosques' && ("
+              start = text.index(start_marker)
+              end = text.index(end_marker, start)
+              replacement = """      {category === 'adhan' && (
+                <>
+                  <NotificationAdhanSettingsPanel
+                    settings={settings}
+                    updateSettings={updateSettings}
+                    runtime={notificationRuntime}
+                  />
+                  <NotificationOnboardingSettingsEntry locale={settings.locale} />
+                </>
+              )}"""
+              text = text[:start] + replacement + text[end:]
+              settings.write_text(text)
+
+          css = Path('src/prayer-setup-onboarding.css')
+          text = css.read_text()
+          if '.notification-onboarding__notice {' not in text:
+              text += """
+
+          .notification-onboarding__notice {
+            display: grid;
+            gap: var(--salah-space-2);
+            padding: var(--salah-space-3);
+            border: 1px solid var(--salah-border-subtle);
+            border-radius: var(--salah-radius-md);
+            background: var(--salah-bg-subtle);
+          }
+
+          .notification-onboarding__notice h3,
+          .notification-onboarding__notice p {
+            margin: 0;
+          }
+
+          .notification-onboarding__notice h3 {
+            font-size: var(--salah-text-md);
+          }
+
+          .notification-onboarding__notice p {
+            color: var(--salah-fg-secondary);
+            font-size: var(--salah-text-sm);
+            line-height: 1.55;
+          }
+
+          .notification-onboarding__prayers {
+            display: grid;
+            gap: var(--salah-space-2);
+            padding: 0;
+            border: 0;
+          }
+
+          .notification-onboarding__prayers legend {
+            margin-block-end: var(--salah-space-2);
+            font-weight: 800;
+          }
+
+          .notification-onboarding__all,
+          .notification-onboarding__prayer-grid label {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr);
+            align-items: center;
+            gap: var(--salah-space-2);
+            min-height: 2.75rem;
+            padding: var(--salah-space-2) var(--salah-space-3);
+            border: 1px solid var(--salah-border-subtle);
+            border-radius: var(--salah-radius-sm);
+            background: var(--salah-bg-surface);
+          }
+
+          .notification-onboarding__prayer-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: var(--salah-space-2);
+          }
+
+          .notification-onboarding__prayers input {
+            accent-color: var(--salah-fg-accent);
+          }
+
+          .notification-onboarding-settings-entry {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--salah-space-4);
+          }
+
+          .notification-onboarding-settings-entry h2,
+          .notification-onboarding-settings-entry p {
+            margin: 0;
+          }
+
+          .notification-onboarding-settings-entry div {
+            display: grid;
+            gap: var(--salah-space-2);
+          }
+
+          .notification-onboarding-settings-entry p {
+            color: var(--salah-fg-secondary);
+          }
+
+          .notification-onboarding-settings-entry button {
+            min-height: 2.75rem;
+            flex: 0 0 auto;
+          }
+
+          @media (max-width: 35rem) {
+            .notification-onboarding__prayer-grid {
+              grid-template-columns: 1fr;
+            }
+
+            .notification-onboarding-settings-entry {
+              align-items: stretch;
+              flex-direction: column;
+            }
+          }
+          """
+              css.write_text(text)
+          PY
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Format Item 20 files
+        run: >-
+          npx prettier --write
+          src/platform/notificationOnboarding.ts
+          src/platform/notificationOnboarding.test.ts
+          src/platform/notificationPermission.ts
+          src/platform/notificationPermission.test.ts
+          src/domain/notificationOnboardingPreferences.ts
+          src/domain/notificationOnboardingPreferences.test.ts
+          src/ui/NotificationOnboarding.tsx
+          src/ui/NotificationOnboardingSettingsEntry.tsx
+          src/main.tsx src/ui/SettingsScreen.tsx src/prayer-setup-onboarding.css
+
+      - name: Required Item 20 gate
+        run: npm run typecheck && npm run lint && npm run test && npm run security:native-permissions
+
+      - name: Architecture and formatting checks
+        run: npm run format:check && npm run ui:design-system-ownership && npm run ui:theme-architecture
+
+      - name: Retain production-only commit
+        shell: bash
+        run: |
+          rm \
+            .github/workflows/temp-item20-implement.yml \
+            .github/workflows/temp-item20-wire.yml \
+            .github/workflows/temp-item20-wire-v2.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Add notification opt-in onboarding"
+          echo "ITEM20_RETAINED_COMMIT=$(git rev-parse HEAD)"
+          git push origin HEAD:v1.5.3/item-20-notification-onboarding
