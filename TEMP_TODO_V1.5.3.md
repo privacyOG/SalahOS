@@ -198,41 +198,41 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - [x] Add all four locales.
 - [x] Gate: `npm run typecheck && npm run lint && npm run test && npm run calendar:check`.
 
-## Work Item 20 — Notification opt-in during onboarding
+## Work Item 20 — Notification opt-in during onboarding — COMPLETE
 
-- [ ] Add a third onboarding step after Item 12 explaining local prayer notifications and background-Adhan platform limitations accurately.
-- [ ] Use the existing notification preference shape for all/none or per-prayer toggles without unnecessary restructuring.
-- [ ] Request OS permission only after opt-in, following existing native-permission patterns.
-- [ ] Keep the step skippable/reachable later and do not re-prompt after decline.
-- [ ] Preserve exact-alarm fallback and reboot-restoration contracts.
-- [ ] Gate: `npm run typecheck && npm run lint && npm run test && npm run security:native-permissions`.
+- [x] Add a third onboarding step after Item 12 explaining local prayer notifications and background-Adhan platform limitations accurately.
+- [x] Use the existing notification preference shape for all/none or per-prayer toggles without unnecessary restructuring.
+- [x] Request OS permission only after opt-in, following existing native-permission patterns.
+- [x] Keep the step skippable/reachable later and do not re-prompt after decline.
+- [x] Preserve exact-alarm fallback and reboot-restoration contracts.
+- [x] Gate: `npm run typecheck && npm run lint && npm run test && npm run security:native-permissions`.
 
-## Work Item 21 — Knowledge accessibility and small corrections
+## Work Item 21 — Knowledge accessibility and small corrections — COMPLETE
 
-- [ ] Move `aria-live` off the ayah content list to a concise status region.
-- [ ] Localize hardcoded `Juz`, related-ayah, source-line, and page labels; format numbers with `Intl.NumberFormat`.
-- [ ] Align browser/Android `theme-color` with dark canvas and add a light-mode media variant.
-- [ ] Confirm Tanzil attribution and required link are visible in-app.
-- [ ] Gate: `npm run check`.
+- [x] Move `aria-live` off the ayah content list to a concise status region.
+- [x] Localize hardcoded `Juz`, related-ayah, source-line, and page labels; format numbers with `Intl.NumberFormat`.
+- [x] Align browser/Android `theme-color` with dark canvas and add a light-mode media variant.
+- [x] Confirm Tanzil attribution and required link are visible in-app.
+- [x] Gate: `npm run check`.
 
-## Work Item 22 — Batched small corrections
+## Work Item 22 — Batched small corrections — COMPLETE
 
 ### 22a — Hijri correction range
 
-- [ ] Widen correction from -2..2 to -3..3 in storage, settings controls, and tests.
+- [x] Widen correction from -2..2 to -3..3 in storage, settings controls, and tests.
 
 ### 22b — Midnight-to-Fajr current-prayer state
 
-- [ ] Replace ambiguous "Between prayer times" behavior with an explicitly documented/tested convention; do not silently choose fiqh semantics.
+- [x] Replace ambiguous "Between prayer times" behavior with an explicitly documented/tested convention; do not silently choose fiqh semantics.
 
 ### 22c — Mount-time storage snapshots
 
-- [ ] Subscribe Today to mosque-profile changes and add an equivalent settings-change event using the existing location-event pattern.
+- [x] Subscribe Today to mosque-profile changes and add an equivalent settings-change event using the existing location-event pattern.
 
 ### 22d — Eyebrow density
 
-- [ ] Keep uppercase/strong tracking for hero prayer/countdown labels only; convert lower hierarchy labels to sentence case/weight 600 while preserving RTL overrides.
-- [ ] Gate for Item 22: `npm run check`.
+- [x] Keep uppercase/strong tracking for hero prayer/countdown labels only; convert lower hierarchy labels to sentence case/weight 600 while preserving RTL overrides.
+- [x] Gate for Item 22: `npm run check`.
 
 ## Product-decision backlog — DO NOT IMPLEMENT WITHOUT DIRECTION
 
@@ -262,3 +262,6 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - Work Item 17: complete via PR #250, merged as `088c3ba8abd49ab6807f5cf153056391411e87d0`; final head `133bcfa5c8abd2c9d629215d31e6a0fc15f46f86` passed Quality, Visual, Android, iOS, and Windows gates. Five-iteration Al-Baqarah browser benchmark measured 20.1 ms → 23.6 ms selection latency while reducing the chapter DOM from 286 rows to a 7–9 row virtual window and the full-chapter navigation path from 273.6 ms expand-all to 32.3 ms virtual scroll-to-bottom.
 - Work Item 18: complete via PR #252, merged as `372c2d1c8ceff5bb0dfa8416e1a6a8047759068f`; final head `cd26766d6cf5f26c457f042fd2c58563973f1bbc` passed Quality and Visual Regression, including 320/360/390/430px phone coverage, LTR/RTL, 44px touch targets, equal-width six-destination phone navigation, ellipsis safety, Indonesian `Ilmu`, and 800/1200px sidebar transition acceptance.
 - Work Item 19: complete via PR #254, merged as `3e8124351140604e9aa268bc2d0abeba5748d15b`; final head `6f1e2b30ee1b727ebfb482d198bf14f5460e10f2` passed Quality, Visual, Android, iOS, and Windows acceptance. The Night section includes Islamic midnight, final-third/Tahajjud start, optional configured Ishraq/Duha, civil-midnight boundary handling, explicit NightEndConvention, and all four locales.
+- Work Item 20: complete via PR #256, merged as `106418507b01dc3ace71b6a51a403b02e40ce99c`; final head `970fe6349728ad1c85c1892238c0d8ae0a8c2215` passed Quality, Visual, Android, Android emulator, iOS, and Windows acceptance before merge.
+- Work Item 21: complete via PR #257, merged as `aaf4d1308e9640deebd2823382cdb097444c28bf`; final head `e6bd4a35d6cfe15033e2ce4f7e24dd9e54614e4d` passed Quality, Visual, Android, Android emulator, iOS, and Windows acceptance before merge.
+- Work Item 22: complete via PR #258, merged as `c5efaccb644b9359406a0dbf892f557cdafde7b9`; final head `14b13761c6a209da8438b800681b48ab9273ca11` passed Quality, Visual, Android, Android emulator, iOS, and Windows acceptance. The reviewed 0.892% Today typography golden delta is covered by a scenario-specific 0.95% tolerance while the global 0.50% visual threshold remains unchanged.
