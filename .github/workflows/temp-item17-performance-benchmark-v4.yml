@@ -1,0 +1,171 @@
+name: TEMP Item 17 Performance Benchmark V4
+
+on:
+  push:
+    branches:
+      - temp/item17-performance-benchmark
+    paths:
+      - .github/workflows/temp-item17-performance-benchmark-v4.yml
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          path: baseline
+      - uses: actions/checkout@v4
+        with:
+          ref: 133bcfa5c8abd2c9d629215d31e6a0fc15f46f86
+          path: candidate
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build baseline and candidate
+        run: |
+          (cd baseline && npm ci --ignore-scripts && npm run build)
+          (cd candidate && npm ci --ignore-scripts && npm run build)
+      - name: Install browser harness
+        run: |
+          rm -rf /tmp/salahos-item17-harness
+          mkdir -p /tmp/salahos-item17-harness
+          cd /tmp/salahos-item17-harness
+          npm init -y >/dev/null 2>&1
+          npm install --ignore-scripts --save-exact playwright-core@1.62.0
+      - name: Benchmark Al-Baqarah before and after
+        shell: bash
+        run: |
+          python3 -m http.server 4173 --directory baseline/dist --bind 127.0.0.1 >/tmp/item17-baseline.log 2>&1 &
+          BASE_PID=$!
+          python3 -m http.server 4174 --directory candidate/dist --bind 127.0.0.1 >/tmp/item17-candidate.log 2>&1 &
+          CAND_PID=$!
+          trap 'kill $BASE_PID $CAND_PID 2>/dev/null || true' EXIT
+          for port in 4173 4174; do
+            for i in $(seq 1 50); do
+              curl -fsS "http://127.0.0.1:${port}/" >/dev/null && break
+              sleep 0.1
+            done
+          done
+          node --input-type=module <<'NODE'
+          import { chromium } from '/tmp/salahos-item17-harness/node_modules/playwright-core/index.mjs';
+
+          const settings = {
+            version: 2,
+            locale: 'en',
+            theme: 'light',
+            timeFormat: 'h23',
+            calculationMethodId: 'muslim-world-league',
+            asrConvention: 'standard',
+            highLatitudeRule: 'angle-based',
+            hijriCorrectionDays: 0,
+            prayerAdjustments: {},
+            prayerSourceMode: 'calculated',
+            location: {
+              coordinates: { latitude: -33.8688, longitude: 151.2093 },
+              timeZone: 'Australia/Sydney',
+            },
+            mosqueTimetable: null,
+            notifications: {},
+          };
+          const median = (values) => [...values].sort((a, b) => a - b)[Math.floor(values.length / 2)];
+          const browser = await chromium.launch({
+            headless: true,
+            executablePath: '/usr/bin/google-chrome',
+            args: ['--no-sandbox'],
+          });
+
+          async function open(baseUrl) {
+            const context = await browser.newContext({ viewport: { width: 390, height: 844 }, serviceWorkers: 'block' });
+            const page = await context.newPage();
+            await page.addInitScript((value) => localStorage.setItem('salahos.settings', JSON.stringify(value)), settings);
+            await page.goto(`${baseUrl}/?view=knowledge&knowledgeView=quran`, { waitUntil: 'networkidle' });
+            await page.getByText('114 surahs · 6,236 ayat', { exact: false }).waitFor();
+            return { context, page };
+          }
+
+          const baselineSelection = [];
+          const baselineExpand = [];
+          const baselineInitialNodes = [];
+          const baselineExpandedNodes = [];
+          for (let i = 0; i < 5; i += 1) {
+            const { context, page } = await open('http://127.0.0.1:4173');
+            const selected = await page.evaluate(async () => {
+              const select = document.querySelector('[data-quran-surah-select]');
+              if (!(select instanceof HTMLSelectElement)) throw new Error('baseline surah select missing');
+              const start = performance.now();
+              select.value = '2';
+              select.dispatchEvent(new Event('change', { bubbles: true }));
+              await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+              return { ms: performance.now() - start, nodes: document.querySelectorAll('[data-quran-offline-ayah]').length };
+            });
+            baselineSelection.push(selected.ms);
+            baselineInitialNodes.push(selected.nodes);
+            const expanded = await page.evaluate(async () => {
+              const start = performance.now();
+              while (true) {
+                const button = document.querySelector('[data-quran-show-more]');
+                if (!(button instanceof HTMLButtonElement)) break;
+                button.click();
+                await new Promise((resolve) => requestAnimationFrame(resolve));
+              }
+              await new Promise((resolve) => requestAnimationFrame(resolve));
+              return { ms: performance.now() - start, nodes: document.querySelectorAll('[data-quran-offline-ayah]').length };
+            });
+            baselineExpand.push(expanded.ms);
+            baselineExpandedNodes.push(expanded.nodes);
+            await context.close();
+          }
+
+          const candidateSelection = [];
+          const candidateBottom = [];
+          const candidateInitialRows = [];
+          const candidateBottomRows = [];
+          for (let i = 0; i < 5; i += 1) {
+            const { context, page } = await open('http://127.0.0.1:4174');
+            await page.locator('[data-quran-surah-search]').fill('2');
+            const option = page.locator('[data-quran-surah-option="2"]');
+            await option.waitFor({ state: 'visible' });
+            const selected = await page.evaluate(async () => {
+              const button = document.querySelector('[data-quran-surah-option="2"]');
+              if (!(button instanceof HTMLButtonElement)) throw new Error('candidate Surah 2 option missing');
+              const start = performance.now();
+              button.click();
+              await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+              return { ms: performance.now() - start, rows: document.querySelectorAll('[data-quran-virtual-key]').length };
+            });
+            candidateSelection.push(selected.ms);
+            candidateInitialRows.push(selected.rows);
+            const bottom = await page.evaluate(async () => {
+              const scroller = document.querySelector('[data-quran-virtual-scroll]');
+              if (!(scroller instanceof HTMLElement)) throw new Error('candidate virtual scroller missing');
+              const start = performance.now();
+              scroller.scrollTop = scroller.scrollHeight;
+              scroller.dispatchEvent(new Event('scroll', { bubbles: true }));
+              await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+              return { ms: performance.now() - start, rows: document.querySelectorAll('[data-quran-virtual-key]').length };
+            });
+            candidateBottom.push(bottom.ms);
+            candidateBottomRows.push(bottom.rows);
+            await context.close();
+          }
+
+          const report = {
+            environment: 'GitHub ubuntu-24.04 / Google Chrome / 390x844 / 5 iterations',
+            baselineMain: {
+              selectSurah2MedianMs: Number(median(baselineSelection).toFixed(2)),
+              initialAyahDomNodesMedian: median(baselineInitialNodes),
+              expandAll286MedianMs: Number(median(baselineExpand).toFixed(2)),
+              expandedAyahDomNodesMedian: median(baselineExpandedNodes),
+            },
+            item17: {
+              selectSurah2MedianMs: Number(median(candidateSelection).toFixed(2)),
+              initialVirtualRowsMedian: median(candidateInitialRows),
+              scrollToBottomMedianMs: Number(median(candidateBottom).toFixed(2)),
+              bottomVirtualRowsMedian: median(candidateBottomRows),
+            },
+          };
+          console.log(`ITEM17_AL_BAQARAH_BENCHMARK=${JSON.stringify(report)}`);
+          await browser.close();
+          NODE
