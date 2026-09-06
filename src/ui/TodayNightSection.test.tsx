@@ -8,9 +8,12 @@ const baseModel: NightPrayerPresentation = {
   phase: 'active',
   prominent: true,
   nightEndConvention: 'fajr',
-  islamicMidnight: { localMinutes: 10, provenance: 'Midpoint from displayed Maghrib to next fajr' },
+  islamicMidnight: {
+    localMinutes: 10.5,
+    provenance: 'Midpoint from displayed Maghrib to next fajr',
+  },
   lastThirdStart: {
-    localMinutes: 90,
+    localMinutes: 90 + 2 / 3,
     provenance: 'Start of final third from displayed Maghrib to next fajr',
   },
   ishraq: {
@@ -34,6 +37,17 @@ describe('TodayNightSection', () => {
     expect(markup).toContain('Midpoint from displayed Maghrib to next fajr');
     expect(markup).toContain('Configured 15 minutes after displayed sunrise');
     expect(markup).not.toContain('undefined');
+  });
+
+  it('rounds fractional calculated night times only at the display boundary', () => {
+    const markup = renderToStaticMarkup(
+      <TodayNightSection model={baseModel} locale="en" timeFormat="h23" promoted />,
+    );
+
+    expect(markup).toContain('00:11');
+    expect(markup).toContain('01:31');
+    expect(baseModel.islamicMidnight.localMinutes).toBe(10.5);
+    expect(baseModel.lastThirdStart.localMinutes).toBe(90 + 2 / 3);
   });
 
   it('hides Ishraq when the offset is explicitly unset', () => {
