@@ -34,7 +34,9 @@ describe('v1.5.3 Item 22 corrections', () => {
 
   it('reserves uppercase tracking for hero prayer/countdown labels', () => {
     expect(todayCss).toContain('.today-next__identity p,\n.today-next__countdown span {');
-    expect(todayCss).toContain('font-weight: 780;\n  letter-spacing: 0.08em;\n  text-transform: uppercase;');
+    expect(todayCss).toContain(
+      'font-weight: 780;\n  letter-spacing: 0.08em;\n  text-transform: uppercase;',
+    );
     expect(todayCss).toContain(
       '.today-section-heading p,\n.today-dates span,\n.today-next__times dt {',
     );
