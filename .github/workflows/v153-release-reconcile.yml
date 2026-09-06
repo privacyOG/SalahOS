@@ -1,0 +1,67 @@
+name: V1.5.3 Release Reconciliation Helper
+
+on:
+  push:
+    branches:
+      - 'v1.5.3/release-reconciliation'
+    paths:
+      - '.github/workflows/v153-release-reconcile.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  reconcile:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout reconciliation branch
+        uses: actions/checkout@v4
+        with:
+          ref: v1.5.3/release-reconciliation
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Reconcile package and native versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm version 1.5.3 --no-git-tag-version --allow-same-version
+          sed -i 's/versionCode 9/versionCode 10/' android/app/build.gradle
+          sed -i 's/versionName "1.5.2"/versionName "1.5.3"/' android/app/build.gradle
+          sed -i 's/CURRENT_PROJECT_VERSION = 9;/CURRENT_PROJECT_VERSION = 10;/g' ios/App/App.xcodeproj/project.pbxproj
+          sed -i 's/MARKETING_VERSION = 1.5.2;/MARKETING_VERSION = 1.5.3;/g' ios/App/App.xcodeproj/project.pbxproj
+
+      - name: Verify version parity
+        shell: bash
+        run: |
+          set -euo pipefail
+          PACKAGE_VERSION="$(node -p "require('./package.json').version")"
+          LOCK_VERSION="$(node -p "require('./package-lock.json').version")"
+          LOCK_ROOT_VERSION="$(node -p "require('./package-lock.json').packages[''].version")"
+          ANDROID_VERSION="$(sed -n 's/^[[:space:]]*versionName[[:space:]]*"\([^"]*\)".*/\1/p' android/app/build.gradle | head -1)"
+          ANDROID_VERSION_CODE="$(sed -n 's/^[[:space:]]*versionCode[[:space:]]*\([0-9][0-9]*\).*/\1/p' android/app/build.gradle | head -1)"
+          IOS_VERSION="$(sed -n 's/^[[:space:]]*MARKETING_VERSION = \([^;]*\);/\1/p' ios/App/App.xcodeproj/project.pbxproj | sort -u)"
+          IOS_BUILD_NUMBER="$(sed -n 's/^[[:space:]]*CURRENT_PROJECT_VERSION = \([^;]*\);/\1/p' ios/App/App.xcodeproj/project.pbxproj | sort -u)"
+          test "$PACKAGE_VERSION" = "1.5.3"
+          test "$LOCK_VERSION" = "$PACKAGE_VERSION"
+          test "$LOCK_ROOT_VERSION" = "$PACKAGE_VERSION"
+          test "$ANDROID_VERSION" = "$PACKAGE_VERSION"
+          test "$IOS_VERSION" = "$PACKAGE_VERSION"
+          test "$ANDROID_VERSION_CODE" = "10"
+          test "$IOS_BUILD_NUMBER" = "$ANDROID_VERSION_CODE"
+
+      - name: Commit reconciled versions
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add package.json package-lock.json android/app/build.gradle ios/App/App.xcodeproj/project.pbxproj
+          git diff --cached --quiet && exit 0
+          git commit -m 'Reconcile release version 1.5.3 and native build 10'
+          git push origin HEAD:v1.5.3/release-reconciliation
