@@ -173,6 +173,22 @@ describe('versioned settings persistence', () => {
     expect(invalid.ishraqMinutesAfterSunrise).toBeNull();
   });
 
+  it('accepts the documented -3..3 Hijri correction range and rejects values outside it', () => {
+    for (const correction of [-3, -2, -1, 0, 1, 2, 3]) {
+      const parsed = importPersistedSettings(
+        JSON.stringify({ version: 2, hijriCorrectionDays: correction }),
+      );
+      expect(parsed.hijriCorrectionDays).toBe(correction);
+    }
+
+    for (const correction of [-4, 4]) {
+      const parsed = importPersistedSettings(
+        JSON.stringify({ version: 2, hijriCorrectionDays: correction }),
+      );
+      expect(parsed.hijriCorrectionDays).toBe(0);
+    }
+  });
+
   it('rejects unsupported future schema versions', () => {
     expect(() => importPersistedSettings('{"version":99}')).toThrow(RangeError);
   });
