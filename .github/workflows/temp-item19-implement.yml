@@ -1,0 +1,414 @@
+name: TEMP Item 19 Night Prayer Implementation
+
+on:
+  push:
+    branches:
+      - v1.5.3/item-19-night-prayer-times
+    paths:
+      - .github/workflows/temp-item19-implement.yml
+
+permissions:
+  contents: write
+
+jobs:
+  implement:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v1.5.3/item-19-night-prayer-times
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Wire settings and Today night presentation
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          def replace_once(path, old, new):
+              p = Path(path)
+              text = p.read_text()
+              count = text.count(old)
+              if count != 1:
+                  raise SystemExit(f'{path}: expected one exact match, found {count}')
+              p.write_text(text.replace(old, new, 1))
+
+          # Persist night-end convention and the explicitly optional Ishraq offset.
+          replace_once(
+              'src/platform/settingsStorage.ts',
+              "import type { AsrConvention, HighLatitudeRule, PrayerName } from '../domain/prayerEngine';\nimport { assertIanaTimeZone } from '../domain/timezone';",
+              "import type { AsrConvention, HighLatitudeRule, PrayerName } from '../domain/prayerEngine';\nimport type { NightEndConvention } from '../domain/supplementaryTimes';\nimport { assertIanaTimeZone } from '../domain/timezone';",
+          )
+          replace_once(
+              'src/platform/settingsStorage.ts',
+              "  readonly highLatitudeRule: HighLatitudeRule;\n  readonly hijriCorrectionDays: number;",
+              "  readonly highLatitudeRule: HighLatitudeRule;\n  readonly nightEndConvention?: NightEndConvention;\n  readonly ishraqMinutesAfterSunrise?: number | null;\n  readonly hijriCorrectionDays: number;",
+          )
+          replace_once(
+              'src/platform/settingsStorage.ts',
+              "  highLatitudeRule: 'angle-based',\n  hijriCorrectionDays: 0,",
+              "  highLatitudeRule: 'angle-based',\n  nightEndConvention: 'fajr',\n  ishraqMinutesAfterSunrise: null,\n  hijriCorrectionDays: 0,",
+          )
+          replace_once(
+              'src/platform/settingsStorage.ts',
+              "function parseHighLatitudeRule(value: unknown): HighLatitudeRule {\n  if (value === 'middle-of-the-night' || value === 'one-seventh') return value;\n  return 'angle-based';\n}\nfunction parseHijriCorrection(value: unknown): number {",
+              "function parseHighLatitudeRule(value: unknown): HighLatitudeRule {\n  if (value === 'middle-of-the-night' || value === 'one-seventh') return value;\n  return 'angle-based';\n}\nfunction parseNightEndConvention(value: unknown): NightEndConvention {\n  return value === 'sunrise' ? 'sunrise' : 'fajr';\n}\nfunction parseIshraqMinutesAfterSunrise(value: unknown): number | null {\n  return Number.isInteger(value) && Number(value) >= 0 && Number(value) <= 240\n    ? Number(value)\n    : null;\n}\nfunction parseHijriCorrection(value: unknown): number {",
+          )
+          replace_once(
+              'src/platform/settingsStorage.ts',
+              "    highLatitudeRule: parseHighLatitudeRule(migrated.highLatitudeRule),\n    hijriCorrectionDays: parseHijriCorrection(migrated.hijriCorrectionDays),",
+              "    highLatitudeRule: parseHighLatitudeRule(migrated.highLatitudeRule),\n    nightEndConvention: parseNightEndConvention(migrated.nightEndConvention),\n    ishraqMinutesAfterSunrise: parseIshraqMinutesAfterSunrise(\n      migrated.ishraqMinutesAfterSunrise,\n    ),\n    hijriCorrectionDays: parseHijriCorrection(migrated.hijriCorrectionDays),",
+          )
+
+          # Storage coverage for defaults, valid values, and malformed values.
+          replace_once(
+              'src/platform/settingsStorage.test.ts',
+              "    highLatitudeRule: 'one-seventh',\n    hijriCorrectionDays: 1,",
+              "    highLatitudeRule: 'one-seventh',\n    nightEndConvention: 'sunrise',\n    ishraqMinutesAfterSunrise: 20,\n    hijriCorrectionDays: 1,",
+          )
+          replace_once(
+              'src/platform/settingsStorage.test.ts',
+              "    expect(migrated.calculationMethodId).toBe('muslim-world-league');\n    expect(migrated.notifications).toEqual(defaultPersistedSettings.notifications);",
+              "    expect(migrated.calculationMethodId).toBe('muslim-world-league');\n    expect(migrated.nightEndConvention).toBe('fajr');\n    expect(migrated.ishraqMinutesAfterSunrise).toBeNull();\n    expect(migrated.notifications).toEqual(defaultPersistedSettings.notifications);",
+          )
+          replace_once(
+              'src/platform/settingsStorage.test.ts',
+              "    expect(migrated.prayerAdjustments).toEqual({ fajr: 2 });\n    expect(migrated.location?.timeZone).toBe('Australia/Sydney');",
+              "    expect(migrated.prayerAdjustments).toEqual({ fajr: 2 });\n    expect(migrated.nightEndConvention).toBe('fajr');\n    expect(migrated.ishraqMinutesAfterSunrise).toBeNull();\n    expect(migrated.location?.timeZone).toBe('Australia/Sydney');",
+          )
+          marker = "  it('rejects unsupported future schema versions', () => {"
+          insertion = """  it('validates night-end convention and the optional Ishraq offset', () => {
+    const configured = importPersistedSettings(
+      JSON.stringify({
+        version: 2,
+        nightEndConvention: 'sunrise',
+        ishraqMinutesAfterSunrise: 15,
+      }),
+    );
+    expect(configured.nightEndConvention).toBe('sunrise');
+    expect(configured.ishraqMinutesAfterSunrise).toBe(15);
+
+    const invalid = importPersistedSettings(
+      JSON.stringify({
+        version: 2,
+        nightEndConvention: 'invalid',
+        ishraqMinutesAfterSunrise: 241,
+      }),
+    );
+    expect(invalid.nightEndConvention).toBe('fajr');
+    expect(invalid.ishraqMinutesAfterSunrise).toBeNull();
+  });
+
+"""
+          p = Path('src/platform/settingsStorage.test.ts')
+          text = p.read_text()
+          if text.count(marker) != 1:
+              raise SystemExit('settingsStorage.test.ts: unsupported-version marker mismatch')
+          p.write_text(text.replace(marker, insertion + marker, 1))
+
+          # Localized prayer-setting controls.
+          settings_path = Path('src/ui/SettingsScreen.tsx')
+          text = settings_path.read_text()
+          marker = "const base = { palette: 'Colour palette' };\n"
+          settings_copy = """const base = { palette: 'Colour palette' };
+
+const ishraqOffsetOptions = [10, 15, 20, 30, 45, 60] as const;
+const nightPrayerSettingsCopy: Readonly<
+  Record<
+    Locale,
+    Readonly<{
+      nightEnd: string;
+      nightEndFajr: string;
+      nightEndSunrise: string;
+      nightEndHelp: string;
+      ishraqOffset: string;
+      ishraqUnset: string;
+      ishraqHelp: string;
+      minutesAfterSunrise: string;
+    }>
+  >
+> = {
+  en: {
+    nightEnd: 'Night-end convention',
+    nightEndFajr: 'Fajr',
+    nightEndSunrise: 'Sunrise',
+    nightEndHelp: 'Used for Islamic midnight and the final third of the night.',
+    ishraqOffset: 'Ishraq / Duha after sunrise',
+    ishraqUnset: 'Not set — hide Ishraq',
+    ishraqHelp: 'Choose an explicit safety interval after sunrise. No hidden default is applied.',
+    minutesAfterSunrise: 'min after sunrise',
+  },
+  ar: {
+    nightEnd: 'نهاية الليل',
+    nightEndFajr: 'الفجر',
+    nightEndSunrise: 'الشروق',
+    nightEndHelp: 'يُستخدم لحساب منتصف الليل الشرعي وبداية الثلث الأخير.',
+    ishraqOffset: 'الإشراق / الضحى بعد الشروق',
+    ishraqUnset: 'غير محدد — إخفاء الإشراق',
+    ishraqHelp: 'اختر مدة أمان صريحة بعد الشروق. لا توجد قيمة افتراضية مخفية.',
+    minutesAfterSunrise: 'دقيقة بعد الشروق',
+  },
+  tr: {
+    nightEnd: 'Gece sonu ölçütü',
+    nightEndFajr: 'Sabah namazı',
+    nightEndSunrise: 'Güneş doğuşu',
+    nightEndHelp: 'İslami gece yarısı ve son üçte bir hesabında kullanılır.',
+    ishraqOffset: 'İşrak / Duha güneş doğuşundan sonra',
+    ishraqUnset: 'Ayarlanmadı — İşrak gizlensin',
+    ishraqHelp: 'Güneş doğuşundan sonra açık bir güvenlik aralığı seçin. Gizli varsayılan yoktur.',
+    minutesAfterSunrise: 'dk güneş doğuşundan sonra',
+  },
+  id: {
+    nightEnd: 'Batas akhir malam',
+    nightEndFajr: 'Subuh',
+    nightEndSunrise: 'Matahari terbit',
+    nightEndHelp: 'Dipakai untuk menghitung tengah malam Islami dan awal sepertiga malam terakhir.',
+    ishraqOffset: 'Isyraq / Duha setelah matahari terbit',
+    ishraqUnset: 'Belum diatur — sembunyikan Isyraq',
+    ishraqHelp: 'Pilih jeda aman yang eksplisit setelah matahari terbit. Tidak ada default tersembunyi.',
+    minutesAfterSunrise: 'mnt setelah matahari terbit',
+  },
+};
+"""
+          if text.count(marker) != 1:
+              raise SystemExit('SettingsScreen.tsx: base marker mismatch')
+          text = text.replace(marker, settings_copy, 1)
+
+          function_start = text.index('function PrayerSettingsForm(')
+          locale_marker = "  const locale = settings.locale;\n  return ("
+          locale_index = text.index(locale_marker, function_start)
+          text = (
+              text[:locale_index]
+              + "  const locale = settings.locale;\n  const nightCopy = nightPrayerSettingsCopy[locale];\n  const number = new Intl.NumberFormat(locale);\n  return ("
+              + text[locale_index + len(locale_marker):]
+          )
+
+          hijri_marker = """      <label>
+        <span>{translate(locale, 'hijriCorrection')}</span>"""
+          controls = """      <label>
+        <span>{nightCopy.nightEnd}</span>
+        <select
+          value={settings.nightEndConvention ?? 'fajr'}
+          onChange={(event) => {
+            updateSettings((current) => ({
+              ...current,
+              nightEndConvention: event.target.value === 'sunrise' ? 'sunrise' : 'fajr',
+            }));
+          }}
+        >
+          <option value="fajr">{nightCopy.nightEndFajr}</option>
+          <option value="sunrise">{nightCopy.nightEndSunrise}</option>
+        </select>
+        <small>{nightCopy.nightEndHelp}</small>
+      </label>
+      <label>
+        <span>{nightCopy.ishraqOffset}</span>
+        <select
+          value={settings.ishraqMinutesAfterSunrise ?? ''}
+          onChange={(event) => {
+            updateSettings((current) => ({
+              ...current,
+              ishraqMinutesAfterSunrise:
+                event.target.value === '' ? null : Number(event.target.value),
+            }));
+          }}
+        >
+          <option value="">{nightCopy.ishraqUnset}</option>
+          {ishraqOffsetOptions.map((minutes) => (
+            <option key={minutes} value={minutes}>
+              {number.format(minutes)} {nightCopy.minutesAfterSunrise}
+            </option>
+          ))}
+        </select>
+        <small>{nightCopy.ishraqHelp}</small>
+      </label>
+"""
+          if text.count(hijri_marker) != 1:
+              raise SystemExit('SettingsScreen.tsx: Hijri marker mismatch')
+          text = text.replace(hijri_marker, controls + hijri_marker, 1)
+          settings_path.write_text(text)
+
+          # Wire the pure night model to Today, including the previous civil day before Fajr.
+          today_path = Path('src/ui/TodayScreen.tsx')
+          text = today_path.read_text()
+          text = text.replace(
+              "import '../today-prayer-provenance.css';\n",
+              "import '../today-prayer-provenance.css';\nimport '../today-night.css';\n",
+              1,
+          )
+          text = text.replace(
+              "import { calculationMethods } from '../domain/methods';\n",
+              "import { calculationMethods } from '../domain/methods';\nimport { buildNightPrayerPresentation } from '../domain/nightPrayerPresentation';\n",
+              1,
+          )
+          text = text.replace(
+              "import { TodayJumuahSection } from './TodayJumuahSection';\n",
+              "import { TodayJumuahSection } from './TodayJumuahSection';\nimport { TodayNightSection } from './TodayNightSection';\n",
+              1,
+          )
+
+          unavailable_marker = "  const unavailablePrayers = dashboardResult?.ok === true ? dashboardResult.unavailablePrayers : [];\n"
+          night_logic = """  const unavailablePrayers = dashboardResult?.ok === true ? dashboardResult.unavailablePrayers : [];
+  const needsPreviousNightSchedule =
+    dashboard !== null &&
+    dashboard.today.prayers.fajr.roundedLocalMinutes !== null &&
+    dashboard.clock.localMinutes < dashboard.today.prayers.fajr.roundedLocalMinutes;
+  const previousNightScheduleResult = useMemo(() => {
+    if (
+      !needsPreviousNightSchedule ||
+      coordinates === null ||
+      resolvedPrayerTimeZone === null ||
+      scheduleCivilDate === null
+    ) {
+      return null;
+    }
+    const previousCivilDate = new Date(scheduleCivilDate.getTime() - 86_400_000);
+    return buildPrayerDashboardScheduleResult({
+      civilDate: previousCivilDate,
+      coordinates,
+      timeZone: resolvedPrayerTimeZone,
+      method: calculationMethods[settings.calculationMethodId],
+      asrConvention: settings.asrConvention,
+      highLatitudeRule: settings.highLatitudeRule,
+      adjustments: settings.prayerAdjustments,
+      hijriCorrectionDays: settings.hijriCorrectionDays,
+    });
+  }, [
+    coordinates,
+    needsPreviousNightSchedule,
+    resolvedPrayerTimeZone,
+    scheduleCivilDate,
+    settings.asrConvention,
+    settings.calculationMethodId,
+    settings.highLatitudeRule,
+    settings.hijriCorrectionDays,
+    settings.prayerAdjustments,
+  ]);
+  const nightPresentation = useMemo(() => {
+    if (dashboard === null || scheduleResult?.ok !== true) return null;
+    const previousSchedule = needsPreviousNightSchedule
+      ? previousNightScheduleResult?.ok === true
+        ? previousNightScheduleResult.schedule.today
+        : null
+      : scheduleResult.schedule.today;
+    if (previousSchedule === null) return null;
+    try {
+      return buildNightPrayerPresentation({
+        previous: previousSchedule,
+        today: scheduleResult.schedule.today,
+        tomorrow: scheduleResult.schedule.tomorrow,
+        localMinutes: dashboard.clock.localMinutes,
+        nightEndConvention: settings.nightEndConvention ?? 'fajr',
+        ishraqMinutesAfterSunrise: settings.ishraqMinutesAfterSunrise ?? null,
+      });
+    } catch {
+      return null;
+    }
+  }, [
+    dashboard,
+    needsPreviousNightSchedule,
+    previousNightScheduleResult,
+    scheduleResult,
+    settings.ishraqMinutesAfterSunrise,
+    settings.nightEndConvention,
+  ]);
+"""
+          if text.count(unavailable_marker) != 1:
+              raise SystemExit('TodayScreen.tsx: unavailable marker mismatch')
+          text = text.replace(unavailable_marker, night_logic, 1)
+
+          promoted_marker = """          {promoteFridayJumuah && (
+            <TodayJumuahSection
+              sessions={todayJumuahSessions}
+              locale={locale}
+              timeFormat={settings.timeFormat}
+              promoted
+            />
+          )}
+
+          <div className="today-prayer-provenance">"""
+          promoted_replacement = """          {promoteFridayJumuah && (
+            <TodayJumuahSection
+              sessions={todayJumuahSessions}
+              locale={locale}
+              timeFormat={settings.timeFormat}
+              promoted
+            />
+          )}
+
+          {nightPresentation?.prominent === true && (
+            <TodayNightSection
+              model={nightPresentation}
+              locale={locale}
+              timeFormat={settings.timeFormat}
+              promoted
+            />
+          )}
+
+          <div className="today-prayer-provenance">"""
+          if text.count(promoted_marker) != 1:
+              raise SystemExit('TodayScreen.tsx: promoted insertion marker mismatch')
+          text = text.replace(promoted_marker, promoted_replacement, 1)
+
+          secondary_marker = """            <div className="today-secondary-context__content">
+              {modules['sunrise-sunset'] && ("""
+          secondary_replacement = """            <div className="today-secondary-context__content">
+              {nightPresentation !== null && !nightPresentation.prominent && (
+                <TodayNightSection
+                  model={nightPresentation}
+                  locale={locale}
+                  timeFormat={settings.timeFormat}
+                />
+              )}
+
+              {modules['sunrise-sunset'] && ("""
+          if text.count(secondary_marker) != 1:
+              raise SystemExit('TodayScreen.tsx: secondary insertion marker mismatch')
+          text = text.replace(secondary_marker, secondary_replacement, 1)
+          today_path.write_text(text)
+          PY
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Format Item 19 files
+        run: >-
+          npx prettier --write
+          src/domain/nightPrayerPresentation.ts
+          src/domain/nightPrayerPresentation.test.ts
+          src/platform/settingsStorage.ts
+          src/platform/settingsStorage.test.ts
+          src/ui/SettingsScreen.tsx
+          src/ui/TodayScreen.tsx
+          src/ui/TodayNightSection.tsx
+          src/ui/TodayNightSection.test.tsx
+          src/today-night.css
+
+      - name: Run Item 19 gate
+        run: npm run typecheck && npm run lint && npm run test && npm run calendar:check
+
+      - name: Retain clean implementation commit
+        shell: bash
+        run: |
+          rm .github/workflows/temp-item19-implement.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            src/domain/nightPrayerPresentation.ts \
+            src/domain/nightPrayerPresentation.test.ts \
+            src/platform/settingsStorage.ts \
+            src/platform/settingsStorage.test.ts \
+            src/ui/SettingsScreen.tsx \
+            src/ui/TodayScreen.tsx \
+            src/ui/TodayNightSection.tsx \
+            src/ui/TodayNightSection.test.tsx \
+            src/today-night.css \
+            .github/workflows/temp-item19-implement.yml
+          git commit -m "Wire Tahajjud and night prayer times"
+          echo "ITEM19_RETAINED_COMMIT=$(git rev-parse HEAD)"
+          git push origin HEAD:v1.5.3/item-19-night-prayer-times
