@@ -45,8 +45,8 @@ describe('v1.5.3 Qur’an reader architecture', () => {
   });
 
   it('announces concise result status instead of making the ayah content list live', () => {
-    const ayahListOpeningTag = readerSource.match(
-      /<div\s+className=\{`quran-offline-reader__ayat[\s\S]*?\}>/u,
+    const ayahListOpeningTag = /<div\s+className=\{`quran-offline-reader__ayat[\s\S]*?\}>/u.exec(
+      readerSource,
     )?.[0];
 
     expect(ayahListOpeningTag).toBeDefined();
