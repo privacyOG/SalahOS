@@ -4,6 +4,7 @@ import {
   PERSISTED_APPLICATION_KEYS,
   type PreferencesStore,
 } from './applicationStorage';
+import { NOTIFICATION_ONBOARDING_STORAGE_KEY } from './notificationOnboarding';
 import { PRAYER_SETUP_ONBOARDING_STORAGE_KEY } from './prayerSetupOnboarding';
 import { QIBLA_PERMISSION_ONBOARDING_STORAGE_KEY } from './qiblaPermissionOnboarding';
 
@@ -52,6 +53,10 @@ describe('native application storage', () => {
       '{"version":1,"completed":true}',
     );
     preferences.values.set(PRAYER_SETUP_ONBOARDING_STORAGE_KEY, '{"version":1,"completed":true}');
+    preferences.values.set(
+      NOTIFICATION_ONBOARDING_STORAGE_KEY,
+      '{"version":1,"completed":true,"decision":"declined"}',
+    );
 
     const storage = await createNativePreferencesStorage(preferences);
 
@@ -71,6 +76,9 @@ describe('native application storage', () => {
     );
     expect(storage.getItem(PRAYER_SETUP_ONBOARDING_STORAGE_KEY)).toBe(
       '{"version":1,"completed":true}',
+    );
+    expect(storage.getItem(NOTIFICATION_ONBOARDING_STORAGE_KEY)).toBe(
+      '{"version":1,"completed":true,"decision":"declined"}',
     );
   });
 

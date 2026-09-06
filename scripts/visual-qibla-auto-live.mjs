@@ -242,6 +242,26 @@ try {
       'First-run prayer setup completion was not persisted before Qiblah navigation',
     );
 
+    const notificationDialog = page.locator('[data-notification-onboarding]');
+    await notificationDialog.waitFor({ state: 'visible' });
+    await notificationDialog.getByRole('button', { name: 'Not now' }).click();
+    await notificationDialog.waitFor({ state: 'detached' });
+
+    const notificationOnboardingState = await page.evaluate(() => {
+      const serialized = localStorage.getItem('salahos.notification-onboarding');
+      return serialized === null ? null : JSON.parse(serialized);
+    });
+    assert(
+      notificationOnboardingState?.version === 1 &&
+        notificationOnboardingState.completed === true &&
+        notificationOnboardingState.decision === 'declined',
+      'First-run notification decline was not persisted before Qiblah navigation',
+    );
+    assert(
+      (await notificationDialog.count()) === 0,
+      'Declined notification onboarding reappeared without explicit user action',
+    );
+
     const qiblahNavigation = page.locator('.congregation-nav button').filter({ hasText: 'Qiblah' });
     await qiblahNavigation.click();
     const finder = page.locator('.qibla-finder');
@@ -272,6 +292,7 @@ try {
       name: 'first-run-permission-to-live-qiblah',
       ...onboardingState,
       prayerSetupState,
+      notificationOnboardingState,
     });
     await context.close();
   }

@@ -198,3 +198,99 @@
     width: 100%;
   }
 }
+
+.notification-onboarding__notice {
+  display: grid;
+  gap: var(--salah-space-2);
+  padding: var(--salah-space-3);
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-md);
+  background: var(--salah-bg-subtle);
+}
+
+.notification-onboarding__notice h3,
+.notification-onboarding__notice p {
+  margin: 0;
+}
+
+.notification-onboarding__notice h3 {
+  font-size: var(--salah-text-md);
+}
+
+.notification-onboarding__notice p {
+  color: var(--salah-fg-secondary);
+  font-size: var(--salah-text-sm);
+  line-height: 1.55;
+}
+
+.notification-onboarding__prayers {
+  display: grid;
+  gap: var(--salah-space-2);
+  padding: 0;
+  border: 0;
+}
+
+.notification-onboarding__prayers legend {
+  margin-block-end: var(--salah-space-2);
+  font-weight: 800;
+}
+
+.notification-onboarding__all,
+.notification-onboarding__prayer-grid label {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: var(--salah-space-2);
+  min-height: 2.75rem;
+  padding: var(--salah-space-2) var(--salah-space-3);
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: var(--salah-radius-sm);
+  background: var(--salah-bg-surface);
+}
+
+.notification-onboarding__prayer-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--salah-space-2);
+}
+
+.notification-onboarding__prayers input {
+  accent-color: var(--salah-fg-accent);
+}
+
+.notification-onboarding-settings-entry {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--salah-space-4);
+}
+
+.notification-onboarding-settings-entry h2,
+.notification-onboarding-settings-entry p {
+  margin: 0;
+}
+
+.notification-onboarding-settings-entry div {
+  display: grid;
+  gap: var(--salah-space-2);
+}
+
+.notification-onboarding-settings-entry p {
+  color: var(--salah-fg-secondary);
+}
+
+.notification-onboarding-settings-entry button {
+  min-height: 2.75rem;
+  flex: 0 0 auto;
+}
+
+@media (max-width: 35rem) {
+  .notification-onboarding__prayer-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .notification-onboarding-settings-entry {
+    align-items: stretch;
+    flex-direction: column;
+  }
+}

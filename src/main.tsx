@@ -8,12 +8,17 @@ import {
 import { installAutomaticLocationSync } from './platform/automaticLocationSync';
 import { LOCATION_CONTEXT_CHANGE_EVENT } from './platform/bestAvailableLocation';
 import { PRAYER_SETUP_ONBOARDING_COMPLETE_EVENT } from './platform/prayerSetupOnboarding';
+import {
+  initializeNotificationOnboarding,
+  NOTIFICATION_ONBOARDING_COMPLETE_EVENT,
+} from './platform/notificationOnboarding';
 import { installPrivacyDiagnostics } from './platform/privacyDiagnostics';
 import { loadPersistedSettings } from './platform/settingsStorage';
 import { installThemePreference } from './platform/themePreference';
 import { applyThemePalette } from './platform/themePalette';
 import { CongregationShell } from './ui/CongregationShell';
 import { MobilePrayerThemeSurface } from './ui/MobilePrayerThemeSurface';
+import { NotificationOnboarding } from './ui/NotificationOnboarding';
 import { PrayerSetupOnboarding } from './ui/PrayerSetupOnboarding';
 import { QiblaPermissionOnboarding } from './ui/QiblaPermissionOnboarding';
 import { TodayScreen } from './ui/TodayScreen';
@@ -161,11 +166,13 @@ function CongregationApplication() {
     };
     window.addEventListener(LOCATION_CONTEXT_CHANGE_EVENT, refreshApplication);
     window.addEventListener(PRAYER_SETUP_ONBOARDING_COMPLETE_EVENT, refreshApplication);
+    window.addEventListener(NOTIFICATION_ONBOARDING_COMPLETE_EVENT, refreshApplication);
     const stopAutomaticLocationSync = installAutomaticLocationSync();
     return () => {
       stopAutomaticLocationSync();
       window.removeEventListener(LOCATION_CONTEXT_CHANGE_EVENT, refreshApplication);
       window.removeEventListener(PRAYER_SETUP_ONBOARDING_COMPLETE_EVENT, refreshApplication);
+      window.removeEventListener(NOTIFICATION_ONBOARDING_COMPLETE_EVENT, refreshApplication);
     };
   }, []);
 
@@ -173,6 +180,7 @@ function CongregationApplication() {
     <>
       <QiblaPermissionOnboarding />
       <PrayerSetupOnboarding />
+      <NotificationOnboarding />
       <CongregationShell key={applicationRevision}>
         {(destination) => <CongregationRoute destination={destination} />}
       </CongregationShell>
@@ -205,6 +213,7 @@ async function bootstrap(): Promise<void> {
   if (root === null) throw new Error('SalahOS root element is missing');
 
   await initializeApplicationStorage(window.localStorage);
+  initializeNotificationOnboarding(getApplicationStorage());
   installPrivacyDiagnostics(getApplicationStorage());
   const settings = loadPersistedSettings(getApplicationStorage());
   applyThemePalette(settings.palette, document);
