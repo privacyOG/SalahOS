@@ -73,7 +73,7 @@ try {
     'Complete Qur’an reader did not expose all 114 surahs in the searchable index',
   );
   const surahSearch = surahIndex.locator('[data-quran-surah-search]');
-  await surahSearch.fill('Al-Baqarah');
+  await surahSearch.fill('Baqarah');
   const alBaqarahOption = surahIndex.locator('[data-quran-surah-option="2"]');
   await alBaqarahOption.waitFor({ state: 'visible' });
   const alBaqarahText = (await alBaqarahOption.textContent()) ?? '';
