@@ -86,12 +86,18 @@ function conventionBasis(localeCopy: NightCopy, convention: NightEndConvention):
   return convention === 'fajr' ? localeCopy.basisFajr : localeCopy.basisSunrise;
 }
 
+function roundedDisplayMinute(localMinutes: number): number {
+  return ((Math.round(localMinutes) % 1_440) + 1_440) % 1_440;
+}
+
 function timeLabel(
   localMinutes: number | null,
   locale: Locale,
   timeFormat: TimeFormatPreference,
 ): string {
-  return localMinutes === null ? '—' : formatLocalTime(localMinutes, locale, timeFormat);
+  return localMinutes === null
+    ? '—'
+    : formatLocalTime(roundedDisplayMinute(localMinutes), locale, timeFormat);
 }
 
 export function TodayNightSection({
