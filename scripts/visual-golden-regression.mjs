@@ -68,6 +68,10 @@ const scenarios = [
     theme: 'light',
     viewport: { width: 390, height: 844 },
     ready: '.today-screen',
+    // V1.5.3 Item 22 intentionally de-emphasizes lower-level Today labels while
+    // preserving the hero prayer/countdown hierarchy. The reviewed visual delta is
+    // 0.892%; keep this exception scoped to the affected Today golden only.
+    maxDifferenceRatio: 0.0095,
   },
   {
     name: 'knowledge-phone-ar-dark',
