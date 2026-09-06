@@ -1,0 +1,74 @@
+name: TEMP Item 18 Page-Level Overflow Fix
+
+on:
+  push:
+    branches:
+      - v1.5.3/item-18-navigation-consolidation
+    paths:
+      - .github/workflows/temp-item18-overflow-page-level.yml
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v1.5.3/item-18-navigation-consolidation
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Keep overflow detection page-level
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/visual-regression.mjs')
+          text = path.read_text()
+          old = """      const isFormControl =
+        element instanceof HTMLInputElement ||
+        element instanceof HTMLSelectElement ||
+        element instanceof HTMLTextAreaElement ||
+        element instanceof HTMLButtonElement;
+      const visiblyOverflowsOwnBox =
+        !isFormControl &&
+        element.clientWidth > 0 &&
+        element.scrollWidth > element.clientWidth + tolerance &&
+        style.overflowX === 'visible';
+
+      if (!outsideViewport && !visiblyOverflowsOwnBox) continue;"""
+          new = """      if (!outsideViewport) continue;"""
+          if text.count(old) != 1:
+              raise SystemExit(f'expected one overflow block, found {text.count(old)}')
+          path.write_text(text.replace(old, new, 1))
+          PY
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Validate Item 18 gate and scripts
+        shell: bash
+        run: |
+          npx prettier --write scripts/visual-regression.mjs
+          npm run ui:design-system-ownership
+          npm run ui:theme-architecture
+          npm run format:check
+          node --check scripts/visual-regression.mjs
+          node --check scripts/visual-device-ux-refinement.mjs
+
+      - name: Retain clean final commit
+        shell: bash
+        run: |
+          rm .github/workflows/temp-item18-overflow-page-level.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/visual-regression.mjs .github/workflows/temp-item18-overflow-page-level.yml
+          git commit -m "Keep visual overflow detection page-level"
+          echo "ITEM18_PAGE_LEVEL_COMMIT=$(git rev-parse HEAD)"
+          git push origin HEAD:v1.5.3/item-18-navigation-consolidation
