@@ -27,7 +27,9 @@ describe('Knowledge text direction', () => {
     expect(arabicTags.every((tag) => tag.includes('lang="ar"') && tag.includes('dir="rtl"'))).toBe(
       true,
     );
-    expect(source).toContain('<BidiText>{result.ayah.key}</BidiText>');
+    expect(source).toContain(
+      '<BidiText>{formatQuranVerseReference(result.ayah.key, locale)}</BidiText>',
+    );
   });
 
   it('prevents translation, tafsir, source metadata and related-reference elements from inheriting direction implicitly', () => {

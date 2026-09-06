@@ -8,7 +8,6 @@ import {
   getQuranOfflineSurah,
   loadQuranOfflinePack,
   parseQuranVerseKey,
-  quranOfflineReferencePresentation,
   quranOfflineTransliterationPresentation,
   searchQuranOfflinePack,
   type QuranOfflinePack,
@@ -29,6 +28,7 @@ import {
   type QuranReadingPreferences,
   type QuranTranslationMode,
 } from '../platform/quranReadingPreferences';
+import { quranTanzilSourceUrl } from '../platform/quranExternalActions';
 import {
   persistQuranScrollPosition,
   quranScrollPositionForSurah,
@@ -65,6 +65,7 @@ type QuranReaderCopy = Readonly<{
   copied: string;
   copyFailed: string;
   source: string;
+  tanzilSource: string;
   tafsir: string;
   related: string;
   noResults: string;
@@ -123,6 +124,7 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     copied: 'Ayah copied or shared.',
     copyFailed: 'Sharing is not available on this device.',
     source: 'Source',
+    tanzilSource: 'Uthmani Arabic text source:',
     tafsir: 'Tafsir summary',
     related: 'Related ayat',
     noResults: 'No ayat match this search.',
@@ -177,6 +179,7 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     copied: 'تم نسخ الآية أو مشاركتها.',
     copyFailed: 'المشاركة غير متاحة على هذا الجهاز.',
     source: 'المصدر',
+    tanzilSource: 'مصدر النص العربي العثماني:',
     tafsir: 'ملخص التفسير',
     related: 'آيات ذات صلة',
     noResults: 'لا توجد آيات مطابقة للبحث.',
@@ -231,6 +234,7 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     copied: 'Ayet kopyalandı veya paylaşıldı.',
     copyFailed: 'Bu cihazda paylaşım kullanılamıyor.',
     source: 'Kaynak',
+    tanzilSource: 'Osmanî Arapça metin kaynağı:',
     tafsir: 'Tefsir özeti',
     related: 'İlgili ayetler',
     noResults: 'Bu aramayla eşleşen ayet yok.',
@@ -285,6 +289,7 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     copied: 'Ayat disalin atau dibagikan.',
     copyFailed: 'Berbagi tidak tersedia di perangkat ini.',
     source: 'Sumber',
+    tanzilSource: 'Sumber teks Arab Utsmani:',
     tafsir: 'Ringkasan tafsir',
     related: 'Ayat terkait',
     noResults: 'Tidak ada ayat yang cocok dengan pencarian ini.',
@@ -329,6 +334,31 @@ function relatedVerseKeys(entry: QuranKnowledgeEntry): readonly string[] {
 
 export function formatQuranAyahNumber(ayah: number): string {
   return new Intl.NumberFormat('ar-u-nu-arab', { useGrouping: false }).format(ayah);
+}
+
+export function formatQuranUiNumber(value: number, locale: Locale): string {
+  return new Intl.NumberFormat(locale, { useGrouping: false }).format(value);
+}
+
+export function formatQuranVerseReference(verseKey: string, locale: Locale): string {
+  const parsed = parseQuranVerseKey(verseKey);
+  return parsed
+    ? `${formatQuranUiNumber(parsed.surah, locale)}:${formatQuranUiNumber(parsed.ayah, locale)}`
+    : verseKey;
+}
+
+export function formatQuranResultsStatus(count: number, locale: Locale): string {
+  const number = formatQuranUiNumber(count, locale);
+  switch (locale) {
+    case 'ar':
+      return `عرض ${number} آيات`;
+    case 'tr':
+      return `${number} ayet gösteriliyor`;
+    case 'id':
+      return `Menampilkan ${number} ayat`;
+    default:
+      return `Showing ${number} ayat`;
+  }
 }
 
 async function shareOfflineAyah(
@@ -578,7 +608,10 @@ export function QuranOfflineReader({
           >
             {bookmarksOnly
               ? labels.allAyat
-              : `${labels.bookmarks} (${String(preferences.bookmarkedAyahIds.filter((key) => parseQuranVerseKey(key)).length)})`}
+              : `${labels.bookmarks} (${formatQuranUiNumber(
+                  preferences.bookmarkedAyahIds.filter((key) => parseQuranVerseKey(key)).length,
+                  locale,
+                )})`}
           </button>
           {lastRead ? (
             <button
@@ -591,7 +624,12 @@ export function QuranOfflineReader({
               }}
             >
               {labels.resume}:{' '}
-              <BidiText>{`${String(lastRead.surah)}:${String(lastRead.ayah)}`}</BidiText>
+              <BidiText>
+                {formatQuranVerseReference(
+                  `${String(lastRead.surah)}:${String(lastRead.ayah)}`,
+                  locale,
+                )}
+              </BidiText>
             </button>
           ) : null}
         </div>
@@ -756,7 +794,8 @@ export function QuranOfflineReader({
                 {labels.previousPage}
               </button>
               <strong>
-                {labels.page} {String(currentPage)} / {String(maxPage)}
+                {labels.page} {formatQuranUiNumber(currentPage, locale)} /{' '}
+                {formatQuranUiNumber(maxPage, locale)}
               </strong>
               <button
                 type="button"
@@ -773,7 +812,9 @@ export function QuranOfflineReader({
           {activeResult ? (
             <aside className="quran-ayah-utility" aria-label={labels.selectedAyah}>
               <strong>
-                <BidiText>{`${labels.quran} ${activeResult.ayah.key}`}</BidiText>
+                <BidiText>
+                  {`${labels.quran} ${formatQuranVerseReference(activeResult.ayah.key, locale)}`}
+                </BidiText>
               </strong>
               <div>
                 <button
@@ -822,6 +863,17 @@ export function QuranOfflineReader({
             <p className="quran-offline-reader__hint">{labels.resultLimit}</p>
           ) : null}
 
+          {results.length > 0 ? (
+            <p
+              className="quran-offline-reader__hint"
+              role="status"
+              aria-live="polite"
+              data-quran-results-status
+            >
+              {formatQuranResultsStatus(results.length, locale)}
+            </p>
+          ) : null}
+
           {results.length === 0 ? (
             <p className="knowledge-empty" role="status">
               {labels.noResults}
@@ -868,7 +920,7 @@ export function QuranOfflineReader({
                         {result.ayah.arabic}{' '}
                         <span
                           className="quran-offline-ayah__marker"
-                          aria-label={`${labels.ayah} ${String(parsed?.ayah ?? '')}`}
+                          aria-label={`${labels.ayah} ${formatQuranUiNumber(parsed?.ayah ?? 1, locale)}`}
                         >
                           ۝ {formatQuranAyahNumber(parsed?.ayah ?? 1)}
                         </span>
@@ -903,7 +955,7 @@ export function QuranOfflineReader({
                       ) : null}
                       {curated ? (
                         <div className="quran-offline-ayah__related">
-                          <strong>{labels.related}</strong>
+                          <strong data-quran-related-label>{labels.related}</strong>
                           <div>
                             {relatedVerseKeys(curated).map((verseKey) => (
                               <button
@@ -914,10 +966,11 @@ export function QuranOfflineReader({
                                   jumpToVerse(verseKey);
                                 }}
                                 data-quran-related-reference
-                                lang={quranOfflineReferencePresentation.lang}
-                                dir={quranOfflineReferencePresentation.dir}
+                                lang={locale}
+                                dir={locale === 'ar' ? 'rtl' : 'ltr'}
                               >
-                                {labels.quran} <BidiText>{verseKey}</BidiText>
+                                {labels.quran}{' '}
+                                <BidiText>{formatQuranVerseReference(verseKey, locale)}</BidiText>
                               </button>
                             ))}
                           </div>
@@ -931,7 +984,6 @@ export function QuranOfflineReader({
           ) : (
             <div
               className={`quran-offline-reader__ayat quran-offline-reader__ayat--${preferences.readingMode}`}
-              aria-live="polite"
             >
               {results.map((result) => {
                 const parsed = parseQuranVerseKey(result.ayah.key);
@@ -960,11 +1012,15 @@ export function QuranOfflineReader({
                       {!normalBrowsing ? (
                         <p
                           className="quran-offline-ayah__reference"
-                          lang={quranOfflineTransliterationPresentation.lang}
-                          dir={quranOfflineTransliterationPresentation.dir}
+                          lang={locale}
+                          dir={locale === 'ar' ? 'rtl' : 'ltr'}
                         >
-                          {result.surah.nameTransliteration} ·{' '}
-                          <BidiText>{result.ayah.key}</BidiText> · Juz {String(result.ayah.juz)}
+                          <span lang={quranOfflineTransliterationPresentation.lang} dir="ltr">
+                            {result.surah.nameTransliteration}
+                          </span>{' '}
+                          ·{' '}
+                          <BidiText>{formatQuranVerseReference(result.ayah.key, locale)}</BidiText>{' '}
+                          · {labels.juz} {formatQuranUiNumber(result.ayah.juz, locale)}
                         </p>
                       ) : null}
                       <p
@@ -977,7 +1033,7 @@ export function QuranOfflineReader({
                         {result.ayah.arabic}{' '}
                         <span
                           className="quran-offline-ayah__marker"
-                          aria-label={`${labels.ayah} ${String(parsed?.ayah ?? '')}`}
+                          aria-label={`${labels.ayah} ${formatQuranUiNumber(parsed?.ayah ?? 1, locale)}`}
                         >
                           ۝ {formatQuranAyahNumber(parsed?.ayah ?? 1)}
                         </span>
@@ -1012,7 +1068,7 @@ export function QuranOfflineReader({
                       ) : null}
                       {curated ? (
                         <div className="quran-offline-ayah__related">
-                          <strong>{labels.related}</strong>
+                          <strong data-quran-related-label>{labels.related}</strong>
                           <div>
                             {relatedVerseKeys(curated).map((verseKey) => (
                               <button
@@ -1023,10 +1079,11 @@ export function QuranOfflineReader({
                                   jumpToVerse(verseKey);
                                 }}
                                 data-quran-related-reference
-                                lang={quranOfflineReferencePresentation.lang}
-                                dir={quranOfflineReferencePresentation.dir}
+                                lang={locale}
+                                dir={locale === 'ar' ? 'rtl' : 'ltr'}
                               >
-                                {labels.quran} <BidiText>{verseKey}</BidiText>
+                                {labels.quran}{' '}
+                                <BidiText>{formatQuranVerseReference(verseKey, locale)}</BidiText>
                               </button>
                             ))}
                           </div>
@@ -1045,10 +1102,16 @@ export function QuranOfflineReader({
               <p data-knowledge-source-metadata lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
                 {labels.provenance}
                 {preferences.readingMode === 'page'
-                  ? ` · ${labels.page} ${String(currentPage)}`
+                  ? ` · ${labels.page} ${formatQuranUiNumber(currentPage, locale)}`
                   : selected
-                    ? ` · ${labels.surah} ${String(selected.surah)}`
+                    ? ` · ${labels.surah} ${formatQuranUiNumber(selected.surah, locale)}`
                     : ''}
+              </p>
+              <p data-quran-tanzil-attribution lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+                {labels.tanzilSource}{' '}
+                <a href={quranTanzilSourceUrl()} target="_blank" rel="noreferrer">
+                  Tanzil
+                </a>
               </p>
             </footer>
           ) : null}
