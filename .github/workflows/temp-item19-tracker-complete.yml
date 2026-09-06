@@ -1,0 +1,54 @@
+name: TEMP Item 19 Tracker Completion
+
+on:
+  push:
+    branches:
+      - v1.5.3/item-19-tracker-complete
+    paths:
+      - .github/workflows/temp-item19-tracker-complete.yml
+
+permissions:
+  contents: write
+
+jobs:
+  update-tracker:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v1.5.3/item-19-tracker-complete
+      - name: Mark Item 19 complete
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('TEMP_TODO_V1.5.3.md')
+          text = path.read_text()
+          heading = '## Work Item 19 — Wire up Tahajjud, Islamic midnight, and Ishraq'
+          next_heading = '\n## Work Item 20 — Notification opt-in during onboarding'
+          start = text.index(heading)
+          end = text.index(next_heading, start)
+          block = text[start:end]
+          if '— COMPLETE' not in block.splitlines()[0]:
+              block = block.replace(heading, f'{heading} — COMPLETE', 1)
+          block = block.replace('- [ ]', '- [x]')
+          text = text[:start] + block + text[end:]
+
+          completion = ('- Work Item 19: complete via PR #254, merged as '
+                        '`3e8124351140604e9aa268bc2d0abeba5748d15b`; final head '
+                        '`6f1e2b30ee1b727ebfb482d198bf14f5460e10f2` passed Quality, Visual, '
+                        'Android, iOS, and Windows acceptance. The Night section includes Islamic '
+                        'midnight, final-third/Tahajjud start, optional configured Ishraq/Duha, '
+                        'civil-midnight boundary handling, explicit NightEndConvention, and all four locales.')
+          if completion not in text:
+              text = text.rstrip() + '\n' + completion + '\n'
+          path.write_text(text)
+          PY
+          rm .github/workflows/temp-item19-tracker-complete.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add TEMP_TODO_V1.5.3.md .github/workflows/temp-item19-tracker-complete.yml
+          git commit -m "Mark v1.5.3 Item 19 complete"
+          echo "ITEM19_TRACKER_COMMIT=$(git rev-parse HEAD)"
+          git push origin HEAD:v1.5.3/item-19-tracker-complete
