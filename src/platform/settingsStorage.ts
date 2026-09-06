@@ -12,6 +12,7 @@ import type { AsrConvention, HighLatitudeRule, PrayerName } from '../domain/pray
 import type { NightEndConvention } from '../domain/supplementaryTimes';
 import { assertIanaTimeZone } from '../domain/timezone';
 import type { Locale } from '../i18n/translations';
+import { SETTINGS_CHANGE_EVENT } from './settingsEvents';
 import { defaultThemePalette, parseThemePalette, type ThemePalette } from './themePalette';
 
 export const SETTINGS_STORAGE_KEY = 'salahos.settings';
@@ -113,7 +114,7 @@ function parseIshraqMinutesAfterSunrise(value: unknown): number | null {
     : null;
 }
 function parseHijriCorrection(value: unknown): number {
-  return Number.isInteger(value) && Number(value) >= -2 && Number(value) <= 2 ? Number(value) : 0;
+  return Number.isInteger(value) && Number(value) >= -3 && Number(value) <= 3 ? Number(value) : 0;
 }
 function parseSourceMode(value: unknown): PrayerSourceMode {
   if (value === 'local-mosque' || value === 'calculated-adjustments') return value;
@@ -180,6 +181,10 @@ function migrateSettings(value: Record<string, unknown>): Record<string, unknown
     };
   return value;
 }
+function dispatchSettingsChange(): void {
+  if (typeof window === 'undefined') return;
+  window.dispatchEvent(new window.Event(SETTINGS_CHANGE_EVENT));
+}
 export function parsePersistedSettings(raw: string): PersistedSettings {
   const parsed: unknown = JSON.parse(raw);
   if (!isRecord(parsed)) throw new TypeError('Persisted settings must be an object');
@@ -219,9 +224,11 @@ export function loadPersistedSettings(storage: KeyValueStorage): PersistedSettin
 }
 export function savePersistedSettings(storage: KeyValueStorage, settings: PersistedSettings): void {
   storage.setItem(SETTINGS_STORAGE_KEY, serializePersistedSettings(settings));
+  dispatchSettingsChange();
 }
 export function resetPersistedSettings(storage: KeyValueStorage): void {
   storage.removeItem(SETTINGS_STORAGE_KEY);
+  dispatchSettingsChange();
 }
 export function importPersistedSettings(raw: string): PersistedSettings {
   return parsePersistedSettings(raw);

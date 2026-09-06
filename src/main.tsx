@@ -7,12 +7,14 @@ import {
 } from './platform/applicationStorage';
 import { installAutomaticLocationSync } from './platform/automaticLocationSync';
 import { LOCATION_CONTEXT_CHANGE_EVENT } from './platform/bestAvailableLocation';
+import { MOSQUE_PROFILE_LIBRARY_CHANGE_EVENT } from './platform/mosqueProfileEvents';
 import { PRAYER_SETUP_ONBOARDING_COMPLETE_EVENT } from './platform/prayerSetupOnboarding';
 import {
   initializeNotificationOnboarding,
   NOTIFICATION_ONBOARDING_COMPLETE_EVENT,
 } from './platform/notificationOnboarding';
 import { installPrivacyDiagnostics } from './platform/privacyDiagnostics';
+import { SETTINGS_CHANGE_EVENT } from './platform/settingsEvents';
 import { loadPersistedSettings } from './platform/settingsStorage';
 import { installThemePreference } from './platform/themePreference';
 import { applyThemePalette } from './platform/themePalette';
@@ -94,6 +96,24 @@ function LoadingSurface() {
   );
 }
 
+function ReactiveTodayScreen() {
+  const [snapshotRevision, setSnapshotRevision] = useState(0);
+
+  useEffect(() => {
+    const refreshSnapshot = () => {
+      setSnapshotRevision((current) => current + 1);
+    };
+    window.addEventListener(SETTINGS_CHANGE_EVENT, refreshSnapshot);
+    window.addEventListener(MOSQUE_PROFILE_LIBRARY_CHANGE_EVENT, refreshSnapshot);
+    return () => {
+      window.removeEventListener(SETTINGS_CHANGE_EVENT, refreshSnapshot);
+      window.removeEventListener(MOSQUE_PROFILE_LIBRARY_CHANGE_EVENT, refreshSnapshot);
+    };
+  }, []);
+
+  return <TodayScreen key={snapshotRevision} />;
+}
+
 function CongregationRoute({ destination }: Readonly<{ destination: CongregationDestination }>) {
   switch (destination) {
     case 'calendar':
@@ -149,7 +169,7 @@ function CongregationRoute({ destination }: Readonly<{ destination: Congregation
         <div className="congregation-route congregation-route--today">
           <MobilePrayerThemeSurface>
             <div className="app-shell today-route-shell">
-              <TodayScreen />
+              <ReactiveTodayScreen />
             </div>
           </MobilePrayerThemeSurface>
         </div>

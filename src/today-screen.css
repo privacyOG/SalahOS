@@ -112,10 +112,7 @@
 }
 
 .today-next__identity p,
-.today-next__countdown span,
-.today-section-heading p,
-.today-dates span,
-.today-next__times dt {
+.today-next__countdown span {
   margin: 0;
   color: var(--salah-fg-tertiary);
   font-size: var(--salah-text-xs);
@@ -125,7 +122,21 @@
 }
 
 [dir='rtl'] .today-next__identity p,
-[dir='rtl'] .today-next__countdown span,
+[dir='rtl'] .today-next__countdown span {
+  letter-spacing: 0;
+}
+
+.today-section-heading p,
+.today-dates span,
+.today-next__times dt {
+  margin: 0;
+  color: var(--salah-fg-tertiary);
+  font-size: var(--salah-text-xs);
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
 [dir='rtl'] .today-section-heading p,
 [dir='rtl'] .today-dates span,
 [dir='rtl'] .today-next__times dt {
@@ -438,9 +449,9 @@
 .today-state p {
   color: var(--salah-fg-tertiary);
   font-size: var(--salah-text-xs);
-  font-weight: 780;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .today-state h1 {
@@ -584,9 +595,9 @@
 .today-location-confidence > div:first-child span {
   color: var(--salah-fg-tertiary);
   font-size: var(--salah-text-xs);
-  font-weight: 780;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0;
+  text-transform: none;
 }
 
 .today-location-confidence > div:first-child strong {

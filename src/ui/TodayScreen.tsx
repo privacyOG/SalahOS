@@ -111,7 +111,8 @@ const stage8TodayCopy: Readonly<
       precise: string;
       selectedMosque: string;
       mosqueLocation: string;
-      betweenPrayerTimes: string;
+      beforeFirstPrayer: string;
+      noCurrentPrayer: string;
       fajrEnds: string;
       nonPrayerTime: string;
       notApplicable: string;
@@ -131,7 +132,8 @@ const stage8TodayCopy: Readonly<
     precise: 'Precise',
     selectedMosque: 'Selected mosque',
     mosqueLocation: 'Mosque location',
-    betweenPrayerTimes: 'Between prayer times',
+    beforeFirstPrayer: 'Before today’s first obligatory prayer',
+    noCurrentPrayer: 'No current obligatory prayer',
     fajrEnds: 'Fajr ends',
     nonPrayerTime: 'Non-prayer time',
     notApplicable: 'Not applicable',
@@ -149,7 +151,8 @@ const stage8TodayCopy: Readonly<
     precise: 'دقيق',
     selectedMosque: 'المسجد المختار',
     mosqueLocation: 'موقع المسجد',
-    betweenPrayerTimes: 'بين أوقات الصلوات',
+    beforeFirstPrayer: 'قبل أول صلاة مفروضة اليوم',
+    noCurrentPrayer: 'لا توجد صلاة مفروضة حالية',
     fajrEnds: 'ينتهي وقت الفجر',
     nonPrayerTime: 'ليس وقت صلاة مفروضة',
     notApplicable: 'لا ينطبق',
@@ -167,7 +170,8 @@ const stage8TodayCopy: Readonly<
     precise: 'Hassas',
     selectedMosque: 'Seçili cami',
     mosqueLocation: 'Cami konumu',
-    betweenPrayerTimes: 'Namaz vakitleri arasında',
+    beforeFirstPrayer: 'Bugünün ilk farz namazından önce',
+    noCurrentPrayer: 'Şu anda geçerli farz namaz yok',
     fajrEnds: 'Sabah vakti biter',
     nonPrayerTime: 'Farz namaz vakti değildir',
     notApplicable: 'Uygulanmaz',
@@ -185,7 +189,8 @@ const stage8TodayCopy: Readonly<
     precise: 'Akurat',
     selectedMosque: 'Masjid terpilih',
     mosqueLocation: 'Lokasi masjid',
-    betweenPrayerTimes: 'Di antara waktu salat',
+    beforeFirstPrayer: 'Sebelum salat wajib pertama hari ini',
+    noCurrentPrayer: 'Tidak ada salat wajib yang sedang berlangsung',
     fajrEnds: 'Waktu Subuh berakhir',
     nonPrayerTime: 'Bukan waktu salat wajib',
     notApplicable: 'Tidak berlaku',
@@ -493,9 +498,11 @@ export function TodayScreen() {
   const currentPrayerLabel =
     prayerBoardData === null
       ? translate(locale, 'notConfigured')
-      : currentPrayer === null
-        ? uxCopy.betweenPrayerTimes
-        : translate(locale, prayerTranslationKeys[currentPrayer.name]);
+      : currentPrayer !== null
+        ? translate(locale, prayerTranslationKeys[currentPrayer.name])
+        : sourcedDashboard?.currentPrayerState === 'before-first-obligatory-prayer'
+          ? uxCopy.beforeFirstPrayer
+          : uxCopy.noCurrentPrayer;
   const recentLocation = useMemo(() => {
     if (coordinates === null || directoryMosqueLocationAdopted) return null;
     try {

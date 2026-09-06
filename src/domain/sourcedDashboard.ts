@@ -16,6 +16,9 @@ const OBLIGATORY_PRAYERS: readonly ObligatoryPrayerName[] = [
   'isha',
 ];
 
+export type CurrentPrayerState =
+  'active' | 'before-first-obligatory-prayer' | 'no-current-obligatory-prayer';
+
 export interface SourcedDashboardPrayerRow {
   readonly name: PrayerName;
   readonly localMinutes: number | null;
@@ -34,6 +37,7 @@ export interface SourcedPrayerDashboard {
   readonly mosqueName: string | null;
   readonly prayers: readonly SourcedDashboardPrayerRow[];
   readonly currentPrayer: ObligatoryPrayerName | null;
+  readonly currentPrayerState: CurrentPrayerState;
   readonly nextPrayer: ObligatoryPrayerName | null;
   readonly nextPrayerDayOffset: 0 | 1 | null;
   readonly nextPrayerLocalMinutes: number | null;
@@ -82,6 +86,28 @@ function findCurrentResolvedPrayer(
   }
 
   return current;
+}
+
+function currentPrayerState(
+  currentLocalMinutes: number,
+  today: Readonly<Record<ObligatoryPrayerName, ResolvedPrayerTime>>,
+  current: ObligatoryPrayerName | null,
+): CurrentPrayerState {
+  if (current !== null) return 'active';
+
+  let firstStart: number | null = null;
+  for (const prayer of OBLIGATORY_PRAYERS) {
+    const start = today[prayer].startLocalMinutes;
+    if (start !== null && (firstStart === null || start < firstStart)) {
+      firstStart = start;
+    }
+  }
+
+  // This is a civil-day schedule state only. It deliberately does not infer
+  // whether any previous prayer remains valid according to a fiqh convention.
+  return firstStart !== null && currentLocalMinutes < firstStart
+    ? 'before-first-obligatory-prayer'
+    : 'no-current-obligatory-prayer';
 }
 
 function findNextResolvedPrayer(
@@ -144,6 +170,11 @@ export function applyPrayerSourceToDashboard(input: {
     resolvedToday,
     input.dashboard.today.prayers.sunrise.roundedLocalMinutes,
   );
+  const currentState = currentPrayerState(
+    input.dashboard.clock.localMinutes,
+    resolvedToday,
+    current,
+  );
   const next = findNextResolvedPrayer(
     input.dashboard.clock.localMinutes,
     resolvedToday,
@@ -187,6 +218,7 @@ export function applyPrayerSourceToDashboard(input: {
       input.sourceMode === 'local-mosque' ? (input.mosqueTimetable?.mosqueName ?? null) : null,
     prayers,
     currentPrayer: current,
+    currentPrayerState: currentState,
     nextPrayer: next?.prayer ?? null,
     nextPrayerDayOffset: next?.dayOffset ?? null,
     nextPrayerLocalMinutes: next?.localMinutes ?? null,
