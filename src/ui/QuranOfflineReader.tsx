@@ -55,7 +55,6 @@ type QuranReaderCopy = Readonly<{
   mushafPage: string;
   go: string;
   virtualListLabel: string;
-  showMore: string;
   bookmark: string;
   removeBookmark: string;
   lastRead: string;
@@ -168,7 +167,6 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     mushafPage: 'صفحة المصحف',
     go: 'انتقال',
     virtualListLabel: 'قراءة السورة المتواصلة',
-    showMore: 'عرض المزيد من الآيات',
     bookmark: 'حفظ',
     removeBookmark: 'إزالة الحفظ',
     lastRead: 'تعيين آخر قراءة',
@@ -223,7 +221,6 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     mushafPage: 'Mushaf sayfası',
     go: 'Git',
     virtualListLabel: 'Kesintisiz sure okuma',
-    showMore: 'Daha fazla ayet göster',
     bookmark: 'Kaydet',
     removeBookmark: 'Kaydı kaldır',
     lastRead: 'Son okuma olarak işaretle',
@@ -278,7 +275,6 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     mushafPage: 'Halaman mushaf',
     go: 'Buka',
     virtualListLabel: 'Bacaan surah berkelanjutan',
-    showMore: 'Tampilkan ayat lainnya',
     bookmark: 'Tandai',
     removeBookmark: 'Hapus markah',
     lastRead: 'Tandai terakhir dibaca',
@@ -647,7 +643,9 @@ export function QuranOfflineReader({
                 min={1}
                 max={30}
                 value={juzJump}
-                onChange={(event) => { setJuzJump(Number(event.target.value)); }}
+                onChange={(event) => {
+                  setJuzJump(Number(event.target.value));
+                }}
               />
               <button
                 type="button"
@@ -666,7 +664,9 @@ export function QuranOfflineReader({
                 min={1}
                 max={604}
                 value={mushafPageJump}
-                onChange={(event) => { setMushafPageJump(Number(event.target.value)); }}
+                onChange={(event) => {
+                  setMushafPageJump(Number(event.target.value));
+                }}
               />
               <button
                 type="button"
@@ -951,7 +951,9 @@ export function QuranOfflineReader({
                       className="quran-offline-ayah"
                       data-quran-offline-ayah={result.ayah.key}
                       data-active={activeAyahKey === result.ayah.key ? 'true' : undefined}
-                      data-resume-highlight={resumeHighlightKey === result.ayah.key ? 'true' : undefined}
+                      data-resume-highlight={
+                        resumeHighlightKey === result.ayah.key ? 'true' : undefined
+                      }
                       onClick={() => {
                         setActiveAyahKey(result.ayah.key);
                         setResumeHighlightKey(null);
@@ -1039,8 +1041,6 @@ export function QuranOfflineReader({
               })}
             </div>
           )}
-
-
 
           {normalBrowsing ? (
             <footer className="quran-reader-info" data-quran-reader-provenance>
