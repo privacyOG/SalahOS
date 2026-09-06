@@ -59,7 +59,7 @@ const copy: Readonly<Record<Locale, CongregationCopy>> = {
     calendar: 'Kalender',
     mosques: 'Masjid',
     qiblah: 'Kiblat',
-    knowledge: 'Pengetahuan',
+    knowledge: 'Ilmu',
     community: 'Komunitas',
     settings: 'Pengaturan',
   },
