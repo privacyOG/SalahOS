@@ -113,7 +113,7 @@ function parseIshraqMinutesAfterSunrise(value: unknown): number | null {
     : null;
 }
 function parseHijriCorrection(value: unknown): number {
-  return Number.isInteger(value) && Number(value) >= -2 && Number(value) <= 2 ? Number(value) : 0;
+  return Number.isInteger(value) && Number(value) >= -3 && Number(value) <= 3 ? Number(value) : 0;
 }
 function parseSourceMode(value: unknown): PrayerSourceMode {
   if (value === 'local-mosque' || value === 'calculated-adjustments') return value;
