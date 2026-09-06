@@ -188,15 +188,15 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - [x] Verify 320/360/390/430px, LTR/RTL, and 44px touch targets; verify 800/1200px sidebar transitions.
 - [x] Gate: `npm run ui:design-system-ownership && npm run ui:theme-architecture && npm run format:check`.
 
-## Work Item 19 — Wire up Tahajjud, Islamic midnight, and Ishraq
+## Work Item 19 — Wire up Tahajjud, Islamic midnight, and Ishraq — COMPLETE
 
-- [ ] Add a Night section with Islamic midnight, last-third start, and next-morning Ishraq/Duha.
-- [ ] Show prominently only after Isha/before Fajr; otherwise keep under More today.
-- [ ] Preserve supplementary-time provenance strings.
-- [ ] Add explicit unset Ishraq offset to Settings → Prayer; hide the row until chosen.
-- [ ] Expose `NightEndConvention`, default to Fajr, and label the active convention.
-- [ ] Add all four locales.
-- [ ] Gate: `npm run typecheck && npm run lint && npm run test && npm run calendar:check`.
+- [x] Add a Night section with Islamic midnight, last-third start, and next-morning Ishraq/Duha.
+- [x] Show prominently only after Isha/before Fajr; otherwise keep under More today.
+- [x] Preserve supplementary-time provenance strings.
+- [x] Add explicit unset Ishraq offset to Settings → Prayer; hide the row until chosen.
+- [x] Expose `NightEndConvention`, default to Fajr, and label the active convention.
+- [x] Add all four locales.
+- [x] Gate: `npm run typecheck && npm run lint && npm run test && npm run calendar:check`.
 
 ## Work Item 20 — Notification opt-in during onboarding
 
@@ -261,3 +261,4 @@ Keep this tracker authoritative for v1.5.3 implementation progress. Work items a
 - Work Item 12: complete via PR #234, merged as `05240f6aaf5cbcfc56d06f6163c3e5dff6ce3727`; exact-head Quality Gate run 33678029000 passed the required format, lint, typecheck, and unit-test steps before merge.
 - Work Item 17: complete via PR #250, merged as `088c3ba8abd49ab6807f5cf153056391411e87d0`; final head `133bcfa5c8abd2c9d629215d31e6a0fc15f46f86` passed Quality, Visual, Android, iOS, and Windows gates. Five-iteration Al-Baqarah browser benchmark measured 20.1 ms → 23.6 ms selection latency while reducing the chapter DOM from 286 rows to a 7–9 row virtual window and the full-chapter navigation path from 273.6 ms expand-all to 32.3 ms virtual scroll-to-bottom.
 - Work Item 18: complete via PR #252, merged as `372c2d1c8ceff5bb0dfa8416e1a6a8047759068f`; final head `cd26766d6cf5f26c457f042fd2c58563973f1bbc` passed Quality and Visual Regression, including 320/360/390/430px phone coverage, LTR/RTL, 44px touch targets, equal-width six-destination phone navigation, ellipsis safety, Indonesian `Ilmu`, and 800/1200px sidebar transition acceptance.
+- Work Item 19: complete via PR #254, merged as `3e8124351140604e9aa268bc2d0abeba5748d15b`; final head `6f1e2b30ee1b727ebfb482d198bf14f5460e10f2` passed Quality, Visual, Android, iOS, and Windows acceptance. The Night section includes Islamic midnight, final-third/Tahajjud start, optional configured Ishraq/Duha, civil-midnight boundary handling, explicit NightEndConvention, and all four locales.
