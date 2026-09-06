@@ -117,7 +117,7 @@ export function validateQuranOfflinePack(value: unknown): QuranOfflinePack {
   for (const surah of surahs) {
     assertPack(Number.isInteger(surah.surah), 'Offline Qur’an surah number is invalid.');
     assertPack(
-      ['meccan', 'medinan'].includes(String(surah.revelationPlace)),
+      ['meccan', 'medinan'].includes(surah.revelationPlace),
       `Surah ${String(surah.surah)} revelation place is invalid.`,
     );
     assertPack(surah.ayahs.length > 0, `Surah ${String(surah.surah)} has no ayat.`);
