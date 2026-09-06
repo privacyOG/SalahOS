@@ -1,0 +1,184 @@
+name: TEMP Item 17 Performance Benchmark
+
+on:
+  push:
+    branches:
+      - temp/item17-performance-benchmark
+    paths:
+      - .github/workflows/temp-item17-performance-benchmark.yml
+
+jobs:
+  benchmark:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      PLAYWRIGHT_BROWSERS_PATH: /tmp/salahos-item17-pw
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          path: baseline
+      - uses: actions/checkout@v4
+        with:
+          ref: 20402fb8138794d3b398899b10850fbd29fc7566
+          path: candidate
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Build baseline and candidate
+        shell: bash
+        run: |
+          (cd baseline && npm ci --ignore-scripts && npm run build)
+          (cd candidate && npm ci --ignore-scripts && npm run build)
+      - name: Install isolated Chromium harness
+        shell: bash
+        run: |
+          rm -rf /tmp/salahos-item17-harness
+          mkdir -p /tmp/salahos-item17-harness
+          cd /tmp/salahos-item17-harness
+          npm init -y >/dev/null 2>&1
+          npm install --ignore-scripts --save-exact playwright@1.62.0
+          npx playwright install --with-deps chromium
+      - name: Benchmark Al-Baqarah render path
+        shell: bash
+        run: |
+          python3 -m http.server 4173 --directory baseline/dist --bind 127.0.0.1 >/tmp/item17-baseline.log 2>&1 &
+          BASE_PID=$!
+          python3 -m http.server 4174 --directory candidate/dist --bind 127.0.0.1 >/tmp/item17-candidate.log 2>&1 &
+          CAND_PID=$!
+          trap 'kill $BASE_PID $CAND_PID 2>/dev/null || true' EXIT
+          for port in 4173 4174; do
+            for i in $(seq 1 50); do
+              curl -fsS "http://127.0.0.1:${port}/" >/dev/null && break
+              sleep 0.1
+            done
+          done
+          node --input-type=module <<'NODE'
+          import { chromium } from '/tmp/salahos-item17-harness/node_modules/playwright/index.mjs';
+
+          const settings = {
+            version: 2,
+            locale: 'en',
+            theme: 'light',
+            timeFormat: 'h23',
+            calculationMethodId: 'muslim-world-league',
+            asrConvention: 'standard',
+            highLatitudeRule: 'angle-based',
+            hijriCorrectionDays: 0,
+            prayerAdjustments: {},
+            prayerSourceMode: 'calculated',
+            location: {
+              coordinates: { latitude: -33.8688, longitude: 151.2093 },
+              timeZone: 'Australia/Sydney',
+            },
+            mosqueTimetable: null,
+            notifications: {},
+          };
+
+          const median = (values) => {
+            const sorted = [...values].sort((a, b) => a - b);
+            return sorted[Math.floor(sorted.length / 2)];
+          };
+          const nextFrames = () => new Promise((resolve) =>
+            requestAnimationFrame(() => requestAnimationFrame(resolve))
+          );
+
+          const browser = await chromium.launch({ headless: true });
+          async function newPage(baseUrl) {
+            const context = await browser.newContext({ viewport: { width: 390, height: 844 }, serviceWorkers: 'block' });
+            const page = await context.newPage();
+            await page.addInitScript((value) => localStorage.setItem('salahos.settings', JSON.stringify(value)), settings);
+            await page.goto(`${baseUrl}/?view=knowledge&knowledgeView=quran`, { waitUntil: 'networkidle' });
+            await page.locator('[data-quran-offline-reader]').waitFor({ state: 'visible' });
+            return { context, page };
+          }
+
+          const baselineSelect = [];
+          const baselineExpandAll = [];
+          const baselineDomCounts = [];
+          for (let i = 0; i < 5; i += 1) {
+            const { context, page } = await newPage('http://127.0.0.1:4173');
+            const selected = await page.evaluate(async () => {
+              const select = document.querySelector('[data-quran-surah-select]');
+              if (!(select instanceof HTMLSelectElement)) throw new Error('baseline surah select missing');
+              const start = performance.now();
+              select.value = '2';
+              select.dispatchEvent(new Event('change', { bubbles: true }));
+              await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+              return {
+                ms: performance.now() - start,
+                count: document.querySelectorAll('[data-quran-offline-ayah]').length,
+              };
+            });
+            baselineSelect.push(selected.ms);
+            baselineDomCounts.push(selected.count);
+            const expanded = await page.evaluate(async () => {
+              const start = performance.now();
+              while (true) {
+                const button = document.querySelector('[data-quran-show-more]');
+                if (!(button instanceof HTMLButtonElement)) break;
+                button.click();
+                await new Promise((resolve) => requestAnimationFrame(resolve));
+              }
+              await new Promise((resolve) => requestAnimationFrame(resolve));
+              return {
+                ms: performance.now() - start,
+                count: document.querySelectorAll('[data-quran-offline-ayah]').length,
+              };
+            });
+            baselineExpandAll.push(expanded.ms);
+            await context.close();
+          }
+
+          const candidateSelect = [];
+          const candidateBottom = [];
+          const candidateDomCounts = [];
+          for (let i = 0; i < 5; i += 1) {
+            const { context, page } = await newPage('http://127.0.0.1:4174');
+            await page.locator('[data-quran-surah-search]').fill('Al-Baqarah');
+            const selected = await page.evaluate(async () => {
+              const option = document.querySelector('[data-quran-surah-option="2"]');
+              if (!(option instanceof HTMLButtonElement)) throw new Error('candidate Al-Baqarah option missing');
+              const start = performance.now();
+              option.click();
+              await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+              return {
+                ms: performance.now() - start,
+                count: document.querySelectorAll('[data-quran-virtual-key]').length,
+              };
+            });
+            candidateSelect.push(selected.ms);
+            candidateDomCounts.push(selected.count);
+            const bottom = await page.evaluate(async () => {
+              const scroller = document.querySelector('[data-quran-virtual-scroll]');
+              if (!(scroller instanceof HTMLElement)) throw new Error('candidate virtual scroller missing');
+              const start = performance.now();
+              scroller.scrollTop = scroller.scrollHeight;
+              scroller.dispatchEvent(new Event('scroll', { bubbles: true }));
+              await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+              return {
+                ms: performance.now() - start,
+                count: document.querySelectorAll('[data-quran-virtual-key]').length,
+              };
+            });
+            candidateBottom.push(bottom.ms);
+            await context.close();
+          }
+
+          const report = {
+            environment: 'GitHub ubuntu-24.04 hosted runner / Chromium / 390x844',
+            iterations: 5,
+            baseline: {
+              selectAlBaqarahMedianMs: Number(median(baselineSelect).toFixed(2)),
+              initialRenderedAyahNodesMedian: median(baselineDomCounts),
+              expandAll286MedianMs: Number(median(baselineExpandAll).toFixed(2)),
+            },
+            item17: {
+              selectAlBaqarahMedianMs: Number(median(candidateSelect).toFixed(2)),
+              initialRenderedVirtualRowsMedian: median(candidateDomCounts),
+              scrollToBottomVirtualWindowMedianMs: Number(median(candidateBottom).toFixed(2)),
+            },
+          };
+          console.log(`ITEM17_AL_BAQARAH_BENCHMARK=${JSON.stringify(report)}`);
+          await browser.close();
+          NODE
