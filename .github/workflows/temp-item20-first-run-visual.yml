@@ -1,0 +1,88 @@
+name: TEMP Item 20 First-run Visual Acceptance
+
+on:
+  push:
+    branches:
+      - v1.5.3/item-20-notification-onboarding
+    paths:
+      - .github/workflows/temp-item20-first-run-visual.yml
+
+permissions:
+  contents: write
+
+jobs:
+  update:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v1.5.3/item-20-notification-onboarding
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Extend first-run Qiblah flow through notification step
+        shell: bash
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('scripts/visual-qibla-auto-live.mjs')
+          text = path.read_text()
+          marker = "    const qiblahNavigation = page.locator('.congregation-nav button').filter({ hasText: 'Qiblah' });"
+          if text.count(marker) != 1:
+              raise SystemExit(f'Expected one Qiblah navigation marker, found {text.count(marker)}')
+          insertion = """    const notificationDialog = page.locator('[data-notification-onboarding]');
+            await notificationDialog.waitFor({ state: 'visible' });
+            await notificationDialog.getByRole('button', { name: 'Not now' }).click();
+            await notificationDialog.waitFor({ state: 'detached' });
+
+            const notificationOnboardingState = await page.evaluate(() => {
+              const serialized = localStorage.getItem('salahos.notification-onboarding');
+              return serialized === null ? null : JSON.parse(serialized);
+            });
+            assert(
+              notificationOnboardingState?.version === 1 &&
+                notificationOnboardingState.completed === true &&
+                notificationOnboardingState.decision === 'declined',
+              'First-run notification decline was not persisted before Qiblah navigation',
+            );
+            assert(
+              (await notificationDialog.count()) === 0,
+              'Declined notification onboarding reappeared without explicit user action',
+            );
+
+          """
+          path.write_text(text.replace(marker, insertion + marker, 1))
+
+          result_marker = "      prayerSetupState,\n"
+          if text.count(result_marker) != 1:
+              text = path.read_text()
+          text = path.read_text()
+          if '      notificationOnboardingState,\n' not in text:
+              if text.count(result_marker) != 1:
+                  raise SystemExit(f'Expected one result marker, found {text.count(result_marker)}')
+              path.write_text(
+                  text.replace(
+                      result_marker,
+                      result_marker + '      notificationOnboardingState,\n',
+                      1,
+                  )
+              )
+          PY
+      - name: Format and syntax check
+        run: |
+          npm ci --ignore-scripts
+          npx prettier --write scripts/visual-qibla-auto-live.mjs
+          node --check scripts/visual-qibla-auto-live.mjs
+          npm run format:check
+      - name: Retain clean acceptance commit
+        shell: bash
+        run: |
+          rm .github/workflows/temp-item20-first-run-visual.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add scripts/visual-qibla-auto-live.mjs .github/workflows/temp-item20-first-run-visual.yml
+          git commit -m "Cover notification onboarding in first-run visual flow"
+          echo "ITEM20_VISUAL_COMMIT=$(git rev-parse HEAD)"
+          git push origin HEAD:v1.5.3/item-20-notification-onboarding
