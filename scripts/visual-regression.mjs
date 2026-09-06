@@ -432,13 +432,13 @@ async function findHorizontalOverflow(page) {
         element instanceof HTMLSelectElement ||
         element instanceof HTMLTextAreaElement ||
         element instanceof HTMLButtonElement;
-      const explicitlyClipsContent =
+      const visiblyOverflowsOwnBox =
         !isFormControl &&
         element.clientWidth > 0 &&
         element.scrollWidth > element.clientWidth + tolerance &&
-        (style.overflowX === 'hidden' || style.overflowX === 'clip');
+        style.overflowX === 'visible';
 
-      if (!outsideViewport && !explicitlyClipsContent) continue;
+      if (!outsideViewport && !visiblyOverflowsOwnBox) continue;
 
       offenders.push({
         tag: element.tagName.toLowerCase(),
