@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "packPath": "/data/quran/quran-offline-pack.json",
-  "sha256": "fc81a35d049c10cbaa7817ea5546f60a06d10706a75f250c094f79bad73d3070",
+  "sha256": "74c47e1d4d83e25a26cd4f2e4f1e49004b58ef847d4abc90206e8b10d797f789",
   "surahs": 114,
   "ayahs": 6236,
   "translationIds": ["pickthall-1930"],

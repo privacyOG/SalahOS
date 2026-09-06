@@ -1,9 +1,13 @@
 import { describe, expect, it } from 'vitest';
 
 import {
+  firstQuranOfflineAyahInJuz,
+  firstQuranOfflineAyahOnPage,
   getQuranOfflineAyah,
+  listQuranOfflineSurahSummaries,
   parseQuranVerseKey,
   searchQuranOfflinePack,
+  searchQuranOfflineSurahs,
   type QuranOfflinePack,
 } from './quranOfflineLibrary';
 
@@ -32,6 +36,7 @@ const fixture = {
       nameArabic: 'الفاتحة',
       nameTransliteration: 'Al-Fatihah',
       nameEnglish: 'The Opening',
+      revelationPlace: 'meccan',
       ayahs: [
         {
           ayah: 1,
@@ -50,6 +55,7 @@ const fixture = {
       nameArabic: 'الناس',
       nameTransliteration: 'An-Nas',
       nameEnglish: 'Mankind',
+      revelationPlace: 'meccan',
       ayahs: [
         {
           ayah: 6,
@@ -91,5 +97,36 @@ describe('complete offline Qur’an library navigation', () => {
     expect(searchQuranOfflinePack(fixture, 'Mankind').map((result) => result.ayah.key)).toEqual([
       '114:6',
     ]);
+  });
+
+  it('builds searchable surah summaries with ayah count and revelation place', () => {
+    expect(listQuranOfflineSurahSummaries(fixture)).toEqual([
+      {
+        surah: 1,
+        nameArabic: 'الفاتحة',
+        nameTransliteration: 'Al-Fatihah',
+        ayahCount: 1,
+        revelationPlace: 'meccan',
+      },
+      {
+        surah: 114,
+        nameArabic: 'الناس',
+        nameTransliteration: 'An-Nas',
+        ayahCount: 1,
+        revelationPlace: 'meccan',
+      },
+    ]);
+    expect(searchQuranOfflineSurahs(fixture, 'nas').map((surah) => surah.surah)).toEqual([114]);
+    expect(searchQuranOfflineSurahs(fixture, 'الفاتحة').map((surah) => surah.surah)).toEqual([1]);
+    expect(searchQuranOfflineSurahs(fixture, '114').map((surah) => surah.surah)).toEqual([114]);
+  });
+
+  it('jumps to the first available ayah in a Juz or mushaf page', () => {
+    expect(firstQuranOfflineAyahInJuz(fixture, 1)?.ayah.key).toBe('1:1');
+    expect(firstQuranOfflineAyahInJuz(fixture, 30)?.ayah.key).toBe('114:6');
+    expect(firstQuranOfflineAyahInJuz(fixture, 31)).toBeNull();
+    expect(firstQuranOfflineAyahOnPage(fixture, 1)?.ayah.key).toBe('1:1');
+    expect(firstQuranOfflineAyahOnPage(fixture, 604)?.ayah.key).toBe('114:6');
+    expect(firstQuranOfflineAyahOnPage(fixture, 605)).toBeNull();
   });
 });

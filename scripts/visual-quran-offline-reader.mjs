@@ -65,10 +65,29 @@ try {
   const reader = page.locator('[data-quran-offline-reader]');
   await reader.waitFor({ state: 'visible' });
   await reader.getByText('114 surahs · 6,236 ayat', { exact: false }).waitFor();
+
+  const surahIndex = reader.locator('[data-quran-surah-index]');
+  await surahIndex.waitFor({ state: 'visible' });
   assert(
-    (await reader.locator('[data-quran-surah-select] option').count()) === 114,
-    'Complete Qur’an reader did not expose all 114 surahs',
+    (await surahIndex.locator('[data-quran-surah-option]').count()) === 114,
+    'Complete Qur’an reader did not expose all 114 surahs in the searchable index',
   );
+  const surahSearch = surahIndex.locator('[data-quran-surah-search]');
+  await surahSearch.fill('2');
+  const alBaqarahOption = surahIndex.locator('[data-quran-surah-option="2"]');
+  await alBaqarahOption.waitFor({ state: 'visible' });
+  const alBaqarahText = (await alBaqarahOption.textContent()) ?? '';
+  assert(
+    alBaqarahText.includes('286') && alBaqarahText.includes('Medinan'),
+    'Searchable surah index did not expose Surah 2 ayah count and revelation place',
+  );
+  await alBaqarahOption.click();
+  await reader.locator('[data-quran-virtual-scroll]').waitFor({ state: 'visible' });
+  assert(
+    (await reader.locator('[data-quran-virtual-key]').count()) < 20,
+    'Al-Baqarah virtual reader rendered an unexpectedly large initial DOM window',
+  );
+  await surahSearch.fill('');
 
   const search = reader.locator('[data-quran-offline-search]');
   await search.fill('114:6');
@@ -116,6 +135,10 @@ try {
   await search.fill('');
   await reader.locator('[data-quran-offline-resume]').click();
   await finalAyah.waitFor({ state: 'visible' });
+  assert(
+    (await finalAyah.getAttribute('data-resume-highlight')) === 'true',
+    'Resume last read did not visibly highlight the restored ayah',
+  );
 
   await reader.locator('[data-quran-translation-mode]').selectOption('none');
   await page.waitForFunction(() => {
