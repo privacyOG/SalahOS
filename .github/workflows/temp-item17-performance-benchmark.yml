@@ -79,16 +79,21 @@ jobs:
             const sorted = [...values].sort((a, b) => a - b);
             return sorted[Math.floor(sorted.length / 2)];
           };
-          const nextFrames = () => new Promise((resolve) =>
-            requestAnimationFrame(() => requestAnimationFrame(resolve))
-          );
 
           const browser = await chromium.launch({ headless: true });
           async function newPage(baseUrl) {
-            const context = await browser.newContext({ viewport: { width: 390, height: 844 }, serviceWorkers: 'block' });
+            const context = await browser.newContext({
+              viewport: { width: 390, height: 844 },
+              serviceWorkers: 'block',
+            });
             const page = await context.newPage();
-            await page.addInitScript((value) => localStorage.setItem('salahos.settings', JSON.stringify(value)), settings);
-            await page.goto(`${baseUrl}/?view=knowledge&knowledgeView=quran`, { waitUntil: 'networkidle' });
+            await page.addInitScript(
+              (value) => localStorage.setItem('salahos.settings', JSON.stringify(value)),
+              settings,
+            );
+            await page.goto(`${baseUrl}/?view=knowledge&knowledgeView=quran`, {
+              waitUntil: 'networkidle',
+            });
             await page.locator('[data-quran-offline-reader]').waitFor({ state: 'visible' });
             return { context, page };
           }
@@ -100,11 +105,15 @@ jobs:
             const { context, page } = await newPage('http://127.0.0.1:4173');
             const selected = await page.evaluate(async () => {
               const select = document.querySelector('[data-quran-surah-select]');
-              if (!(select instanceof HTMLSelectElement)) throw new Error('baseline surah select missing');
+              if (!(select instanceof HTMLSelectElement)) {
+                throw new Error('baseline surah select missing');
+              }
               const start = performance.now();
               select.value = '2';
               select.dispatchEvent(new Event('change', { bubbles: true }));
-              await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+              await new Promise((resolve) =>
+                requestAnimationFrame(() => requestAnimationFrame(resolve)),
+              );
               return {
                 ms: performance.now() - start,
                 count: document.querySelectorAll('[data-quran-offline-ayah]').length,
@@ -136,12 +145,17 @@ jobs:
           for (let i = 0; i < 5; i += 1) {
             const { context, page } = await newPage('http://127.0.0.1:4174');
             await page.locator('[data-quran-surah-search]').fill('Al-Baqarah');
+            await page.locator('[data-quran-surah-option="2"]').waitFor({ state: 'visible' });
             const selected = await page.evaluate(async () => {
               const option = document.querySelector('[data-quran-surah-option="2"]');
-              if (!(option instanceof HTMLButtonElement)) throw new Error('candidate Al-Baqarah option missing');
+              if (!(option instanceof HTMLButtonElement)) {
+                throw new Error('candidate Al-Baqarah option missing');
+              }
               const start = performance.now();
               option.click();
-              await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+              await new Promise((resolve) =>
+                requestAnimationFrame(() => requestAnimationFrame(resolve)),
+              );
               return {
                 ms: performance.now() - start,
                 count: document.querySelectorAll('[data-quran-virtual-key]').length,
@@ -151,11 +165,15 @@ jobs:
             candidateDomCounts.push(selected.count);
             const bottom = await page.evaluate(async () => {
               const scroller = document.querySelector('[data-quran-virtual-scroll]');
-              if (!(scroller instanceof HTMLElement)) throw new Error('candidate virtual scroller missing');
+              if (!(scroller instanceof HTMLElement)) {
+                throw new Error('candidate virtual scroller missing');
+              }
               const start = performance.now();
               scroller.scrollTop = scroller.scrollHeight;
               scroller.dispatchEvent(new Event('scroll', { bubbles: true }));
-              await new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
+              await new Promise((resolve) =>
+                requestAnimationFrame(() => requestAnimationFrame(resolve)),
+              );
               return {
                 ms: performance.now() - start,
                 count: document.querySelectorAll('[data-quran-virtual-key]').length,
