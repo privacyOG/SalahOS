@@ -28,6 +28,7 @@ import {
   type QuranReadingPreferences,
   type QuranTranslationMode,
 } from '../platform/quranReadingPreferences';
+import { quranTanzilSourceUrl } from '../platform/quranExternalActions';
 import {
   persistQuranScrollPosition,
   quranScrollPositionForSurah,
@@ -1108,7 +1109,7 @@ export function QuranOfflineReader({
               </p>
               <p data-quran-tanzil-attribution lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
                 {labels.tanzilSource}{' '}
-                <a href="https://tanzil.net" target="_blank" rel="noreferrer">
+                <a href={quranTanzilSourceUrl()} target="_blank" rel="noreferrer">
                   Tanzil
                 </a>
               </p>
