@@ -9,6 +9,7 @@ import {
 } from '../domain/notificationPreferences';
 import type { NotificationPreferences } from '../domain/notificationPreferences';
 import type { AsrConvention, HighLatitudeRule, PrayerName } from '../domain/prayerEngine';
+import type { NightEndConvention } from '../domain/supplementaryTimes';
 import { assertIanaTimeZone } from '../domain/timezone';
 import type { Locale } from '../i18n/translations';
 import { defaultThemePalette, parseThemePalette, type ThemePalette } from './themePalette';
@@ -30,6 +31,8 @@ export interface PersistedSettings {
   readonly calculationMethodId: Exclude<CalculationMethodId, 'custom'>;
   readonly asrConvention: AsrConvention;
   readonly highLatitudeRule: HighLatitudeRule;
+  readonly nightEndConvention?: NightEndConvention;
+  readonly ishraqMinutesAfterSunrise?: number | null;
   readonly hijriCorrectionDays: number;
   readonly prayerAdjustments: Readonly<Partial<Record<PrayerName, number>>>;
   readonly prayerSourceMode: PrayerSourceMode;
@@ -64,6 +67,8 @@ export const defaultPersistedSettings: PersistedSettings = Object.freeze({
   calculationMethodId: 'muslim-world-league',
   asrConvention: 'standard',
   highLatitudeRule: 'angle-based',
+  nightEndConvention: 'fajr',
+  ishraqMinutesAfterSunrise: null,
   hijriCorrectionDays: 0,
   prayerAdjustments: Object.freeze({}),
   prayerSourceMode: 'calculated',
@@ -98,6 +103,14 @@ function parseAsrConvention(value: unknown): AsrConvention {
 function parseHighLatitudeRule(value: unknown): HighLatitudeRule {
   if (value === 'middle-of-the-night' || value === 'one-seventh') return value;
   return 'angle-based';
+}
+function parseNightEndConvention(value: unknown): NightEndConvention {
+  return value === 'sunrise' ? 'sunrise' : 'fajr';
+}
+function parseIshraqMinutesAfterSunrise(value: unknown): number | null {
+  return Number.isInteger(value) && Number(value) >= 0 && Number(value) <= 240
+    ? Number(value)
+    : null;
 }
 function parseHijriCorrection(value: unknown): number {
   return Number.isInteger(value) && Number(value) >= -2 && Number(value) <= 2 ? Number(value) : 0;
@@ -182,6 +195,8 @@ export function parsePersistedSettings(raw: string): PersistedSettings {
     calculationMethodId: parseMethod(migrated.calculationMethodId),
     asrConvention: parseAsrConvention(migrated.asrConvention),
     highLatitudeRule: parseHighLatitudeRule(migrated.highLatitudeRule),
+    nightEndConvention: parseNightEndConvention(migrated.nightEndConvention),
+    ishraqMinutesAfterSunrise: parseIshraqMinutesAfterSunrise(migrated.ishraqMinutesAfterSunrise),
     hijriCorrectionDays: parseHijriCorrection(migrated.hijriCorrectionDays),
     prayerAdjustments: parsePrayerAdjustments(migrated.prayerAdjustments),
     prayerSourceMode: parseSourceMode(migrated.prayerSourceMode),

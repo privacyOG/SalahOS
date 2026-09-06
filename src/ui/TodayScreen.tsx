@@ -2,6 +2,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import '../today-contextual-v2.css';
 import '../today-prayer-provenance.css';
+import '../today-night.css';
 
 import {
   applyAustralianMosqueCongregationTimes,
@@ -20,6 +21,7 @@ import {
   MOSQUE_LOCATION_ADOPTION_THRESHOLD_KILOMETERS,
 } from '../domain/greatCircleDistance';
 import { calculationMethods } from '../domain/methods';
+import { buildNightPrayerPresentation } from '../domain/nightPrayerPresentation';
 import { buildPrayerBoardData, type PrayerBoardData } from '../domain/prayerBoardTemplate';
 import { isSupplementaryPrayer } from '../domain/prayerPresentation';
 import { displayedManualPrayerAdjustmentMinutes } from '../domain/prayerAdjustments';
@@ -50,6 +52,7 @@ import { readSystemTime } from '../platform/systemTime';
 import { BidiText } from './BidiText';
 import { TodayContextualSections } from './TodayContextualSections';
 import { TodayJumuahSection } from './TodayJumuahSection';
+import { TodayNightSection } from './TodayNightSection';
 import { TodayAppBarClock, TodayCountdown } from './TodayLiveTick';
 import { useMobilePrayerThemeConfig, useMobilePrayerWeather } from './MobilePrayerThemeSurface';
 import { PrayerBoardWeatherModule } from './PrayerBoardWeatherModule';
@@ -363,6 +366,69 @@ export function TodayScreen() {
   const dashboard = dashboardResult?.ok === true ? dashboardResult.dashboard : null;
   const calculationUnavailable = dashboardResult?.ok === false;
   const unavailablePrayers = dashboardResult?.ok === true ? dashboardResult.unavailablePrayers : [];
+  const needsPreviousNightSchedule =
+    dashboard !== null &&
+    dashboard.today.prayers.fajr.roundedLocalMinutes !== null &&
+    dashboard.clock.localMinutes < dashboard.today.prayers.fajr.roundedLocalMinutes;
+  const previousNightScheduleResult = useMemo(() => {
+    if (
+      !needsPreviousNightSchedule ||
+      coordinates === null ||
+      resolvedPrayerTimeZone === null ||
+      scheduleCivilDate === null
+    ) {
+      return null;
+    }
+    const previousCivilDate = new Date(scheduleCivilDate.getTime() - 86_400_000);
+    return buildPrayerDashboardScheduleResult({
+      civilDate: previousCivilDate,
+      coordinates,
+      timeZone: resolvedPrayerTimeZone,
+      method: calculationMethods[settings.calculationMethodId],
+      asrConvention: settings.asrConvention,
+      highLatitudeRule: settings.highLatitudeRule,
+      adjustments: settings.prayerAdjustments,
+      hijriCorrectionDays: settings.hijriCorrectionDays,
+    });
+  }, [
+    coordinates,
+    needsPreviousNightSchedule,
+    resolvedPrayerTimeZone,
+    scheduleCivilDate,
+    settings.asrConvention,
+    settings.calculationMethodId,
+    settings.highLatitudeRule,
+    settings.hijriCorrectionDays,
+    settings.prayerAdjustments,
+  ]);
+  const nightPresentation = useMemo(() => {
+    if (dashboard === null || scheduleResult?.ok !== true) return null;
+    const previousSchedule = needsPreviousNightSchedule
+      ? previousNightScheduleResult?.ok === true
+        ? previousNightScheduleResult.schedule.today
+        : null
+      : scheduleResult.schedule.today;
+    if (previousSchedule === null) return null;
+    try {
+      return buildNightPrayerPresentation({
+        previous: previousSchedule,
+        today: scheduleResult.schedule.today,
+        tomorrow: scheduleResult.schedule.tomorrow,
+        localMinutes: dashboard.clock.localMinutes,
+        nightEndConvention: settings.nightEndConvention ?? 'fajr',
+        ishraqMinutesAfterSunrise: settings.ishraqMinutesAfterSunrise ?? null,
+      });
+    } catch {
+      return null;
+    }
+  }, [
+    dashboard,
+    needsPreviousNightSchedule,
+    previousNightScheduleResult,
+    scheduleResult,
+    settings.ishraqMinutesAfterSunrise,
+    settings.nightEndConvention,
+  ]);
   const sourcedDashboard = useMemo(() => {
     if (dashboard === null) return null;
     const sourced = applyPrayerSourceToDashboard({
@@ -566,6 +632,15 @@ export function TodayScreen() {
           {promoteFridayJumuah && (
             <TodayJumuahSection
               sessions={todayJumuahSessions}
+              locale={locale}
+              timeFormat={settings.timeFormat}
+              promoted
+            />
+          )}
+
+          {nightPresentation?.prominent === true && (
+            <TodayNightSection
+              model={nightPresentation}
               locale={locale}
               timeFormat={settings.timeFormat}
               promoted
@@ -786,6 +861,14 @@ export function TodayScreen() {
               <small>{uxCopy.moreTodayHint}</small>
             </summary>
             <div className="today-secondary-context__content">
+              {nightPresentation !== null && !nightPresentation.prominent && (
+                <TodayNightSection
+                  model={nightPresentation}
+                  locale={locale}
+                  timeFormat={settings.timeFormat}
+                />
+              )}
+
               {modules['sunrise-sunset'] && (
                 <section className="today-solar" aria-labelledby="today-solar-title">
                   <div className="today-section-heading">

@@ -62,6 +62,65 @@ type SettingsCopy = Readonly<{
 }>;
 
 const base = { palette: 'Colour palette' };
+
+const ishraqOffsetOptions = [10, 15, 20, 30, 45, 60] as const;
+const nightPrayerSettingsCopy: Readonly<
+  Record<
+    Locale,
+    Readonly<{
+      nightEnd: string;
+      nightEndFajr: string;
+      nightEndSunrise: string;
+      nightEndHelp: string;
+      ishraqOffset: string;
+      ishraqUnset: string;
+      ishraqHelp: string;
+      minutesAfterSunrise: string;
+    }>
+  >
+> = {
+  en: {
+    nightEnd: 'Night-end convention',
+    nightEndFajr: 'Fajr',
+    nightEndSunrise: 'Sunrise',
+    nightEndHelp: 'Used for Islamic midnight and the final third of the night.',
+    ishraqOffset: 'Ishraq / Duha after sunrise',
+    ishraqUnset: 'Not set — hide Ishraq',
+    ishraqHelp: 'Choose an explicit safety interval after sunrise. No hidden default is applied.',
+    minutesAfterSunrise: 'min after sunrise',
+  },
+  ar: {
+    nightEnd: 'نهاية الليل',
+    nightEndFajr: 'الفجر',
+    nightEndSunrise: 'الشروق',
+    nightEndHelp: 'يُستخدم لحساب منتصف الليل الشرعي وبداية الثلث الأخير.',
+    ishraqOffset: 'الإشراق / الضحى بعد الشروق',
+    ishraqUnset: 'غير محدد — إخفاء الإشراق',
+    ishraqHelp: 'اختر مدة أمان صريحة بعد الشروق. لا توجد قيمة افتراضية مخفية.',
+    minutesAfterSunrise: 'دقيقة بعد الشروق',
+  },
+  tr: {
+    nightEnd: 'Gece sonu ölçütü',
+    nightEndFajr: 'Sabah namazı',
+    nightEndSunrise: 'Güneş doğuşu',
+    nightEndHelp: 'İslami gece yarısı ve son üçte bir hesabında kullanılır.',
+    ishraqOffset: 'İşrak / Duha güneş doğuşundan sonra',
+    ishraqUnset: 'Ayarlanmadı — İşrak gizlensin',
+    ishraqHelp: 'Güneş doğuşundan sonra açık bir güvenlik aralığı seçin. Gizli varsayılan yoktur.',
+    minutesAfterSunrise: 'dk güneş doğuşundan sonra',
+  },
+  id: {
+    nightEnd: 'Batas akhir malam',
+    nightEndFajr: 'Subuh',
+    nightEndSunrise: 'Matahari terbit',
+    nightEndHelp: 'Dipakai untuk menghitung tengah malam Islami dan awal sepertiga malam terakhir.',
+    ishraqOffset: 'Isyraq / Duha setelah matahari terbit',
+    ishraqUnset: 'Belum diatur — sembunyikan Isyraq',
+    ishraqHelp:
+      'Pilih jeda aman yang eksplisit setelah matahari terbit. Tidak ada default tersembunyi.',
+    minutesAfterSunrise: 'mnt setelah matahari terbit',
+  },
+};
 const settingsCopy: Readonly<Record<Locale, SettingsCopy>> = {
   en: {
     ...base,
@@ -234,6 +293,8 @@ function PrayerSettingsForm({
   updateSettings: (update: (current: PersistedSettings) => PersistedSettings) => void;
 }>) {
   const locale = settings.locale;
+  const nightCopy = nightPrayerSettingsCopy[locale];
+  const number = new Intl.NumberFormat(locale);
   return (
     <div className="settings-focus-grid">
       <label>
@@ -305,6 +366,43 @@ function PrayerSettingsForm({
           <option value="middle-of-the-night">{translate(locale, 'highLatitudeMiddle')}</option>
           <option value="one-seventh">{translate(locale, 'highLatitudeSeventh')}</option>
         </select>
+      </label>
+      <label>
+        <span>{nightCopy.nightEnd}</span>
+        <select
+          value={settings.nightEndConvention ?? 'fajr'}
+          onChange={(event) => {
+            updateSettings((current) => ({
+              ...current,
+              nightEndConvention: event.target.value === 'sunrise' ? 'sunrise' : 'fajr',
+            }));
+          }}
+        >
+          <option value="fajr">{nightCopy.nightEndFajr}</option>
+          <option value="sunrise">{nightCopy.nightEndSunrise}</option>
+        </select>
+        <small>{nightCopy.nightEndHelp}</small>
+      </label>
+      <label>
+        <span>{nightCopy.ishraqOffset}</span>
+        <select
+          value={settings.ishraqMinutesAfterSunrise ?? ''}
+          onChange={(event) => {
+            updateSettings((current) => ({
+              ...current,
+              ishraqMinutesAfterSunrise:
+                event.target.value === '' ? null : Number(event.target.value),
+            }));
+          }}
+        >
+          <option value="">{nightCopy.ishraqUnset}</option>
+          {ishraqOffsetOptions.map((minutes) => (
+            <option key={minutes} value={minutes}>
+              {number.format(minutes)} {nightCopy.minutesAfterSunrise}
+            </option>
+          ))}
+        </select>
+        <small>{nightCopy.ishraqHelp}</small>
       </label>
       <label>
         <span>{translate(locale, 'hijriCorrection')}</span>
