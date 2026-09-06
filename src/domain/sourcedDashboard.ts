@@ -17,9 +17,7 @@ const OBLIGATORY_PRAYERS: readonly ObligatoryPrayerName[] = [
 ];
 
 export type CurrentPrayerState =
-  | 'active'
-  | 'before-first-obligatory-prayer'
-  | 'no-current-obligatory-prayer';
+  'active' | 'before-first-obligatory-prayer' | 'no-current-obligatory-prayer';
 
 export interface SourcedDashboardPrayerRow {
   readonly name: PrayerName;
