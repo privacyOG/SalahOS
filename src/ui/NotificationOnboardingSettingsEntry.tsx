@@ -1,9 +1,7 @@
 import type { Locale } from '../i18n/translations';
 import { NOTIFICATION_ONBOARDING_OPEN_EVENT } from '../platform/notificationOnboarding';
 
-const copy: Readonly<
-  Record<Locale, Readonly<{ title: string; body: string; action: string }>>
-> = {
+const copy: Readonly<Record<Locale, Readonly<{ title: string; body: string; action: string }>>> = {
   en: {
     title: 'Notification setup',
     body: 'Review the first-run prayer notification choices and platform limitations.',

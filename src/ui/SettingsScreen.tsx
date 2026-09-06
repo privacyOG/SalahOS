@@ -15,6 +15,7 @@ import {
 import { installThemePreference } from '../platform/themePreference';
 import { applyThemePalette, themePaletteLabels, themePalettes } from '../platform/themePalette';
 import { MobilePrayerThemeSettings } from './MobilePrayerThemeSettings';
+import { NotificationOnboardingSettingsEntry } from './NotificationOnboardingSettingsEntry';
 import { PrayerBoardWeatherSettings } from './PrayerBoardWeatherSettings';
 import { PrivacyDiagnosticsSettings } from './PrivacyDiagnosticsSettings';
 import { RamadanModePanel } from './RamadanModePanel';
@@ -694,11 +695,14 @@ export function SettingsScreen() {
       )}
 
       {category === 'adhan' && (
-        <NotificationAdhanSettingsPanel
-          settings={settings}
-          updateSettings={updateSettings}
-          runtime={notificationRuntime}
-        />
+        <>
+          <NotificationAdhanSettingsPanel
+            settings={settings}
+            updateSettings={updateSettings}
+            runtime={notificationRuntime}
+          />
+          <NotificationOnboardingSettingsEntry locale={settings.locale} />
+        </>
       )}
 
       {category === 'mosques' && (
