@@ -27,7 +27,7 @@ effect_replacement = """    const preservedNavigation = preservedSearchNavigatio
     preservedSearchNavigationRef.current = null;
     setBookmarksOnly(false);
     setSearch('');
-    if (preserveSearchReturn && preservedNavigation) {
+    if (preserveSearchReturn) {
       setSearchReturnQuery(preservedNavigation.query);
     } else {
       setSearchReturnQuery(null);
