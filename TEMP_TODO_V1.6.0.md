@@ -5,12 +5,14 @@ Source: SalahOS-V1.5.3-Mobile-Visual-Audit.pdf (16 pages), supplied 7 September 
 Mark `[x]` only after implementation and the applicable validation pass. Record evidence below each item. Unavailable hardware, unapproved religious wording and pending CI are not passes.
 
 ## 1. Quran access (audit pages 5–6)
+
 - [ ] A01 Clear rejected loader promises; Retry after HTTP, network and malformed-pack failures without deleting bookmarks or last-read state.
 - [ ] A02 Explicit PWA offline preparation verifies reader assets, corpus and font; distinguish preparing, ready, unavailable and native bundled states.
 - [ ] A03 Verify complete corpus/font in production and native bundles; test clean native offline, prepared/unprepared PWA and interrupted loads.
 - [ ] A04 Recover from lazy-route/chunk failures with a visible action.
 
 ## 2. Knowledge and reading (pages 2, 7–9)
+
 - [ ] K01 Distinct Quran / Hadith / Fiqh & questions scopes, remove duplicate filters, report scoped collection/result counts.
 - [ ] K02 Compact heading and source/review disclosure; resume Quran; expose useful content sooner.
 - [ ] K03 Label English content and selected commentary honestly with explicit language/direction.
@@ -19,6 +21,7 @@ Mark `[x]` only after implementation and the applicable validation pass. Record 
 - [ ] K06 Describe page grouping accurately, preserve bookmark/resume/share/RTL behavior.
 
 ## 3. Today, themes and responsive layout (pages 3–4, 10–12, 16)
+
 - [ ] UI01 Persistent Standard, Light Blue, Emerald, Navy, Warm Sand, Soft Lavender palettes independently of Light/Dark/System mode.
 - [ ] UI02 Palette previews/reset; consistent semantic surfaces, text, focus, borders and selection across app; rendered contrast verification.
 - [ ] UI03 Remove all Iqamah labels, values, placeholders, prompts and empty columns from Today for configured and unconfigured cases.
@@ -30,6 +33,7 @@ Mark `[x]` only after implementation and the applicable validation pass. Record 
 - [ ] UI09 Physical Android/iOS acceptance: offline clean install, font marks, gesture insets, screen reader, rotation/keyboard, compass/calibration, notifications/Doze/reboot/background. Profile Quran loading on lower-end Android.
 
 ## 4. Quran editorial policy (pages 14–15)
+
 - [ ] Q01 Encode supplied Muhkam/Mutashabih guide; foundations 42:11, 112:4, 19:65 and method 3:7; prohibit bodily/spatial implications for Allah.
 - [ ] Q02 Support tafwid and sourced contextual ta'wil, recording selected reading/evidence; no universal gloss.
 - [ ] Q03 Screen all 114 surahs / 6,236 ayat; scholarly review includes non-attribute and unknowable passages.
@@ -42,6 +46,7 @@ Mark `[x]` only after implementation and the applicable validation pass. Record 
 - [ ] Q10 Regression gates, explicit complete coverage report and named scholarly sign-off; no unresolved policy violations before release.
 
 ## 5. Release V1.6.0 (after all applicable items above pass)
+
 - [ ] R01 Update Instructions guide, CHANGELOG and V1.6.0 release notes with verified behavior and limitations.
 - [ ] R02 Synchronize npm/lock/Android/iOS versions to 1.6.0 and advance native build numbers together.
 - [ ] R03 Pass formatting, lint, typecheck, tests/coverage, content/integrity, security, design-token checks, production build and bundle limits.
@@ -54,4 +59,4 @@ Mark `[x]` only after implementation and the applicable validation pass. Record 
 - Initial inspection: audit baseline is still current main; V1.5.3 published assets confirmed through GitHub.
 - Original supplied Quran guide is available for policy extraction.
 - Named whole-corpus scholarly review and physical Android/iOS acceptance are mandatory in the supplied audit; neither may be inferred from automated scans or desktop tests.
-- Implementation in progress on `codex/v1.6.0-audit`. No V1.6.0 release is claimed.
+- Implementation in progress on `codex/v1.6.0-implementation`. No V1.6.0 release is claimed.
