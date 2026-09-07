@@ -12,7 +12,7 @@ export function QuranSurahIndex(
     selectedSurah: number;
     searchLabel: string;
     searchPlaceholder: string;
-    emptyLabel: string;
+    emptyLabel?: string;
     ayahCountLabel: string;
     revelationLabel: Readonly<Record<QuranRevelationPlace, string>>;
     onSelect: (surah: number) => void;
@@ -38,7 +38,7 @@ export function QuranSurahIndex(
       </label>
       {emptySearch ? (
         <p className="knowledge-empty" role="status" data-quran-surah-search-empty>
-          {props.emptyLabel}
+          {props.emptyLabel ?? 'No surahs match this search.'}
         </p>
       ) : (
         <div className="quran-surah-index__results" role="listbox" aria-label={props.searchLabel}>
