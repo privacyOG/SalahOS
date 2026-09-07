@@ -153,16 +153,28 @@ export function resetQuranOfflinePackCache(): void {
 export async function loadQuranOfflinePack(
   fetcher: QuranPackFetcher = globalThis.fetch.bind(globalThis),
 ): Promise<QuranOfflinePack> {
-  cachedPackPromise ??= (async () => {
-    const response = await fetcher(manifest.packPath);
-    if (!response.ok) {
-      throw new Error(
-        `Packaged offline Qur’an could not be loaded (HTTP ${String(response.status)}).`,
-      );
-    }
-    return validateQuranOfflinePack(await response.json());
-  })();
-  return cachedPackPromise;
+  const request =
+    cachedPackPromise ??
+    (async () => {
+      const response = await fetcher(manifest.packPath);
+      if (!response.ok) {
+        throw new Error(
+          `Packaged offline Qur’an could not be loaded (HTTP ${String(response.status)}).`,
+        );
+      }
+      return validateQuranOfflinePack(await response.json());
+    })();
+
+  cachedPackPromise = request;
+
+  try {
+    return await request;
+  } catch (error) {
+    // A rejected promise must never poison future attempts. Only clear the cache
+    // when it still points at this request so a newer in-flight request cannot be lost.
+    if (cachedPackPromise === request) cachedPackPromise = null;
+    throw error;
+  }
 }
 
 export function getQuranOfflineSurah(
