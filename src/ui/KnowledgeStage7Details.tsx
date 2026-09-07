@@ -271,7 +271,8 @@ export function HadithStage7Details({
               lang={metadata.displayPresentation.lang}
               dir={metadata.displayPresentation.dir}
             >
-              {entry.collection} · <BidiText>{entry.reference}</BidiText> · {metadata.inBookReference}
+              {entry.collection} · <BidiText>{entry.reference}</BidiText> ·{' '}
+              {metadata.inBookReference}
             </dd>
           </div>
           <div>
