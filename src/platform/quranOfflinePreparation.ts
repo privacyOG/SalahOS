@@ -3,11 +3,7 @@ import { Capacitor } from '@capacitor/core';
 import manifest from '../data/quran-offline-manifest.json';
 import { validateQuranOfflinePack } from '../domain/quranOfflineLibrary';
 
-export type QuranOfflinePreparationState =
-  | 'preparing'
-  | 'ready'
-  | 'unavailable'
-  | 'native-bundled';
+export type QuranOfflinePreparationState = 'preparing' | 'ready' | 'unavailable' | 'native-bundled';
 
 export const QURAN_OFFLINE_FONT_PATH = '/fonts/amiri-quran-arabic.woff2';
 export const QURAN_OFFLINE_CACHE_PREFIX = 'salahos-quran-offline-';
@@ -53,10 +49,11 @@ function sameOriginAssetUrls(): readonly string[] {
 }
 
 async function sha256Hex(bytes: ArrayBuffer): Promise<string> {
-  if (!globalThis.crypto?.subtle) {
+  const cryptoCandidate = Reflect.get(globalThis, 'crypto') as Crypto | undefined;
+  if (cryptoCandidate === undefined) {
     throw new Error('Web Crypto is unavailable; Qur’an pack integrity cannot be verified.');
   }
-  const digest = await globalThis.crypto.subtle.digest('SHA-256', bytes);
+  const digest = await cryptoCandidate.subtle.digest('SHA-256', bytes);
   return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, '0')).join('');
 }
 
@@ -69,7 +66,9 @@ async function fetchVerifiedPack(): Promise<Response> {
   const bytes = await response.clone().arrayBuffer();
   const actualHash = await sha256Hex(bytes);
   if (actualHash !== manifest.sha256) {
-    throw new Error(`Qur’an pack integrity mismatch: expected ${manifest.sha256}, got ${actualHash}.`);
+    throw new Error(
+      `Qur’an pack integrity mismatch: expected ${manifest.sha256}, got ${actualHash}.`,
+    );
   }
   validateQuranOfflinePack(await response.clone().json());
   return response;
@@ -77,7 +76,8 @@ async function fetchVerifiedPack(): Promise<Response> {
 
 async function fetchRequiredAsset(path: string): Promise<Response> {
   const response = await fetch(path, { cache: 'reload' });
-  if (!response.ok) throw new Error(`Required offline asset ${path} returned HTTP ${String(response.status)}.`);
+  if (!response.ok)
+    throw new Error(`Required offline asset ${path} returned HTTP ${String(response.status)}.`);
   return response;
 }
 
@@ -85,7 +85,9 @@ async function prunePreviousQuranCaches(): Promise<void> {
   const names = await caches.keys();
   await Promise.all(
     names
-      .filter((name) => name.startsWith(QURAN_OFFLINE_CACHE_PREFIX) && name !== QURAN_OFFLINE_CACHE_NAME)
+      .filter(
+        (name) => name.startsWith(QURAN_OFFLINE_CACHE_PREFIX) && name !== QURAN_OFFLINE_CACHE_NAME,
+      )
       .map((name) => caches.delete(name)),
   );
 }
