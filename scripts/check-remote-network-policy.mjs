@@ -16,6 +16,10 @@ const reviewedRemoteNetworkFiles = new Map([
   ['src/platform/hadithExternalActions.ts', 'user-initiated canonical hadith navigation'],
   ['src/platform/quranExternalActions.ts', 'user-initiated Tanzil provenance navigation'],
   [
+    'src/platform/quranOfflineAssetTransport.ts',
+    'same-origin packaged Qur’an and shell assets for explicit offline preparation',
+  ],
+  [
     'src/platform/mosqueDirectoryExternalActions.ts',
     'user-initiated mosque directions and external navigation',
   ],
