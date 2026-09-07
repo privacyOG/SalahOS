@@ -66,6 +66,17 @@ try {
   await reader.waitFor({ state: 'visible' });
   await reader.getByText('114 surahs · 6,236 ayat', { exact: false }).waitFor();
 
+  const navigationDisclosure = reader.locator('[data-quran-navigation-disclosure]');
+  assert(
+    (await navigationDisclosure.getAttribute('open')) === null,
+    'Secondary Qur’an navigation should be collapsed by default',
+  );
+  await navigationDisclosure.locator('summary').click();
+  assert(
+    (await navigationDisclosure.getAttribute('open')) !== null,
+    'Qur’an navigation disclosure did not open on demand',
+  );
+
   const surahIndex = reader.locator('[data-quran-surah-index]');
   await surahIndex.waitFor({ state: 'visible' });
   assert(
@@ -73,6 +84,8 @@ try {
     'Complete Qur’an reader did not expose all 114 surahs in the searchable index',
   );
   const surahSearch = surahIndex.locator('[data-quran-surah-search]');
+  await surahSearch.fill('not-a-surah');
+  await surahIndex.locator('[data-quran-surah-search-empty]').waitFor({ state: 'visible' });
   await surahSearch.fill('2');
   const alBaqarahOption = surahIndex.locator('[data-quran-surah-option="2"]');
   await alBaqarahOption.waitFor({ state: 'visible' });
@@ -140,6 +153,21 @@ try {
     'Resume last read did not visibly highlight the restored ayah',
   );
 
+  const preferencesDisclosure = reader.locator('[data-quran-preferences-disclosure]');
+  assert(
+    (await preferencesDisclosure.getAttribute('open')) === null,
+    'Qur’an reading preferences should be collapsed by default',
+  );
+  await preferencesDisclosure.locator('summary').click();
+  await reader.locator('[data-quran-reading-mode="page"]').click();
+  const pageGroupingNote = reader.locator('[data-quran-page-grouping-note]');
+  await pageGroupingNote.waitFor({ state: 'visible' });
+  assert(
+    ((await pageGroupingNote.textContent()) ?? '').includes('not a facsimile page'),
+    'Page mode did not disclose that source-page grouping is not a facsimile',
+  );
+  await reader.locator('[data-quran-reading-mode="list"]').click();
+
   await reader.locator('[data-quran-translation-mode]').selectOption('none');
   await page.waitForFunction(() => {
     const serialized = localStorage.getItem('salahos.quran-reading-preferences.v1');
@@ -171,6 +199,18 @@ try {
     'Curated tafsir attribution was not connected to the complete Qur’an reader',
   );
   await curatedAyah.getByText('Tafsir al-Jalalayn', { exact: true }).waitFor();
+
+  const relatedAyah = curatedAyah.locator('[data-quran-related-reference]').first();
+  await relatedAyah.click();
+  const returnToSearch = reader.locator('[data-quran-return-to-search]');
+  await returnToSearch.waitFor({ state: 'visible' });
+  assert((await search.inputValue()) === '', 'Related ayah navigation did not leave search view');
+  await returnToSearch.click();
+  assert(
+    (await search.inputValue()) === '20:14',
+    'Return-to-search did not restore the previous Qur’an query',
+  );
+  await curatedAyah.waitFor({ state: 'visible' });
 
   const metrics = await page.evaluate(() => ({
     innerWidth: window.innerWidth,
