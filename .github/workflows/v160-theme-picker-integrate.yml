@@ -39,25 +39,17 @@ jobs:
               raise SystemExit('Taraweeh import marker drifted')
           text = text.replace(marker, marker + "\nimport { ThemePalettePicker } from './ThemePalettePicker';")
 
-          old = '''      <label>
-            <span>{settingsCopy[locale].palette}</span>
-            <select
-              value={settings.palette}
-              onChange={(event) => {
-                updateSettings((current) => ({
-                  ...current,
-                  palette: event.target.value as PersistedSettings['palette'],
-                }));
-              }}
-            >
-              {themePalettes.map((palette) => (
-                <option key={palette} value={palette}>
-                  {themePaletteLabels[palette]}
-                </option>
-              ))}
-            </select>
-          </label>'''
-          new = '''      <ThemePalettePicker
+          palette_marker = '<span>{settingsCopy[locale].palette}</span>'
+          marker_index = text.find(palette_marker)
+          if marker_index < 0:
+              raise SystemExit('palette label marker drifted')
+          start = text.rfind('      <label>', 0, marker_index)
+          end_marker = '      </label>'
+          end = text.find(end_marker, marker_index)
+          if start < 0 or end < 0:
+              raise SystemExit('palette select boundaries drifted')
+          end += len(end_marker)
+          replacement = '''      <ThemePalettePicker
             locale={locale}
             label={settingsCopy[locale].palette}
             selected={settings.palette}
@@ -65,9 +57,7 @@ jobs:
               updateSettings((current) => ({ ...current, palette }));
             }}
           />'''
-          if old not in text:
-              raise SystemExit('palette select block drifted')
-          path.write_text(text.replace(old, new))
+          path.write_text(text[:start] + replacement + text[end:])
           PY
       - name: Verify integration
         run: |
