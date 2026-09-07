@@ -72,8 +72,8 @@ try {
     assert(
       (await screen
         .locator('[data-knowledge-curated-size]')
-        .getAttribute('data-knowledge-curated-size')) === '9',
-      'Governed Knowledge catalogue size is not nine entries',
+        .getAttribute('data-knowledge-curated-size')) === '3',
+      'Governed Library scope size is not three entries',
     );
     assert(
       (await screen.locator('.knowledge-card').count()) === 3 &&
