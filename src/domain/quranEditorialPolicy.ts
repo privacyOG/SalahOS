@@ -47,11 +47,20 @@ export function validateQuranEditorialEntry(value: unknown): QuranEditorialRegis
     quranEditorialStatuses.includes(entry.status as QuranEditorialStatus),
     `Editorial status is invalid for ${entry.verseKey}.`,
   );
-  assertPolicy(Array.isArray(entry.sourceReferences), `Source references are missing for ${entry.verseKey}.`);
-  assertPolicy(Array.isArray(entry.disagreements), `Disagreement field is missing for ${entry.verseKey}.`);
+  assertPolicy(
+    Array.isArray(entry.sourceReferences),
+    `Source references are missing for ${entry.verseKey}.`,
+  );
+  assertPolicy(
+    Array.isArray(entry.disagreements),
+    `Disagreement field is missing for ${entry.verseKey}.`,
+  );
 
   if (entry.status === 'approved') {
-    assertPolicy(isNonEmptyString(entry.reviewer), `Approved entry ${entry.verseKey} has no named reviewer.`);
+    assertPolicy(
+      isNonEmptyString(entry.reviewer),
+      `Approved entry ${entry.verseKey} has no named reviewer.`,
+    );
     assertPolicy(
       entry.treatment !== 'unassigned',
       `Approved entry ${entry.verseKey} has no selected treatment.`,
