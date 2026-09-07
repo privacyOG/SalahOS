@@ -1,10 +1,11 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
   firstQuranOfflineAyahInJuz,
   firstQuranOfflineAyahOnPage,
   getQuranOfflineAyah,
   listQuranOfflineSurahSummaries,
+  loadQuranOfflinePack,
   parseQuranVerseKey,
   searchQuranOfflinePack,
   searchQuranOfflineSurahs,
@@ -71,6 +72,22 @@ const fixture = {
 } as unknown as QuranOfflinePack;
 
 describe('complete offline Qur’an library navigation', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('clears a rejected loader promise so a later retry performs a new request', async () => {
+    const fetchMock = vi
+      .fn<typeof fetch>()
+      .mockResolvedValueOnce(new Response('{}', { status: 200 }))
+      .mockResolvedValueOnce(new Response(null, { status: 503 }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(loadQuranOfflinePack()).rejects.toThrow();
+    await expect(loadQuranOfflinePack()).rejects.toThrow('HTTP 503');
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
   it('parses canonical verse keys and rejects invalid positions', () => {
     expect(parseQuranVerseKey('114:6')).toEqual({ surah: 114, ayah: 6 });
     expect(parseQuranVerseKey('1:1')).toEqual({ surah: 1, ayah: 1 });
