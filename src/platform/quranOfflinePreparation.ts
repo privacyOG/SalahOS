@@ -2,6 +2,10 @@ import { Capacitor } from '@capacitor/core';
 
 import manifest from '../data/quran-offline-manifest.json';
 import { validateQuranOfflinePack } from '../domain/quranOfflineLibrary';
+import {
+  fetchQuranOfflineAsset,
+  quranOfflineAssetTransportAvailable,
+} from './quranOfflineAssetTransport';
 
 export type QuranOfflinePreparationState = 'preparing' | 'ready' | 'unavailable' | 'native-bundled';
 
@@ -12,7 +16,7 @@ export const QURAN_OFFLINE_CACHE_NAME = `${QURAN_OFFLINE_CACHE_PREFIX}${manifest
 const CORE_URLS = Object.freeze(['/', manifest.packPath, QURAN_OFFLINE_FONT_PATH] as const);
 
 function cacheApiAvailable(): boolean {
-  return typeof globalThis.caches !== 'undefined' && typeof globalThis.fetch === 'function';
+  return typeof globalThis.caches !== 'undefined' && quranOfflineAssetTransportAvailable();
 }
 
 function sameOriginAssetUrls(): readonly string[] {
@@ -58,7 +62,7 @@ async function sha256Hex(bytes: ArrayBuffer): Promise<string> {
 }
 
 async function fetchVerifiedPack(): Promise<Response> {
-  const response = await fetch(manifest.packPath, { cache: 'reload' });
+  const response = await fetchQuranOfflineAsset(manifest.packPath);
   if (!response.ok) {
     throw new Error(`Qur’an pack preparation failed (HTTP ${String(response.status)}).`);
   }
@@ -75,7 +79,7 @@ async function fetchVerifiedPack(): Promise<Response> {
 }
 
 async function fetchRequiredAsset(path: string): Promise<Response> {
-  const response = await fetch(path, { cache: 'reload' });
+  const response = await fetchQuranOfflineAsset(path);
   if (!response.ok)
     throw new Error(`Required offline asset ${path} returned HTTP ${String(response.status)}.`);
   return response;
