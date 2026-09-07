@@ -1,4 +1,4 @@
-import { lazy, StrictMode, Suspense, useEffect, useState } from 'react';
+import { lazy, StrictMode, Suspense, useEffect, useState, type ReactNode } from 'react';
 import { createRoot } from 'react-dom/client';
 import {
   flushApplicationStorage,
@@ -19,6 +19,7 @@ import { loadPersistedSettings } from './platform/settingsStorage';
 import { installThemePreference } from './platform/themePreference';
 import { applyThemePalette } from './platform/themePalette';
 import { CongregationShell } from './ui/CongregationShell';
+import { LazyRouteBoundary } from './ui/LazyRouteBoundary';
 import { MobilePrayerThemeSurface } from './ui/MobilePrayerThemeSurface';
 import { NotificationOnboarding } from './ui/NotificationOnboarding';
 import { PrayerSetupOnboarding } from './ui/PrayerSetupOnboarding';
@@ -96,6 +97,14 @@ function LoadingSurface() {
   );
 }
 
+function DeferredSurface({ children }: Readonly<{ children: ReactNode }>) {
+  return (
+    <LazyRouteBoundary>
+      <Suspense fallback={<LoadingSurface />}>{children}</Suspense>
+    </LazyRouteBoundary>
+  );
+}
+
 function ReactiveTodayScreen() {
   const [snapshotRevision, setSnapshotRevision] = useState(0);
 
@@ -119,49 +128,49 @@ function CongregationRoute({ destination }: Readonly<{ destination: Congregation
     case 'calendar':
       return (
         <div className="congregation-route congregation-route--calendar">
-          <Suspense fallback={<LoadingSurface />}>
+          <DeferredSurface>
             <PrayerCalendarScreen />
-          </Suspense>
+          </DeferredSurface>
         </div>
       );
     case 'mosques':
       return (
         <div className="congregation-route congregation-route--mosques">
-          <Suspense fallback={<LoadingSurface />}>
+          <DeferredSurface>
             <MosquesRoute />
-          </Suspense>
+          </DeferredSurface>
         </div>
       );
     case 'qiblah':
       return (
         <div className="congregation-route congregation-route--qiblah">
-          <Suspense fallback={<LoadingSurface />}>
+          <DeferredSurface>
             <QiblaFinder />
-          </Suspense>
+          </DeferredSurface>
         </div>
       );
     case 'knowledge':
       return (
         <div className="congregation-route congregation-route--knowledge">
-          <Suspense fallback={<LoadingSurface />}>
+          <DeferredSurface>
             <KnowledgeExperience />
-          </Suspense>
+          </DeferredSurface>
         </div>
       );
     case 'community':
       return (
         <div className="congregation-route congregation-route--community">
-          <Suspense fallback={<LoadingSurface />}>
+          <DeferredSurface>
             <CommunityScreen />
-          </Suspense>
+          </DeferredSurface>
         </div>
       );
     case 'settings':
       return (
         <div className="congregation-route congregation-route--settings">
-          <Suspense fallback={<LoadingSurface />}>
+          <DeferredSurface>
             <SettingsScreen />
-          </Suspense>
+          </DeferredSurface>
         </div>
       );
     default:
@@ -213,16 +222,16 @@ function RootApplication() {
   if (fixture !== null) return <TouchDisplayFixture {...fixture} />;
   if (smartDisplayModeRequested(window.location.search)) {
     return (
-      <Suspense fallback={<LoadingSurface />}>
+      <DeferredSurface>
         <SmartDisplayRoot />
-      </Suspense>
+      </DeferredSurface>
     );
   }
   if (readProductSurface(window.location.search) === 'admin') {
     return (
-      <Suspense fallback={<LoadingSurface />}>
+      <DeferredSurface>
         <AdministrationApplication />
-      </Suspense>
+      </DeferredSurface>
     );
   }
   return <CongregationApplication />;
