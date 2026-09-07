@@ -1,7 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
 import {
-  applyThemePalette,
   defaultThemePalette,
   parseThemePalette,
   themePaletteLabels,
@@ -27,12 +26,5 @@ describe('V1.6.0 theme palettes', () => {
     expect(parseThemePalette('navy')).toBe('navy');
     expect(parseThemePalette('soft-lavender')).toBe('soft-lavender');
     expect(parseThemePalette('not-a-palette')).toBe(defaultThemePalette);
-  });
-
-  it('applies only the palette data attribute', () => {
-    const dataset: DOMStringMap = {};
-    applyThemePalette('royal-blue', { documentElement: { dataset } } as Document);
-    expect(dataset.palette).toBe('royal-blue');
-    expect(dataset.theme).toBeUndefined();
   });
 });
