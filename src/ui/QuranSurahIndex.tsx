@@ -6,6 +6,17 @@ import {
   type QuranRevelationPlace,
 } from '../domain/quranOfflineLibrary';
 
+const emptySearchLabels: Readonly<Record<string, string>> = Object.freeze({
+  'Find a surah': 'No surahs match this search.',
+  'ابحث عن سورة': 'لا توجد سورة مطابقة لهذا البحث.',
+  'Sure bul': 'Bu aramayla eşleşen sure yok.',
+  'Cari surah': 'Tidak ada surah yang cocok dengan pencarian ini.',
+});
+
+function emptySearchLabel(searchLabel: string, override?: string): string {
+  return override ?? emptySearchLabels[searchLabel] ?? 'No surahs match this search.';
+}
+
 export function QuranSurahIndex(
   props: Readonly<{
     pack: QuranOfflinePack;
@@ -38,7 +49,7 @@ export function QuranSurahIndex(
       </label>
       {emptySearch ? (
         <p className="knowledge-empty" role="status" data-quran-surah-search-empty>
-          {props.emptyLabel ?? 'No surahs match this search.'}
+          {emptySearchLabel(props.searchLabel, props.emptyLabel)}
         </p>
       ) : (
         <div className="quran-surah-index__results" role="listbox" aria-label={props.searchLabel}>
