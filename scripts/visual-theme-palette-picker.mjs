@@ -52,9 +52,12 @@ try {
       serviceWorkers: 'block',
     });
     const page = await context.newPage();
-    await page.addInitScript((value) => {
-      localStorage.setItem('salahos.settings', JSON.stringify(value));
-    }, settings(fixture.locale, fixture.theme, 'royal-blue'));
+    await page.addInitScript(
+      (value) => {
+        localStorage.setItem('salahos.settings', JSON.stringify(value));
+      },
+      settings(fixture.locale, fixture.theme, 'royal-blue'),
+    );
     await page.goto(`${baseUrl}/?view=settings&settings=display`, { waitUntil: 'networkidle' });
 
     const picker = page.locator('[data-theme-palette-picker]');
@@ -70,9 +73,7 @@ try {
 
     const reset = picker.locator('[data-theme-palette-reset]');
     await reset.click();
-    await page.waitForFunction(
-      () => document.documentElement.dataset.palette === 'salah-classic',
-    );
+    await page.waitForFunction(() => document.documentElement.dataset.palette === 'salah-classic');
     assert(
       (await picker
         .locator('[data-theme-palette-option="salah-classic"]')
