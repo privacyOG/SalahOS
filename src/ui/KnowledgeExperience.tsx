@@ -30,28 +30,28 @@ type KnowledgeExperienceCopy = Readonly<{
 const copy: Readonly<Record<Locale, KnowledgeExperienceCopy>> = {
   en: {
     navigation: 'Knowledge sections',
-    library: 'Library',
+    library: 'Fiqh & questions',
     quran: 'Qur’an',
     hadith: 'Hadith',
     retryQuran: 'Retry / reload Qur’an',
   },
   ar: {
     navigation: 'أقسام المعرفة',
-    library: 'المكتبة',
+    library: 'الفقه والأسئلة',
     quran: 'القرآن',
     hadith: 'الحديث',
     retryQuran: 'إعادة محاولة تحميل القرآن',
   },
   tr: {
     navigation: 'Bilgi bölümleri',
-    library: 'Kütüphane',
+    library: 'Fıkıh ve sorular',
     quran: 'Kur’an',
     hadith: 'Hadis',
     retryQuran: 'Kur’an yüklemesini yeniden dene',
   },
   id: {
     navigation: 'Bagian pengetahuan',
-    library: 'Pustaka',
+    library: 'Fikih & pertanyaan',
     quran: 'Qur’an',
     hadith: 'Hadis',
     retryQuran: 'Coba muat ulang Qur’an',
