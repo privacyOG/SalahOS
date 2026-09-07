@@ -31,6 +31,14 @@ function isNonEmptyString(value: unknown): value is string {
   return typeof value === 'string' && value.trim().length > 0;
 }
 
+function isQuranEditorialTreatment(value: unknown): value is QuranEditorialTreatment {
+  return quranEditorialTreatments.some((candidate) => candidate === value);
+}
+
+function isQuranEditorialStatus(value: unknown): value is QuranEditorialStatus {
+  return quranEditorialStatuses.some((candidate) => candidate === value);
+}
+
 function assertPolicy(condition: unknown, message: string): asserts condition {
   if (!condition) throw new Error(message);
 }
@@ -40,11 +48,11 @@ export function validateQuranEditorialEntry(value: unknown): QuranEditorialRegis
   const entry = value as Partial<QuranEditorialRegisterEntry>;
   assertPolicy(isNonEmptyString(entry.verseKey), 'Editorial register verse key is missing.');
   assertPolicy(
-    quranEditorialTreatments.includes(entry.treatment!),
+    isQuranEditorialTreatment(entry.treatment),
     `Editorial treatment is invalid for ${entry.verseKey}.`,
   );
   assertPolicy(
-    quranEditorialStatuses.includes(entry.status!),
+    isQuranEditorialStatus(entry.status),
     `Editorial status is invalid for ${entry.verseKey}.`,
   );
   assertPolicy(
