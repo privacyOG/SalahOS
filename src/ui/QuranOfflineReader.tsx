@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useState } from 'react';
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react';
 
 import '../quran-reader-disclosures.css';
 
@@ -445,6 +445,7 @@ export function QuranOfflineReader({
   const [mushafPageJump, setMushafPageJump] = useState(1);
   const [search, setSearch] = useState('');
   const [searchReturnQuery, setSearchReturnQuery] = useState<string | null>(null);
+  const preservedSearchNavigationRef = useRef<{ verseKey: string; query: string } | null>(null);
   const [bookmarksOnly, setBookmarksOnly] = useState(false);
   const [shareStatus, setShareStatus] = useState('');
   const [activeAyahKey, setActiveAyahKey] = useState(initialVerse(preferences, initialVerseKey));
@@ -476,9 +477,16 @@ export function QuranOfflineReader({
     if (!pack || !initialVerseKey) return;
     const target = getQuranOfflineAyah(pack, initialVerseKey);
     if (!target) return;
+    const preservedNavigation = preservedSearchNavigationRef.current;
+    const preserveSearchReturn = preservedNavigation?.verseKey === initialVerseKey;
+    preservedSearchNavigationRef.current = null;
     setBookmarksOnly(false);
     setSearch('');
-    setSearchReturnQuery(null);
+    if (preserveSearchReturn) {
+      setSearchReturnQuery(preservedNavigation.query);
+    } else {
+      setSearchReturnQuery(null);
+    }
     setSelectedSurah(target.surah.surah);
     setVirtualTargetAyahKey(initialVerseKey);
     setCurrentPage(target.ayah.page);
@@ -548,8 +556,10 @@ export function QuranOfflineReader({
     if (!parsed) return;
     if (preserveSearchContext && search.trim().length > 0) {
       setSearchReturnQuery(search);
+      preservedSearchNavigationRef.current = onVerseNavigate ? { verseKey, query: search } : null;
     } else {
       setSearchReturnQuery(null);
+      preservedSearchNavigationRef.current = null;
     }
     setBookmarksOnly(false);
     setSearch('');

@@ -21,6 +21,9 @@ describe('V1.6.0 Qur’an reader UX', () => {
   it('preserves a search-return path when following a related ayah', () => {
     expect(reader).toContain('const [searchReturnQuery, setSearchReturnQuery]');
     expect(reader).toContain('setSearchReturnQuery(search)');
+    expect(reader).toContain('preservedSearchNavigationRef');
+    expect(reader).toContain('preservedNavigation?.verseKey === initialVerseKey');
+    expect(reader).toContain('setSearchReturnQuery(preservedNavigation.query)');
     expect(reader.match(/jumpToVerse\(verseKey, true\)/gu)).toHaveLength(2);
     expect(reader).toContain('data-quran-return-to-search');
     expect(reader).toContain('setSearch(searchReturnQuery)');
