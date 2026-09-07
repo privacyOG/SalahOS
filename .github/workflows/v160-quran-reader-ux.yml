@@ -21,6 +21,19 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci --ignore-scripts
+      - name: Repair structural navigation markers
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('scripts/apply-v160-quran-reader-ux.py')
+          text = path.read_text()
+          old = "first_navigation = \"    setBookmarksOnly(false);\\n    setSearch('');\\n    if (first) {\"\nif text.count(first_navigation) != 2:\n    raise SystemExit('select Surah/page navigation count drifted')\ntext = text.replace(\n    first_navigation,\n    \"    setBookmarksOnly(false);\\n    setSearch('');\\n    setSearchReturnQuery(null);\\n    if (first) {\",\n)\n"
+          new = "surah_navigation = \"    setBookmarksOnly(false);\\n    setSearch('');\\n    if (first) {\"\nif surah_navigation not in text:\n    raise SystemExit('select Surah navigation marker drifted')\ntext = text.replace(\n    surah_navigation,\n    \"    setBookmarksOnly(false);\\n    setSearch('');\\n    setSearchReturnQuery(null);\\n    if (first) {\",\n    1,\n)\n\npage_navigation = \"    setBookmarksOnly(false);\\n    setSearch('');\\n    const first = allResults.find((result) => result.ayah.page === nextPage);\"\nif page_navigation not in text:\n    raise SystemExit('select page navigation marker drifted')\ntext = text.replace(\n    page_navigation,\n    \"    setBookmarksOnly(false);\\n    setSearch('');\\n    setSearchReturnQuery(null);\\n    const first = allResults.find((result) => result.ayah.page === nextPage);\",\n    1,\n)\n"
+          if old not in text:
+              raise SystemExit('helper repair target drifted')
+          path.write_text(text.replace(old, new, 1))
+          PY
       - name: Apply reader UX transform
         run: python3 scripts/apply-v160-quran-reader-ux.py
       - name: Verify reader UX transform
