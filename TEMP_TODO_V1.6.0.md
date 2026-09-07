@@ -24,7 +24,8 @@ Mark `[x]` only after implementation and the applicable validation pass. Record 
 
 - [ ] UI01 Persistent Standard, Light Blue, Emerald, Navy, Warm Sand, Soft Lavender palettes independently of Light/Dark/System mode.
 - [ ] UI02 Palette previews/reset; consistent semantic surfaces, text, focus, borders and selection across app; rendered contrast verification.
-- [ ] UI03 Remove all Iqamah labels, values, placeholders, prompts and empty columns from Today for configured and unconfigured cases.
+- [x] UI03 Remove all Iqamah labels, values, placeholders, prompts and empty columns from Today for configured and unconfigured cases.
+  - Evidence: PR #263 merged as `7abc4132eefc2d8614dc67aee4e72fbd9f4a472b` after Quality, Visual, Android, iOS and Windows all passed on synchronized head `6d9bb7466ad58c8f8353576c383a21095e4301cb`.
 - [ ] UI04 Clear locality and calculation provenance; verify midnight/DST/resume behavior.
 - [ ] UI05 Mobile calendar agenda/cards, optional full timetable, localized labels.
 - [ ] UI06 Check internal clipping, navigation labels, landscape height, touch/focus targets and 200% text.
