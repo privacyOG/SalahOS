@@ -16,6 +16,7 @@ import {
   type KnowledgeView,
 } from './applicationRoute';
 import { KnowledgeScreen } from './KnowledgeScreen';
+import { QuranOfflinePreparationControl } from './QuranOfflinePreparationControl';
 import { QuranOfflineReader } from './QuranOfflineReader';
 
 type KnowledgeExperienceCopy = Readonly<{
@@ -162,14 +163,17 @@ export function KnowledgeExperience() {
       {view === 'library' ? <KnowledgeScreen scope="library" /> : null}
       {view === 'hadith' ? <KnowledgeScreen scope="hadith" /> : null}
       {view === 'quran' ? (
-        <QuranOfflineReader
-          key={quranReaderAttempt}
-          locale={locale}
-          preferences={quranPreferences}
-          onPreferencesChange={persistQuranPreferences}
-          initialVerseKey={verseKey}
-          onVerseNavigate={updateVerseRoute}
-        />
+        <>
+          <QuranOfflinePreparationControl locale={locale} />
+          <QuranOfflineReader
+            key={quranReaderAttempt}
+            locale={locale}
+            preferences={quranPreferences}
+            onPreferencesChange={persistQuranPreferences}
+            initialVerseKey={verseKey}
+            onVerseNavigate={updateVerseRoute}
+          />
+        </>
       ) : null}
     </div>
   );
