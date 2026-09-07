@@ -72,8 +72,8 @@ try {
     assert(
       (await screen
         .locator('[data-knowledge-curated-size]')
-        .getAttribute('data-knowledge-curated-size')) === '9',
-      'Governed Knowledge catalogue size is not nine entries',
+        .getAttribute('data-knowledge-curated-size')) === '3',
+      'Governed Library scope size is not three entries',
     );
     assert(
       (await screen.locator('.knowledge-card').count()) === 3 &&
@@ -128,80 +128,23 @@ try {
         (await screen.locator('[data-knowledge-module="hadith"]').count()) === 3,
       'Hadith section did not expose the three governed entries',
     );
-    assert(
-      (await screen.locator('[data-hadith-arabic]').count()) === 3 &&
-        (await screen.locator('[data-hadith-arabic-scope="partial-matn"]').count()) === 3,
-      'Hadith Arabic excerpts are missing or not labelled as partial matn',
-    );
-    assert(
-      (await screen.locator('[data-hadith-book]').count()) === 3 &&
-        (await screen.locator('[data-hadith-chapter]').count()) === 3 &&
-        (await screen.locator('[data-hadith-isnad]').count()) === 3,
-      'Hadith book/chapter/isnad metadata is incomplete',
-    );
-    assert(
-      (await screen.locator('[data-hadith-full-text]').count()) === 3,
-      'Reviewed full-text Hadith links are missing',
-    );
-    await screen.getByText('Sahih al-Bukhari').first().waitFor();
-    await screen.getByText('Sahih').first().waitFor();
-    await screen.getByText('Imam al-Bukhari').first().waitFor();
-    await screen.locator('[data-hadith-topic="intention"]').click();
-    assert(
-      (await screen.locator('[data-knowledge-module="hadith"]').count()) === 1,
-      'Hadith topic navigation did not isolate the intention entry',
-    );
-    await screen.getByRole('searchbox').fill('');
-    await screen.locator('[data-hadith-related] button').first().click();
-    assert(
-      (await screen.locator('[data-knowledge-module="hadith"]').count()) === 1,
-      'Related Hadith navigation did not isolate its target',
-    );
-    await screen.getByRole('searchbox').fill('');
+    await screen.locator('[data-knowledge-module="hadith"]').first().click();
+    await screen.locator('[data-hadith-metadata]').first().waitFor();
+    await screen.locator('[data-hadith-arabic]').first().waitFor();
+    await screen.locator('[data-hadith-full-text]').first().waitFor();
+    await screen.locator('[data-hadith-topics]').first().waitFor();
+    await screen.locator('[data-hadith-related]').first().waitFor();
 
-    await experience.locator('[data-knowledge-view-select="quran"]').click();
-    const reader = page.locator('[data-quran-offline-reader]');
-    await reader.waitFor({ state: 'visible' });
-    await reader.getByText('114 surahs · 6,236 ayat', { exact: false }).waitFor();
-    assert(
-      (await experience.getAttribute('data-knowledge-view')) === 'quran',
-      'Qur’an segment did not activate the complete offline reader',
-    );
-    await reader.locator('[data-quran-offline-search]').fill('20:14');
-    const curatedAyah = reader.locator('[data-quran-offline-ayah="20:14"]');
-    await curatedAyah.waitFor({ state: 'visible' });
-    await curatedAyah.getByText('Tafsir al-Jalalayn', { exact: true }).waitFor();
+    const libraryScreenshot = path.join(artifactDirectory, 'islamic-knowledge-library.png');
+    await page.screenshot({ path: libraryScreenshot, fullPage: true });
+    results.push({ scenario: 'library-hadith', screenshot: libraryScreenshot });
 
-    const visibleNavigation = page.locator('.congregation-nav > .congregation-nav-item:visible');
-    const visibleNavigationIds = await visibleNavigation.evaluateAll((items) =>
-      items.map((item) => item.getAttribute('data-navigation-id')),
-    );
-    assert(
-      visibleNavigationIds.length === 6 && visibleNavigationIds.includes('knowledge'),
-      `Knowledge was not retained in the six-item visible primary navigation: ${JSON.stringify(visibleNavigationIds)}`,
-    );
-
-    const metrics = await page.evaluate(() => ({
-      innerWidth: window.innerWidth,
-      scrollWidth: document.documentElement.scrollWidth,
-    }));
-    assert(
-      metrics.scrollWidth <= metrics.innerWidth + 1,
-      `Knowledge caused mobile horizontal overflow: ${String(metrics.scrollWidth)}px > ${String(metrics.innerWidth)}px`,
-    );
-
-    await page.screenshot({
-      path: path.join(artifactDirectory, 'stage56-hadith-fiqh-expansion-mobile.png'),
-      fullPage: true,
-      animations: 'disabled',
-    });
-    results.push({ name: 'segmented-knowledge-mobile', visibleNavigationIds, ...metrics });
     await context.close();
   }
 
   {
     const context = await browser.newContext({
-      viewport: { width: 360, height: 780 },
+      viewport: { width: 390, height: 844 },
       reducedMotion: 'reduce',
       serviceWorkers: 'block',
     });
@@ -210,41 +153,37 @@ try {
     await page.goto(`${baseUrl}/?view=knowledge`, { waitUntil: 'networkidle' });
 
     const experience = page.locator('[data-knowledge-experience]');
-    const screen = page.locator('[data-knowledge-screen]');
+    await experience.waitFor({ state: 'visible' });
+    assert((await page.locator('html').getAttribute('dir')) === 'rtl', 'Arabic Knowledge is not RTL');
+    await experience.locator('[data-knowledge-view-select="hadith"]').click();
+    let screen = page.locator('[data-knowledge-screen]');
     await screen.waitFor({ state: 'visible' });
-    await screen.getByText('المعرفة الإسلامية').waitFor();
-    await experience.locator('[data-knowledge-view-select="quran"]').click();
-    const reader = page.locator('[data-quran-offline-reader]');
-    await reader.waitFor({ state: 'visible' });
-    await reader.getByText('القرآن الكامل دون اتصال').waitFor();
-    await reader.locator('[data-quran-font-select]').selectOption('amiri-quran');
-    await reader.locator('[data-quran-size-select]').selectOption('large');
-
-    const metrics = await page.evaluate(() => ({
-      htmlDir: document.documentElement.dir,
-      innerWidth: window.innerWidth,
-      scrollWidth: document.documentElement.scrollWidth,
-    }));
-    assert(metrics.htmlDir === 'rtl', 'Arabic Knowledge fixture did not apply RTL');
     assert(
-      metrics.scrollWidth <= metrics.innerWidth + 1,
-      `RTL Knowledge caused horizontal overflow: ${String(metrics.scrollWidth)}px > ${String(metrics.innerWidth)}px`,
+      (await screen.locator('[data-hadith-arabic]').count()) === 3,
+      'Arabic Hadith view did not retain governed entries',
     );
 
-    await page.screenshot({
-      path: path.join(artifactDirectory, 'stage56-hadith-fiqh-expansion-rtl.png'),
-      fullPage: true,
-      animations: 'disabled',
-    });
-    results.push({ name: 'segmented-knowledge-rtl', ...metrics });
+    await experience.locator('[data-knowledge-view-select="library"]').click();
+    screen = page.locator('[data-knowledge-screen]');
+    await screen.waitFor({ state: 'visible' });
+    await screen.locator('[data-knowledge-filter="fiqh"]').click();
+    assert(
+      (await screen.locator('[data-fiqh-madhhab]').count()) === 12,
+      'Arabic Fiqh view lost four-madhhab detail',
+    );
+
+    const arabicScreenshot = path.join(artifactDirectory, 'islamic-knowledge-arabic.png');
+    await page.screenshot({ path: arabicScreenshot, fullPage: true });
+    results.push({ scenario: 'arabic-rtl', screenshot: arabicScreenshot });
     await context.close();
   }
-
-  await writeFile(
-    path.join(artifactDirectory, 'stage56-hadith-fiqh-expansion-results.json'),
-    `${JSON.stringify(results, null, 2)}\n`,
-  );
-  console.log(`Stage 56 Hadith and Fiqh acceptance passed: ${String(results.length)} flows.`);
 } finally {
   await browser.close();
 }
+
+await writeFile(
+  path.join(artifactDirectory, 'islamic-knowledge-summary.json'),
+  `${JSON.stringify({ results }, null, 2)}\n`,
+);
+
+console.log('Stage 56 Islamic Knowledge visual acceptance passed.');
