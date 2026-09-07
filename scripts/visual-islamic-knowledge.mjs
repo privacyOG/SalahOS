@@ -223,6 +223,8 @@ try {
     const reader = page.locator('[data-quran-offline-reader]');
     await reader.waitFor({ state: 'visible' });
     await reader.getByText('القرآن الكامل دون اتصال').waitFor();
+    const preferencesDisclosure = reader.locator('[data-quran-preferences-disclosure]');
+    await preferencesDisclosure.locator('summary').click();
     await reader.locator('[data-quran-font-select]').selectOption('amiri-quran');
     await reader.locator('[data-quran-size-select]').selectOption('large');
 
