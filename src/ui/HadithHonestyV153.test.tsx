@@ -45,7 +45,7 @@ describe('v1.5.3 Hadith honesty', () => {
     expect(markup).toContain('https://sunnah.com/bukhari:645');
     expect(markup).toContain('data-scholar-disclaimer');
     expect(markup).toContain(
-      `data-knowledge-curated-size="${String(filterIslamicKnowledge('all', '').length)}"`,
+      `data-knowledge-curated-size="${String(filterIslamicKnowledge('hadith', '').length)}"`,
     );
   });
 
