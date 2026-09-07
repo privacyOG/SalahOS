@@ -88,7 +88,6 @@ export function QuranOfflinePreparationControl({ locale }: Readonly<{ locale: Lo
       {canPrepare ? (
         <button
           type="button"
-          disabled={state === 'preparing'}
           data-quran-offline-prepare
           onClick={() => {
             setState('preparing');
