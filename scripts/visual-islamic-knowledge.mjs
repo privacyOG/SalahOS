@@ -85,6 +85,7 @@ try {
       'Hadith entries leaked into the segmented Library section',
     );
     await screen.locator('[data-scholar-disclaimer]').waitFor();
+    await screen.locator('[data-fiqh-source-disclosure] summary').first().click();
     await screen
       .getByText('Classical Hanafi, Maliki, Shafi‘i and Hanbali sources')
       .first()
@@ -149,6 +150,7 @@ try {
       (await screen.locator('[data-hadith-full-text]').count()) === 3,
       'Reviewed full-text Hadith links are missing',
     );
+    await screen.locator('[data-hadith-source-disclosure] summary').first().click();
     await screen.getByText('Sahih al-Bukhari').first().waitFor();
     await screen.getByText('Sahih').first().waitFor();
     await screen.getByText('Imam al-Bukhari').first().waitFor();
