@@ -1,0 +1,22 @@
+/* V1.6.0 mobile-audit presentation corrections. */
+
+/* Today intentionally presents prayer starts only. Mosque Iqamah remains available in mosque/admin data. */
+.today-next__times {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.today-next__times > :nth-child(n + 2),
+.today-prayer-row--header > :nth-child(3),
+.today-prayer-row__iqamah,
+[data-mosque-iqamah-source='directory-published'] {
+  display: none !important;
+}
+
+.today-prayer-row {
+  grid-template-columns: minmax(8rem, 1fr) minmax(5rem, auto);
+}
+
+/* Keep the start-time column aligned after the third Today column is removed. */
+.today-prayer-row__time:not(.today-prayer-row__iqamah) {
+  justify-self: end;
+}
