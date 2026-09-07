@@ -137,7 +137,9 @@ function KnowledgeEntryCard({
           <span className="knowledge-badge">{labels.hadith}</span>
           <span className="knowledge-offline">{labels.offline}</span>
         </div>
-        <h3>{entry.title}</h3>
+        <h3 lang="en" dir="ltr">
+          {entry.title}
+        </h3>
         <HadithStage7Details
           entry={entry}
           locale={locale}
@@ -160,11 +162,15 @@ function KnowledgeEntryCard({
         </span>
         <span className="knowledge-offline">{labels.offline}</span>
       </div>
-      <h3>{entry.question}</h3>
+      <h3 lang="en" dir="ltr">
+        {entry.question}
+      </h3>
       {entry.contentType === 'fiqh' ? (
         <FiqhStage7Details entry={entry} locale={locale} />
       ) : (
-        <p>{entry.answer}</p>
+        <p lang="en" dir="ltr">
+          {entry.answer}
+        </p>
       )}
     </article>
   );
