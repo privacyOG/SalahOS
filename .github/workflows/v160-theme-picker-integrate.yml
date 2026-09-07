@@ -1,0 +1,85 @@
+name: V1.6.0 Theme Picker Integrate
+
+on:
+  push:
+    branches:
+      - v160-theme-picker
+
+permissions:
+  contents: write
+
+jobs:
+  integrate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v160-theme-picker
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Integrate picker into Settings
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path('src/ui/SettingsScreen.tsx')
+          text = path.read_text()
+          old_import = "import { applyThemePalette, themePaletteLabels, themePalettes } from '../platform/themePalette';"
+          new_import = "import { applyThemePalette } from '../platform/themePalette';"
+          if old_import not in text:
+              raise SystemExit('theme palette import drifted')
+          text = text.replace(old_import, new_import)
+
+          marker = "import { TaraweehPanel } from './TaraweehPanel';"
+          if marker not in text:
+              raise SystemExit('Taraweeh import marker drifted')
+          text = text.replace(marker, marker + "\nimport { ThemePalettePicker } from './ThemePalettePicker';")
+
+          old = '''      <label>
+            <span>{settingsCopy[locale].palette}</span>
+            <select
+              value={settings.palette}
+              onChange={(event) => {
+                updateSettings((current) => ({
+                  ...current,
+                  palette: event.target.value as PersistedSettings['palette'],
+                }));
+              }}
+            >
+              {themePalettes.map((palette) => (
+                <option key={palette} value={palette}>
+                  {themePaletteLabels[palette]}
+                </option>
+              ))}
+            </select>
+          </label>'''
+          new = '''      <ThemePalettePicker
+            locale={locale}
+            label={settingsCopy[locale].palette}
+            selected={settings.palette}
+            onSelect={(palette) => {
+              updateSettings((current) => ({ ...current, palette }));
+            }}
+          />'''
+          if old not in text:
+              raise SystemExit('palette select block drifted')
+          path.write_text(text.replace(old, new))
+          PY
+      - name: Verify integration
+        run: |
+          npx prettier --write src/ui/SettingsScreen.tsx src/ui/ThemePalettePicker.tsx src/ui/ThemePalettePickerV160.test.ts src/theme-palette-picker.css
+          npm run lint
+          npm run typecheck
+          npx vitest run src/ui/ThemePalettePickerV160.test.ts
+      - name: Commit integrated source without helper
+        run: |
+          rm .github/workflows/v160-theme-picker-integrate.yml
+          git config user.name "SalahOS CI"
+          git config user.email "actions@users.noreply.github.com"
+          git add src/ui/SettingsScreen.tsx src/ui/ThemePalettePicker.tsx src/ui/ThemePalettePickerV160.test.ts src/theme-palette-picker.css .github/workflows/v160-theme-picker-integrate.yml
+          git commit -m "feat(theme): add palette previews and reset"
+          git push origin HEAD:v160-theme-picker
