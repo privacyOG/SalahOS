@@ -53,6 +53,9 @@ jobs:
       - name: Build Android debug APK
         run: npm run android:build
 
+      - name: Verify packaged offline Qur'an
+        run: node scripts/check-quran-native-bundle.mjs android
+
   emulator:
     if: >-
       github.event_name == 'pull_request' ||
@@ -91,6 +94,9 @@ jobs:
 
       - name: Synchronize Android application
         run: npm run android:sync
+
+      - name: Verify packaged offline Qur'an
+        run: node scripts/check-quran-native-bundle.mjs android
 
       - name: Enable KVM
         run: |
