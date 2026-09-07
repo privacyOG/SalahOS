@@ -62,8 +62,9 @@ try {
     const options = picker.locator('[data-theme-palette-option]');
     assert((await options.count()) === 10, 'Palette picker did not render all ten palettes');
     assert(
-      (await picker.locator('[data-theme-palette-option="royal-blue"]').getAttribute('aria-checked')) ===
-        'true',
+      (await picker
+        .locator('[data-theme-palette-option="royal-blue"]')
+        .getAttribute('aria-checked')) === 'true',
       'Persisted Light Blue palette was not selected',
     );
 
@@ -73,8 +74,9 @@ try {
       () => document.documentElement.dataset.palette === 'salah-classic',
     );
     assert(
-      (await picker.locator('[data-theme-palette-option="salah-classic"]').getAttribute('aria-checked')) ===
-        'true',
+      (await picker
+        .locator('[data-theme-palette-option="salah-classic"]')
+        .getAttribute('aria-checked')) === 'true',
       'Reset did not return the palette to Standard',
     );
     assert(
