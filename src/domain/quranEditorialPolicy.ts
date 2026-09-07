@@ -40,11 +40,11 @@ export function validateQuranEditorialEntry(value: unknown): QuranEditorialRegis
   const entry = value as Partial<QuranEditorialRegisterEntry>;
   assertPolicy(isNonEmptyString(entry.verseKey), 'Editorial register verse key is missing.');
   assertPolicy(
-    quranEditorialTreatments.includes(entry.treatment as QuranEditorialTreatment),
+    quranEditorialTreatments.includes(entry.treatment!),
     `Editorial treatment is invalid for ${entry.verseKey}.`,
   );
   assertPolicy(
-    quranEditorialStatuses.includes(entry.status as QuranEditorialStatus),
+    quranEditorialStatuses.includes(entry.status!),
     `Editorial status is invalid for ${entry.verseKey}.`,
   );
   assertPolicy(
