@@ -151,7 +151,10 @@ describe('Qur’an offline preparation', () => {
 
   it('returns unavailable rather than ready after an interrupted preparation', async () => {
     installCacheMock();
-    vi.stubGlobal('fetch', vi.fn(() => Promise.reject(new TypeError('offline'))));
+    vi.stubGlobal(
+      'fetch',
+      vi.fn(() => Promise.reject(new TypeError('offline'))),
+    );
     expect(await prepareQuranOffline()).toBe('unavailable');
   });
 });
