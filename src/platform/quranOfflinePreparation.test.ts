@@ -118,7 +118,9 @@ describe('Qur’an offline preparation', () => {
   it('prepares and verifies the corpus, font and shell before reporting ready', async () => {
     const stores = installCacheMock();
     const expectedDigest = Uint8Array.from(Buffer.from(manifest.sha256, 'hex')).buffer;
-    vi.stubGlobal('crypto', { subtle: { digest: vi.fn(() => Promise.resolve(expectedDigest)) } });
+    vi.stubGlobal('crypto', {
+      subtle: { digest: vi.fn(() => Promise.resolve(expectedDigest)) },
+    });
 
     const pack = completePack();
     vi.stubGlobal(
