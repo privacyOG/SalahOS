@@ -11,7 +11,7 @@ describe('v1.5.3 selected mosque location state', () => {
     expect(todayScreen).toContain("? 'saved'");
     expect(todayScreen).toContain(": 'precise'");
     expect(todayScreen).toContain('<SalahIcon name="mosques"');
-    expect(todayScreen).toContain('{directoryMosqueActive && (');
+    expect(todayScreen).toContain('directoryMosqueLocationAdopted && (');
   });
 
   it('styles only mosque and approximate states beyond the neutral base card', () => {
