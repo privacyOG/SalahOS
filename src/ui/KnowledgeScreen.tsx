@@ -188,7 +188,9 @@ export function KnowledgeScreen({ scope = 'library' }: Readonly<{ scope?: 'libra
     return scope === 'hadith'
       ? scoped.filter((entry) => entry.module === 'hadith')
       : scoped.filter(
-          (entry): entry is Exclude<IslamicKnowledgeEntry, { readonly module: 'quran' | 'hadith' }> =>
+          (
+            entry,
+          ): entry is Exclude<IslamicKnowledgeEntry, { readonly module: 'quran' | 'hadith' }> =>
             entry.module !== 'quran' && entry.module !== 'hadith',
         );
   }, [module, query, scope]);
