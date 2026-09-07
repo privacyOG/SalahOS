@@ -97,10 +97,10 @@ const labels: Readonly<
 };
 
 const hadithCopy = {
-  en: ['Isnad', 'Partial Arabic matn', 'Full text', 'Metadata unavailable'],
-  ar: ['الإسناد', 'متن عربي جزئي', 'النص الكامل', 'البيانات غير متاحة'],
-  tr: ['İsnad', 'Kısmi Arapça metin', 'Tam metin', 'Meta veri yok'],
-  id: ['Isnad', 'Matan Arab sebagian', 'Teks lengkap', 'Metadata tidak ada'],
+  en: ['Companion narrator', 'Partial Arabic matn', 'Full text', 'Metadata unavailable'],
+  ar: ['الصحابي الراوي', 'متن عربي جزئي', 'النص الكامل', 'البيانات غير متاحة'],
+  tr: ['Sahabi ravi', 'Kısmi Arapça metin', 'Tam metin', 'Meta veri yok'],
+  id: ['Perawi sahabat', 'Matan Arab sebagian', 'Teks lengkap', 'Metadata tidak ada'],
 } as const satisfies Readonly<Record<Locale, readonly [string, string, string, string]>>;
 
 const madhhabNames = {
@@ -141,7 +141,7 @@ export function HadithStage7Details({
   const related = metadata.relatedHadithIds
     .map((entryId) => getIslamicKnowledgeEntryById(entryId))
     .filter((candidate): candidate is HadithKnowledgeEntry => candidate?.module === 'hadith');
-  const [isnadLabel, excerptLabel, fullTextLabel] = hadithCopy[locale];
+  const [narratorLabel, excerptLabel, fullTextLabel] = hadithCopy[locale];
 
   return (
     <>
@@ -172,7 +172,7 @@ export function HadithStage7Details({
       </p>
       <dl className="knowledge-source-list" data-hadith-metadata>
         <div>
-          <dt>{isnadLabel}</dt>
+          <dt>{narratorLabel}</dt>
           <dd data-hadith-isnad data-knowledge-source-metadata lang="en" dir="ltr">
             {metadata.narrator} → Muhammad ﷺ
           </dd>
