@@ -1,3 +1,5 @@
+import '../knowledge-disclosures-v160.css';
+
 import type { Locale } from '../i18n/translations';
 import { BidiText } from './BidiText';
 import {
@@ -27,6 +29,9 @@ const labels: Readonly<
       supporting: string;
       madhhabViews: string;
       disagreement: string;
+      sourceReview: string;
+      englishRendering: string;
+      englishAnswer: string;
     }>
   >
 > = {
@@ -45,6 +50,9 @@ const labels: Readonly<
     supporting: 'Supporting references',
     madhhabViews: 'Four-madhhab view',
     disagreement: 'Recognised disagreement',
+    sourceReview: 'Source & review',
+    englishRendering: 'English rendering',
+    englishAnswer: 'English answer',
   },
   ar: {
     book: 'الكتاب',
@@ -61,6 +69,9 @@ const labels: Readonly<
     supporting: 'مراجع مساندة',
     madhhabViews: 'عرض المذاهب الأربعة',
     disagreement: 'الخلاف المعتبر',
+    sourceReview: 'المصدر والمراجعة',
+    englishRendering: 'صياغة إنجليزية',
+    englishAnswer: 'إجابة بالإنجليزية',
   },
   tr: {
     book: 'Kitap',
@@ -77,6 +88,9 @@ const labels: Readonly<
     supporting: 'Destekleyici kaynaklar',
     madhhabViews: 'Dört mezhep görünümü',
     disagreement: 'Geçerli ihtilaf',
+    sourceReview: 'Kaynak ve inceleme',
+    englishRendering: 'İngilizce aktarım',
+    englishAnswer: 'İngilizce yanıt',
   },
   id: {
     book: 'Kitab',
@@ -93,6 +107,9 @@ const labels: Readonly<
     supporting: 'Referensi pendukung',
     madhhabViews: 'Pandangan empat mazhab',
     disagreement: 'Perbedaan yang diakui',
+    sourceReview: 'Sumber & tinjauan',
+    englishRendering: 'Terjemahan bahasa Inggris',
+    englishAnswer: 'Jawaban bahasa Inggris',
   },
 };
 
@@ -110,6 +127,14 @@ const madhhabNames = {
   hanbali: 'Hanbali',
 } as const;
 
+function EnglishContentLabel({ label }: Readonly<{ label: string }>) {
+  return (
+    <p className="knowledge-content-language" data-knowledge-language-label="en">
+      {label}
+    </p>
+  );
+}
+
 export function HadithStage7Details({
   entry,
   locale,
@@ -126,6 +151,7 @@ export function HadithStage7Details({
   if (!metadata)
     return (
       <>
+        <EnglishContentLabel label={copy.englishRendering} />
         <p lang={entry.translationPresentation.lang} dir={entry.translationPresentation.dir}>
           {entry.text}
         </p>
@@ -163,6 +189,7 @@ export function HadithStage7Details({
       >
         {metadata.arabicExcerpt}
       </p>
+      <EnglishContentLabel label={copy.englishRendering} />
       <p
         data-hadith-translation
         lang={entry.translationPresentation.lang}
@@ -170,66 +197,6 @@ export function HadithStage7Details({
       >
         {entry.text}
       </p>
-      <dl className="knowledge-source-list" data-hadith-metadata>
-        <div>
-          <dt>{narratorLabel}</dt>
-          <dd data-hadith-isnad data-knowledge-source-metadata lang="en" dir="ltr">
-            {metadata.narrator} → Muhammad ﷺ
-          </dd>
-        </div>
-        <div>
-          <dt>{copy.book}</dt>
-          <dd
-            data-hadith-book
-            data-knowledge-source-metadata
-            lang={metadata.displayPresentation.lang}
-            dir={metadata.displayPresentation.dir}
-          >
-            {metadata.bookNumber} · {metadata.bookTitle}
-          </dd>
-        </div>
-        <div>
-          <dt>{copy.chapter}</dt>
-          <dd
-            data-hadith-chapter
-            data-knowledge-source-metadata
-            lang={metadata.displayPresentation.lang}
-            dir={metadata.displayPresentation.dir}
-          >
-            {metadata.chapterNumber} · {metadata.chapterTitle}
-          </dd>
-        </div>
-        <div>
-          <dt>{copy.hadithNumber}</dt>
-          <dd
-            data-knowledge-source-metadata
-            lang={metadata.displayPresentation.lang}
-            dir={metadata.displayPresentation.dir}
-          >
-            {entry.collection} · <BidiText>{entry.reference}</BidiText> · {metadata.inBookReference}
-          </dd>
-        </div>
-        <div>
-          <dt>{copy.grade}</dt>
-          <dd
-            data-knowledge-source-metadata
-            lang={entry.metadataPresentation.lang}
-            dir={entry.metadataPresentation.dir}
-          >
-            {entry.grade}
-          </dd>
-        </div>
-        <div>
-          <dt>{copy.gradingAuthority}</dt>
-          <dd
-            data-knowledge-source-metadata
-            lang={entry.metadataPresentation.lang}
-            dir={entry.metadataPresentation.dir}
-          >
-            {entry.grader}
-          </dd>
-        </div>
-      </dl>
       <div className="knowledge-topics" data-hadith-topics>
         <strong>{copy.topics}</strong>
         <div className="knowledge-chip-row">
@@ -266,13 +233,76 @@ export function HadithStage7Details({
           ))}
         </div>
       </div>
-      <p
-        className="knowledge-card__source-note"
-        lang={entry.metadataPresentation.lang}
-        dir={entry.metadataPresentation.dir}
-      >
-        {entry.sourceNote}
-      </p>
+      <details className="knowledge-source-disclosure" data-hadith-source-disclosure>
+        <summary>{copy.sourceReview}</summary>
+        <dl className="knowledge-source-list" data-hadith-metadata>
+          <div>
+            <dt>{narratorLabel}</dt>
+            <dd data-hadith-isnad data-knowledge-source-metadata lang="en" dir="ltr">
+              {metadata.narrator} → Muhammad ﷺ
+            </dd>
+          </div>
+          <div>
+            <dt>{copy.book}</dt>
+            <dd
+              data-hadith-book
+              data-knowledge-source-metadata
+              lang={metadata.displayPresentation.lang}
+              dir={metadata.displayPresentation.dir}
+            >
+              {metadata.bookNumber} · {metadata.bookTitle}
+            </dd>
+          </div>
+          <div>
+            <dt>{copy.chapter}</dt>
+            <dd
+              data-hadith-chapter
+              data-knowledge-source-metadata
+              lang={metadata.displayPresentation.lang}
+              dir={metadata.displayPresentation.dir}
+            >
+              {metadata.chapterNumber} · {metadata.chapterTitle}
+            </dd>
+          </div>
+          <div>
+            <dt>{copy.hadithNumber}</dt>
+            <dd
+              data-knowledge-source-metadata
+              lang={metadata.displayPresentation.lang}
+              dir={metadata.displayPresentation.dir}
+            >
+              {entry.collection} · <BidiText>{entry.reference}</BidiText> · {metadata.inBookReference}
+            </dd>
+          </div>
+          <div>
+            <dt>{copy.grade}</dt>
+            <dd
+              data-knowledge-source-metadata
+              lang={entry.metadataPresentation.lang}
+              dir={entry.metadataPresentation.dir}
+            >
+              {entry.grade}
+            </dd>
+          </div>
+          <div>
+            <dt>{copy.gradingAuthority}</dt>
+            <dd
+              data-knowledge-source-metadata
+              lang={entry.metadataPresentation.lang}
+              dir={entry.metadataPresentation.dir}
+            >
+              {entry.grader}
+            </dd>
+          </div>
+        </dl>
+        <p
+          className="knowledge-card__source-note"
+          lang={entry.metadataPresentation.lang}
+          dir={entry.metadataPresentation.dir}
+        >
+          {entry.sourceNote}
+        </p>
+      </details>
     </>
   );
 }
@@ -285,69 +315,19 @@ export function FiqhStage7Details({
   const metadata = getFiqhStage7Metadata(entry.id);
   if (!metadata)
     return (
-      <p lang={entry.metadataPresentation.lang} dir={entry.metadataPresentation.dir}>
-        {entry.answer}
-      </p>
+      <>
+        <EnglishContentLabel label={copy.englishAnswer} />
+        <p lang={entry.metadataPresentation.lang} dir={entry.metadataPresentation.dir}>
+          {entry.answer}
+        </p>
+      </>
     );
   return (
     <>
+      <EnglishContentLabel label={copy.englishAnswer} />
       <p lang={entry.metadataPresentation.lang} dir={entry.metadataPresentation.dir}>
         {entry.answer}
       </p>
-      <dl className="knowledge-source-list" data-fiqh-audit>
-        <div>
-          <dt>{copy.scholar}</dt>
-          <dd
-            data-knowledge-source-metadata
-            lang={entry.metadataPresentation.lang}
-            dir={entry.metadataPresentation.dir}
-          >
-            {entry.scholar}
-          </dd>
-        </div>
-        <div>
-          <dt>{copy.originalSources}</dt>
-          <dd
-            data-knowledge-source-metadata
-            lang={entry.metadataPresentation.lang}
-            dir={entry.metadataPresentation.dir}
-          >
-            {entry.sourceTitle}
-          </dd>
-        </div>
-        <div>
-          <dt>{copy.topic}</dt>
-          <dd
-            data-fiqh-topic
-            data-knowledge-source-metadata
-            lang={entry.metadataPresentation.lang}
-            dir={entry.metadataPresentation.dir}
-          >
-            {metadata.topic}
-          </dd>
-        </div>
-        <div>
-          <dt>{copy.reviewed}</dt>
-          <dd
-            data-knowledge-source-metadata
-            lang={entry.metadataPresentation.lang}
-            dir={entry.metadataPresentation.dir}
-          >
-            {metadata.reviewedAt}
-          </dd>
-        </div>
-        <div>
-          <dt>{copy.supporting}</dt>
-          <dd
-            data-fiqh-supporting
-            data-knowledge-source-metadata
-            lang={entry.metadataPresentation.lang}
-            dir={entry.metadataPresentation.dir}
-          >
-            {metadata.supportingReferences.join(' · ')}
-          </dd>
-        </div>
-      </dl>
       <section className="knowledge-fiqh" data-fiqh-four-madhhab>
         <h4>{copy.madhhabViews}</h4>
         <div className="knowledge-fiqh-grid">
@@ -378,13 +358,70 @@ export function FiqhStage7Details({
           </p>
         </div>
       ) : null}
-      <p
-        className="knowledge-card__source-note"
-        lang={entry.metadataPresentation.lang}
-        dir={entry.metadataPresentation.dir}
-      >
-        {entry.sourceNote}
-      </p>
+      <details className="knowledge-source-disclosure" data-fiqh-source-disclosure>
+        <summary>{copy.sourceReview}</summary>
+        <dl className="knowledge-source-list" data-fiqh-audit>
+          <div>
+            <dt>{copy.scholar}</dt>
+            <dd
+              data-knowledge-source-metadata
+              lang={entry.metadataPresentation.lang}
+              dir={entry.metadataPresentation.dir}
+            >
+              {entry.scholar}
+            </dd>
+          </div>
+          <div>
+            <dt>{copy.originalSources}</dt>
+            <dd
+              data-knowledge-source-metadata
+              lang={entry.metadataPresentation.lang}
+              dir={entry.metadataPresentation.dir}
+            >
+              {entry.sourceTitle}
+            </dd>
+          </div>
+          <div>
+            <dt>{copy.topic}</dt>
+            <dd
+              data-fiqh-topic
+              data-knowledge-source-metadata
+              lang={entry.metadataPresentation.lang}
+              dir={entry.metadataPresentation.dir}
+            >
+              {metadata.topic}
+            </dd>
+          </div>
+          <div>
+            <dt>{copy.reviewed}</dt>
+            <dd
+              data-knowledge-source-metadata
+              lang={entry.metadataPresentation.lang}
+              dir={entry.metadataPresentation.dir}
+            >
+              {metadata.reviewedAt}
+            </dd>
+          </div>
+          <div>
+            <dt>{copy.supporting}</dt>
+            <dd
+              data-fiqh-supporting
+              data-knowledge-source-metadata
+              lang={entry.metadataPresentation.lang}
+              dir={entry.metadataPresentation.dir}
+            >
+              {metadata.supportingReferences.join(' · ')}
+            </dd>
+          </div>
+        </dl>
+        <p
+          className="knowledge-card__source-note"
+          lang={entry.metadataPresentation.lang}
+          dir={entry.metadataPresentation.dir}
+        >
+          {entry.sourceNote}
+        </p>
+      </details>
     </>
   );
 }
