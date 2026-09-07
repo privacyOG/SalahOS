@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
-import { islamicKnowledgeEntries, type QuranKnowledgeEntry } from './islamicKnowledge';
+import { islamicKnowledgeEntries } from './islamicKnowledge';
 
 interface OfflinePackAyah {
   readonly ayah: number;
@@ -19,13 +19,18 @@ interface OfflinePack {
   readonly surahs: readonly OfflinePackSurah[];
 }
 
+type CuratedQuranEntry = Extract<
+  (typeof islamicKnowledgeEntries)[number],
+  { readonly module: 'quran' }
+>;
+
 const pack = JSON.parse(
   readFileSync(new URL('../../public/data/quran/quran-offline-pack.json', import.meta.url), 'utf8'),
 ) as OfflinePack;
 
-function quranEntries(): readonly QuranKnowledgeEntry[] {
+function quranEntries(): readonly CuratedQuranEntry[] {
   return islamicKnowledgeEntries.filter(
-    (entry): entry is QuranKnowledgeEntry => entry.module === 'quran',
+    (entry): entry is CuratedQuranEntry => entry.module === 'quran',
   );
 }
 
