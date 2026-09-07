@@ -73,7 +73,7 @@ try {
       (await screen
         .locator('[data-knowledge-curated-size]')
         .getAttribute('data-knowledge-curated-size')) === '3',
-      'Governed Library scope size is not three entries',
+      'Scoped Fiqh & questions catalogue size is not three entries',
     );
     assert(
       (await screen.locator('.knowledge-card').count()) === 3 &&
@@ -123,6 +123,12 @@ try {
     );
     screen = page.locator('[data-knowledge-screen]');
     await screen.waitFor({ state: 'visible' });
+    assert(
+      (await screen
+        .locator('[data-knowledge-curated-size]')
+        .getAttribute('data-knowledge-curated-size')) === '3',
+      'Scoped Hadith catalogue size is not three entries',
+    );
     assert(
       (await screen.locator('.knowledge-card').count()) === 3 &&
         (await screen.locator('[data-knowledge-module="hadith"]').count()) === 3,
