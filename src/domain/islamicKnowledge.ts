@@ -87,7 +87,7 @@ export const islamicKnowledgeEntries = Object.freeze([
     arabic:
       'إِنَّنِي أَنَا اللَّهُ لَا إِلَٰهَ إِلَّا أَنَا فَاعْبُدْنِي وَأَقِمِ الصَّلَاةَ لِذِكْرِي',
     translation:
-      'Lo! I, even I, am Allah. There is no God save Me. So serve Me and establish worship for My remembrance.',
+      'Lo! I, even I, am Allah, There is no Allah save Me. So serve Me and establish worship for My remembrance.',
     reference: 'Qur’an 20:14',
     source: 'Arabic Uthmani text · English translation: M. M. Pickthall (1930)',
     sourceIds: quranReadingSources,
