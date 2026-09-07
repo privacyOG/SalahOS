@@ -1,7 +1,8 @@
 import { Component, type ErrorInfo, type ReactNode } from 'react';
 
 function routeFailureCopy(): Readonly<{ message: string; retry: string }> {
-  const language = typeof document === 'undefined' ? 'en' : document.documentElement.lang.toLowerCase();
+  const language =
+    typeof document === 'undefined' ? 'en' : document.documentElement.lang.toLowerCase();
   if (language.startsWith('ar')) {
     return { message: 'تعذر تحميل هذا القسم.', retry: 'إعادة التحميل والمحاولة مجدداً' };
   }
@@ -18,17 +19,17 @@ export class LazyRouteBoundary extends Component<
   Readonly<{ children: ReactNode }>,
   Readonly<{ failed: boolean }>
 > {
-  public state: Readonly<{ failed: boolean }> = { failed: false };
+  public override state: Readonly<{ failed: boolean }> = { failed: false };
 
   public static getDerivedStateFromError(): Readonly<{ failed: boolean }> {
     return { failed: true };
   }
 
-  public componentDidCatch(error: Error, info: ErrorInfo): void {
+  public override componentDidCatch(error: Error, info: ErrorInfo): void {
     console.error('SalahOS deferred surface failed to load.', error, info.componentStack);
   }
 
-  public render(): ReactNode {
+  public override render(): ReactNode {
     if (!this.state.failed) return this.props.children;
     const copy = routeFailureCopy();
     return (
