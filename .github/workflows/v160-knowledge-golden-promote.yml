@@ -1,0 +1,41 @@
+name: V1.6.0 Knowledge Golden Promotion
+
+on:
+  push:
+    branches:
+      - v160-knowledge-disclosure-language
+    paths:
+      - .github/workflows/v160-knowledge-golden-promote.yml
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v160-knowledge-disclosure-language
+          fetch-depth: 0
+      - name: Download reviewed Visual artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          rm -rf /tmp/salahos-v160-golden
+          mkdir -p /tmp/salahos-v160-golden
+          gh run download 34162568085 \
+            --repo privacyOG/SalahOS \
+            --name visual-regression-2ef22fbc5fdf889d5f7902390183734b09c3679b \
+            --dir /tmp/salahos-v160-golden
+          echo '7508dec3e1d7dd15af387bf59857ea7bc18ba76d5649e52266e8700af3792675  /tmp/salahos-v160-golden/golden-knowledge-phone-ar-dark-actual.png' | sha256sum --check --strict
+      - name: Publish clean reviewed golden
+        run: |
+          cp /tmp/salahos-v160-golden/golden-knowledge-phone-ar-dark-actual.png tests/golden/knowledge-phone-ar-dark.png
+          rm .github/workflows/v160-knowledge-golden-promote.yml
+          git config user.name 'SalahOS CI'
+          git config user.email 'actions@users.noreply.github.com'
+          git add tests/golden/knowledge-phone-ar-dark.png .github/workflows/v160-knowledge-golden-promote.yml
+          git commit -m 'test(v1.6.0): accept reviewed Arabic Knowledge golden'
+          git push origin HEAD:v160-knowledge-disclosure-language
