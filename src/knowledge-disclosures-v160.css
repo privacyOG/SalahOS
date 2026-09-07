@@ -56,6 +56,12 @@
   margin-block: 0.75rem 0.2rem;
 }
 
+@media (min-width: 761px) {
+  .knowledge-screen p:not(.knowledge-content-language) {
+    max-inline-size: 72ch;
+  }
+}
+
 @media (max-width: 760px) {
   .knowledge-screen .knowledge-hero {
     padding: 0.85rem 0.9rem;
