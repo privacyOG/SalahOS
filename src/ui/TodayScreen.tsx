@@ -6,7 +6,6 @@ import '../today-night.css';
 
 import {
   applyAustralianMosqueCongregationTimes,
-  publishedAustralianMosqueCongregationMinutes,
   publishedAustralianMosqueJumuahSessions,
 } from '../domain/australianMosquePrayerContext';
 import { resolvePrayerDashboardTimeZone } from '../domain/dashboard';
@@ -115,9 +114,6 @@ const stage8TodayCopy: Readonly<
       noCurrentPrayer: string;
       fajrEnds: string;
       nonPrayerTime: string;
-      notApplicable: string;
-      iqamahNotPublished: string;
-      mosquePublishedIqamah: string;
       moreToday: string;
       moreTodayHint: string;
     }>
@@ -136,9 +132,6 @@ const stage8TodayCopy: Readonly<
     noCurrentPrayer: 'No current obligatory prayer',
     fajrEnds: 'Fajr ends',
     nonPrayerTime: 'Non-prayer time',
-    notApplicable: 'Not applicable',
-    iqamahNotPublished: 'Not published',
-    mosquePublishedIqamah: 'Iqamah/Jama’ah from the selected mosque listing where published',
     moreToday: 'More today',
     moreTodayHint: 'Solar times, Jumu’ah, shortcuts and calculation details',
   },
@@ -155,9 +148,6 @@ const stage8TodayCopy: Readonly<
     noCurrentPrayer: 'لا توجد صلاة مفروضة حالية',
     fajrEnds: 'ينتهي وقت الفجر',
     nonPrayerTime: 'ليس وقت صلاة مفروضة',
-    notApplicable: 'لا ينطبق',
-    iqamahNotPublished: 'غير منشور',
-    mosquePublishedIqamah: 'الإقامة/الجماعة من بيانات المسجد المختار عند نشرها',
     moreToday: 'المزيد لليوم',
     moreTodayHint: 'الشروق والغروب والجمعة والاختصارات وتفاصيل الحساب',
   },
@@ -174,9 +164,6 @@ const stage8TodayCopy: Readonly<
     noCurrentPrayer: 'Şu anda geçerli farz namaz yok',
     fajrEnds: 'Sabah vakti biter',
     nonPrayerTime: 'Farz namaz vakti değildir',
-    notApplicable: 'Uygulanmaz',
-    iqamahNotPublished: 'Yayımlanmamış',
-    mosquePublishedIqamah: 'Yayımlandığında seçili cami kaydındaki kamet/cemaat saati',
     moreToday: 'Bugün daha fazlası',
     moreTodayHint: 'Güneş vakitleri, Cuma, kısayollar ve hesaplama ayrıntıları',
   },
@@ -193,9 +180,6 @@ const stage8TodayCopy: Readonly<
     noCurrentPrayer: 'Tidak ada salat wajib yang sedang berlangsung',
     fajrEnds: 'Waktu Subuh berakhir',
     nonPrayerTime: 'Bukan waktu salat wajib',
-    notApplicable: 'Tidak berlaku',
-    iqamahNotPublished: 'Tidak dipublikasikan',
-    mosquePublishedIqamah: 'Iqamah/jamaah dari daftar masjid terpilih bila dipublikasikan',
     moreToday: 'Lainnya hari ini',
     moreTodayHint: 'Waktu matahari, Jumat, pintasan, dan detail perhitungan',
   },
@@ -246,7 +230,6 @@ export function TodayScreen() {
     selectedDirectoryContext !== null && settings.prayerSourceMode !== 'local-mosque'
       ? selectedDirectoryContext
       : null;
-  const directoryMosqueActive = activeDirectoryMosque !== null;
   const mobileThemeConfig = useMobilePrayerThemeConfig();
   const weather = useMobilePrayerWeather();
   const modules = mobileThemeConfig.moduleVisibility;
@@ -475,13 +458,6 @@ export function TodayScreen() {
     prayerBoardData?.nextPrayer === null || prayerBoardData?.nextPrayer === undefined
       ? '—'
       : formatLocalTime(prayerBoardData.nextPrayer.startLocalMinutes, locale, settings.timeFormat);
-  const nextPrayerIqamahMinutes = prayerBoardData?.nextPrayer?.iqamahLocalMinutes ?? null;
-  const nextPrayerIqamah =
-    nextPrayerIqamahMinutes === null
-      ? directoryMosqueActive
-        ? uxCopy.iqamahNotPublished
-        : translate(locale, 'noIqamah')
-      : formatLocalTime(nextPrayerIqamahMinutes, locale, settings.timeFormat);
   const contextLabel = selectedMosqueFarAway
     ? (prayerBoardData?.timeZone ??
       settings.location?.timeZone ??
@@ -629,10 +605,6 @@ export function TodayScreen() {
                 <dt>{translate(locale, 'prayerStart')}</dt>
                 <dd>{nextPrayerStart}</dd>
               </div>
-              <div>
-                <dt>{translate(locale, 'iqamah')}</dt>
-                <dd>{nextPrayerIqamah}</dd>
-              </div>
             </dl>
           </section>
 
@@ -734,11 +706,6 @@ export function TodayScreen() {
               <span>
                 {translate(locale, 'sourceMode')} ·{' '}
                 {translate(locale, sourceTranslationKeys[prayerBoardData.sourceMode])}
-                {directoryMosqueActive && (
-                  <small data-mosque-iqamah-source="directory-published">
-                    {uxCopy.mosquePublishedIqamah}
-                  </small>
-                )}
                 {activeDirectoryMosque !== null && selectedMosqueDistance !== null && (
                   <small data-selected-mosque-distance={selectedMosqueFarAway ? 'far' : 'near'}>
                     <BidiText>{activeDirectoryMosque.mosqueName}</BidiText> ·{' '}
@@ -756,7 +723,6 @@ export function TodayScreen() {
               <div className="today-prayer-row today-prayer-row--header" role="row">
                 <span role="columnheader">{translate(locale, 'dailyPrayers')}</span>
                 <span role="columnheader">{translate(locale, 'prayerStart')}</span>
-                <span role="columnheader">{translate(locale, 'iqamah')}</span>
               </div>
               {prayerBoardData.prayers.map((prayer) => {
                 const sourcePrayer = sourcedDashboard.prayers.find(
@@ -779,13 +745,6 @@ export function TodayScreen() {
                         prayerBoardData.sourceMode,
                       );
                 const isSunrise = prayer.name === 'sunrise';
-                const publishedIqamahMinutes =
-                  activeDirectoryMosque !== null && !isSunrise
-                    ? publishedAustralianMosqueCongregationMinutes(
-                        activeDirectoryMosque.prayerTimes,
-                        prayer.name,
-                      )
-                    : [];
                 const stateLabel = isSunrise
                   ? uxCopy.fajrEnds
                   : prayer.isCurrent
@@ -793,17 +752,6 @@ export function TodayScreen() {
                     : prayer.isNext
                       ? translate(locale, 'nextPrayer')
                       : null;
-                const iqamahDisplay = isSunrise
-                  ? uxCopy.notApplicable
-                  : publishedIqamahMinutes.length > 0
-                    ? publishedIqamahMinutes
-                        .map((minutes) => formatLocalTime(minutes, locale, settings.timeFormat))
-                        .join(' / ')
-                    : prayer.iqamahLocalMinutes === null
-                      ? directoryMosqueActive
-                        ? uxCopy.iqamahNotPublished
-                        : translate(locale, 'noIqamah')
-                      : formatLocalTime(prayer.iqamahLocalMinutes, locale, settings.timeFormat);
                 return (
                   <div
                     className={`today-prayer-row${!isSunrise && prayer.isCurrent ? ' is-current' : ''}${
@@ -811,9 +759,6 @@ export function TodayScreen() {
                     }${isSunrise ? ' today-prayer-row--sunrise' : ''}`}
                     role="row"
                     data-today-prayer-name={prayer.name}
-                    data-directory-published-iqamah={
-                      publishedIqamahMinutes.length > 0 ? 'true' : 'false'
-                    }
                     key={prayer.name}
                   >
                     <div className="today-prayer-row__name" role="cell">
@@ -841,9 +786,6 @@ export function TodayScreen() {
                       {prayer.startLocalMinutes === null
                         ? '—'
                         : formatLocalTime(prayer.startLocalMinutes, locale, settings.timeFormat)}
-                    </strong>
-                    <strong className="today-prayer-row__time today-prayer-row__iqamah" role="cell">
-                      {iqamahDisplay}
                     </strong>
                   </div>
                 );
