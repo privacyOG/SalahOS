@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 const details = readFileSync(new URL('./KnowledgeStage7Details.tsx', import.meta.url), 'utf8');
+const screen = readFileSync(new URL('./KnowledgeScreen.tsx', import.meta.url), 'utf8');
 const css = readFileSync(new URL('../knowledge-disclosures-v160.css', import.meta.url), 'utf8');
 
 describe('V1.6.0 compact Knowledge reading', () => {
@@ -25,6 +26,8 @@ describe('V1.6.0 compact Knowledge reading', () => {
     expect(details).toContain('dir={entry.translationPresentation.dir}');
     expect(details).toContain('lang={entry.metadataPresentation.lang}');
     expect(details).toContain('dir={entry.metadataPresentation.dir}');
+    expect(screen.match(/<h3 lang="en" dir="ltr">/gu)?.length).toBe(2);
+    expect(screen).toContain('<p lang="en" dir="ltr">');
   });
 
   it('makes the heading compact and disclosures keyboard-visible with semantic tokens', () => {
