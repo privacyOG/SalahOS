@@ -1,0 +1,85 @@
+name: V1.6.0 UI Patch Helper
+
+on:
+  pull_request:
+    branches: ['codex/v1.6.0-implementation']
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.event.pull_request.head.ref == 'codex/v1.6.0-ui-patch'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - name: Checkout patch branch
+        uses: actions/checkout@v4
+        with:
+          ref: codex/v1.6.0-ui-patch
+          fetch-depth: 0
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+      - name: Remove Today Iqamah presentation at source
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          const path = 'src/ui/TodayScreen.tsx';
+          let source = fs.readFileSync(path, 'utf8');
+          const replacements = [
+            [
+              `import {\n  applyAustralianMosqueCongregationTimes,\n  publishedAustralianMosqueCongregationMinutes,\n  publishedAustralianMosqueJumuahSessions,\n} from '../domain/australianMosquePrayerContext';`,
+              `import {\n  applyAustralianMosqueCongregationTimes,\n  publishedAustralianMosqueJumuahSessions,\n} from '../domain/australianMosquePrayerContext';`,
+            ],
+            [`  const directoryMosqueActive = activeDirectoryMosque !== null;\n`, ``],
+            [
+              `  const nextPrayerIqamahMinutes = prayerBoardData?.nextPrayer?.iqamahLocalMinutes ?? null;\n  const nextPrayerIqamah =\n    nextPrayerIqamahMinutes === null\n      ? directoryMosqueActive\n        ? uxCopy.iqamahNotPublished\n        : translate(locale, 'noIqamah')\n      : formatLocalTime(nextPrayerIqamahMinutes, locale, settings.timeFormat);\n`,
+              ``,
+            ],
+            [
+              `              <div>\n                <dt>{translate(locale, 'iqamah')}</dt>\n                <dd>{nextPrayerIqamah}</dd>\n              </div>\n`,
+              ``,
+            ],
+            [
+              `                {directoryMosqueActive && (\n                  <small data-mosque-iqamah-source="directory-published">\n                    {uxCopy.mosquePublishedIqamah}\n                  </small>\n                )}\n`,
+              ``,
+            ],
+            [`                <span role="columnheader">{translate(locale, 'iqamah')}</span>\n`, ``],
+            [
+              `                const publishedIqamahMinutes =\n                  activeDirectoryMosque !== null && !isSunrise\n                    ? publishedAustralianMosqueCongregationMinutes(\n                        activeDirectoryMosque.prayerTimes,\n                        prayer.name,\n                      )\n                    : [];\n`,
+              ``,
+            ],
+            [
+              `                const iqamahDisplay = isSunrise\n                  ? uxCopy.notApplicable\n                  : publishedIqamahMinutes.length > 0\n                    ? publishedIqamahMinutes\n                        .map((minutes) => formatLocalTime(minutes, locale, settings.timeFormat))\n                        .join(' / ')\n                    : prayer.iqamahLocalMinutes === null\n                      ? directoryMosqueActive\n                        ? uxCopy.iqamahNotPublished\n                        : translate(locale, 'noIqamah')\n                      : formatLocalTime(prayer.iqamahLocalMinutes, locale, settings.timeFormat);\n`,
+              ``,
+            ],
+            [
+              `                    data-directory-published-iqamah={\n                      publishedIqamahMinutes.length > 0 ? 'true' : 'false'\n                    }\n`,
+              ``,
+            ],
+            [
+              `                    <strong className="today-prayer-row__time today-prayer-row__iqamah" role="cell">\n                      {iqamahDisplay}\n                    </strong>\n`,
+              ``,
+            ],
+          ];
+          for (const [from, to] of replacements) {
+            if (!source.includes(from)) throw new Error(`Expected Today block not found:\n${from}`);
+            source = source.replace(from, to);
+          }
+          fs.writeFileSync(path, source);
+          NODE
+          npx prettier --write src/ui/TodayScreen.tsx src/ui/TodayIqamahRemovalV160.test.ts
+      - name: Remove one-shot helper and commit patch
+        run: |
+          rm .github/workflows/v160-ui-patch-helper.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src/ui/TodayScreen.tsx src/ui/TodayIqamahRemovalV160.test.ts .github/workflows/v160-ui-patch-helper.yml
+          git diff --cached --check
+          git commit -m "fix(today): remove Iqamah presentation from Today at source"
+          git push origin HEAD:codex/v1.6.0-ui-patch
