@@ -50,6 +50,9 @@ jobs:
       - name: Verify packaged Adhan audio in iOS bundle
         run: node scripts/check-adhan-audio-native-bundle.mjs ios
 
+      - name: Verify packaged offline Qur'an in iOS bundle
+        run: node scripts/check-quran-native-bundle.mjs ios
+
       - name: Build iOS Simulator application
         env:
           DERIVED_DATA: ${{ runner.temp }}/SalahOSDerivedData
