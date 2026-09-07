@@ -27,11 +27,11 @@ jobs:
           npm run lint
           npm run typecheck
           npx vitest run src/ui/KnowledgeDisclosureV160.test.ts src/ui/KnowledgeTextDirection.test.tsx
-      - name: Publish clean formatted commit
+      - name: Publish clean formatted branch
         run: |
           rm .github/workflows/v160-knowledge-format.yml
           git config user.name "SalahOS CI"
           git config user.email "actions@users.noreply.github.com"
           git add src/ui/KnowledgeStage7Details.tsx .github/workflows/v160-knowledge-format.yml
           git commit -m "style(knowledge): apply canonical formatting"
-          git push origin HEAD:v160-knowledge-disclosure-language
+          git push origin HEAD:refs/heads/v160-knowledge-disclosure-language-clean
