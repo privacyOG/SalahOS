@@ -1,5 +1,7 @@
 import { Fragment, useEffect, useMemo, useState } from 'react';
 
+import '../quran-reader-disclosures.css';
+
 import {
   firstQuranOfflineAyahInJuz,
   firstQuranOfflineAyahOnPage,
@@ -90,6 +92,10 @@ type QuranReaderCopy = Readonly<{
   ayah: string;
   selectedAyah: string;
   quran: string;
+  navigation: string;
+  readingPreferences: string;
+  backToSearch: string;
+  pageGroupingNote: string;
   provenance: string;
 }>;
 
@@ -149,6 +155,11 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     ayah: 'Ayah',
     selectedAyah: 'Selected ayah actions',
     quran: 'Qur’an',
+    navigation: 'Navigation',
+    readingPreferences: 'Reading preferences',
+    backToSearch: 'Back to search results',
+    pageGroupingNote:
+      'Groups ayat by the source Mushaf page number in the packaged corpus; this is not a facsimile page.',
     provenance: 'Uthmani Arabic text · M. M. Pickthall (1930) · packaged offline corpus',
   },
   ar: {
@@ -204,6 +215,11 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     ayah: 'الآية',
     selectedAyah: 'إجراءات الآية المحددة',
     quran: 'القرآن',
+    navigation: 'التنقل',
+    readingPreferences: 'تفضيلات القراءة',
+    backToSearch: 'العودة إلى نتائج البحث',
+    pageGroupingNote:
+      'تُجمع الآيات حسب رقم صفحة المصحف في المصدر المحفوظ؛ وهذا العرض ليس صورة مطابقة لصفحة المصحف.',
     provenance: 'النص العربي العثماني · ترجمة م. م. بكتال (1930) · مجموعة محفوظة دون اتصال',
   },
   tr: {
@@ -259,6 +275,11 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     ayah: 'Ayet',
     selectedAyah: 'Seçili ayet işlemleri',
     quran: 'Kur’an',
+    navigation: 'Gezinme',
+    readingPreferences: 'Okuma tercihleri',
+    backToSearch: 'Arama sonuçlarına dön',
+    pageGroupingNote:
+      'Ayetleri paketlenmiş kaynaktaki mushaf sayfa numarasına göre gruplar; bu görünüm tıpkıbasım bir mushaf sayfası değildir.',
     provenance: 'Osmanî Arapça metin · M. M. Pickthall (1930) · çevrimdışı paketlenmiş külliyat',
   },
   id: {
@@ -314,6 +335,11 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     ayah: 'Ayat',
     selectedAyah: 'Tindakan ayat terpilih',
     quran: 'Qur’an',
+    navigation: 'Navigasi',
+    readingPreferences: 'Preferensi membaca',
+    backToSearch: 'Kembali ke hasil pencarian',
+    pageGroupingNote:
+      'Mengelompokkan ayat berdasarkan nomor halaman mushaf pada sumber terkemas; tampilan ini bukan faksimile halaman mushaf.',
     provenance: 'Teks Arab Utsmani · M. M. Pickthall (1930) · korpus luring terkemas',
   },
 };
@@ -418,6 +444,7 @@ export function QuranOfflineReader({
   const [juzJump, setJuzJump] = useState(1);
   const [mushafPageJump, setMushafPageJump] = useState(1);
   const [search, setSearch] = useState('');
+  const [searchReturnQuery, setSearchReturnQuery] = useState<string | null>(null);
   const [bookmarksOnly, setBookmarksOnly] = useState(false);
   const [shareStatus, setShareStatus] = useState('');
   const [activeAyahKey, setActiveAyahKey] = useState(initialVerse(preferences, initialVerseKey));
@@ -451,6 +478,7 @@ export function QuranOfflineReader({
     if (!target) return;
     setBookmarksOnly(false);
     setSearch('');
+    setSearchReturnQuery(null);
     setSelectedSurah(target.surah.surah);
     setVirtualTargetAyahKey(initialVerseKey);
     setCurrentPage(target.ayah.page);
@@ -515,9 +543,14 @@ export function QuranOfflineReader({
     onPreferencesChange({ ...preferences, ...patch });
   };
 
-  const jumpToVerse = (verseKey: string): void => {
+  const jumpToVerse = (verseKey: string, preserveSearchContext = false): void => {
     const parsed = parseQuranVerseKey(verseKey);
     if (!parsed) return;
+    if (preserveSearchContext && search.trim().length > 0) {
+      setSearchReturnQuery(search);
+    } else {
+      setSearchReturnQuery(null);
+    }
     setBookmarksOnly(false);
     setSearch('');
     setSelectedSurah(parsed.surah);
@@ -544,6 +577,7 @@ export function QuranOfflineReader({
     setResumeHighlightKey(null);
     setBookmarksOnly(false);
     setSearch('');
+    setSearchReturnQuery(null);
     if (first) {
       setCurrentPage(first.page);
       setActiveAyahKey(first.key);
@@ -556,6 +590,7 @@ export function QuranOfflineReader({
     setCurrentPage(nextPage);
     setBookmarksOnly(false);
     setSearch('');
+    setSearchReturnQuery(null);
     const first = allResults.find((result) => result.ayah.page === nextPage);
     if (first) {
       setSelectedSurah(first.surah.surah);
@@ -604,6 +639,7 @@ export function QuranOfflineReader({
             onClick={() => {
               setBookmarksOnly((current) => !current);
               setSearch('');
+              setSearchReturnQuery(null);
             }}
           >
             {bookmarksOnly
@@ -656,157 +692,173 @@ export function QuranOfflineReader({
                 onChange={(event) => {
                   setSearch(event.target.value);
                   setBookmarksOnly(false);
+                  setSearchReturnQuery(null);
                 }}
               />
             </label>
-            <QuranSurahIndex
-              pack={pack}
-              selectedSurah={selectedSurah}
-              searchLabel={labels.surahSearch}
-              searchPlaceholder={labels.surahSearchPlaceholder}
-              ayahCountLabel={labels.ayatLabel}
-              revelationLabel={{ meccan: labels.meccan, medinan: labels.medinan }}
-              onSelect={selectSurah}
-            />
-          </div>
-
-          <div className="quran-jump-navigation" data-quran-jump-navigation>
-            <label>
-              <span>{labels.juz}</span>
-              <input
-                type="number"
-                min={1}
-                max={30}
-                value={juzJump}
-                onChange={(event) => {
-                  setJuzJump(Number(event.target.value));
-                }}
-              />
-              <button
-                type="button"
-                onClick={() => {
-                  const target = firstQuranOfflineAyahInJuz(pack, juzJump);
-                  if (target) jumpToVerse(target.ayah.key);
-                }}
-              >
-                {labels.go}
-              </button>
-            </label>
-            <label>
-              <span>{labels.mushafPage}</span>
-              <input
-                type="number"
-                min={1}
-                max={604}
-                value={mushafPageJump}
-                onChange={(event) => {
-                  setMushafPageJump(Number(event.target.value));
-                }}
-              />
-              <button
-                type="button"
-                onClick={() => {
-                  const target = firstQuranOfflineAyahOnPage(pack, mushafPageJump);
-                  if (target) jumpToVerse(target.ayah.key);
-                }}
-              >
-                {labels.go}
-              </button>
-            </label>
-          </div>
-
-          <div className="quran-offline-reader__reading-controls" data-quran-reading-controls>
-            <label>
-              <span>{labels.translation}</span>
-              <select
-                data-quran-translation-mode
-                value={preferences.translationMode}
-                onChange={(event) => {
-                  persistPatch({ translationMode: event.target.value as QuranTranslationMode });
-                }}
-              >
-                <option value="pickthall-1930">{labels.pickthall}</option>
-                <option value="none">{labels.arabicOnly}</option>
-              </select>
-            </label>
-            <label>
-              <span>{labels.arabicFont}</span>
-              <select
-                data-quran-font-select
-                value={preferences.arabicFont}
-                onChange={(event) => {
-                  persistPatch({ arabicFont: event.target.value as QuranArabicFont });
-                }}
-              >
-                <option value="amiri-quran">{labels.fontAmiri}</option>
-                <option value="system">{labels.fontSystem}</option>
-              </select>
-            </label>
-            <label>
-              <span>{labels.fontSize}</span>
-              <select
-                data-quran-size-select
-                value={preferences.fontScale}
-                onChange={(event) => {
-                  persistPatch({ fontScale: event.target.value as QuranFontScale });
-                }}
-              >
-                <option value="compact">{labels.sizeCompact}</option>
-                <option value="comfortable">{labels.sizeComfortable}</option>
-                <option value="large">{labels.sizeLarge}</option>
-                <option value="xlarge">{labels.sizeXLarge}</option>
-              </select>
-            </label>
-            <fieldset>
-              <legend>{labels.readingMode}</legend>
-              <div className="quran-reading-mode" role="group" aria-label={labels.readingMode}>
-                {(
-                  [
-                    ['list', labels.listMode],
-                    ['page', labels.pageMode],
-                  ] as const
-                ).map(([mode, label]) => (
-                  <button
-                    type="button"
-                    key={mode}
-                    aria-pressed={preferences.readingMode === mode}
-                    data-quran-reading-mode={mode}
-                    onClick={() => {
-                      persistPatch({ readingMode: mode });
-                    }}
-                  >
-                    {label}
-                  </button>
-                ))}
+            <details className="quran-reader-disclosure" data-quran-navigation-disclosure>
+              <summary>{labels.navigation}</summary>
+              <div className="quran-reader-disclosure__content">
+                <QuranSurahIndex
+                  pack={pack}
+                  selectedSurah={selectedSurah}
+                  searchLabel={labels.surahSearch}
+                  searchPlaceholder={labels.surahSearchPlaceholder}
+                  ayahCountLabel={labels.ayatLabel}
+                  revelationLabel={{ meccan: labels.meccan, medinan: labels.medinan }}
+                  onSelect={selectSurah}
+                />
+                <div className="quran-jump-navigation" data-quran-jump-navigation>
+                  <label>
+                    <span>{labels.juz}</span>
+                    <input
+                      type="number"
+                      min={1}
+                      max={30}
+                      value={juzJump}
+                      onChange={(event) => {
+                        setJuzJump(Number(event.target.value));
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const target = firstQuranOfflineAyahInJuz(pack, juzJump);
+                        if (target) jumpToVerse(target.ayah.key);
+                      }}
+                    >
+                      {labels.go}
+                    </button>
+                  </label>
+                  <label>
+                    <span>{labels.mushafPage}</span>
+                    <input
+                      type="number"
+                      min={1}
+                      max={604}
+                      value={mushafPageJump}
+                      onChange={(event) => {
+                        setMushafPageJump(Number(event.target.value));
+                      }}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => {
+                        const target = firstQuranOfflineAyahOnPage(pack, mushafPageJump);
+                        if (target) jumpToVerse(target.ayah.key);
+                      }}
+                    >
+                      {labels.go}
+                    </button>
+                  </label>
+                </div>
               </div>
-            </fieldset>
+            </details>
           </div>
+
+          <details
+            className="quran-reader-disclosure quran-reader-disclosure--preferences"
+            data-quran-preferences-disclosure
+          >
+            <summary>{labels.readingPreferences}</summary>
+            <div className="quran-offline-reader__reading-controls" data-quran-reading-controls>
+              <label>
+                <span>{labels.translation}</span>
+                <select
+                  data-quran-translation-mode
+                  value={preferences.translationMode}
+                  onChange={(event) => {
+                    persistPatch({ translationMode: event.target.value as QuranTranslationMode });
+                  }}
+                >
+                  <option value="pickthall-1930">{labels.pickthall}</option>
+                  <option value="none">{labels.arabicOnly}</option>
+                </select>
+              </label>
+              <label>
+                <span>{labels.arabicFont}</span>
+                <select
+                  data-quran-font-select
+                  value={preferences.arabicFont}
+                  onChange={(event) => {
+                    persistPatch({ arabicFont: event.target.value as QuranArabicFont });
+                  }}
+                >
+                  <option value="amiri-quran">{labels.fontAmiri}</option>
+                  <option value="system">{labels.fontSystem}</option>
+                </select>
+              </label>
+              <label>
+                <span>{labels.fontSize}</span>
+                <select
+                  data-quran-size-select
+                  value={preferences.fontScale}
+                  onChange={(event) => {
+                    persistPatch({ fontScale: event.target.value as QuranFontScale });
+                  }}
+                >
+                  <option value="compact">{labels.sizeCompact}</option>
+                  <option value="comfortable">{labels.sizeComfortable}</option>
+                  <option value="large">{labels.sizeLarge}</option>
+                  <option value="xlarge">{labels.sizeXLarge}</option>
+                </select>
+              </label>
+              <fieldset>
+                <legend>{labels.readingMode}</legend>
+                <div className="quran-reading-mode" role="group" aria-label={labels.readingMode}>
+                  {(
+                    [
+                      ['list', labels.listMode],
+                      ['page', labels.pageMode],
+                    ] as const
+                  ).map(([mode, label]) => (
+                    <button
+                      type="button"
+                      key={mode}
+                      aria-pressed={preferences.readingMode === mode}
+                      data-quran-reading-mode={mode}
+                      onClick={() => {
+                        persistPatch({ readingMode: mode });
+                      }}
+                    >
+                      {label}
+                    </button>
+                  ))}
+                </div>
+              </fieldset>
+            </div>
+          </details>
 
           {preferences.readingMode === 'page' && normalBrowsing ? (
-            <div className="quran-page-navigation" aria-label={labels.readingMode}>
-              <button
-                type="button"
-                disabled={currentPage <= 1}
-                onClick={() => {
-                  selectPage(currentPage - 1);
-                }}
-              >
-                {labels.previousPage}
-              </button>
-              <strong>
-                {labels.page} {formatQuranUiNumber(currentPage, locale)} /{' '}
-                {formatQuranUiNumber(maxPage, locale)}
-              </strong>
-              <button
-                type="button"
-                disabled={currentPage >= maxPage}
-                onClick={() => {
-                  selectPage(currentPage + 1);
-                }}
-              >
-                {labels.nextPage}
-              </button>
-            </div>
+            <>
+              <div className="quran-page-navigation" aria-label={labels.readingMode}>
+                <button
+                  type="button"
+                  disabled={currentPage <= 1}
+                  onClick={() => {
+                    selectPage(currentPage - 1);
+                  }}
+                >
+                  {labels.previousPage}
+                </button>
+                <strong>
+                  {labels.page} {formatQuranUiNumber(currentPage, locale)} /{' '}
+                  {formatQuranUiNumber(maxPage, locale)}
+                </strong>
+                <button
+                  type="button"
+                  disabled={currentPage >= maxPage}
+                  onClick={() => {
+                    selectPage(currentPage + 1);
+                  }}
+                >
+                  {labels.nextPage}
+                </button>
+              </div>
+              <p className="quran-page-grouping-note" data-quran-page-grouping-note>
+                {labels.pageGroupingNote}
+              </p>
+            </>
           ) : null}
 
           {activeResult ? (
@@ -857,6 +909,21 @@ export function QuranOfflineReader({
                 </button>
               </div>
             </aside>
+          ) : null}
+
+          {searchReturnQuery !== null ? (
+            <button
+              type="button"
+              className="quran-offline-reader__return-search"
+              data-quran-return-to-search
+              onClick={() => {
+                setSearch(searchReturnQuery);
+                setSearchReturnQuery(null);
+                setBookmarksOnly(false);
+              }}
+            >
+              {labels.backToSearch}
+            </button>
           ) : null}
 
           {search.trim().length > 0 && searchResults.length === 50 ? (
@@ -963,7 +1030,7 @@ export function QuranOfflineReader({
                                 key={verseKey}
                                 onClick={(event) => {
                                   event.stopPropagation();
-                                  jumpToVerse(verseKey);
+                                  jumpToVerse(verseKey, true);
                                 }}
                                 data-quran-related-reference
                                 lang={locale}
@@ -1076,7 +1143,7 @@ export function QuranOfflineReader({
                                 key={verseKey}
                                 onClick={(event) => {
                                   event.stopPropagation();
-                                  jumpToVerse(verseKey);
+                                  jumpToVerse(verseKey, true);
                                 }}
                                 data-quran-related-reference
                                 lang={locale}
