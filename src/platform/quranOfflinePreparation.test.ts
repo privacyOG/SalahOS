@@ -56,6 +56,12 @@ function completePack() {
 
 type CacheRecord = Map<string, Response>;
 
+function requestKey(input: RequestInfo | URL): string {
+  if (typeof input === 'string') return input;
+  if (input instanceof URL) return input.toString();
+  return input.url;
+}
+
 function installCacheMock() {
   const stores = new Map<string, CacheRecord>();
   const cacheFor = (name: string) => {
@@ -64,23 +70,25 @@ function installCacheMock() {
       store = new Map();
       stores.set(name, store);
     }
+    const resolvedStore = store;
     return {
-      put: async (path: RequestInfo | URL, response: Response) => {
-        store!.set(String(path), response);
+      put: (path: RequestInfo | URL, response: Response) => {
+        resolvedStore.set(requestKey(path), response);
+        return Promise.resolve();
       },
     };
   };
 
   vi.stubGlobal('caches', {
-    open: async (name: string) => cacheFor(name),
-    keys: async () => [...stores.keys()],
-    delete: async (name: string) => stores.delete(name),
-    match: async (path: RequestInfo | URL) => {
+    open: (name: string) => Promise.resolve(cacheFor(name)),
+    keys: () => Promise.resolve([...stores.keys()]),
+    delete: (name: string) => Promise.resolve(stores.delete(name)),
+    match: (path: RequestInfo | URL) => {
       for (const store of stores.values()) {
-        const response = store.get(String(path));
-        if (response) return response.clone();
+        const response = store.get(requestKey(path));
+        if (response) return Promise.resolve(response.clone());
       }
-      return undefined;
+      return Promise.resolve(undefined);
     },
   });
   return stores;
@@ -110,23 +118,25 @@ describe('Qur’an offline preparation', () => {
   it('prepares and verifies the corpus, font and shell before reporting ready', async () => {
     const stores = installCacheMock();
     const expectedDigest = Uint8Array.from(Buffer.from(manifest.sha256, 'hex')).buffer;
-    vi.stubGlobal('crypto', { subtle: { digest: vi.fn(async () => expectedDigest) } });
+    vi.stubGlobal('crypto', { subtle: { digest: vi.fn(() => Promise.resolve(expectedDigest)) } });
 
     const pack = completePack();
     vi.stubGlobal(
       'fetch',
-      vi.fn(async (input: RequestInfo | URL) => {
-        const path = String(input);
+      vi.fn((input: RequestInfo | URL) => {
+        const path = requestKey(input);
         if (path === manifest.packPath) {
-          return new Response(JSON.stringify(pack), {
-            status: 200,
-            headers: { 'content-type': 'application/json' },
-          });
+          return Promise.resolve(
+            new Response(JSON.stringify(pack), {
+              status: 200,
+              headers: { 'content-type': 'application/json' },
+            }),
+          );
         }
         if (path === QURAN_OFFLINE_FONT_PATH || path === '/') {
-          return new Response('asset', { status: 200 });
+          return Promise.resolve(new Response('asset', { status: 200 }));
         }
-        return new Response('missing', { status: 404 });
+        return Promise.resolve(new Response('missing', { status: 404 }));
       }),
     );
 
@@ -139,7 +149,7 @@ describe('Qur’an offline preparation', () => {
 
   it('returns unavailable rather than ready after an interrupted preparation', async () => {
     installCacheMock();
-    vi.stubGlobal('fetch', vi.fn(async () => Promise.reject(new TypeError('offline'))));
+    vi.stubGlobal('fetch', vi.fn(() => Promise.reject(new TypeError('offline'))));
     expect(await prepareQuranOffline()).toBe('unavailable');
   });
 });
