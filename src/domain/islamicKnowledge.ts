@@ -110,7 +110,7 @@ export const islamicKnowledgeEntries = Object.freeze([
     title: 'Seek help through patience and prayer',
     arabic: 'وَاسْتَعِينُوا بِالصَّبْرِ وَالصَّلَاةِ',
     translation:
-      'Seek help in patience and prayer; and truly it is hard save for the humble-minded.',
+      'Seek help in patience and prayer; and truly it is hard save for the humble-minded,',
     reference: 'Qur’an 2:45',
     source: 'Arabic Uthmani text · English translation: M. M. Pickthall (1930)',
     sourceIds: quranReadingSources,
@@ -134,7 +134,7 @@ export const islamicKnowledgeEntries = Object.freeze([
     arabic:
       'يَا أَيُّهَا الَّذِينَ آمَنُوا إِذَا نُودِيَ لِلصَّلَاةِ مِن يَوْمِ الْجُمُعَةِ فَاسْعَوْا إِلَىٰ ذِكْرِ اللَّهِ',
     translation:
-      'O ye who believe! When the call is heard for the prayer of the day of congregation, haste unto remembrance of Allah and leave your trading.',
+      'O ye who believe! When the call is heard for the prayer of the day of congregation, haste unto remembrance of Allah and leave your trading. That is better for you if ye did but know.',
     reference: 'Qur’an 62:9',
     source: 'Arabic Uthmani text · English translation: M. M. Pickthall (1930)',
     sourceIds: quranReadingSources,
