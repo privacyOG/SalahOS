@@ -53,7 +53,7 @@ function completePack(): QuranOfflinePack {
 }
 
 function okResponse(pack: QuranOfflinePack) {
-  return Promise.resolve({ ok: true, status: 200, json: async () => pack });
+  return Promise.resolve({ ok: true, status: 200, json: () => Promise.resolve(pack) });
 }
 
 afterEach(() => {
@@ -66,7 +66,7 @@ describe('offline Qur’an pack retry recovery', () => {
     let calls = 0;
     const fetcher: QuranPackFetcher = async () => {
       calls += 1;
-      if (calls === 1) return { ok: false, status: 503, json: async () => ({}) };
+      if (calls === 1) return { ok: false, status: 503, json: () => Promise.resolve({}) };
       return okResponse(pack);
     };
 
@@ -95,7 +95,7 @@ describe('offline Qur’an pack retry recovery', () => {
     const fetcher: QuranPackFetcher = async () => {
       calls += 1;
       return calls === 1
-        ? { ok: true, status: 200, json: async () => ({ schemaVersion: 99 }) }
+        ? { ok: true, status: 200, json: () => Promise.resolve({ schemaVersion: 99 }) }
         : okResponse(pack);
     };
 
