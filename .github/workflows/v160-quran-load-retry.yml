@@ -1,0 +1,42 @@
+name: V1.6.0 Quran Load Retry Validation
+
+on:
+  push:
+    branches:
+      - v160-quran-load-retry
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v160-quran-load-retry
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Apply A01 retry recovery
+        run: python3 scripts/apply-v160-quran-load-retry.py
+      - name: Validate retry recovery
+        run: |
+          npx prettier --write src/ui/QuranOfflineReader.tsx src/ui/QuranLoadRetryV160.test.ts src/domain/quranOfflineLibrary.test.ts
+          npm run lint
+          npm run typecheck
+          npx vitest run src/ui/QuranLoadRetryV160.test.ts src/domain/quranOfflineLibrary.test.ts src/platform/quranReadingPreferences.test.ts
+          npm run build
+      - name: Publish clean validated commit tag
+        run: |
+          rm .github/workflows/v160-quran-load-retry.yml scripts/apply-v160-quran-load-retry.py
+          git config user.name "SalahOS CI"
+          git config user.email "actions@users.noreply.github.com"
+          git add src/ui/QuranOfflineReader.tsx src/ui/QuranLoadRetryV160.test.ts src/domain/quranOfflineLibrary.test.ts .github/workflows/v160-quran-load-retry.yml scripts/apply-v160-quran-load-retry.py
+          git commit -m "fix(quran): add explicit load retry recovery"
+          echo "VALIDATED_QURAN_RETRY_COMMIT=$(git rev-parse HEAD)"
+          git tag -f v160-quran-load-retry-validated
+          git push origin refs/tags/v160-quran-load-retry-validated --force
