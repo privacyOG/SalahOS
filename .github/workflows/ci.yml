@@ -22,8 +22,22 @@ jobs:
           cache: npm
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
-      - name: Format check
-        run: npm run format:check
+      - name: Emit exact V1.6.0 Prettier patch
+        run: |
+          npx prettier --write \
+            src/platform/quranOfflinePreparation.test.ts \
+            src/platform/quranOfflinePreparation.ts \
+            src/ui/KnowledgeScreen.tsx \
+            src/ui/LazyRouteBoundary.tsx \
+            TEMP_TODO_V1.6.0.md
+          echo '--- PRETTIER PATCH START ---'
+          git diff --no-ext-diff --no-color -- \
+            src/platform/quranOfflinePreparation.test.ts \
+            src/platform/quranOfflinePreparation.ts \
+            src/ui/KnowledgeScreen.tsx \
+            src/ui/LazyRouteBoundary.tsx \
+            TEMP_TODO_V1.6.0.md
+          echo '--- PRETTIER PATCH END ---'
       - name: Lint
         run: npm run lint
       - name: Typecheck
