@@ -22,8 +22,11 @@ jobs:
           cache: npm
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
-      - name: Format check
-        run: npm run format:check
+      - name: Print final Prettier delta
+        run: |
+          npx prettier --write src/platform/quranOfflinePreparation.test.ts
+          git diff --no-ext-diff --no-color -- src/platform/quranOfflinePreparation.test.ts
+          exit 1
       - name: Lint
         run: npm run lint
       - name: Typecheck
