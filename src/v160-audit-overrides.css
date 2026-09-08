@@ -20,3 +20,44 @@
 .today-prayer-row__time:not(.today-prayer-row__iqamah) {
   justify-self: end;
 }
+
+/*
+ * At the smallest supported phone width, OS/browser text scaling can double rem-based
+ * minimums. Remove intrinsic column pressure and cap hero type by viewport width so
+ * 200% text remains readable without creating a horizontal scrolling surface.
+ */
+@media (max-width: 390px) {
+  .today-next__identity,
+  .today-next__countdown,
+  .today-prayer-row__name {
+    min-width: 0;
+  }
+
+  .today-next__identity h1 {
+    max-width: 100%;
+    overflow-wrap: anywhere;
+    font-size: min(clamp(2.5rem, 1.8rem + 4vw, 5.5rem), 14vw);
+  }
+
+  .today-next__countdown strong {
+    max-width: 100%;
+    font-size: min(clamp(2rem, 1.5rem + 2.5vw, 4rem), 13vw);
+  }
+
+  .today-prayer-row {
+    grid-template-columns: minmax(0, 1fr) max-content;
+  }
+
+  .today-prayer-row__name > strong,
+  .today-prayer-row__name > span,
+  .today-prayer-row__name > small {
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  .today-prayer-row__time:not(.today-prayer-row__iqamah) {
+    min-width: 0;
+    white-space: nowrap;
+  }
+}
