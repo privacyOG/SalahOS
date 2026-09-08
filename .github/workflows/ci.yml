@@ -52,6 +52,8 @@ jobs:
         run: npm run quran:offline:prepare
       - name: Offline Qur'an corpus integrity
         run: npm run quran:offline:check
+      - name: Qur'an editorial coverage report
+        run: node scripts/check-quran-editorial-release-readiness.mjs
       - name: Islamic Knowledge source governance
         run: npm run knowledge:content:check
       - name: Australian mosque directory reproducibility
