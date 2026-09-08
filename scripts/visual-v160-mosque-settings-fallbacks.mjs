@@ -70,7 +70,8 @@ try {
 
     const nearest = directory.getByRole('button', { name: 'Nearest first' });
     assert(await nearest.isDisabled(), 'Nearest-first remained enabled without a saved location');
-    const privacyText = (await directory.locator('.australian-mosque-directory__privacy-note').textContent()) ?? '';
+    const privacyText =
+      (await directory.locator('.australian-mosque-directory__privacy-note').textContent()) ?? '';
     assert(
       privacyText.trim().length > 0,
       'Mosque directory did not explain why nearest-first is unavailable without location',
@@ -79,7 +80,8 @@ try {
     const search = directory.locator('input[type="search"]');
     await search.fill('zzzz-no-such-mosque-v160');
     await directory.locator('.mosques-screen__empty').waitFor({ state: 'visible' });
-    const countText = (await directory.locator('.australian-mosque-directory__result-count').textContent()) ?? '';
+    const countText =
+      (await directory.locator('.australian-mosque-directory__result-count').textContent()) ?? '';
     assert(/^\s*0\b/u.test(countText), `No-match search did not report zero results: ${countText}`);
 
     const metrics = await page.evaluate(() => ({
@@ -113,19 +115,26 @@ try {
     const settingsScreen = page.locator('.settings-screen');
     await settingsScreen.waitFor({ state: 'visible' });
     await settingsScreen.getByRole('button', { name: /Privacy & data/u }).click();
-    await page.waitForFunction(() => new URLSearchParams(location.search).get('settingsView') === 'privacy-data');
+    await page.waitForFunction(
+      () => new URLSearchParams(location.search).get('settingsView') === 'privacy-data',
+    );
 
     const payload = page.locator('.settings-data-panel textarea');
     await payload.waitFor({ state: 'visible' });
     await page.getByRole('button', { name: 'Export settings' }).click();
     const exported = await payload.inputValue();
-    assert(exported.includes('"version":2'), 'Settings export did not expose the persisted settings payload');
+    assert(
+      exported.includes('"version":2'),
+      'Settings export did not expose the persisted settings payload',
+    );
     await page.getByRole('button', { name: 'Import settings' }).waitFor({ state: 'visible' });
     await page.getByRole('button', { name: 'Reset to defaults' }).waitFor({ state: 'visible' });
 
     await page.getByRole('button', { name: 'All settings' }).click();
     await settingsScreen.getByRole('button', { name: /Adhan/u }).click();
-    await page.waitForFunction(() => new URLSearchParams(location.search).get('settingsView') === 'adhan');
+    await page.waitForFunction(
+      () => new URLSearchParams(location.search).get('settingsView') === 'adhan',
+    );
     await page.locator('.notification-fieldset').first().waitFor({ state: 'visible' });
     const onboarding = page.locator('.notification-onboarding-settings-entry');
     await onboarding.waitFor({ state: 'visible' });
