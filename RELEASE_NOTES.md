@@ -32,6 +32,7 @@ SalahOS v1.6.0 is a mobile usability, Qur’an reliability, Knowledge organisati
 - Preserves search-result return context, explicit empty-search states, bookmarks, Resume last read, sharing and RTL behavior.
 - Describes dataset page grouping as navigation metadata rather than implying that the screen is a facsimile of a printed mushaf.
 - Keeps the current packaged English translation identity explicit as **M. M. Pickthall (1930)** and keeps English translation/commentary language and direction metadata distinct from Qur’anic Arabic.
+- Pins the packaged Arabic corpus as **Tanzil Uthmani / Medina Mushaf / Hafs** with repository, commit, source-edition licence boundaries and SHA-256 traceability. Search derives a separate normalized Arabic comparison key so unvocalised queries can match marked Uthmani text without modifying the canonical display/copy/share corpus.
 
 ## Islamic Knowledge organisation
 
