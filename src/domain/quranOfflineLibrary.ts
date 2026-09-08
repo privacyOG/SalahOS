@@ -209,19 +209,29 @@ export function listQuranOfflineSurahSummaries(
   );
 }
 
+export function normalizeQuranSearchText(value: string): string {
+  return value
+    .normalize('NFD')
+    .replace(/\p{M}+/gu, '')
+    .replace(/[\u0640\u06e5\u06e6]/gu, '')
+    .replace(/ٱ/gu, 'ا')
+    .toLocaleLowerCase()
+    .trim()
+    .replace(/\s+/gu, ' ');
+}
+
 export function searchQuranOfflineSurahs(
   pack: QuranOfflinePack,
   query: string,
 ): readonly QuranOfflineSurahSummary[] {
   const summaries = listQuranOfflineSurahSummaries(pack);
-  const normalized = query.trim().toLocaleLowerCase();
+  const normalized = normalizeQuranSearchText(query);
   if (normalized.length === 0) return summaries;
   return Object.freeze(
     summaries.filter((surah) =>
-      [String(surah.surah), surah.nameArabic, surah.nameTransliteration]
-        .join(' ')
-        .toLocaleLowerCase()
-        .includes(normalized),
+      normalizeQuranSearchText(
+        [String(surah.surah), surah.nameArabic, surah.nameTransliteration].join(' '),
+      ).includes(normalized),
     ),
   );
 }
@@ -251,18 +261,18 @@ export function firstQuranOfflineAyahOnPage(
 }
 
 function searchableAyahText(surah: QuranOfflineSurah, ayah: QuranOfflineAyah): string {
-  return [
-    ayah.key,
-    ayah.arabic,
-    ayah.translations['pickthall-1930'],
-    surah.nameArabic,
-    surah.nameTransliteration,
-    surah.nameEnglish,
-    `juz ${String(ayah.juz)}`,
-    `page ${String(ayah.page)}`,
-  ]
-    .join(' ')
-    .toLocaleLowerCase();
+  return normalizeQuranSearchText(
+    [
+      ayah.key,
+      ayah.arabic,
+      ayah.translations['pickthall-1930'],
+      surah.nameArabic,
+      surah.nameTransliteration,
+      surah.nameEnglish,
+      `juz ${String(ayah.juz)}`,
+      `page ${String(ayah.page)}`,
+    ].join(' '),
+  );
 }
 
 export function searchQuranOfflinePack(
@@ -270,7 +280,7 @@ export function searchQuranOfflinePack(
   query: string,
   limit = 50,
 ): readonly QuranOfflineSearchResult[] {
-  const normalized = query.trim().toLocaleLowerCase();
+  const normalized = normalizeQuranSearchText(query);
   if (normalized.length === 0 || limit <= 0) return [];
 
   const exact = getQuranOfflineAyah(pack, normalized);
