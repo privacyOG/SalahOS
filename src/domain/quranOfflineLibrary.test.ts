@@ -118,12 +118,16 @@ describe('complete offline Qur’an library navigation', () => {
   });
 
   it('matches unvocalised Arabic without mutating canonical Uthmani display text', () => {
-    const canonical = fixture.surahs[0].ayahs[0].arabic;
+    const first = getQuranOfflineAyah(fixture, '1:1');
+    expect(first).not.toBeNull();
+    if (!first) throw new Error('Qur’an fixture 1:1 is missing.');
+    const canonical = first.ayah.arabic;
+
     expect(normalizeQuranSearchText('ٱلرَّحْمَٰنِ')).toBe('الرحمن');
     expect(
       searchQuranOfflinePack(fixture, 'بسم الله الرحمن الرحيم').map((result) => result.ayah.key),
     ).toEqual(['1:1']);
-    expect(fixture.surahs[0].ayahs[0].arabic).toBe(canonical);
+    expect(first.ayah.arabic).toBe(canonical);
   });
 
   it('builds searchable surah summaries with ayah count and revelation place', () => {
