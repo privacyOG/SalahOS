@@ -169,9 +169,9 @@ function assertPhoneMetrics(name, metrics) {
     throw new Error(`${name} expected seven route-capable primary navigation targets in the DOM`);
   }
   const visibleNavigationTargets = metrics.navigationTargets.filter((target) => target.visible);
-  if (visibleNavigationTargets.length !== 6) {
+  if (visibleNavigationTargets.length !== 7) {
     throw new Error(
-      `${name} expected six visible mobile navigation targets: ${JSON.stringify(metrics.navigationTargets)}`,
+      `${name} expected seven visible mobile navigation targets: ${JSON.stringify(metrics.navigationTargets)}`,
     );
   }
   const visibleWidths = visibleNavigationTargets.map((target) => target.width);
@@ -198,9 +198,9 @@ function assertPhoneMetrics(name, metrics) {
   const communityTarget = metrics.navigationTargets.find(
     (target) => target.navigationId === 'community',
   );
-  if (communityTarget === undefined || communityTarget.visible) {
+  if (communityTarget === undefined || !communityTarget.visible) {
     throw new Error(
-      `${name} expected Community to remain route-capable but hidden from the mobile bottom bar`,
+      `${name} expected Community to remain visible in the mobile primary navigation`,
     );
   }
   for (const target of [...visibleNavigationTargets, ...metrics.quickTargets]) {

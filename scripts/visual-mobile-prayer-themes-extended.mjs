@@ -124,8 +124,8 @@ async function validateTranslatedTheme(browser, scenario) {
       throw new Error(`${scenario.name} did not apply ${scenario.templateId}`);
     }
     const visibleNavigation = page.locator('.congregation-nav > .congregation-nav-item:visible');
-    if ((await visibleNavigation.count()) !== 6) {
-      throw new Error(`${scenario.name} did not preserve the six-item primary navigation`);
+    if ((await visibleNavigation.count()) !== 7) {
+      throw new Error(`${scenario.name} did not preserve the seven-item primary navigation`);
     }
     const visibleNavigationIds = await visibleNavigation.evaluateAll((items) =>
       items.map((item) => item.getAttribute('data-navigation-id')),
@@ -136,6 +136,7 @@ async function validateTranslatedTheme(browser, scenario) {
       'mosques',
       'qiblah',
       'knowledge',
+      'community',
       'settings',
     ];
     if (JSON.stringify(visibleNavigationIds) !== JSON.stringify(expectedNavigationIds)) {

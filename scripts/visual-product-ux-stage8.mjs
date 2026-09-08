@@ -61,6 +61,7 @@ try {
     'Mosques',
     'Qiblah',
     'Knowledge',
+    'Community',
     'Settings',
   ];
   if (primaryNavLabels.length !== expectedPrimaryNavLabels.length) {

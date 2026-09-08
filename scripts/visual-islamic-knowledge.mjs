@@ -185,8 +185,8 @@ try {
       items.map((item) => item.getAttribute('data-navigation-id')),
     );
     assert(
-      visibleNavigationIds.length === 6 && visibleNavigationIds.includes('knowledge'),
-      `Knowledge was not retained in the six-item visible primary navigation: ${JSON.stringify(visibleNavigationIds)}`,
+      visibleNavigationIds.length === 7 && visibleNavigationIds.includes('knowledge'),
+      `Knowledge was not retained in the seven-item visible primary navigation: ${JSON.stringify(visibleNavigationIds)}`,
     );
 
     const metrics = await page.evaluate(() => ({

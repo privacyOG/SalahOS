@@ -225,12 +225,16 @@
 
 @media (max-width: 340px) {
   .congregation-nav {
-    gap: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.15rem;
     padding-inline-start: max(0.25rem, env(safe-area-inset-left));
     padding-inline-end: max(0.25rem, env(safe-area-inset-right));
   }
 
   .congregation-nav-item {
+    min-width: 44px;
+    min-height: 44px;
     padding-inline: 0.1rem;
     font-size: 0.6rem;
   }
@@ -247,12 +251,5 @@
     border-color: Highlight;
     color: HighlightText;
     background: Highlight;
-  }
-}
-
-/* Keep Community route-capable but off the phone bar; six visible destinations share the available width equally. */
-@media (max-width: 799px) {
-  .congregation-nav-item[data-navigation-id='community'] {
-    display: none;
   }
 }
