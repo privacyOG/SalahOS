@@ -1,0 +1,174 @@
+name: Temporary V1.6 Quran search normalization
+
+on:
+  push:
+    branches:
+      - v160-quran-uthmani-search
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v160-quran-uthmani-search
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Add search-only Arabic normalization
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          library = Path('src/domain/quranOfflineLibrary.ts')
+          text = library.read_text()
+
+          old_surah = """export function searchQuranOfflineSurahs(
+            pack: QuranOfflinePack,
+            query: string,
+          ): readonly QuranOfflineSurahSummary[] {
+            const summaries = listQuranOfflineSurahSummaries(pack);
+            const normalized = query.trim().toLocaleLowerCase();
+            if (normalized.length === 0) return summaries;
+            return Object.freeze(
+              summaries.filter((surah) =>
+                [String(surah.surah), surah.nameArabic, surah.nameTransliteration]
+                  .join(' ')
+                  .toLocaleLowerCase()
+                  .includes(normalized),
+              ),
+            );
+          }
+          """
+
+          new_surah = """export function normalizeQuranSearchText(value: string): string {
+            return value
+              .normalize('NFD')
+              .replace(/\\p{M}+/gu, '')
+              .replace(/[\\u0640\\u06e5\\u06e6]/gu, '')
+              .replace(/ٱ/gu, 'ا')
+              .toLocaleLowerCase()
+              .trim()
+              .replace(/\\s+/gu, ' ');
+          }
+
+          export function searchQuranOfflineSurahs(
+            pack: QuranOfflinePack,
+            query: string,
+          ): readonly QuranOfflineSurahSummary[] {
+            const summaries = listQuranOfflineSurahSummaries(pack);
+            const normalized = normalizeQuranSearchText(query);
+            if (normalized.length === 0) return summaries;
+            return Object.freeze(
+              summaries.filter((surah) =>
+                normalizeQuranSearchText(
+                  [String(surah.surah), surah.nameArabic, surah.nameTransliteration].join(' '),
+                ).includes(normalized),
+              ),
+            );
+          }
+          """
+          if old_surah not in text:
+              raise SystemExit('surah search block did not match')
+          text = text.replace(old_surah, new_surah, 1)
+
+          old_ayah = """function searchableAyahText(surah: QuranOfflineSurah, ayah: QuranOfflineAyah): string {
+            return [
+              ayah.key,
+              ayah.arabic,
+              ayah.translations['pickthall-1930'],
+              surah.nameArabic,
+              surah.nameTransliteration,
+              surah.nameEnglish,
+              `juz ${String(ayah.juz)}`,
+              `page ${String(ayah.page)}`,
+            ]
+              .join(' ')
+              .toLocaleLowerCase();
+          }
+
+          export function searchQuranOfflinePack(
+            pack: QuranOfflinePack,
+            query: string,
+            limit = 50,
+          ): readonly QuranOfflineSearchResult[] {
+            const normalized = query.trim().toLocaleLowerCase();
+          """
+          new_ayah = """function searchableAyahText(surah: QuranOfflineSurah, ayah: QuranOfflineAyah): string {
+            return normalizeQuranSearchText(
+              [
+                ayah.key,
+                ayah.arabic,
+                ayah.translations['pickthall-1930'],
+                surah.nameArabic,
+                surah.nameTransliteration,
+                surah.nameEnglish,
+                `juz ${String(ayah.juz)}`,
+                `page ${String(ayah.page)}`,
+              ].join(' '),
+            );
+          }
+
+          export function searchQuranOfflinePack(
+            pack: QuranOfflinePack,
+            query: string,
+            limit = 50,
+          ): readonly QuranOfflineSearchResult[] {
+            const normalized = normalizeQuranSearchText(query);
+          """
+          if old_ayah not in text:
+              raise SystemExit('ayah search block did not match')
+          library.write_text(text.replace(old_ayah, new_ayah, 1))
+
+          test = Path('src/domain/quranOfflineLibrary.test.ts')
+          text = test.read_text()
+          old_import = """  loadQuranOfflinePack,
+            parseQuranVerseKey,
+          """
+          new_import = """  loadQuranOfflinePack,
+            normalizeQuranSearchText,
+            parseQuranVerseKey,
+          """
+          if old_import not in text:
+              raise SystemExit('test import block did not match')
+          text = text.replace(old_import, new_import, 1)
+
+          marker = """  it('builds searchable surah summaries with ayah count and revelation place', () => {
+          """
+          addition = """  it('matches unvocalised Arabic without mutating canonical Uthmani display text', () => {
+            const canonical = fixture.surahs[0].ayahs[0].arabic;
+            expect(normalizeQuranSearchText('ٱلرَّحْمَٰنِ')).toBe('الرحمن');
+            expect(
+              searchQuranOfflinePack(fixture, 'بسم الله الرحمن الرحيم').map(
+                (result) => result.ayah.key,
+              ),
+            ).toEqual(['1:1']);
+            expect(fixture.surahs[0].ayahs[0].arabic).toBe(canonical);
+          });
+
+          """
+          if marker not in text:
+              raise SystemExit('test insertion marker did not match')
+          test.write_text(text.replace(marker, addition + marker, 1))
+          PY
+          npx prettier --write src/domain/quranOfflineLibrary.ts src/domain/quranOfflineLibrary.test.ts src/domain/quranUthmaniProvenanceV160.test.ts docs/QURAN_UTHMANI_PROVENANCE.md src/data/quran-offline-manifest.json
+          npx vitest run src/domain/quranOfflineLibrary.test.ts src/domain/quranUthmaniProvenanceV160.test.ts
+          rm .github/workflows/temp-v160-quran-search-normalization.yml
+          git diff --check
+      - name: Commit normalized search implementation
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add src/domain/quranOfflineLibrary.ts src/domain/quranOfflineLibrary.test.ts src/domain/quranUthmaniProvenanceV160.test.ts docs/QURAN_UTHMANI_PROVENANCE.md src/data/quran-offline-manifest.json .github/workflows/temp-v160-quran-search-normalization.yml
+          git commit -m 'Normalize Quran Arabic search without altering Uthmani text'
+          git push origin HEAD:v160-quran-uthmani-search
