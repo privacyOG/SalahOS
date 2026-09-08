@@ -22,6 +22,7 @@ jobs:
           set -euo pipefail
           python3 - <<'PY'
           from pathlib import Path
+          from textwrap import dedent
 
           path = Path('CHANGELOG.md')
           text = path.read_text()
@@ -31,7 +32,8 @@ jobs:
           if '### V1.6.0 candidate' in text:
               raise SystemExit('V1.6.0 candidate changelog already present')
 
-          section = '''## Unreleased
+          section = dedent('''\
+          ## Unreleased
 
           ### V1.6.0 candidate
 
@@ -61,7 +63,7 @@ jobs:
           - Preserve formatting, lint, typecheck, tests/coverage, Qur'an/content integrity, security, design-token, production-build, bundle-budget and permanent Quality/Visual/Android/iOS/Windows gates.
           - Preserve exact-current-main release preflight, persistent Android signing, Web/PWA/Raspberry Pi archive verification, Windows executable verification and SHA-256 reconciliation.
           - Keep V1.6.0 publication blocked until required physical Android/iOS acceptance and named qualified whole-corpus Qur'an scholarly review are recorded complete.
-'''
+          ''')
           path.write_text(text.replace(marker, section, 1))
           PY
           rm .github/workflows/temp-v160-changelog-prepend.yml
