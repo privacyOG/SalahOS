@@ -52,9 +52,12 @@ function settings(locale, theme) {
 }
 
 async function seed(page, locale, theme) {
-  await page.addInitScript((persisted) => {
-    localStorage.setItem('salahos.settings', JSON.stringify(persisted));
-  }, settings(locale, theme));
+  await page.addInitScript(
+    (persisted) => {
+      localStorage.setItem('salahos.settings', JSON.stringify(persisted));
+    },
+    settings(locale, theme),
+  );
 }
 
 async function pageMetrics(page) {
@@ -96,7 +99,8 @@ async function keySurfaceOverflow(page) {
 async function navigationState(page) {
   return page.locator('.congregation-nav-item').evaluateAll((buttons) =>
     buttons.map((button) => {
-      if (!(button instanceof HTMLElement)) throw new Error('Navigation button is not an HTMLElement');
+      if (!(button instanceof HTMLElement))
+        throw new Error('Navigation button is not an HTMLElement');
       const label = button.querySelector('.congregation-nav-label');
       const rect = button.getBoundingClientRect();
       const labelRect = label?.getBoundingClientRect();
@@ -106,7 +110,11 @@ async function navigationState(page) {
         text: label?.textContent?.trim() ?? '',
         width: rect.width,
         height: rect.height,
-        visible: style.display !== 'none' && style.visibility !== 'hidden' && rect.width > 0 && rect.height > 0,
+        visible:
+          style.display !== 'none' &&
+          style.visibility !== 'hidden' &&
+          rect.width > 0 &&
+          rect.height > 0,
         labelWidth: labelRect?.width ?? 0,
         labelHeight: labelRect?.height ?? 0,
       };
@@ -133,8 +141,14 @@ function assertNavigation(name, navigation) {
     assert(item.id.length > 0, `${name} navigation item is missing a stable id`);
     assert(item.text.length > 0, `${name} navigation item ${item.id} has no visible label`);
     assert(item.visible, `${name} navigation item ${item.id} is not visible`);
-    assert(item.width >= 44 && item.height >= 44, `${name} navigation item ${item.id} is below 44px`);
-    assert(item.labelWidth > 0 && item.labelHeight > 0, `${name} navigation label ${item.id} is clipped away`);
+    assert(
+      item.width >= 44 && item.height >= 44,
+      `${name} navigation item ${item.id} is below 44px`,
+    );
+    assert(
+      item.labelWidth > 0 && item.labelHeight > 0,
+      `${name} navigation label ${item.id} is clipped away`,
+    );
   }
 }
 
@@ -163,7 +177,10 @@ async function runMatrixScenario(browser, viewport, locale, theme, index) {
       effectiveTheme,
     });
     const overflow = await keySurfaceOverflow(page);
-    assert(overflow.length === 0, `${name} internal horizontal clipping: ${JSON.stringify(overflow)}`);
+    assert(
+      overflow.length === 0,
+      `${name} internal horizontal clipping: ${JSON.stringify(overflow)}`,
+    );
     const navigation = await navigationState(page);
     assertNavigation(name, navigation);
 
@@ -204,7 +221,10 @@ async function runTextScaleScenario(browser, viewport, locale) {
       effectiveTheme: 'dark',
     });
     const overflow = await keySurfaceOverflow(page);
-    assert(overflow.length === 0, `${name} internal horizontal clipping: ${JSON.stringify(overflow)}`);
+    assert(
+      overflow.length === 0,
+      `${name} internal horizontal clipping: ${JSON.stringify(overflow)}`,
+    );
     const navigation = await navigationState(page);
     assertNavigation(name, navigation);
     const heading = page.locator('#today-next-prayer');
@@ -239,7 +259,11 @@ async function runKeyboardBackScenario(browser, locale) {
     await calendarButton.focus();
     const focus = await calendarButton.evaluate((button) => {
       const style = getComputedStyle(button);
-      return { outlineStyle: style.outlineStyle, outlineWidth: style.outlineWidth, boxShadow: style.boxShadow };
+      return {
+        outlineStyle: style.outlineStyle,
+        outlineWidth: style.outlineWidth,
+        boxShadow: style.boxShadow,
+      };
     });
     assert(
       (focus.outlineStyle !== 'none' && Number.parseFloat(focus.outlineWidth) >= 2) ||
