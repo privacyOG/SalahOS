@@ -1,0 +1,27 @@
+name: Temporary Q08 Prettier capture
+
+on:
+  push:
+    branches:
+      - temp/v160-q08-prettier
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Capture exact Prettier diff
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx prettier --write src/domain/quranOfflineLibrary.test.ts
+          git diff -- src/domain/quranOfflineLibrary.test.ts
+          npx prettier --check src/domain/quranOfflineLibrary.test.ts
