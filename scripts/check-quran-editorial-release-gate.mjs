@@ -31,7 +31,10 @@ const [pack, register, signoff] = await Promise.all(
 
 assert(pack?.counts?.surahs === 114, 'Editorial gate requires the complete 114-surah corpus.');
 assert(pack?.counts?.ayahs === 6236, 'Editorial gate requires the complete 6,236-ayah corpus.');
-assert(Array.isArray(pack.surahs) && pack.surahs.length === 114, 'Offline Qur’an pack is incomplete.');
+assert(
+  Array.isArray(pack.surahs) && pack.surahs.length === 114,
+  'Offline Qur’an pack is incomplete.',
+);
 assert(Array.isArray(register?.entries), 'Editorial review register entries are missing.');
 
 const corpusKeys = new Set();
@@ -47,23 +50,47 @@ assert(corpusKeys.size === 6236, `Offline Qur’an exposes ${String(corpusKeys.s
 
 const entriesByKey = new Map();
 for (const entry of register.entries) {
-  assert(isNonEmptyString(entry?.verseKey), 'Editorial register contains an entry without a verse key.');
-  assert(corpusKeys.has(entry.verseKey), `Editorial register contains unknown verse ${entry.verseKey}.`);
+  assert(
+    isNonEmptyString(entry?.verseKey),
+    'Editorial register contains an entry without a verse key.',
+  );
+  assert(
+    corpusKeys.has(entry.verseKey),
+    `Editorial register contains unknown verse ${entry.verseKey}.`,
+  );
   assert(!entriesByKey.has(entry.verseKey), `Editorial register duplicates ${entry.verseKey}.`);
   entriesByKey.set(entry.verseKey, entry);
 
   if (entry.status === 'approved') {
-    assert(isNonEmptyString(entry.reviewer), `Approved entry ${entry.verseKey} has no named reviewer.`);
-    assert(entry.treatment !== 'unassigned', `Approved entry ${entry.verseKey} has no selected treatment.`);
+    assert(
+      isNonEmptyString(entry.reviewer),
+      `Approved entry ${entry.verseKey} has no named reviewer.`,
+    );
+    assert(
+      entry.treatment !== 'unassigned',
+      `Approved entry ${entry.verseKey} has no selected treatment.`,
+    );
     assert(
       Array.isArray(entry.sourceReferences) && entry.sourceReferences.length > 0,
       `Approved entry ${entry.verseKey} has no source reference.`,
     );
-    assert(isNonEmptyString(entry.originalEnglish), `Approved entry ${entry.verseKey} has no original English wording.`);
-    assert(isNonEmptyString(entry.arabicExpression), `Approved entry ${entry.verseKey} has no Arabic expression.`);
+    assert(
+      isNonEmptyString(entry.originalEnglish),
+      `Approved entry ${entry.verseKey} has no original English wording.`,
+    );
+    assert(
+      isNonEmptyString(entry.arabicExpression),
+      `Approved entry ${entry.verseKey} has no Arabic expression.`,
+    );
     if (entry.treatment === 'contextual-tawil') {
-      assert(isNonEmptyString(entry.proposedMeaning), `Approved contextual ta’wil ${entry.verseKey} has no proposed meaning.`);
-      assert(isNonEmptyString(entry.context), `Approved contextual ta’wil ${entry.verseKey} has no context/evidence.`);
+      assert(
+        isNonEmptyString(entry.proposedMeaning),
+        `Approved contextual ta’wil ${entry.verseKey} has no proposed meaning.`,
+      );
+      assert(
+        isNonEmptyString(entry.context),
+        `Approved contextual ta’wil ${entry.verseKey} has no context/evidence.`,
+      );
     }
   }
 }
@@ -71,7 +98,9 @@ for (const entry of register.entries) {
 const missingKeys = [...corpusKeys].filter((key) => !entriesByKey.has(key));
 const approved = [...entriesByKey.values()].filter((entry) => entry.status === 'approved');
 const unresolved = [...entriesByKey.values()].filter((entry) => entry.status !== 'approved');
-const namedReviewers = [...new Set(approved.map((entry) => entry.reviewer).filter(isNonEmptyString))].sort();
+const namedReviewers = [
+  ...new Set(approved.map((entry) => entry.reviewer).filter(isNonEmptyString)),
+].sort();
 
 const report = {
   corpusAyat: corpusKeys.size,
@@ -93,13 +122,37 @@ if (!isReleaseRef()) {
   process.exit(0);
 }
 
-assert(entriesByKey.size === 6236, `Release blocked: ${String(missingKeys.length)} ayat are absent from the editorial review register.`);
-assert(approved.length === 6236, `Release blocked: ${String(6236 - approved.length)} ayat are not approved in the editorial review register.`);
-assert(unresolved.length === 0, `Release blocked: ${String(unresolved.length)} registered ayat remain unresolved.`);
-assert(signoff?.status === 'approved', 'Release blocked: whole-corpus scholarly sign-off is not approved.');
-assert(isNonEmptyString(signoff.reviewerName), 'Release blocked: scholarly sign-off has no named reviewer.');
-assert(isNonEmptyString(signoff.qualification), 'Release blocked: scholarly sign-off has no qualification record.');
-assert(signoff.scope === 'whole-corpus-6236', 'Release blocked: scholarly sign-off does not cover all 6,236 ayat.');
-assert(isNonEmptyString(signoff.reviewedAt), 'Release blocked: scholarly sign-off has no review date.');
+assert(
+  entriesByKey.size === 6236,
+  `Release blocked: ${String(missingKeys.length)} ayat are absent from the editorial review register.`,
+);
+assert(
+  approved.length === 6236,
+  `Release blocked: ${String(6236 - approved.length)} ayat are not approved in the editorial review register.`,
+);
+assert(
+  unresolved.length === 0,
+  `Release blocked: ${String(unresolved.length)} registered ayat remain unresolved.`,
+);
+assert(
+  signoff?.status === 'approved',
+  'Release blocked: whole-corpus scholarly sign-off is not approved.',
+);
+assert(
+  isNonEmptyString(signoff.reviewerName),
+  'Release blocked: scholarly sign-off has no named reviewer.',
+);
+assert(
+  isNonEmptyString(signoff.qualification),
+  'Release blocked: scholarly sign-off has no qualification record.',
+);
+assert(
+  signoff.scope === 'whole-corpus-6236',
+  'Release blocked: scholarly sign-off does not cover all 6,236 ayat.',
+);
+assert(
+  isNonEmptyString(signoff.reviewedAt),
+  'Release blocked: scholarly sign-off has no review date.',
+);
 
 console.log('Qur’an editorial release gate passed for the complete 6,236-ayah corpus.');
