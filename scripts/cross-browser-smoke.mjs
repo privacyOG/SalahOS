@@ -24,6 +24,7 @@ const expectedVisibleNavigationIds = [
   'mosques',
   'qiblah',
   'knowledge',
+  'community',
   'settings',
 ];
 
