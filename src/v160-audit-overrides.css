@@ -23,40 +23,19 @@
 
 /*
  * At the smallest supported phone width, OS/browser text scaling can double rem-based
- * minimums. Remove intrinsic column pressure and let the Today hero reflow vertically
- * rather than creating a horizontal scrolling surface.
+ * minimums. Remove only intrinsic minimum pressure; preserve the normal 390px geometry.
  */
 @media (max-width: 390px) {
-  .today-next {
-    min-width: 0;
-    gap: min(1rem, 4vw);
-    padding-inline: min(1.25rem, 5vw);
-  }
-
-  .today-next > *,
-  .today-next__times,
-  .today-next__times > div,
   .today-next__identity,
   .today-next__countdown,
   .today-next__current,
   .today-prayer-row__name {
     min-width: 0;
-    max-width: 100%;
   }
 
   .today-next__current {
-    flex-wrap: wrap;
-  }
-
-  .today-next__current span,
-  .today-next__current strong,
-  .today-next__identity p,
-  .today-next__countdown span,
-  .today-next__times dt,
-  .today-next__times dd {
-    min-width: 0;
     max-width: 100%;
-    overflow-wrap: anywhere;
+    flex-wrap: wrap;
   }
 
   .today-next__identity h1 {
@@ -67,11 +46,7 @@
 
   .today-next__countdown strong {
     max-width: 100%;
-    font-size: min(clamp(2rem, 1.5rem + 2.5vw, 4rem), 11vw);
-  }
-
-  .today-next__times dd {
-    font-size: min(clamp(1.5rem, 1.2rem + 1vw, 2.3rem), 10vw);
+    font-size: min(clamp(2rem, 1.5rem + 2.5vw, 4rem), 13vw);
   }
 
   .today-prayer-row {
