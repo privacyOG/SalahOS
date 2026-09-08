@@ -6,10 +6,12 @@ SalahOS packages the Arabic Qur’an from the pinned `mjmirza/quran-dataset` rep
 
 The upstream Tanzil Uthmani source used by that pinned dataset is the Unicode Uthmani text aligned to the **Medina Mushaf**. Tanzil’s text documentation identifies the underlying reading as **Hafs**. The source download selected by the pinned dataset is `quranType=uthmani`.
 
+The licence boundary is recorded explicitly rather than collapsed into one label: the pinned dataset is CC BY 4.0 for its original dataset work, while its pinned documentation attributes the underlying Tanzil source edition/metadata under CC BY 3.0 and requires the Tanzil attribution to be retained when redistributing that source material.
+
 Traceability is recorded in `src/data/quran-offline-manifest.json`, including:
 
 - pinned repository, commit and file path;
-- source licence/attribution boundary;
+- pinned-dataset and upstream Tanzil licence/attribution boundaries;
 - Uthmani script identity;
 - Medina Mushaf edition/alignment;
 - Hafs reading;
