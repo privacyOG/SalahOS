@@ -44,6 +44,7 @@ type QuranReaderCopy = Readonly<{
   complete: string;
   loading: string;
   loadError: string;
+  retry: string;
   search: string;
   searchPlaceholder: string;
   surah: string;
@@ -107,6 +108,7 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     complete: '114 surahs · 6,236 ayat · packaged for offline reading',
     loading: 'Loading the packaged Qur’an…',
     loadError: 'The packaged Qur’an could not be loaded.',
+    retry: 'Retry',
     search: 'Search the complete Qur’an',
     searchPlaceholder: '1:1, Arabic, translation, surah name…',
     surah: 'Surah',
@@ -167,6 +169,7 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     complete: '114 سورة · 6236 آية · محفوظ للقراءة دون اتصال',
     loading: 'جارٍ تحميل القرآن المحفوظ…',
     loadError: 'تعذر تحميل القرآن المحفوظ.',
+    retry: 'إعادة المحاولة',
     search: 'البحث في القرآن الكامل',
     searchPlaceholder: '1:1، العربية، الترجمة، اسم السورة…',
     surah: 'السورة',
@@ -227,6 +230,7 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     complete: '114 sure · 6.236 ayet · çevrimdışı okuma için paketlendi',
     loading: 'Paketlenmiş Kur’an yükleniyor…',
     loadError: 'Paketlenmiş Kur’an yüklenemedi.',
+    retry: 'Yeniden dene',
     search: 'Tam Kur’an’da ara',
     searchPlaceholder: '1:1, Arapça, meal, sure adı…',
     surah: 'Sure',
@@ -287,6 +291,7 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     complete: '114 surah · 6.236 ayat · dikemas untuk dibaca luring',
     loading: 'Memuat Qur’an yang dikemas…',
     loadError: 'Qur’an yang dikemas tidak dapat dimuat.',
+    retry: 'Coba lagi',
     search: 'Cari Qur’an lengkap',
     searchPlaceholder: '1:1, Arab, terjemahan, nama surah…',
     surah: 'Surah',
@@ -436,6 +441,7 @@ export function QuranOfflineReader({
   const initialParsed = parseQuranVerseKey(initialVerse(preferences, initialVerseKey));
   const [pack, setPack] = useState<QuranOfflinePack | null>(null);
   const [loadError, setLoadError] = useState(false);
+  const [loadAttempt, setLoadAttempt] = useState(0);
   const [selectedSurah, setSelectedSurah] = useState(initialParsed?.surah ?? 1);
   const [virtualTargetAyahKey, setVirtualTargetAyahKey] = useState<string | null>(
     initialVerse(preferences, initialVerseKey),
@@ -456,6 +462,7 @@ export function QuranOfflineReader({
     void loadQuranOfflinePack()
       .then((loaded) => {
         if (cancelled) return;
+        setLoadError(false);
         setPack(loaded);
         const target = getQuranOfflineAyah(loaded, initialVerse(preferences, initialVerseKey));
         if (target) {
@@ -471,7 +478,7 @@ export function QuranOfflineReader({
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [loadAttempt]);
 
   useEffect(() => {
     if (!pack || !initialVerseKey) return;
@@ -682,9 +689,19 @@ export function QuranOfflineReader({
       </header>
 
       {loadError ? (
-        <p className="knowledge-empty" role="alert">
-          {labels.loadError}
-        </p>
+        <div className="knowledge-empty quran-load-error" role="alert" data-quran-load-error>
+          <p>{labels.loadError}</p>
+          <button
+            type="button"
+            data-quran-load-retry
+            onClick={() => {
+              setLoadError(false);
+              setLoadAttempt((current) => current + 1);
+            }}
+          >
+            {labels.retry}
+          </button>
+        </div>
       ) : !pack ? (
         <p className="knowledge-empty" role="status">
           {labels.loading}
