@@ -1,0 +1,53 @@
+name: Temporary V1.6 release version promotion
+
+on:
+  push:
+    branches:
+      - v160-release-prep
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v160-release-prep
+          fetch-depth: 0
+      - name: Synchronize V1.6.0 versions and native build numbers
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm version 1.6.0 --no-git-tag-version
+          python3 - <<'PY'
+          from pathlib import Path
+
+          android = Path('android/app/build.gradle')
+          text = android.read_text()
+          text = text.replace('versionCode 10', 'versionCode 11', 1)
+          text = text.replace('versionName "1.5.3"', 'versionName "1.6.0"', 1)
+          android.write_text(text)
+
+          ios = Path('ios/App/App.xcodeproj/project.pbxproj')
+          text = ios.read_text()
+          if text.count('CURRENT_PROJECT_VERSION = 10;') != 2:
+              raise SystemExit('unexpected iOS current build number count')
+          if text.count('MARKETING_VERSION = 1.5.3;') != 2:
+              raise SystemExit('unexpected iOS marketing version count')
+          text = text.replace('CURRENT_PROJECT_VERSION = 10;', 'CURRENT_PROJECT_VERSION = 11;')
+          text = text.replace('MARKETING_VERSION = 1.5.3;', 'MARKETING_VERSION = 1.6.0;')
+          ios.write_text(text)
+          PY
+          rm .github/workflows/temp-v160-release-version-promotion.yml
+          git diff --check
+      - name: Commit promoted version metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add package.json package-lock.json android/app/build.gradle ios/App/App.xcodeproj/project.pbxproj .github/workflows/temp-v160-release-version-promotion.yml
+          git commit -m 'Prepare V1.6.0 version metadata'
+          git push origin HEAD:v160-release-prep
