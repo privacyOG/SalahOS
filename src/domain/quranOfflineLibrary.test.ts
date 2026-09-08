@@ -6,6 +6,7 @@ import {
   getQuranOfflineAyah,
   listQuranOfflineSurahSummaries,
   loadQuranOfflinePack,
+  normalizeQuranSearchText,
   parseQuranVerseKey,
   searchQuranOfflinePack,
   searchQuranOfflineSurahs,
@@ -114,6 +115,17 @@ describe('complete offline Qur’an library navigation', () => {
     expect(searchQuranOfflinePack(fixture, 'Mankind').map((result) => result.ayah.key)).toEqual([
       '114:6',
     ]);
+  });
+
+  it('matches unvocalised Arabic without mutating canonical Uthmani display text', () => {
+    const canonical = fixture.surahs[0].ayahs[0].arabic;
+    expect(normalizeQuranSearchText('ٱلرَّحْمَٰنِ')).toBe('الرحمن');
+    expect(
+      searchQuranOfflinePack(fixture, 'بسم الله الرحمن الرحيم').map(
+        (result) => result.ayah.key,
+      ),
+    ).toEqual(['1:1']);
+    expect(fixture.surahs[0].ayahs[0].arabic).toBe(canonical);
   });
 
   it('builds searchable surah summaries with ayah count and revelation place', () => {
