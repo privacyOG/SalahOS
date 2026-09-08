@@ -1,0 +1,42 @@
+name: Temporary Vitest 4.1.11 lockfile generator
+
+on:
+  push:
+    branches:
+      - temp/v160-vitest-411
+
+permissions:
+  contents: write
+
+jobs:
+  generate:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Generate patched package metadata
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --package-lock-only --ignore-scripts --save-dev vitest@4.1.11 @vitest/coverage-v8@4.1.11
+          node -e "const p=require('./package.json'); if(p.devDependencies.vitest!=='4.1.11'||p.devDependencies['@vitest/coverage-v8']!=='4.1.11') process.exit(1)"
+          npm audit --audit-level=moderate
+          npx prettier --check package.json package-lock.json
+      - name: Store generated files as unattached Git blobs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          create_blob() {
+            local file="$1"
+            local payload
+            payload="$(base64 -w0 "$file")"
+            gh api --method POST "repos/${GITHUB_REPOSITORY}/git/blobs" -f content="$payload" -f encoding=base64 --jq '.sha'
+          }
+          echo "PACKAGE_JSON_BLOB=$(create_blob package.json)"
+          echo "PACKAGE_LOCK_BLOB=$(create_blob package-lock.json)"
