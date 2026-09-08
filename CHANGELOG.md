@@ -4,6 +4,35 @@ All notable SalahOS changes are recorded here.
 
 ## Unreleased
 
+### V1.6.0 candidate
+
+#### Mobile, Today and appearance
+
+- Remove Iqamah labels, values, placeholders and empty Iqamah columns from Today while retaining mosque/admin Iqamah data for mosque-specific surfaces.
+- Add Standard, Light Blue, Emerald, Navy, Warm Sand and Soft Lavender palettes independently of Light/Dark/System, with previews/reset and rendered contrast acceptance.
+- Add permanent responsive acceptance for 320×568, 360×780, 390×844, 430×932, 844×390 and 768×1024 across English/Arabic RTL, Light/Dark/System, keyboard/back navigation and 200% text sizing.
+- Preserve seven visible primary destinations and harden the smallest Today layout against large-text horizontal overflow.
+- Refine the mobile Prayer Calendar and verify locality/provenance across civil-date rollover, DST and resume/focus refresh.
+
+#### Qur'an and Knowledge
+
+- Make failed Qur'an pack loads genuinely retryable without deleting bookmarks/last-read state; add explicit Web/PWA offline preparation states and native corpus/font bundle verification.
+- Add visible lazy-route recovery, reading-first Qur'an navigation/preferences, search-return context, accurate dataset page-grouping language and preserved bookmark/resume/share/RTL behavior.
+- Keep packaged English Qur'an identity explicit as M. M. Pickthall (1930), with Arabic/English/commentary language-direction separation and canonical-content parity checks.
+- Reorganise Knowledge into distinct Qur'an, Hadith and Fiqh & questions scopes with scoped counts, compact disclosure and Companion narrator metadata.
+- Add Muhkam/Mutashabih editorial policy and verse-review register infrastructure based on the supplied project guide; whole-corpus named scholarly sign-off remains an external release gate and is not inferred from automation.
+
+#### Mosques, Qiblah and Settings
+
+- Verify mosque search, empty/no-location and cached states, Qiblah sensor-unavailable/map fallback and Settings import/export/reset/notification discoverability through permanent visual acceptance.
+
+#### Release engineering
+
+- Prepare npm/package-lock version 1.6.0, Android versionCode 11/versionName 1.6.0 and iOS build 11/marketing version 1.6.0.
+- Preserve formatting, lint, typecheck, tests/coverage, Qur'an/content integrity, security, design-token, production-build, bundle-budget and permanent Quality/Visual/Android/iOS/Windows gates.
+- Preserve exact-current-main release preflight, persistent Android signing, Web/PWA/Raspberry Pi archive verification, Windows executable verification and SHA-256 reconciliation.
+- Keep V1.6.0 publication blocked until required physical Android/iOS acceptance and named qualified whole-corpus Qur'an scholarly review are recorded complete.
+
 ## 1.5.3 — 2026-09-06
 
 ### Prayer correctness and mosque context
