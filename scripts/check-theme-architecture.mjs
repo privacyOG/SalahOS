@@ -5,12 +5,15 @@ const contract = read('src/platform/themePalette.ts');
 const settings = read('src/platform/settingsStorage.ts');
 const main = read('src/main.tsx');
 const screen = read('src/ui/SettingsScreen.tsx');
+const picker = read('src/ui/ThemePalettePicker.tsx');
 const names = [
   'salah-classic',
-  'midnight-gold',
-  'emerald-mosque',
   'royal-blue',
+  'emerald-mosque',
+  'navy',
   'desert-sand',
+  'soft-lavender',
+  'midnight-gold',
   'olive-heritage',
   'monochrome',
   'high-contrast',
@@ -31,8 +34,12 @@ if (!settings.includes('parseThemePalette(migrated.palette)'))
   throw new Error('Palette persistence is not validated');
 if (!main.includes('applyThemePalette(settings.palette'))
   throw new Error('Palette is not bootstrapped globally');
-if (!screen.includes('themePalettes.map'))
-  throw new Error('Display settings do not expose palette selection');
+if (!screen.includes('<ThemePalettePicker'))
+  throw new Error('Display settings do not expose the palette picker');
+if (!picker.includes('themePalettes.map') || !picker.includes('data-theme-palette-option'))
+  throw new Error('Palette picker does not expose all palette options');
+if (!picker.includes('data-theme-palette-reset') || !picker.includes('defaultThemePalette'))
+  throw new Error('Palette picker reset contract is missing');
 if (
   !palettes.includes('@media (forced-colors: active)') &&
   !read('src/theme-contrast-guard.css').includes('@media (forced-colors: active)')

@@ -13,7 +13,7 @@ import {
   type PersistedSettings,
 } from '../platform/settingsStorage';
 import { installThemePreference } from '../platform/themePreference';
-import { applyThemePalette, themePaletteLabels, themePalettes } from '../platform/themePalette';
+import { applyThemePalette } from '../platform/themePalette';
 import { MobilePrayerThemeSettings } from './MobilePrayerThemeSettings';
 import { NotificationOnboardingSettingsEntry } from './NotificationOnboardingSettingsEntry';
 import { PrayerBoardWeatherSettings } from './PrayerBoardWeatherSettings';
@@ -27,6 +27,7 @@ import {
   useSettingsNotificationSynchronization,
 } from './SettingsMigrationPanels';
 import { TaraweehPanel } from './TaraweehPanel';
+import { ThemePalettePicker } from './ThemePalettePicker';
 import {
   readSettingsCategory,
   searchForAdminDestination,
@@ -482,24 +483,14 @@ function AppearanceSettingsForm({
           <option value="dark">{translate(locale, 'themeDark')}</option>
         </select>
       </label>
-      <label>
-        <span>{settingsCopy[locale].palette}</span>
-        <select
-          value={settings.palette}
-          onChange={(event) => {
-            updateSettings((current) => ({
-              ...current,
-              palette: event.target.value as PersistedSettings['palette'],
-            }));
-          }}
-        >
-          {themePalettes.map((palette) => (
-            <option key={palette} value={palette}>
-              {themePaletteLabels[palette]}
-            </option>
-          ))}
-        </select>
-      </label>
+      <ThemePalettePicker
+        locale={locale}
+        label={settingsCopy[locale].palette}
+        selected={settings.palette}
+        onSelect={(palette) => {
+          updateSettings((current) => ({ ...current, palette }));
+        }}
+      />
     </div>
   );
 }
