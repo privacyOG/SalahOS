@@ -14,11 +14,12 @@ describe('V1.6 Uthmani Qur’an provenance', () => {
     expect(manifest.arabicSource.upstreamTextSource).toContain('King Fahd Complex');
   });
 
-  it('keeps complete-corpus and hash traceability in the manifest', () => {
+  it('keeps complete-corpus, licence and hash traceability in the manifest', () => {
     expect(manifest.surahs).toBe(114);
     expect(manifest.ayahs).toBe(6236);
     expect(manifest.sha256).toMatch(/^[0-9a-f]{64}$/u);
     expect(manifest.arabicSource.license).toContain('CC BY 4.0');
+    expect(manifest.arabicSource.upstreamLicense).toContain('CC BY 3.0');
     expect(manifest.arabicSource.upstreamSourceUrl).toContain('quranType=uthmani');
   });
 });
