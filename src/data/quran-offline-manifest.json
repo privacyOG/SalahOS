@@ -9,7 +9,7 @@
     "repository": "mjmirza/quran-dataset",
     "commit": "c0dc86b060b854d03f62848692bf1d2936dba630",
     "path": "data/quran.json",
-    "license": "CC BY 4.0 at pinned commit; underlying Tanzil source attribution retained by upstream",
+    "license": "CC BY 4.0 at pinned commit",
     "provenance": "Tanzil Uthmani text with KFQPC verification metadata retained by the pinned dataset",
     "script": "Uthmani",
     "edition": "Medina Mushaf",
