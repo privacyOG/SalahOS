@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "status": "pending",
+  "scope": {
+    "surahs": 114,
+    "ayahs": 6236
+  },
+  "reviewMethod": "human-whole-corpus-screening-required",
+  "reviewedSurahs": [],
+  "notes": [
+    "This file records human scholarly screening coverage; an automated scan must not populate reviewedSurahs or mark a surah complete.",
+    "Each completed surah record must attest that every ayah in that surah was screened, including non-attribute passages and passages whose intended meaning may be unknowable.",
+    "Any verse requiring editorial treatment must also be represented and resolved in quran-mutashabih-review-register.json before release."
+  ]
+}
