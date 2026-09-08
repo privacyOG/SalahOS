@@ -1,0 +1,27 @@
+name: Temporary editorial gate Prettier capture
+
+on:
+  push:
+    branches:
+      - temp/v160-editorial-prettier
+
+permissions:
+  contents: read
+
+jobs:
+  capture:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Capture exact Prettier diff
+        shell: bash
+        run: |
+          set -euo pipefail
+          npx prettier --write scripts/check-quran-editorial-release-gate.mjs
+          git diff -- scripts/check-quran-editorial-release-gate.mjs
+          npx prettier --check scripts/check-quran-editorial-release-gate.mjs
