@@ -121,9 +121,7 @@ describe('complete offline Qur’an library navigation', () => {
     const canonical = fixture.surahs[0].ayahs[0].arabic;
     expect(normalizeQuranSearchText('ٱلرَّحْمَٰنِ')).toBe('الرحمن');
     expect(
-      searchQuranOfflinePack(fixture, 'بسم الله الرحمن الرحيم').map(
-        (result) => result.ayah.key,
-      ),
+      searchQuranOfflinePack(fixture, 'بسم الله الرحمن الرحيم').map((result) => result.ayah.key),
     ).toEqual(['1:1']);
     expect(fixture.surahs[0].ayahs[0].arabic).toBe(canonical);
   });
