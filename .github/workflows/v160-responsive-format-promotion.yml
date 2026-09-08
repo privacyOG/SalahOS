@@ -1,0 +1,35 @@
+name: V1.6.0 Responsive Format Promotion
+
+on:
+  push:
+    branches:
+      - v160-responsive-acceptance
+    paths:
+      - .github/workflows/v160-responsive-format-promotion.yml
+
+permissions:
+  contents: write
+
+jobs:
+  promote:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v160-responsive-acceptance
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Format and create clean commit
+        run: |
+          npx prettier --write scripts/visual-v160-responsive-matrix.mjs
+          rm .github/workflows/v160-responsive-format-promotion.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add scripts/visual-v160-responsive-matrix.mjs .github/workflows/v160-responsive-format-promotion.yml
+          git commit -m 'style(v1.6.0): format responsive acceptance matrix'
+          echo "CLEAN_COMMIT=$(git rev-parse HEAD)"
+          git push origin HEAD:v160-responsive-acceptance
