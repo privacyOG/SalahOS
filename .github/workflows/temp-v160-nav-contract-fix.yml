@@ -1,0 +1,50 @@
+name: Temporary V1.6 navigation contract repair
+
+on:
+  push:
+    branches:
+      - v160-responsive-acceptance
+
+permissions:
+  contents: write
+
+jobs:
+  repair:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: v160-responsive-acceptance
+          fetch-depth: 0
+      - name: Repair stale seven-destination acceptance contract
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/visual-device-ux-refinement.mjs')
+          text = path.read_text()
+          replacements = {
+              "if (visibleNavigationTargets.length !== 6) {": "if (visibleNavigationTargets.length !== 7) {",
+              "`${name} expected six visible mobile navigation targets: ${JSON.stringify(metrics.navigationTargets)}`": "`${name} expected seven visible mobile navigation targets: ${JSON.stringify(metrics.navigationTargets)}`",
+              "if (communityTarget === undefined || communityTarget.visible) {": "if (communityTarget === undefined || !communityTarget.visible) {",
+              "`${name} expected Community to remain route-capable but hidden from the mobile bottom bar`": "`${name} expected Community to remain visible in the mobile primary navigation`",
+          }
+          for old, new in replacements.items():
+              if old not in text:
+                  raise SystemExit(f'missing expected stale contract: {old}')
+              text = text.replace(old, new, 1)
+          path.write_text(text)
+          PY
+          rm .github/workflows/temp-v160-nav-contract-fix.yml
+          git diff --check
+          git diff -- scripts/visual-device-ux-refinement.mjs .github/workflows/temp-v160-nav-contract-fix.yml
+      - name: Commit repaired fixture and remove helper
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add scripts/visual-device-ux-refinement.mjs .github/workflows/temp-v160-nav-contract-fix.yml
+          git commit -m 'Update device UX acceptance for seven destinations'
+          git push origin HEAD:v160-responsive-acceptance
