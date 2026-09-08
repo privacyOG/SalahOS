@@ -50,6 +50,10 @@
   padding: 0.5rem 1rem;
   background: var(--salah-bg-surface);
 }
+.prayer-calendar__agenda,
+.prayer-calendar__mobile-timetable {
+  display: none;
+}
 .prayer-calendar__table-wrap {
   overflow-x: auto;
   border: 1px solid var(--salah-border-subtle);
@@ -128,12 +132,97 @@
   line-height: 1.5;
   font-size: 0.85rem;
 }
+.prayer-calendar button:focus-visible,
+.prayer-calendar summary:focus-visible {
+  outline: 3px solid var(--salah-focus-ring);
+  outline-offset: 2px;
+}
 @media (max-width: 700px) {
   .prayer-calendar {
     padding: 0.75rem;
   }
   .prayer-calendar__views {
     grid-template-columns: repeat(2, 1fr);
+  }
+  .prayer-calendar__desktop-timetable {
+    display: none;
+  }
+  .prayer-calendar__agenda {
+    display: grid;
+    gap: 0.75rem;
+  }
+  .prayer-calendar__day-card {
+    min-width: 0;
+    padding: 0.9rem;
+    border: 1px solid var(--salah-border-subtle);
+    border-radius: 1rem;
+    background: var(--salah-bg-surface);
+  }
+  .prayer-calendar__day-card > header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+    padding-bottom: 0.65rem;
+    border-bottom: 1px solid var(--salah-border-subtle);
+  }
+  .prayer-calendar__day-card > header strong,
+  .prayer-calendar__day-card > header small {
+    min-width: 0;
+  }
+  .prayer-calendar__day-card > header small {
+    color: var(--salah-fg-secondary);
+    text-align: end;
+  }
+  .prayer-calendar__day-card dl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.5rem;
+    margin: 0.75rem 0 0;
+  }
+  .prayer-calendar__day-card dl > div {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.5rem;
+    min-width: 0;
+    padding: 0.55rem 0.65rem;
+    border-radius: 0.75rem;
+    background: var(--salah-bg-muted);
+  }
+  .prayer-calendar__day-card dt,
+  .prayer-calendar__day-card dd {
+    margin: 0;
+  }
+  .prayer-calendar__day-card dt {
+    color: var(--salah-fg-secondary);
+    font-size: 0.85rem;
+  }
+  .prayer-calendar__day-card dd {
+    color: var(--salah-fg-primary);
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+  }
+  .prayer-calendar__mobile-timetable {
+    display: block;
+    margin-top: 0.85rem;
+    border: 1px solid var(--salah-border-subtle);
+    border-radius: 1rem;
+    background: var(--salah-bg-surface);
+  }
+  .prayer-calendar__mobile-timetable > summary {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    padding: 0.7rem 0.9rem;
+    color: var(--salah-fg-primary);
+    font-weight: 800;
+    cursor: pointer;
+  }
+  .prayer-calendar__mobile-timetable .prayer-calendar__table-wrap {
+    border: 0;
+    border-top: 1px solid var(--salah-border-subtle);
+    border-radius: 0 0 1rem 1rem;
   }
   .prayer-calendar__year {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -147,6 +236,9 @@
   }
 }
 @media (max-width: 420px) {
+  .prayer-calendar__day-card dl {
+    grid-template-columns: 1fr;
+  }
   .prayer-calendar__year {
     grid-template-columns: 1fr 1fr;
   }
@@ -154,6 +246,8 @@
 @media (forced-colors: active) {
   .prayer-calendar__views,
   .prayer-calendar__table-wrap,
+  .prayer-calendar__day-card,
+  .prayer-calendar__mobile-timetable,
   .prayer-calendar__year button {
     border: 1px solid CanvasText;
   }
