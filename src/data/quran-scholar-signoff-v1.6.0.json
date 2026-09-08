@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "status": "pending",
+  "scholarName": null,
+  "qualifications": null,
+  "reviewDate": null,
+  "reviewScope": "all-114-surahs-6236-ayat-approved-English-content-and-editorial-register",
+  "quranPackSha256": null,
+  "reviewRegisterSha256": null,
+  "approvedEnglishContentId": null,
+  "statement": null,
+  "notes": [
+    "This record must be completed by or from documented evidence supplied by the named qualified scholar. Automation must not invent or populate scholarly approval.",
+    "Approval must bind to the exact packaged Quran hash and exact editorial review-register hash accepted for release."
+  ]
+}
