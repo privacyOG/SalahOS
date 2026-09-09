@@ -1,0 +1,20 @@
+{
+  "id": "quran-salahos-2026",
+  "kind": "quran-translation",
+  "title": "SalahOS 2026 (English meaning)",
+  "authors": ["SalahOS 2026 editorial project"],
+  "edition": "2026 provisional Ash'ari-guided English meaning; derived from the pinned Pickthall 1930 baseline with verse-specific owner-guide overrides",
+  "translator": "SalahOS 2026 editorial project",
+  "citation": "Cite SalahOS 2026 plus surah and ayah; disclose that whole-corpus qualified scholarly sign-off remains pending until the V1.6.0 editorial gate passes.",
+  "provenance": "Project English-meaning layer governed by the project-owner-supplied 'The Ayahs of the Qur'an – Muhkam and Mutashabih' guide. Pickthall 1930 remains the pinned baseline where wording has not yet been changed. Registry approval permits source identity and development use; it is not whole-corpus scholarly approval.",
+  "reviewStatus": "approved",
+  "trustTier": "project-derived-translation-pending-scholarly-signoff",
+  "reviewedAt": "2026-09-09",
+  "madhhabs": [],
+  "creedTraditions": ["ashari"],
+  "approvedModules": ["quran"],
+  "displayPresentation": {
+    "lang": "en",
+    "dir": "ltr"
+  }
+}
