@@ -1018,7 +1018,9 @@ export function QuranOfflineReader({
                 <button
                   type="button"
                   disabled={currentPage <= 1}
-                  onClick={() => selectPage(currentPage - 1)}
+                  onClick={() => {
+                    selectPage(currentPage - 1);
+                  }}
                 >
                   {labels.previousPage}
                 </button>
@@ -1029,7 +1031,9 @@ export function QuranOfflineReader({
                 <button
                   type="button"
                   disabled={currentPage >= maxPage}
-                  onClick={() => selectPage(currentPage + 1)}
+                  onClick={() => {
+                    selectPage(currentPage + 1);
+                  }}
                 >
                   {labels.nextPage}
                 </button>
@@ -1049,9 +1053,9 @@ export function QuranOfflineReader({
                 <button
                   type="button"
                   data-quran-offline-bookmark={activeResult.ayah.key}
-                  onClick={() =>
-                    onPreferencesChange(toggleQuranBookmark(preferences, activeResult.ayah.key))
-                  }
+                  onClick={() => {
+                    onPreferencesChange(toggleQuranBookmark(preferences, activeResult.ayah.key));
+                  }}
                 >
                   {preferences.bookmarkedAyahIds.includes(activeResult.ayah.key)
                     ? labels.removeBookmark
@@ -1060,9 +1064,9 @@ export function QuranOfflineReader({
                 <button
                   type="button"
                   data-quran-offline-last-read={activeResult.ayah.key}
-                  onClick={() =>
-                    onPreferencesChange(setQuranLastRead(preferences, activeResult.ayah.key))
-                  }
+                  onClick={() => {
+                    onPreferencesChange(setQuranLastRead(preferences, activeResult.ayah.key));
+                  }}
                 >
                   {labels.lastRead}
                 </button>
@@ -1071,8 +1075,12 @@ export function QuranOfflineReader({
                   data-quran-offline-share={activeResult.ayah.key}
                   onClick={() => {
                     void shareOfflineAyah(activeResult, preferences.translationMode)
-                      .then((shared) => setShareStatus(shared ? labels.copied : labels.copyFailed))
-                      .catch(() => setShareStatus(labels.copyFailed));
+                      .then((shared) => {
+                        setShareStatus(shared ? labels.copied : labels.copyFailed);
+                      })
+                      .catch(() => {
+                        setShareStatus(labels.copyFailed);
+                      });
                   }}
                 >
                   {labels.share}
@@ -1124,9 +1132,9 @@ export function QuranOfflineReader({
                 initialScrollTop={quranScrollPositionForSurah(selected.surah)}
                 targetAyahKey={virtualTargetAyahKey}
                 ariaLabel={labels.virtualListLabel}
-                onScrollTopChange={(scrollTop) =>
-                  persistQuranScrollPosition(selected.surah, scrollTop)
-                }
+                onScrollTopChange={(scrollTop) => {
+                  persistQuranScrollPosition(selected.surah, scrollTop);
+                }}
                 renderItem={(result) => (
                   <article
                     className="quran-offline-ayah"

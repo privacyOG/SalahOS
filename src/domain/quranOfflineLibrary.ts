@@ -157,7 +157,7 @@ export function quranReaderArabicForAyah(
   canonicalBasmala: string,
 ): string {
   const parsed = parseQuranVerseKey(verseKey);
-  if (!parsed || parsed.ayah !== 1 || parsed.surah === 1) return arabic;
+  if (parsed?.ayah !== 1 || parsed.surah === 1) return arabic;
 
   const text = arabic.trimStart();
   const basmala = canonicalBasmala.trim();
@@ -172,24 +172,19 @@ function prepareQuranReaderPack(pack: QuranOfflinePack): QuranOfflinePack {
   const canonicalBasmala = fatihah?.ayahs.find((ayah) => ayah.ayah === 1)?.arabic ?? '';
   if (canonicalBasmala.trim().length === 0) return pack;
 
-  let changed = false;
   const surahs = pack.surahs.map((surah) => {
     if (surah.surah === 1) return surah;
 
-    let surahChanged = false;
     const ayahs = surah.ayahs.map((ayah) => {
       if (ayah.ayah !== 1) return ayah;
       const arabic = quranReaderArabicForAyah(ayah.key, ayah.arabic, canonicalBasmala);
-      if (arabic === ayah.arabic) return ayah;
-      changed = true;
-      surahChanged = true;
-      return Object.freeze({ ...ayah, arabic });
+      return arabic === ayah.arabic ? ayah : Object.freeze({ ...ayah, arabic });
     });
 
-    return surahChanged ? Object.freeze({ ...surah, ayahs: Object.freeze(ayahs) }) : surah;
+    return Object.freeze({ ...surah, ayahs: Object.freeze(ayahs) });
   });
 
-  return changed ? Object.freeze({ ...pack, surahs: Object.freeze(surahs) }) : pack;
+  return Object.freeze({ ...pack, surahs: Object.freeze(surahs) });
 }
 
 let cachedPackPromise: Promise<QuranOfflinePack> | null = null;
