@@ -56,9 +56,9 @@ describe('Quran reading preferences', () => {
     expect(parseQuranReadingPreferences({ arabicFont: 'traditional' }).arabicFont).toBe(
       'amiri-quran',
     );
-    expect(parseQuranReadingPreferences({ translationMode: 'pickthall-1930' }).translationMode).toBe(
-      'pickthall-1930',
-    );
+    expect(
+      parseQuranReadingPreferences({ translationMode: 'pickthall-1930' }).translationMode,
+    ).toBe('pickthall-1930');
     expect(parseQuranReadingPreferences({ translationMode: 'none' }).translationMode).toBe('none');
     expect(parseQuranReadingPreferences({ translationMode: 'none' }).readingMode).toBe('list');
     expect(parseQuranReadingPreferences({ translationMode: 'unknown' }).translationMode).toBe(

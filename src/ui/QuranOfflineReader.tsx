@@ -351,7 +351,8 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     resultLimit: 'Menampilkan 50 hasil pertama.',
     translation: 'Makna Inggris',
     salahos2026: 'SalahOS 2026 (English meaning)',
-    salahos2026Status: 'Redaksi sementara · persetujuan ulama berkualifikasi untuk seluruh korpus masih diperlukan',
+    salahos2026Status:
+      'Redaksi sementara · persetujuan ulama berkualifikasi untuk seluruh korpus masih diperlukan',
     ashariGuidance: 'Panduan Muhkam / Mutasyabih Asyʿari',
     salafMethod: 'Metode Salaf',
     khalafMethod: 'Taʾwil kontekstual Khalaf',
@@ -779,8 +780,7 @@ export function QuranOfflineReader({
                   lang={locale}
                   dir={locale === 'ar' ? 'rtl' : 'ltr'}
                 >
-                  {labels.quran}{' '}
-                  <BidiText>{formatQuranVerseReference(verseKey, locale)}</BidiText>
+                  {labels.quran} <BidiText>{formatQuranVerseReference(verseKey, locale)}</BidiText>
                 </button>
               ))}
             </div>
@@ -1015,14 +1015,22 @@ export function QuranOfflineReader({
           {preferences.readingMode === 'page' && normalBrowsing ? (
             <>
               <div className="quran-page-navigation" aria-label={labels.readingMode}>
-                <button type="button" disabled={currentPage <= 1} onClick={() => selectPage(currentPage - 1)}>
+                <button
+                  type="button"
+                  disabled={currentPage <= 1}
+                  onClick={() => selectPage(currentPage - 1)}
+                >
                   {labels.previousPage}
                 </button>
                 <strong>
                   {labels.page} {formatQuranUiNumber(currentPage, locale)} /{' '}
                   {formatQuranUiNumber(maxPage, locale)}
                 </strong>
-                <button type="button" disabled={currentPage >= maxPage} onClick={() => selectPage(currentPage + 1)}>
+                <button
+                  type="button"
+                  disabled={currentPage >= maxPage}
+                  onClick={() => selectPage(currentPage + 1)}
+                >
                   {labels.nextPage}
                 </button>
               </div>
@@ -1041,7 +1049,9 @@ export function QuranOfflineReader({
                 <button
                   type="button"
                   data-quran-offline-bookmark={activeResult.ayah.key}
-                  onClick={() => onPreferencesChange(toggleQuranBookmark(preferences, activeResult.ayah.key))}
+                  onClick={() =>
+                    onPreferencesChange(toggleQuranBookmark(preferences, activeResult.ayah.key))
+                  }
                 >
                   {preferences.bookmarkedAyahIds.includes(activeResult.ayah.key)
                     ? labels.removeBookmark
@@ -1050,7 +1060,9 @@ export function QuranOfflineReader({
                 <button
                   type="button"
                   data-quran-offline-last-read={activeResult.ayah.key}
-                  onClick={() => onPreferencesChange(setQuranLastRead(preferences, activeResult.ayah.key))}
+                  onClick={() =>
+                    onPreferencesChange(setQuranLastRead(preferences, activeResult.ayah.key))
+                  }
                 >
                   {labels.lastRead}
                 </button>
@@ -1089,7 +1101,12 @@ export function QuranOfflineReader({
           ) : null}
 
           {results.length > 0 ? (
-            <p className="quran-offline-reader__hint" role="status" aria-live="polite" data-quran-results-status>
+            <p
+              className="quran-offline-reader__hint"
+              role="status"
+              aria-live="polite"
+              data-quran-results-status
+            >
               {formatQuranResultsStatus(results.length, locale)}
             </p>
           ) : null}
@@ -1107,13 +1124,17 @@ export function QuranOfflineReader({
                 initialScrollTop={quranScrollPositionForSurah(selected.surah)}
                 targetAyahKey={virtualTargetAyahKey}
                 ariaLabel={labels.virtualListLabel}
-                onScrollTopChange={(scrollTop) => persistQuranScrollPosition(selected.surah, scrollTop)}
+                onScrollTopChange={(scrollTop) =>
+                  persistQuranScrollPosition(selected.surah, scrollTop)
+                }
                 renderItem={(result) => (
                   <article
                     className="quran-offline-ayah"
                     data-quran-offline-ayah={result.ayah.key}
                     data-active={activeAyahKey === result.ayah.key ? 'true' : undefined}
-                    data-resume-highlight={resumeHighlightKey === result.ayah.key ? 'true' : undefined}
+                    data-resume-highlight={
+                      resumeHighlightKey === result.ayah.key ? 'true' : undefined
+                    }
                     onClick={() => {
                       setActiveAyahKey(result.ayah.key);
                       setResumeHighlightKey(null);
@@ -1126,7 +1147,9 @@ export function QuranOfflineReader({
               />
             </>
           ) : (
-            <div className={`quran-offline-reader__ayat quran-offline-reader__ayat--${preferences.readingMode}`}>
+            <div
+              className={`quran-offline-reader__ayat quran-offline-reader__ayat--${preferences.readingMode}`}
+            >
               {results.map((result) => {
                 const parsed = parseQuranVerseKey(result.ayah.key);
                 const showPageSurahBand =
@@ -1138,7 +1161,9 @@ export function QuranOfflineReader({
                       className="quran-offline-ayah"
                       data-quran-offline-ayah={result.ayah.key}
                       data-active={activeAyahKey === result.ayah.key ? 'true' : undefined}
-                      data-resume-highlight={resumeHighlightKey === result.ayah.key ? 'true' : undefined}
+                      data-resume-highlight={
+                        resumeHighlightKey === result.ayah.key ? 'true' : undefined
+                      }
                       onClick={() => {
                         setActiveAyahKey(result.ayah.key);
                         setResumeHighlightKey(null);
@@ -1146,11 +1171,16 @@ export function QuranOfflineReader({
                       }}
                     >
                       {!normalBrowsing ? (
-                        <p className="quran-offline-ayah__reference" lang={locale} dir={locale === 'ar' ? 'rtl' : 'ltr'}>
+                        <p
+                          className="quran-offline-ayah__reference"
+                          lang={locale}
+                          dir={locale === 'ar' ? 'rtl' : 'ltr'}
+                        >
                           <span lang={quranOfflineTransliterationPresentation.lang} dir="ltr">
                             {result.surah.nameTransliteration}
                           </span>{' '}
-                          · <BidiText>{formatQuranVerseReference(result.ayah.key, locale)}</BidiText>{' '}
+                          ·{' '}
+                          <BidiText>{formatQuranVerseReference(result.ayah.key, locale)}</BidiText>{' '}
                           · {labels.juz} {formatQuranUiNumber(result.ayah.juz, locale)}
                         </p>
                       ) : null}

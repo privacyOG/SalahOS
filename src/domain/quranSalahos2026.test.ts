@@ -50,9 +50,13 @@ describe('SalahOS 2026 English meaning', () => {
     expect(salahos2026EnglishMeaning('28:88', 'baseline')).toContain('His Dominion');
     expect(salahos2026EnglishMeaning('68:42', 'baseline')).toContain('anguish and hardship');
     expect(salahos2026EnglishMeaning('24:35', 'baseline')).toContain('Creator of guidance');
-    expect(salahos2026EnglishMeaning('57:4', 'baseline')).toContain('He knows you wherever you are');
+    expect(salahos2026EnglishMeaning('57:4', 'baseline')).toContain(
+      'He knows you wherever you are',
+    );
     expect(salahos2026EnglishMeaning('16:128', 'baseline')).toContain('Allah supports');
-    expect(salahos2026EnglishMeaning('20:5', 'baseline')).toContain('without sitting, place, direction');
+    expect(salahos2026EnglishMeaning('20:5', 'baseline')).toContain(
+      'without sitting, place, direction',
+    );
   });
 
   it('keeps override keys unique and explicitly provisional', () => {

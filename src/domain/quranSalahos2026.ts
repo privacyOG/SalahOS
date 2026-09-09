@@ -12,10 +12,7 @@ export const salahos2026Presentation: TextPresentationMetadata = textPresentatio
 );
 
 export type SalahOS2026Treatment =
-  | 'muhkam-foundation'
-  | 'tafwid-with-tanzih'
-  | 'contextual-tawil'
-  | 'tafwid-and-contextual-tawil';
+  'muhkam-foundation' | 'tafwid-with-tanzih' | 'contextual-tawil' | 'tafwid-and-contextual-tawil';
 
 export type SalahOS2026Classification = 'muhkam-foundation' | 'mutashabih';
 
@@ -39,9 +36,7 @@ const entries = Object.freeze(
   ),
 );
 
-export function getSalahOS2026EditorialEntry(
-  verseKey: string,
-): SalahOS2026EditorialEntry | null {
+export function getSalahOS2026EditorialEntry(verseKey: string): SalahOS2026EditorialEntry | null {
   return entries.get(verseKey) ?? null;
 }
 
