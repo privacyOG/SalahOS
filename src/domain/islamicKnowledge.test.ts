@@ -15,8 +15,9 @@ describe('Islamic knowledge catalogue', () => {
       expect(entry.sourceIds.length).toBeGreaterThan(0);
       if (entry.module === 'quran') {
         expect(entry.reference).toMatch(/^Qur’an \d+:\d+$/u);
-        expect(entry.source.length).toBeGreaterThan(10);
-        expect(entry.translationSourceId).toBe('quran-pickthall-1930');
+        expect(entry.source).toContain('SalahOS 2026');
+        expect(entry.translationSourceId).toBe('quran-salahos-2026');
+        expect(entry.sourceIds).toContain('quran-pickthall-1930');
         expect(entry.tafsirSourceId).toBe('quran-tafsir-jalalayn');
         expect(entry.tafsirSummary.length).toBeGreaterThan(40);
         expect(entry.topics.length).toBeGreaterThan(0);
@@ -52,6 +53,7 @@ describe('Islamic knowledge catalogue', () => {
       'quran-patience-prayer',
     ]);
     expect(filterIslamicKnowledge('quran', 'Jalalayn')).toHaveLength(3);
+    expect(filterIslamicKnowledge('quran', 'SalahOS 2026')).toHaveLength(3);
   });
 
   it('resolves related ayat by stable offline identifiers', () => {
