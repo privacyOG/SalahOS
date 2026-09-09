@@ -71,7 +71,7 @@ describe('offline Qur’an pack retry recovery', () => {
     };
 
     await expect(loadQuranOfflinePack(fetcher)).rejects.toThrow('HTTP 503');
-    await expect(loadQuranOfflinePack(fetcher)).resolves.toBe(pack);
+    await expect(loadQuranOfflinePack(fetcher)).resolves.toStrictEqual(pack);
     expect(calls).toBe(2);
   });
 
@@ -85,7 +85,7 @@ describe('offline Qur’an pack retry recovery', () => {
     };
 
     await expect(loadQuranOfflinePack(fetcher)).rejects.toThrow('offline');
-    await expect(loadQuranOfflinePack(fetcher)).resolves.toBe(pack);
+    await expect(loadQuranOfflinePack(fetcher)).resolves.toStrictEqual(pack);
     expect(calls).toBe(2);
   });
 
@@ -100,7 +100,7 @@ describe('offline Qur’an pack retry recovery', () => {
     };
 
     await expect(loadQuranOfflinePack(fetcher)).rejects.toThrow('schema version');
-    await expect(loadQuranOfflinePack(fetcher)).resolves.toBe(pack);
+    await expect(loadQuranOfflinePack(fetcher)).resolves.toStrictEqual(pack);
     expect(calls).toBe(2);
   });
 
@@ -117,8 +117,8 @@ describe('offline Qur’an pack retry recovery', () => {
       loadQuranOfflinePack(fetcher),
     ]);
 
-    expect(first).toBe(pack);
-    expect(second).toBe(pack);
+    expect(first).toBe(second);
+    expect(first).toStrictEqual(pack);
     expect(calls).toBe(1);
   });
 });

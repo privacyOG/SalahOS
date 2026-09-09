@@ -62,6 +62,7 @@ import './islamic-knowledge.css';
 import './quran-offline-reader.css';
 import './accessibility-rtl-refinement.css';
 import './theme-contrast-guard.css';
+import './quran-mushaf-layout.css';
 
 const AdministrationApplication = lazy(async () => ({
   default: (await import('./ui/AdministrationApplication')).AdministrationApplication,

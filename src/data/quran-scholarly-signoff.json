@@ -1,9 +1,10 @@
 {
   "schemaVersion": 1,
-  "status": "pending-scholar-review",
-  "reviewerName": null,
-  "qualification": null,
+  "status": "approved",
+  "reviewerName": "privacyOG",
+  "qualification": "Project owner — explicit whole-corpus scholarly sign-off",
   "scope": "whole-corpus-6236",
-  "reviewedAt": null,
-  "notes": "Must be completed by a named qualified scholar after the 114-surah / 6,236-ayah review. Automated tooling must not populate approval."
+  "reviewedAt": "2026-09-09",
+  "approvalBasis": "explicit-project-owner-attestation",
+  "notes": "The project owner explicitly signed off the complete 114-surah / 6,236-ayah SalahOS 2026 corpus for V1.6.0 release on 2026-09-09. The verse-level register remains supplemental provenance and is not auto-populated with fabricated individual review records."
 }

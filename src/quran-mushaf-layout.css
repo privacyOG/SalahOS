@@ -1,0 +1,59 @@
+/* V1.6.0 Qur’an structure follows the supplied Arabic mushaf reference:
+ * surah heading, one centred opening Bismillah, then the ayat. */
+.quran-surah-band {
+  display: grid;
+  justify-items: center;
+  gap: 0.7rem;
+  padding-block: 1rem 1.15rem;
+  text-align: center;
+}
+
+.quran-surah-band > div {
+  display: grid;
+  justify-items: center;
+  justify-content: center;
+  gap: 0.25rem;
+  width: min(100%, 34rem);
+}
+
+.quran-surah-band strong[lang='ar'] {
+  width: 100%;
+  text-align: center;
+  font-family: 'amiri-quran', var(--salah-font-arabic, serif);
+  font-size: clamp(1.55rem, 4vw, 2rem);
+  line-height: 1.8;
+}
+
+.quran-surah-band > div > span {
+  color: var(--salah-fg-secondary);
+  font-size: var(--salah-text-sm);
+}
+
+.quran-surah-band [data-quran-basmala] {
+  width: 100%;
+  margin: 0;
+  direction: rtl;
+  text-align: center;
+  unicode-bidi: isolate;
+  font-family: 'amiri-quran', var(--salah-font-arabic, serif);
+  font-size: clamp(1.65rem, 4.5vw, 2.25rem);
+  line-height: 2;
+}
+
+/* Page mode reads as one mushaf-style page instead of a stack of separate cards. */
+.quran-offline-reader__ayat--page .quran-offline-ayah {
+  padding-block: 0.6rem;
+  border-block-end: 0;
+}
+
+.quran-offline-reader__ayat--page .quran-offline-ayah .knowledge-card__arabic {
+  margin-block: 0.35rem;
+  line-height: 2.15;
+}
+
+.quran-offline-reader__ayat--page .quran-offline-ayah__translation,
+.quran-offline-reader__ayat--page .quran-offline-ayah__salahos-note,
+.quran-offline-reader__ayat--page .quran-offline-ayah__tafsir,
+.quran-offline-reader__ayat--page .quran-offline-ayah__related {
+  margin-inline: 0.35rem;
+}

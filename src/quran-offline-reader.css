@@ -160,6 +160,14 @@
   line-height: 1.9;
 }
 
+/* V1.6.0: every Uthmani Arabic surface is an explicit RTL/right-aligned isolate. */
+.quran-uthmani-script[lang='ar'][dir='rtl'],
+.quran-offline-ayah .knowledge-card__arabic[lang='ar'][dir='rtl'] {
+  direction: rtl;
+  text-align: right;
+  unicode-bidi: isolate;
+}
+
 .quran-offline-reader__ayat {
   display: grid;
   gap: 0.9rem;
@@ -202,9 +210,11 @@
   margin-block: 1rem;
 }
 
-.quran-offline-reader__ayat--page .knowledge-card__arabic {
-  text-align: justify;
-  text-align-last: end;
+/* Page grouping must not override Arabic direction/alignment. */
+.quran-offline-reader__ayat--page .knowledge-card__arabic[lang='ar'][dir='rtl'] {
+  direction: rtl;
+  text-align: right;
+  text-align-last: right;
 }
 
 .quran-offline-ayah__marker {
@@ -220,6 +230,7 @@
   line-height: 1.7;
 }
 
+.quran-offline-ayah__salahos-note,
 .quran-offline-ayah__tafsir,
 .quran-offline-ayah__related {
   display: grid;
@@ -228,6 +239,27 @@
   padding: 0.9rem;
   border-radius: var(--salah-radius-md);
   background: color-mix(in srgb, var(--salah-fg-accent) 6%, var(--salah-bg-surface));
+}
+
+.quran-offline-ayah__salahos-note {
+  border: 1px solid color-mix(in srgb, var(--salah-fg-accent) 28%, var(--salah-border-subtle));
+}
+
+.quran-offline-ayah__salahos-note > summary {
+  cursor: pointer;
+  color: var(--salah-fg-primary);
+  font-weight: 800;
+}
+
+.quran-offline-ayah__salahos-note p,
+.quran-offline-ayah__salahos-note small {
+  margin: 0.35rem 0 0;
+  color: var(--salah-fg-secondary);
+  line-height: 1.65;
+}
+
+.quran-offline-ayah__salahos-note small {
+  color: var(--salah-fg-tertiary);
 }
 
 .quran-offline-ayah__tafsir strong,

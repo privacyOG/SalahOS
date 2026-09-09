@@ -16,6 +16,12 @@ import {
   type QuranOfflineSearchResult,
 } from '../domain/quranOfflineLibrary';
 import {
+  SALAHOS_2026_DISPLAY_NAME,
+  getSalahOS2026EditorialEntry,
+  salahos2026EnglishMeaning,
+  salahos2026Presentation,
+} from '../domain/quranSalahos2026';
+import {
   getIslamicKnowledgeEntryById,
   islamicKnowledgeEntries,
   type QuranKnowledgeEntry,
@@ -74,6 +80,11 @@ type QuranReaderCopy = Readonly<{
   noResults: string;
   resultLimit: string;
   translation: string;
+  salahos2026: string;
+  salahos2026Status: string;
+  ashariGuidance: string;
+  salafMethod: string;
+  khalafMethod: string;
   pickthall: string;
   arabicOnly: string;
   arabicFont: string;
@@ -105,12 +116,12 @@ const pickthallPresentation = getQuranOfflineTranslationPresentation('pickthall-
 const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
   en: {
     title: 'Complete offline Qur’an',
-    complete: '114 surahs · 6,236 ayat · packaged for offline reading',
+    complete: '114 surahs · 6,236 ayat · Uthmani Hafs text · packaged for offline reading',
     loading: 'Loading the packaged Qur’an…',
     loadError: 'The packaged Qur’an could not be loaded.',
     retry: 'Retry',
     search: 'Search the complete Qur’an',
-    searchPlaceholder: '1:1, Arabic, translation, surah name…',
+    searchPlaceholder: '1:1, Arabic, SalahOS 2026 meaning, surah name…',
     surah: 'Surah',
     surahSearch: 'Find a surah',
     surahSearchPlaceholder: 'Number, Arabic or transliterated name…',
@@ -137,8 +148,13 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     related: 'Related ayat',
     noResults: 'No ayat match this search.',
     resultLimit: 'Showing the first 50 matches.',
-    translation: 'Translation',
-    pickthall: 'M. M. Pickthall (1930)',
+    translation: 'English meaning',
+    salahos2026: SALAHOS_2026_DISPLAY_NAME,
+    salahos2026Status: 'Provisional wording · whole-corpus qualified scholarly sign-off pending',
+    ashariGuidance: 'Muhkam / Mutashabih Ashʿarī guidance',
+    salafMethod: 'Salaf method',
+    khalafMethod: 'Khalaf contextual taʾwīl',
+    pickthall: 'M. M. Pickthall (1930) — baseline/reference',
     arabicOnly: 'Arabic only',
     arabicFont: 'Arabic font',
     fontAmiri: 'Amiri Quran',
@@ -162,16 +178,17 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     backToSearch: 'Back to search results',
     pageGroupingNote:
       'Groups ayat by the source Mushaf page number in the packaged corpus; this is not a facsimile page.',
-    provenance: 'Uthmani Arabic text · M. M. Pickthall (1930) · packaged offline corpus',
+    provenance:
+      'Uthmani Arabic · Medina Mushaf · Hafs · SalahOS 2026 English meaning (Ashʿarī-guided; whole-corpus scholarly sign-off pending) · Pickthall 1930 baseline',
   },
   ar: {
     title: 'القرآن الكامل دون اتصال',
-    complete: '114 سورة · 6236 آية · محفوظ للقراءة دون اتصال',
+    complete: '114 سورة · 6236 آية · نص عثماني برواية حفص · محفوظ دون اتصال',
     loading: 'جارٍ تحميل القرآن المحفوظ…',
     loadError: 'تعذر تحميل القرآن المحفوظ.',
     retry: 'إعادة المحاولة',
     search: 'البحث في القرآن الكامل',
-    searchPlaceholder: '1:1، العربية، الترجمة، اسم السورة…',
+    searchPlaceholder: '1:1، العربية، معنى SalahOS 2026، اسم السورة…',
     surah: 'السورة',
     surahSearch: 'ابحث عن سورة',
     surahSearchPlaceholder: 'الرقم أو الاسم العربي أو المنقول…',
@@ -198,8 +215,13 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     related: 'آيات ذات صلة',
     noResults: 'لا توجد آيات مطابقة للبحث.',
     resultLimit: 'تظهر أول 50 نتيجة.',
-    translation: 'الترجمة',
-    pickthall: 'م. م. بكتال (1930)',
+    translation: 'المعنى الإنجليزي',
+    salahos2026: 'SalahOS 2026 (English meaning)',
+    salahos2026Status: 'صياغة أولية · اعتماد عالم مؤهل لكامل القرآن ما زال مطلوباً',
+    ashariGuidance: 'منهج المحكم والمتشابه الأشعري',
+    salafMethod: 'منهج السلف',
+    khalafMethod: 'التأويل السياقي عند الخلف',
+    pickthall: 'م. م. بكتال (1930) — النص الأساس/المرجعي',
     arabicOnly: 'العربية فقط',
     arabicFont: 'الخط العربي',
     fontAmiri: 'أميري قرآن',
@@ -223,16 +245,17 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     backToSearch: 'العودة إلى نتائج البحث',
     pageGroupingNote:
       'تُجمع الآيات حسب رقم صفحة المصحف في المصدر المحفوظ؛ وهذا العرض ليس صورة مطابقة لصفحة المصحف.',
-    provenance: 'النص العربي العثماني · ترجمة م. م. بكتال (1930) · مجموعة محفوظة دون اتصال',
+    provenance:
+      'نص عثماني · مصحف المدينة · رواية حفص · معنى SalahOS 2026 الإنجليزي وفق منهج أشعري مع انتظار اعتماد كامل القرآن · بكتال 1930 أساس مرجعي',
   },
   tr: {
     title: 'Tam çevrimdışı Kur’an',
-    complete: '114 sure · 6.236 ayet · çevrimdışı okuma için paketlendi',
+    complete: '114 sure · 6.236 ayet · Osmanî Hafs metni · çevrimdışı paket',
     loading: 'Paketlenmiş Kur’an yükleniyor…',
     loadError: 'Paketlenmiş Kur’an yüklenemedi.',
     retry: 'Yeniden dene',
     search: 'Tam Kur’an’da ara',
-    searchPlaceholder: '1:1, Arapça, meal, sure adı…',
+    searchPlaceholder: '1:1, Arapça, SalahOS 2026 anlamı, sure adı…',
     surah: 'Sure',
     surahSearch: 'Sure bul',
     surahSearchPlaceholder: 'Numara, Arapça veya latin harfli ad…',
@@ -259,8 +282,13 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     related: 'İlgili ayetler',
     noResults: 'Bu aramayla eşleşen ayet yok.',
     resultLimit: 'İlk 50 eşleşme gösteriliyor.',
-    translation: 'Meal',
-    pickthall: 'M. M. Pickthall (1930)',
+    translation: 'İngilizce anlam',
+    salahos2026: 'SalahOS 2026 (English meaning)',
+    salahos2026Status: 'Geçici metin · bütün Kur’an için nitelikli âlim onayı bekleniyor',
+    ashariGuidance: 'Muhkem / Müteşabih Eşʿarî rehberliği',
+    salafMethod: 'Selef yöntemi',
+    khalafMethod: 'Halef bağlamsal teʾvili',
+    pickthall: 'M. M. Pickthall (1930) — temel/referans',
     arabicOnly: 'Yalnızca Arapça',
     arabicFont: 'Arapça yazı tipi',
     fontAmiri: 'Amiri Quran',
@@ -284,16 +312,17 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     backToSearch: 'Arama sonuçlarına dön',
     pageGroupingNote:
       'Ayetleri paketlenmiş kaynaktaki mushaf sayfa numarasına göre gruplar; bu görünüm tıpkıbasım bir mushaf sayfası değildir.',
-    provenance: 'Osmanî Arapça metin · M. M. Pickthall (1930) · çevrimdışı paketlenmiş külliyat',
+    provenance:
+      'Osmanî Arapça · Medine Mushafı · Hafs · Eşʿarî rehberli SalahOS 2026 İngilizce anlamı (bütün-korpus âlim onayı bekleniyor) · Pickthall 1930 temel metni',
   },
   id: {
     title: 'Qur’an lengkap luring',
-    complete: '114 surah · 6.236 ayat · dikemas untuk dibaca luring',
+    complete: '114 surah · 6.236 ayat · teks Utsmani Hafs · dikemas luring',
     loading: 'Memuat Qur’an yang dikemas…',
     loadError: 'Qur’an yang dikemas tidak dapat dimuat.',
     retry: 'Coba lagi',
     search: 'Cari Qur’an lengkap',
-    searchPlaceholder: '1:1, Arab, terjemahan, nama surah…',
+    searchPlaceholder: '1:1, Arab, makna SalahOS 2026, nama surah…',
     surah: 'Surah',
     surahSearch: 'Cari surah',
     surahSearchPlaceholder: 'Nomor, nama Arab, atau transliterasi…',
@@ -320,8 +349,14 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     related: 'Ayat terkait',
     noResults: 'Tidak ada ayat yang cocok dengan pencarian ini.',
     resultLimit: 'Menampilkan 50 hasil pertama.',
-    translation: 'Terjemahan',
-    pickthall: 'M. M. Pickthall (1930)',
+    translation: 'Makna Inggris',
+    salahos2026: 'SalahOS 2026 (English meaning)',
+    salahos2026Status:
+      'Redaksi sementara · persetujuan ulama berkualifikasi untuk seluruh korpus masih diperlukan',
+    ashariGuidance: 'Panduan Muhkam / Mutasyabih Asyʿari',
+    salafMethod: 'Metode Salaf',
+    khalafMethod: 'Taʾwil kontekstual Khalaf',
+    pickthall: 'M. M. Pickthall (1930) — dasar/referensi',
     arabicOnly: 'Arab saja',
     arabicFont: 'Font Arab',
     fontAmiri: 'Amiri Quran',
@@ -345,7 +380,8 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     backToSearch: 'Kembali ke hasil pencarian',
     pageGroupingNote:
       'Mengelompokkan ayat berdasarkan nomor halaman mushaf pada sumber terkemas; tampilan ini bukan faksimile halaman mushaf.',
-    provenance: 'Teks Arab Utsmani · M. M. Pickthall (1930) · korpus luring terkemas',
+    provenance:
+      'Arab Utsmani · Mushaf Madinah · Hafs · makna Inggris SalahOS 2026 berpanduan Asyʿari (persetujuan seluruh korpus masih menunggu) · Pickthall 1930 sebagai dasar',
   },
 };
 
@@ -392,16 +428,28 @@ export function formatQuranResultsStatus(count: number, locale: Locale): string 
   }
 }
 
+function englishMeaningForMode(
+  result: QuranOfflineSearchResult,
+  mode: QuranTranslationMode,
+): string | null {
+  const pickthall = result.ayah.translations['pickthall-1930'];
+  if (mode === 'salahos-2026') return salahos2026EnglishMeaning(result.ayah.key, pickthall);
+  if (mode === 'pickthall-1930') return pickthall;
+  return null;
+}
+
 async function shareOfflineAyah(
   result: QuranOfflineSearchResult,
-  showTranslation: boolean,
+  mode: QuranTranslationMode,
 ): Promise<boolean> {
-  const text = [
-    result.ayah.arabic,
-    showTranslation ? result.ayah.translations['pickthall-1930'] : null,
-    `Qur’an ${result.ayah.key}`,
-    showTranslation ? 'M. M. Pickthall (1930)' : 'Uthmani Arabic text',
-  ]
+  const translation = englishMeaningForMode(result, mode);
+  const translationLabel =
+    mode === 'salahos-2026'
+      ? SALAHOS_2026_DISPLAY_NAME
+      : mode === 'pickthall-1930'
+        ? 'M. M. Pickthall (1930)'
+        : 'Uthmani Arabic text';
+  const text = [result.ayah.arabic, translation, `Qur’an ${result.ayah.key}`, translationLabel]
     .filter((value): value is string => Boolean(value))
     .join('\n\n');
 
@@ -489,11 +537,7 @@ export function QuranOfflineReader({
     preservedSearchNavigationRef.current = null;
     setBookmarksOnly(false);
     setSearch('');
-    if (preserveSearchReturn) {
-      setSearchReturnQuery(preservedNavigation.query);
-    } else {
-      setSearchReturnQuery(null);
-    }
+    setSearchReturnQuery(preserveSearchReturn ? preservedNavigation.query : null);
     setSelectedSurah(target.surah.surah);
     setVirtualTargetAyahKey(initialVerseKey);
     setCurrentPage(target.ayah.page);
@@ -624,16 +668,125 @@ export function QuranOfflineReader({
           <span lang={quranOfflineTransliterationPresentation.lang} dir="ltr">
             {result.surah.nameTransliteration}
           </span>
-          <strong lang="ar" dir="rtl">
+          <strong className="quran-uthmani-script" lang="ar" dir="rtl">
             {result.surah.nameArabic}
           </strong>
         </div>
         {showBasmala ? (
-          <p lang="ar" dir="rtl" data-quran-basmala>
+          <p className="quran-uthmani-script" lang="ar" dir="rtl" data-quran-basmala>
             {basmalaArabic}
           </p>
         ) : null}
       </header>
+    );
+  };
+
+  const renderAyahContent = (result: QuranOfflineSearchResult) => {
+    const parsed = parseQuranVerseKey(result.ayah.key);
+    const curated = curatedEntryForVerseKey(result.ayah.key);
+    const tafsirSource = curated ? getIslamicKnowledgeSource(curated.tafsirSourceId) : null;
+    const translation = englishMeaningForMode(result, preferences.translationMode);
+    const translationPresentation =
+      preferences.translationMode === 'salahos-2026'
+        ? salahos2026Presentation
+        : pickthallPresentation;
+    const editorial =
+      preferences.translationMode === 'salahos-2026'
+        ? getSalahOS2026EditorialEntry(result.ayah.key)
+        : null;
+
+    return (
+      <>
+        <p
+          className="knowledge-card__arabic quran-uthmani-script"
+          lang="ar"
+          dir="rtl"
+          data-quran-font={preferences.arabicFont}
+          data-quran-scale={preferences.fontScale}
+          data-quran-script="uthmani-hafs"
+        >
+          {result.ayah.arabic}{' '}
+          <span
+            className="quran-offline-ayah__marker"
+            aria-label={`${labels.ayah} ${formatQuranUiNumber(parsed?.ayah ?? 1, locale)}`}
+          >
+            ۝ {formatQuranAyahNumber(parsed?.ayah ?? 1)}
+          </span>
+        </p>
+        {translation ? (
+          <p
+            className="quran-offline-ayah__translation"
+            data-quran-offline-translation
+            data-quran-translation-source={preferences.translationMode}
+            lang={translationPresentation.lang}
+            dir={translationPresentation.dir}
+          >
+            {translation}
+          </p>
+        ) : null}
+        {editorial ? (
+          <details
+            className="quran-offline-ayah__salahos-note"
+            data-quran-salahos-2026-note={result.ayah.key}
+          >
+            <summary>
+              {labels.ashariGuidance} · {editorial.classification}
+            </summary>
+            <small>{labels.salahos2026Status}</small>
+            <p>{editorial.editorialNote}</p>
+            {editorial.salafReading ? (
+              <p>
+                <strong>{labels.salafMethod}:</strong> {editorial.salafReading}
+              </p>
+            ) : null}
+            {editorial.khalafReading ? (
+              <p>
+                <strong>{labels.khalafMethod}:</strong> {editorial.khalafReading}
+              </p>
+            ) : null}
+          </details>
+        ) : null}
+        {curated && tafsirSource ? (
+          <div className="quran-offline-ayah__tafsir">
+            <strong>{labels.tafsir}</strong>
+            <p
+              data-quran-tafsir-summary
+              lang={curated.tafsirSummaryPresentation.lang}
+              dir={curated.tafsirSummaryPresentation.dir}
+            >
+              {curated.tafsirSummary}
+            </p>
+            <small
+              lang={tafsirSource.displayPresentation.lang}
+              dir={tafsirSource.displayPresentation.dir}
+            >
+              {tafsirSource.title}
+            </small>
+          </div>
+        ) : null}
+        {curated ? (
+          <div className="quran-offline-ayah__related">
+            <strong data-quran-related-label>{labels.related}</strong>
+            <div>
+              {relatedVerseKeys(curated).map((verseKey) => (
+                <button
+                  type="button"
+                  key={verseKey}
+                  onClick={(event) => {
+                    event.stopPropagation();
+                    jumpToVerse(verseKey, true);
+                  }}
+                  data-quran-related-reference
+                  lang={locale}
+                  dir={locale === 'ar' ? 'rtl' : 'ltr'}
+                >
+                  {labels.quran} <BidiText>{formatQuranVerseReference(verseKey, locale)}</BidiText>
+                </button>
+              ))}
+            </div>
+          </div>
+        ) : null}
+      </>
     );
   };
 
@@ -642,6 +795,8 @@ export function QuranOfflineReader({
       className="quran-offline-reader"
       data-quran-offline-reader
       data-reading-mode={preferences.readingMode}
+      data-quran-arabic-script="uthmani"
+      data-quran-reading="hafs"
     >
       <header className="quran-offline-reader__header">
         <div>
@@ -798,6 +953,7 @@ export function QuranOfflineReader({
                     persistPatch({ translationMode: event.target.value as QuranTranslationMode });
                   }}
                 >
+                  <option value="salahos-2026">{labels.salahos2026}</option>
                   <option value="pickthall-1930">{labels.pickthall}</option>
                   <option value="none">{labels.arabicOnly}</option>
                 </select>
@@ -891,9 +1047,7 @@ export function QuranOfflineReader({
           {activeResult ? (
             <aside className="quran-ayah-utility" aria-label={labels.selectedAyah}>
               <strong>
-                <BidiText>
-                  {`${labels.quran} ${formatQuranVerseReference(activeResult.ayah.key, locale)}`}
-                </BidiText>
+                <BidiText>{`${labels.quran} ${formatQuranVerseReference(activeResult.ayah.key, locale)}`}</BidiText>
               </strong>
               <div>
                 <button
@@ -920,10 +1074,7 @@ export function QuranOfflineReader({
                   type="button"
                   data-quran-offline-share={activeResult.ayah.key}
                   onClick={() => {
-                    void shareOfflineAyah(
-                      activeResult,
-                      preferences.translationMode === 'pickthall-1930',
-                    )
+                    void shareOfflineAyah(activeResult, preferences.translationMode)
                       .then((shared) => {
                         setShareStatus(shared ? labels.copied : labels.copyFailed);
                       })
@@ -984,95 +1135,23 @@ export function QuranOfflineReader({
                 onScrollTopChange={(scrollTop) => {
                   persistQuranScrollPosition(selected.surah, scrollTop);
                 }}
-                renderItem={(result) => {
-                  const parsed = parseQuranVerseKey(result.ayah.key);
-                  const curated = curatedEntryForVerseKey(result.ayah.key);
-                  const tafsirSource = curated
-                    ? getIslamicKnowledgeSource(curated.tafsirSourceId)
-                    : null;
-                  return (
-                    <article
-                      className="quran-offline-ayah"
-                      data-quran-offline-ayah={result.ayah.key}
-                      data-active={activeAyahKey === result.ayah.key ? 'true' : undefined}
-                      data-resume-highlight={
-                        resumeHighlightKey === result.ayah.key ? 'true' : undefined
-                      }
-                      onClick={() => {
-                        setActiveAyahKey(result.ayah.key);
-                        setResumeHighlightKey(null);
-                        onVerseNavigate?.(result.ayah.key);
-                      }}
-                    >
-                      <p
-                        className="knowledge-card__arabic"
-                        lang="ar"
-                        dir="rtl"
-                        data-quran-font={preferences.arabicFont}
-                        data-quran-scale={preferences.fontScale}
-                      >
-                        {result.ayah.arabic}{' '}
-                        <span
-                          className="quran-offline-ayah__marker"
-                          aria-label={`${labels.ayah} ${formatQuranUiNumber(parsed?.ayah ?? 1, locale)}`}
-                        >
-                          ۝ {formatQuranAyahNumber(parsed?.ayah ?? 1)}
-                        </span>
-                      </p>
-                      {preferences.translationMode === 'pickthall-1930' ? (
-                        <p
-                          className="quran-offline-ayah__translation"
-                          data-quran-offline-translation
-                          lang={pickthallPresentation.lang}
-                          dir={pickthallPresentation.dir}
-                        >
-                          {result.ayah.translations['pickthall-1930']}
-                        </p>
-                      ) : null}
-                      {curated && tafsirSource ? (
-                        <div className="quran-offline-ayah__tafsir">
-                          <strong>{labels.tafsir}</strong>
-                          <p
-                            data-quran-tafsir-summary
-                            lang={curated.tafsirSummaryPresentation.lang}
-                            dir={curated.tafsirSummaryPresentation.dir}
-                          >
-                            {curated.tafsirSummary}
-                          </p>
-                          <small
-                            lang={tafsirSource.displayPresentation.lang}
-                            dir={tafsirSource.displayPresentation.dir}
-                          >
-                            {tafsirSource.title}
-                          </small>
-                        </div>
-                      ) : null}
-                      {curated ? (
-                        <div className="quran-offline-ayah__related">
-                          <strong data-quran-related-label>{labels.related}</strong>
-                          <div>
-                            {relatedVerseKeys(curated).map((verseKey) => (
-                              <button
-                                type="button"
-                                key={verseKey}
-                                onClick={(event) => {
-                                  event.stopPropagation();
-                                  jumpToVerse(verseKey, true);
-                                }}
-                                data-quran-related-reference
-                                lang={locale}
-                                dir={locale === 'ar' ? 'rtl' : 'ltr'}
-                              >
-                                {labels.quran}{' '}
-                                <BidiText>{formatQuranVerseReference(verseKey, locale)}</BidiText>
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      ) : null}
-                    </article>
-                  );
-                }}
+                renderItem={(result) => (
+                  <article
+                    className="quran-offline-ayah"
+                    data-quran-offline-ayah={result.ayah.key}
+                    data-active={activeAyahKey === result.ayah.key ? 'true' : undefined}
+                    data-resume-highlight={
+                      resumeHighlightKey === result.ayah.key ? 'true' : undefined
+                    }
+                    onClick={() => {
+                      setActiveAyahKey(result.ayah.key);
+                      setResumeHighlightKey(null);
+                      onVerseNavigate?.(result.ayah.key);
+                    }}
+                  >
+                    {renderAyahContent(result)}
+                  </article>
+                )}
               />
             </>
           ) : (
@@ -1081,10 +1160,6 @@ export function QuranOfflineReader({
             >
               {results.map((result) => {
                 const parsed = parseQuranVerseKey(result.ayah.key);
-                const curated = curatedEntryForVerseKey(result.ayah.key);
-                const tafsirSource = curated
-                  ? getIslamicKnowledgeSource(curated.tafsirSourceId)
-                  : null;
                 const showPageSurahBand =
                   normalBrowsing && preferences.readingMode === 'page' && parsed?.ayah === 1;
                 return (
@@ -1117,72 +1192,7 @@ export function QuranOfflineReader({
                           · {labels.juz} {formatQuranUiNumber(result.ayah.juz, locale)}
                         </p>
                       ) : null}
-                      <p
-                        className="knowledge-card__arabic"
-                        lang="ar"
-                        dir="rtl"
-                        data-quran-font={preferences.arabicFont}
-                        data-quran-scale={preferences.fontScale}
-                      >
-                        {result.ayah.arabic}{' '}
-                        <span
-                          className="quran-offline-ayah__marker"
-                          aria-label={`${labels.ayah} ${formatQuranUiNumber(parsed?.ayah ?? 1, locale)}`}
-                        >
-                          ۝ {formatQuranAyahNumber(parsed?.ayah ?? 1)}
-                        </span>
-                      </p>
-                      {preferences.translationMode === 'pickthall-1930' ? (
-                        <p
-                          className="quran-offline-ayah__translation"
-                          data-quran-offline-translation
-                          lang={pickthallPresentation.lang}
-                          dir={pickthallPresentation.dir}
-                        >
-                          {result.ayah.translations['pickthall-1930']}
-                        </p>
-                      ) : null}
-                      {curated && tafsirSource ? (
-                        <div className="quran-offline-ayah__tafsir">
-                          <strong>{labels.tafsir}</strong>
-                          <p
-                            data-quran-tafsir-summary
-                            lang={curated.tafsirSummaryPresentation.lang}
-                            dir={curated.tafsirSummaryPresentation.dir}
-                          >
-                            {curated.tafsirSummary}
-                          </p>
-                          <small
-                            lang={tafsirSource.displayPresentation.lang}
-                            dir={tafsirSource.displayPresentation.dir}
-                          >
-                            {tafsirSource.title}
-                          </small>
-                        </div>
-                      ) : null}
-                      {curated ? (
-                        <div className="quran-offline-ayah__related">
-                          <strong data-quran-related-label>{labels.related}</strong>
-                          <div>
-                            {relatedVerseKeys(curated).map((verseKey) => (
-                              <button
-                                type="button"
-                                key={verseKey}
-                                onClick={(event) => {
-                                  event.stopPropagation();
-                                  jumpToVerse(verseKey, true);
-                                }}
-                                data-quran-related-reference
-                                lang={locale}
-                                dir={locale === 'ar' ? 'rtl' : 'ltr'}
-                              >
-                                {labels.quran}{' '}
-                                <BidiText>{formatQuranVerseReference(verseKey, locale)}</BidiText>
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      ) : null}
+                      {renderAyahContent(result)}
                     </article>
                   </Fragment>
                 );

@@ -67,7 +67,7 @@ export function QuranSurahIndex(
             >
               <span className="quran-surah-index__number">{String(surah.surah)}</span>
               <span className="quran-surah-index__names">
-                <strong lang="ar" dir="rtl">
+                <strong className="quran-uthmani-script" lang="ar" dir="rtl">
                   {surah.nameArabic}
                 </strong>
                 <span lang="en-Latn" dir="ltr">

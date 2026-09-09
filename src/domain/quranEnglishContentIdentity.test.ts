@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 
 import { islamicKnowledgeEntries } from './islamicKnowledge';
+import { salahos2026EnglishMeaning } from './quranSalahos2026';
 
 interface OfflinePackAyah {
   readonly ayah: number;
@@ -51,16 +52,18 @@ function packTranslation(verseKey: string): string {
 }
 
 describe('Qur’an English content identity', () => {
-  it('uses the complete pinned corpus as the canonical English source', () => {
+  it('uses the complete pinned corpus as the canonical baseline', () => {
     expect(pack.counts).toEqual({ surahs: 114, ayahs: 6236 });
   });
 
-  it('keeps every curated Qur’an excerpt byte-for-byte aligned with Pickthall 1930', () => {
+  it('keeps every curated Qur’an excerpt aligned with the SalahOS 2026 derived meaning', () => {
     for (const entry of quranEntries()) {
       const verseKey = verseKeyFromReference(entry.reference);
-      expect(entry.translationSourceId).toBe('quran-pickthall-1930');
-      expect(entry.translation, `${entry.id} differs from the pinned ${verseKey} translation`).toBe(
-        packTranslation(verseKey),
+      const pickthall = packTranslation(verseKey);
+      expect(entry.translationSourceId).toBe('quran-salahos-2026');
+      expect(entry.sourceIds).toContain('quran-pickthall-1930');
+      expect(entry.translation, `${entry.id} differs from SalahOS 2026 at ${verseKey}`).toBe(
+        salahos2026EnglishMeaning(verseKey, pickthall),
       );
       expect(entry.translationPresentation).toEqual({ lang: 'en', dir: 'ltr' });
     }

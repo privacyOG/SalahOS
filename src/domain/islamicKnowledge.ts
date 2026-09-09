@@ -74,9 +74,13 @@ const fourMadhhabSources = Object.freeze([
 ] as const);
 const quranReadingSources = Object.freeze([
   'quran-uthmani-text',
+  'quran-salahos-2026',
   'quran-pickthall-1930',
   'quran-tafsir-jalalayn',
 ] as const);
+
+const quranSourceLabel =
+  'Arabic Uthmani Hafs text · English meaning: SalahOS 2026 · Pickthall 1930 baseline';
 
 export const islamicKnowledgeEntries = Object.freeze([
   {
@@ -89,10 +93,10 @@ export const islamicKnowledgeEntries = Object.freeze([
     translation:
       'Lo! I, even I, am Allah, There is no Allah save Me. So serve Me and establish worship for My remembrance.',
     reference: 'Qur’an 20:14',
-    source: 'Arabic Uthmani text · English translation: M. M. Pickthall (1930)',
+    source: quranSourceLabel,
     sourceIds: quranReadingSources,
     arabicSourceId: 'quran-uthmani-text',
-    translationSourceId: 'quran-pickthall-1930',
+    translationSourceId: 'quran-salahos-2026',
     translationPresentation: englishTextPresentation,
     referencePresentation: englishTextPresentation,
     tafsirSummaryPresentation: englishTextPresentation,
@@ -112,10 +116,10 @@ export const islamicKnowledgeEntries = Object.freeze([
     translation:
       'Seek help in patience and prayer; and truly it is hard save for the humble-minded,',
     reference: 'Qur’an 2:45',
-    source: 'Arabic Uthmani text · English translation: M. M. Pickthall (1930)',
+    source: quranSourceLabel,
     sourceIds: quranReadingSources,
     arabicSourceId: 'quran-uthmani-text',
-    translationSourceId: 'quran-pickthall-1930',
+    translationSourceId: 'quran-salahos-2026',
     translationPresentation: englishTextPresentation,
     referencePresentation: englishTextPresentation,
     tafsirSummaryPresentation: englishTextPresentation,
@@ -136,10 +140,10 @@ export const islamicKnowledgeEntries = Object.freeze([
     translation:
       'O ye who believe! When the call is heard for the prayer of the day of congregation, haste unto remembrance of Allah and leave your trading. That is better for you if ye did but know.',
     reference: 'Qur’an 62:9',
-    source: 'Arabic Uthmani text · English translation: M. M. Pickthall (1930)',
+    source: quranSourceLabel,
     sourceIds: quranReadingSources,
     arabicSourceId: 'quran-uthmani-text',
-    translationSourceId: 'quran-pickthall-1930',
+    translationSourceId: 'quran-salahos-2026',
     translationPresentation: englishTextPresentation,
     referencePresentation: englishTextPresentation,
     tafsirSummaryPresentation: englishTextPresentation,

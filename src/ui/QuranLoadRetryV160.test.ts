@@ -18,11 +18,14 @@ describe('V1.6.0 Qur’an load recovery', () => {
     expect(retryBlock).not.toContain('onPreferencesChange');
   });
 
-  it('keeps the rejected-promise cache self-healing for HTTP, network and malformed responses', () => {
+  it('keeps the rejected-promise cache self-healing while applying reader-only Bismillah normalization', () => {
     expect(loader).toContain('if (cachedPackPromise === request) cachedPackPromise = null;');
     expect(loader).toContain(
       'Packaged offline Qur’an could not be loaded (HTTP ${String(response.status)}).',
     );
-    expect(loader).toContain('return validateQuranOfflinePack(await response.json());');
+    expect(loader).toContain(
+      'prepareQuranReaderPack(validateQuranOfflinePack(await response.json()))',
+    );
+    expect(loader).toContain('Canonical packaged bytes and their integrity hash remain unchanged.');
   });
 });
