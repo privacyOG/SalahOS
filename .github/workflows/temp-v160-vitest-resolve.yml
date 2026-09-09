@@ -1,0 +1,31 @@
+name: Temporary V1.6 Vitest resolver
+
+on:
+  push:
+    branches:
+      - temp/v160-vitest-4.1.11
+
+permissions:
+  contents: read
+
+jobs:
+  resolve:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Resolve fixed Vitest patch line
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm install --save-dev --save-exact vitest@4.1.11 @vitest/coverage-v8@4.1.11 --ignore-scripts
+          npm audit --audit-level=moderate
+          npm run typecheck
+          npm run test -- --runInBand=false
+          echo '---BEGIN DEPENDENCY DIFF---'
+          git diff -- package.json package-lock.json
+          echo '---END DEPENDENCY DIFF---'
