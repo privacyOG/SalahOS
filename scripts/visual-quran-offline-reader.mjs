@@ -65,6 +65,10 @@ try {
   const reader = page.locator('[data-quran-offline-reader]');
   await reader.waitFor({ state: 'visible' });
   await reader.getByText('114 surahs · 6,236 ayat', { exact: false }).waitFor();
+  assert(
+    (await reader.locator('[data-quran-translation-mode]').inputValue()) === 'salahos-2026',
+    'SalahOS 2026 is not the default English meaning for a fresh reader',
+  );
 
   const navigationDisclosure = reader.locator('[data-quran-navigation-disclosure]');
   assert(
@@ -99,6 +103,38 @@ try {
   assert(
     (await reader.locator('[data-quran-virtual-key]').count()) < 20,
     'Al-Baqarah virtual reader rendered an unexpectedly large initial DOM window',
+  );
+
+  const openingBasmala = reader.locator('[data-quran-basmala]');
+  assert(
+    (await openingBasmala.count()) === 1,
+    'An ordinary surah must render exactly one standalone opening Bismillah',
+  );
+  const basmalaText = ((await openingBasmala.textContent()) ?? '').trim();
+  const alBaqarahFirst = reader.locator(
+    '[data-quran-offline-ayah="2:1"] .knowledge-card__arabic',
+  );
+  await alBaqarahFirst.waitFor({ state: 'visible' });
+  assert(
+    !((await alBaqarahFirst.textContent()) ?? '').includes(basmalaText),
+    'Surah 2 ayah 1 repeated the standalone Bismillah inside the ayah text',
+  );
+
+  await surahSearch.fill('1');
+  const alFatihahOption = surahIndex.locator('[data-quran-surah-option="1"]');
+  await alFatihahOption.waitFor({ state: 'visible' });
+  await alFatihahOption.click();
+  assert(
+    (await reader.locator('[data-quran-basmala]').count()) === 0,
+    'Al-Fatihah must not add a second standalone Bismillah above ayah 1',
+  );
+  const alFatihahFirst = reader.locator(
+    '[data-quran-offline-ayah="1:1"] .knowledge-card__arabic',
+  );
+  await alFatihahFirst.waitFor({ state: 'visible' });
+  assert(
+    ((await alFatihahFirst.textContent()) ?? '').includes(basmalaText),
+    'Al-Fatihah ayah 1 must retain the Bismillah as its ayah text',
   );
   await surahSearch.fill('');
 
