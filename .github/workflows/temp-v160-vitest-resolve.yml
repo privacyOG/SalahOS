@@ -34,3 +34,12 @@ jobs:
           echo '---BEGIN DEPENDENCY DIFF---'
           git diff -- package.json package-lock.json
           echo '---END DEPENDENCY DIFF---'
+      - name: Retain exact resolved dependency files
+        uses: actions/upload-artifact@v4
+        with:
+          name: v160-vitest-4.1.11-lock
+          path: |
+            package.json
+            package-lock.json
+          if-no-files-found: error
+          retention-days: 3
