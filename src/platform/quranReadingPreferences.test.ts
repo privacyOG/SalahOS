@@ -25,8 +25,9 @@ class MemoryStorage implements KeyValueStorage {
 }
 
 describe('Quran reading preferences', () => {
-  it('loads safe offline defaults from empty or malformed storage', () => {
+  it('loads SalahOS 2026 as the safe offline default', () => {
     const storage = new MemoryStorage();
+    expect(defaultQuranReadingPreferences.translationMode).toBe('salahos-2026');
     expect(loadQuranReadingPreferences(storage)).toEqual(defaultQuranReadingPreferences);
     storage.setItem(QURAN_READING_PREFERENCES_STORAGE_KEY, '{invalid');
     expect(loadQuranReadingPreferences(storage)).toEqual(defaultQuranReadingPreferences);
@@ -36,7 +37,7 @@ describe('Quran reading preferences', () => {
     const storage = new MemoryStorage();
     const preferences = parseQuranReadingPreferences({
       version: 1,
-      translationMode: 'none',
+      translationMode: 'salahos-2026',
       arabicFont: 'system',
       fontScale: 'large',
       readingMode: 'page',
@@ -50,12 +51,19 @@ describe('Quran reading preferences', () => {
     });
   });
 
-  it('migrates legacy preferences to the bundled font and List reading mode', () => {
+  it('preserves explicit Pickthall and Arabic-only choices while migrating legacy typography', () => {
     expect(parseQuranReadingPreferences({ arabicFont: 'naskh' }).arabicFont).toBe('amiri-quran');
     expect(parseQuranReadingPreferences({ arabicFont: 'traditional' }).arabicFont).toBe(
       'amiri-quran',
     );
+    expect(parseQuranReadingPreferences({ translationMode: 'pickthall-1930' }).translationMode).toBe(
+      'pickthall-1930',
+    );
+    expect(parseQuranReadingPreferences({ translationMode: 'none' }).translationMode).toBe('none');
     expect(parseQuranReadingPreferences({ translationMode: 'none' }).readingMode).toBe('list');
+    expect(parseQuranReadingPreferences({ translationMode: 'unknown' }).translationMode).toBe(
+      'salahos-2026',
+    );
   });
 
   it('toggles bookmarks without mutating the prior state', () => {
