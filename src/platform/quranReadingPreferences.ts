@@ -1,5 +1,6 @@
 import type { KeyValueStorage } from './settingsStorage';
 
+// Keep the storage key stable so bookmarks and last-read state survive the V1.6 migration.
 export const QURAN_READING_PREFERENCES_STORAGE_KEY = 'salahos.quran-reading-preferences.v1';
 export const QURAN_READING_PREFERENCES_CHANGE_EVENT = 'salahos:quran-reading-preferences-change';
 
@@ -9,7 +10,7 @@ export type QuranTranslationMode = 'salahos-2026' | 'pickthall-1930' | 'none';
 export type QuranReadingMode = 'list' | 'page';
 
 export interface QuranReadingPreferences {
-  readonly version: 1;
+  readonly version: 2;
   readonly translationMode: QuranTranslationMode;
   readonly arabicFont: QuranArabicFont;
   readonly fontScale: QuranFontScale;
@@ -19,7 +20,7 @@ export interface QuranReadingPreferences {
 }
 
 export const defaultQuranReadingPreferences: QuranReadingPreferences = Object.freeze({
-  version: 1,
+  version: 2,
   translationMode: 'salahos-2026',
   arabicFont: 'amiri-quran',
   fontScale: 'comfortable',
@@ -35,7 +36,10 @@ function stringArray(value: unknown): readonly string[] {
   ]);
 }
 
-function translationMode(value: unknown): QuranTranslationMode {
+function translationMode(value: unknown, payloadVersion: unknown): QuranTranslationMode {
+  // V1 only offered Pickthall as its English translation. Move those installs to
+  // the new in-house default once, while preserving a deliberate V2 Pickthall choice.
+  if (payloadVersion !== 2 && value === 'pickthall-1930') return 'salahos-2026';
   return value === 'salahos-2026' || value === 'pickthall-1930' || value === 'none'
     ? value
     : defaultQuranReadingPreferences.translationMode;
@@ -62,8 +66,8 @@ export function parseQuranReadingPreferences(value: unknown): QuranReadingPrefer
 
   const candidate = value as Record<string, unknown>;
   return Object.freeze({
-    version: 1,
-    translationMode: translationMode(candidate.translationMode),
+    version: 2,
+    translationMode: translationMode(candidate.translationMode, candidate.version),
     arabicFont: arabicFont(candidate.arabicFont),
     fontScale: fontScale(candidate.fontScale),
     readingMode: readingMode(candidate.readingMode),
