@@ -89,8 +89,10 @@ public class MainActivityInstrumentedTest {
             "window.__salahosQuranOfflineProbe='pending';" +
             "void (async()=>{" +
             "try{" +
-            "const packResponse=await fetch('/data/quran/quran-offline-pack.json',{cache:'no-store'});" +
-            "const fontResponse=await fetch('/fonts/amiri-quran-arabic.woff2',{cache:'no-store'});" +
+            "const packUrl=new URL('/data/quran/quran-offline-pack.json',window.location.href).href;" +
+            "const fontUrl=new URL('/fonts/amiri-quran-arabic.woff2',window.location.href).href;" +
+            "const packResponse=await fetch(packUrl,{cache:'no-store'});" +
+            "const fontResponse=await fetch(fontUrl,{cache:'no-store'});" +
             "if(!packResponse.ok){window.__salahosQuranOfflineProbe='pack-http-'+packResponse.status;return;}" +
             "if(!fontResponse.ok){window.__salahosQuranOfflineProbe='font-http-'+fontResponse.status;return;}" +
             "const pack=await packResponse.json();" +
