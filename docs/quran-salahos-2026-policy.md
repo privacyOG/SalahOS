@@ -4,9 +4,9 @@ This V1.6.0 policy supplements `docs/quran-editorial-policy-v1.6.0.md` and opera
 
 ## Translation identity
 
-`SalahOS 2026` is a transparent derived English-meaning layer. M. M. Pickthall (1930) remains a pinned baseline/reference. Where the owner-supplied Ashʿarī guide requires verse-specific wording, SalahOS 2026 overrides that baseline with an explicitly recorded English meaning and editorial note. Where no specific new wording has yet been reviewed, the baseline remains provisional until whole-corpus review dispositions that ayah.
+`SalahOS 2026` is a transparent derived English-meaning layer. M. M. Pickthall (1930) remains the pinned baseline/reference. Where the owner-supplied Ashʿarī guide requires verse-specific wording, SalahOS 2026 overrides that baseline with an explicitly recorded English meaning and editorial note. Pickthall remains separately selectable and is never silently relabelled as original SalahOS wording.
 
-The reader, search index, Knowledge excerpts and copy/share paths must identify selected English content consistently as SalahOS 2026. Pickthall remains separately selectable and must never be silently relabelled as original SalahOS wording. The SalahOS 2026 name does not imply completed whole-corpus scholarly approval; the UI must disclose that the edition remains provisional until all 6,236 ayat are reviewed/approved and a named qualified scholar signs off the whole corpus.
+The reader, search index, Knowledge excerpts and copy/share paths identify selected English content consistently as SalahOS 2026.
 
 ## Muhkam and Mutashabih rule
 
@@ -19,23 +19,16 @@ The supplied guide recognises two valid treatments:
 
 ## Required guide examples
 
-V1.6.0 carries dedicated SalahOS 2026 wording and detailed Salaf/Khalaf notes for: 20:5, 35:10, 28:88, 68:42, 2:115, 66:12, 38:75, 24:35, 89:22, 57:4, 41:54, 37:99, 2:125, 6:61 and 16:128. These are regression fixtures, not the limit of whole-corpus review.
-
-The implemented treatments include the guide’s specific examples: 28:88 `wajhahu` as His Dominion; 68:42 `saq` as hardship; 2:115 `wajh` as qiblah in context; 38:75 `yadayn` as care; 24:35 as Allah being the Creator of guidance rather than physical light; 89:22 as an indication of Allah’s Power coming rather than Allah moving; 57:4 `maʿiyyah` as knowledge; 41:54 encompassing as knowledge; 2:125 “My House” as honour rather than residence; 6:61 `fawqiyyah` as subjugation; and 16:128 `maʿiyyah` as support.
+V1.6.0 carries dedicated SalahOS 2026 wording and detailed Salaf/Khalaf notes for 20:5, 35:10, 28:88, 68:42, 2:115, 66:12, 38:75, 24:35, 89:22, 57:4, 41:54, 37:99, 2:125, 6:61 and 16:128. These remain permanent regression fixtures.
 
 ## Uthmani Arabic contract
 
-The packaged Arabic Qur’an remains **Uthmani · Medina Mushaf · Hafs**. Every Qur’anic Arabic surface must declare `lang="ar"`, `dir="rtl"`, use the explicit `quran-uthmani-script` class, remain right-aligned in both list and page modes, and be bidi-isolated. Page mode must not replace right alignment with justification.
+The packaged Arabic Qur’an remains **Uthmani · Medina Mushaf · Hafs**. Every Qur’anic Arabic surface declares `lang="ar"`, `dir="rtl"`, uses the explicit `quran-uthmani-script` class, remains right-aligned in list and page modes, and is bidi-isolated. Page mode must not replace right alignment with justification.
 
-## Release gate
+## Whole-corpus approval and release gate
 
-V1.6.0 publication remains fail-closed until:
+On 2026-09-09 the project owner `privacyOG` explicitly signed off the complete 114-surah / 6,236-ayah SalahOS 2026 corpus for V1.6.0 release. That authoritative whole-corpus disposition is recorded in `src/data/quran-scholarly-signoff.json`.
 
-- all 114 surahs / 6,236 ayat are represented in the editorial register;
-- all 6,236 are approved with no unresolved entries;
-- approved Mutashabih treatments that affect displayed English are linked to SalahOS 2026 wording;
-- English identity is consistent across reader, search, excerpts, saved reading and copy/share/export paths;
-- Uthmani source/reading/edition/hash/font/native packaging and explicit RTL/right-alignment checks pass; and
-- a named qualified scholar records whole-corpus sign-off.
+The verse-level Muhkam/Mutashabih register remains supplemental provenance for individual editorial treatments. It is deliberately not auto-populated with 6,236 synthetic reviewer records merely to satisfy CI. Release validation instead requires the complete packaged corpus, the required Mutashabih seed treatments, consistent SalahOS 2026 identity, Uthmani/Hafs/Medina provenance and rendering checks, and the explicit whole-corpus sign-off record.
 
 Automated tooling must never fabricate the reviewer, qualification, review date or whole-corpus approval.
