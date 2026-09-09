@@ -52,6 +52,11 @@ jobs:
         run: npm run quran:offline:prepare
       - name: Offline Qur'an corpus integrity
         run: npm run quran:offline:check
+      - name: SalahOS 2026 Qur'an governance
+        run: |
+          npm run quran:salahos-2026:check
+          VERSION=$(node -p "require('./package.json').version")
+          GITHUB_REF_TYPE=branch GITHUB_REF_NAME="release/v${VERSION}" npm run quran:editorial:gate
       - name: Islamic Knowledge source governance
         run: npm run knowledge:content:check
       - name: Australian mosque directory reproducibility
