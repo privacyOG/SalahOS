@@ -1,0 +1,26 @@
+name: V1.6.0 Prettier CI Once
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  prettier:
+    if: github.head_ref == 'v160-release-contract-fix'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npx prettier --write .github/workflows/ci.yml
+      - uses: actions/upload-artifact@v4
+        with:
+          name: v160-prettier-ci-output
+          path: .github/workflows/ci.yml
+          retention-days: 1
