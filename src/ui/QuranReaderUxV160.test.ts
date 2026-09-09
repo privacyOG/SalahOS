@@ -26,7 +26,7 @@ describe('V1.6.0 Qur’an reader UX', () => {
     expect(reader).toContain(
       'setSearchReturnQuery(preserveSearchReturn ? preservedNavigation.query : null)',
     );
-    expect(reader.match(/jumpToVerse\(verseKey, true\)/gu)).toHaveLength(2);
+    expect(reader.match(/jumpToVerse\(verseKey, true\)/gu)).toHaveLength(1);
     expect(reader).toContain('data-quran-return-to-search');
     expect(reader).toContain('setSearch(searchReturnQuery)');
     expect(visual).toContain('data-quran-return-to-search');
