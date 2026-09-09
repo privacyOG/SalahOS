@@ -1,4 +1,5 @@
 import manifest from '../data/quran-offline-manifest.json';
+import { salahos2026EnglishMeaning } from './quranSalahos2026';
 import { textPresentationMetadata, type TextPresentationMetadata } from './textPresentation';
 
 export type QuranOfflineTranslationId = 'pickthall-1930';
@@ -170,8 +171,6 @@ export async function loadQuranOfflinePack(
   try {
     return await request;
   } catch (error) {
-    // A rejected promise must never poison future attempts. Only clear the cache
-    // when it still points at this request so a newer in-flight request cannot be lost.
     if (cachedPackPromise === request) cachedPackPromise = null;
     throw error;
   }
@@ -261,11 +260,13 @@ export function firstQuranOfflineAyahOnPage(
 }
 
 function searchableAyahText(surah: QuranOfflineSurah, ayah: QuranOfflineAyah): string {
+  const pickthall = ayah.translations['pickthall-1930'];
   return normalizeQuranSearchText(
     [
       ayah.key,
       ayah.arabic,
-      ayah.translations['pickthall-1930'],
+      salahos2026EnglishMeaning(ayah.key, pickthall),
+      pickthall,
       surah.nameArabic,
       surah.nameTransliteration,
       surah.nameEnglish,
