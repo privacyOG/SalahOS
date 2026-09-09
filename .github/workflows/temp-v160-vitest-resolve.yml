@@ -6,7 +6,7 @@ on:
       - temp/v160-vitest-4.1.11
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   resolve:
@@ -43,3 +43,14 @@ jobs:
             package-lock.json
           if-no-files-found: error
           retention-days: 3
+      - name: Publish clean resolved tree as temporary tag
+        shell: bash
+        run: |
+          set -euo pipefail
+          rm .github/workflows/temp-v160-vitest-resolve.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add package.json package-lock.json .github/workflows/temp-v160-vitest-resolve.yml
+          git commit -m 'Fix Vitest security advisory for V1.6.0'
+          git tag -f temp-vitest-4.1.11-resolved
+          git push --force origin refs/tags/temp-vitest-4.1.11-resolved
