@@ -111,9 +111,7 @@ try {
     'An ordinary surah must render exactly one standalone opening Bismillah',
   );
   const basmalaText = ((await openingBasmala.textContent()) ?? '').trim();
-  const alBaqarahFirst = reader.locator(
-    '[data-quran-offline-ayah="2:1"] .knowledge-card__arabic',
-  );
+  const alBaqarahFirst = reader.locator('[data-quran-offline-ayah="2:1"] .knowledge-card__arabic');
   await alBaqarahFirst.waitFor({ state: 'visible' });
   assert(
     !((await alBaqarahFirst.textContent()) ?? '').includes(basmalaText),
@@ -128,9 +126,7 @@ try {
     (await reader.locator('[data-quran-basmala]').count()) === 0,
     'Al-Fatihah must not add a second standalone Bismillah above ayah 1',
   );
-  const alFatihahFirst = reader.locator(
-    '[data-quran-offline-ayah="1:1"] .knowledge-card__arabic',
-  );
+  const alFatihahFirst = reader.locator('[data-quran-offline-ayah="1:1"] .knowledge-card__arabic');
   await alFatihahFirst.waitFor({ state: 'visible' });
   assert(
     ((await alFatihahFirst.textContent()) ?? '').includes(basmalaText),

@@ -74,9 +74,9 @@ describe('Quran reading preferences', () => {
       parseQuranReadingPreferences({ version: 2, translationMode: 'pickthall-1930' })
         .translationMode,
     ).toBe('pickthall-1930');
-    expect(parseQuranReadingPreferences({ version: 1, translationMode: 'none' }).translationMode).toBe(
-      'none',
-    );
+    expect(
+      parseQuranReadingPreferences({ version: 1, translationMode: 'none' }).translationMode,
+    ).toBe('none');
     expect(parseQuranReadingPreferences({ translationMode: 'none' }).readingMode).toBe('list');
     expect(parseQuranReadingPreferences({ translationMode: 'unknown' }).translationMode).toBe(
       'salahos-2026',
