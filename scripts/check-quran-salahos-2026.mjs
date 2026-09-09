@@ -86,13 +86,13 @@ for (const key of requiredSeeds) {
 }
 
 assert(
-  manifest.counts?.surahs === 114 && manifest.counts?.ayahs === 6236,
+  manifest.surahs === 114 && manifest.ayahs === 6236,
   'Complete Qur’an corpus declaration changed.',
 );
-assert(manifest.arabicText?.script === 'Uthmani', 'Arabic Qur’an script must be Uthmani.');
-assert(manifest.arabicText?.reading === 'Hafs', 'Arabic Qur’an reading must remain Hafs.');
+assert(manifest.arabicSource?.script === 'Uthmani', 'Arabic Qur’an script must be Uthmani.');
+assert(manifest.arabicSource?.reading === 'Hafs', 'Arabic Qur’an reading must remain Hafs.');
 assert(
-  manifest.arabicText?.edition === 'Medina Mushaf',
+  manifest.arabicSource?.edition === 'Medina Mushaf',
   'Arabic Qur’an edition must remain Medina Mushaf.',
 );
 assert(
