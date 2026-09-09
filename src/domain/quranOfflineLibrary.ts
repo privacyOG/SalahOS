@@ -145,6 +145,53 @@ export function validateQuranOfflinePack(value: unknown): QuranOfflinePack {
   return value as QuranOfflinePack;
 }
 
+/**
+ * The pinned source may prefix the unnumbered opening Bismillah to ayah 1.
+ * The reader renders that Bismillah separately under the surah heading, so
+ * remove only that display-layer prefix. Al-Fatihah keeps its Bismillah as
+ * ayah 1. Canonical packaged bytes and their integrity hash remain unchanged.
+ */
+export function quranReaderArabicForAyah(
+  verseKey: string,
+  arabic: string,
+  canonicalBasmala: string,
+): string {
+  const parsed = parseQuranVerseKey(verseKey);
+  if (!parsed || parsed.ayah !== 1 || parsed.surah === 1) return arabic;
+
+  const text = arabic.trimStart();
+  const basmala = canonicalBasmala.trim();
+  if (basmala.length === 0 || !text.startsWith(basmala)) return arabic;
+
+  const withoutBasmala = text.slice(basmala.length).trimStart();
+  return withoutBasmala.length > 0 ? withoutBasmala : arabic;
+}
+
+function prepareQuranReaderPack(pack: QuranOfflinePack): QuranOfflinePack {
+  const fatihah = pack.surahs.find((surah) => surah.surah === 1);
+  const canonicalBasmala = fatihah?.ayahs.find((ayah) => ayah.ayah === 1)?.arabic ?? '';
+  if (canonicalBasmala.trim().length === 0) return pack;
+
+  let changed = false;
+  const surahs = pack.surahs.map((surah) => {
+    if (surah.surah === 1) return surah;
+
+    let surahChanged = false;
+    const ayahs = surah.ayahs.map((ayah) => {
+      if (ayah.ayah !== 1) return ayah;
+      const arabic = quranReaderArabicForAyah(ayah.key, ayah.arabic, canonicalBasmala);
+      if (arabic === ayah.arabic) return ayah;
+      changed = true;
+      surahChanged = true;
+      return Object.freeze({ ...ayah, arabic });
+    });
+
+    return surahChanged ? Object.freeze({ ...surah, ayahs: Object.freeze(ayahs) }) : surah;
+  });
+
+  return changed ? Object.freeze({ ...pack, surahs: Object.freeze(surahs) }) : pack;
+}
+
 let cachedPackPromise: Promise<QuranOfflinePack> | null = null;
 
 export function resetQuranOfflinePackCache(): void {
@@ -163,7 +210,7 @@ export async function loadQuranOfflinePack(
           `Packaged offline Qur’an could not be loaded (HTTP ${String(response.status)}).`,
         );
       }
-      return validateQuranOfflinePack(await response.json());
+      return prepareQuranReaderPack(validateQuranOfflinePack(await response.json()));
     })();
 
   cachedPackPromise = request;
