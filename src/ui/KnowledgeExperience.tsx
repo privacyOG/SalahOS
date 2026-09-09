@@ -16,6 +16,7 @@ import {
   type KnowledgeView,
 } from './applicationRoute';
 import { KnowledgeScreen } from './KnowledgeScreen';
+import { QuranOfflinePreparationControl } from './QuranOfflinePreparationControl';
 import { QuranOfflineReader } from './QuranOfflineReader';
 
 type KnowledgeExperienceCopy = Readonly<{
@@ -23,13 +24,38 @@ type KnowledgeExperienceCopy = Readonly<{
   library: string;
   quran: string;
   hadith: string;
+  retryQuran: string;
 }>;
 
 const copy: Readonly<Record<Locale, KnowledgeExperienceCopy>> = {
-  en: { navigation: 'Knowledge sections', library: 'Library', quran: 'Qur’an', hadith: 'Hadith' },
-  ar: { navigation: 'أقسام المعرفة', library: 'المكتبة', quran: 'القرآن', hadith: 'الحديث' },
-  tr: { navigation: 'Bilgi bölümleri', library: 'Kütüphane', quran: 'Kur’an', hadith: 'Hadis' },
-  id: { navigation: 'Bagian pengetahuan', library: 'Pustaka', quran: 'Qur’an', hadith: 'Hadis' },
+  en: {
+    navigation: 'Knowledge sections',
+    library: 'Fiqh & questions',
+    quran: 'Qur’an',
+    hadith: 'Hadith',
+    retryQuran: 'Retry / reload Qur’an',
+  },
+  ar: {
+    navigation: 'أقسام المعرفة',
+    library: 'الفقه والأسئلة',
+    quran: 'القرآن',
+    hadith: 'الحديث',
+    retryQuran: 'إعادة محاولة تحميل القرآن',
+  },
+  tr: {
+    navigation: 'Bilgi bölümleri',
+    library: 'Fıkıh ve sorular',
+    quran: 'Kur’an',
+    hadith: 'Hadis',
+    retryQuran: 'Kur’an yüklemesini yeniden dene',
+  },
+  id: {
+    navigation: 'Bagian pengetahuan',
+    library: 'Fikih & pertanyaan',
+    quran: 'Qur’an',
+    hadith: 'Hadis',
+    retryQuran: 'Coba muat ulang Qur’an',
+  },
 };
 
 function currentLocale(): Locale {
@@ -54,6 +80,7 @@ export function KnowledgeExperience() {
   const [quranPreferences, setQuranPreferences] = useState<QuranReadingPreferences>(() =>
     loadQuranReadingPreferences(getApplicationStorage()),
   );
+  const [quranReaderAttempt, setQuranReaderAttempt] = useState(0);
 
   useEffect(() => {
     const reload = () => {
@@ -120,18 +147,33 @@ export function KnowledgeExperience() {
             {segment.label}
           </button>
         ))}
+        {view === 'quran' ? (
+          <button
+            type="button"
+            data-quran-retry-load
+            onClick={() => {
+              setQuranReaderAttempt((attempt) => attempt + 1);
+            }}
+          >
+            {labels.retryQuran}
+          </button>
+        ) : null}
       </nav>
 
       {view === 'library' ? <KnowledgeScreen scope="library" /> : null}
       {view === 'hadith' ? <KnowledgeScreen scope="hadith" /> : null}
       {view === 'quran' ? (
-        <QuranOfflineReader
-          locale={locale}
-          preferences={quranPreferences}
-          onPreferencesChange={persistQuranPreferences}
-          initialVerseKey={verseKey}
-          onVerseNavigate={updateVerseRoute}
-        />
+        <>
+          <QuranOfflinePreparationControl locale={locale} />
+          <QuranOfflineReader
+            key={quranReaderAttempt}
+            locale={locale}
+            preferences={quranPreferences}
+            onPreferencesChange={persistQuranPreferences}
+            initialVerseKey={verseKey}
+            onVerseNavigate={updateVerseRoute}
+          />
+        </>
       ) : null}
     </div>
   );

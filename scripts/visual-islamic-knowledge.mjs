@@ -72,8 +72,8 @@ try {
     assert(
       (await screen
         .locator('[data-knowledge-curated-size]')
-        .getAttribute('data-knowledge-curated-size')) === '9',
-      'Governed Knowledge catalogue size is not nine entries',
+        .getAttribute('data-knowledge-curated-size')) === '3',
+      'Scoped Fiqh & questions catalogue size is not three entries',
     );
     assert(
       (await screen.locator('.knowledge-card').count()) === 3 &&
@@ -85,6 +85,7 @@ try {
       'Hadith entries leaked into the segmented Library section',
     );
     await screen.locator('[data-scholar-disclaimer]').waitFor();
+    await screen.locator('[data-fiqh-source-disclosure] summary').first().click();
     await screen
       .getByText('Classical Hanafi, Maliki, Shafi‘i and Hanbali sources')
       .first()
@@ -124,6 +125,12 @@ try {
     screen = page.locator('[data-knowledge-screen]');
     await screen.waitFor({ state: 'visible' });
     assert(
+      (await screen
+        .locator('[data-knowledge-curated-size]')
+        .getAttribute('data-knowledge-curated-size')) === '3',
+      'Scoped Hadith catalogue size is not three entries',
+    );
+    assert(
       (await screen.locator('.knowledge-card').count()) === 3 &&
         (await screen.locator('[data-knowledge-module="hadith"]').count()) === 3,
       'Hadith section did not expose the three governed entries',
@@ -143,6 +150,7 @@ try {
       (await screen.locator('[data-hadith-full-text]').count()) === 3,
       'Reviewed full-text Hadith links are missing',
     );
+    await screen.locator('[data-hadith-source-disclosure] summary').first().click();
     await screen.getByText('Sahih al-Bukhari').first().waitFor();
     await screen.getByText('Sahih').first().waitFor();
     await screen.getByText('Imam al-Bukhari').first().waitFor();
@@ -177,8 +185,8 @@ try {
       items.map((item) => item.getAttribute('data-navigation-id')),
     );
     assert(
-      visibleNavigationIds.length === 6 && visibleNavigationIds.includes('knowledge'),
-      `Knowledge was not retained in the six-item visible primary navigation: ${JSON.stringify(visibleNavigationIds)}`,
+      visibleNavigationIds.length === 7 && visibleNavigationIds.includes('knowledge'),
+      `Knowledge was not retained in the seven-item visible primary navigation: ${JSON.stringify(visibleNavigationIds)}`,
     );
 
     const metrics = await page.evaluate(() => ({
@@ -217,6 +225,8 @@ try {
     const reader = page.locator('[data-quran-offline-reader]');
     await reader.waitFor({ state: 'visible' });
     await reader.getByText('القرآن الكامل دون اتصال').waitFor();
+    const preferencesDisclosure = reader.locator('[data-quran-preferences-disclosure]');
+    await preferencesDisclosure.locator('summary').click();
     await reader.locator('[data-quran-font-select]').selectOption('amiri-quran');
     await reader.locator('[data-quran-size-select]').selectOption('large');
 

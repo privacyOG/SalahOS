@@ -1,0 +1,118 @@
+.theme-palette-picker {
+  display: grid;
+  gap: 0.75rem;
+  grid-column: 1 / -1;
+}
+
+.theme-palette-picker__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.theme-palette-picker__header button {
+  min-height: 44px;
+  border: 1px solid var(--salah-border-default);
+  border-radius: 0.75rem;
+  background: var(--salah-bg-control);
+  color: var(--salah-fg-primary);
+  padding: 0.55rem 0.8rem;
+  font: inherit;
+  cursor: pointer;
+}
+
+.theme-palette-picker__header button:disabled {
+  color: var(--salah-fg-tertiary);
+  cursor: default;
+  opacity: 0.72;
+}
+
+.theme-palette-picker__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 9rem), 1fr));
+  gap: 0.65rem;
+}
+
+.theme-palette-picker__option {
+  min-height: 76px;
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  align-items: center;
+  gap: 0.15rem 0.65rem;
+  border: 1px solid var(--salah-border-default);
+  border-radius: 0.9rem;
+  background: var(--salah-bg-surface-raised);
+  color: var(--salah-fg-primary);
+  padding: 0.7rem;
+  text-align: start;
+  font: inherit;
+  cursor: pointer;
+}
+
+.theme-palette-picker__option[data-selected='true'] {
+  border-color: var(--salah-border-strong);
+  background: var(--salah-bg-accent-soft);
+  box-shadow: inset 0 0 0 1px var(--salah-border-strong);
+}
+
+.theme-palette-picker__option:focus-visible,
+.theme-palette-picker__header button:focus-visible {
+  outline: 3px solid var(--salah-focus-ring);
+  outline-offset: 2px;
+}
+
+.theme-palette-picker__swatches {
+  grid-row: 1 / 3;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 2.5rem;
+  height: 2.5rem;
+  overflow: hidden;
+  border: 1px solid var(--salah-border-subtle);
+  border-radius: 50%;
+  background: var(--salah-bg-surface);
+}
+
+.theme-palette-picker__swatches span:first-child {
+  background: var(--theme-palette-preview-accent);
+}
+
+.theme-palette-picker__swatches span:last-child {
+  background: var(--theme-palette-preview-strong);
+}
+
+.theme-palette-picker__name {
+  min-width: 0;
+  font-weight: 700;
+  overflow-wrap: anywhere;
+}
+
+.theme-palette-picker__option small {
+  color: var(--salah-fg-secondary);
+}
+
+@media (max-width: 360px) {
+  .theme-palette-picker__header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .theme-palette-picker__header button {
+    width: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .theme-palette-picker__option,
+  .theme-palette-picker__header button {
+    scroll-behavior: auto;
+  }
+}
+
+@media (forced-colors: active) {
+  .theme-palette-picker__swatches {
+    forced-color-adjust: none;
+  }
+}

@@ -10,7 +10,14 @@
     "commit": "c0dc86b060b854d03f62848692bf1d2936dba630",
     "path": "data/quran.json",
     "license": "CC BY 4.0 at pinned commit",
-    "provenance": "Tanzil Uthmani text with KFQPC verification metadata retained by the pinned dataset"
+    "provenance": "Tanzil Uthmani text with KFQPC verification metadata retained by the pinned dataset",
+    "script": "Uthmani",
+    "edition": "Medina Mushaf",
+    "reading": "Hafs",
+    "upstreamTextSource": "Tanzil Project / King Fahd Complex",
+    "upstreamLicense": "CC BY 3.0 for the Tanzil source edition/metadata as attributed by the pinned dataset",
+    "upstreamSourceUrl": "https://tanzil.net/pub/download/index.php?quranType=uthmani&outType=txt-2",
+    "documentationUrl": "https://tanzil.net/docs/quran_text"
   },
   "translationSource": {
     "repository": "Kristories/quran",

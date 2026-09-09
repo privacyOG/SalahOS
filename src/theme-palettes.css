@@ -1,4 +1,4 @@
-/* SalahOS v1.5.1 palette layer. Appearance (data-theme) and palette are independent axes. */
+/* SalahOS v1.6.0 palette layer. Appearance (data-theme) and palette are independent axes. */
 
 :root,
 :root[data-palette='salah-classic'] {
@@ -15,12 +15,20 @@
   --salah-palette-accent-strong: #14704a;
 }
 :root[data-palette='royal-blue'] {
-  --salah-palette-accent: #6c9fe8;
-  --salah-palette-accent-strong: #285caa;
+  --salah-palette-accent: #74b9f2;
+  --salah-palette-accent-strong: #276ea7;
+}
+:root[data-palette='navy'] {
+  --salah-palette-accent: #6689c8;
+  --salah-palette-accent-strong: #173c70;
 }
 :root[data-palette='desert-sand'] {
   --salah-palette-accent: #c99b68;
   --salah-palette-accent-strong: #81552d;
+}
+:root[data-palette='soft-lavender'] {
+  --salah-palette-accent: #aa94d6;
+  --salah-palette-accent-strong: #66509a;
 }
 :root[data-palette='olive-heritage'] {
   --salah-palette-accent: #9aa66b;
@@ -63,17 +71,30 @@
   --salah-focus-ring: #82ddb0;
 }
 :root[data-theme='dark'][data-palette='royal-blue'] {
-  --salah-bg-canvas: #07101d;
-  --salah-bg-subtle: #0d1929;
-  --salah-bg-surface: #12243ae8;
-  --salah-bg-surface-raised: #192f4a;
-  --salah-bg-control: #12243a;
-  --salah-bg-accent-soft: #18365c;
-  --salah-fg-primary: #f3f7fd;
-  --salah-fg-secondary: #c5d3e7;
-  --salah-fg-tertiary: #91aacb;
-  --salah-fg-accent: #9bc1f4;
-  --salah-focus-ring: #9bc1f4;
+  --salah-bg-canvas: #07131d;
+  --salah-bg-subtle: #0d1f2c;
+  --salah-bg-surface: #122b3de8;
+  --salah-bg-surface-raised: #18384f;
+  --salah-bg-control: #122b3d;
+  --salah-bg-accent-soft: #17405f;
+  --salah-fg-primary: #f4faff;
+  --salah-fg-secondary: #c7dcea;
+  --salah-fg-tertiary: #91b5ca;
+  --salah-fg-accent: #9fd4fa;
+  --salah-focus-ring: #9fd4fa;
+}
+:root[data-theme='dark'][data-palette='navy'] {
+  --salah-bg-canvas: #050b16;
+  --salah-bg-subtle: #0a1424;
+  --salah-bg-surface: #0f1d33ed;
+  --salah-bg-surface-raised: #172a46;
+  --salah-bg-control: #10213a;
+  --salah-bg-accent-soft: #1a3154;
+  --salah-fg-primary: #f5f8fd;
+  --salah-fg-secondary: #c9d5e7;
+  --salah-fg-tertiary: #95a9c6;
+  --salah-fg-accent: #9db8e7;
+  --salah-focus-ring: #b7cef3;
 }
 :root[data-theme='dark'][data-palette='desert-sand'] {
   --salah-bg-canvas: #15100b;
@@ -87,6 +108,19 @@
   --salah-fg-tertiary: #b39a7e;
   --salah-fg-accent: #e8bd8b;
   --salah-focus-ring: #e8bd8b;
+}
+:root[data-theme='dark'][data-palette='soft-lavender'] {
+  --salah-bg-canvas: #100d17;
+  --salah-bg-subtle: #1a1524;
+  --salah-bg-surface: #241d32ed;
+  --salah-bg-surface-raised: #302641;
+  --salah-bg-control: #251e33;
+  --salah-bg-accent-soft: #3b3050;
+  --salah-fg-primary: #fbf8ff;
+  --salah-fg-secondary: #d9cee8;
+  --salah-fg-tertiary: #ad9bbf;
+  --salah-fg-accent: #ccb8f0;
+  --salah-focus-ring: #d8c7f5;
 }
 :root[data-theme='dark'][data-palette='olive-heritage'] {
   --salah-bg-canvas: #101108;
@@ -159,17 +193,30 @@
   --salah-focus-ring: #12613f;
 }
 :root[data-theme='light'][data-palette='royal-blue'] {
-  --salah-bg-canvas: #f4f7fb;
-  --salah-bg-subtle: #e9eff7;
+  --salah-bg-canvas: #f4f9fd;
+  --salah-bg-subtle: #e8f3fb;
   --salah-bg-surface: #fff;
   --salah-bg-surface-raised: #fff;
   --salah-bg-control: #fff;
-  --salah-bg-accent-soft: #dfeaf8;
-  --salah-fg-primary: #14243a;
-  --salah-fg-secondary: #465e7b;
-  --salah-fg-tertiary: #567292;
-  --salah-fg-accent: #24599f;
-  --salah-focus-ring: #24599f;
+  --salah-bg-accent-soft: #dceefa;
+  --salah-fg-primary: #12283a;
+  --salah-fg-secondary: #45657b;
+  --salah-fg-tertiary: #557991;
+  --salah-fg-accent: #1f6498;
+  --salah-focus-ring: #1f6498;
+}
+:root[data-theme='light'][data-palette='navy'] {
+  --salah-bg-canvas: #f4f6fa;
+  --salah-bg-subtle: #e8edf5;
+  --salah-bg-surface: #fff;
+  --salah-bg-surface-raised: #fff;
+  --salah-bg-control: #fff;
+  --salah-bg-accent-soft: #dde6f4;
+  --salah-fg-primary: #111d2f;
+  --salah-fg-secondary: #3f526e;
+  --salah-fg-tertiary: #596b84;
+  --salah-fg-accent: #244d82;
+  --salah-focus-ring: #244d82;
 }
 :root[data-theme='light'][data-palette='desert-sand'] {
   --salah-bg-canvas: #faf6ef;
@@ -183,6 +230,19 @@
   --salah-fg-tertiary: #80644d;
   --salah-fg-accent: #75491f;
   --salah-focus-ring: #75491f;
+}
+:root[data-theme='light'][data-palette='soft-lavender'] {
+  --salah-bg-canvas: #faf8fc;
+  --salah-bg-subtle: #f1edf6;
+  --salah-bg-surface: #fff;
+  --salah-bg-surface-raised: #fff;
+  --salah-bg-control: #fff;
+  --salah-bg-accent-soft: #ece4f6;
+  --salah-fg-primary: #292135;
+  --salah-fg-secondary: #5c506d;
+  --salah-fg-tertiary: #746586;
+  --salah-fg-accent: #624c8d;
+  --salah-focus-ring: #624c8d;
 }
 :root[data-theme='light'][data-palette='olive-heritage'] {
   --salah-bg-canvas: #f7f7ef;

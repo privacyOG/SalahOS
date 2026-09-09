@@ -176,27 +176,24 @@ try {
       (await sunrise.textContent())?.includes('Non-prayer time') === true,
       'Sunrise is not explicitly identified as a non-prayer time',
     );
+    const todayText = (await today.textContent()) ?? '';
     assert(
-      (await sunrise.textContent())?.includes('Not applicable') === true,
-      'Sunrise incorrectly exposes an Iqamah configuration state',
+      !todayText.includes('Iqamah') && !todayText.includes('Not applicable'),
+      'Today still exposes removed Iqamah presentation or placeholders',
     );
     const dhuhr = today.locator('[data-today-prayer-name="dhuhr"]');
     assert(
-      (await dhuhr.getAttribute('data-directory-published-iqamah')) === 'true',
-      'Selected mosque published Dhuhr congregation time was not applied as Iqamah/Jama’ah context',
+      (await dhuhr.getAttribute('data-directory-published-iqamah')) === null,
+      'Today still exposes the removed directory-published Iqamah attribute',
     );
     const dhuhrText = (await dhuhr.textContent()) ?? '';
     assert(
-      dhuhrText.includes('13:15'),
-      'Sanitized published Dhuhr congregation time was not exposed on Today',
-    );
-    assert(
-      !dhuhrText.includes('12:15'),
-      'Jumu’ah-colliding 12:15 value leaked back into the daily Dhuhr congregation row',
+      !dhuhrText.includes('13:15') && !dhuhrText.includes('12:15'),
+      'Published congregation values leaked into the V1.6.0 Today prayer row',
     );
 
     await page.screenshot({
-      path: path.join(artifactDirectory, 'stage47-selected-mosque-today-sunrise-iqamah.png'),
+      path: path.join(artifactDirectory, 'stage47-selected-mosque-today.png'),
       fullPage: true,
       animations: 'disabled',
     });
@@ -206,7 +203,7 @@ try {
       ...metrics,
       selectedMosqueToday: 'mosque-finder:sydney-cbd-erskine-musallah',
       sunriseBoundary: true,
-      sanitizedPublishedDhuhr: '13:15',
+      publishedPrayerContextRetainedInDirectory: true,
     });
     await context.close();
   }

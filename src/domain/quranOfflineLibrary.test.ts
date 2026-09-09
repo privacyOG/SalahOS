@@ -1,10 +1,12 @@
-import { describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 
 import {
   firstQuranOfflineAyahInJuz,
   firstQuranOfflineAyahOnPage,
   getQuranOfflineAyah,
   listQuranOfflineSurahSummaries,
+  loadQuranOfflinePack,
+  normalizeQuranSearchText,
   parseQuranVerseKey,
   searchQuranOfflinePack,
   searchQuranOfflineSurahs,
@@ -71,6 +73,22 @@ const fixture = {
 } as unknown as QuranOfflinePack;
 
 describe('complete offline Qur’an library navigation', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it('clears a rejected loader promise so a later retry performs a new request', async () => {
+    const fetchMock = vi
+      .fn<typeof fetch>()
+      .mockResolvedValueOnce(new Response('{}', { status: 200 }))
+      .mockResolvedValueOnce(new Response(null, { status: 503 }));
+    vi.stubGlobal('fetch', fetchMock);
+
+    await expect(loadQuranOfflinePack()).rejects.toThrow();
+    await expect(loadQuranOfflinePack()).rejects.toThrow('HTTP 503');
+    expect(fetchMock).toHaveBeenCalledTimes(2);
+  });
+
   it('parses canonical verse keys and rejects invalid positions', () => {
     expect(parseQuranVerseKey('114:6')).toEqual({ surah: 114, ayah: 6 });
     expect(parseQuranVerseKey('1:1')).toEqual({ surah: 1, ayah: 1 });
@@ -97,6 +115,19 @@ describe('complete offline Qur’an library navigation', () => {
     expect(searchQuranOfflinePack(fixture, 'Mankind').map((result) => result.ayah.key)).toEqual([
       '114:6',
     ]);
+  });
+
+  it('matches unvocalised Arabic without mutating canonical Uthmani display text', () => {
+    const first = getQuranOfflineAyah(fixture, '1:1');
+    expect(first).not.toBeNull();
+    if (!first) throw new Error('Qur’an fixture 1:1 is missing.');
+    const canonical = first.ayah.arabic;
+
+    expect(normalizeQuranSearchText('ٱلرَّحْمَٰنِ')).toBe('الرحمن');
+    expect(
+      searchQuranOfflinePack(fixture, 'بسم الله الرحمن الرحيم').map((result) => result.ayah.key),
+    ).toEqual(['1:1']);
+    expect(first.ayah.arabic).toBe(canonical);
   });
 
   it('builds searchable surah summaries with ayah count and revelation place', () => {
