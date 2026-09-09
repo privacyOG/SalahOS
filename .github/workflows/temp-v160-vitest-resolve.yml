@@ -29,6 +29,7 @@ jobs:
           npm ci --ignore-scripts
           npm audit --audit-level=moderate
           npm run typecheck
+          npm run quran:offline:prepare
           npm run test
           echo '---BEGIN DEPENDENCY DIFF---'
           git diff -- package.json package-lock.json
