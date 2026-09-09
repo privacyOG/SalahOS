@@ -27,6 +27,7 @@ class MemoryStorage implements KeyValueStorage {
 describe('Quran reading preferences', () => {
   it('loads SalahOS 2026 as the safe offline default', () => {
     const storage = new MemoryStorage();
+    expect(defaultQuranReadingPreferences.version).toBe(2);
     expect(defaultQuranReadingPreferences.translationMode).toBe('salahos-2026');
     expect(loadQuranReadingPreferences(storage)).toEqual(defaultQuranReadingPreferences);
     storage.setItem(QURAN_READING_PREFERENCES_STORAGE_KEY, '{invalid');
@@ -36,7 +37,7 @@ describe('Quran reading preferences', () => {
   it('round-trips translation, typography, reading mode, bookmarks and last-read state', () => {
     const storage = new MemoryStorage();
     const preferences = parseQuranReadingPreferences({
-      version: 1,
+      version: 2,
       translationMode: 'salahos-2026',
       arabicFont: 'system',
       fontScale: 'large',
@@ -51,15 +52,31 @@ describe('Quran reading preferences', () => {
     });
   });
 
-  it('preserves explicit Pickthall and Arabic-only choices while migrating legacy typography', () => {
+  it('migrates the legacy Pickthall default to SalahOS 2026 without losing reader state', () => {
+    const migrated = parseQuranReadingPreferences({
+      version: 1,
+      translationMode: 'pickthall-1930',
+      bookmarkedAyahIds: ['3:1'],
+      lastReadAyahId: '3:2',
+    });
+    expect(migrated.version).toBe(2);
+    expect(migrated.translationMode).toBe('salahos-2026');
+    expect(migrated.bookmarkedAyahIds).toEqual(['3:1']);
+    expect(migrated.lastReadAyahId).toBe('3:2');
+  });
+
+  it('preserves deliberate V2 Pickthall and Arabic-only choices while migrating typography', () => {
     expect(parseQuranReadingPreferences({ arabicFont: 'naskh' }).arabicFont).toBe('amiri-quran');
     expect(parseQuranReadingPreferences({ arabicFont: 'traditional' }).arabicFont).toBe(
       'amiri-quran',
     );
     expect(
-      parseQuranReadingPreferences({ translationMode: 'pickthall-1930' }).translationMode,
+      parseQuranReadingPreferences({ version: 2, translationMode: 'pickthall-1930' })
+        .translationMode,
     ).toBe('pickthall-1930');
-    expect(parseQuranReadingPreferences({ translationMode: 'none' }).translationMode).toBe('none');
+    expect(parseQuranReadingPreferences({ version: 1, translationMode: 'none' }).translationMode).toBe(
+      'none',
+    );
     expect(parseQuranReadingPreferences({ translationMode: 'none' }).readingMode).toBe('list');
     expect(parseQuranReadingPreferences({ translationMode: 'unknown' }).translationMode).toBe(
       'salahos-2026',
