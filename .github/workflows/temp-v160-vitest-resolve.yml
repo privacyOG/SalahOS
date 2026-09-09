@@ -17,12 +17,14 @@ jobs:
         with:
           node-version: 22
           cache: npm
-      - run: npm ci --ignore-scripts
       - name: Resolve fixed Vitest patch line
         shell: bash
         run: |
           set -euo pipefail
-          npm install --save-dev --save-exact vitest@4.1.11 @vitest/coverage-v8@4.1.11 --ignore-scripts
+          npm pkg set 'devDependencies.vitest=4.1.11' 'devDependencies.@vitest/coverage-v8=4.1.11'
+          rm -rf node_modules
+          npm install --package-lock-only --ignore-scripts
+          npm ci --ignore-scripts
           npm audit --audit-level=moderate
           npm run typecheck
           npm run test
