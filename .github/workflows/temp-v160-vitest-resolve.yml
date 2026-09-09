@@ -21,6 +21,8 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          npm install --global npm@11.6.0
+          npm --version
           npm pkg set 'devDependencies.vitest=4.1.11' 'devDependencies.@vitest/coverage-v8=4.1.11'
           rm -rf node_modules
           npm install --package-lock-only --ignore-scripts
