@@ -5,7 +5,7 @@ export const QURAN_READING_PREFERENCES_CHANGE_EVENT = 'salahos:quran-reading-pre
 
 export type QuranArabicFont = 'amiri-quran' | 'system';
 export type QuranFontScale = 'compact' | 'comfortable' | 'large' | 'xlarge';
-export type QuranTranslationMode = 'pickthall-1930' | 'none';
+export type QuranTranslationMode = 'salahos-2026' | 'pickthall-1930' | 'none';
 export type QuranReadingMode = 'list' | 'page';
 
 export interface QuranReadingPreferences {
@@ -20,7 +20,7 @@ export interface QuranReadingPreferences {
 
 export const defaultQuranReadingPreferences: QuranReadingPreferences = Object.freeze({
   version: 1,
-  translationMode: 'pickthall-1930',
+  translationMode: 'salahos-2026',
   arabicFont: 'amiri-quran',
   fontScale: 'comfortable',
   readingMode: 'list',
@@ -36,7 +36,7 @@ function stringArray(value: unknown): readonly string[] {
 }
 
 function translationMode(value: unknown): QuranTranslationMode {
-  return value === 'pickthall-1930' || value === 'none'
+  return value === 'salahos-2026' || value === 'pickthall-1930' || value === 'none'
     ? value
     : defaultQuranReadingPreferences.translationMode;
 }
