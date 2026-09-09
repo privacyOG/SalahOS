@@ -5,7 +5,7 @@ on:
     branches: [main]
 
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   format:
@@ -43,15 +43,17 @@ jobs:
             src/domain/quranSalahos2026.ts \
             src/platform/quranReadingPreferences.test.ts \
             src/ui/QuranOfflineReader.tsx
+          git diff --check
 
-      - name: Commit formatting when needed
-        run: |
-          if git diff --quiet; then
-            echo 'Formatting already clean.'
-            exit 0
-          fi
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add scripts/check-quran-editorial-release-gate.mjs scripts/check-quran-salahos-2026.mjs src/domain/quranSalahos2026.test.ts src/domain/quranSalahos2026.ts src/platform/quranReadingPreferences.test.ts src/ui/QuranOfflineReader.tsx
-          git commit -m 'style: normalize V1.6.0 Quran integration'
-          git push origin HEAD:v160-salahos-2026-quran
+      - name: Export normalized files
+        uses: actions/upload-artifact@v4
+        with:
+          name: v160-quran-prettier-output
+          path: |
+            scripts/check-quran-editorial-release-gate.mjs
+            scripts/check-quran-salahos-2026.mjs
+            src/domain/quranSalahos2026.test.ts
+            src/domain/quranSalahos2026.ts
+            src/platform/quranReadingPreferences.test.ts
+            src/ui/QuranOfflineReader.tsx
+          retention-days: 1
