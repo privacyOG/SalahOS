@@ -1,4 +1,5 @@
 import sourceRegistryJson from '../data/islamic-knowledge-source-registry.json';
+import salahos2026SourceJson from '../data/quran-salahos-2026-source.json';
 import type { IslamicKnowledgeEntry, Madhhab } from './islamicKnowledge';
 import type { TextPresentationMetadata } from './textPresentation';
 
@@ -34,9 +35,10 @@ export interface IslamicKnowledgeGovernanceIssue {
 const requiredMadhhabs = Object.freeze(['hanafi', 'maliki', 'shafii', 'hanbali'] as const);
 const approvedCreedTraditions = new Set<CreedTradition>(['ashari', 'maturidi']);
 
-export const approvedIslamicKnowledgeSources = Object.freeze(
-  sourceRegistryJson.sources as readonly ScholarlySourceRecord[],
-);
+export const approvedIslamicKnowledgeSources = Object.freeze([
+  ...(sourceRegistryJson.sources as readonly ScholarlySourceRecord[]),
+  salahos2026SourceJson as ScholarlySourceRecord,
+]);
 
 export const islamicKnowledgeSourceRegistryMetadata = Object.freeze({
   schemaVersion: sourceRegistryJson.schemaVersion,
