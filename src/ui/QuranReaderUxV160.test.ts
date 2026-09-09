@@ -23,7 +23,9 @@ describe('V1.6.0 Qur’an reader UX', () => {
     expect(reader).toContain('setSearchReturnQuery(search)');
     expect(reader).toContain('preservedSearchNavigationRef');
     expect(reader).toContain('preservedNavigation?.verseKey === initialVerseKey');
-    expect(reader).toContain('setSearchReturnQuery(preservedNavigation.query)');
+    expect(reader).toContain(
+      'setSearchReturnQuery(preserveSearchReturn ? preservedNavigation.query : null)',
+    );
     expect(reader.match(/jumpToVerse\(verseKey, true\)/gu)).toHaveLength(2);
     expect(reader).toContain('data-quran-return-to-search');
     expect(reader).toContain('setSearch(searchReturnQuery)');
