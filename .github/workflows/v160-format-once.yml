@@ -1,0 +1,57 @@
+name: V1.6.0 Quran Format Once
+
+on:
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    if: github.head_ref == 'v160-salahos-2026-quran'
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout implementation branch
+        uses: actions/checkout@v4
+        with:
+          ref: v160-salahos-2026-quran
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --ignore-scripts
+
+      - name: Correct checker regex and format changed files
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          path = Path('scripts/check-quran-salahos-2026.mjs')
+          text = path.read_text()
+          text = text.replace('/usu.test(css)', '/us.test(css)')
+          path.write_text(text)
+          PY
+          npx prettier --write \
+            scripts/check-quran-editorial-release-gate.mjs \
+            scripts/check-quran-salahos-2026.mjs \
+            src/domain/quranSalahos2026.test.ts \
+            src/domain/quranSalahos2026.ts \
+            src/platform/quranReadingPreferences.test.ts \
+            src/ui/QuranOfflineReader.tsx
+
+      - name: Commit formatting when needed
+        run: |
+          if git diff --quiet; then
+            echo 'Formatting already clean.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add scripts/check-quran-editorial-release-gate.mjs scripts/check-quran-salahos-2026.mjs src/domain/quranSalahos2026.test.ts src/domain/quranSalahos2026.ts src/platform/quranReadingPreferences.test.ts src/ui/QuranOfflineReader.tsx
+          git commit -m 'style: normalize V1.6.0 Quran integration'
+          git push origin HEAD:v160-salahos-2026-quran
