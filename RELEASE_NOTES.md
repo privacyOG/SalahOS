@@ -23,16 +23,21 @@ SalahOS v1.6.0 is a mobile usability, Qur’an reliability, Knowledge organisati
 - Keeps Qiblah usable when orientation sensors are unavailable by retaining the calculated bearing and map-oriented fallback rather than presenting a dead end.
 - Keeps Settings import/export/reset and prayer-notification controls discoverable in mobile layouts.
 
-## Qur’an reader and offline reliability
+## Qur’an reader, SalahOS 2026 and offline reliability
 
+- Adds **SalahOS 2026 (English meaning)** as the default Qur’an English-meaning mode. It is a transparent derived edition: M. M. Pickthall (1930) remains the pinned baseline/reference where a verse has not yet received a new reviewed wording, while owner-guide-driven verse-specific meanings override that baseline.
+- Keeps **M. M. Pickthall (1930)** separately selectable as a baseline/reference and keeps Arabic-only reading available; the UI does not silently relabel Pickthall as original SalahOS wording.
+- Applies the project-owner-supplied Ashʿarī **Muhkam/Mutashabih** guideline to dedicated V1.6.0 entries for 20:5, 35:10, 28:88, 68:42, 2:115, 66:12, 38:75, 24:35, 89:22, 57:4, 41:54, 37:99, 2:125, 6:61 and 16:128. Covered verses expose expandable notes distinguishing Salaf-style tafwīd/tanzīh from contextual Khalaf taʾwīl where the supplied guide gives one.
+- Preserves the guide’s concrete non-corporeal examples, including 28:88 as **His Dominion**, 68:42 as **hardship**, 2:115 as **qiblah** in context, 38:75 as **care**, 24:35 as Allah being the **Creator of guidance**, 57:4 as Allah **knowing** people wherever they are, 6:61 as **subjugation**, and 16:128 as divine **support** rather than physical co-location.
+- Makes the provisional status explicit: `SalahOS 2026` does not claim completed whole-corpus scholarly approval until all 6,236 ayat are screened/approved and a named qualified scholar signs the complete corpus.
+- Pins Qur’anic Arabic as **Uthmani · Medina Mushaf · Hafs** and now enforces the display contract on every tagged Arabic Qur’an surface: `lang="ar"`, `dir="rtl"`, explicit Uthmani class, RTL direction, right alignment and bidi isolation. Page mode no longer replaces right alignment with justified Arabic text.
 - Clears rejected Qur’an loader promises after HTTP, network and malformed-pack failures so **Retry** performs a genuine new load without deleting bookmarks or last-read state.
 - Adds explicit Qur’an offline preparation states for Web/PWA: preparing, ready and unavailable; native builds identify the verified bundled corpus/font path separately.
 - Verifies the production/native Qur’an pack and Amiri Quran font during native build pipelines and keeps visible recovery for lazy-route/chunk failures.
 - Makes reader navigation and preferences available on demand so the selected surah is the dominant reading surface rather than persistent control chrome.
-- Preserves search-result return context, explicit empty-search states, bookmarks, Resume last read, sharing and RTL behavior.
+- Preserves search-result return context, explicit empty-search states, bookmarks, Resume last read, copy/share and RTL behavior; search indexes both the selected SalahOS 2026 wording and the pinned Pickthall baseline.
 - Describes dataset page grouping as navigation metadata rather than implying that the screen is a facsimile of a printed mushaf.
-- Keeps the current packaged English translation identity explicit as **M. M. Pickthall (1930)** and keeps English translation/commentary language and direction metadata distinct from Qur’anic Arabic.
-- Pins the packaged Arabic corpus as **Tanzil Uthmani / Medina Mushaf / Hafs** with repository, commit, source-edition licence boundaries and SHA-256 traceability. Search derives a separate normalized Arabic comparison key so unvocalised queries can match marked Uthmani text without modifying the canonical display/copy/share corpus.
+- Search derives a separate normalized Arabic comparison key so unvocalised queries can match marked Uthmani text without modifying the canonical display/copy/share corpus.
 
 ## Islamic Knowledge organisation
 
@@ -40,12 +45,13 @@ SalahOS v1.6.0 is a mobile usability, Qur’an reliability, Knowledge organisati
 - Moves useful content higher in the Knowledge experience with more compact heading/source/review disclosure and a direct Qur’an Resume path.
 - Renames the abbreviated Hadith “Isnad” field to **Companion narrator** while preserving sourced grading and juristic/school distinctions.
 - Keeps translation text distinct from separately identified commentary/summary content and preserves explicit `lang`/`dir` handling.
+- Aligns curated Qur’an excerpts to the `SalahOS 2026` translation identity while retaining explicit Uthmani Arabic, Pickthall baseline and tafsir provenance.
 
 ## Qur’an editorial governance
 
-V1.6.0 adds the repository-level Muhkam/Mutashabih editorial policy and review-register infrastructure derived from the supplied project guide. The policy records Qur’an 3:7 as the governing method and 42:11, 112:4 and 19:65 among its foundations; it prohibits assigning bodily or spatial implications to Allah and supports either general tafwid or sourced contextual ta’wil on a verse-by-verse basis rather than a universal lexical replacement.
+V1.6.0 includes repository-level Muhkam/Mutashabih policy and the supplemental `docs/quran-salahos-2026-policy.md`, derived from the supplied project guide. Qur’an 3:7 governs the method and 42:11, 112:4 and 19:65 provide clear foundations. The policy prohibits bodily/spatial implications for Allah and supports either general tafwīd with tanzīh or sourced contextual taʾwīl on a verse-by-verse basis rather than universal lexical replacement.
 
-The review register includes the required seed passages and requires verse key, Arabic expression, context, original English, proposed meaning where applicable, treatment, sources, reviewer, status and disagreements. Automated tooling is not permitted to fabricate scholarly approval.
+A permanent `quran:salahos-2026:check` now verifies required seed coverage, translation identity, Uthmani/Hafs/Medina provenance and explicit RTL/right-aligned Arabic rendering. The release-only editorial gate is additionally bound to the SalahOS 2026 override set so approved Mutashabih treatments cannot drift away from displayed English wording.
 
 **Release boundary:** whole-corpus 114-surah / 6,236-ayah review and named qualified scholarly sign-off remain mandatory external acceptance gates. They must be completed and recorded before v1.6.0 is published; CI or machine-generated text cannot substitute for that sign-off.
 
