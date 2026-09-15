@@ -124,8 +124,8 @@ try {
       (await translation.getAttribute('data-quran-visible-reference')) === '2:255',
       'English translation did not expose its canonical verse number',
     );
-    const visibleReference = await translation.evaluate((element) =>
-      getComputedStyle(element, '::before').content,
+    const visibleReference = await translation.evaluate(
+      (element) => getComputedStyle(element, '::before').content,
     );
     assert(
       visibleReference.includes('2:255'),
