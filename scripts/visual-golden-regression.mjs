@@ -80,10 +80,11 @@ const scenarios = [
     theme: 'dark',
     viewport: { width: 390, height: 844 },
     ready: '[data-knowledge-screen]',
-    // Stage 54 intentionally replaces the prior English Qur'an paraphrase with the
-    // governed Pickthall 1930 wording. Exact provenance/content is asserted by the
-    // dedicated Islamic Knowledge acceptance; keep only this known text delta scoped here.
-    maxDifferenceRatio: 0.008,
+    // Stage 56 keeps the governed Knowledge content while intentionally replacing
+    // the horizontally scrollable section strip with a three-column mobile grid.
+    // The reviewed 390px visual delta is 1.200%; keep the allowance narrowly scoped
+    // to this Knowledge golden so unrelated mobile regressions remain protected.
+    maxDifferenceRatio: 0.013,
   },
 ];
 
