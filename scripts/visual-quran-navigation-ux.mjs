@@ -40,7 +40,10 @@ function assert(condition, message) {
 }
 
 function assertInsideViewport(metrics, label) {
-  assert(metrics.left >= -1, `${label} begins outside the mobile viewport: ${String(metrics.left)}px`);
+  assert(
+    metrics.left >= -1,
+    `${label} begins outside the mobile viewport: ${String(metrics.left)}px`,
+  );
   assert(
     metrics.right <= metrics.innerWidth + 1,
     `${label} extends beyond the mobile viewport: ${String(metrics.right)}px > ${String(metrics.innerWidth)}px`,
