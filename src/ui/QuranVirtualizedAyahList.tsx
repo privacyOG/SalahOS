@@ -81,7 +81,6 @@ export function QuranVirtualizedAyahList(
 ) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const measuredHeightsRef = useRef(new Map<string, number>());
-  const programmaticScrollTopRef = useRef<number | null>(null);
   const [scrollTop, setScrollTop] = useState(props.initialScrollTop);
   const [viewportHeight, setViewportHeight] = useState(720);
   const [measurementVersion, setMeasurementVersion] = useState(0);
@@ -122,7 +121,6 @@ export function QuranVirtualizedAyahList(
     const container = containerRef.current;
     if (!container) return;
     container.scrollTop = props.initialScrollTop;
-    programmaticScrollTopRef.current = container.scrollTop;
     setScrollTop(container.scrollTop);
     setViewportHeight(Math.max(1, container.clientHeight));
   }, [props.initialScrollTop, props.surahNumber]);
@@ -136,7 +134,6 @@ export function QuranVirtualizedAyahList(
         container.clientHeight * 0.25,
     );
     container.scrollTop = nextTop;
-    programmaticScrollTopRef.current = container.scrollTop;
     setScrollTop(container.scrollTop);
     setViewportHeight(Math.max(1, container.clientHeight));
   }, [anchoredTargetKey, measurementVersion, props.items, targetIndex]);
@@ -169,7 +166,6 @@ export function QuranVirtualizedAyahList(
 
   const releaseAnchor = (): void => {
     setAnchoredTargetKey(null);
-    programmaticScrollTopRef.current = null;
   };
 
   return (
@@ -183,13 +179,6 @@ export function QuranVirtualizedAyahList(
       onPointerDown={releaseAnchor}
       onScroll={(event) => {
         const next = event.currentTarget.scrollTop;
-        const expected = programmaticScrollTopRef.current;
-        if (expected !== null && Math.abs(next - expected) <= 1) {
-          programmaticScrollTopRef.current = null;
-        } else if (anchoredTargetKey !== null) {
-          setAnchoredTargetKey(null);
-          programmaticScrollTopRef.current = null;
-        }
         setScrollTop(next);
         props.onScrollTopChange(next);
       }}
