@@ -132,7 +132,6 @@ try {
       `English translation verse number is not visibly rendered: ${visibleReference}`,
     );
 
-    await ayatAlKursi.scrollIntoViewIfNeeded();
     await page.screenshot({
       path: path.join(artifactDirectory, `stage56-quran-verse-reference-${viewport.name}.png`),
       animations: 'disabled',
