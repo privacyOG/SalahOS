@@ -82,6 +82,9 @@ jobs:
       - name: Diagnose Today render readiness
         run: node scripts/visual-today-smoke.mjs
 
+      - name: Verify wrapped Qur'an Arabic RTL alignment
+        run: node scripts/visual-quran-arabic-rtl.mjs
+
       - name: Run Qur'an navigation UX acceptance
         run: node scripts/visual-quran-navigation-ux.mjs
 
