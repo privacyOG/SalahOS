@@ -35,6 +35,18 @@ function persistedSettings() {
   };
 }
 
+function quranReadingPreferences() {
+  return {
+    version: 2,
+    translationMode: 'salahos-2026',
+    arabicFont: 'amiri-quran',
+    fontScale: 'xlarge',
+    readingMode: 'list',
+    bookmarkedAyahIds: [],
+    lastReadAyahId: null,
+  };
+}
+
 function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
@@ -54,10 +66,16 @@ try {
       serviceWorkers: 'block',
     });
     const page = await context.newPage();
-    await page.addInitScript((settings) => {
-      localStorage.setItem('salahos.settings', JSON.stringify(settings));
-      localStorage.removeItem('salahos.quran-reading-preferences.v1');
-    }, persistedSettings());
+    await page.addInitScript(
+      ({ settings, quranPreferences }) => {
+        localStorage.setItem('salahos.settings', JSON.stringify(settings));
+        localStorage.setItem(
+          'salahos.quran-reading-preferences.v1',
+          JSON.stringify(quranPreferences),
+        );
+      },
+      { settings: persistedSettings(), quranPreferences: quranReadingPreferences() },
+    );
 
     await page.goto(`${baseUrl}/?view=knowledge&knowledgeView=quran`, { waitUntil: 'networkidle' });
 
@@ -65,7 +83,8 @@ try {
     await picker.waitFor({ state: 'visible' });
     await picker.locator('[data-quran-surah-select]').selectOption('2');
 
-    const ayah = page.locator('[data-quran-offline-ayah="2:2"]');
+    const ayahKey = '2:4';
+    const ayah = page.locator(`[data-quran-offline-ayah="${ayahKey}"]`);
     await ayah.waitFor({ state: 'visible' });
     const arabic = ayah.locator('.knowledge-card__arabic[lang="ar"][dir="rtl"]');
     await arabic.waitFor({ state: 'visible' });
@@ -105,6 +124,11 @@ try {
       };
     });
 
+    await arabic.screenshot({
+      path: path.join(artifactDirectory, `quran-arabic-rtl-2-4-${viewport.name}.png`),
+      animations: 'disabled',
+    });
+
     assert(metrics.direction === 'rtl', `Arabic direction is ${metrics.direction}, expected rtl`);
     assert(
       metrics.textAlign === 'right',
@@ -114,7 +138,7 @@ try {
       metrics.textAlignLast === 'right',
       `Arabic text-align-last is ${metrics.textAlignLast}, expected right`,
     );
-    assert(metrics.lineCount >= 2, `Qur’an 2:2 did not wrap at ${String(viewport.width)}px`);
+    assert(metrics.lineCount >= 2, `Qur’an ${ayahKey} did not wrap at ${String(viewport.width)}px`);
     assert(
       metrics.rightEdgeDeltas.every((delta) => delta <= 8),
       `Wrapped Arabic lines are not consistently right aligned: ${metrics.rightEdgeDeltas.join(', ')}`,
@@ -124,12 +148,7 @@ try {
       `Arabic paragraph exceeds viewport: ${String(metrics.paragraphWidth)}px > ${String(metrics.viewportWidth)}px`,
     );
 
-    await arabic.screenshot({
-      path: path.join(artifactDirectory, `quran-arabic-rtl-2-2-${viewport.name}.png`),
-      animations: 'disabled',
-    });
-
-    results.push({ viewport, ...metrics });
+    results.push({ viewport, ayahKey, ...metrics });
     await context.close();
   }
 
