@@ -81,21 +81,22 @@ export function QuranVirtualizedAyahList(
 ) {
   const containerRef = useRef<HTMLDivElement | null>(null);
   const measuredHeightsRef = useRef(new Map<string, number>());
+  const programmaticScrollTopRef = useRef<number | null>(null);
   const [scrollTop, setScrollTop] = useState(props.initialScrollTop);
   const [viewportHeight, setViewportHeight] = useState(720);
   const [measurementVersion, setMeasurementVersion] = useState(0);
-  const [pendingTargetKey, setPendingTargetKey] = useState<string | null>(props.targetAyahKey);
+  const [anchoredTargetKey, setAnchoredTargetKey] = useState<string | null>(props.targetAyahKey);
 
   useEffect(() => {
-    setPendingTargetKey(props.targetAyahKey);
+    setAnchoredTargetKey(props.targetAyahKey);
   }, [props.targetAyahKey]);
 
   const targetIndex = useMemo(
     () =>
-      pendingTargetKey === null
+      anchoredTargetKey === null
         ? -1
-        : props.items.findIndex((result) => result.ayah.key === pendingTargetKey),
-    [pendingTargetKey, props.items],
+        : props.items.findIndex((result) => result.ayah.key === anchoredTargetKey),
+    [anchoredTargetKey, props.items],
   );
   const anchoredScrollTop =
     targetIndex >= 0
@@ -121,39 +122,24 @@ export function QuranVirtualizedAyahList(
     const container = containerRef.current;
     if (!container) return;
     container.scrollTop = props.initialScrollTop;
-    setScrollTop(props.initialScrollTop);
+    programmaticScrollTopRef.current = container.scrollTop;
+    setScrollTop(container.scrollTop);
     setViewportHeight(Math.max(1, container.clientHeight));
   }, [props.initialScrollTop, props.surahNumber]);
 
   useLayoutEffect(() => {
     const container = containerRef.current;
-    if (!container || pendingTargetKey === null || targetIndex < 0) return;
+    if (!container || anchoredTargetKey === null || targetIndex < 0) return;
     const nextTop = Math.max(
       0,
       offsetBefore(props.items, targetIndex, measuredHeightsRef.current) -
         container.clientHeight * 0.25,
     );
     container.scrollTop = nextTop;
-    setScrollTop(nextTop);
+    programmaticScrollTopRef.current = container.scrollTop;
+    setScrollTop(container.scrollTop);
     setViewportHeight(Math.max(1, container.clientHeight));
-  }, [measurementVersion, pendingTargetKey, props.items, targetIndex]);
-
-  useEffect(() => {
-    if (pendingTargetKey === null || targetIndex < 0) return;
-    const visibleItems = props.items.slice(window.start, window.end);
-    if (
-      visibleItems.length === 0 ||
-      !visibleItems.every((result) => measuredHeightsRef.current.has(result.ayah.key))
-    ) {
-      return;
-    }
-    const frame = requestAnimationFrame(() => {
-      setPendingTargetKey((current) => (current === pendingTargetKey ? null : current));
-    });
-    return () => {
-      cancelAnimationFrame(frame);
-    };
-  }, [measurementVersion, pendingTargetKey, props.items, targetIndex, window.end, window.start]);
+  }, [anchoredTargetKey, measurementVersion, props.items, targetIndex]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -181,14 +167,29 @@ export function QuranVirtualizedAyahList(
     };
   }, [visible]);
 
+  const releaseAnchor = (): void => {
+    setAnchoredTargetKey(null);
+    programmaticScrollTopRef.current = null;
+  };
+
   return (
     <div
       ref={containerRef}
       className="quran-offline-reader__virtual-scroll"
       data-quran-virtual-scroll
       aria-label={props.ariaLabel}
+      onWheel={releaseAnchor}
+      onTouchStart={releaseAnchor}
+      onPointerDown={releaseAnchor}
       onScroll={(event) => {
         const next = event.currentTarget.scrollTop;
+        const expected = programmaticScrollTopRef.current;
+        if (expected !== null && Math.abs(next - expected) <= 1) {
+          programmaticScrollTopRef.current = null;
+        } else if (anchoredTargetKey !== null) {
+          setAnchoredTargetKey(null);
+          programmaticScrollTopRef.current = null;
+        }
         setScrollTop(next);
         props.onScrollTopChange(next);
       }}
