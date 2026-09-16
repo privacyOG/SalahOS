@@ -93,6 +93,16 @@
   vertical-align: 0.08em;
 }
 
+/* Qur'anic Arabic must start from the right on every visual line, including the final wrapped line. */
+.quran-knowledge-reader__reader-host
+  .quran-offline-ayah
+  .knowledge-card__arabic[lang='ar'][dir='rtl'] {
+  direction: rtl;
+  text-align: right;
+  text-align-last: right;
+  unicode-bidi: isolate;
+}
+
 .quran-knowledge-reader__reader-host,
 .quran-knowledge-reader__reader-host > * {
   min-width: 0;
