@@ -106,7 +106,10 @@ try {
     });
 
     assert(metrics.direction === 'rtl', `Arabic direction is ${metrics.direction}, expected rtl`);
-    assert(metrics.textAlign === 'right', `Arabic text-align is ${metrics.textAlign}, expected right`);
+    assert(
+      metrics.textAlign === 'right',
+      `Arabic text-align is ${metrics.textAlign}, expected right`,
+    );
     assert(
       metrics.textAlignLast === 'right',
       `Arabic text-align-last is ${metrics.textAlignLast}, expected right`,
@@ -134,7 +137,9 @@ try {
     path.join(artifactDirectory, 'quran-arabic-rtl-results.json'),
     `${JSON.stringify(results, null, 2)}\n`,
   );
-  console.log(`Qur’an wrapped Arabic RTL acceptance passed ${String(results.length)} mobile viewports.`);
+  console.log(
+    `Qur’an wrapped Arabic RTL acceptance passed ${String(results.length)} mobile viewports.`,
+  );
 } finally {
   await browser.close();
 }
