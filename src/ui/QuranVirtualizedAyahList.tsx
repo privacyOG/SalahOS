@@ -177,6 +177,7 @@ export function QuranVirtualizedAyahList(
       onWheel={releaseAnchor}
       onTouchStart={releaseAnchor}
       onPointerDown={releaseAnchor}
+      onKeyDown={releaseAnchor}
       onScroll={(event) => {
         const next = event.currentTarget.scrollTop;
         setScrollTop(next);
