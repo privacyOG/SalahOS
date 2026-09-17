@@ -2,10 +2,7 @@ import { useMemo, useState } from 'react';
 
 import '../hadith-library.css';
 
-import {
-  islamicKnowledgeEntries,
-  type HadithKnowledgeEntry,
-} from '../domain/islamicKnowledge';
+import { islamicKnowledgeEntries, type HadithKnowledgeEntry } from '../domain/islamicKnowledge';
 import {
   NAWAWI_COLLECTION_AUTHOR,
   NAWAWI_COLLECTION_AUTHOR_ALIASES,
@@ -168,28 +165,28 @@ function legacyAuthor(entry: HadithKnowledgeEntry): Readonly<{
   };
 }
 
-const legacyHadithEntries = islamicKnowledgeEntries.filter(
+const allKnowledgeEntries: readonly import('../domain/islamicKnowledge').IslamicKnowledgeEntry[] =
+  islamicKnowledgeEntries;
+const legacyHadithEntries = allKnowledgeEntries.filter(
   (entry): entry is HadithKnowledgeEntry => entry.module === 'hadith',
 );
 
 const libraryRecords: readonly HadithLibraryRecord[] = Object.freeze(
   [
-    ...nawawiHadithEntries.map(
-      (entry): HadithLibraryRecord => ({
-        id: entry.id,
-        sortNumber: entry.number,
-        title: entry.title,
-        author: NAWAWI_COLLECTION_AUTHOR,
-        authorAliases: NAWAWI_COLLECTION_AUTHOR_ALIASES,
-        collectionId: NAWAWI_COLLECTION_ID,
-        collection: NAWAWI_COLLECTION_TITLE,
-        reference: `Hadith ${String(entry.number)}`,
-        grade: null,
-        blocks: entry.blocks,
-        sourceNote: 'Text transcribed from the user-provided “The Forty Nawawi Hadiths” document.',
-        tags: ['nawawi', 'forty hadith', 'arbaeen'],
-      }),
-    ),
+    ...nawawiHadithEntries.map((entry): HadithLibraryRecord => ({
+      id: entry.id,
+      sortNumber: entry.number,
+      title: entry.title,
+      author: NAWAWI_COLLECTION_AUTHOR,
+      authorAliases: NAWAWI_COLLECTION_AUTHOR_ALIASES,
+      collectionId: NAWAWI_COLLECTION_ID,
+      collection: NAWAWI_COLLECTION_TITLE,
+      reference: `Hadith ${String(entry.number)}`,
+      grade: null,
+      blocks: entry.blocks,
+      sourceNote: 'Text transcribed from the user-provided “The Forty Nawawi Hadiths” document.',
+      tags: ['nawawi', 'forty hadith', 'arbaeen'],
+    })),
     ...legacyHadithEntries.map((entry): HadithLibraryRecord => {
       const author = legacyAuthor(entry);
       const metadata = getHadithStage7Metadata(entry.id);
@@ -216,7 +213,9 @@ const libraryRecords: readonly HadithLibraryRecord[] = Object.freeze(
   ].sort((left, right) => {
     const author = left.author.localeCompare(right.author, 'en', { sensitivity: 'base' });
     if (author !== 0) return author;
-    const collection = left.collection.localeCompare(right.collection, 'en', { sensitivity: 'base' });
+    const collection = left.collection.localeCompare(right.collection, 'en', {
+      sensitivity: 'base',
+    });
     if (collection !== 0) return collection;
     return left.sortNumber - right.sortNumber;
   }),
@@ -238,7 +237,9 @@ function searchableText(record: HadithLibraryRecord): string {
     .toLocaleLowerCase();
 }
 
-function collectionDirectory(records: readonly HadithLibraryRecord[]): readonly CollectionDirectoryEntry[] {
+function collectionDirectory(
+  records: readonly HadithLibraryRecord[],
+): readonly CollectionDirectoryEntry[] {
   const grouped = new Map<string, CollectionDirectoryEntry>();
   for (const record of records) {
     const key = `${record.author}\u0000${record.collectionId}`;
@@ -291,15 +292,23 @@ export function HadithLibraryScreen({ locale }: Readonly<{ locale: Locale }>) {
         <p className="knowledge-hero__eyebrow">{labels.eyebrow}</p>
         <h1>{labels.title}</h1>
         <p>{labels.intro}</p>
-        <p className="knowledge-hero__scope" data-hadith-library-result-count={filteredRecords.length}>
+        <p
+          className="knowledge-hero__scope"
+          data-hadith-library-result-count={filteredRecords.length}
+        >
           {filteredRecords.length} {labels.results} · {labels.offline}
         </p>
       </header>
 
-      <section className="hadith-library__directory" aria-labelledby="hadith-library-directory-title">
+      <section
+        className="hadith-library__directory"
+        aria-labelledby="hadith-library-directory-title"
+      >
         <div className="hadith-library__section-heading">
           <h2 id="hadith-library-directory-title">{labels.browse}</h2>
-          <span>{directory.length} {labels.collection.toLocaleLowerCase()}</span>
+          <span>
+            {directory.length} {labels.collection.toLocaleLowerCase()}
+          </span>
         </div>
         <div className="hadith-library__collection-grid">
           {directory.map((item) => (
@@ -317,7 +326,9 @@ export function HadithLibraryScreen({ locale }: Readonly<{ locale: Locale }>) {
             >
               <strong>{item.author}</strong>
               <span>{item.collection}</span>
-              <small>{item.count} {labels.entries}</small>
+              <small>
+                {item.count} {labels.entries}
+              </small>
             </button>
           ))}
         </div>
@@ -348,7 +359,9 @@ export function HadithLibraryScreen({ locale }: Readonly<{ locale: Locale }>) {
           >
             <option value="all">{labels.allScholars}</option>
             {scholarOptions.map((name) => (
-              <option key={name} value={name}>{name}</option>
+              <option key={name} value={name}>
+                {name}
+              </option>
             ))}
           </select>
         </label>
@@ -372,7 +385,9 @@ export function HadithLibraryScreen({ locale }: Readonly<{ locale: Locale }>) {
       </section>
 
       {filteredRecords.length === 0 ? (
-        <p className="knowledge-empty" role="status">{labels.noResults}</p>
+        <p className="knowledge-empty" role="status">
+          {labels.noResults}
+        </p>
       ) : (
         <section className="hadith-library__results" aria-live="polite">
           {filteredRecords.map((record) => (
@@ -387,9 +402,13 @@ export function HadithLibraryScreen({ locale }: Readonly<{ locale: Locale }>) {
                 <summary>
                   <span className="hadith-library__record-title">
                     <strong>{record.title}</strong>
-                    <span>{record.author} · {record.collection}</span>
+                    <span>
+                      {record.author} · {record.collection}
+                    </span>
                   </span>
-                  {record.reference ? <span className="hadith-library__reference">{record.reference}</span> : null}
+                  {record.reference ? (
+                    <span className="hadith-library__reference">{record.reference}</span>
+                  ) : null}
                 </summary>
                 <div className="hadith-library__record-body">
                   {record.blocks.map((block, index) =>
@@ -431,7 +450,9 @@ export function HadithLibraryScreen({ locale }: Readonly<{ locale: Locale }>) {
                       </div>
                     ) : null}
                   </dl>
-                  <p className="hadith-library__source-note" role="note">{record.sourceNote}</p>
+                  <p className="hadith-library__source-note" role="note">
+                    {record.sourceNote}
+                  </p>
                 </div>
               </details>
             </article>

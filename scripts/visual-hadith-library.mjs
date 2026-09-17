@@ -58,7 +58,9 @@ try {
       localStorage.setItem('salahos.settings', JSON.stringify(settings));
     }, persistedSettings());
 
-    await page.goto(`${baseUrl}/?view=knowledge&knowledgeView=hadith`, { waitUntil: 'networkidle' });
+    await page.goto(`${baseUrl}/?view=knowledge&knowledgeView=hadith`, {
+      waitUntil: 'networkidle',
+    });
     const library = page.locator('[data-hadith-library]');
     await library.waitFor({ state: 'visible' });
 
@@ -68,7 +70,10 @@ try {
 
     const scholarLabels = await scholarSelect.locator('option').allTextContents();
     assert(scholarLabels.includes('Imam al-Nawawi'), 'Nawawi is missing from scholar navigation');
-    assert(scholarLabels.includes('Imam al-Bukhari'), 'al-Bukhari is missing from scholar navigation');
+    assert(
+      scholarLabels.includes('Imam al-Bukhari'),
+      'al-Bukhari is missing from scholar navigation',
+    );
     assert(scholarLabels.includes('Imam Muslim'), 'Muslim is missing from scholar navigation');
 
     await scholarSelect.selectOption({ label: 'Imam al-Nawawi' });
@@ -83,7 +88,10 @@ try {
     const nawawiCollection = library.locator('[data-hadith-collection-select] option').filter({
       hasText: 'The Forty Nawawi Hadiths',
     });
-    assert((await nawawiCollection.count()) === 1, 'Nawawi collection is missing from collection menu');
+    assert(
+      (await nawawiCollection.count()) === 1,
+      'Nawawi collection is missing from collection menu',
+    );
     await collectionSelect.selectOption('nawawi-forty');
 
     await search.fill('intentions');
@@ -91,7 +99,10 @@ try {
       return document.querySelectorAll('[data-hadith-library-entry]').length === 1;
     });
     const matched = library.locator('[data-hadith-library-entry]');
-    assert((await matched.getAttribute('data-hadith-library-entry')) === 'nawawi-01', 'Intentions search did not locate the first Nawawi hadith');
+    assert(
+      (await matched.getAttribute('data-hadith-library-entry')) === 'nawawi-01',
+      'Intentions search did not locate the first Nawawi hadith',
+    );
 
     await search.fill('');
     await page.waitForFunction(() => {
@@ -131,10 +142,22 @@ try {
       };
     });
 
-    assert(arabicMetrics.direction === 'rtl', `Arabic direction is ${arabicMetrics.direction}, expected rtl`);
-    assert(arabicMetrics.textAlign === 'right', `Arabic text-align is ${arabicMetrics.textAlign}, expected right`);
-    assert(arabicMetrics.textAlignLast === 'right', `Arabic text-align-last is ${arabicMetrics.textAlignLast}, expected right`);
-    assert(arabicMetrics.lineCount >= 2, `Arabic acceptance text did not wrap at ${String(viewport.width)}px`);
+    assert(
+      arabicMetrics.direction === 'rtl',
+      `Arabic direction is ${arabicMetrics.direction}, expected rtl`,
+    );
+    assert(
+      arabicMetrics.textAlign === 'right',
+      `Arabic text-align is ${arabicMetrics.textAlign}, expected right`,
+    );
+    assert(
+      arabicMetrics.textAlignLast === 'right',
+      `Arabic text-align-last is ${arabicMetrics.textAlignLast}, expected right`,
+    );
+    assert(
+      arabicMetrics.lineCount >= 2,
+      `Arabic acceptance text did not wrap at ${String(viewport.width)}px`,
+    );
     assert(
       arabicMetrics.rightEdgeDeltas.every((delta) => delta <= 8),
       `Wrapped Arabic lines are not consistently right-aligned: ${arabicMetrics.rightEdgeDeltas.join(', ')}`,
@@ -153,10 +176,22 @@ try {
         rootClientWidth: root.clientWidth,
       };
     });
-    assert(layout.rootLeft >= -1, `Hadith library begins outside viewport: ${String(layout.rootLeft)}px`);
-    assert(layout.rootRight <= layout.innerWidth + 1, `Hadith library exceeds viewport: ${String(layout.rootRight)}px`);
-    assert(layout.rootScrollWidth <= layout.rootClientWidth + 1, 'Hadith library has internal horizontal overflow');
-    assert(layout.documentScrollWidth <= layout.innerWidth + 1, 'Hadith library causes document horizontal overflow');
+    assert(
+      layout.rootLeft >= -1,
+      `Hadith library begins outside viewport: ${String(layout.rootLeft)}px`,
+    );
+    assert(
+      layout.rootRight <= layout.innerWidth + 1,
+      `Hadith library exceeds viewport: ${String(layout.rootRight)}px`,
+    );
+    assert(
+      layout.rootScrollWidth <= layout.rootClientWidth + 1,
+      'Hadith library has internal horizontal overflow',
+    );
+    assert(
+      layout.documentScrollWidth <= layout.innerWidth + 1,
+      'Hadith library causes document horizontal overflow',
+    );
 
     await page.screenshot({
       path: path.join(artifactDirectory, `stage57-hadith-library-${viewport.name}.png`),
