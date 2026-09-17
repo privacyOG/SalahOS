@@ -126,12 +126,10 @@ try {
           .querySelector('[data-knowledge-experience]')
           ?.getAttribute('data-knowledge-view') === 'hadith',
     );
-    screen = page.locator('[data-knowledge-screen]');
+    screen = page.locator('[data-hadith-library]');
     await screen.waitFor({ state: 'visible' });
     assert(
-      (await screen
-        .locator('[data-knowledge-curated-size]')
-        .getAttribute('data-knowledge-curated-size')) === '3',
+      (await screen.getAttribute('data-knowledge-curated-size')) === '3',
       'Governed curated Hadith size is not three entries',
     );
     assert(
