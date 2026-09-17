@@ -88,6 +88,9 @@ jobs:
       - name: Run Qur'an navigation UX acceptance
         run: node scripts/visual-quran-navigation-ux.mjs
 
+      - name: Run Hadith scholar/collection UX acceptance
+        run: node scripts/visual-hadith-library.mjs
+
       - name: Run visual regression matrix
         run: npm run visual:check
 
