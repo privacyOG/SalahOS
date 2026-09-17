@@ -2,7 +2,11 @@ import { useMemo, useState } from 'react';
 
 import '../hadith-library.css';
 
-import { islamicKnowledgeEntries, type HadithKnowledgeEntry } from '../domain/islamicKnowledge';
+import {
+  islamicKnowledgeEntries,
+  type HadithKnowledgeEntry,
+  type IslamicKnowledgeEntry,
+} from '../domain/islamicKnowledge';
 import {
   NAWAWI_COLLECTION_AUTHOR,
   NAWAWI_COLLECTION_AUTHOR_ALIASES,
@@ -13,6 +17,7 @@ import {
 } from '../domain/nawawiHadithCollection';
 import { getHadithStage7Metadata } from '../domain/islamicKnowledgeStage7';
 import type { Locale } from '../i18n/translations';
+import { HadithStage7Details } from './KnowledgeStage7Details';
 
 type HadithLibraryCopy = Readonly<{
   eyebrow: string;
@@ -47,6 +52,7 @@ type HadithLibraryRecord = Readonly<{
   blocks: readonly HadithLibraryContentBlock[];
   sourceNote: string;
   tags: readonly string[];
+  legacyEntry: HadithKnowledgeEntry | null;
 }>;
 
 type CollectionDirectoryEntry = Readonly<{
@@ -165,8 +171,7 @@ function legacyAuthor(entry: HadithKnowledgeEntry): Readonly<{
   };
 }
 
-const allKnowledgeEntries: readonly import('../domain/islamicKnowledge').IslamicKnowledgeEntry[] =
-  islamicKnowledgeEntries;
+const allKnowledgeEntries: readonly IslamicKnowledgeEntry[] = islamicKnowledgeEntries;
 const legacyHadithEntries = allKnowledgeEntries.filter(
   (entry): entry is HadithKnowledgeEntry => entry.module === 'hadith',
 );
@@ -186,6 +191,7 @@ const libraryRecords: readonly HadithLibraryRecord[] = Object.freeze(
       blocks: entry.blocks,
       sourceNote: 'Text transcribed from the user-provided “The Forty Nawawi Hadiths” document.',
       tags: ['nawawi', 'forty hadith', 'arbaeen'],
+      legacyEntry: null,
     })),
     ...legacyHadithEntries.map((entry): HadithLibraryRecord => {
       const author = legacyAuthor(entry);
@@ -195,9 +201,10 @@ const libraryRecords: readonly HadithLibraryRecord[] = Object.freeze(
         blocks.push({ kind: 'arabic', text: metadata.arabicExcerpt });
       }
       blocks.push({ kind: 'text', text: entry.text });
+      const referenceNumber = /\d+/u.exec(entry.reference)?.[0] ?? '0';
       return {
         id: entry.id,
-        sortNumber: Number.parseInt(entry.reference.match(/\d+/u)?.[0] ?? '0', 10),
+        sortNumber: Number.parseInt(referenceNumber, 10),
         title: entry.title,
         author: author.name,
         authorAliases: author.aliases,
@@ -208,6 +215,7 @@ const libraryRecords: readonly HadithLibraryRecord[] = Object.freeze(
         blocks,
         sourceNote: entry.sourceNote,
         tags: entry.tags,
+        legacyEntry: entry,
       };
     }),
   ].sort((left, right) => {
@@ -286,8 +294,21 @@ export function HadithLibraryScreen({ locale }: Readonly<{ locale: Locale }>) {
     });
   }, [collectionId, query, scholar]);
 
+  const navigateToHadith = (entryId: string) => {
+    const target = libraryRecords.find((record) => record.id === entryId);
+    if (!target) return;
+    setScholar(target.author);
+    setCollectionId(target.collectionId);
+    setQuery(target.reference ?? target.title);
+  };
+
   return (
-    <main className="knowledge-screen hadith-library" data-knowledge-screen data-hadith-library>
+    <main
+      className="knowledge-screen hadith-library"
+      data-knowledge-screen
+      data-hadith-library
+      data-knowledge-curated-size={legacyHadithEntries.length}
+    >
       <header className="knowledge-hero hadith-library__hero">
         <p className="knowledge-hero__eyebrow">{labels.eyebrow}</p>
         <h1>{labels.title}</h1>
@@ -397,6 +418,7 @@ export function HadithLibraryScreen({ locale }: Readonly<{ locale: Locale }>) {
               data-hadith-library-entry={record.id}
               data-hadith-library-author={record.author}
               data-hadith-library-collection={record.collectionId}
+              data-knowledge-module={record.legacyEntry ? 'hadith' : undefined}
             >
               <details>
                 <summary>
@@ -411,48 +433,61 @@ export function HadithLibraryScreen({ locale }: Readonly<{ locale: Locale }>) {
                   ) : null}
                 </summary>
                 <div className="hadith-library__record-body">
-                  {record.blocks.map((block, index) =>
-                    block.kind === 'arabic' ? (
-                      <p
-                        key={`${record.id}-block-${String(index)}`}
-                        className="hadith-library__arabic"
-                        lang="ar"
-                        dir="rtl"
-                        data-hadith-library-arabic
-                      >
-                        {block.text}
+                  {record.legacyEntry ? (
+                    <HadithStage7Details
+                      entry={record.legacyEntry}
+                      locale={locale}
+                      onSearchTopic={(topic) => {
+                        setQuery(topic);
+                      }}
+                      onNavigateHadith={navigateToHadith}
+                    />
+                  ) : (
+                    <>
+                      {record.blocks.map((block, index) =>
+                        block.kind === 'arabic' ? (
+                          <p
+                            key={`${record.id}-block-${String(index)}`}
+                            className="hadith-library__arabic"
+                            lang="ar"
+                            dir="rtl"
+                            data-hadith-library-arabic
+                          >
+                            {block.text}
+                          </p>
+                        ) : (
+                          <p key={`${record.id}-block-${String(index)}`} lang="en" dir="ltr">
+                            {block.text}
+                          </p>
+                        ),
+                      )}
+                      <dl className="hadith-library__metadata">
+                        <div>
+                          <dt>{labels.scholar}</dt>
+                          <dd>{record.author}</dd>
+                        </div>
+                        <div>
+                          <dt>{labels.source}</dt>
+                          <dd>{record.collection}</dd>
+                        </div>
+                        {record.reference ? (
+                          <div>
+                            <dt>{labels.reference}</dt>
+                            <dd>{record.reference}</dd>
+                          </div>
+                        ) : null}
+                        {record.grade ? (
+                          <div>
+                            <dt>{labels.grade}</dt>
+                            <dd>{record.grade}</dd>
+                          </div>
+                        ) : null}
+                      </dl>
+                      <p className="hadith-library__source-note" role="note">
+                        {record.sourceNote}
                       </p>
-                    ) : (
-                      <p key={`${record.id}-block-${String(index)}`} lang="en" dir="ltr">
-                        {block.text}
-                      </p>
-                    ),
+                    </>
                   )}
-                  <dl className="hadith-library__metadata">
-                    <div>
-                      <dt>{labels.scholar}</dt>
-                      <dd>{record.author}</dd>
-                    </div>
-                    <div>
-                      <dt>{labels.source}</dt>
-                      <dd>{record.collection}</dd>
-                    </div>
-                    {record.reference ? (
-                      <div>
-                        <dt>{labels.reference}</dt>
-                        <dd>{record.reference}</dd>
-                      </div>
-                    ) : null}
-                    {record.grade ? (
-                      <div>
-                        <dt>{labels.grade}</dt>
-                        <dd>{record.grade}</dd>
-                      </div>
-                    ) : null}
-                  </dl>
-                  <p className="hadith-library__source-note" role="note">
-                    {record.sourceNote}
-                  </p>
                 </div>
               </details>
             </article>
