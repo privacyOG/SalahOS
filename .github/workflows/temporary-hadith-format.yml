@@ -6,7 +6,7 @@ on:
       - hadith-library-nawawi-collections
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   format:
@@ -16,6 +16,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           ref: hadith-library-nawawi-collections
+          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -45,19 +46,12 @@ jobs:
       - name: Verify TypeScript build
         run: npm run typecheck
 
-      - name: Package formatted source files
+      - name: Create verified formatter commit
         run: |
-          mkdir -p formatted-hadith/src/domain formatted-hadith/src/ui formatted-hadith/scripts
-          cp src/domain/nawawiHadithCollection.ts formatted-hadith/src/domain/
-          cp src/ui/HadithLibraryScreen.tsx formatted-hadith/src/ui/
-          cp src/ui/HadithLibraryScreen.test.ts formatted-hadith/src/ui/
-          cp src/hadith-library.css formatted-hadith/src/
-          cp scripts/visual-hadith-library.mjs formatted-hadith/scripts/
-
-      - name: Upload formatted source artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: hadith-feature-formatted
-          path: formatted-hadith/
-          if-no-files-found: error
-          retention-days: 1
+          rm .github/workflows/temporary-hadith-format.yml
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -A
+          git commit -m 'Fix and format Hadith library implementation'
+          echo "VERIFIED_COMMIT_SHA=$(git rev-parse HEAD)"
+          git push origin HEAD:hadith-library-nawawi-collections
