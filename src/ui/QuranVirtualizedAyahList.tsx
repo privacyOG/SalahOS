@@ -84,10 +84,36 @@ export function QuranVirtualizedAyahList(
   const [scrollTop, setScrollTop] = useState(props.initialScrollTop);
   const [viewportHeight, setViewportHeight] = useState(720);
   const [measurementVersion, setMeasurementVersion] = useState(0);
+  const [anchoredTargetKey, setAnchoredTargetKey] = useState<string | null>(props.targetAyahKey);
 
+  useEffect(() => {
+    setAnchoredTargetKey(props.targetAyahKey);
+  }, [props.targetAyahKey]);
+
+  const targetIndex = useMemo(
+    () =>
+      anchoredTargetKey === null
+        ? -1
+        : props.items.findIndex((result) => result.ayah.key === anchoredTargetKey),
+    [anchoredTargetKey, props.items],
+  );
+  const anchoredScrollTop =
+    targetIndex >= 0
+      ? Math.max(
+          0,
+          offsetBefore(props.items, targetIndex, measuredHeightsRef.current) -
+            viewportHeight * 0.25,
+        )
+      : scrollTop;
   const window = useMemo(
-    () => quranVirtualWindow(props.items, scrollTop, viewportHeight, measuredHeightsRef.current),
-    [measurementVersion, props.items, scrollTop, viewportHeight],
+    () =>
+      quranVirtualWindow(
+        props.items,
+        targetIndex >= 0 ? anchoredScrollTop : scrollTop,
+        viewportHeight,
+        measuredHeightsRef.current,
+      ),
+    [anchoredScrollTop, measurementVersion, props.items, scrollTop, targetIndex, viewportHeight],
   );
   const visible = props.items.slice(window.start, window.end);
 
@@ -95,18 +121,22 @@ export function QuranVirtualizedAyahList(
     const container = containerRef.current;
     if (!container) return;
     container.scrollTop = props.initialScrollTop;
-    setScrollTop(props.initialScrollTop);
+    setScrollTop(container.scrollTop);
     setViewportHeight(Math.max(1, container.clientHeight));
   }, [props.initialScrollTop, props.surahNumber]);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const container = containerRef.current;
-    if (!container || props.targetAyahKey === null) return;
-    const index = props.items.findIndex((result) => result.ayah.key === props.targetAyahKey);
-    if (index < 0) return;
-    const targetTop = offsetBefore(props.items, index, measuredHeightsRef.current);
-    container.scrollTo({ top: Math.max(0, targetTop - container.clientHeight * 0.25) });
-  }, [props.items, props.targetAyahKey]);
+    if (!container || anchoredTargetKey === null || targetIndex < 0) return;
+    const nextTop = Math.max(
+      0,
+      offsetBefore(props.items, targetIndex, measuredHeightsRef.current) -
+        container.clientHeight * 0.25,
+    );
+    container.scrollTop = nextTop;
+    setScrollTop(container.scrollTop);
+    setViewportHeight(Math.max(1, container.clientHeight));
+  }, [anchoredTargetKey, measurementVersion, props.items, targetIndex]);
 
   useEffect(() => {
     const container = containerRef.current;
@@ -134,12 +164,20 @@ export function QuranVirtualizedAyahList(
     };
   }, [visible]);
 
+  const releaseAnchor = (): void => {
+    setAnchoredTargetKey(null);
+  };
+
   return (
     <div
       ref={containerRef}
       className="quran-offline-reader__virtual-scroll"
       data-quran-virtual-scroll
       aria-label={props.ariaLabel}
+      onWheel={releaseAnchor}
+      onTouchStart={releaseAnchor}
+      onPointerDown={releaseAnchor}
+      onKeyDown={releaseAnchor}
       onScroll={(event) => {
         const next = event.currentTarget.scrollTop;
         setScrollTop(next);

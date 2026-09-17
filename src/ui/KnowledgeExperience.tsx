@@ -16,8 +16,8 @@ import {
   type KnowledgeView,
 } from './applicationRoute';
 import { KnowledgeScreen } from './KnowledgeScreen';
+import { QuranKnowledgeReader } from './QuranKnowledgeReader';
 import { QuranOfflinePreparationControl } from './QuranOfflinePreparationControl';
-import { QuranOfflineReader } from './QuranOfflineReader';
 
 type KnowledgeExperienceCopy = Readonly<{
   navigation: string;
@@ -147,25 +147,25 @@ export function KnowledgeExperience() {
             {segment.label}
           </button>
         ))}
-        {view === 'quran' ? (
-          <button
-            type="button"
-            data-quran-retry-load
-            onClick={() => {
-              setQuranReaderAttempt((attempt) => attempt + 1);
-            }}
-          >
-            {labels.retryQuran}
-          </button>
-        ) : null}
       </nav>
 
       {view === 'library' ? <KnowledgeScreen scope="library" /> : null}
       {view === 'hadith' ? <KnowledgeScreen scope="hadith" /> : null}
       {view === 'quran' ? (
         <>
+          <div className="knowledge-experience__quran-tools">
+            <button
+              type="button"
+              data-quran-retry-load
+              onClick={() => {
+                setQuranReaderAttempt((attempt) => attempt + 1);
+              }}
+            >
+              {labels.retryQuran}
+            </button>
+          </div>
           <QuranOfflinePreparationControl locale={locale} />
-          <QuranOfflineReader
+          <QuranKnowledgeReader
             key={quranReaderAttempt}
             locale={locale}
             preferences={quranPreferences}
