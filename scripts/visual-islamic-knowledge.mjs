@@ -98,6 +98,10 @@ try {
       'First-class Fiqh filter did not isolate the governed Fiqh entries',
     );
     assert(
+      (await screen.locator('[data-fiqh-four-madhhab]').count()) === 3,
+      'Fiqh entries are missing four-madhhab comparison blocks',
+    );
+    assert(
       (await screen.locator('[data-fiqh-madhhab]').count()) === 12,
       'Four-madhhab Fiqh views are incomplete',
     );
@@ -122,45 +126,52 @@ try {
           .querySelector('[data-knowledge-experience]')
           ?.getAttribute('data-knowledge-view') === 'hadith',
     );
-    screen = page.locator('[data-knowledge-screen]');
+    screen = page.locator('[data-hadith-library]');
     await screen.waitFor({ state: 'visible' });
     assert(
-      (await screen
-        .locator('[data-knowledge-curated-size]')
-        .getAttribute('data-knowledge-curated-size')) === '3',
-      'Scoped Hadith catalogue size is not three entries',
+      (await screen.getAttribute('data-knowledge-curated-size')) === '3',
+      'Governed curated Hadith size is not three entries',
     );
     assert(
-      (await screen.locator('.knowledge-card').count()) === 3 &&
+      (await screen.locator('[data-hadith-library-entry]').count()) >= 45 &&
         (await screen.locator('[data-knowledge-module="hadith"]').count()) === 3,
-      'Hadith section did not expose the three governed entries',
+      'Hadith library did not expose the Nawawi collection alongside all three governed entries',
     );
     assert(
       (await screen.locator('[data-hadith-arabic]').count()) === 3 &&
         (await screen.locator('[data-hadith-arabic-scope="partial-matn"]').count()) === 3,
-      'Hadith Arabic excerpts are missing or not labelled as partial matn',
+      'Governed Hadith Arabic excerpts are missing or not labelled as partial matn',
     );
     assert(
       (await screen.locator('[data-hadith-book]').count()) === 3 &&
         (await screen.locator('[data-hadith-chapter]').count()) === 3 &&
         (await screen.locator('[data-hadith-isnad]').count()) === 3,
-      'Hadith book/chapter/isnad metadata is incomplete',
+      'Governed Hadith book/chapter/isnad metadata is incomplete',
     );
     assert(
       (await screen.locator('[data-hadith-full-text]').count()) === 3,
       'Reviewed full-text Hadith links are missing',
     );
-    await screen.locator('[data-hadith-source-disclosure] summary').first().click();
-    await screen.getByText('Sahih al-Bukhari').first().waitFor();
-    await screen.getByText('Sahih').first().waitFor();
+
+    const intentionEntry = screen.locator('[data-hadith-library-entry="hadith-intentions"]');
+    await intentionEntry.locator('details > summary').first().click();
+    await intentionEntry.locator('[data-hadith-source-disclosure] summary').click();
+    await intentionEntry.getByText('Sahih al-Bukhari').first().waitFor();
+    await intentionEntry.getByText('Sahih').first().waitFor();
     await screen.getByText('Imam al-Bukhari').first().waitFor();
-    await screen.locator('[data-hadith-topic="intention"]').click();
+    await intentionEntry.locator('[data-hadith-topic="intention"]').click();
     assert(
       (await screen.locator('[data-knowledge-module="hadith"]').count()) === 1,
       'Hadith topic navigation did not isolate the intention entry',
     );
     await screen.getByRole('searchbox').fill('');
-    await screen.locator('[data-hadith-related] button').first().click();
+
+    const reopenedIntentionEntry = screen.locator(
+      '[data-hadith-library-entry="hadith-intentions"]',
+    );
+    const isOpen = await reopenedIntentionEntry.locator('details').first().getAttribute('open');
+    if (isOpen === null) await reopenedIntentionEntry.locator('details > summary').first().click();
+    await reopenedIntentionEntry.locator('[data-hadith-related] button').first().click();
     assert(
       (await screen.locator('[data-knowledge-module="hadith"]').count()) === 1,
       'Related Hadith navigation did not isolate its target',

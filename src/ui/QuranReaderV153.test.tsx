@@ -25,7 +25,7 @@ describe('v1.5.3 Qur’an reader architecture', () => {
       'view === \'library\' ? <KnowledgeScreen scope="library" /> : null',
     );
     expect(experienceSource).toContain(
-      'view === \'hadith\' ? <KnowledgeScreen scope="hadith" /> : null',
+      "view === 'hadith' ? <HadithLibraryScreen locale={locale} /> : null",
     );
     expect(experienceSource).toContain("view === 'quran' ? (");
     expect(experienceSource).toContain('data-knowledge-view-select');
