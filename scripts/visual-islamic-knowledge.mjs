@@ -168,7 +168,9 @@ try {
     );
     await screen.getByRole('searchbox').fill('');
 
-    const reopenedIntentionEntry = screen.locator('[data-hadith-library-entry="hadith-intentions"]');
+    const reopenedIntentionEntry = screen.locator(
+      '[data-hadith-library-entry="hadith-intentions"]',
+    );
     const isOpen = await reopenedIntentionEntry.locator('details').first().getAttribute('open');
     if (isOpen === null) await reopenedIntentionEntry.locator('details > summary').first().click();
     await reopenedIntentionEntry.locator('[data-hadith-related] button').first().click();
