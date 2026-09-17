@@ -15,6 +15,7 @@ import {
   searchForKnowledgeView,
   type KnowledgeView,
 } from './applicationRoute';
+import { HadithLibraryScreen } from './HadithLibraryScreen';
 import { KnowledgeScreen } from './KnowledgeScreen';
 import { QuranKnowledgeReader } from './QuranKnowledgeReader';
 import { QuranOfflinePreparationControl } from './QuranOfflinePreparationControl';
@@ -150,7 +151,7 @@ export function KnowledgeExperience() {
       </nav>
 
       {view === 'library' ? <KnowledgeScreen scope="library" /> : null}
-      {view === 'hadith' ? <KnowledgeScreen scope="hadith" /> : null}
+      {view === 'hadith' ? <HadithLibraryScreen locale={locale} /> : null}
       {view === 'quran' ? (
         <>
           <div className="knowledge-experience__quran-tools">
