@@ -40,7 +40,7 @@ jobs:
           test "$(grep -E '^[[:space:]]*MARKETING_VERSION = ' ios/App/App.xcodeproj/project.pbxproj | sed -E 's/.*MARKETING_VERSION = ([^;]+);/\1/' | sort -u)" = '1.6.1'
           test "$(grep -E '^[[:space:]]*CURRENT_PROJECT_VERSION = ' ios/App/App.xcodeproj/project.pbxproj | sed -E 's/.*CURRENT_PROJECT_VERSION = ([^;]+);/\1/' | sort -u)" = '12'
 
-      - name: Commit synchronized metadata and remove one-shot workflow
+      - name: Commit synchronized metadata to release candidate branch
         shell: bash
         run: |
           set -euo pipefail
@@ -49,4 +49,4 @@ jobs:
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add package.json package-lock.json android/app/build.gradle ios/App/App.xcodeproj/project.pbxproj .github/workflows/release-prep-v161.yml
           git commit -m 'chore: prepare v1.6.1 version metadata'
-          git push origin HEAD:release-prep/v1.6.1
+          git push origin HEAD:refs/heads/v161-metadata
