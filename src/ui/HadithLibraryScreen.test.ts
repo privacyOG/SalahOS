@@ -15,8 +15,8 @@ describe('Hadith scholar and collection library', () => {
     expect(NAWAWI_COLLECTION_AUTHOR).toBe('Imam al-Nawawi');
     expect(NAWAWI_COLLECTION_TITLE).toBe('The Forty Nawawi Hadiths');
     expect(nawawiHadithEntries).toHaveLength(42);
-    expect(nawawiHadithEntries[0]?.title).toBe('The First Hadith');
-    expect(nawawiHadithEntries[41]?.title).toBe('The Forty Second Hadith');
+    expect(nawawiHadithEntries[0].title).toBe('The First Hadith');
+    expect(nawawiHadithEntries[41].title).toBe('The Forty Second Hadith');
   });
 
   it('keeps Arabic passages as explicit RTL blocks', () => {
@@ -41,6 +41,13 @@ describe('Hadith scholar and collection library', () => {
     expect(screen).toContain('record.blocks.map((block) => block.text)');
     expect(screen).toContain("name: 'Imam al-Bukhari'");
     expect(screen).toContain("name: 'Imam Muslim'");
+  });
+
+  it('retains governed metadata and navigation for curated Bukhari and Muslim entries', () => {
+    expect(screen).toContain('HadithStage7Details');
+    expect(screen).toContain("data-knowledge-module={record.legacyEntry ? 'hadith' : undefined}");
+    expect(screen).toContain('onNavigateHadith={navigateToHadith}');
+    expect(screen).toContain('data-knowledge-curated-size={legacyHadithEntries.length}');
   });
 
   it('uses responsive, accessible controls without hard-coded colours', () => {
