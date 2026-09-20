@@ -6,6 +6,7 @@ const packPath = resolve(root, 'public/data/quran/quran-offline-pack.json');
 const registerPath = resolve(root, 'src/data/quran-mutashabih-review-register.json');
 const signoffPath = resolve(root, 'src/data/quran-scholarly-signoff.json');
 const salahos2026Path = resolve(root, 'src/data/quran-salahos-2026-overrides.json');
+const attributeCoveragePath = resolve(root, 'src/data/quran-mutashabih-attribute-coverage.json');
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -24,8 +25,8 @@ function isReleaseRef() {
   );
 }
 
-const [pack, register, signoff, salahos2026] = await Promise.all(
-  [packPath, registerPath, signoffPath, salahos2026Path].map(async (path) =>
+const [pack, register, signoff, salahos2026, attributeCoverage] = await Promise.all(
+  [packPath, registerPath, signoffPath, salahos2026Path, attributeCoveragePath].map(async (path) =>
     JSON.parse(await readFile(path, 'utf8')),
   ),
 );
@@ -64,14 +65,35 @@ for (const entry of salahos2026.entries) {
   assert(corpusKeys.has(entry.verseKey), `SalahOS 2026 contains unknown verse ${entry.verseKey}.`);
   assert(!salahosOverridesByKey.has(entry.verseKey), `SalahOS 2026 duplicates ${entry.verseKey}.`);
   assert(
-    isNonEmptyString(entry.englishMeaning),
-    `SalahOS 2026 ${entry.verseKey} has no English meaning.`,
+    isNonEmptyString(entry.englishMeaning) ||
+      (Array.isArray(entry.baseRewrites) && entry.baseRewrites.length > 0),
+    `SalahOS 2026 ${entry.verseKey} has no English meaning or base rewrite.`,
   );
   assert(
     isNonEmptyString(entry.editorialNote),
     `SalahOS 2026 ${entry.verseKey} has no editorial note.`,
   );
   salahosOverridesByKey.set(entry.verseKey, entry);
+}
+
+const attributeCoverageKeys = [
+  ...new Set(
+    (attributeCoverage.categories ?? []).flatMap((category) => category.verseKeys ?? []),
+  ),
+];
+assert(
+  attributeCoverageKeys.length === 88,
+  'Editorial gate requires all 88 full-corpus divine-attribute risk verses.',
+);
+for (const verseKey of attributeCoverageKeys) {
+  const override = salahosOverridesByKey.get(verseKey);
+  assert(override, `SalahOS 2026 is missing full-corpus Mutashabih treatment ${verseKey}.`);
+  assert(
+    override.classification === 'mutashabih',
+    `${verseKey} is not marked Mutashabih in SalahOS 2026.`,
+  );
+  assert(isNonEmptyString(override.salafReading), `${verseKey} has no Salaf treatment.`);
+  assert(isNonEmptyString(override.khalafReading), `${verseKey} has no Khalaf treatment.`);
 }
 
 for (const seed of register.requiredSeedVerses ?? []) {
@@ -136,6 +158,7 @@ const report = {
   approvedRegisteredAyat: approvedEntries.length,
   unresolvedRegisteredAyat: unresolvedEntries.length,
   salahos2026Overrides: salahosOverridesByKey.size,
+  fullCorpusAttributeRiskVerses: attributeCoverageKeys.length,
   requiredMutashabihSeeds: register.requiredSeedVerses?.length ?? 0,
   scholarlySignoffStatus: signoff?.status ?? null,
   scholarlySignoffReviewer: signoff?.reviewerName ?? null,
