@@ -9,6 +9,36 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
+function renderSalahosMeaning(entry, baseline) {
+  if (typeof entry.englishMeaning === 'string' && entry.englishMeaning.trim().length > 0) {
+    return entry.englishMeaning;
+  }
+
+  const rewrites = Array.isArray(entry.baseRewrites) ? entry.baseRewrites : [];
+  assert(rewrites.length > 0, `${entry.verseKey} has no English meaning or base rewrite.`);
+  let rendered = baseline;
+  for (const rewrite of rewrites) {
+    assert(
+      typeof rewrite?.from === 'string' && rewrite.from.length > 0,
+      `${entry.verseKey} has an invalid rewrite source.`,
+    );
+    assert(
+      typeof rewrite?.to === 'string' && rewrite.to.length > 0,
+      `${entry.verseKey} has an invalid rewrite target.`,
+    );
+    assert(
+      rendered.includes(rewrite.from),
+      `${entry.verseKey} rewrite no longer matches pinned Pickthall text: ${rewrite.from}`,
+    );
+    rendered = rendered.replace(rewrite.from, rewrite.to);
+    assert(
+      !rendered.includes(rewrite.from),
+      `${entry.verseKey} still exposes the rejected baseline phrase: ${rewrite.from}`,
+    );
+  }
+  return rendered;
+}
+
 const requiredSeeds = [
   '20:5',
   '35:10',
@@ -27,16 +57,20 @@ const requiredSeeds = [
   '16:128',
 ];
 
-const [manifest, overrides, register, reader, preferences, css, surahIndex] = await Promise.all([
-  readJson('src/data/quran-offline-manifest.json'),
-  readJson('src/data/quran-salahos-2026-overrides.json'),
-  readJson('src/data/quran-mutashabih-review-register.json'),
-  readText('src/ui/QuranOfflineReader.tsx'),
-  readText('src/platform/quranReadingPreferences.ts'),
-  readText('src/quran-offline-reader.css'),
-  readText('src/ui/QuranSurahIndex.tsx'),
-]);
+const [manifest, overrides, coverage, register, pack, reader, preferences, css, surahIndex] =
+  await Promise.all([
+    readJson('src/data/quran-offline-manifest.json'),
+    readJson('src/data/quran-salahos-2026-overrides.json'),
+    readJson('src/data/quran-mutashabih-attribute-coverage.json'),
+    readJson('src/data/quran-mutashabih-review-register.json'),
+    readJson('public/data/quran/quran-offline-pack.json'),
+    readText('src/ui/QuranOfflineReader.tsx'),
+    readText('src/platform/quranReadingPreferences.ts'),
+    readText('src/quran-offline-reader.css'),
+    readText('src/ui/QuranSurahIndex.tsx'),
+  ]);
 
+assert(overrides.schemaVersion === 2, 'SalahOS 2026 override schema version changed.');
 assert(overrides.translationId === 'salahos-2026', 'SalahOS 2026 translation ID changed.');
 assert(
   overrides.displayName === 'SalahOS 2026 (English meaning)',
@@ -50,19 +84,28 @@ assert(
   overrides.status === 'provisional-pending-whole-corpus-scholar-review',
   'SalahOS 2026 must remain explicitly provisional until scholarly sign-off.',
 );
+assert(
+  Array.isArray(coverage.creedTraditions) &&
+    coverage.creedTraditions.includes('ashari') &&
+    coverage.creedTraditions.includes('maturidi'),
+  'Mutashabih coverage must retain both Ashari and Maturidi governance.',
+);
 
 const overrideKeys = overrides.entries.map((entry) => entry.verseKey);
 assert(
   new Set(overrideKeys).size === overrideKeys.length,
   'SalahOS 2026 contains duplicate verse overrides.',
 );
+const overridesByKey = new Map(overrides.entries.map((entry) => [entry.verseKey, entry]));
+
 for (const key of requiredSeeds) {
-  const entry = overrides.entries.find((candidate) => candidate.verseKey === key);
+  const entry = overridesByKey.get(key);
   assert(entry, `SalahOS 2026 is missing required Mutashabih seed ${key}.`);
   assert(entry.classification === 'mutashabih', `${key} must be marked Mutashabih.`);
   assert(
-    typeof entry.englishMeaning === 'string' && entry.englishMeaning.trim().length > 0,
-    `${key} has no English meaning.`,
+    (typeof entry.englishMeaning === 'string' && entry.englishMeaning.trim().length > 0) ||
+      (Array.isArray(entry.baseRewrites) && entry.baseRewrites.length > 0),
+    `${key} has no display treatment.`,
   );
   assert(
     typeof entry.editorialNote === 'string' && entry.editorialNote.trim().length > 0,
@@ -84,6 +127,83 @@ for (const key of requiredSeeds) {
     `Editorial review register no longer requires guide seed ${key}.`,
   );
 }
+
+const coverageKeys = coverage.categories.flatMap((category) => category.verseKeys);
+const uniqueCoverageKeys = [...new Set(coverageKeys)];
+assert(uniqueCoverageKeys.length === 88, 'Expected 88 unique creed-sensitive coverage verses.');
+assert(
+  overrides.coverage?.reviewedAttributeRiskVerses === uniqueCoverageKeys.length,
+  'SalahOS 2026 coverage metadata is out of sync.',
+);
+
+const baselineByKey = new Map();
+for (const surah of pack.surahs ?? []) {
+  for (const ayah of surah.ayahs ?? []) {
+    baselineByKey.set(ayah.key, ayah.translations?.['pickthall-1930']);
+  }
+}
+assert(baselineByKey.size === 6236, 'Pinned Pickthall pack must expose all 6,236 ayat.');
+
+const renderedByKey = new Map();
+for (const key of uniqueCoverageKeys) {
+  const entry = overridesByKey.get(key);
+  assert(entry, `Missing SalahOS 2026 full-corpus treatment for ${key}.`);
+  assert(entry.classification === 'mutashabih', `${key} must be classified Mutashabih.`);
+  assert(
+    typeof entry.editorialNote === 'string' && entry.editorialNote.trim().length > 40,
+    `${key} requires a substantive editorial note.`,
+  );
+  assert(
+    typeof entry.salafReading === 'string' && entry.salafReading.trim().length > 30,
+    `${key} requires a Salaf/tanzih treatment.`,
+  );
+  assert(
+    typeof entry.khalafReading === 'string' && entry.khalafReading.trim().length > 30,
+    `${key} requires a contextual ta'wil treatment.`,
+  );
+  const baseline = baselineByKey.get(key);
+  assert(typeof baseline === 'string' && baseline.length > 0, `Missing pinned baseline for ${key}.`);
+  const rendered = renderSalahosMeaning(entry, baseline);
+  assert(rendered.trim().length > 0, `${key} rendered an empty English meaning.`);
+  renderedByKey.set(key, rendered);
+}
+
+for (const key of coverage.categories.find((category) => category.id === 'istiwa-throne').verseKeys) {
+  const rendered = renderedByKey.get(key).toLowerCase();
+  assert(rendered.includes('subjugat'), `${key} must apply the guide's istiwa/subjugation ta'wil.`);
+  assert(!rendered.includes('mounted the throne'), `${key} still implies mounting the Throne.`);
+  assert(
+    !rendered.includes('established himself upon the throne'),
+    `${key} still implies bodily establishment on the Throne.`,
+  );
+}
+for (const key of coverage.categories.find((category) => category.id === 'fi-sama-location').verseKeys) {
+  assert(
+    !renderedByKey.get(key).toLowerCase().includes('who is in the heaven'),
+    `${key} still assigns Allah a location in the heaven.`,
+  );
+}
+
+assert(
+  renderedByKey.get('20:5').includes('without beginning'),
+  '20:5 must preserve the guide’s beginningless subjugation explanation.',
+);
+assert(
+  renderedByKey.get('28:88').includes('His Dominion'),
+  '28:88 must preserve the supplied guide’s Dominion ta’wil.',
+);
+assert(
+  renderedByKey.get('68:42').includes('anguish and hardship'),
+  '68:42 must preserve the supplied guide’s hardship ta’wil.',
+);
+assert(
+  renderedByKey.get('24:35').includes('Creator of guidance'),
+  '24:35 must preserve the supplied guide’s guidance ta’wil.',
+);
+assert(
+  renderedByKey.get('57:4').includes('He knows you wherever you are'),
+  '57:4 must preserve the supplied guide’s knowledge ta’wil for ma’iyyah.',
+);
 
 assert(
   manifest.surahs === 114 && manifest.ayahs === 6236,
@@ -143,5 +263,5 @@ assert(
 );
 
 console.log(
-  `SalahOS 2026 Qur’an contract passed: ${String(requiredSeeds.length)} Mutashabih seeds, Uthmani/Hafs/Medina Arabic, explicit RTL/right alignment.`,
+  `SalahOS 2026 Qur’an contract passed: ${String(uniqueCoverageKeys.length)} full-corpus Mutashabih attribute-risk verses, ${String(requiredSeeds.length)} guide seeds, Uthmani/Hafs/Medina Arabic, explicit RTL/right alignment.`,
 );
