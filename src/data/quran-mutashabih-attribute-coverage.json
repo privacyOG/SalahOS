@@ -1,0 +1,232 @@
+{
+  "schemaVersion": 1,
+  "title": "SalahOS Muhkam/Mutashabih divine-attribute coverage",
+  "scope": "Full-corpus lexical/contextual audit of the 6,236-ayah corpus for the anthropomorphic, bodily, spatial, directional and created-quality risk families governed by the project-owner Muhkam/Mutashabih guide. This is not a claim that every kind of mutashabih matter has a humanly knowable ta'wil; the guide itself distinguishes matters whose exact reality/timing is known only to Allah.",
+  "creedTraditions": [
+    "ashari",
+    "maturidi"
+  ],
+  "governingMuhkam": [
+    "3:7",
+    "42:11",
+    "112:4",
+    "19:65"
+  ],
+  "rules": [
+    "Muhkam foundations govern every mutashabih rendering.",
+    "Never render Allah with bodily, spatial, directional, created, sensuous or human modality.",
+    "Use tafwid with tanzih where a specific gloss is not established.",
+    "Use contextual ta'wil only for the verse/context in which it is supported; never turn one ta'wil into a universal lexical substitution."
+  ],
+  "categories": [
+    {
+      "id": "istiwa-throne",
+      "description": "All seven Qur'anic occurrences of istawa 'ala al-'Arsh.",
+      "verseKeys": [
+        "7:54",
+        "10:3",
+        "13:2",
+        "20:5",
+        "25:59",
+        "32:4",
+        "57:4"
+      ]
+    },
+    {
+      "id": "istiwa-heaven",
+      "description": "Occurrences of istawa ila al-sama that must not be rendered as bodily turning or movement.",
+      "verseKeys": [
+        "2:29",
+        "41:11"
+      ]
+    },
+    {
+      "id": "wajh-divine-attribution",
+      "description": "Divine wajh expressions: qiblah, acceptance/pleasure, Self or Dominion according to context; never a bodily face.",
+      "verseKeys": [
+        "2:115",
+        "2:272",
+        "6:52",
+        "13:22",
+        "18:28",
+        "28:88",
+        "30:38",
+        "30:39",
+        "55:27",
+        "76:9",
+        "92:20"
+      ]
+    },
+    {
+      "id": "yad-divine-attribution",
+      "description": "Divine yad/yadayn/yamin expressions: power, care, bounty, dominion or generosity according to context; never bodily hands.",
+      "verseKeys": [
+        "3:26",
+        "3:73",
+        "5:64",
+        "23:88",
+        "36:71",
+        "36:83",
+        "38:75",
+        "39:67",
+        "48:10",
+        "57:29",
+        "67:1"
+      ]
+    },
+    {
+      "id": "ayn-divine-attribution",
+      "description": "Divine 'ayn/a'yun expressions rendered as care, protection or watchfulness; never bodily eyes.",
+      "verseKeys": [
+        "11:37",
+        "20:39",
+        "23:27",
+        "52:48",
+        "54:14"
+      ]
+    },
+    {
+      "id": "ruh-divine-attribution",
+      "description": "Ruh attributed to Allah is created and/or an attribution of honour/command; never a part of Allah.",
+      "verseKeys": [
+        "4:171",
+        "15:29",
+        "19:17",
+        "21:91",
+        "32:9",
+        "38:72",
+        "58:22",
+        "66:12"
+      ]
+    },
+    {
+      "id": "maiyyah-divine",
+      "description": "Divine ma'iyyah rendered by knowledge, support or protection according to context; never physical co-location.",
+      "verseKeys": [
+        "2:153",
+        "2:194",
+        "2:249",
+        "4:108",
+        "8:19",
+        "8:46",
+        "8:66",
+        "9:36",
+        "9:40",
+        "9:123",
+        "16:128",
+        "20:46",
+        "26:15",
+        "26:62",
+        "29:69",
+        "47:35",
+        "57:4",
+        "58:7"
+      ]
+    },
+    {
+      "id": "fawq-directional",
+      "description": "Fawq expressions concerning Allah rendered as supremacy/subjugation or authority; never physical direction.",
+      "verseKeys": [
+        "6:18",
+        "6:61",
+        "16:50"
+      ]
+    },
+    {
+      "id": "fi-sama-location",
+      "description": "Fi al-sama wording must not place Allah inside the sky; render supreme status/dominion without location.",
+      "verseKeys": [
+        "67:16",
+        "67:17"
+      ]
+    },
+    {
+      "id": "divine-coming",
+      "description": "Coming expressions concerning Allah rendered contextually as judgment, command, punishment or an indication of power; never locomotion.",
+      "verseKeys": [
+        "2:210",
+        "6:158",
+        "59:2",
+        "89:22"
+      ]
+    },
+    {
+      "id": "ascent-toward-divine",
+      "description": "Ascension/raising wording must not imply movement to a place occupied by Allah.",
+      "verseKeys": [
+        "3:55",
+        "4:158",
+        "32:5",
+        "35:10",
+        "70:4"
+      ]
+    },
+    {
+      "id": "light-attribution",
+      "description": "Nur attributed to Allah rendered as guidance/revelation where context supports it; never physical luminosity.",
+      "verseKeys": [
+        "9:32",
+        "24:35",
+        "61:8"
+      ]
+    },
+    {
+      "id": "honorific-house",
+      "description": "Bayt attributed to Allah is an attribution of honour, never residence or containment.",
+      "verseKeys": [
+        "2:125",
+        "22:26"
+      ]
+    },
+    {
+      "id": "kursi",
+      "description": "Kursi is retained without translating it as a bodily seat; no place or containment is implied.",
+      "verseKeys": [
+        "2:255"
+      ]
+    },
+    {
+      "id": "proximity",
+      "description": "Nearness wording is rendered through knowledge/care or created agents according to context, not spatial distance.",
+      "verseKeys": [
+        "50:16",
+        "56:85"
+      ]
+    },
+    {
+      "id": "location-statement",
+      "description": "Statements liable to imply Allah is physically in heaven/earth are rendered without location.",
+      "verseKeys": [
+        "6:3"
+      ]
+    },
+    {
+      "id": "interposition-control",
+      "description": "Allah coming between a person and heart is rendered as control over the person and heart, not spatial insertion.",
+      "verseKeys": [
+        "8:24"
+      ]
+    },
+    {
+      "id": "encompassing",
+      "description": "Ihatah is rendered as comprehensive knowledge where the supplied guide gives that meaning, not bodily surrounding.",
+      "verseKeys": [
+        "41:54"
+      ]
+    },
+    {
+      "id": "journey-toward-lord",
+      "description": "Going 'to my Lord' is rendered as going where Allah commanded, not travelling to Allah's location.",
+      "verseKeys": [
+        "37:99"
+      ]
+    },
+    {
+      "id": "saq",
+      "description": "Saq in 68:42 is rendered as hardship/anguish according to the guide, never a bodily shin.",
+      "verseKeys": [
+        "68:42"
+      ]
+    }
+  ]
+}
