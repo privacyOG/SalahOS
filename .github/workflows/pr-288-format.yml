@@ -1,0 +1,50 @@
+name: PR 288 one-shot formatting
+
+on:
+  push:
+    branches:
+      - quran-mutashabih-ashari-maturidi-audit
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: quran-mutashabih-ashari-maturidi-audit
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Format changed Qur'an files
+        run: |
+          npx prettier --write \
+            scripts/check-quran-editorial-release-gate.mjs \
+            scripts/check-quran-salahos-2026.mjs \
+            src/data/quran-mutashabih-attribute-coverage.json \
+            src/data/quran-mutashabih-review-register.json \
+            src/data/quran-salahos-2026-overrides.json \
+            src/data/quran-salahos-2026-source.json \
+            src/domain/quranSalahos2026.ts
+      - name: Commit formatting
+        run: |
+          if git diff --quiet; then
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            scripts/check-quran-editorial-release-gate.mjs \
+            scripts/check-quran-salahos-2026.mjs \
+            src/data/quran-mutashabih-attribute-coverage.json \
+            src/data/quran-mutashabih-review-register.json \
+            src/data/quran-salahos-2026-overrides.json \
+            src/data/quran-salahos-2026-source.json \
+            src/domain/quranSalahos2026.ts
+          git commit -m "Format Quran mutashabih audit files"
+          git push origin HEAD:quran-mutashabih-ashari-maturidi-audit
