@@ -1,0 +1,48 @@
+name: PR 288 one-shot formatting
+
+on:
+  push:
+    branches:
+      - quran-mutashabih-ashari-maturidi-audit
+
+permissions:
+  contents: read
+
+jobs:
+  format:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: quran-mutashabih-ashari-maturidi-audit
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Format changed Qur'an files
+        run: |
+          npx prettier --write \
+            scripts/check-quran-editorial-release-gate.mjs \
+            scripts/check-quran-salahos-2026.mjs \
+            src/data/quran-mutashabih-attribute-coverage.json \
+            src/data/quran-mutashabih-review-register.json \
+            src/data/quran-salahos-2026-overrides.json \
+            src/data/quran-salahos-2026-source.json \
+            src/domain/quranSalahos2026.ts
+      - name: Verify formatted diff
+        run: git diff --check
+      - name: Upload formatted files
+        uses: actions/upload-artifact@v4
+        with:
+          name: pr-288-prettier-files
+          path: |
+            scripts/check-quran-editorial-release-gate.mjs
+            scripts/check-quran-salahos-2026.mjs
+            src/data/quran-mutashabih-attribute-coverage.json
+            src/data/quran-mutashabih-review-register.json
+            src/data/quran-salahos-2026-overrides.json
+            src/data/quran-salahos-2026-source.json
+            src/domain/quranSalahos2026.ts
+          retention-days: 1

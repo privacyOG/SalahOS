@@ -151,7 +151,7 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     translation: 'English meaning',
     salahos2026: SALAHOS_2026_DISPLAY_NAME,
     salahos2026Status: 'Provisional wording · whole-corpus qualified scholarly sign-off pending',
-    ashariGuidance: 'Muhkam / Mutashabih Ashʿarī guidance',
+    ashariGuidance: 'Muhkam / Mutashabih Ashʿarī–Māturīdī guidance',
     salafMethod: 'Salaf method',
     khalafMethod: 'Khalaf contextual taʾwīl',
     pickthall: 'M. M. Pickthall (1930) — baseline/reference',

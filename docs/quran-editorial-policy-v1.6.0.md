@@ -1,6 +1,6 @@
 # SalahOS Qur’an Editorial Policy — V1.6.0 draft
 
-This policy operationalises the project-owner-supplied guide **The Ayahs of the Qur’an – Muhkam and Mutashabih**. It is a review policy, not an automated tafsir engine and not a substitute for named scholarly approval.
+This policy operationalises the project-owner-supplied guide **The Ayahs of the Qur’an – Muhkam and Mutashabih** within a shared Ashʿarī/Māturīdī tanzīh framework. The supplied guide remains the operative verse-level source. This is a review policy, not an automated tafsir engine and not a substitute for named scholarly approval.
 
 ## Foundations
 
@@ -41,13 +41,13 @@ An entry cannot become `approved` unless the relevant fields are complete and a 
 
 ## Required V1.6.0 seed review
 
-The initial register must include 20:5, 35:10, 28:88, 68:42, 2:115, 66:12, 38:75, 24:35, 89:22, 57:4, 41:54, 37:99, 2:125, 6:61 and 16:128, plus the four governing foundation entries. These seeds are starting points only; they do not constitute full-corpus coverage.
+The initial register must include 20:5, 35:10, 28:88, 68:42, 2:115, 66:12, 38:75, 24:35, 89:22, 57:4, 41:54, 37:99, 2:125, 6:61 and 16:128, plus the four governing foundation entries. These seeds are permanent regression fixtures, not the limit of coverage. The full-corpus divine-attribute risk inventory is maintained in `src/data/quran-mutashabih-attribute-coverage.json` and currently contains 88 unique ayat identified by a complete 6,236-ayah lexical/contextual scan.
 
 The supplied guide itself includes examples such as 20:5 and 35:10 as Mutashabih passages, explains the Salaf and Khalaf methodologies as valid approaches, and explicitly rejects physical/spatial implications. Other examples in the guide include 28:88, 68:42, 66:12, 38:75 and 24:35. Each must be reviewed in context rather than receiving a universal lexical substitution.
 
 ## Full-corpus release gate
 
-V1.6.0 Qur’an editorial acceptance requires a documented screening of all 114 surahs / 6,236 ayat, including passages not limited to divine-attribute terminology and passages whose intended meaning may be unknowable. The coverage report must identify every unresolved review item.
+V1.6.0 Qur’an editorial acceptance requires a documented screening of all 114 surahs / 6,236 ayat. For divine-attribute wording, every creed-sensitive family identified by the supplied guide must be represented in the 88-ayah coverage inventory and receive an explicit treatment. This remains distinct from other kinds of mutashabih matters whose exact reality or timing may be known only to Allah. The coverage report must identify every unresolved review item.
 
 No release gate may claim the whole-corpus review complete until:
 

@@ -16,11 +16,18 @@ export type SalahOS2026Treatment =
 
 export type SalahOS2026Classification = 'muhkam-foundation' | 'mutashabih';
 
+export interface SalahOS2026BaseRewrite {
+  readonly from: string;
+  readonly to: string;
+}
+
 export interface SalahOS2026EditorialEntry {
   readonly verseKey: string;
   readonly classification: SalahOS2026Classification;
   readonly treatment: SalahOS2026Treatment;
-  readonly englishMeaning: string;
+  readonly englishMeaning: string | null;
+  readonly baseRewrites?: readonly SalahOS2026BaseRewrite[];
+  readonly coverageCategories?: readonly string[];
   readonly editorialNote: string;
   readonly salafReading: string | null;
   readonly khalafReading: string | null;
@@ -44,14 +51,31 @@ export function getSalahOS2026EditorialEntry(verseKey: string): SalahOS2026Edito
  * SalahOS 2026 is a derived English-meaning layer.
  *
  * The pinned Pickthall 1930 corpus remains the byte-stable baseline where the
- * owner-supplied Ash'ari editorial guide has not yet produced a verse-specific
- * wording. Explicit guide-driven entries replace that baseline for display,
+ * owner-supplied Ash'ari-Maturidi editorial framework has not yet produced a verse-specific
+ * wording. Explicit guide-driven entries or fail-closed phrase rewrites replace that baseline for display,
  * search, copy/share and curated Knowledge identity. Whole-corpus scholarly
  * approval remains a separate release gate and is never inferred here.
  */
 export function salahos2026EnglishMeaning(verseKey: string, pickthall1930: string): string {
   const override = getSalahOS2026EditorialEntry(verseKey);
-  return override?.englishMeaning ?? pickthall1930;
+  if (!override) return pickthall1930;
+  if (override.englishMeaning?.trim()) return override.englishMeaning;
+
+  const rewrites = override.baseRewrites ?? [];
+  if (rewrites.length === 0) {
+    throw new Error(`SalahOS 2026 editorial entry ${verseKey} has no English meaning or base rewrite.`);
+  }
+
+  let meaning = pickthall1930;
+  for (const rewrite of rewrites) {
+    if (!meaning.includes(rewrite.from)) {
+      throw new Error(
+        `SalahOS 2026 rewrite for ${verseKey} no longer matches the pinned Pickthall baseline: ${rewrite.from}`,
+      );
+    }
+    meaning = meaning.replace(rewrite.from, rewrite.to);
+  }
+  return meaning;
 }
 
 export function isSalahOS2026MutashabihVerse(verseKey: string): boolean {
