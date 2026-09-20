@@ -51,8 +51,8 @@ export function getSalahOS2026EditorialEntry(verseKey: string): SalahOS2026Edito
  * SalahOS 2026 is a derived English-meaning layer.
  *
  * The pinned Pickthall 1930 corpus remains the byte-stable baseline where the
- * owner-supplied Ash'ari editorial guide has not yet produced a verse-specific
- * wording. Explicit guide-driven entries replace that baseline for display,
+ * owner-supplied Ash'ari-Maturidi editorial framework has not yet produced a verse-specific
+ * wording. Explicit guide-driven entries or fail-closed phrase rewrites replace that baseline for display,
  * search, copy/share and curated Knowledge identity. Whole-corpus scholarly
  * approval remains a separate release gate and is never inferred here.
  */
