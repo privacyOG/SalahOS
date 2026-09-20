@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "translationId": "salahos-2026",
   "displayName": "SalahOS 2026 (English meaning)",
   "baseTranslationId": "pickthall-1930",
@@ -7,35 +7,745 @@
   "sourceGuide": {
     "title": "The Ayahs of the Qur’an – Muhkam and Mutashabih",
     "suppliedBy": "project-owner",
-    "method": "Ashari Sunni muhkam/mutashabih guidance"
+    "method": "Ashari-Maturidi Sunni muhkam/mutashabih guidance with the project-owner guide as the operative verse-level source"
   },
   "editorialPrinciples": [
     "Muhkam verses govern the interpretation of mutashabih wording.",
-    "No English wording may attribute bodily, spatial, directional, created or sensuous characteristics to Allah.",
-    "Salaf-style tafwid with tanzih and context-specific Khalaf-style tawil are both supported where the supplied guide supports them.",
+    "No English wording may attribute bodily, spatial, directional, created, sensuous or human modality to Allah.",
+    "Salaf-style tafwid with tanzih and contextual Khalaf-style tawil are both supported where the supplied guide supports them.",
+    "The Ashari and Maturidi traditions share the governing tanzih principle used by this project; verse-specific wording remains traceable to the project guide or a recorded contextual review.",
     "A verse-specific tawil must not be turned into a universal lexical substitution rule.",
-    "The whole 6,236-ayah corpus must be screened and signed off by a named qualified scholar before release publication."
+    "All verses in the full-corpus attribute-risk inventory must have an explicit SalahOS 2026 treatment; phrase rewrites fail closed if the pinned Pickthall wording changes."
   ],
   "entries": [
     {
-      "verseKey": "42:11",
-      "classification": "muhkam-foundation",
-      "treatment": "muhkam-foundation",
-      "englishMeaning": "He is the Creator of the heavens and the earth. He made for you mates from yourselves and pairs among the livestock, multiplying you thereby. Absolutely nothing resembles Him. He is the All-Hearing, the All-Seeing.",
-      "editorialNote": "The supplied guide treats 'Absolutely there is nothing like Him' as a governing muhkam foundation. All mutashabih renderings are checked against this principle.",
-      "salafReading": null,
-      "khalafReading": null,
-      "guideSpecificMeaning": "Absolutely there is nothing like Him."
+      "verseKey": "2:29",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "Then turned He to the heaven",
+          "to": "Then He directed His will to the heaven"
+        }
+      ],
+      "coverageCategories": [
+        "istiwa-heaven"
+      ],
+      "editorialNote": "Full-corpus audit: Occurrences of istawa ila al-sama that must not be rendered as bodily turning or movement. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
     },
     {
-      "verseKey": "112:4",
-      "classification": "muhkam-foundation",
-      "treatment": "muhkam-foundation",
-      "englishMeaning": "And there is absolutely nothing equal or comparable to Him.",
-      "editorialNote": "A governing muhkam foundation in the supplied guide: nothing is equal to Allah.",
-      "salafReading": null,
-      "khalafReading": null,
-      "guideSpecificMeaning": "There is nothing which is equal to Him."
+      "verseKey": "2:115",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "To Allah belong the east and the west; wherever you turn, there is the qiblah appointed by Allah. Surely Allah is All-Encompassing, All-Knowing.",
+      "editorialNote": "The supplied guide reports Mujahid's explanation of wajh in this verse as qiblah, in the context of voluntary prayer while travelling. SalahOS does not render the expression as a bodily face of Allah.",
+      "salafReading": "The verse is understood without attributing a face, direction or location to Allah.",
+      "khalafReading": "Mujahid is cited in the supplied guide as explaining wajh here as qiblah, the direction of prayer in its context.",
+      "guideSpecificMeaning": "Qiblah, the direction of prayers during voluntary prayer while travelling.",
+      "coverageCategories": [
+        "wajh-divine-attribution"
+      ]
+    },
+    {
+      "verseKey": "2:125",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "And when We made the House, the Ka'bah, a house greatly honoured by Allah, a place of return for people and a place of safety: take the station of Ibrahim as a place of prayer. We commanded Ibrahim and Ismail: Purify My House for those who perform tawaf, remain there in worship, bow and prostrate.",
+      "editorialNote": "The supplied guide explicitly rejects reading 'My House' as Allah's residence. It gives the meaning that the Ka'bah is a house of great honour to Allah.",
+      "salafReading": "The possessive attribution is understood as one of honour and not residence, containment or place for Allah.",
+      "khalafReading": "The guide gives the specific meaning: the Ka'bah is a house of great honour to Allah.",
+      "guideSpecificMeaning": "The Ka'bah is a house of a great honor to Allah.",
+      "coverageCategories": [
+        "honorific-house"
+      ]
+    },
+    {
+      "verseKey": "2:153",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "Allah is with the steadfast.",
+          "to": "Allah supports the steadfast."
+        }
+      ],
+      "coverageCategories": [
+        "maiyyah-divine"
+      ],
+      "editorialNote": "Full-corpus audit: Divine ma'iyyah rendered by knowledge, support or protection according to context; never physical co-location. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "2:194",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "Allah is with those who ward off (evil).",
+          "to": "Allah supports those who ward off (evil)."
+        }
+      ],
+      "coverageCategories": [
+        "maiyyah-divine"
+      ],
+      "editorialNote": "Full-corpus audit: Divine ma'iyyah rendered by knowledge, support or protection according to context; never physical co-location. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "2:210",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "Allah should come unto them in the shadows of the clouds with the angels",
+          "to": "Allah's judgment should come upon them in the shadows of the clouds, with the angels"
+        }
+      ],
+      "coverageCategories": [
+        "divine-coming"
+      ],
+      "editorialNote": "Full-corpus audit: Coming expressions concerning Allah rendered contextually as judgment, command, punishment or an indication of power; never locomotion. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "2:249",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "Allah is with the steadfast.",
+          "to": "Allah supports the steadfast."
+        }
+      ],
+      "coverageCategories": [
+        "maiyyah-divine"
+      ],
+      "editorialNote": "Full-corpus audit: Divine ma'iyyah rendered by knowledge, support or protection according to context; never physical co-location. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "2:255",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "His throne includeth the heavens and the earth",
+          "to": "His Kursi encompasses the heavens and the earth"
+        }
+      ],
+      "coverageCategories": [
+        "kursi"
+      ],
+      "editorialNote": "Full-corpus audit: Kursi is retained without translating it as a bodily seat; no place or containment is implied. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "2:272",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "in search of Allah's Countenance",
+          "to": "seeking Allah's acceptance"
+        }
+      ],
+      "coverageCategories": [
+        "wajh-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Divine wajh expressions: qiblah, acceptance/pleasure, Self or Dominion according to context; never a bodily face. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "3:26",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "In Thy hand is the good.",
+          "to": "All good is Thine to bestow."
+        }
+      ],
+      "coverageCategories": [
+        "yad-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Divine yad/yadayn/yamin expressions: power, care, bounty, dominion or generosity according to context; never bodily hands. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "3:55",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "causing thee to ascend unto Me",
+          "to": "raising thee to the heavens and honouring thee"
+        }
+      ],
+      "coverageCategories": [
+        "ascent-toward-divine"
+      ],
+      "editorialNote": "Full-corpus audit: Ascension/raising wording must not imply movement to a place occupied by Allah. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "3:73",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "the bounty is in Allah's hand.",
+          "to": "all bounty belongs to Allah to bestow."
+        }
+      ],
+      "coverageCategories": [
+        "yad-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Divine yad/yadayn/yamin expressions: power, care, bounty, dominion or generosity according to context; never bodily hands. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "4:108",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "He is with them when by night",
+          "to": "He knows them when by night"
+        },
+        {
+          "from": "Allah ever surroundeth what they do.",
+          "to": "Allah's knowledge encompasses all that they do."
+        }
+      ],
+      "coverageCategories": [
+        "maiyyah-divine"
+      ],
+      "editorialNote": "Full-corpus audit: Divine ma'iyyah rendered by knowledge, support or protection according to context; never physical co-location. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "4:158",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "Allah took him up unto Himself.",
+          "to": "Allah raised him to the heavens and honoured him."
+        }
+      ],
+      "coverageCategories": [
+        "ascent-toward-divine"
+      ],
+      "editorialNote": "Full-corpus audit: Ascension/raising wording must not imply movement to a place occupied by Allah. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "4:171",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "and a spirit from Him.",
+          "to": "and a created spirit brought into being by His command."
+        }
+      ],
+      "coverageCategories": [
+        "ruh-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Ruh attributed to Allah is created and/or an attribution of honour/command; never a part of Allah. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "5:64",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "Allah's hand is fettered.",
+          "to": "Allah is miserly."
+        },
+        {
+          "from": "Nay, but both His hands are spread out wide in bounty.",
+          "to": "Rather, His bounty is abundant."
+        }
+      ],
+      "coverageCategories": [
+        "yad-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Divine yad/yadayn/yamin expressions: power, care, bounty, dominion or generosity according to context; never bodily hands. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "6:3",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "He is Allah in the heavens and in the earth.",
+          "to": "He is Allah, the One worshipped in the heavens and on the earth."
+        }
+      ],
+      "coverageCategories": [
+        "location-statement"
+      ],
+      "editorialNote": "Full-corpus audit: Statements liable to imply Allah is physically in heaven/earth are rendered without location. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "6:18",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "He is the Omnipotent over His slaves",
+          "to": "All His servants are under His complete subjugation"
+        }
+      ],
+      "coverageCategories": [
+        "fawq-directional"
+      ],
+      "editorialNote": "Full-corpus audit: Fawq expressions concerning Allah rendered as supremacy/subjugation or authority; never physical direction. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "6:52",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "seeking His Countenance.",
+          "to": "seeking His acceptance."
+        }
+      ],
+      "coverageCategories": [
+        "wajh-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Divine wajh expressions: qiblah, acceptance/pleasure, Self or Dominion according to context; never a bodily face. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "6:61",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "He is the One to Whom all His servants are subjugated. He sends guardians over you until, when death comes to one of you, Our messengers take the soul without neglecting their duty.",
+      "editorialNote": "The supplied guide explains fawqiyyah here as aboveness of subjugation: all are subjugated to Allah, not that Allah occupies a physical direction above creation.",
+      "salafReading": "Affirm Allah's supremacy without assigning place, physical height or direction.",
+      "khalafReading": "The guide gives the specific meaning of fawqiyyah as subjugation: all are subjugated to Allah.",
+      "guideSpecificMeaning": "All are subjugated to Allah.",
+      "coverageCategories": [
+        "fawq-directional"
+      ]
+    },
+    {
+      "verseKey": "6:158",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "or thy Lord should come",
+          "to": "or thy Lord's command should come"
+        }
+      ],
+      "coverageCategories": [
+        "divine-coming"
+      ],
+      "editorialNote": "Full-corpus audit: Coming expressions concerning Allah rendered contextually as judgment, command, punishment or an indication of power; never locomotion. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "7:54",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "then mounted He the Throne.",
+          "to": "then He subjugated the Throne."
+        }
+      ],
+      "coverageCategories": [
+        "istiwa-throne"
+      ],
+      "editorialNote": "Full-corpus audit: All seven Qur'anic occurrences of istawa 'ala al-'Arsh. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "8:19",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "Allah is with the believers (in His Guidance).",
+          "to": "Allah supports and guides the believers."
+        }
+      ],
+      "coverageCategories": [
+        "maiyyah-divine"
+      ],
+      "editorialNote": "Full-corpus audit: Divine ma'iyyah rendered by knowledge, support or protection according to context; never physical co-location. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "8:24",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "Allah cometh in between the man and his own heart",
+          "to": "Allah has complete control over a person and his own heart"
+        }
+      ],
+      "coverageCategories": [
+        "interposition-control"
+      ],
+      "editorialNote": "Full-corpus audit: Allah coming between a person and heart is rendered as control over the person and heart, not spatial insertion. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "8:46",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "Allah is with the steadfast.",
+          "to": "Allah supports the steadfast."
+        }
+      ],
+      "coverageCategories": [
+        "maiyyah-divine"
+      ],
+      "editorialNote": "Full-corpus audit: Divine ma'iyyah rendered by knowledge, support or protection according to context; never physical co-location. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "8:66",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "Allah is with the steadfast.",
+          "to": "Allah supports the steadfast."
+        }
+      ],
+      "coverageCategories": [
+        "maiyyah-divine"
+      ],
+      "editorialNote": "Full-corpus audit: Divine ma'iyyah rendered by knowledge, support or protection according to context; never physical co-location. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "9:32",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "the light of Allah",
+          "to": "the guidance of Allah"
+        },
+        {
+          "from": "His light",
+          "to": "His guidance"
+        }
+      ],
+      "coverageCategories": [
+        "light-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Nur attributed to Allah rendered as guidance/revelation where context supports it; never physical luminosity. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "9:36",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "Allah is with those who keep their duty (unto Him).",
+          "to": "Allah supports those who keep their duty (unto Him)."
+        }
+      ],
+      "coverageCategories": [
+        "maiyyah-divine"
+      ],
+      "editorialNote": "Full-corpus audit: Divine ma'iyyah rendered by knowledge, support or protection according to context; never physical co-location. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "9:40",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "Allah is with us.",
+          "to": "Allah's support and protection are with us."
+        }
+      ],
+      "coverageCategories": [
+        "maiyyah-divine"
+      ],
+      "editorialNote": "Full-corpus audit: Divine ma'iyyah rendered by knowledge, support or protection according to context; never physical co-location. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "9:123",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "Allah is with those who keep their duty (unto Him).",
+          "to": "Allah supports those who keep their duty (unto Him)."
+        }
+      ],
+      "coverageCategories": [
+        "maiyyah-divine"
+      ],
+      "editorialNote": "Full-corpus audit: Divine ma'iyyah rendered by knowledge, support or protection according to context; never physical co-location. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "10:3",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "then He established Himself upon the Throne",
+          "to": "then He subjugated the Throne"
+        }
+      ],
+      "coverageCategories": [
+        "istiwa-throne"
+      ],
+      "editorialNote": "Full-corpus audit: All seven Qur'anic occurrences of istawa 'ala al-'Arsh. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "11:37",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "under Our eyes",
+          "to": "under Our watchful care"
+        }
+      ],
+      "coverageCategories": [
+        "ayn-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Divine 'ayn/a'yun expressions rendered as care, protection or watchfulness; never bodily eyes. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "13:2",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "then mounted the Throne",
+          "to": "then subjugated the Throne"
+        }
+      ],
+      "coverageCategories": [
+        "istiwa-throne"
+      ],
+      "editorialNote": "Full-corpus audit: All seven Qur'anic occurrences of istawa 'ala al-'Arsh. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "13:22",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "seeking their Lord's Countenance",
+          "to": "seeking their Lord's acceptance"
+        }
+      ],
+      "coverageCategories": [
+        "wajh-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Divine wajh expressions: qiblah, acceptance/pleasure, Self or Dominion according to context; never a bodily face. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "15:29",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "breathed into him of My Spirit",
+          "to": "caused a created spirit, honoured by attribution to Me, to be breathed into him by My command"
+        }
+      ],
+      "coverageCategories": [
+        "ruh-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Ruh attributed to Allah is created and/or an attribution of honour/command; never a part of Allah. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "16:50",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "They fear their Lord above them",
+          "to": "They fear the supreme authority of their Lord over them"
+        }
+      ],
+      "coverageCategories": [
+        "fawq-directional"
+      ],
+      "editorialNote": "Full-corpus audit: Fawq expressions concerning Allah rendered as supremacy/subjugation or authority; never physical direction. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "16:128",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Indeed, Allah supports those who are mindful of Him and those who do good.",
+      "editorialNote": "The supplied guide explains Allah being 'with' the pious as support, not physical accompaniment, proximity or co-location.",
+      "salafReading": "Affirm divine ma'iyyah with a befitting meaning while denying physical accompaniment or location.",
+      "khalafReading": "The guide gives the specific meaning that Allah supports those who are pious.",
+      "guideSpecificMeaning": "Allah supports those who are pious.",
+      "coverageCategories": [
+        "maiyyah-divine"
+      ]
+    },
+    {
+      "verseKey": "18:28",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "seeking His Countenance",
+          "to": "seeking His acceptance"
+        }
+      ],
+      "coverageCategories": [
+        "wajh-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Divine wajh expressions: qiblah, acceptance/pleasure, Self or Dominion according to context; never a bodily face. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "19:17",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "We sent unto her Our Spirit and it assumed",
+          "to": "We sent unto her Jibril, the created spirit honoured by Us, and he assumed"
+        }
+      ],
+      "coverageCategories": [
+        "ruh-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Ruh attributed to Allah is created and/or an attribution of honour/command; never a part of Allah. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
     },
     {
       "verseKey": "19:65",
@@ -50,21 +760,198 @@
     {
       "verseKey": "20:5",
       "classification": "mutashabih",
-      "treatment": "tafwid-with-tanzih",
-      "englishMeaning": "The All-Merciful has an istiwa over the Throne that befits Him, without sitting, place, direction, movement, or any bodily modality.",
-      "editorialNote": "The supplied guide identifies istiwa as mutashabih. It explicitly rejects sitting, resting, movement, place, direction, bodies and parts. The primary SalahOS wording follows the Salaf-style general befitting affirmation with tanzih rather than assigning a bodily 'how'.",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "The All-Merciful subjugates the Throne with a subjugation without beginning; this does not imply sitting, place, direction, movement, or any bodily modality.",
+      "editorialNote": "The supplied guide identifies istiwa as mutashabih and cites al-istila (subjugation) as an accepted contextual ta'wil. The displayed SalahOS English meaning now applies that ta'wil directly rather than leaving the potentially misleading word istiwa untranslated.",
       "salafReading": "Believe in the revealed istiwa according to the meaning Allah willed, affirming a meaning befitting Him and denying any how, bodily quality, place, direction, movement or sitting.",
-      "khalafReading": "The guide records the contextual tawil al-istila: Allah subjugated the Throne with a subjugation without beginning, like all His attributes.",
-      "guideSpecificMeaning": "Allah subjugated the Throne in al-azal with a subjugation which is without a beginning, like all of the attributes of Allah."
+      "khalafReading": "The guide records al-istila: Allah subjugates the Throne with a subjugation without beginning, like all His attributes.",
+      "guideSpecificMeaning": "Allah subjugated the Throne in al-azal with a subjugation which is without a beginning, like all of the attributes of Allah.",
+      "coverageCategories": [
+        "istiwa-throne"
+      ]
     },
     {
-      "verseKey": "35:10",
+      "verseKey": "20:39",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
-      "englishMeaning": "Whoever seeks honour, then all honour belongs to Allah. Good words are accepted by Him, and He raises the righteous deed in rank. Those who plot evil will have a severe punishment, and their plotting will fail.",
-      "editorialNote": "The supplied guide identifies this verse as mutashabih and requires any assigned meaning to comply with Arabic, the Religion and the muhkam foundations. 'Good words are accepted by Him' prevents a spatial reading of ascent to a location. This wording remains subject to named scholarly review.",
-      "salafReading": "Affirm the revealed wording with a meaning befitting Allah while denying spatial movement or location.",
-      "khalafReading": "A contextual reading treats the ascent of good words as their acceptance and honouring by Allah, not movement toward a place occupied by Him.",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "that thou mightest be trained according to My will",
+          "to": "that thou mightest be raised under My care"
+        }
+      ],
+      "coverageCategories": [
+        "ayn-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Divine 'ayn/a'yun expressions rendered as care, protection or watchfulness; never bodily eyes. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "20:46",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "I am with you twain, Hearing and Seeing.",
+          "to": "My support and protection are with you both; I hear and see."
+        }
+      ],
+      "coverageCategories": [
+        "maiyyah-divine"
+      ],
+      "editorialNote": "Full-corpus audit: Divine ma'iyyah rendered by knowledge, support or protection according to context; never physical co-location. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "21:91",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "We breathed into her (something) of Our Spirit",
+          "to": "We caused a created spirit, honoured by Us, to be breathed into her by Our command"
+        }
+      ],
+      "coverageCategories": [
+        "ruh-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Ruh attributed to Allah is created and/or an attribution of honour/command; never a part of Allah. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "22:26",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "purify My House",
+          "to": "purify the House honoured by Me"
+        }
+      ],
+      "coverageCategories": [
+        "honorific-house"
+      ],
+      "editorialNote": "Full-corpus audit: Bayt attributed to Allah is an attribution of honour, never residence or containment. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "23:27",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "under Our eyes",
+          "to": "under Our watchful care"
+        }
+      ],
+      "coverageCategories": [
+        "ayn-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Divine 'ayn/a'yun expressions rendered as care, protection or watchfulness; never bodily eyes. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "23:88",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "In Whose hand is the dominion over all things",
+          "to": "To Whom belongs complete dominion over all things"
+        }
+      ],
+      "coverageCategories": [
+        "yad-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Divine yad/yadayn/yamin expressions: power, care, bounty, dominion or generosity according to context; never bodily hands. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "24:35",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Allah is the Creator of guidance for the inhabitants of the heavens and the earth. The example of His guidance is like a niche in which there is a lamp; the lamp is in glass, and the glass is as though it were a brilliant star, lit from a blessed olive tree, neither of the east nor of the west, whose oil would almost glow even though no fire touched it: light upon light. Allah guides to His light whom He wills. Allah sets forth examples for people, and Allah knows all things.",
+      "editorialNote": "The supplied guide explicitly rejects understanding Allah as physical light. It gives the meaning that Allah is the Creator of guidance in the occupants of the heavens and the earth.",
+      "salafReading": "Affirm the revealed wording without attributing created light, colour, luminosity or bodily properties to Allah.",
+      "khalafReading": "The guide gives the specific meaning that Allah is the Creator of guidance in the occupants of the heavens and the earth.",
+      "guideSpecificMeaning": "Allah is the Creator of guidance in the occupants of the skies and the occupants of the earth.",
+      "coverageCategories": [
+        "light-attribution"
+      ]
+    },
+    {
+      "verseKey": "25:59",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "then He mounted the Throne.",
+          "to": "then He subjugated the Throne."
+        }
+      ],
+      "coverageCategories": [
+        "istiwa-throne"
+      ],
+      "editorialNote": "Full-corpus audit: All seven Qur'anic occurrences of istawa 'ala al-'Arsh. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "26:15",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "We shall be with you, Hearing.",
+          "to": "Our support is with you, and We hear."
+        }
+      ],
+      "coverageCategories": [
+        "maiyyah-divine"
+      ],
+      "editorialNote": "Full-corpus audit: Divine ma'iyyah rendered by knowledge, support or protection according to context; never physical co-location. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "26:62",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "my Lord is with me.",
+          "to": "my Lord's support is with me."
+        }
+      ],
+      "coverageCategories": [
+        "maiyyah-divine"
+      ],
+      "editorialNote": "Full-corpus audit: Divine ma'iyyah rendered by knowledge, support or protection according to context; never physical co-location. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
       "guideSpecificMeaning": null
     },
     {
@@ -75,87 +962,175 @@
       "editorialNote": "The supplied guide reports Imam al-Bukhari's explanation of 'illa wajhahu' as 'illa mulkahu': His Dominion. SalahOS therefore does not render wajh here as a bodily face.",
       "salafReading": "Affirm the revealed wording with a meaning befitting Allah and deny a bodily face or created form.",
       "khalafReading": "Imam al-Bukhari is cited in the supplied guide as explaining wajhahu here by mulkahu, His Dominion.",
-      "guideSpecificMeaning": "His Dominion."
+      "guideSpecificMeaning": "His Dominion.",
+      "coverageCategories": [
+        "wajh-divine-attribution"
+      ]
     },
     {
-      "verseKey": "68:42",
+      "verseKey": "29:69",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
-      "englishMeaning": "On the Day of anguish and hardship, they will be called to prostrate, but they will not be able.",
-      "editorialNote": "The supplied guide reports the explanation of saq as hardship and the verse as referring to a day of anguish and hardship; it attributes this explanation to Ibn Abbas and other early scholars.",
-      "salafReading": "The supplied guide records early Salaf authorities explaining the expression without attributing a bodily shin to Allah.",
-      "khalafReading": "Saq is explained contextually as hardship or severe anguish.",
-      "guideSpecificMeaning": "A day of anguish and hardship."
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "Allah is with the good.",
+          "to": "Allah supports those who do good."
+        }
+      ],
+      "coverageCategories": [
+        "maiyyah-divine"
+      ],
+      "editorialNote": "Full-corpus audit: Divine ma'iyyah rendered by knowledge, support or protection according to context; never physical co-location. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
     },
     {
-      "verseKey": "2:115",
+      "verseKey": "30:38",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
-      "englishMeaning": "To Allah belong the east and the west; wherever you turn, there is the qiblah appointed by Allah. Surely Allah is All-Encompassing, All-Knowing.",
-      "editorialNote": "The supplied guide reports Mujahid's explanation of wajh in this verse as qiblah, in the context of voluntary prayer while travelling. SalahOS does not render the expression as a bodily face of Allah.",
-      "salafReading": "The verse is understood without attributing a face, direction or location to Allah.",
-      "khalafReading": "Mujahid is cited in the supplied guide as explaining wajh here as qiblah, the direction of prayer in its context.",
-      "guideSpecificMeaning": "Qiblah, the direction of prayers during voluntary prayer while travelling."
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "seek Allah's Countenance",
+          "to": "seek Allah's acceptance"
+        }
+      ],
+      "coverageCategories": [
+        "wajh-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Divine wajh expressions: qiblah, acceptance/pleasure, Self or Dominion according to context; never a bodily face. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
     },
     {
-      "verseKey": "66:12",
+      "verseKey": "30:39",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
-      "englishMeaning": "And Mary, daughter of Imran, who guarded her chastity; We caused the honoured created spirit to be blown into her by Our command. She affirmed the words of her Lord and His Books and was among the devout.",
-      "editorialNote": "The supplied guide rejects any reading in which 'Our spirit' means a part or soul of Allah. It explains the passage through Allah's command to Jibril and a soul honoured by Allah. The SalahOS wording therefore makes createdness and honour explicit.",
-      "salafReading": "Affirm the revealed wording while categorically denying that Allah has a soul, parts or anything separable from Him.",
-      "khalafReading": "The guide explains that Allah ordered Jibril to blow the honoured soul by Allah's command; 'Our spirit' is an attribution of honour, not a part of Allah.",
-      "guideSpecificMeaning": "Allah ordered Jibril to blow the soul which is honorable to Allah."
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "seeking Allah's Countenance",
+          "to": "seeking Allah's acceptance"
+        }
+      ],
+      "coverageCategories": [
+        "wajh-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Divine wajh expressions: qiblah, acceptance/pleasure, Self or Dominion according to context; never a bodily face. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
     },
     {
-      "verseKey": "38:75",
+      "verseKey": "32:4",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
-      "englishMeaning": "He said: O Iblis, what prevented you from prostrating to the one I created with special care? Were you arrogant, or were you among the exalted?",
-      "editorialNote": "The supplied guide explains yadayn in this verse by Allah's care and rejects a bodily-hands reading.",
-      "salafReading": "Affirm the revealed wording with a befitting meaning while denying limbs, hands, parts or bodily form.",
-      "khalafReading": "The guide gives the specific meaning of care for yadayn in this verse.",
-      "guideSpecificMeaning": "The care of Allah."
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "Then He mounted the Throne.",
+          "to": "Then He subjugated the Throne."
+        }
+      ],
+      "coverageCategories": [
+        "istiwa-throne"
+      ],
+      "editorialNote": "Full-corpus audit: All seven Qur'anic occurrences of istawa 'ala al-'Arsh. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
     },
     {
-      "verseKey": "24:35",
+      "verseKey": "32:5",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
-      "englishMeaning": "Allah is the Creator of guidance for the inhabitants of the heavens and the earth. The example of His guidance is like a niche in which there is a lamp; the lamp is in glass, and the glass is as though it were a brilliant star, lit from a blessed olive tree, neither of the east nor of the west, whose oil would almost glow even though no fire touched it: light upon light. Allah guides to His light whom He wills. Allah sets forth examples for people, and Allah knows all things.",
-      "editorialNote": "The supplied guide explicitly rejects understanding Allah as physical light. It gives the meaning that Allah is the Creator of guidance in the occupants of the heavens and the earth.",
-      "salafReading": "Affirm the revealed wording without attributing created light, colour, luminosity or bodily properties to Allah.",
-      "khalafReading": "The guide gives the specific meaning that Allah is the Creator of guidance in the occupants of the heavens and the earth.",
-      "guideSpecificMeaning": "Allah is the Creator of guidance in the occupants of the skies and the occupants of the earth."
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "then it ascendeth unto Him",
+          "to": "then it returns to His judgment"
+        }
+      ],
+      "coverageCategories": [
+        "ascent-toward-divine"
+      ],
+      "editorialNote": "Full-corpus audit: Ascension/raising wording must not imply movement to a place occupied by Allah. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
     },
     {
-      "verseKey": "89:22",
+      "verseKey": "32:9",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
-      "englishMeaning": "And an indication of your Lord's Power comes, and the angels, rank upon rank.",
-      "editorialNote": "The supplied guide reports an explanation attributed to Imam Ahmad: the coming here is the coming of an indication of Allah's Power, not movement of Allah from one place to another.",
-      "salafReading": "Affirm the revealed wording while denying movement, transition, place and direction for Allah.",
-      "khalafReading": "The guide reports the meaning: an indication of the Power of Allah has come.",
-      "guideSpecificMeaning": "An indication of the Power of Allah has come."
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "breathed into him of His Spirit",
+          "to": "caused a created spirit, honoured by Him, to be breathed into him by His command"
+        }
+      ],
+      "coverageCategories": [
+        "ruh-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Ruh attributed to Allah is created and/or an attribution of honour/command; never a part of Allah. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
     },
     {
-      "verseKey": "57:4",
-      "classification": "mutashabih",
-      "treatment": "tafwid-and-contextual-tawil",
-      "englishMeaning": "He is the One Who created the heavens and the earth in six days, then has an istiwa over the Throne that befits Him, without bodily or spatial meaning. He knows what enters the earth and what comes out of it, what descends from the heaven and what ascends into it. He knows you wherever you are. Allah sees all that you do.",
-      "editorialNote": "This verse contains both istiwa and ma'iyyah wording. The supplied guide rejects spatial readings and explicitly explains 'He is with you wherever you are' as Allah knowing about you wherever you are.",
-      "salafReading": "Istiwa is affirmed with a befitting meaning and no how; bodily, spatial and directional meanings are denied.",
-      "khalafReading": "The guide explicitly renders ma'iyyah here as Allah knowing about you wherever you are; its discussion of 20:5 supplies the accepted non-corporeal treatment of istiwa.",
-      "guideSpecificMeaning": "Allah knows about you wherever you are."
-    },
-    {
-      "verseKey": "41:54",
+      "verseKey": "35:10",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
-      "englishMeaning": "Indeed, they are in doubt about meeting their Lord. Surely Allah's knowledge encompasses all things.",
-      "editorialNote": "The supplied guide rejects a spatial reading in which Allah physically surrounds creation and gives the meaning that Allah knows everything.",
-      "salafReading": "Affirm the wording while denying bodily surrounding, enclosure, spatial extension or location.",
-      "khalafReading": "The guide gives the specific meaning: Allah knows everything.",
-      "guideSpecificMeaning": "Allah knows everything."
+      "englishMeaning": "Whoever seeks honour, then all honour belongs to Allah. Good words are accepted by Him, and He raises the righteous deed in rank. Those who plot evil will have a severe punishment, and their plotting will fail.",
+      "editorialNote": "The supplied guide identifies this verse as mutashabih and requires any assigned meaning to comply with Arabic, the Religion and the muhkam foundations. 'Good words are accepted by Him' prevents a spatial reading of ascent to a location. This wording remains subject to named scholarly review.",
+      "salafReading": "Affirm the revealed wording with a meaning befitting Allah while denying spatial movement or location.",
+      "khalafReading": "A contextual reading treats the ascent of good words as their acceptance and honouring by Allah, not movement toward a place occupied by Him.",
+      "guideSpecificMeaning": null,
+      "coverageCategories": [
+        "ascent-toward-divine"
+      ]
+    },
+    {
+      "verseKey": "36:71",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "of Our handiwork",
+          "to": "from what We created by Our power"
+        }
+      ],
+      "coverageCategories": [
+        "yad-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Divine yad/yadayn/yamin expressions: power, care, bounty, dominion or generosity according to context; never bodily hands. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "36:83",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "in Whose hand is the dominion over all things!",
+          "to": "to Whom belongs complete dominion over all things!"
+        }
+      ],
+      "coverageCategories": [
+        "yad-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Divine yad/yadayn/yamin expressions: power, care, bounty, dominion or generosity according to context; never bodily hands. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
     },
     {
       "verseKey": "37:99",
@@ -165,37 +1140,518 @@
       "editorialNote": "The supplied guide rejects the literalist inference that Ibrahim was travelling to a country in which Allah is located. SalahOS makes the commanded destination explicit rather than implying movement toward Allah's place.",
       "salafReading": "The wording is affirmed without attributing place, direction or spatial location to Allah.",
       "khalafReading": "The journey is understood as going where Allah commanded Ibrahim to go; Allah is not located in the destination.",
+      "guideSpecificMeaning": null,
+      "coverageCategories": [
+        "journey-toward-lord"
+      ]
+    },
+    {
+      "verseKey": "38:72",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "breathed into him of My Spirit",
+          "to": "caused a created spirit, honoured by attribution to Me, to be breathed into him by My command"
+        }
+      ],
+      "coverageCategories": [
+        "ruh-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Ruh attributed to Allah is created and/or an attribution of honour/command; never a part of Allah. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
       "guideSpecificMeaning": null
     },
     {
-      "verseKey": "2:125",
+      "verseKey": "38:75",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
-      "englishMeaning": "And when We made the House, the Ka'bah, a house greatly honoured by Allah, a place of return for people and a place of safety: take the station of Ibrahim as a place of prayer. We commanded Ibrahim and Ismail: Purify My House for those who perform tawaf, remain there in worship, bow and prostrate.",
-      "editorialNote": "The supplied guide explicitly rejects reading 'My House' as Allah's residence. It gives the meaning that the Ka'bah is a house of great honour to Allah.",
-      "salafReading": "The possessive attribution is understood as one of honour and not residence, containment or place for Allah.",
-      "khalafReading": "The guide gives the specific meaning: the Ka'bah is a house of great honour to Allah.",
-      "guideSpecificMeaning": "The Ka'bah is a house of a great honor to Allah."
+      "englishMeaning": "He said: O Iblis, what prevented you from prostrating to the one I created with special care? Were you arrogant, or were you among the exalted?",
+      "editorialNote": "The supplied guide explains yadayn in this verse by Allah's care and rejects a bodily-hands reading.",
+      "salafReading": "Affirm the revealed wording with a befitting meaning while denying limbs, hands, parts or bodily form.",
+      "khalafReading": "The guide gives the specific meaning of care for yadayn in this verse.",
+      "guideSpecificMeaning": "The care of Allah.",
+      "coverageCategories": [
+        "yad-divine-attribution"
+      ]
     },
     {
-      "verseKey": "6:61",
+      "verseKey": "39:67",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
-      "englishMeaning": "He is the One to Whom all His servants are subjugated. He sends guardians over you until, when death comes to one of you, Our messengers take the soul without neglecting their duty.",
-      "editorialNote": "The supplied guide explains fawqiyyah here as aboveness of subjugation: all are subjugated to Allah, not that Allah occupies a physical direction above creation.",
-      "salafReading": "Affirm Allah's supremacy without assigning place, physical height or direction.",
-      "khalafReading": "The guide gives the specific meaning of fawqiyyah as subjugation: all are subjugated to Allah.",
-      "guideSpecificMeaning": "All are subjugated to Allah."
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "when the whole earth is His handful on the Day of Resurrection, and the heavens are rolled in His right hand.",
+          "to": "when the whole earth will be under His complete dominion on the Day of Resurrection, and the heavens will be folded by His power."
+        }
+      ],
+      "coverageCategories": [
+        "yad-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Divine yad/yadayn/yamin expressions: power, care, bounty, dominion or generosity according to context; never bodily hands. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
     },
     {
-      "verseKey": "16:128",
+      "verseKey": "41:11",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
-      "englishMeaning": "Indeed, Allah supports those who are mindful of Him and those who do good.",
-      "editorialNote": "The supplied guide explains Allah being 'with' the pious as support, not physical accompaniment, proximity or co-location.",
-      "salafReading": "Affirm divine ma'iyyah with a befitting meaning while denying physical accompaniment or location.",
-      "khalafReading": "The guide gives the specific meaning that Allah supports those who are pious.",
-      "guideSpecificMeaning": "Allah supports those who are pious."
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "Then turned He to the heaven when it was smoke",
+          "to": "Then He directed His will to the heaven when it was smoke"
+        }
+      ],
+      "coverageCategories": [
+        "istiwa-heaven"
+      ],
+      "editorialNote": "Full-corpus audit: Occurrences of istawa ila al-sama that must not be rendered as bodily turning or movement. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "41:54",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Indeed, they are in doubt about meeting their Lord. Surely Allah's knowledge encompasses all things.",
+      "editorialNote": "The supplied guide rejects a spatial reading in which Allah physically surrounds creation and gives the meaning that Allah knows everything.",
+      "salafReading": "Affirm the wording while denying bodily surrounding, enclosure, spatial extension or location.",
+      "khalafReading": "The guide gives the specific meaning: Allah knows everything.",
+      "guideSpecificMeaning": "Allah knows everything.",
+      "coverageCategories": [
+        "encompassing"
+      ]
+    },
+    {
+      "verseKey": "42:11",
+      "classification": "muhkam-foundation",
+      "treatment": "muhkam-foundation",
+      "englishMeaning": "He is the Creator of the heavens and the earth. He made for you mates from yourselves and pairs among the livestock, multiplying you thereby. Absolutely nothing resembles Him. He is the All-Hearing, the All-Seeing.",
+      "editorialNote": "The supplied guide treats 'Absolutely there is nothing like Him' as a governing muhkam foundation. All mutashabih renderings are checked against this principle.",
+      "salafReading": null,
+      "khalafReading": null,
+      "guideSpecificMeaning": "Absolutely there is nothing like Him."
+    },
+    {
+      "verseKey": "47:35",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "Allah is with you",
+          "to": "Allah supports you"
+        }
+      ],
+      "coverageCategories": [
+        "maiyyah-divine"
+      ],
+      "editorialNote": "Full-corpus audit: Divine ma'iyyah rendered by knowledge, support or protection according to context; never physical co-location. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "48:10",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "The Hand of Allah is above their hands.",
+          "to": "Allah's care and authority encompass their pledge."
+        }
+      ],
+      "coverageCategories": [
+        "yad-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Divine yad/yadayn/yamin expressions: power, care, bounty, dominion or generosity according to context; never bodily hands. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "50:16",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "We are nearer to him than his jugular vein.",
+          "to": "Our knowledge of him is more immediate than his jugular vein."
+        }
+      ],
+      "coverageCategories": [
+        "proximity"
+      ],
+      "editorialNote": "Full-corpus audit: Nearness wording is rendered through knowledge/care or created agents according to context, not spatial distance. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "52:48",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "thou art in Our sight",
+          "to": "thou art under Our watchful care"
+        }
+      ],
+      "coverageCategories": [
+        "ayn-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Divine 'ayn/a'yun expressions rendered as care, protection or watchfulness; never bodily eyes. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "54:14",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "in Our sight",
+          "to": "under Our watchful care"
+        }
+      ],
+      "coverageCategories": [
+        "ayn-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Divine 'ayn/a'yun expressions rendered as care, protection or watchfulness; never bodily eyes. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "55:27",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "There remaineth but the Countenance of thy Lord",
+          "to": "Thy Lord Himself remaineth"
+        }
+      ],
+      "coverageCategories": [
+        "wajh-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Divine wajh expressions: qiblah, acceptance/pleasure, Self or Dominion according to context; never a bodily face. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "56:85",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "And We are nearer unto him than ye are, but ye see not",
+          "to": "And Our angels are nearer unto him than ye are, though ye see them not"
+        }
+      ],
+      "coverageCategories": [
+        "proximity"
+      ],
+      "editorialNote": "Full-corpus audit: Nearness wording is rendered through knowledge/care or created agents according to context, not spatial distance. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "57:4",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "He is the One Who created the heavens and the earth in six days; the Throne is under His complete subjugation, without place, direction, sitting, movement, or bodily modality. He knows what enters the earth and what comes out of it, what descends from the heaven and what ascends into it. He knows you wherever you are. Allah sees all that you do.",
+      "editorialNote": "This verse combines istiwa and ma'iyyah. The supplied guide rejects spatial readings, explains ma'iyyah here as Allah knowing about you wherever you are, and gives al-istila/subjugation as the accepted contextual treatment of istiwa.",
+      "salafReading": "Istiwa is affirmed with a befitting meaning and no how; bodily, spatial and directional meanings are denied.",
+      "khalafReading": "Istiwa is rendered as the Throne being under Allah's complete subjugation; ma'iyyah is rendered as Allah knowing about you wherever you are.",
+      "guideSpecificMeaning": "Allah knows about you wherever you are.",
+      "coverageCategories": [
+        "istiwa-throne",
+        "maiyyah-divine"
+      ]
+    },
+    {
+      "verseKey": "57:29",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "the bounty is in Allah's hand to give to whom He will",
+          "to": "the bounty belongs to Allah to bestow on whom He will"
+        }
+      ],
+      "coverageCategories": [
+        "yad-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Divine yad/yadayn/yamin expressions: power, care, bounty, dominion or generosity according to context; never bodily hands. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "58:7",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "There is no secret conference of three but He is their fourth, nor of five but He is their sixth, nor of less than that or more but He is with them wheresoever they may be;",
+          "to": "There is no secret conference of three but He knows them all, nor of five but He knows them all, nor of fewer or more but He knows them wherever they may be;"
+        }
+      ],
+      "coverageCategories": [
+        "maiyyah-divine"
+      ],
+      "editorialNote": "Full-corpus audit: Divine ma'iyyah rendered by knowledge, support or protection according to context; never physical co-location. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "58:22",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "strengthened them with a Spirit from Him",
+          "to": "strengthened them with support and guidance from Him"
+        }
+      ],
+      "coverageCategories": [
+        "ruh-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Ruh attributed to Allah is created and/or an attribution of honour/command; never a part of Allah. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "59:2",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "But Allah reached them from a place whereof they recked not",
+          "to": "But Allah's punishment reached them from where they did not expect"
+        }
+      ],
+      "coverageCategories": [
+        "divine-coming"
+      ],
+      "editorialNote": "Full-corpus audit: Coming expressions concerning Allah rendered contextually as judgment, command, punishment or an indication of power; never locomotion. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "61:8",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "the light of Allah",
+          "to": "the guidance of Allah"
+        },
+        {
+          "from": "His light",
+          "to": "His guidance"
+        }
+      ],
+      "coverageCategories": [
+        "light-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Nur attributed to Allah rendered as guidance/revelation where context supports it; never physical luminosity. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "66:12",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "And Mary, daughter of Imran, who guarded her chastity; We caused the honoured created spirit to be blown into her by Our command. She affirmed the words of her Lord and His Books and was among the devout.",
+      "editorialNote": "The supplied guide rejects any reading in which 'Our spirit' means a part or soul of Allah. It explains the passage through Allah's command to Jibril and a soul honoured by Allah. The SalahOS wording therefore makes createdness and honour explicit.",
+      "salafReading": "Affirm the revealed wording while categorically denying that Allah has a soul, parts or anything separable from Him.",
+      "khalafReading": "The guide explains that Allah ordered Jibril to blow the honoured soul by Allah's command; 'Our spirit' is an attribution of honour, not a part of Allah.",
+      "guideSpecificMeaning": "Allah ordered Jibril to blow the soul which is honorable to Allah.",
+      "coverageCategories": [
+        "ruh-divine-attribution"
+      ]
+    },
+    {
+      "verseKey": "67:1",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "in Whose hand is the Sovereignty",
+          "to": "to Whom belongs all Sovereignty"
+        }
+      ],
+      "coverageCategories": [
+        "yad-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Divine yad/yadayn/yamin expressions: power, care, bounty, dominion or generosity according to context; never bodily hands. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "67:16",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "from Him Who is in the heaven",
+          "to": "from the One of supreme status and dominion"
+        }
+      ],
+      "coverageCategories": [
+        "fi-sama-location"
+      ],
+      "editorialNote": "Full-corpus audit: Fi al-sama wording must not place Allah inside the sky; render supreme status/dominion without location. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "67:17",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "from Him Who is in the heaven",
+          "to": "from the One of supreme status and dominion"
+        }
+      ],
+      "coverageCategories": [
+        "fi-sama-location"
+      ],
+      "editorialNote": "Full-corpus audit: Fi al-sama wording must not place Allah inside the sky; render supreme status/dominion without location. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "68:42",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "On the Day of anguish and hardship, they will be called to prostrate, but they will not be able.",
+      "editorialNote": "The supplied guide reports the explanation of saq as hardship and the verse as referring to a day of anguish and hardship; it attributes this explanation to Ibn Abbas and other early scholars.",
+      "salafReading": "The supplied guide records early Salaf authorities explaining the expression without attributing a bodily shin to Allah.",
+      "khalafReading": "Saq is explained contextually as hardship or severe anguish.",
+      "guideSpecificMeaning": "A day of anguish and hardship.",
+      "coverageCategories": [
+        "saq"
+      ]
+    },
+    {
+      "verseKey": "70:4",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "the angels and the Spirit ascend unto Him",
+          "to": "the angels and the Spirit ascend through the heavens by His command"
+        }
+      ],
+      "coverageCategories": [
+        "ascent-toward-divine"
+      ],
+      "editorialNote": "Full-corpus audit: Ascension/raising wording must not imply movement to a place occupied by Allah. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "76:9",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "for the sake of Allah only",
+          "to": "seeking Allah's acceptance alone"
+        }
+      ],
+      "coverageCategories": [
+        "wajh-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Divine wajh expressions: qiblah, acceptance/pleasure, Self or Dominion according to context; never a bodily face. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "89:22",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "And an indication of your Lord's Power comes, and the angels, rank upon rank.",
+      "editorialNote": "The supplied guide reports an explanation attributed to Imam Ahmad: the coming here is the coming of an indication of Allah's Power, not movement of Allah from one place to another.",
+      "salafReading": "Affirm the revealed wording while denying movement, transition, place and direction for Allah.",
+      "khalafReading": "The guide reports the meaning: an indication of the Power of Allah has come.",
+      "guideSpecificMeaning": "An indication of the Power of Allah has come.",
+      "coverageCategories": [
+        "divine-coming"
+      ]
+    },
+    {
+      "verseKey": "92:20",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": null,
+      "baseRewrites": [
+        {
+          "from": "seeking (to fulfil) the purpose of his Lord Most High.",
+          "to": "seeking the acceptance of his Lord Most High."
+        }
+      ],
+      "coverageCategories": [
+        "wajh-divine-attribution"
+      ],
+      "editorialNote": "Full-corpus audit: Divine wajh expressions: qiblah, acceptance/pleasure, Self or Dominion according to context; never a bodily face. The SalahOS 2026 layer changes only the creed-sensitive Pickthall phrase(s) recorded for this verse and leaves the remaining baseline wording intact.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while categorically denying bodily, spatial, directional, created or human modality and without assigning a created 'how'.",
+      "khalafReading": "Apply the recorded contextual ta'wil to this verse only, in accordance with Arabic context and the governing tanzih foundations; do not turn it into a universal lexical substitution.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "112:4",
+      "classification": "muhkam-foundation",
+      "treatment": "muhkam-foundation",
+      "englishMeaning": "And there is absolutely nothing equal or comparable to Him.",
+      "editorialNote": "A governing muhkam foundation in the supplied guide: nothing is equal to Allah.",
+      "salafReading": null,
+      "khalafReading": null,
+      "guideSpecificMeaning": "There is nothing which is equal to Him."
     }
-  ]
+  ],
+  "coverage": {
+    "file": "src/data/quran-mutashabih-attribute-coverage.json",
+    "corpusAyat": 6236,
+    "reviewedAttributeRiskVerses": 88,
+    "scope": "full-corpus divine-attribute / anthropomorphic-risk lexical and contextual audit"
+  }
 }
