@@ -5,7 +5,12 @@
     "title": "The Ayahs of the Qur’an – Muhkam and Mutashabih",
     "status": "supplied-by-project-owner"
   },
-  "requiredFoundations": ["3:7", "42:11", "112:4", "19:65"],
+  "requiredFoundations": [
+    "3:7",
+    "42:11",
+    "112:4",
+    "19:65"
+  ],
   "requiredSeedVerses": [
     "20:5",
     "35:10",
@@ -252,5 +257,11 @@
       "status": "pending-scholar-review",
       "disagreements": []
     }
-  ]
+  ],
+  "creedTraditions": [
+    "ashari",
+    "maturidi"
+  ],
+  "attributeCoverageFile": "src/data/quran-mutashabih-attribute-coverage.json",
+  "attributeCoverageScope": "88 unique divine-attribute / anthropomorphic-risk ayat identified by full 6,236-ayah lexical/contextual audit"
 }
