@@ -229,6 +229,16 @@
       "guideSpecificMeaning": null
     },
     {
+      "verseKey": "4:135",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "O believers, stand firmly for justice as witnesses for Allah, even against yourselves, your parents, or close relatives. Whether one is rich or poor, Allah has greater right over both. So do not follow desire and deviate from justice. If you distort testimony or turn away, surely Allah is fully aware of what you do.",
+      "editorialNote": "Pickthall's 'Allah is nearer unto both' can suggest spatial proximity, while the Arabic awla bihima expresses greater right, authority or claim. SalahOS renders the phrase non-spatially.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while denying spatial proximity, distance, direction, or location.",
+      "khalafReading": "Contextual ta'wil/translation: awla bihima means Allah has greater right and authority concerning both the rich and the poor, not that He is spatially nearer to them.",
+      "guideSpecificMeaning": null
+    },
+    {
       "verseKey": "4:142",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
@@ -276,6 +286,16 @@
       "editorialNote": "Yad and yadahu are rendered through generosity and giving in the immediate context, not bodily hands.",
       "salafReading": "Affirm the revealed expression with a meaning befitting Allah while denying limbs, hands, parts, bodily form or created instruments.",
       "khalafReading": "Yad and related expressions are read contextually as power, authority, generosity, care or disposal according to the verse, not as bodily hands.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "5:116",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "And when Allah says: O Jesus son of Mary, did you say to the people, 'Take me and my mother as two gods besides Allah'? He will say: Glory be to You. It was not for me to say what I had no right to say. Had I said it, You would certainly have known it. You know what I conceal, while I do not know what You have kept hidden. Surely You alone are the Knower of all unseen things.",
+      "editorialNote": "The Pickthall phrase 'Thy Mind' is not retained because it can attribute a created mental faculty to Allah. The Arabic nafs wording is rendered contextually through what is concealed/hidden, while preserving tanzih.",
+      "salafReading": "Affirm the revealed nafs wording with a meaning befitting Allah while denying soul, mind as a created faculty, body, composition, indwelling, or any created modality.",
+      "khalafReading": "Contextual ta'wil: Jesus says that Allah knows what he conceals, while Jesus does not know what Allah has kept hidden; no created 'mind' is attributed to Allah.",
       "guideSpecificMeaning": null
     },
     {
@@ -449,6 +469,16 @@
       "guideSpecificMeaning": null
     },
     {
+      "verseKey": "9:30",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "The Jews say, 'Ezra is the son of Allah,' and the Christians say, 'The Messiah is the son of Allah.' These are words from their mouths, imitating the words of earlier disbelievers. May Allah destroy them—how far they are turned from the truth!",
+      "editorialNote": "The Arabic idiom qatalahumu Allah is not rendered as Allah physically 'fighting' them. SalahOS uses its idiomatic imprecatory sense, avoiding a bodily-combat reading.",
+      "salafReading": "Affirm the revealed expression according to a meaning befitting Allah while denying bodily combat, physical struggle, movement, or created action.",
+      "khalafReading": "Contextual rendering: qatalahumu Allah is an imprecation meaning 'May Allah destroy them' or condemn them, not physical fighting.",
+      "guideSpecificMeaning": null
+    },
+    {
       "verseKey": "9:36",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
@@ -566,6 +596,16 @@
       "editorialNote": "The repeated Pickthall 'grasp' wording is rendered as seizure in punishment and taking to account, not a bodily grasp.",
       "salafReading": "Affirm the revealed taking according to a meaning befitting Allah while denying bodily grasping, limbs, instruments, contact or movement.",
       "khalafReading": "Contextual ta'wil: the divine taking is punishment and seizure of wrongdoers by power and decree, not physical grasping.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "12:87",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "O my sons, go and search carefully for Joseph and his brother, and do not despair of relief from Allah. Indeed, no one despairs of relief from Allah except the disbelieving people.",
+      "editorialNote": "The Arabic here is rawh Allah—relief, mercy or deliverance—not ruh ('spirit'). Pickthall's capitalized 'Spirit of Allah' is therefore replaced to avoid both a lexical error and a possible partitive misunderstanding.",
+      "salafReading": "Read rawh according to its Arabic meaning of relief/mercy here; this verse does not attribute a soul, spirit, part, or bodily property to Allah.",
+      "khalafReading": "Contextual translation: rawh Allah means relief or mercy from Allah in the context of Ya'qub's hope for Yusuf's return.",
       "guideSpecificMeaning": null
     },
     {
@@ -986,6 +1026,16 @@
       "editorialNote": "The rendering avoids implying that Allah is a physical source of created luminosity.",
       "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or a created modality.",
       "khalafReading": "Contextual ta’wil: the light is illumination created or bestowed by Allah, not Allah being physical light.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "40:34",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Joseph had already come to you earlier with clear proofs, yet you remained in doubt about what he brought. Then when he died, you said, 'Allah will never send a messenger after him.' In this way Allah leaves astray whoever is a transgressor and persistent doubter.",
+      "editorialNote": "The Arabic verb is yudillu (leaves astray/causes to stray), not 'deceives'. Pickthall's 'Allah deceiveth' is replaced because deception is not the meaning of the Arabic here and would attribute an unbefitting defect.",
+      "salafReading": "Affirm the verse without attributing deceit, lying, ignorance, or any deficiency to Allah.",
+      "khalafReading": "Contextual translation: yudillu is rendered as leaving astray or causing to stray, not deceiving.",
       "guideSpecificMeaning": null
     },
     {
