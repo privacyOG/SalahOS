@@ -5,7 +5,12 @@
     "title": "The Ayahs of the Qur’an – Muhkam and Mutashabih",
     "status": "supplied-by-project-owner"
   },
-  "requiredFoundations": ["3:7", "19:65", "42:11", "112:4"],
+  "requiredFoundations": [
+    "3:7",
+    "19:65",
+    "42:11",
+    "112:4"
+  ],
   "requiredSeedVerses": [
     "2:15",
     "2:19",
@@ -17,10 +22,12 @@
     "2:186",
     "2:194",
     "2:210",
+    "2:245",
     "2:249",
     "2:255",
     "2:272",
     "3:26",
+    "3:52",
     "3:54",
     "3:55",
     "3:73",
@@ -57,6 +64,7 @@
     "9:40",
     "9:67",
     "9:79",
+    "9:111",
     "9:123",
     "10:3",
     "10:21",
@@ -112,6 +120,7 @@
     "41:54",
     "43:84",
     "45:34",
+    "47:7",
     "47:35",
     "48:10",
     "50:16",
@@ -121,10 +130,15 @@
     "55:27",
     "56:85",
     "57:4",
+    "57:11",
+    "57:18",
     "57:29",
     "58:7",
     "58:22",
     "59:2",
+    "59:8",
+    "61:14",
+    "64:17",
     "66:12",
     "67:1",
     "67:16",
@@ -134,6 +148,7 @@
     "69:45",
     "70:4",
     "72:28",
+    "73:20",
     "75:23",
     "76:9",
     "85:20",
@@ -303,6 +318,22 @@
       "disagreements": []
     },
     {
+      "verseKey": "2:245",
+      "arabicExpression": "مَّن ذَا ٱلَّذِى يُقْرِضُ ٱللَّهَ قَرْضًا حَسَنًا فَيُضَٰعِفَهُۥ لَهُۥٓ أَضْعَافًا كَثِيرَةً وَٱللَّهُ يَقْبِضُ وَيَبْصُۜطُ وَإِلَيْهِ تُرْجَعُونَ",
+      "context": "Policy trigger groups: divineNeedAndTransactionIdioms. The English meaning applies tanzih to need/dependency or transaction-like wording so no created deficiency is attributed to Allah.",
+      "originalEnglish": "Who is it that will lend unto Allah a goodly loan, so that He may give it increase manifold? Allah straiteneth and enlargeth. Unto Him ye will return.",
+      "proposedMeaning": "Who is it that will make a goodly expenditure for Allah's sake, so He may multiply it for him many times over? Allah restricts and expands provision, and to Him you will be returned.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
       "verseKey": "2:249",
       "arabicExpression": "فَلَمَّا فَصَلَ طَالُوتُ بِٱلْجُنُودِ قَالَ إِنَّ ٱللَّهَ مُبْتَلِيكُم بِنَهَرٍ فَمَن شَرِبَ مِنْهُ فَلَيْسَ مِنِّى وَمَن لَّمْ يَطْعَمْهُ فَإِنَّهُۥ مِنِّىٓ إِلَّا مَنِ ٱغْتَرَفَ غُرْفَةًۢ بِيَدِهِۦ فَشَرِبُوا۟ مِنْهُ إِلَّا قَلِيلًا مِّنْهُمْ فَلَمَّا جَاوَزَهُۥ هُوَ وَٱلَّذِينَ ءَامَنُوا۟ مَعَهُۥ قَالُوا۟ لَا طَاقَةَ لَنَا ٱلْيَوْمَ بِجَالُوتَ وَجُنُودِهِۦ قَالَ ٱلَّذِينَ يَظُنُّونَ أَنَّهُم مُّلَٰقُوا۟ ٱللَّهِ كَم مِّن فِئَةٍ قَلِيلَةٍ غَلَبَتْ فِئَةً كَثِيرَةًۢ بِإِذْنِ ٱللَّهِ وَٱللَّهُ مَعَ ٱلصَّٰبِرِينَ",
       "context": "Policy trigger groups: divineMaiyyah. The concluding ma'iyyah is rendered as support.",
@@ -372,6 +403,22 @@
       "context": "Policy trigger groups: divineYadAndPowerLanguage. Bi-yadika is rendered as power and disposal, not a bodily hand.",
       "originalEnglish": "Say: O Allah! Owner of Sovereignty! Thou givest sovereignty unto whom Thou wilt, and Thou withdrawest sovereignty from whom Thou wilt. Thou exaltest whom Thou wilt, and Thou abasest whom Thou wilt. In Thy hand is the good. Lo! Thou art Able to do all things.",
       "proposedMeaning": "Say: O Allah, Owner of Sovereignty, You give sovereignty to whom You will and take sovereignty from whom You will; You honor whom You will and humble whom You will. All good is in Your power and disposal. Surely You are able to do all things.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "3:52",
+      "arabicExpression": "فَلَمَّآ أَحَسَّ عِيسَىٰ مِنْهُمُ ٱلْكُفْرَ قَالَ مَنْ أَنصَارِىٓ إِلَى ٱللَّهِ قَالَ ٱلْحَوَارِيُّونَ نَحْنُ أَنصَارُ ٱللَّهِ ءَامَنَّا بِٱللَّهِ وَٱشْهَدْ بِأَنَّا مُسْلِمُونَ",
+      "context": "Policy trigger groups: divineNeedAndTransactionIdioms. The English meaning applies tanzih to need/dependency or transaction-like wording so no created deficiency is attributed to Allah.",
+      "originalEnglish": "But when Jesus became conscious of their disbelief, he cried: Who will be my helpers in the cause of Allah? The disciples said: We will be Allah's helpers. We believe in Allah, and bear thou witness that we have surrendered (unto Him).",
+      "proposedMeaning": "When Jesus sensed disbelief from them, he said: Who will be my helpers in Allah's cause? The disciples said: We are supporters of Allah's cause. We believe in Allah, so bear witness that we submit to Him.",
       "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
@@ -561,9 +608,9 @@
     {
       "verseKey": "5:12",
       "arabicExpression": "وَلَقَدْ أَخَذَ ٱللَّهُ مِيثَٰقَ بَنِىٓ إِسْرَٰٓءِيلَ وَبَعَثْنَا مِنْهُمُ ٱثْنَىْ عَشَرَ نَقِيبًا وَقَالَ ٱللَّهُ إِنِّى مَعَكُمْ لَئِنْ أَقَمْتُمُ ٱلصَّلَوٰةَ وَءَاتَيْتُمُ ٱلزَّكَوٰةَ وَءَامَنتُم بِرُسُلِى وَعَزَّرْتُمُوهُمْ وَأَقْرَضْتُمُ ٱللَّهَ قَرْضًا حَسَنًا لَّأُكَفِّرَنَّ عَنكُمْ سَيِّـَٔاتِكُمْ وَلَأُدْخِلَنَّكُمْ جَنَّٰتٍ تَجْرِى مِن تَحْتِهَا ٱلْأَنْهَٰرُ فَمَن كَفَرَ بَعْدَ ذَٰلِكَ مِنكُمْ فَقَدْ ضَلَّ سَوَآءَ ٱلسَّبِيلِ",
-      "context": "Policy trigger groups: divineMaiyyah. Divine ma'iyyah is rendered by support, protection, guidance or encompassing knowledge according to context, never physical accompaniment or co-location.",
+      "context": "Policy trigger groups: divineMaiyyah, divineNeedAndTransactionIdioms. Ma'iyyah is rendered as support rather than physical co-location, and the qard idiom as sincere expenditure for Allah's sake rather than borrowing or need.",
       "originalEnglish": "Allah made a covenant of old with the Children of Israel and We raised among them twelve chieftains, and Allah said: Lo! I am with you. If ye establish worship and pay the poor-due, and believe in My messengers and support them, and lend unto Allah a kindly loan, surely I shall remit your sins, and surely I shall bring you into Gardens underneath which rivers flow. Whoso among you disbelieveth after this will go astray from a plain road.",
-      "proposedMeaning": "Allah made a covenant of old with the Children of Israel and We raised among them twelve chieftains, and Allah said: Lo! I support you. If ye establish worship and pay the poor-due, and believe in My messengers and support them, and lend unto Allah a kindly loan, surely I shall remit your sins, and surely I shall bring you into Gardens underneath which rivers flow. Whoso among you disbelieveth after this will go astray from a plain road.",
+      "proposedMeaning": "Allah made a covenant with the Children of Israel and raised twelve leaders among them. Allah said: I support you. If you establish prayer, give zakat, believe in My messengers and support them, and make a sincere goodly expenditure for My sake, I will surely erase your sins and admit you into Gardens beneath which rivers flow. Whoever among you disbelieves after that has strayed from the straight way.",
       "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
@@ -951,6 +998,22 @@
       "context": "Policy trigger groups: reciprocalHumanSoundingVerbs. The English meaning avoids attributing deficiency, deception, forgetfulness or human-style mockery to Allah; the verb is rendered as a just requital or counteraction appropriate to its context.",
       "originalEnglish": "Those who point at such of the believers as give the alms willingly and such as can find naught to give but their endeavours, and deride them - Allah (Himself) derideth them. Theirs will be a painful doom.",
       "proposedMeaning": "Those who ridicule the believers who give charity willingly, and those who find nothing to give except their effort—Allah requites their derision. Theirs will be a painful punishment.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "9:111",
+      "arabicExpression": "إِنَّ ٱللَّهَ ٱشْتَرَىٰ مِنَ ٱلْمُؤْمِنِينَ أَنفُسَهُمْ وَأَمْوَٰلَهُم بِأَنَّ لَهُمُ ٱلْجَنَّةَ يُقَٰتِلُونَ فِى سَبِيلِ ٱللَّهِ فَيَقْتُلُونَ وَيُقْتَلُونَ وَعْدًا عَلَيْهِ حَقًّا فِى ٱلتَّوْرَىٰةِ وَٱلْإِنجِيلِ وَٱلْقُرْءَانِ وَمَنْ أَوْفَىٰ بِعَهْدِهِۦ مِنَ ٱللَّهِ فَٱسْتَبْشِرُوا۟ بِبَيْعِكُمُ ٱلَّذِى بَايَعْتُم بِهِۦ وَذَٰلِكَ هُوَ ٱلْفَوْزُ ٱلْعَظِيمُ",
+      "context": "Policy trigger groups: divineNeedAndTransactionIdioms. The English meaning applies tanzih to need/dependency or transaction-like wording so no created deficiency is attributed to Allah.",
+      "originalEnglish": "Lo! Allah hath bought from the believers their lives and their wealth because the Garden will be theirs: they shall fight in the way of Allah and shall slay and be slain. It is a promise which is binding on Him in the Torah and the Gospel and the Qur'an. Who fulfilleth His covenant better than Allah? Rejoice then in your bargain that ye have made, for that is the supreme triumph.",
+      "proposedMeaning": "Indeed, Allah has promised the believers Paradise in return for their lives and wealth: they fight in Allah's cause, killing and being killed. It is a true promise He has made in the Torah, the Gospel and the Qur'an. Who is more faithful to His covenant than Allah? So rejoice in the covenant you have made; that is the supreme triumph.",
       "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
@@ -1874,6 +1937,22 @@
       "disagreements": []
     },
     {
+      "verseKey": "47:7",
+      "arabicExpression": "يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوٓا۟ إِن تَنصُرُوا۟ ٱللَّهَ يَنصُرْكُمْ وَيُثَبِّتْ أَقْدَامَكُمْ",
+      "context": "Policy trigger groups: divineNeedAndTransactionIdioms. The English meaning applies tanzih to need/dependency or transaction-like wording so no created deficiency is attributed to Allah.",
+      "originalEnglish": "O ye who believe! If ye help Allah, He will help you and will make your foothold firm.",
+      "proposedMeaning": "O believers, if you support Allah's religion, He will support you and make your footing firm.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
       "verseKey": "47:35",
       "arabicExpression": "فَلَا تَهِنُوا۟ وَتَدْعُوٓا۟ إِلَى ٱلسَّلْمِ وَأَنتُمُ ٱلْأَعْلَوْنَ وَٱللَّهُ مَعَكُمْ وَلَن يَتِرَكُمْ أَعْمَٰلَكُمْ",
       "context": "Policy trigger groups: divineMaiyyah. Ma'iyyah is rendered as support.",
@@ -2018,6 +2097,38 @@
       "disagreements": []
     },
     {
+      "verseKey": "57:11",
+      "arabicExpression": "مَّن ذَا ٱلَّذِى يُقْرِضُ ٱللَّهَ قَرْضًا حَسَنًا فَيُضَٰعِفَهُۥ لَهُۥ وَلَهُۥٓ أَجْرٌ كَرِيمٌ",
+      "context": "Policy trigger groups: divineNeedAndTransactionIdioms. The English meaning applies tanzih to need/dependency or transaction-like wording so no created deficiency is attributed to Allah.",
+      "originalEnglish": "Who is he that will lend unto Allah a goodly loan, that He may double it for him and his may be a rich reward?",
+      "proposedMeaning": "Who is it that will make a goodly expenditure for Allah's sake, so He may multiply it for him and grant him a noble reward?",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "57:18",
+      "arabicExpression": "إِنَّ ٱلْمُصَّدِّقِينَ وَٱلْمُصَّدِّقَٰتِ وَأَقْرَضُوا۟ ٱللَّهَ قَرْضًا حَسَنًا يُضَٰعَفُ لَهُمْ وَلَهُمْ أَجْرٌ كَرِيمٌ",
+      "context": "Policy trigger groups: divineNeedAndTransactionIdioms. The English meaning applies tanzih to need/dependency or transaction-like wording so no created deficiency is attributed to Allah.",
+      "originalEnglish": "Lo! those who give alms, both men and women, and lend unto Allah a goodly loan, it will be doubled for them, and theirs will be a rich reward.",
+      "proposedMeaning": "Indeed, the charitable men and women who make a goodly expenditure for Allah's sake will have it multiplied for them, and they will have a noble reward.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
       "verseKey": "57:29",
       "arabicExpression": "لِّئَلَّا يَعْلَمَ أَهْلُ ٱلْكِتَٰبِ أَلَّا يَقْدِرُونَ عَلَىٰ شَىْءٍ مِّن فَضْلِ ٱللَّهِ وَأَنَّ ٱلْفَضْلَ بِيَدِ ٱللَّهِ يُؤْتِيهِ مَن يَشَآءُ وَٱللَّهُ ذُو ٱلْفَضْلِ ٱلْعَظِيمِ",
       "context": "Policy trigger groups: divineYadAndPowerLanguage. Bi-yad Allah is rendered as disposal and granting.",
@@ -2071,6 +2182,54 @@
       "context": "Policy trigger groups: comingAndMovementLanguage. The baseline 'Allah reached them from a place' is replaced by the reaching of His decree, removing spatial movement.",
       "originalEnglish": "He it is Who hath caused those of the People of the Scripture who disbelieved to go forth from their homes unto the first exile. Ye deemed not that they would go forth, while they deemed that their strongholds would protect them from Allah. But Allah reached them from a place whereof they recked not, and cast terror in their hearts so that they ruined their houses with their own hands and the hands of the believers. So learn a lesson, O ye who have eyes!",
       "proposedMeaning": "He is the One Who expelled from their homes at the first exile those among the People of the Scripture who disbelieved. You did not think they would leave, and they thought their fortresses would protect them from Allah; but Allah's decree reached them from where they did not expect and cast terror into their hearts. They demolished their homes with their own hands and the hands of the believers. So take warning, people of insight.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "59:8",
+      "arabicExpression": "لِلْفُقَرَآءِ ٱلْمُهَٰجِرِينَ ٱلَّذِينَ أُخْرِجُوا۟ مِن دِيَٰرِهِمْ وَأَمْوَٰلِهِمْ يَبْتَغُونَ فَضْلًا مِّنَ ٱللَّهِ وَرِضْوَٰنًا وَيَنصُرُونَ ٱللَّهَ وَرَسُولَهُۥٓ أُو۟لَٰٓئِكَ هُمُ ٱلصَّٰدِقُونَ",
+      "context": "Policy trigger groups: divineNeedAndTransactionIdioms. The English meaning applies tanzih to need/dependency or transaction-like wording so no created deficiency is attributed to Allah.",
+      "originalEnglish": "And (it is) for the poor fugitives who have been driven out from their homes and their belongings, who seek bounty from Allah and help Allah and His messenger. They are the loyal.",
+      "proposedMeaning": "And for the poor emigrants who were driven from their homes and wealth, seeking bounty from Allah and His acceptance, and supporting Allah's religion and His Messenger. They are the truthful.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "61:14",
+      "arabicExpression": "يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ كُونُوٓا۟ أَنصَارَ ٱللَّهِ كَمَا قَالَ عِيسَى ٱبْنُ مَرْيَمَ لِلْحَوَارِيِّـۧنَ مَنْ أَنصَارِىٓ إِلَى ٱللَّهِ قَالَ ٱلْحَوَارِيُّونَ نَحْنُ أَنصَارُ ٱللَّهِ فَـَٔامَنَت طَّآئِفَةٌ مِّنۢ بَنِىٓ إِسْرَٰٓءِيلَ وَكَفَرَت طَّآئِفَةٌ فَأَيَّدْنَا ٱلَّذِينَ ءَامَنُوا۟ عَلَىٰ عَدُوِّهِمْ فَأَصْبَحُوا۟ ظَٰهِرِينَ",
+      "context": "Policy trigger groups: divineNeedAndTransactionIdioms. The English meaning applies tanzih to need/dependency or transaction-like wording so no created deficiency is attributed to Allah.",
+      "originalEnglish": "O ye who believe! Be Allah's helpers, even as Jesus son of Mary said unto the disciples: Who are my helpers for Allah? They said: We are Allah's helpers. And a party of the Children of Israel believed, while a party disbelieved. Then We strengthened those who believed against their foe, and they became the uppermost.",
+      "proposedMeaning": "O believers, be supporters of Allah's cause, as Jesus son of Mary said to the disciples: Who are my helpers in Allah's cause? The disciples said: We are supporters of Allah's cause. Then a group of the Children of Israel believed and a group disbelieved, so We strengthened those who believed against their enemy and they became victorious.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "64:17",
+      "arabicExpression": "إِن تُقْرِضُوا۟ ٱللَّهَ قَرْضًا حَسَنًا يُضَٰعِفْهُ لَكُمْ وَيَغْفِرْ لَكُمْ وَٱللَّهُ شَكُورٌ حَلِيمٌ",
+      "context": "Policy trigger groups: divineNeedAndTransactionIdioms. The English meaning applies tanzih to need/dependency or transaction-like wording so no created deficiency is attributed to Allah.",
+      "originalEnglish": "If ye lend unto Allah a goodly loan, He will double it for you and will forgive you, for Allah is Responsive, Clement,",
+      "proposedMeaning": "If you make a goodly expenditure for Allah's sake, He will multiply it for you and forgive you. Allah abundantly rewards good and is Forbearing.",
       "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
@@ -2226,6 +2385,22 @@
       "disagreements": []
     },
     {
+      "verseKey": "73:20",
+      "arabicExpression": "إِنَّ رَبَّكَ يَعْلَمُ أَنَّكَ تَقُومُ أَدْنَىٰ مِن ثُلُثَىِ ٱلَّيْلِ وَنِصْفَهُۥ وَثُلُثَهُۥ وَطَآئِفَةٌ مِّنَ ٱلَّذِينَ مَعَكَ وَٱللَّهُ يُقَدِّرُ ٱلَّيْلَ وَٱلنَّهَارَ عَلِمَ أَن لَّن تُحْصُوهُ فَتَابَ عَلَيْكُمْ فَٱقْرَءُوا۟ مَا تَيَسَّرَ مِنَ ٱلْقُرْءَانِ عَلِمَ أَن سَيَكُونُ مِنكُم مَّرْضَىٰ وَءَاخَرُونَ يَضْرِبُونَ فِى ٱلْأَرْضِ يَبْتَغُونَ مِن فَضْلِ ٱللَّهِ وَءَاخَرُونَ يُقَٰتِلُونَ فِى سَبِيلِ ٱللَّهِ فَٱقْرَءُوا۟ مَا تَيَسَّرَ مِنْهُ وَأَقِيمُوا۟ ٱلصَّلَوٰةَ وَءَاتُوا۟ ٱلزَّكَوٰةَ وَأَقْرِضُوا۟ ٱللَّهَ قَرْضًا حَسَنًا وَمَا تُقَدِّمُوا۟ لِأَنفُسِكُم مِّنْ خَيْرٍ تَجِدُوهُ عِندَ ٱللَّهِ هُوَ خَيْرًا وَأَعْظَمَ أَجْرًا وَٱسْتَغْفِرُوا۟ ٱللَّهَ إِنَّ ٱللَّهَ غَفُورٌ رَّحِيمٌۢ",
+      "context": "Policy trigger groups: divineNeedAndTransactionIdioms. The English meaning applies tanzih to need/dependency or transaction-like wording so no created deficiency is attributed to Allah.",
+      "originalEnglish": "Lo! thy Lord knoweth how thou keepest vigil sometimes nearly two-thirds of the night, or (sometimes) half or a third thereof, as do a party of those with thee. Allah measureth the night and the day. He knoweth that ye count it not, and turneth unto you in mercy. Recite, then, of the Qur'an that which is easy for you. He knoweth that there are sick folk among you, while others travel in the land in search of Allah's bounty, and others (still) are fighting for the cause of Allah. So recite of it that which is easy (for you), and establish worship and pay the poor-due, and (so) lend unto Allah a goodly loan. Whatsoever good ye send before you for your souls, ye will find it with Allah, better and greater in the recompense. And seek forgiveness of Allah. Lo! Allah is Forgiving, Merciful.",
+      "proposedMeaning": "Indeed your Lord knows that you stand in prayer nearly two-thirds of the night, or half of it, or a third, as does a group of those with you. Allah determines the night and day. He knows that you cannot keep exact count, so He has turned to you in mercy. Recite then what is easy for you from the Qur'an. He knows that some of you will be ill, others traveling through the land seeking Allah's bounty, and others fighting in Allah's cause. So recite what is easy from it, establish prayer, give zakat, and make a goodly expenditure for Allah's sake. Whatever good you send ahead for yourselves, you will find it with Allah, better and greater in reward. Seek Allah's forgiveness; surely Allah is Forgiving, Merciful.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
       "verseKey": "75:23",
       "arabicExpression": "إِلَىٰ رَبِّهَا نَاظِرَةٌ",
       "context": "Policy trigger group: ruyahWithoutDirectionOrModality. Read with 75:22, the project aqidah guide requires affirmation that believers will see Allah in the Hereafter without direction or modality; the English must not imply a spatial facing or deny the ru'yah.",
@@ -2343,9 +2518,9 @@
   ],
   "coverageScope": {
     "corpusAyat": 6236,
-    "translationRiskVerses": 133,
+    "translationRiskVerses": 143,
     "governingFoundations": 4,
-    "explicitOverrides": 133,
+    "explicitOverrides": 143,
     "qualifiedScholarReview": "pending"
   }
 }
