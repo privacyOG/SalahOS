@@ -154,6 +154,21 @@ for (const key of requiredMutashabih) {
   assert(corpusByKey.has(key), `Expanded audit references unknown verse ${key}.`);
 }
 
+const istiwaOverThroneKeys = ['7:54', '10:3', '13:2', '20:5', '25:59', '32:4', '57:4'];
+for (const key of istiwaOverThroneKeys) {
+  const meaning = overrideByKey.get(key)?.englishMeaning ?? '';
+  assert(
+    meaning.includes('absolute dominion') && meaning.includes('subjugates the Throne'),
+    `${key} must use the direct contextual ta'wil of istiwa as dominion/subjugation.`,
+  );
+  assert(
+    !/mounted.*Throne|established (?:Himself )?(?:on|upon) the Throne|has an istiwa over/iu.test(
+      meaning,
+    ),
+    `${key} reintroduced bodily-sounding istiwa wording.`,
+  );
+}
+
 const forbiddenLiteralPhrases = new Map([
   ['7:54', ['mounted He the Throne', 'established Himself upon the Throne']],
   ['10:3', ['mounted He the Throne', 'established Himself upon the Throne']],
