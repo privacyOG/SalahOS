@@ -59,8 +59,8 @@ const requiredMutashabih = [...new Set(Object.values(triggers.groups ?? {}).flat
 
 assert(requiredFoundations.length === 4, 'Muhkam/tanzih foundation count changed.');
 assert(
-  requiredMutashabih.length === 133,
-  `Comprehensive Mutashabih trigger inventory must contain 133 verses, found ${String(requiredMutashabih.length)}.`,
+  requiredMutashabih.length === 143,
+  `Comprehensive Mutashabih trigger inventory must contain 143 verses, found ${String(requiredMutashabih.length)}.`,
 );
 
 assert(
@@ -68,8 +68,8 @@ assert(
   'Expanded Muhkam/Mutashabih audit status changed unexpectedly.',
 );
 assert(
-  fullAudit?.scope?.screenedVerseCount === 133 &&
-    fullAudit?.scope?.overrideVerseCount === 133 &&
+  fullAudit?.scope?.screenedVerseCount === 143 &&
+    fullAudit?.scope?.overrideVerseCount === 143 &&
     fullAudit?.scope?.baselineSafeVerseCount === 0,
   'Expanded Muhkam/Mutashabih audit coverage changed unexpectedly.',
 );
@@ -135,8 +135,8 @@ for (const key of requiredMutashabih) {
 }
 
 assert(
-  register.entries.length === 137,
-  'Editorial register must contain 133 triggers + 4 foundations.',
+  register.entries.length === 147,
+  'Editorial register must contain 143 triggers + 4 foundations.',
 );
 assert(
   register.entries.every(
@@ -194,6 +194,17 @@ assert(
   /knowledge encompasses/iu.test(encompassing7228),
   '72:28 must render divine encompassing through knowledge rather than spatial surrounding.',
 );
+
+const divineNeedAndTransactionKeys = ["2:245","3:52","5:12","9:111","47:7","57:11","57:18","59:8","61:14","64:17","73:20"];
+for (const key of divineNeedAndTransactionKeys) {
+  const meaning = overrideByKey.get(key)?.englishMeaning ?? '';
+  assert(
+    !/lend unto Allah|lend to Allah|help Allah\b|Allah's helpers|Allah hath bought|Allah has bought/iu.test(
+      meaning,
+    ),
+    `${key} reintroduced wording that can imply need, dependency or a created transaction.`,
+  );
+}
 
 const forbiddenLiteralPhrases = new Map([
   ['7:54', ['mounted He the Throne', 'established Himself upon the Throne']],
