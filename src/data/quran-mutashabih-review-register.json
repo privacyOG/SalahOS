@@ -5,7 +5,12 @@
     "title": "The Ayahs of the Qur’an – Muhkam and Mutashabih",
     "status": "supplied-by-project-owner"
   },
-  "requiredFoundations": ["3:7", "42:11", "112:4", "19:65"],
+  "requiredFoundations": [
+    "3:7",
+    "42:11",
+    "112:4",
+    "19:65"
+  ],
   "requiredSeedVerses": [
     "2:15",
     "2:19",
@@ -27,11 +32,13 @@
     "3:120",
     "4:108",
     "4:126",
+    "4:135",
     "4:142",
     "4:158",
     "4:171",
     "5:12",
     "5:64",
+    "5:116",
     "6:3",
     "6:18",
     "6:52",
@@ -49,6 +56,7 @@
     "8:46",
     "8:47",
     "8:66",
+    "9:30",
     "9:36",
     "9:40",
     "9:67",
@@ -61,6 +69,7 @@
     "11:61",
     "11:92",
     "11:102",
+    "12:87",
     "13:2",
     "13:22",
     "13:42",
@@ -102,6 +111,7 @@
     "39:56",
     "39:67",
     "39:69",
+    "40:34",
     "41:11",
     "41:54",
     "43:84",
@@ -472,6 +482,22 @@
       "disagreements": []
     },
     {
+      "verseKey": "4:135",
+      "arabicExpression": "يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ كُونُوا۟ قَوَّٰمِينَ بِٱلْقِسْطِ شُهَدَآءَ لِلَّهِ وَلَوْ عَلَىٰٓ أَنفُسِكُمْ أَوِ ٱلْوَٰلِدَيْنِ وَٱلْأَقْرَبِينَ إِن يَكُنْ غَنِيًّا أَوْ فَقِيرًا فَٱللَّهُ أَوْلَىٰ بِهِمَا فَلَا تَتَّبِعُوا۟ ٱلْهَوَىٰٓ أَن تَعْدِلُوا۟ وَإِن تَلْوُۥٓا۟ أَوْ تُعْرِضُوا۟ فَإِنَّ ٱللَّهَ كَانَ بِمَا تَعْمَلُونَ خَبِيرًا",
+      "context": "Policy trigger groups: divineNearness. Pickthall's 'Allah is nearer unto both' can suggest spatial proximity, while the Arabic awla bihima expresses greater right, authority or claim. SalahOS renders the phrase non-spatially.",
+      "originalEnglish": "O ye who believe! Be ye staunch in justice, witnesses for Allah, even though it be against yourselves or (your) parents or (your) kindred, whether (the case be of) a rich man or a poor man, for Allah is nearer unto both (them ye are). So follow not passion lest ye lapse (from truth) and if ye lapse or fall away, then lo! Allah is ever Informed of what ye do.",
+      "proposedMeaning": "O believers, stand firmly for justice as witnesses for Allah, even against yourselves, your parents, or close relatives. Whether one is rich or poor, Allah has greater right over both. So do not follow desire and deviate from justice. If you distort testimony or turn away, surely Allah is fully aware of what you do.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
       "verseKey": "4:142",
       "arabicExpression": "إِنَّ ٱلْمُنَٰفِقِينَ يُخَٰدِعُونَ ٱللَّهَ وَهُوَ خَٰدِعُهُمْ وَإِذَا قَامُوٓا۟ إِلَى ٱلصَّلَوٰةِ قَامُوا۟ كُسَالَىٰ يُرَآءُونَ ٱلنَّاسَ وَلَا يَذْكُرُونَ ٱللَّهَ إِلَّا قَلِيلًا",
       "context": "Policy trigger groups: reciprocalHumanSoundingVerbs. The English meaning avoids attributing deficiency, deception, forgetfulness or human-style mockery to Allah; the verb is rendered as a just requital or counteraction appropriate to its context.",
@@ -541,6 +567,22 @@
       "context": "Policy trigger groups: divineYadAndPowerLanguage. Yad and yadahu are rendered through generosity and giving in the immediate context, not bodily hands.",
       "originalEnglish": "The Jews say: Allah's hand is fettered. Their hands are fettered and they are accursed for saying so. Nay, but both His hands are spread out wide in bounty. He bestoweth as He will. That which hath been revealed unto thee from thy Lord is certain to increase the contumacy and disbelief of many of them, and We have cast among them enmity and hatred till the Day of Resurrection. As often as they light a fire for war, Allah extinguisheth it. Their effort is for corruption in the land, and Allah loveth not corrupters.",
       "proposedMeaning": "The Jews said: Allah's generosity is constrained. Their own hands are constrained, and they are condemned for what they said. Rather, His bounty is abundant and unrestricted; He gives as He wills. What has been revealed to you from your Lord will increase many of them in rebellion and disbelief. We cast enmity and hatred among them until the Day of Resurrection. Whenever they kindle a fire for war, Allah extinguishes it. They strive to spread corruption in the land, and Allah does not love corrupters.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "5:116",
+      "arabicExpression": "وَإِذْ قَالَ ٱللَّهُ يَٰعِيسَى ٱبْنَ مَرْيَمَ ءَأَنتَ قُلْتَ لِلنَّاسِ ٱتَّخِذُونِى وَأُمِّىَ إِلَٰهَيْنِ مِن دُونِ ٱللَّهِ قَالَ سُبْحَٰنَكَ مَا يَكُونُ لِىٓ أَنْ أَقُولَ مَا لَيْسَ لِى بِحَقٍّ إِن كُنتُ قُلْتُهُۥ فَقَدْ عَلِمْتَهُۥ تَعْلَمُ مَا فِى نَفْسِى وَلَآ أَعْلَمُ مَا فِى نَفْسِكَ إِنَّكَ أَنتَ عَلَّٰمُ ٱلْغُيُوبِ",
+      "context": "Policy trigger groups: divineNafsAndSelfLanguage. The Pickthall phrase 'Thy Mind' is not retained because it can attribute a created mental faculty to Allah. The Arabic nafs wording is rendered contextually through what is concealed/hidden, while preserving tanzih.",
+      "originalEnglish": "And when Allah saith: O Jesus, son of Mary! Didst thou say unto mankind: Take me and my mother for two gods beside Allah? he saith: Be glorified! It was not mine to utter that to which I had no right. If I used to say it, then Thou knewest it. Thou knowest what is in my mind, and I know not what is in Thy Mind. Lo! Thou, only Thou, art the Knower of Things Hidden?",
+      "proposedMeaning": "And when Allah says: O Jesus son of Mary, did you say to the people, 'Take me and my mother as two gods besides Allah'? He will say: Glory be to You. It was not for me to say what I had no right to say. Had I said it, You would certainly have known it. You know what I conceal, while I do not know what You have kept hidden. Surely You alone are the Knower of all unseen things.",
       "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
@@ -827,6 +869,22 @@
       "disagreements": []
     },
     {
+      "verseKey": "9:30",
+      "arabicExpression": "وَقَالَتِ ٱلْيَهُودُ عُزَيْرٌ ٱبْنُ ٱللَّهِ وَقَالَتِ ٱلنَّصَٰرَى ٱلْمَسِيحُ ٱبْنُ ٱللَّهِ ذَٰلِكَ قَوْلُهُم بِأَفْوَٰهِهِمْ يُضَٰهِـُٔونَ قَوْلَ ٱلَّذِينَ كَفَرُوا۟ مِن قَبْلُ قَٰتَلَهُمُ ٱللَّهُ أَنَّىٰ يُؤْفَكُونَ",
+      "context": "Policy trigger groups: reciprocalHumanSoundingVerbs. The Arabic idiom qatalahumu Allah is not rendered as Allah physically 'fighting' them. SalahOS uses its idiomatic imprecatory sense, avoiding a bodily-combat reading.",
+      "originalEnglish": "And the Jews say: Ezra is the son of Allah, and the Christians say: The Messiah is the son of Allah. That is their saying with their mouths. They imitate the saying of those who disbelieved of old. Allah (Himself) fighteth against them. How perverse are they!",
+      "proposedMeaning": "The Jews say, 'Ezra is the son of Allah,' and the Christians say, 'The Messiah is the son of Allah.' These are words from their mouths, imitating the words of earlier disbelievers. May Allah destroy them—how far they are turned from the truth!",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
       "verseKey": "9:36",
       "arabicExpression": "إِنَّ عِدَّةَ ٱلشُّهُورِ عِندَ ٱللَّهِ ٱثْنَا عَشَرَ شَهْرًا فِى كِتَٰبِ ٱللَّهِ يَوْمَ خَلَقَ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضَ مِنْهَآ أَرْبَعَةٌ حُرُمٌ ذَٰلِكَ ٱلدِّينُ ٱلْقَيِّمُ فَلَا تَظْلِمُوا۟ فِيهِنَّ أَنفُسَكُمْ وَقَٰتِلُوا۟ ٱلْمُشْرِكِينَ كَآفَّةً كَمَا يُقَٰتِلُونَكُمْ كَآفَّةً وَٱعْلَمُوٓا۟ أَنَّ ٱللَّهَ مَعَ ٱلْمُتَّقِينَ",
       "context": "Policy trigger groups: divineMaiyyah. Ma'iyyah is rendered as support.",
@@ -1008,6 +1066,22 @@
       "context": "Policy trigger groups: divineTakingAndSeizureLanguage. The repeated Pickthall 'grasp' wording is rendered as seizure in punishment and taking to account, not a bodily grasp.",
       "originalEnglish": "Even thus is the grasp of thy Lord when He graspeth the townships while they are doing wrong. Lo! His grasp is painful, very strong.",
       "proposedMeaning": "Such is your Lord's punishment when He takes wrongdoing towns to account. His punishment is painful and severe.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "12:87",
+      "arabicExpression": "يَٰبَنِىَّ ٱذْهَبُوا۟ فَتَحَسَّسُوا۟ مِن يُوسُفَ وَأَخِيهِ وَلَا تَا۟يْـَٔسُوا۟ مِن رَّوْحِ ٱللَّهِ إِنَّهُۥ لَا يَا۟يْـَٔسُ مِن رَّوْحِ ٱللَّهِ إِلَّا ٱلْقَوْمُ ٱلْكَٰفِرُونَ",
+      "context": "Policy trigger groups: rawhReliefNotRuh. The Arabic here is rawh Allah—relief, mercy or deliverance—not ruh ('spirit'). Pickthall's capitalized 'Spirit of Allah' is therefore replaced to avoid both a lexical error and a possible partitive misunderstanding.",
+      "originalEnglish": "Go, O my sons, and ascertain concerning Joseph and his brother, and despair not of the Spirit of Allah. Lo! none despaireth of the Spirit of Allah save disbelieving folk.",
+      "proposedMeaning": "O my sons, go and search carefully for Joseph and his brother, and do not despair of relief from Allah. Indeed, no one despairs of relief from Allah except the disbelieving people.",
       "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
@@ -1691,6 +1765,22 @@
       "disagreements": []
     },
     {
+      "verseKey": "40:34",
+      "arabicExpression": "وَلَقَدْ جَآءَكُمْ يُوسُفُ مِن قَبْلُ بِٱلْبَيِّنَٰتِ فَمَا زِلْتُمْ فِى شَكٍّ مِّمَّا جَآءَكُم بِهِۦ حَتَّىٰٓ إِذَا هَلَكَ قُلْتُمْ لَن يَبْعَثَ ٱللَّهُ مِنۢ بَعْدِهِۦ رَسُولًا كَذَٰلِكَ يُضِلُّ ٱللَّهُ مَنْ هُوَ مُسْرِفٌ مُّرْتَابٌ",
+      "context": "Policy trigger groups: reciprocalHumanSoundingVerbs. The Arabic verb is yudillu (leaves astray/causes to stray), not 'deceives'. Pickthall's 'Allah deceiveth' is replaced because deception is not the meaning of the Arabic here and would attribute an unbefitting defect.",
+      "originalEnglish": "And verily Joseph brought you of old clear proofs, yet ye ceased not to be in doubt concerning what he brought you till, when he died, ye said: Allah will not send any messenger after him. Thus Allah deceiveth him who is a prodigal, a doubter.",
+      "proposedMeaning": "Joseph had already come to you earlier with clear proofs, yet you remained in doubt about what he brought. Then when he died, you said, 'Allah will never send a messenger after him.' In this way Allah leaves astray whoever is a transgressor and persistent doubter.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
       "verseKey": "41:11",
       "arabicExpression": "ثُمَّ ٱسْتَوَىٰٓ إِلَى ٱلسَّمَآءِ وَهِىَ دُخَانٌ فَقَالَ لَهَا وَلِلْأَرْضِ ٱئْتِيَا طَوْعًا أَوْ كَرْهًا قَالَتَآ أَتَيْنَا طَآئِعِينَ",
       "context": "Policy trigger groups: istiwaIla. Istiwa ila is rendered as directing the divine will, not movement toward a spatial destination.",
@@ -2224,9 +2314,9 @@
   ],
   "coverageScope": {
     "corpusAyat": 6236,
-    "translationRiskVerses": 126,
+    "translationRiskVerses": 131,
     "governingFoundations": 4,
-    "explicitOverrides": 126,
+    "explicitOverrides": 131,
     "qualifiedScholarReview": "pending"
   }
 }
