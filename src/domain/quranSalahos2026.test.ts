@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
 import fullAudit from '../data/quran-mutashabih-full-audit.json';
+import triggers from '../data/quran-mutashabih-policy-triggers.json';
 import overrides from '../data/quran-salahos-2026-overrides.json';
 import {
   SALAHOS_2026_BASE_TRANSLATION_ID,
@@ -27,6 +28,14 @@ const requiredMutashabihSeeds = [
   '6:61',
   '16:128',
 ] as const;
+
+const policyTriggeredVerseKeys = [
+  ...new Set(Object.values(triggers.groups).flat()),
+].sort((a, b) => {
+  const [aSurah, aAyah] = a.split(':').map(Number);
+  const [bSurah, bAyah] = b.split(':').map(Number);
+  return aSurah - bSurah || aAyah - bAyah;
+});
 
 describe('SalahOS 2026 English meaning', () => {
   it('is transparently derived from the pinned Pickthall baseline', () => {
@@ -60,17 +69,22 @@ describe('SalahOS 2026 English meaning', () => {
     );
   });
 
-  it('covers the expanded owner-guide mutashabih translation-risk audit', () => {
-    expect(fullAudit.scope.screenedVerseCount).toBe(85);
-    expect(fullAudit.scope.overrideVerseCount).toBe(79);
-    expect(fullAudit.scope.baselineSafeVerseCount).toBe(6);
+  it('covers all maintained translation-risk triggers with explicit verse-specific wording', () => {
+    expect(policyTriggeredVerseKeys).toHaveLength(110);
+    expect(fullAudit.scope.screenedVerseCount).toBe(110);
+    expect(fullAudit.scope.overrideVerseCount).toBe(110);
+    expect(fullAudit.scope.baselineSafeVerseCount).toBe(0);
+    expect(fullAudit.screenedVerseKeys).toEqual(policyTriggeredVerseKeys);
+    expect(fullAudit.overrideVerseKeys).toEqual(policyTriggeredVerseKeys);
 
-    for (const verseKey of fullAudit.overrideVerseKeys) {
+    for (const verseKey of policyTriggeredVerseKeys) {
       const entry = getSalahOS2026EditorialEntry(verseKey);
-      expect(entry, `Missing expanded audit override for ${verseKey}`).not.toBeNull();
+      expect(entry, `Missing audit override for ${verseKey}`).not.toBeNull();
       expect(entry?.classification).toBe('mutashabih');
       expect(entry?.englishMeaning.trim().length ?? 0).toBeGreaterThan(15);
       expect(entry?.editorialNote.trim().length ?? 0).toBeGreaterThan(20);
+      expect(entry?.salafReading?.trim().length ?? 0).toBeGreaterThan(30);
+      expect(entry?.khalafReading?.trim().length ?? 0).toBeGreaterThan(30);
     }
 
     expect(salahos2026EnglishMeaning('7:54', 'baseline')).not.toMatch(/mounted.*Throne/iu);
@@ -78,6 +92,12 @@ describe('SalahOS 2026 English meaning', () => {
     expect(salahos2026EnglishMeaning('55:27', 'baseline')).not.toContain('Countenance');
     expect(salahos2026EnglishMeaning('67:16', 'baseline')).not.toContain('in the heaven');
     expect(salahos2026EnglishMeaning('7:51', 'baseline')).not.toContain('forgotten');
+    expect(salahos2026EnglishMeaning('2:255', 'baseline')).toContain('His Kursi');
+    expect(salahos2026EnglishMeaning('4:158', 'baseline')).not.toContain('unto Himself');
+    expect(salahos2026EnglishMeaning('35:41', 'baseline')).not.toContain('graspeth');
+    expect(salahos2026EnglishMeaning('85:20', 'baseline')).toContain(
+      "Allah's knowledge and power encompass",
+    );
   });
 
   it('keeps override keys unique and explicitly provisional', () => {
