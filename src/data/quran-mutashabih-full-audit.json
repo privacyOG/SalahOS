@@ -11,12 +11,7 @@
     "overrideVerseCount": 79,
     "baselineSafeVerseCount": 6
   },
-  "governingFoundations": [
-    "3:7",
-    "42:11",
-    "112:4",
-    "19:65"
-  ],
+  "governingFoundations": ["3:7", "42:11", "112:4", "19:65"],
   "triggerFamilies": [
     "istiwa and istiwa ila",
     "yad / yamin / qabdah",
