@@ -154,7 +154,15 @@ for (const key of requiredMutashabih) {
   assert(corpusByKey.has(key), `Expanded audit references unknown verse ${key}.`);
 }
 
-const istiwaOverThroneKeys = ['7:54', '10:3', '13:2', '20:5', '25:59', '32:4', '57:4'];
+const istiwaOverThroneKeys = [
+  '7:54',
+  '10:3',
+  '13:2',
+  '20:5',
+  '25:59',
+  '32:4',
+  '57:4',
+];
 for (const key of istiwaOverThroneKeys) {
   const meaning = overrideByKey.get(key)?.englishMeaning ?? '';
   assert(
