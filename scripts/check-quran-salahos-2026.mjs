@@ -305,3 +305,4 @@ assert(
 console.log(
   `SalahOS 2026 Qur’an contract passed: ${String(requiredMutashabih.length)} policy-triggered Mutashabih verses + ${String(requiredFoundations.length)} foundations, all with explicit overrides; Uthmani/Hafs/Medina Arabic and RTL safeguards intact.`,
 );
+// temporary formatter trigger
