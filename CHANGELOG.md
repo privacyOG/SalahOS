@@ -21,7 +21,7 @@ All notable SalahOS changes are recorded here.
 - Keep packaged English Qur'an identity explicit as M. M. Pickthall (1930), with Arabic/English/commentary language-direction separation and canonical-content parity checks.
 - Reorganise Knowledge into distinct Qur'an, Hadith and Fiqh & questions scopes with scoped counts, compact disclosure and Companion narrator metadata.
 - Add Muhkam/Mutashabih editorial policy and verse-review register infrastructure based on the supplied project guide; whole-corpus named scholarly sign-off remains an external release gate and is not inferred from automation.
-- Reconcile the Ashʿarī–Māturīdī tanzīh audit to 124 maintained translation-risk verses, including the required ru’yah pair 6:103 and 75:23, give every trigger explicit SalahOS 2026 wording, populate a 128-row pending review register (124 triggers + four foundations), and fail release refs closed until independent qualified scholarly review is approved.
+- Reconcile the Ashʿarī–Māturīdī tanzīh audit to 126 maintained translation-risk verses, including the required ru’yah pair 6:103 and 75:23, give every trigger explicit SalahOS 2026 wording, populate a 130-row pending review register (126 triggers + four foundations), and fail release refs closed until independent qualified scholarly review is approved.
 
 #### Mosques, Qiblah and Settings
 
