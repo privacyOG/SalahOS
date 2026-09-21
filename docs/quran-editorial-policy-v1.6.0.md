@@ -45,7 +45,7 @@ The original V1.6.0 seed set remains historically important, but `src/data/quran
 
 The supplied guide itself includes examples such as 20:5 and 35:10 as Mutashabih passages, explains the Salaf and Khalaf methodologies as valid approaches, and explicitly rejects physical/spatial implications. Other examples in the guide include 28:88, 68:42, 66:12, 38:75 and 24:35. Each is reviewed in context rather than by a universal lexical substitution.
 
-The maintained inventory also covers parallel constructions elsewhere in the Qur’an—for example all occurrences of *istawā ʿalā al-ʿArsh* in the pinned corpus, divine wajh/yad/ʿayn language, maʿiyyah, fawq/spatial wording, coming/movement expressions, rūḥ attribution and reciprocal verbs whose created-human connotation would be unbefitting if transferred literally to Allah. New triggers may be added when discovered; shrinking the inventory requires explicit editorial review.
+The maintained inventory also covers parallel constructions elsewhere in the Qur’an—for example all occurrences of _istawā ʿalā al-ʿArsh_ in the pinned corpus, divine wajh/yad/ʿayn language, maʿiyyah, fawq/spatial wording, coming/movement expressions, rūḥ attribution and reciprocal verbs whose created-human connotation would be unbefitting if transferred literally to Allah. New triggers may be added when discovered; shrinking the inventory requires explicit editorial review.
 
 ## Full-corpus release gate
 
