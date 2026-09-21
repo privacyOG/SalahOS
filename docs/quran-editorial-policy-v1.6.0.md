@@ -49,6 +49,6 @@ Automated work may populate proposed editorial data, but it must keep `reviewer:
 
 ## Full-corpus release gate
 
-Software validation still verifies all 114 surahs / 6,236 ayat, content identity, Arabic provenance and the 126-trigger parity contract. The prior project-owner whole-corpus attestation is retained as release/editorial provenance, not independent scholarly approval.
+Software validation still verifies all 114 surahs / 6,236 ayat, content identity, Arabic provenance and the 131-trigger parity contract. The prior project-owner whole-corpus attestation is retained as release/editorial provenance, not independent scholarly approval.
 
 A release ref must fail closed until a named qualified scholar has approved the required whole-corpus scholarly review. Physical/software integrity checks and project-owner attestation cannot substitute for that approval.
