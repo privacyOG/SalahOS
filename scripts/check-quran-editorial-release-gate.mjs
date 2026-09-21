@@ -159,23 +159,23 @@ if (!isReleaseRef()) {
 
 assert(
   signoff?.status === 'approved',
-  'Release blocked: whole-corpus scholarly sign-off is not approved.',
+  'Release blocked: whole-corpus project-owner editorial/release attestation is not approved.',
 );
 assert(
   isNonEmptyString(signoff.reviewerName),
-  'Release blocked: scholarly sign-off has no named reviewer.',
+  'Release blocked: owner editorial/release attestation has no named reviewer.',
 );
 assert(
   isNonEmptyString(signoff.qualification),
-  'Release blocked: scholarly sign-off has no qualification record.',
+  'Release blocked: owner editorial/release attestation has no qualification/context record.',
 );
 assert(
   signoff.scope === 'whole-corpus-6236',
-  'Release blocked: scholarly sign-off does not cover all 6,236 ayat.',
+  'Release blocked: owner editorial/release attestation does not cover all 6,236 ayat.',
 );
 assert(
   isNonEmptyString(signoff.reviewedAt),
-  'Release blocked: scholarly sign-off has no review date.',
+  'Release blocked: owner editorial/release attestation has no review date.',
 );
 
 console.log(
