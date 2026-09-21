@@ -56,7 +56,20 @@ jobs:
         run: |
           npm run quran:salahos-2026:check
           VERSION=$(node -p "require('./package.json').version")
-          GITHUB_REF_TYPE=branch GITHUB_REF_NAME="release/v${VERSION}" npm run quran:editorial:gate
+          SIGNOFF_STATUS=$(node -p "require('./src/data/quran-scholarly-signoff.json').status")
+          if [ "$SIGNOFF_STATUS" = "approved" ]; then
+            GITHUB_REF_TYPE=branch GITHUB_REF_NAME="release/v${VERSION}" npm run quran:editorial:gate
+          else
+            set +e
+            GITHUB_REF_TYPE=branch GITHUB_REF_NAME="release/v${VERSION}" npm run quran:editorial:gate
+            GATE_STATUS=$?
+            set -e
+            if [ "$GATE_STATUS" -eq 0 ]; then
+              echo "Editorial release gate unexpectedly passed while scholarly sign-off is $SIGNOFF_STATUS." >&2
+              exit 1
+            fi
+            echo "Editorial release gate correctly blocks release while scholarly sign-off is $SIGNOFF_STATUS."
+          fi
       - name: Islamic Knowledge source governance
         run: npm run knowledge:content:check
       - name: Australian mosque directory reproducibility
