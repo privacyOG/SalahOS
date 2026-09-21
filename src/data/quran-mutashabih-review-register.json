@@ -5,12 +5,7 @@
     "title": "The Ayahs of the Qur’an – Muhkam and Mutashabih",
     "status": "supplied-by-project-owner-current-audit"
   },
-  "requiredFoundations": [
-    "3:7",
-    "42:11",
-    "112:4",
-    "19:65"
-  ],
+  "requiredFoundations": ["3:7", "42:11", "112:4", "19:65"],
   "requiredSeedVerses": [
     "2:15",
     "2:115",
