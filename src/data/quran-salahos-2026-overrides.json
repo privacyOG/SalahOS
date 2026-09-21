@@ -681,12 +681,12 @@
     {
       "verseKey": "20:39",
       "classification": "mutashabih",
-      "treatment": "tafwid-and-contextual-tawil",
-      "englishMeaning": "Saying: Throw him into the ark, and throw it into the river, then the river shall throw it on to the bank, and there an enemy to Me and an enemy to him shall take him. And I endued thee with love from Me that thou mightest be trained according to My will,",
-      "editorialNote": "Eye-language is rendered by care, protection, supervision or will according to context so the English does not attribute an organ or bodily eye to Allah.",
-      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or a created modality.",
-      "khalafReading": "Contextual ta’wil: the expression indicates Allah’s care, protection, supervision or will, not a bodily eye or organ.",
-      "guideSpecificMeaning": null
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Saying: Place him in the chest, then cast it into the river, and the river will cast it onto the bank, where an enemy of Mine and an enemy of his will take him. I bestowed love upon you from Me so that you would be brought up under My care.",
+      "editorialNote": "The project Ashari-Maturidi guide flags 20:39 as an 'ayn passage: a literal 'Eye' rendering is rejected, while care/watchful protection is acceptable. SalahOS therefore renders the expression as being brought up under Allah's care.",
+      "salafReading": "Affirm the revealed wording with a meaning befitting Allah while denying an eye, organ, limb, body, direction, place, or created modality.",
+      "khalafReading": "Contextual ta'wil: 'ala 'ayni is rendered as under My care and watchful protection, not as a bodily eye.",
+      "guideSpecificMeaning": "Under Allah's care and watchful protection."
     },
     {
       "verseKey": "20:46",
@@ -901,11 +901,11 @@
     {
       "verseKey": "36:71",
       "classification": "mutashabih",
-      "treatment": "tafwid-and-contextual-tawil",
-      "englishMeaning": "Have they not seen how We have created for them of Our handiwork the cattle, so that they are their owners,",
-      "editorialNote": "The wording is reviewed so that yad-related expressions denote power, disposal, care, generosity, support or authority according to context, without attributing limbs or bodily hands to Allah.",
-      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or a created modality.",
-      "khalafReading": "Contextual ta’wil assigns a non-bodily meaning appropriate to the verse—such as power, disposal, care, bounty, support or authority—while the Salaf reading maintains tanzih.",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Have they not seen that We created for them, by Our power, livestock of which they are owners?",
+      "editorialNote": "The Arabic expression ma 'amilat aydina is rendered through divine power and creation, not bodily hands or created instruments.",
+      "salafReading": "Affirm the revealed expression with a meaning befitting Allah while denying limbs, hands, bodily parts, composition, or created instruments.",
+      "khalafReading": "Contextual ta'wil: aydina here is rendered through Allah's power and creative act, not bodily hands.",
       "guideSpecificMeaning": null
     },
     {
