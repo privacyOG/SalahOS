@@ -34,12 +34,14 @@ This tracker records the V1.6.0 release disposition. Automated checks are eviden
 
 ## 4. Qur’an editorial policy
 
+> **2026-09-21 correction note:** the earlier V1.6.0 whole-corpus entry was a project-owner release attestation, not independent qualified scholarly approval. The owner subsequently identified additional Muhkam/Mutashabih translation issues; the expanded 85-verse translation-risk audit in `src/data/quran-mutashabih-full-audit.json` supersedes the narrower seed-only disposition. Independent qualified scholarly review remains pending.
+
 - [x] Q01 Supplied Muhkam/Mutashabih guide encoded with Qur’an 3:7 methodology and tanzīh foundations.
 - [x] Q02 Verse-specific tafwīd and contextual taʾwīl supported without universal lexical replacement.
-- [x] Q03 Whole 114-surah / 6,236-ayah corpus approved for V1.6.0 by explicit project-owner whole-corpus sign-off on 2026-09-09.
+- [x] Q03 Whole 114-surah / 6,236-ayah corpus received an explicit project-owner release attestation on 2026-09-09; this is not independent qualified scholarly approval and was reopened for expanded Mutashabih correction on 2026-09-21.
 - [x] Q04 Verse register schema records key, Arabic expression, context, English wording, treatment, sources, reviewer, status and disagreements.
 - [x] Q05 SalahOS 2026 is the approved English-content identity across reader/search/excerpts/copy-share paths, with Pickthall retained as the transparent baseline/reference.
-- [x] Q06 Required guide seeds are present with dedicated SalahOS 2026 treatments; whole-corpus sign-off completes the release disposition without global replacement.
+- [x] Q06 Required guide seeds are present with dedicated SalahOS 2026 treatments; the 2026-09-21 expanded audit adds corpus-wide divine-attribute translation-risk coverage without global lexical replacement.
 - [x] Q07 Translation identity is preserved and the whole-corpus release approval is recorded in `src/data/quran-scholarly-signoff.json`.
 - [x] Q08 Full Uthmani corpus/source/reading/edition/licence/hash contract and separate normalized search are verified.
 - [ ] Q09 Offline font and automated glyph/bundle checks pass; representative physical-device rendering/copy/share/export remains tracked under UI09.
