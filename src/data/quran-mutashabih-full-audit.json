@@ -11,12 +11,7 @@
     "overrideVerseCount": 143,
     "baselineSafeVerseCount": 0
   },
-  "governingFoundations": [
-    "3:7",
-    "42:11",
-    "112:4",
-    "19:65"
-  ],
+  "governingFoundations": ["3:7", "42:11", "112:4", "19:65"],
   "triggerFamilies": [
     "istiwaOverThrone",
     "divineWajh",
