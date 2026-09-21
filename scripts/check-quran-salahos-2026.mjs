@@ -9,16 +9,17 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
-const [manifest, overrides, register, triggers, reader, preferences, css, surahIndex] = await Promise.all([
-  readJson('src/data/quran-offline-manifest.json'),
-  readJson('src/data/quran-salahos-2026-overrides.json'),
-  readJson('src/data/quran-mutashabih-review-register.json'),
-  readJson('src/data/quran-mutashabih-policy-triggers.json'),
-  readText('src/ui/QuranOfflineReader.tsx'),
-  readText('src/platform/quranReadingPreferences.ts'),
-  readText('src/quran-offline-reader.css'),
-  readText('src/ui/QuranSurahIndex.tsx'),
-]);
+const [manifest, overrides, register, triggers, reader, preferences, css, surahIndex] =
+  await Promise.all([
+    readJson('src/data/quran-offline-manifest.json'),
+    readJson('src/data/quran-salahos-2026-overrides.json'),
+    readJson('src/data/quran-mutashabih-review-register.json'),
+    readJson('src/data/quran-mutashabih-policy-triggers.json'),
+    readText('src/ui/QuranOfflineReader.tsx'),
+    readText('src/platform/quranReadingPreferences.ts'),
+    readText('src/quran-offline-reader.css'),
+    readText('src/ui/QuranSurahIndex.tsx'),
+  ]);
 
 assert(overrides.translationId === 'salahos-2026', 'SalahOS 2026 translation ID changed.');
 assert(
@@ -41,16 +42,19 @@ assert(
 );
 
 const requiredFoundations = [...new Set(triggers.foundations ?? [])];
-const requiredMutashabih = [
-  ...new Set(Object.values(triggers.groups ?? {}).flat()),
-].sort((a, b) => {
-  const [aSurah, aAyah] = a.split(':').map(Number);
-  const [bSurah, bAyah] = b.split(':').map(Number);
-  return aSurah - bSurah || aAyah - bAyah;
-});
+const requiredMutashabih = [...new Set(Object.values(triggers.groups ?? {}).flat())].sort(
+  (a, b) => {
+    const [aSurah, aAyah] = a.split(':').map(Number);
+    const [bSurah, bAyah] = b.split(':').map(Number);
+    return aSurah - bSurah || aAyah - bAyah;
+  },
+);
 
 assert(requiredFoundations.length >= 4, 'Muhkam/tanzih foundations are incomplete.');
-assert(requiredMutashabih.length >= 80, 'Comprehensive Mutashabih trigger inventory unexpectedly shrank.');
+assert(
+  requiredMutashabih.length >= 80,
+  'Comprehensive Mutashabih trigger inventory unexpectedly shrank.',
+);
 
 for (const key of requiredFoundations) {
   const entry = overrides.entries.find((candidate) => candidate.verseKey === key);
@@ -95,7 +99,9 @@ for (const key of requiredMutashabih) {
   );
 }
 
-const meaningByKey = new Map(overrides.entries.map((entry) => [entry.verseKey, entry.englishMeaning]));
+const meaningByKey = new Map(
+  overrides.entries.map((entry) => [entry.verseKey, entry.englishMeaning]),
+);
 const forbiddenLiteralPhrases = new Map([
   ['7:54', ['mounted He the Throne', 'established Himself upon the Throne']],
   ['10:3', ['mounted He the Throne', 'established Himself upon the Throne']],
