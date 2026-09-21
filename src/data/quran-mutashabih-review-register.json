@@ -7,9 +7,9 @@
   },
   "requiredFoundations": [
     "3:7",
+    "19:65",
     "42:11",
-    "112:4",
-    "19:65"
+    "112:4"
   ],
   "requiredSeedVerses": [
     "2:15",
@@ -17,6 +17,7 @@
     "2:29",
     "2:115",
     "2:125",
+    "2:138",
     "2:153",
     "2:186",
     "2:194",
@@ -135,6 +136,7 @@
     "67:17",
     "68:42",
     "68:45",
+    "69:45",
     "70:4",
     "72:28",
     "75:23",
@@ -218,6 +220,22 @@
       "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide: The Ayahs of the Qur’an – Muhkam and Mutashabih",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "2:138",
+      "arabicExpression": "صِبْغَةَ ٱللَّهِ وَمَنْ أَحْسَنُ مِنَ ٱللَّهِ صِبْغَةً وَنَحْنُ لَهُۥ عَٰبِدُونَ",
+      "context": "Policy trigger groups: divineColorIdiom. The supplied guide explicitly rejects attributing created sensuous qualities such as colour to Allah. The Arabic sibghat Allah is therefore rendered contextually as the religion/way of faith ordained by Allah, not a physical colour.",
+      "originalEnglish": "(We take our) colour from Allah, and who is better than Allah at colouring. We are His worshippers.",
+      "proposedMeaning": "Take on the religion ordained by Allah—and who can ordain a better way of faith than Allah? We worship Him alone.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: created sensuous qualities such as colour are not attributed to Allah",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
         "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
       ],
@@ -2165,6 +2183,22 @@
       "disagreements": []
     },
     {
+      "verseKey": "69:45",
+      "arabicExpression": "لَأَخَذْنَا مِنْهُ بِٱلْيَمِينِ",
+      "context": "Policy trigger groups: qabdAndYamin. Pickthall's 'taken him by the right hand' can suggest a bodily right hand when read of Allah. The proposed English renders the threat through irresistible power/seizure in accordance with tanzih.",
+      "originalEnglish": "We assuredly had taken him by the right hand",
+      "proposedMeaning": "We would certainly have seized him with irresistible power.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: bodily limbs and sensuous attributes are not attributed to Allah",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
       "verseKey": "70:4",
       "arabicExpression": "تَعْرُجُ ٱلْمَلَٰٓئِكَةُ وَٱلرُّوحُ إِلَيْهِ فِى يَوْمٍ كَانَ مِقْدَارُهُۥ خَمْسِينَ أَلْفَ سَنَةٍ",
       "context": "Policy trigger groups: ascentAndDirectionLanguage. The ascent is rendered as occurring by Allah's command, without implying that Allah occupies a place.",
@@ -2314,9 +2348,9 @@
   ],
   "coverageScope": {
     "corpusAyat": 6236,
-    "translationRiskVerses": 131,
+    "translationRiskVerses": 133,
     "governingFoundations": 4,
-    "explicitOverrides": 131,
+    "explicitOverrides": 133,
     "qualifiedScholarReview": "pending"
   }
 }
