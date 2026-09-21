@@ -285,3 +285,5 @@ console.log(
 );
 
 // quran-format-helper-trigger
+
+// temp-prettier-artifact-probe
