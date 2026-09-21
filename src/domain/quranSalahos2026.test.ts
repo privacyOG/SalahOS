@@ -31,8 +31,8 @@ const requiredMutashabihSeeds = [
 
 const policyTriggeredVerseKeys = [...new Set(Object.values(triggers.groups).flat())].sort(
   (a, b) => {
-    const [aSurah, aAyah] = a.split(':').map(Number);
-    const [bSurah, bAyah] = b.split(':').map(Number);
+    const [aSurah = 0, aAyah = 0] = a.split(':').map(Number);
+    const [bSurah = 0, bAyah = 0] = b.split(':').map(Number);
     return aSurah - bSurah || aAyah - bAyah;
   },
 );
