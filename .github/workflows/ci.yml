@@ -22,14 +22,6 @@ jobs:
           cache: npm
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
-      - name: Temporary Quran formatter recovery
-        run: |
-          npx prettier --write scripts/check-quran-salahos-2026.mjs
-          echo "BEGIN_QURAN_FORMATTED_BASE64"
-          base64 -w0 scripts/check-quran-salahos-2026.mjs
-          echo
-          echo "END_QURAN_FORMATTED_BASE64"
-          exit 1
       - name: Format check
         run: npm run format:check
       - name: Lint
