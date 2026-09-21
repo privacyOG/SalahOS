@@ -59,8 +59,8 @@ const requiredMutashabih = [...new Set(Object.values(triggers.groups ?? {}).flat
 
 assert(requiredFoundations.length === 4, 'Muhkam/tanzih foundation count changed.');
 assert(
-  requiredMutashabih.length === 126,
-  `Comprehensive Mutashabih trigger inventory must contain 126 verses, found ${String(requiredMutashabih.length)}.`,
+  requiredMutashabih.length === 131,
+  `Comprehensive Mutashabih trigger inventory must contain 131 verses, found ${String(requiredMutashabih.length)}.`,
 );
 
 assert(
@@ -68,8 +68,8 @@ assert(
   'Expanded Muhkam/Mutashabih audit status changed unexpectedly.',
 );
 assert(
-  fullAudit?.scope?.screenedVerseCount === 126 &&
-    fullAudit?.scope?.overrideVerseCount === 126 &&
+  fullAudit?.scope?.screenedVerseCount === 131 &&
+    fullAudit?.scope?.overrideVerseCount === 131 &&
     fullAudit?.scope?.baselineSafeVerseCount === 0,
   'Expanded Muhkam/Mutashabih audit coverage changed unexpectedly.',
 );
@@ -135,8 +135,8 @@ for (const key of requiredMutashabih) {
 }
 
 assert(
-  register.entries.length === 130,
-  'Editorial register must contain 126 triggers + 4 foundations.',
+  register.entries.length === 135,
+  'Editorial register must contain 131 triggers + 4 foundations.',
 );
 assert(
   register.entries.every(
@@ -154,15 +154,7 @@ for (const key of requiredMutashabih) {
   assert(corpusByKey.has(key), `Expanded audit references unknown verse ${key}.`);
 }
 
-const istiwaOverThroneKeys = [
-  '7:54',
-  '10:3',
-  '13:2',
-  '20:5',
-  '25:59',
-  '32:4',
-  '57:4',
-];
+const istiwaOverThroneKeys = ['7:54', '10:3', '13:2', '20:5', '25:59', '32:4', '57:4'];
 for (const key of istiwaOverThroneKeys) {
   const meaning = overrideByKey.get(key)?.englishMeaning ?? '';
   assert(
