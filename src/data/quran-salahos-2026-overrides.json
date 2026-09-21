@@ -7,35 +7,386 @@
   "sourceGuide": {
     "title": "The Ayahs of the Qur’an – Muhkam and Mutashabih",
     "suppliedBy": "project-owner",
-    "method": "Ashari Sunni muhkam/mutashabih guidance"
+    "method": "Ashari-Maturidi Sunni muhkam/mutashabih guidance"
   },
   "editorialPrinciples": [
     "Muhkam verses govern the interpretation of mutashabih wording.",
-    "No English wording may attribute bodily, spatial, directional, created or sensuous characteristics to Allah.",
+    "No English wording may attribute bodily, spatial, directional, created, sensuous or deficient characteristics to Allah.",
     "Salaf-style tafwid with tanzih and context-specific Khalaf-style tawil are both supported where the supplied guide supports them.",
     "A verse-specific tawil must not be turned into a universal lexical substitution rule.",
-    "The whole 6,236-ayah corpus must be screened and signed off by a named qualified scholar before release publication."
+    "Corpus-wide screening must cover the guide's anthropomorphic/spatial trigger families, including istiwa, yad, wajh, ayn, saq, nur, coming/movement, ma'iyyah, fawqiyyah, ascent, heaven/place wording, ruh attribution, honored possessives, proximity, encompassing language and impossible deficiencies such as forgetfulness.",
+    "Qualified scholarly review is required before a whole-corpus religious approval claim."
   ],
   "entries": [
     {
-      "verseKey": "42:11",
-      "classification": "muhkam-foundation",
-      "treatment": "muhkam-foundation",
-      "englishMeaning": "He is the Creator of the heavens and the earth. He made for you mates from yourselves and pairs among the livestock, multiplying you thereby. Absolutely nothing resembles Him. He is the All-Hearing, the All-Seeing.",
-      "editorialNote": "The supplied guide treats 'Absolutely there is nothing like Him' as a governing muhkam foundation. All mutashabih renderings are checked against this principle.",
-      "salafReading": null,
-      "khalafReading": null,
-      "guideSpecificMeaning": "Absolutely there is nothing like Him."
+      "verseKey": "2:29",
+      "classification": "mutashabih",
+      "treatment": "tafwid-and-contextual-tawil",
+      "englishMeaning": "He is the One Who created for you all that is on earth; then He directed His will to the heaven and fashioned it into seven heavens. He knows all things.",
+      "editorialNote": "Istiwa ila here is rendered without movement, place or direction; the wording expresses the divine ordering of the heavens.",
+      "salafReading": "Affirm the revealed istiwa with a meaning befitting Allah while denying sitting, place, direction, movement, bodily form or any created modality.",
+      "khalafReading": "Where context permits, istiwa is explained non-spatially through dominion/subjugation or directing creation; it is never physical establishment or movement.",
+      "guideSpecificMeaning": null
     },
     {
-      "verseKey": "112:4",
-      "classification": "muhkam-foundation",
-      "treatment": "muhkam-foundation",
-      "englishMeaning": "And there is absolutely nothing equal or comparable to Him.",
-      "editorialNote": "A governing muhkam foundation in the supplied guide: nothing is equal to Allah.",
-      "salafReading": null,
-      "khalafReading": null,
-      "guideSpecificMeaning": "There is nothing which is equal to Him."
+      "verseKey": "2:115",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "To Allah belong the east and the west; wherever you turn, there is the qiblah appointed by Allah. Surely Allah is All-Encompassing, All-Knowing.",
+      "editorialNote": "The supplied guide reports Mujahid's explanation of wajh in this verse as qiblah, in the context of voluntary prayer while travelling. SalahOS does not render the expression as a bodily face of Allah.",
+      "salafReading": "The verse is understood without attributing a face, direction or location to Allah.",
+      "khalafReading": "Mujahid is cited in the supplied guide as explaining wajh here as qiblah, the direction of prayer in its context.",
+      "guideSpecificMeaning": "Qiblah, the direction of prayers during voluntary prayer while travelling."
+    },
+    {
+      "verseKey": "2:125",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "And when We made the House, the Ka'bah, a house greatly honoured by Allah, a place of return for people and a place of safety: take the station of Ibrahim as a place of prayer. We commanded Ibrahim and Ismail: Purify My House for those who perform tawaf, remain there in worship, bow and prostrate.",
+      "editorialNote": "The supplied guide explicitly rejects reading 'My House' as Allah's residence. It gives the meaning that the Ka'bah is a house of great honour to Allah.",
+      "salafReading": "The possessive attribution is understood as one of honour and not residence, containment or place for Allah.",
+      "khalafReading": "The guide gives the specific meaning: the Ka'bah is a house of great honour to Allah.",
+      "guideSpecificMeaning": "The Ka'bah is a house of a great honor to Allah."
+    },
+    {
+      "verseKey": "2:153",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "O believers, seek help through patience and prayer. Surely Allah supports the steadfast.",
+      "editorialNote": "Ma'iyyah is rendered as support, not physical accompaniment.",
+      "salafReading": "Affirm divine ma'iyyah with a meaning befitting Allah while denying physical accompaniment, indwelling, proximity by distance or co-location.",
+      "khalafReading": "Ma'iyyah is read by context as knowledge, support, aid, protection or witness, never physical presence in a place.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "2:186",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "When My servants ask you about Me, I am near to them by My knowledge and response: I answer the call of the caller when he calls upon Me. So let them respond to Me and believe in Me so that they may be rightly guided.",
+      "editorialNote": "Divine nearness is rendered non-spatially through knowledge and response.",
+      "salafReading": "Affirm divine nearness with a meaning befitting Allah while denying distance, physical proximity, contact or location.",
+      "khalafReading": "Nearness is read contextually through knowledge, response, power, care or the nearness of appointed angels, not spatial distance.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "2:194",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "The sacred month is for the sacred month, and violations are subject to just retaliation. Whoever attacks you, respond in proportion to the attack against you. Be mindful of Allah and know that Allah supports those who are mindful of Him.",
+      "editorialNote": "Ma'iyyah is rendered as support.",
+      "salafReading": "Affirm divine ma'iyyah with a meaning befitting Allah while denying physical accompaniment, indwelling, proximity by distance or co-location.",
+      "khalafReading": "Ma'iyyah is read by context as knowledge, support, aid, protection or witness, never physical presence in a place.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "2:210",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Are they waiting for anything except that Allah's judgment should come to them in canopies of cloud, with the angels, and the matter be decided? To Allah all matters return.",
+      "editorialNote": "The guide rejects movement of Allah from place to place; the coming is rendered as the coming of divine judgment.",
+      "salafReading": "Affirm the revelation while denying movement, transition, arrival from one place to another, place and direction for Allah.",
+      "khalafReading": "Coming or intervening language is read contextually as the coming of Allah's command, judgment, decree, power or effect, not bodily movement.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "2:249",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "When Talut set out with the army, he said: Allah will test you with a river. Whoever drinks from it is not of me, while whoever does not taste it is of me, except one who takes a handful. Yet they drank from it except a few. When he and the believers with him crossed it, they said: We have no strength today against Jalut and his forces. Those certain of meeting Allah said: How many a small group has overcome a large group by Allah's permission. Allah supports the steadfast.",
+      "editorialNote": "The concluding ma'iyyah is rendered as support.",
+      "salafReading": "Affirm divine ma'iyyah with a meaning befitting Allah while denying physical accompaniment, indwelling, proximity by distance or co-location.",
+      "khalafReading": "Ma'iyyah is read by context as knowledge, support, aid, protection or witness, never physical presence in a place.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "2:272",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Their guidance is not your responsibility; Allah guides whom He wills. Whatever good you spend is for your own benefit, when you spend only seeking Allah's acceptance. Whatever good you spend will be repaid to you in full, and you will not be wronged.",
+      "editorialNote": "Wajh Allah in the devotional idiom is rendered without a bodily face.",
+      "salafReading": "Affirm the revealed wajh wording with a meaning befitting Allah while denying a bodily face, countenance, direction or created form.",
+      "khalafReading": "Wajh is read contextually through meanings such as Allah Himself, His acceptance, His Dominion or the qiblah, as the supplied guide and verse context permit.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "3:26",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Say: O Allah, Owner of Sovereignty, You give sovereignty to whom You will and take sovereignty from whom You will; You honor whom You will and humble whom You will. All good is in Your power and disposal. Surely You are able to do all things.",
+      "editorialNote": "Bi-yadika is rendered as power and disposal, not a bodily hand.",
+      "salafReading": "Affirm the revealed expression with a meaning befitting Allah while denying limbs, hands, parts, bodily form or created instruments.",
+      "khalafReading": "Yad and related expressions are read contextually as power, authority, generosity, care or disposal according to the verse, not as bodily hands.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "3:73",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Say: The true guidance is Allah's guidance. Say: All bounty is under Allah's disposal; He grants it to whom He wills. Allah is All-Encompassing, All-Knowing.",
+      "editorialNote": "The phrase placing bounty 'in Allah's hand' is rendered as divine disposal and generosity.",
+      "salafReading": "Affirm the revealed expression with a meaning befitting Allah while denying limbs, hands, parts, bodily form or created instruments.",
+      "khalafReading": "Yad and related expressions are read contextually as power, authority, generosity, care or disposal according to the verse, not as bodily hands.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "3:81",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "When Allah took the covenant of the prophets, He said: Whatever Scripture and wisdom I give you, then a messenger comes confirming what is with you, you must believe in him and support him. He said: Do you affirm and accept My covenant in this? They said: We affirm. He said: Then bear witness, and I bear witness to it as well.",
+      "editorialNote": "The divine 'with you among the witnesses' is rendered without spatial co-presence.",
+      "salafReading": "Affirm divine ma'iyyah with a meaning befitting Allah while denying physical accompaniment, indwelling, proximity by distance or co-location.",
+      "khalafReading": "Ma'iyyah is read by context as knowledge, support, aid, protection or witness, never physical presence in a place.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "4:108",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "They hide from people but cannot hide from Allah. He knows them when they hold secret counsel by night about words that displease Him. Allah's knowledge encompasses all that they do.",
+      "editorialNote": "Ma'iyyah here is rendered as knowledge, consistent with the verse's opening and closing.",
+      "salafReading": "Affirm divine ma'iyyah with a meaning befitting Allah while denying physical accompaniment, indwelling, proximity by distance or co-location.",
+      "khalafReading": "Ma'iyyah is read by context as knowledge, support, aid, protection or witness, never physical presence in a place.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "4:126",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "To Allah belongs whatever is in the heavens and whatever is on earth. Allah's knowledge and power encompass all things.",
+      "editorialNote": "Encompassing is rendered through knowledge and power, not physical surrounding.",
+      "salafReading": "Affirm the wording while denying bodily surrounding, enclosure, spatial extension or location.",
+      "khalafReading": "Allah's encompassing is understood through His knowledge and power, not physical enclosure.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "5:64",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "The Jews said: Allah's generosity is constrained. Their own hands are constrained, and they are condemned for what they said. Rather, His bounty is abundant and unrestricted; He gives as He wills. What has been revealed to you from your Lord will increase many of them in rebellion and disbelief. We cast enmity and hatred among them until the Day of Resurrection. Whenever they kindle a fire for war, Allah extinguishes it. They strive to spread corruption in the land, and Allah does not love corrupters.",
+      "editorialNote": "Yad and yadahu are rendered through generosity and giving in the immediate context, not bodily hands.",
+      "salafReading": "Affirm the revealed expression with a meaning befitting Allah while denying limbs, hands, parts, bodily form or created instruments.",
+      "khalafReading": "Yad and related expressions are read contextually as power, authority, generosity, care or disposal according to the verse, not as bodily hands.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "6:52",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Do not drive away those who call upon their Lord morning and evening, seeking His acceptance. You are not accountable for them, nor are they accountable for you, such that you should drive them away and become one of the wrongdoers.",
+      "editorialNote": "Wajhahu is rendered non-corporeally as seeking divine acceptance.",
+      "salafReading": "Affirm the revealed wajh wording with a meaning befitting Allah while denying a bodily face, countenance, direction or created form.",
+      "khalafReading": "Wajh is read contextually through meanings such as Allah Himself, His acceptance, His Dominion or the qiblah, as the supplied guide and verse context permit.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "6:61",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "He is the One to Whom all His servants are subjugated. He sends guardians over you until, when death comes to one of you, Our messengers take the soul without neglecting their duty.",
+      "editorialNote": "The supplied guide explains fawqiyyah here as aboveness of subjugation: all are subjugated to Allah, not that Allah occupies a physical direction above creation.",
+      "salafReading": "Affirm Allah's supremacy without assigning place, physical height or direction.",
+      "khalafReading": "The guide gives the specific meaning of fawqiyyah as subjugation: all are subjugated to Allah.",
+      "guideSpecificMeaning": "All are subjugated to Allah."
+    },
+    {
+      "verseKey": "6:158",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Do they wait for anything but the angels to come, or for the decisive command of your Lord to come, or for some of your Lord's signs to come? On the day some of your Lord's signs come, faith will not benefit a soul that did not believe before or earn good through its faith. Say: Wait; we too are waiting.",
+      "editorialNote": "The phrase 'your Lord should come' is rendered through the coming of His decisive command, avoiding movement and place.",
+      "salafReading": "Affirm the revelation while denying movement, transition, arrival from one place to another, place and direction for Allah.",
+      "khalafReading": "Coming or intervening language is read contextually as the coming of Allah's command, judgment, decree, power or effect, not bodily movement.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "7:51",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "They took their religion as amusement and play and were deceived by worldly life. Today We abandon them to the consequence of their deeds, just as they neglected the meeting of this Day and denied Our signs.",
+      "editorialNote": "Nisyan is rendered as abandonment in recompense, not literal forgetfulness, which the Qur'an negates of Allah at 19:64.",
+      "salafReading": "Affirm the revealed recompense wording while denying forgetfulness, ignorance or deficiency for Allah.",
+      "khalafReading": "Nisyan attributed in recompense is read as abandoning them to punishment or withholding mercy after they neglected His commands, not literal forgetfulness.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "7:54",
+      "classification": "mutashabih",
+      "treatment": "tafwid-and-contextual-tawil",
+      "englishMeaning": "Indeed your Lord is Allah, Who created the heavens and the earth in six days; then He has an istiwa over the Throne that befits Him, without sitting, place, direction, movement or bodily modality. He covers the night with the day, each pursuing the other swiftly, and the sun, moon and stars are subjected by His command. Surely creation and command belong to Him. Blessed is Allah, Lord of the worlds.",
+      "editorialNote": "The Pickthall baseline says 'mounted He the Throne'; this is replaced because the supplied guide explicitly rejects sitting, mounting, place and movement for Allah.",
+      "salafReading": "Affirm the revealed istiwa with a meaning befitting Allah while denying sitting, place, direction, movement, bodily form or any created modality.",
+      "khalafReading": "Where context permits, istiwa is explained non-spatially through dominion/subjugation or directing creation; it is never physical establishment or movement.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "8:19",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "If you sought a decision, the decision has now come to you. If you stop, it will be better for you; but if you return, We will return, and your forces will not benefit you however numerous they are. Know that Allah supports the believers.",
+      "editorialNote": "Ma'iyyah is rendered as support.",
+      "salafReading": "Affirm divine ma'iyyah with a meaning befitting Allah while denying physical accompaniment, indwelling, proximity by distance or co-location.",
+      "khalafReading": "Ma'iyyah is read by context as knowledge, support, aid, protection or witness, never physical presence in a place.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "8:24",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "O believers, obey Allah and the Messenger when he calls you to what gives you life, and know that Allah has full power over a person and his heart, and that to Him you will be gathered.",
+      "editorialNote": "Yahulu bayna is rendered through divine power and control, not bodily movement between a person and the heart.",
+      "salafReading": "Affirm the revelation while denying movement, transition, arrival from one place to another, place and direction for Allah.",
+      "khalafReading": "Coming or intervening language is read contextually as the coming of Allah's command, judgment, decree, power or effect, not bodily movement.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "8:46",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Obey Allah and His Messenger and do not dispute, lest you lose courage and your strength depart. Be steadfast; surely Allah supports the steadfast.",
+      "editorialNote": "Ma'iyyah is rendered as support.",
+      "salafReading": "Affirm divine ma'iyyah with a meaning befitting Allah while denying physical accompaniment, indwelling, proximity by distance or co-location.",
+      "khalafReading": "Ma'iyyah is read by context as knowledge, support, aid, protection or witness, never physical presence in a place.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "8:66",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Now Allah has lightened your burden, knowing there is weakness in you. If there are one hundred steadfast among you, they will overcome two hundred; and if there are one thousand, they will overcome two thousand by Allah's permission. Allah supports the steadfast.",
+      "editorialNote": "Ma'iyyah is rendered as support.",
+      "salafReading": "Affirm divine ma'iyyah with a meaning befitting Allah while denying physical accompaniment, indwelling, proximity by distance or co-location.",
+      "khalafReading": "Ma'iyyah is read by context as knowledge, support, aid, protection or witness, never physical presence in a place.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "9:36",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Indeed, the number of months with Allah is twelve in Allah's decree from the day He created the heavens and the earth; four are sacred. That is the upright religion. Do not wrong yourselves during them. Fight the polytheists collectively as they fight you collectively, and know that Allah supports those who are mindful of Him.",
+      "editorialNote": "Ma'iyyah is rendered as support.",
+      "salafReading": "Affirm divine ma'iyyah with a meaning befitting Allah while denying physical accompaniment, indwelling, proximity by distance or co-location.",
+      "khalafReading": "Ma'iyyah is read by context as knowledge, support, aid, protection or witness, never physical presence in a place.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "9:40",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "If you do not help him, Allah already helped him when the disbelievers drove him out, the second of two, when they were in the cave and he said to his companion: Do not grieve; Allah's support is with us. Then Allah sent His tranquility upon him, strengthened him with forces you could not see, and made the word of the disbelievers lowest, while Allah's word is supreme. Allah is Mighty, Wise.",
+      "editorialNote": "The cave statement is rendered as divine support, not co-location.",
+      "salafReading": "Affirm divine ma'iyyah with a meaning befitting Allah while denying physical accompaniment, indwelling, proximity by distance or co-location.",
+      "khalafReading": "Ma'iyyah is read by context as knowledge, support, aid, protection or witness, never physical presence in a place.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "9:67",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "The hypocritical men and women are alike: they command what is wrong, forbid what is right and withhold their spending. They neglected Allah, so He abandoned them to their consequences. Surely the hypocrites are the defiantly disobedient.",
+      "editorialNote": "Nisyan attributed to Allah is rendered as abandonment in recompense, not forgetfulness.",
+      "salafReading": "Affirm the revealed recompense wording while denying forgetfulness, ignorance or deficiency for Allah.",
+      "khalafReading": "Nisyan attributed in recompense is read as abandoning them to punishment or withholding mercy after they neglected His commands, not literal forgetfulness.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "9:123",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "O believers, fight those disbelievers nearest to you and let them find firmness in you; know that Allah supports those who are mindful of Him.",
+      "editorialNote": "Ma'iyyah is rendered as support.",
+      "salafReading": "Affirm divine ma'iyyah with a meaning befitting Allah while denying physical accompaniment, indwelling, proximity by distance or co-location.",
+      "khalafReading": "Ma'iyyah is read by context as knowledge, support, aid, protection or witness, never physical presence in a place.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "10:3",
+      "classification": "mutashabih",
+      "treatment": "tafwid-and-contextual-tawil",
+      "englishMeaning": "Indeed your Lord is Allah, Who created the heavens and the earth in six days; then He has an istiwa over the Throne that befits Him, without sitting, place, direction, movement or bodily modality, directing all affairs. No intercessor may act except with His permission. That is Allah, your Lord, so worship Him. Will you not take heed?",
+      "editorialNote": "The baseline 'established Himself upon the Throne' is replaced with a tanzih-safe rendering.",
+      "salafReading": "Affirm the revealed istiwa with a meaning befitting Allah while denying sitting, place, direction, movement, bodily form or any created modality.",
+      "khalafReading": "Where context permits, istiwa is explained non-spatially through dominion/subjugation or directing creation; it is never physical establishment or movement.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "11:37",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Build the Ark under Our protection and by Our revelation, and do not plead with Me for those who have done wrong; they will surely be drowned.",
+      "editorialNote": "Bi-a'yunina is rendered as protection and care.",
+      "salafReading": "Affirm the revealed wording while denying eyes as bodily organs, parts or created instruments.",
+      "khalafReading": "Ayn and a'yun wording is read contextually as care, protection and oversight, without bodily implication.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "13:2",
+      "classification": "mutashabih",
+      "treatment": "tafwid-and-contextual-tawil",
+      "englishMeaning": "Allah is the One Who raised the heavens without visible pillars; then He has an istiwa over the Throne that befits Him, without sitting, place, direction, movement or bodily modality. He subjected the sun and moon, each running for an appointed term. He directs the affair and explains the signs so that you may be certain of meeting your Lord.",
+      "editorialNote": "The baseline 'mounted the Throne' is rejected as potentially corporeal.",
+      "salafReading": "Affirm the revealed istiwa with a meaning befitting Allah while denying sitting, place, direction, movement, bodily form or any created modality.",
+      "khalafReading": "Where context permits, istiwa is explained non-spatially through dominion/subjugation or directing creation; it is never physical establishment or movement.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "13:22",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "They are those who remain steadfast, seeking their Lord's acceptance; establish prayer; spend secretly and openly from what We have provided them; and repel evil with good. Theirs is the good end of the Home.",
+      "editorialNote": "Wajh rabbihim is rendered as divine acceptance, not a bodily countenance.",
+      "salafReading": "Affirm the revealed wajh wording with a meaning befitting Allah while denying a bodily face, countenance, direction or created form.",
+      "khalafReading": "Wajh is read contextually through meanings such as Allah Himself, His acceptance, His Dominion or the qiblah, as the supplied guide and verse context permit.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "15:29",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "When I have fashioned him and placed within him a created spirit honored by Me, then fall down before him in prostration.",
+      "editorialNote": "My Spirit is treated as a created soul honored by attribution to Allah, not a part of Allah.",
+      "salafReading": "Affirm the possessive attribution while denying that Allah has a soul, spirit, part or anything separable from Him.",
+      "khalafReading": "Ruh attributed to Allah is a created spirit or angel honored by attribution to Him, not a part of Allah.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "16:50",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "They fear their Lord's complete authority over them and do what they are commanded.",
+      "editorialNote": "Min fawqihim is rendered through supremacy and authority, not spatial direction.",
+      "salafReading": "Affirm Allah's supremacy while denying physical height, direction, location or spatial relation.",
+      "khalafReading": "Fawqiyyah is read as supremacy, authority and subjugation according to context, not spatial aboveness.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "16:128",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Indeed, Allah supports those who are mindful of Him and those who do good.",
+      "editorialNote": "The supplied guide explains Allah being 'with' the pious as support, not physical accompaniment, proximity or co-location.",
+      "salafReading": "Affirm divine ma'iyyah with a befitting meaning while denying physical accompaniment or location.",
+      "khalafReading": "The guide gives the specific meaning that Allah supports those who are pious.",
+      "guideSpecificMeaning": "Allah supports those who are pious."
+    },
+    {
+      "verseKey": "18:28",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Keep yourself patiently with those who call upon their Lord morning and evening, seeking His acceptance. Do not let your eyes turn away from them, desiring the adornment of worldly life, and do not obey one whose heart We have made heedless of Our remembrance, who follows his desire and whose affair is excessive.",
+      "editorialNote": "Wajhahu is rendered non-corporeally.",
+      "salafReading": "Affirm the revealed wajh wording with a meaning befitting Allah while denying a bodily face, countenance, direction or created form.",
+      "khalafReading": "Wajh is read contextually through meanings such as Allah Himself, His acceptance, His Dominion or the qiblah, as the supplied guide and verse context permit.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "19:17",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "She withdrew from them behind a veil, and We sent to her Our honored messenger-spirit, Gabriel, who appeared to her as a well-formed man.",
+      "editorialNote": "Our Spirit is rendered as the created angelic messenger Gabriel, not a part of Allah.",
+      "salafReading": "Affirm the possessive attribution while denying that Allah has a soul, spirit, part or anything separable from Him.",
+      "khalafReading": "Ruh attributed to Allah is a created spirit or angel honored by attribution to Him, not a part of Allah.",
+      "guideSpecificMeaning": null
     },
     {
       "verseKey": "19:65",
@@ -58,13 +409,83 @@
       "guideSpecificMeaning": "Allah subjugated the Throne in al-azal with a subjugation which is without a beginning, like all of the attributes of Allah."
     },
     {
-      "verseKey": "35:10",
+      "verseKey": "20:46",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
-      "englishMeaning": "Whoever seeks honour, then all honour belongs to Allah. Good words are accepted by Him, and He raises the righteous deed in rank. Those who plot evil will have a severe punishment, and their plotting will fail.",
-      "editorialNote": "The supplied guide identifies this verse as mutashabih and requires any assigned meaning to comply with Arabic, the Religion and the muhkam foundations. 'Good words are accepted by Him' prevents a spatial reading of ascent to a location. This wording remains subject to named scholarly review.",
-      "salafReading": "Affirm the revealed wording with a meaning befitting Allah while denying spatial movement or location.",
-      "khalafReading": "A contextual reading treats the ascent of good words as their acceptance and honouring by Allah, not movement toward a place occupied by Him.",
+      "englishMeaning": "He said: Do not fear. I am with you both by My knowledge and support; I hear and I see.",
+      "editorialNote": "The verse's ma'iyyah is explicitly non-spatial and tied to hearing, seeing and support.",
+      "salafReading": "Affirm divine ma'iyyah with a meaning befitting Allah while denying physical accompaniment, indwelling, proximity by distance or co-location.",
+      "khalafReading": "Ma'iyyah is read by context as knowledge, support, aid, protection or witness, never physical presence in a place.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "21:91",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "And the woman who guarded her chastity: We caused an honored created spirit to be blown into her by Our command, and We made her and her son a sign for all peoples.",
+      "editorialNote": "Our Spirit is explicitly treated as created and honored, consistent with the supplied guide's treatment of 66:12.",
+      "salafReading": "Affirm the possessive attribution while denying that Allah has a soul, spirit, part or anything separable from Him.",
+      "khalafReading": "Ruh attributed to Allah is a created spirit or angel honored by attribution to Him, not a part of Allah.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "22:26",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Remember when We assigned to Ibrahim the site of the House: Do not associate anything with Me, and purify the House honored by Me for those who circle it, stand in worship, bow and prostrate.",
+      "editorialNote": "My House is rendered as a house honored by Allah, not Allah's residence.",
+      "salafReading": "Affirm the possessive attribution while denying residence, containment or a place for Allah.",
+      "khalafReading": "My House is an attribution of honor and consecration to Allah's worship, not Allah's dwelling.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "23:27",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "We revealed to him: Build the Ark under Our protection and by Our revelation. When Our command comes and the oven gushes forth, take aboard a pair of every kind and your household except those against whom the decree has already passed. Do not plead with Me for the wrongdoers; they will surely be drowned.",
+      "editorialNote": "Bi-a'yunina is rendered as protection, not bodily eyes.",
+      "salafReading": "Affirm the revealed wording while denying eyes as bodily organs, parts or created instruments.",
+      "khalafReading": "Ayn and a'yun wording is read contextually as care, protection and oversight, without bodily implication.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "23:88",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Say: Who has absolute dominion over all things, protecting while none can protect against Him, if you truly know?",
+      "editorialNote": "Bi-yadihi is rendered as absolute dominion and control.",
+      "salafReading": "Affirm the revealed expression with a meaning befitting Allah while denying limbs, hands, parts, bodily form or created instruments.",
+      "khalafReading": "Yad and related expressions are read contextually as power, authority, generosity, care or disposal according to the verse, not as bodily hands.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "24:35",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Allah is the Creator of guidance for the inhabitants of the heavens and the earth. The example of His guidance is like a niche in which there is a lamp; the lamp is in glass, and the glass is as though it were a brilliant star, lit from a blessed olive tree, neither of the east nor of the west, whose oil would almost glow even though no fire touched it: light upon light. Allah guides to His light whom He wills. Allah sets forth examples for people, and Allah knows all things.",
+      "editorialNote": "The supplied guide explicitly rejects understanding Allah as physical light. It gives the meaning that Allah is the Creator of guidance in the occupants of the heavens and the earth.",
+      "salafReading": "Affirm the revealed wording without attributing created light, colour, luminosity or bodily properties to Allah.",
+      "khalafReading": "The guide gives the specific meaning that Allah is the Creator of guidance in the occupants of the heavens and the earth.",
+      "guideSpecificMeaning": "Allah is the Creator of guidance in the occupants of the skies and the occupants of the earth."
+    },
+    {
+      "verseKey": "25:59",
+      "classification": "mutashabih",
+      "treatment": "tafwid-and-contextual-tawil",
+      "englishMeaning": "He created the heavens and the earth and all between them in six days; then He has an istiwa over the Throne that befits Him, without sitting, place, direction, movement or bodily modality. He is the All-Merciful; ask one well informed concerning Him.",
+      "editorialNote": "The verse receives the same non-corporeal istiwa treatment as 20:5.",
+      "salafReading": "Affirm the revealed istiwa with a meaning befitting Allah while denying sitting, place, direction, movement, bodily form or any created modality.",
+      "khalafReading": "Where context permits, istiwa is explained non-spatially through dominion/subjugation or directing creation; it is never physical establishment or movement.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "26:15",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "He said: No. Go, both of you, with Our signs. We are with you by Our knowledge and support, hearing.",
+      "editorialNote": "Ma'iyyah is rendered as knowledge and support.",
+      "salafReading": "Affirm divine ma'iyyah with a meaning befitting Allah while denying physical accompaniment, indwelling, proximity by distance or co-location.",
+      "khalafReading": "Ma'iyyah is read by context as knowledge, support, aid, protection or witness, never physical presence in a place.",
       "guideSpecificMeaning": null
     },
     {
@@ -78,84 +499,74 @@
       "guideSpecificMeaning": "His Dominion."
     },
     {
-      "verseKey": "68:42",
+      "verseKey": "29:69",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
-      "englishMeaning": "On the Day of anguish and hardship, they will be called to prostrate, but they will not be able.",
-      "editorialNote": "The supplied guide reports the explanation of saq as hardship and the verse as referring to a day of anguish and hardship; it attributes this explanation to Ibn Abbas and other early scholars.",
-      "salafReading": "The supplied guide records early Salaf authorities explaining the expression without attributing a bodily shin to Allah.",
-      "khalafReading": "Saq is explained contextually as hardship or severe anguish.",
-      "guideSpecificMeaning": "A day of anguish and hardship."
+      "englishMeaning": "Those who strive for Our sake, We will surely guide them to Our ways. Surely Allah supports the doers of good.",
+      "editorialNote": "Ma'iyyah is rendered as support.",
+      "salafReading": "Affirm divine ma'iyyah with a meaning befitting Allah while denying physical accompaniment, indwelling, proximity by distance or co-location.",
+      "khalafReading": "Ma'iyyah is read by context as knowledge, support, aid, protection or witness, never physical presence in a place.",
+      "guideSpecificMeaning": null
     },
     {
-      "verseKey": "2:115",
+      "verseKey": "30:38",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
-      "englishMeaning": "To Allah belong the east and the west; wherever you turn, there is the qiblah appointed by Allah. Surely Allah is All-Encompassing, All-Knowing.",
-      "editorialNote": "The supplied guide reports Mujahid's explanation of wajh in this verse as qiblah, in the context of voluntary prayer while travelling. SalahOS does not render the expression as a bodily face of Allah.",
-      "salafReading": "The verse is understood without attributing a face, direction or location to Allah.",
-      "khalafReading": "Mujahid is cited in the supplied guide as explaining wajh here as qiblah, the direction of prayer in its context.",
-      "guideSpecificMeaning": "Qiblah, the direction of prayers during voluntary prayer while travelling."
+      "englishMeaning": "Give the relative his due, and the needy and the traveler. That is best for those who seek Allah's acceptance, and they are the successful.",
+      "editorialNote": "Wajh Allah is rendered as seeking divine acceptance.",
+      "salafReading": "Affirm the revealed wajh wording with a meaning befitting Allah while denying a bodily face, countenance, direction or created form.",
+      "khalafReading": "Wajh is read contextually through meanings such as Allah Himself, His acceptance, His Dominion or the qiblah, as the supplied guide and verse context permit.",
+      "guideSpecificMeaning": null
     },
     {
-      "verseKey": "66:12",
+      "verseKey": "30:39",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
-      "englishMeaning": "And Mary, daughter of Imran, who guarded her chastity; We caused the honoured created spirit to be blown into her by Our command. She affirmed the words of her Lord and His Books and was among the devout.",
-      "editorialNote": "The supplied guide rejects any reading in which 'Our spirit' means a part or soul of Allah. It explains the passage through Allah's command to Jibril and a soul honoured by Allah. The SalahOS wording therefore makes createdness and honour explicit.",
-      "salafReading": "Affirm the revealed wording while categorically denying that Allah has a soul, parts or anything separable from Him.",
-      "khalafReading": "The guide explains that Allah ordered Jibril to blow the honoured soul by Allah's command; 'Our spirit' is an attribution of honour, not a part of Allah.",
-      "guideSpecificMeaning": "Allah ordered Jibril to blow the soul which is honorable to Allah."
+      "englishMeaning": "Whatever you give as usury to increase through people's wealth brings no increase with Allah; but what you give in charity seeking Allah's acceptance—those are the ones whose reward is multiplied.",
+      "editorialNote": "Wajh Allah is rendered as divine acceptance rather than a face.",
+      "salafReading": "Affirm the revealed wajh wording with a meaning befitting Allah while denying a bodily face, countenance, direction or created form.",
+      "khalafReading": "Wajh is read contextually through meanings such as Allah Himself, His acceptance, His Dominion or the qiblah, as the supplied guide and verse context permit.",
+      "guideSpecificMeaning": null
     },
     {
-      "verseKey": "38:75",
-      "classification": "mutashabih",
-      "treatment": "contextual-tawil",
-      "englishMeaning": "He said: O Iblis, what prevented you from prostrating to the one I created with special care? Were you arrogant, or were you among the exalted?",
-      "editorialNote": "The supplied guide explains yadayn in this verse by Allah's care and rejects a bodily-hands reading.",
-      "salafReading": "Affirm the revealed wording with a befitting meaning while denying limbs, hands, parts or bodily form.",
-      "khalafReading": "The guide gives the specific meaning of care for yadayn in this verse.",
-      "guideSpecificMeaning": "The care of Allah."
-    },
-    {
-      "verseKey": "24:35",
-      "classification": "mutashabih",
-      "treatment": "contextual-tawil",
-      "englishMeaning": "Allah is the Creator of guidance for the inhabitants of the heavens and the earth. The example of His guidance is like a niche in which there is a lamp; the lamp is in glass, and the glass is as though it were a brilliant star, lit from a blessed olive tree, neither of the east nor of the west, whose oil would almost glow even though no fire touched it: light upon light. Allah guides to His light whom He wills. Allah sets forth examples for people, and Allah knows all things.",
-      "editorialNote": "The supplied guide explicitly rejects understanding Allah as physical light. It gives the meaning that Allah is the Creator of guidance in the occupants of the heavens and the earth.",
-      "salafReading": "Affirm the revealed wording without attributing created light, colour, luminosity or bodily properties to Allah.",
-      "khalafReading": "The guide gives the specific meaning that Allah is the Creator of guidance in the occupants of the heavens and the earth.",
-      "guideSpecificMeaning": "Allah is the Creator of guidance in the occupants of the skies and the occupants of the earth."
-    },
-    {
-      "verseKey": "89:22",
-      "classification": "mutashabih",
-      "treatment": "contextual-tawil",
-      "englishMeaning": "And an indication of your Lord's Power comes, and the angels, rank upon rank.",
-      "editorialNote": "The supplied guide reports an explanation attributed to Imam Ahmad: the coming here is the coming of an indication of Allah's Power, not movement of Allah from one place to another.",
-      "salafReading": "Affirm the revealed wording while denying movement, transition, place and direction for Allah.",
-      "khalafReading": "The guide reports the meaning: an indication of the Power of Allah has come.",
-      "guideSpecificMeaning": "An indication of the Power of Allah has come."
-    },
-    {
-      "verseKey": "57:4",
+      "verseKey": "32:4",
       "classification": "mutashabih",
       "treatment": "tafwid-and-contextual-tawil",
-      "englishMeaning": "He is the One Who created the heavens and the earth in six days, then has an istiwa over the Throne that befits Him, without bodily or spatial meaning. He knows what enters the earth and what comes out of it, what descends from the heaven and what ascends into it. He knows you wherever you are. Allah sees all that you do.",
-      "editorialNote": "This verse contains both istiwa and ma'iyyah wording. The supplied guide rejects spatial readings and explicitly explains 'He is with you wherever you are' as Allah knowing about you wherever you are.",
-      "salafReading": "Istiwa is affirmed with a befitting meaning and no how; bodily, spatial and directional meanings are denied.",
-      "khalafReading": "The guide explicitly renders ma'iyyah here as Allah knowing about you wherever you are; its discussion of 20:5 supplies the accepted non-corporeal treatment of istiwa.",
-      "guideSpecificMeaning": "Allah knows about you wherever you are."
+      "englishMeaning": "Allah is the One Who created the heavens and the earth and all between them in six days; then He has an istiwa over the Throne that befits Him, without sitting, place, direction, movement or bodily modality. Besides Him you have no protecting ally or intercessor. Will you not remember?",
+      "editorialNote": "The baseline 'mounted the Throne' is replaced under the guide's istiwa rule.",
+      "salafReading": "Affirm the revealed istiwa with a meaning befitting Allah while denying sitting, place, direction, movement, bodily form or any created modality.",
+      "khalafReading": "Where context permits, istiwa is explained non-spatially through dominion/subjugation or directing creation; it is never physical establishment or movement.",
+      "guideSpecificMeaning": null
     },
     {
-      "verseKey": "41:54",
+      "verseKey": "32:5",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
-      "englishMeaning": "Indeed, they are in doubt about meeting their Lord. Surely Allah's knowledge encompasses all things.",
-      "editorialNote": "The supplied guide rejects a spatial reading in which Allah physically surrounds creation and gives the meaning that Allah knows everything.",
-      "salafReading": "Affirm the wording while denying bodily surrounding, enclosure, spatial extension or location.",
-      "khalafReading": "The guide gives the specific meaning: Allah knows everything.",
-      "guideSpecificMeaning": "Allah knows everything."
+      "englishMeaning": "He directs the affair from heaven to earth; then the matter is raised for His judgment in a day whose measure is a thousand years by your reckoning.",
+      "editorialNote": "The ascent is rendered without locating Allah at a spatial destination.",
+      "salafReading": "Affirm the ascent wording while denying that Allah occupies a destination, place or direction to which created things physically travel.",
+      "khalafReading": "Ascent is read contextually as being raised by Allah's command, to His acceptance, judgment or an appointed station, without locating Allah.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "35:10",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Whoever seeks honour, then all honour belongs to Allah. Good words are accepted by Him, and He raises the righteous deed in rank. Those who plot evil will have a severe punishment, and their plotting will fail.",
+      "editorialNote": "The supplied guide identifies this verse as mutashabih and requires any assigned meaning to comply with Arabic, the Religion and the muhkam foundations. 'Good words are accepted by Him' prevents a spatial reading of ascent to a location. This wording remains subject to named scholarly review.",
+      "salafReading": "Affirm the revealed wording with a meaning befitting Allah while denying spatial movement or location.",
+      "khalafReading": "A contextual reading treats the ascent of good words as their acceptance and honouring by Allah, not movement toward a place occupied by Him.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "36:83",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "So glory be to Him Who has absolute dominion over all things, and to Him you will be returned.",
+      "editorialNote": "Bi-yadihi is rendered as dominion, avoiding a bodily-hand reading.",
+      "salafReading": "Affirm the revealed expression with a meaning befitting Allah while denying limbs, hands, parts, bodily form or created instruments.",
+      "khalafReading": "Yad and related expressions are read contextually as power, authority, generosity, care or disposal according to the verse, not as bodily hands.",
+      "guideSpecificMeaning": null
     },
     {
       "verseKey": "37:99",
@@ -168,34 +579,264 @@
       "guideSpecificMeaning": null
     },
     {
-      "verseKey": "2:125",
+      "verseKey": "38:72",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
-      "englishMeaning": "And when We made the House, the Ka'bah, a house greatly honoured by Allah, a place of return for people and a place of safety: take the station of Ibrahim as a place of prayer. We commanded Ibrahim and Ismail: Purify My House for those who perform tawaf, remain there in worship, bow and prostrate.",
-      "editorialNote": "The supplied guide explicitly rejects reading 'My House' as Allah's residence. It gives the meaning that the Ka'bah is a house of great honour to Allah.",
-      "salafReading": "The possessive attribution is understood as one of honour and not residence, containment or place for Allah.",
-      "khalafReading": "The guide gives the specific meaning: the Ka'bah is a house of great honour to Allah.",
-      "guideSpecificMeaning": "The Ka'bah is a house of a great honor to Allah."
+      "englishMeaning": "When I have fashioned him and placed within him a created spirit honored by Me, then fall down before him in prostration.",
+      "editorialNote": "My Spirit is an attribution of honor to a created soul, not a part of Allah.",
+      "salafReading": "Affirm the possessive attribution while denying that Allah has a soul, spirit, part or anything separable from Him.",
+      "khalafReading": "Ruh attributed to Allah is a created spirit or angel honored by attribution to Him, not a part of Allah.",
+      "guideSpecificMeaning": null
     },
     {
-      "verseKey": "6:61",
+      "verseKey": "38:75",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
-      "englishMeaning": "He is the One to Whom all His servants are subjugated. He sends guardians over you until, when death comes to one of you, Our messengers take the soul without neglecting their duty.",
-      "editorialNote": "The supplied guide explains fawqiyyah here as aboveness of subjugation: all are subjugated to Allah, not that Allah occupies a physical direction above creation.",
-      "salafReading": "Affirm Allah's supremacy without assigning place, physical height or direction.",
-      "khalafReading": "The guide gives the specific meaning of fawqiyyah as subjugation: all are subjugated to Allah.",
-      "guideSpecificMeaning": "All are subjugated to Allah."
+      "englishMeaning": "He said: O Iblis, what prevented you from prostrating to the one I created with special care? Were you arrogant, or were you among the exalted?",
+      "editorialNote": "The supplied guide explains yadayn in this verse by Allah's care and rejects a bodily-hands reading.",
+      "salafReading": "Affirm the revealed wording with a befitting meaning while denying limbs, hands, parts or bodily form.",
+      "khalafReading": "The guide gives the specific meaning of care for yadayn in this verse.",
+      "guideSpecificMeaning": "The care of Allah."
     },
     {
-      "verseKey": "16:128",
+      "verseKey": "39:67",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
-      "englishMeaning": "Indeed, Allah supports those who are mindful of Him and those who do good.",
-      "editorialNote": "The supplied guide explains Allah being 'with' the pious as support, not physical accompaniment, proximity or co-location.",
-      "salafReading": "Affirm divine ma'iyyah with a befitting meaning while denying physical accompaniment or location.",
-      "khalafReading": "The guide gives the specific meaning that Allah supports those who are pious.",
-      "guideSpecificMeaning": "Allah supports those who are pious."
+      "englishMeaning": "They did not esteem Allah as He deserves to be esteemed. On the Day of Resurrection the whole earth will be under His absolute power, and the heavens will be folded by His power. Glory be to Him, exalted above what they associate with Him.",
+      "editorialNote": "Qabdah and yamin are rendered through divine power rather than a handful or right hand.",
+      "salafReading": "Affirm the revealed expression with a meaning befitting Allah while denying limbs, hands, parts, bodily form or created instruments.",
+      "khalafReading": "Yad and related expressions are read contextually as power, authority, generosity, care or disposal according to the verse, not as bodily hands.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "41:11",
+      "classification": "mutashabih",
+      "treatment": "tafwid-and-contextual-tawil",
+      "englishMeaning": "Then He directed His will to the heaven while it was smoke, and said to it and to the earth: Come willingly or unwillingly. They said: We come willingly.",
+      "editorialNote": "Istiwa ila is rendered as directing the divine will, not movement toward a spatial destination.",
+      "salafReading": "Affirm the revealed istiwa with a meaning befitting Allah while denying sitting, place, direction, movement, bodily form or any created modality.",
+      "khalafReading": "Where context permits, istiwa is explained non-spatially through dominion/subjugation or directing creation; it is never physical establishment or movement.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "41:54",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Indeed, they are in doubt about meeting their Lord. Surely Allah's knowledge encompasses all things.",
+      "editorialNote": "The supplied guide rejects a spatial reading in which Allah physically surrounds creation and gives the meaning that Allah knows everything.",
+      "salafReading": "Affirm the wording while denying bodily surrounding, enclosure, spatial extension or location.",
+      "khalafReading": "The guide gives the specific meaning: Allah knows everything.",
+      "guideSpecificMeaning": "Allah knows everything."
+    },
+    {
+      "verseKey": "42:11",
+      "classification": "muhkam-foundation",
+      "treatment": "muhkam-foundation",
+      "englishMeaning": "He is the Creator of the heavens and the earth. He made for you mates from yourselves and pairs among the livestock, multiplying you thereby. Absolutely nothing resembles Him. He is the All-Hearing, the All-Seeing.",
+      "editorialNote": "The supplied guide treats 'Absolutely there is nothing like Him' as a governing muhkam foundation. All mutashabih renderings are checked against this principle.",
+      "salafReading": null,
+      "khalafReading": null,
+      "guideSpecificMeaning": "Absolutely there is nothing like Him."
+    },
+    {
+      "verseKey": "45:34",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "It will be said: Today We abandon you to your consequence, just as you neglected the meeting of this Day. Your refuge is the Fire, and you will have no helpers.",
+      "editorialNote": "Nisyan is rendered as abandonment in recompense, consistent with the muhkam statement that the Lord is never forgetful.",
+      "salafReading": "Affirm the revealed recompense wording while denying forgetfulness, ignorance or deficiency for Allah.",
+      "khalafReading": "Nisyan attributed in recompense is read as abandoning them to punishment or withholding mercy after they neglected His commands, not literal forgetfulness.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "47:35",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Do not lose heart or call for peace while you have the upper hand. Allah supports you and will not diminish the reward of your deeds.",
+      "editorialNote": "Ma'iyyah is rendered as support.",
+      "salafReading": "Affirm divine ma'iyyah with a meaning befitting Allah while denying physical accompaniment, indwelling, proximity by distance or co-location.",
+      "khalafReading": "Ma'iyyah is read by context as knowledge, support, aid, protection or witness, never physical presence in a place.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "48:10",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Those who pledge allegiance to you are in truth pledging allegiance to Allah; Allah's authority is over their pledge. Whoever breaks it only harms himself, while whoever fulfills the covenant he made with Allah will be granted an immense reward.",
+      "editorialNote": "Yad Allah fawqa aydihim is rendered as divine authority over the covenant, not a bodily hand or spatial position.",
+      "salafReading": "Affirm the revealed expression with a meaning befitting Allah while denying limbs, hands, parts, bodily form or created instruments.",
+      "khalafReading": "Yad and related expressions are read contextually as power, authority, generosity, care or disposal according to the verse, not as bodily hands.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "50:16",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "We created the human being and know what his soul whispers to him; Our knowledge of him is nearer than his jugular vein.",
+      "editorialNote": "The verse begins with divine knowledge, so nearness is rendered as nearness of knowledge rather than spatial distance.",
+      "salafReading": "Affirm divine nearness with a meaning befitting Allah while denying distance, physical proximity, contact or location.",
+      "khalafReading": "Nearness is read contextually through knowledge, response, power, care or the nearness of appointed angels, not spatial distance.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "52:48",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Be patient with your Lord's decree, for you are under Our care; glorify your Lord with praise when you rise.",
+      "editorialNote": "Bi-a'yunina is rendered as care and protection.",
+      "salafReading": "Affirm the revealed wording while denying eyes as bodily organs, parts or created instruments.",
+      "khalafReading": "Ayn and a'yun wording is read contextually as care, protection and oversight, without bodily implication.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "54:14",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "It sailed under Our care, as a reward for the one who had been rejected.",
+      "editorialNote": "Bi-a'yunina is rendered as care, not physical sight organs.",
+      "salafReading": "Affirm the revealed wording while denying eyes as bodily organs, parts or created instruments.",
+      "khalafReading": "Ayn and a'yun wording is read contextually as care, protection and oversight, without bodily implication.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "55:27",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Only your Lord, Possessor of Majesty and Honour, remains forever.",
+      "editorialNote": "Wajh rabbika is rendered through Allah Himself, consistent with the guide's allowance of Self as a non-bodily meaning.",
+      "salafReading": "Affirm the revealed wajh wording with a meaning befitting Allah while denying a bodily face, countenance, direction or created form.",
+      "khalafReading": "Wajh is read contextually through meanings such as Allah Himself, His acceptance, His Dominion or the qiblah, as the supplied guide and verse context permit.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "56:85",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Our appointed angels are nearer to the dying person than you are, though you do not see them.",
+      "editorialNote": "The contextual reading avoids attributing spatial proximity to Allah; this remains explicitly provisional pending qualified scholarly review.",
+      "salafReading": "Affirm divine nearness with a meaning befitting Allah while denying distance, physical proximity, contact or location.",
+      "khalafReading": "Nearness is read contextually through knowledge, response, power, care or the nearness of appointed angels, not spatial distance.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "57:4",
+      "classification": "mutashabih",
+      "treatment": "tafwid-and-contextual-tawil",
+      "englishMeaning": "He is the One Who created the heavens and the earth in six days, then has an istiwa over the Throne that befits Him, without bodily or spatial meaning. He knows what enters the earth and what comes out of it, what descends from the heaven and what ascends into it. He knows you wherever you are. Allah sees all that you do.",
+      "editorialNote": "This verse contains both istiwa and ma'iyyah wording. The supplied guide rejects spatial readings and explicitly explains 'He is with you wherever you are' as Allah knowing about you wherever you are.",
+      "salafReading": "Istiwa is affirmed with a befitting meaning and no how; bodily, spatial and directional meanings are denied.",
+      "khalafReading": "The guide explicitly renders ma'iyyah here as Allah knowing about you wherever you are; its discussion of 20:5 supplies the accepted non-corporeal treatment of istiwa.",
+      "guideSpecificMeaning": "Allah knows about you wherever you are."
+    },
+    {
+      "verseKey": "57:29",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "So that the People of the Scripture may know that they control nothing of Allah's bounty, and that all bounty is in Allah's disposal to grant to whom He wills. Allah is the Possessor of immense bounty.",
+      "editorialNote": "Bi-yad Allah is rendered as disposal and granting.",
+      "salafReading": "Affirm the revealed expression with a meaning befitting Allah while denying limbs, hands, parts, bodily form or created instruments.",
+      "khalafReading": "Yad and related expressions are read contextually as power, authority, generosity, care or disposal according to the verse, not as bodily hands.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "58:7",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Do you not see that Allah knows whatever is in the heavens and whatever is on earth? No three hold secret counsel except that He knows them completely, nor five except that He knows them completely, nor fewer or more, except that He knows them wherever they are. Then on the Day of Resurrection He will inform them of what they did. Surely Allah knows all things.",
+      "editorialNote": "The verse itself opens and closes with divine knowledge; 'He is with them' is rendered as knowledge, not physical presence.",
+      "salafReading": "Affirm divine ma'iyyah with a meaning befitting Allah while denying physical accompaniment, indwelling, proximity by distance or co-location.",
+      "khalafReading": "Ma'iyyah is read by context as knowledge, support, aid, protection or witness, never physical presence in a place.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "59:2",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "He is the One Who expelled from their homes at the first exile those among the People of the Scripture who disbelieved. You did not think they would leave, and they thought their fortresses would protect them from Allah; but Allah's decree reached them from where they did not expect and cast terror into their hearts. They demolished their homes with their own hands and the hands of the believers. So take warning, people of insight.",
+      "editorialNote": "The baseline 'Allah reached them from a place' is replaced by the reaching of His decree, removing spatial movement.",
+      "salafReading": "Affirm the revelation while denying movement, transition, arrival from one place to another, place and direction for Allah.",
+      "khalafReading": "Coming or intervening language is read contextually as the coming of Allah's command, judgment, decree, power or effect, not bodily movement.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "66:12",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "And Mary, daughter of Imran, who guarded her chastity; We caused the honoured created spirit to be blown into her by Our command. She affirmed the words of her Lord and His Books and was among the devout.",
+      "editorialNote": "The supplied guide rejects any reading in which 'Our spirit' means a part or soul of Allah. It explains the passage through Allah's command to Jibril and a soul honoured by Allah. The SalahOS wording therefore makes createdness and honour explicit.",
+      "salafReading": "Affirm the revealed wording while categorically denying that Allah has a soul, parts or anything separable from Him.",
+      "khalafReading": "The guide explains that Allah ordered Jibril to blow the honoured soul by Allah's command; 'Our spirit' is an attribution of honour, not a part of Allah.",
+      "guideSpecificMeaning": "Allah ordered Jibril to blow the soul which is honorable to Allah."
+    },
+    {
+      "verseKey": "67:1",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Blessed is He Who holds absolute sovereignty over all things, and He is able to do all things.",
+      "editorialNote": "Bi-yadihi al-mulk is rendered as possession and sovereign control.",
+      "salafReading": "Affirm the revealed expression with a meaning befitting Allah while denying limbs, hands, parts, bodily form or created instruments.",
+      "khalafReading": "Yad and related expressions are read contextually as power, authority, generosity, care or disposal according to the verse, not as bodily hands.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "67:16",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Do you feel secure from the One of supreme status and authority that He will not cause the earth to swallow you as it suddenly convulses?",
+      "editorialNote": "Man fi al-sama is rendered without making the heaven a place for Allah.",
+      "salafReading": "Affirm the verse while categorically denying that the heaven contains Allah or is a place for Him.",
+      "khalafReading": "The expression is read through Allah's supreme status and authority or the heavenly agents under His command, not residence in the sky.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "67:17",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Or do you feel secure from the One of supreme status and authority that He will not send against you a storm of stones? Then you will know how My warning was.",
+      "editorialNote": "Man fi al-sama is rendered through supreme status and authority, not residence in the sky.",
+      "salafReading": "Affirm the verse while categorically denying that the heaven contains Allah or is a place for Him.",
+      "khalafReading": "The expression is read through Allah's supreme status and authority or the heavenly agents under His command, not residence in the sky.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "68:42",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "On the Day of anguish and hardship, they will be called to prostrate, but they will not be able.",
+      "editorialNote": "The supplied guide reports the explanation of saq as hardship and the verse as referring to a day of anguish and hardship; it attributes this explanation to Ibn Abbas and other early scholars.",
+      "salafReading": "The supplied guide records early Salaf authorities explaining the expression without attributing a bodily shin to Allah.",
+      "khalafReading": "Saq is explained contextually as hardship or severe anguish.",
+      "guideSpecificMeaning": "A day of anguish and hardship."
+    },
+    {
+      "verseKey": "70:4",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "The angels and the Spirit ascend by His command in a day whose measure is fifty thousand years.",
+      "editorialNote": "The ascent is rendered as occurring by Allah's command, without implying that Allah occupies a place.",
+      "salafReading": "Affirm the ascent wording while denying that Allah occupies a destination, place or direction to which created things physically travel.",
+      "khalafReading": "Ascent is read contextually as being raised by Allah's command, to His acceptance, judgment or an appointed station, without locating Allah.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "89:22",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "And an indication of your Lord's Power comes, and the angels, rank upon rank.",
+      "editorialNote": "The supplied guide reports an explanation attributed to Imam Ahmad: the coming here is the coming of an indication of Allah's Power, not movement of Allah from one place to another.",
+      "salafReading": "Affirm the revealed wording while denying movement, transition, place and direction for Allah.",
+      "khalafReading": "The guide reports the meaning: an indication of the Power of Allah has come.",
+      "guideSpecificMeaning": "An indication of the Power of Allah has come."
+    },
+    {
+      "verseKey": "112:4",
+      "classification": "muhkam-foundation",
+      "treatment": "muhkam-foundation",
+      "englishMeaning": "And there is absolutely nothing equal or comparable to Him.",
+      "editorialNote": "A governing muhkam foundation in the supplied guide: nothing is equal to Allah.",
+      "salafReading": null,
+      "khalafReading": null,
+      "guideSpecificMeaning": "There is nothing which is equal to Him."
     }
   ]
 }
