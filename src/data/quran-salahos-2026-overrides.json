@@ -119,6 +119,16 @@
       "guideSpecificMeaning": null
     },
     {
+      "verseKey": "2:245",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Who is it that will make a goodly expenditure for Allah's sake, so He may multiply it for him many times over? Allah restricts and expands provision, and to Him you will be returned.",
+      "editorialNote": "The qard ('loan') expression is a Qur'anic exhortation to spend for Allah's sake; it must not imply that Allah borrows, needs wealth, benefits from creation, or is deficient. The closing qabd/bast is also rendered as restricting and expanding provision rather than bodily grasping.",
+      "salafReading": "Affirm the revealed expression according to a meaning befitting Allah while denying need, poverty, dependency, benefit-acquisition, bodily grasping, or any created commercial transaction.",
+      "khalafReading": "Contextual ta'wil: lending a goodly loan to Allah means making a sincere expenditure for His sake, which He rewards and multiplies; qabd and bast here refer to restricting and expanding provision.",
+      "guideSpecificMeaning": null
+    },
+    {
       "verseKey": "2:249",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
@@ -166,6 +176,16 @@
       "editorialNote": "Bi-yadika is rendered as power and disposal, not a bodily hand.",
       "salafReading": "Affirm the revealed expression with a meaning befitting Allah while denying limbs, hands, parts, bodily form or created instruments.",
       "khalafReading": "Yad and related expressions are read contextually as power, authority, generosity, care or disposal according to the verse, not as bodily hands.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "3:52",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "When Jesus sensed disbelief from them, he said: Who will be my helpers in Allah's cause? The disciples said: We are supporters of Allah's cause. We believe in Allah, so bear witness that we submit to Him.",
+      "editorialNote": "Ansar Allah is rendered as supporters of Allah's cause, not helpers needed by Allah. Allah is free of need and does not depend on creation.",
+      "salafReading": "Affirm the revealed wording with a meaning befitting Allah while denying need, dependence, weakness, assistance received for a deficiency, or benefit gained from creation.",
+      "khalafReading": "Contextual ta'wil: being 'helpers of Allah' means supporting Allah's religion and cause and obeying His command, not supplying help that Allah needs.",
       "guideSpecificMeaning": null
     },
     {
@@ -282,10 +302,10 @@
       "verseKey": "5:12",
       "classification": "mutashabih",
       "treatment": "tafwid-and-contextual-tawil",
-      "englishMeaning": "Allah made a covenant of old with the Children of Israel and We raised among them twelve chieftains, and Allah said: Lo! I support you. If ye establish worship and pay the poor-due, and believe in My messengers and support them, and lend unto Allah a kindly loan, surely I shall remit your sins, and surely I shall bring you into Gardens underneath which rivers flow. Whoso among you disbelieveth after this will go astray from a plain road.",
-      "editorialNote": "Divine ma'iyyah is rendered by support, protection, guidance or encompassing knowledge according to context, never physical accompaniment or co-location.",
-      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or a created modality.",
-      "khalafReading": "Contextual ta’wil: ma'iyyah denotes Allah’s support, protection, guidance or knowledge as the context requires, not spatial nearness or physical presence.",
+      "englishMeaning": "Allah made a covenant with the Children of Israel and raised twelve leaders among them. Allah said: I support you. If you establish prayer, give zakat, believe in My messengers and support them, and make a sincere goodly expenditure for My sake, I will surely erase your sins and admit you into Gardens beneath which rivers flow. Whoever among you disbelieves after that has strayed from the straight way.",
+      "editorialNote": "This verse combines ma'iyyah and the qard ('loan') idiom. Ma'iyyah is rendered as support rather than physical co-location, and the goodly loan as sincere expenditure for Allah's sake rather than borrowing, need or benefit received by Allah.",
+      "salafReading": "Affirm both revealed expressions according to meanings befitting Allah while denying physical co-location, need, poverty, dependency, benefit-acquisition, or any created borrowing transaction.",
+      "khalafReading": "Contextual ta'wil: divine ma'iyyah here is support, and the goodly loan is sincere spending for Allah's sake, whose reward He promises.",
       "guideSpecificMeaning": null
     },
     {
@@ -526,6 +546,16 @@
       "editorialNote": "The English meaning avoids attributing deficiency, deception, forgetfulness or human-style mockery to Allah; the verb is rendered as a just requital or counteraction appropriate to its context.",
       "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or a created modality.",
       "khalafReading": "Contextual ta’wil: the divine action is a just requital, countermeasure or frustration of the wrongdoers’ act, not the created defect denoted when the same verb is used of people.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "9:111",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Indeed, Allah has promised the believers Paradise in return for their lives and wealth: they fight in Allah's cause, killing and being killed. It is a true promise He has made in the Torah, the Gospel and the Qur'an. Who is more faithful to His covenant than Allah? So rejoice in the covenant you have made; that is the supreme triumph.",
+      "editorialNote": "The purchase/bargain language is a Qur'anic commercial metaphor for covenant and promised reward. It is not rendered as Allah acquiring something He lacked or needed from creation.",
+      "salafReading": "Affirm the revealed commercial imagery according to a meaning befitting Allah while denying need, gain from deficiency, ownership newly acquired through lack, or a human-style transaction.",
+      "khalafReading": "Contextual ta'wil: the purchase signifies Allah's covenant and promise of Paradise in return for the believers' sacrifice, not Allah obtaining something because He needs it.",
       "guideSpecificMeaning": null
     },
     {
@@ -1099,6 +1129,16 @@
       "guideSpecificMeaning": null
     },
     {
+      "verseKey": "47:7",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "O believers, if you support Allah's religion, He will support you and make your footing firm.",
+      "editorialNote": "Helping Allah is rendered as supporting His religion and cause, not supplying assistance to Allah. Allah is free of need and weakness.",
+      "salafReading": "Affirm the revealed wording with a meaning befitting Allah while denying need, weakness, dependence, or assistance that remedies any deficiency in Allah.",
+      "khalafReading": "Contextual ta'wil: nasr of Allah means supporting His religion, command and cause; Allah Himself does not need the help of creation.",
+      "guideSpecificMeaning": null
+    },
+    {
       "verseKey": "47:35",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
@@ -1189,6 +1229,26 @@
       "guideSpecificMeaning": "Allah knows about you wherever you are."
     },
     {
+      "verseKey": "57:11",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Who is it that will make a goodly expenditure for Allah's sake, so He may multiply it for him and grant him a noble reward?",
+      "editorialNote": "The qard ('loan') expression denotes sincere spending for Allah's sake and His promised multiplication of reward; it does not imply that Allah borrows or needs wealth.",
+      "salafReading": "Affirm the revealed expression according to a meaning befitting Allah while denying need, poverty, dependency, benefit-acquisition, or any created borrowing transaction.",
+      "khalafReading": "Contextual ta'wil: lending to Allah means spending sincerely for His sake, which He rewards and multiplies; Allah does not borrow from creation.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "57:18",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Indeed, the charitable men and women who make a goodly expenditure for Allah's sake will have it multiplied for them, and they will have a noble reward.",
+      "editorialNote": "The qard ('loan') expression denotes charitable spending for Allah's sake and promised reward, not need or borrowing on Allah's part.",
+      "salafReading": "Affirm the revealed expression according to a meaning befitting Allah while denying need, poverty, dependency, benefit-acquisition, or any created borrowing transaction.",
+      "khalafReading": "Contextual ta'wil: the goodly loan is sincere charitable spending for Allah's sake, whose reward He multiplies.",
+      "guideSpecificMeaning": null
+    },
+    {
       "verseKey": "57:29",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
@@ -1226,6 +1286,36 @@
       "editorialNote": "The baseline 'Allah reached them from a place' is replaced by the reaching of His decree, removing spatial movement.",
       "salafReading": "Affirm the revelation while denying movement, transition, arrival from one place to another, place and direction for Allah.",
       "khalafReading": "Coming or intervening language is read contextually as the coming of Allah's command, judgment, decree, power or effect, not bodily movement.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "59:8",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "And for the poor emigrants who were driven from their homes and wealth, seeking bounty from Allah and His acceptance, and supporting Allah's religion and His Messenger. They are the truthful.",
+      "editorialNote": "The verse's nasr language is rendered as support for Allah's religion and His Messenger, not assistance needed by Allah.",
+      "salafReading": "Affirm the revealed wording with a meaning befitting Allah while denying need, dependence, weakness, or benefit received by Allah from created assistance.",
+      "khalafReading": "Contextual ta'wil: supporting Allah means supporting His religion and command, alongside supporting His Messenger.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "61:14",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "O believers, be supporters of Allah's cause, as Jesus son of Mary said to the disciples: Who are my helpers in Allah's cause? The disciples said: We are supporters of Allah's cause. Then a group of the Children of Israel believed and a group disbelieved, so We strengthened those who believed against their enemy and they became victorious.",
+      "editorialNote": "Ansar Allah is rendered as supporters of Allah's cause. The expression must not be understood as Allah needing helpers or depending on creation.",
+      "salafReading": "Affirm the revealed wording with a meaning befitting Allah while denying need, dependence, weakness, assistance received for a deficiency, or benefit gained from creation.",
+      "khalafReading": "Contextual ta'wil: being supporters of Allah means supporting His religion, command and cause, not supplying help that Allah needs.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "64:17",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "If you make a goodly expenditure for Allah's sake, He will multiply it for you and forgive you. Allah abundantly rewards good and is Forbearing.",
+      "editorialNote": "The qard ('loan') expression denotes sincere spending for Allah's sake, not that Allah borrows or needs wealth. Shakur is rendered here through Allah's abundant rewarding of good, without implying a created need to receive benefit.",
+      "salafReading": "Affirm the revealed expressions according to meanings befitting Allah while denying need, poverty, dependency, benefit-acquisition, or any created borrowing or gratitude arising from need.",
+      "khalafReading": "Contextual ta'wil: the goodly loan is spending for Allah's sake, which He multiplies in reward; Shakur here conveys His abundant rewarding of obedience.",
       "guideSpecificMeaning": null
     },
     {
@@ -1316,6 +1406,16 @@
       "editorialNote": "The Arabic ahata is rendered through perfect knowledge, not bodily or spatial surrounding. This follows the same tanzih rule the supplied guide applies to encompassing language such as 41:54.",
       "salafReading": "Affirm the revealed wording with a meaning befitting Allah while denying physical surrounding, enclosure, spatial extension, containment, or location.",
       "khalafReading": "Contextual ta'wil: Allah's encompassing here is His complete knowledge of all that is with the messengers; it is not physical enclosure.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "73:20",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Indeed your Lord knows that you stand in prayer nearly two-thirds of the night, or half of it, or a third, as does a group of those with you. Allah determines the night and day. He knows that you cannot keep exact count, so He has turned to you in mercy. Recite then what is easy for you from the Qur'an. He knows that some of you will be ill, others traveling through the land seeking Allah's bounty, and others fighting in Allah's cause. So recite what is easy from it, establish prayer, give zakat, and make a goodly expenditure for Allah's sake. Whatever good you send ahead for yourselves, you will find it with Allah, better and greater in reward. Seek Allah's forgiveness; surely Allah is Forgiving, Merciful.",
+      "editorialNote": "The qard ('loan') expression in this worship-and-charity context denotes spending for Allah's sake, not borrowing, need, poverty, or benefit received by Allah.",
+      "salafReading": "Affirm the revealed expression according to a meaning befitting Allah while denying need, poverty, dependency, benefit-acquisition, or any created borrowing transaction.",
+      "khalafReading": "Contextual ta'wil: lending a goodly loan to Allah means making sincere expenditure for His sake, whose reward He promises and multiplies.",
       "guideSpecificMeaning": null
     },
     {
