@@ -1,29 +1,19 @@
 import { describe, expect, it } from 'vitest';
 
 import register from '../data/quran-mutashabih-review-register.json';
+import triggers from '../data/quran-mutashabih-policy-triggers.json';
 import { validateQuranEditorialRegister } from './quranEditorialPolicy';
 
-const expectedFoundations = ['3:7', '42:11', '112:4', '19:65'] as const;
-const expectedSeeds = [
-  '20:5',
-  '35:10',
-  '28:88',
-  '68:42',
-  '2:115',
-  '66:12',
-  '38:75',
-  '24:35',
-  '89:22',
-  '57:4',
-  '41:54',
-  '37:99',
-  '2:125',
-  '6:61',
-  '16:128',
-] as const;
+const expectedFoundations = triggers.foundations;
 
-describe('V1.6.0 Qur’an editorial register', () => {
-  it('contains every required foundation and supplied-guide seed', () => {
+const expectedSeeds = [...new Set(Object.values(triggers.groups).flat())].sort((a, b) => {
+  const [aSurah = '0', aAyah = '0'] = a.split(':');
+  const [bSurah = '0', bAyah = '0'] = b.split(':');
+  return Number(aSurah) - Number(bSurah) || Number(aAyah) - Number(bAyah);
+});
+
+describe('Qur’an editorial register', () => {
+  it('contains every required foundation and policy-triggered Mutashabih verse', () => {
     expect(register.requiredFoundations).toEqual(expectedFoundations);
     expect(register.requiredSeedVerses).toEqual(expectedSeeds);
 
@@ -33,13 +23,15 @@ describe('V1.6.0 Qur’an editorial register', () => {
     }
   });
 
-  it('keeps unresolved seed work explicitly pending rather than auto-approving it', () => {
+  it('keeps the comprehensive review pending without discarding completed editorial dispositions', () => {
     const entries = validateQuranEditorialRegister(register.entries);
     expect(entries).toHaveLength(expectedFoundations.length + expectedSeeds.length);
     for (const entry of entries) {
       expect(entry.status).toBe('pending-scholar-review');
       expect(entry.reviewer).toBeNull();
-      expect(entry.treatment).toBe('unassigned');
+      expect(entry.treatment).not.toBe('unassigned');
+      expect(entry.originalEnglish?.trim().length ?? 0).toBeGreaterThan(0);
+      expect(entry.proposedMeaning?.trim().length ?? 0).toBeGreaterThan(0);
     }
   });
 
