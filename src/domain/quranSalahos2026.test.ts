@@ -72,9 +72,9 @@ describe('SalahOS 2026 English meaning', () => {
   });
 
   it('covers all maintained translation-risk triggers with explicit verse-specific wording', () => {
-    expect(policyTriggeredVerseKeys).toHaveLength(110);
-    expect(fullAudit.scope.screenedVerseCount).toBe(110);
-    expect(fullAudit.scope.overrideVerseCount).toBe(110);
+    expect(policyTriggeredVerseKeys).toHaveLength(122);
+    expect(fullAudit.scope.screenedVerseCount).toBe(122);
+    expect(fullAudit.scope.overrideVerseCount).toBe(122);
     expect(fullAudit.scope.baselineSafeVerseCount).toBe(0);
     expect(fullAudit.screenedVerseKeys).toEqual(policyTriggeredVerseKeys);
     expect(fullAudit.overrideVerseKeys).toEqual(policyTriggeredVerseKeys);
