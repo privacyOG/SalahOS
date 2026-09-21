@@ -377,7 +377,7 @@
       "context": "Policy trigger groups: ascentAndDirectionLanguage. The baseline phrase 'ascend unto Me' can suggest a spatial destination. The English preserves Allah's raising of Jesus while removing any implication that Allah occupies a place or direction.",
       "originalEnglish": "(And remember) when Allah said: O Jesus! Lo! I am gathering thee and causing thee to ascend unto Me, and am cleansing thee of those who disbelieve and am setting those who follow thee above those who disbelieve until the Day of Resurrection. Then unto Me ye will (all) return, and I shall judge between you as to that wherein ye used to differ.",
       "proposedMeaning": "When Allah said: O Jesus, I will take you and raise you to a place of honour by My command, purify you from those who disbelieve, and place those who follow you above those who disbelieve until the Day of Resurrection. Then to My judgment you will all return, and I will judge between you concerning that over which you differed.",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
