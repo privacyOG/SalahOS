@@ -2155,9 +2155,9 @@
   ],
   "coverageScope": {
     "corpusAyat": 6236,
-    "translationRiskVerses": 110,
+    "translationRiskVerses": 122,
     "governingFoundations": 4,
-    "explicitOverrides": 110,
+    "explicitOverrides": 122,
     "qualifiedScholarReview": "pending"
   }
 }
