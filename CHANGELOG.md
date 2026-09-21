@@ -21,6 +21,7 @@ All notable SalahOS changes are recorded here.
 - Keep packaged English Qur'an identity explicit as M. M. Pickthall (1930), with Arabic/English/commentary language-direction separation and canonical-content parity checks.
 - Reorganise Knowledge into distinct Qur'an, Hadith and Fiqh & questions scopes with scoped counts, compact disclosure and Companion narrator metadata.
 - Add Muhkam/Mutashabih editorial policy and verse-review register infrastructure based on the supplied project guide; whole-corpus named scholarly sign-off remains an external release gate and is not inferred from automation.
+- Expand the Muhkam/Mutashabih audit from the original seed passages to 88 policy-triggered verses plus four governing foundations, apply Ashʿarī/Māturīdī tanzīh-aware English meanings across istiwāʾ, wajh, yad, ʿayn, maʿiyyah, fawq/spatial, movement and related expressions, and reopen whole-corpus scholarly sign-off pending renewed review.
 
 #### Mosques, Qiblah and Settings
 
