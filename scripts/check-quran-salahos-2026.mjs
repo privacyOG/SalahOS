@@ -59,8 +59,8 @@ const requiredMutashabih = [...new Set(Object.values(triggers.groups ?? {}).flat
 
 assert(requiredFoundations.length === 4, 'Muhkam/tanzih foundation count changed.');
 assert(
-  requiredMutashabih.length === 122,
-  `Comprehensive Mutashabih trigger inventory must contain 122 verses, found ${String(requiredMutashabih.length)}.`,
+  requiredMutashabih.length === 124,
+  `Comprehensive Mutashabih trigger inventory must contain 124 verses, found ${String(requiredMutashabih.length)}.`,
 );
 
 assert(
@@ -68,8 +68,8 @@ assert(
   'Expanded Muhkam/Mutashabih audit status changed unexpectedly.',
 );
 assert(
-  fullAudit?.scope?.screenedVerseCount === 122 &&
-    fullAudit?.scope?.overrideVerseCount === 122 &&
+  fullAudit?.scope?.screenedVerseCount === 124 &&
+    fullAudit?.scope?.overrideVerseCount === 124 &&
     fullAudit?.scope?.baselineSafeVerseCount === 0,
   'Expanded Muhkam/Mutashabih audit coverage changed unexpectedly.',
 );
@@ -135,8 +135,8 @@ for (const key of requiredMutashabih) {
 }
 
 assert(
-  register.entries.length === 126,
-  'Editorial register must contain 122 triggers + 4 foundations.',
+  register.entries.length === 128,
+  'Editorial register must contain 124 triggers + 4 foundations.',
 );
 assert(
   register.entries.every(
@@ -168,6 +168,21 @@ for (const key of istiwaOverThroneKeys) {
     `${key} reintroduced bodily-sounding istiwa wording.`,
   );
 }
+
+const ruyah6103 = overrideByKey.get('6:103')?.englishMeaning ?? '';
+assert(
+  /does not encompass/iu.test(ruyah6103),
+  '6:103 must negate encompassing/comprehending Allah rather than deny ru\'yah.',
+);
+assert(
+  !/cannot see|not see|never see/iu.test(ruyah6103),
+  '6:103 must not be rendered as a denial of seeing Allah.',
+);
+const ruyah7523 = overrideByKey.get('75:23')?.englishMeaning ?? '';
+assert(
+  /beholding their Lord/iu.test(ruyah7523) && /without direction or modality/iu.test(ruyah7523),
+  '75:23 must affirm ru\'yah while explicitly denying direction and modality.',
+);
 
 const forbiddenLiteralPhrases = new Map([
   ['7:54', ['mounted He the Throne', 'established Himself upon the Throne']],
