@@ -29,16 +29,16 @@ const requiredSeeds = [
 
 const [manifest, overrides, register, fullAudit, pack, reader, preferences, css, surahIndex] =
   await Promise.all([
-  readJson('src/data/quran-offline-manifest.json'),
-  readJson('src/data/quran-salahos-2026-overrides.json'),
-  readJson('src/data/quran-mutashabih-review-register.json'),
-  readJson('src/data/quran-mutashabih-full-audit.json'),
-  readJson('public/data/quran/quran-offline-pack.json'),
-  readText('src/ui/QuranOfflineReader.tsx'),
-  readText('src/platform/quranReadingPreferences.ts'),
-  readText('src/quran-offline-reader.css'),
-  readText('src/ui/QuranSurahIndex.tsx'),
-]);
+    readJson('src/data/quran-offline-manifest.json'),
+    readJson('src/data/quran-salahos-2026-overrides.json'),
+    readJson('src/data/quran-mutashabih-review-register.json'),
+    readJson('src/data/quran-mutashabih-full-audit.json'),
+    readJson('public/data/quran/quran-offline-pack.json'),
+    readText('src/ui/QuranOfflineReader.tsx'),
+    readText('src/platform/quranReadingPreferences.ts'),
+    readText('src/quran-offline-reader.css'),
+    readText('src/ui/QuranSurahIndex.tsx'),
+  ]);
 
 assert(overrides.translationId === 'salahos-2026', 'SalahOS 2026 translation ID changed.');
 assert(
