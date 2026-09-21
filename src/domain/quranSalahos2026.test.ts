@@ -66,9 +66,7 @@ describe('SalahOS 2026 English meaning', () => {
     expect(salahos2026EnglishMeaning('16:128', 'baseline')).toContain('Allah supports');
     expect(salahos2026EnglishMeaning('20:5', 'baseline')).toContain('absolute dominion');
     expect(salahos2026EnglishMeaning('20:5', 'baseline')).toContain('subjugates the Throne');
-    expect(salahos2026EnglishMeaning('20:5', 'baseline')).toContain(
-      'without beginning',
-    );
+    expect(salahos2026EnglishMeaning('20:5', 'baseline')).toContain('without beginning');
   });
 
   it('covers all maintained translation-risk triggers with explicit verse-specific wording', () => {
