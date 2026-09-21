@@ -72,9 +72,9 @@ describe('SalahOS 2026 English meaning', () => {
   });
 
   it('covers all maintained translation-risk triggers with explicit verse-specific wording', () => {
-    expect(policyTriggeredVerseKeys).toHaveLength(126);
-    expect(fullAudit.scope.screenedVerseCount).toBe(126);
-    expect(fullAudit.scope.overrideVerseCount).toBe(126);
+    expect(policyTriggeredVerseKeys).toHaveLength(131);
+    expect(fullAudit.scope.screenedVerseCount).toBe(131);
+    expect(fullAudit.scope.overrideVerseCount).toBe(131);
     expect(fullAudit.scope.baselineSafeVerseCount).toBe(0);
     expect(fullAudit.screenedVerseKeys).toEqual(policyTriggeredVerseKeys);
     expect(fullAudit.overrideVerseKeys).toEqual(policyTriggeredVerseKeys);
@@ -98,12 +98,8 @@ describe('SalahOS 2026 English meaning', () => {
       '32:4',
       '57:4',
     ]) {
-      expect(salahos2026EnglishMeaning(verseKey, 'baseline')).toContain(
-        'absolute dominion',
-      );
-      expect(salahos2026EnglishMeaning(verseKey, 'baseline')).toContain(
-        'subjugates the Throne',
-      );
+      expect(salahos2026EnglishMeaning(verseKey, 'baseline')).toContain('absolute dominion');
+      expect(salahos2026EnglishMeaning(verseKey, 'baseline')).toContain('subjugates the Throne');
       expect(salahos2026EnglishMeaning(verseKey, 'baseline')).not.toMatch(
         /mounted.*Throne|established (?:Himself )?(?:on|upon) the Throne|has an istiwa over/iu,
       );
