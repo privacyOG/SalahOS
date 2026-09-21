@@ -29,13 +29,13 @@ const requiredMutashabihSeeds = [
   '16:128',
 ] as const;
 
-const policyTriggeredVerseKeys = [
-  ...new Set(Object.values(triggers.groups).flat()),
-].sort((a, b) => {
-  const [aSurah, aAyah] = a.split(':').map(Number);
-  const [bSurah, bAyah] = b.split(':').map(Number);
-  return aSurah - bSurah || aAyah - bAyah;
-});
+const policyTriggeredVerseKeys = [...new Set(Object.values(triggers.groups).flat())].sort(
+  (a, b) => {
+    const [aSurah, aAyah] = a.split(':').map(Number);
+    const [bSurah, bAyah] = b.split(':').map(Number);
+    return aSurah - bSurah || aAyah - bAyah;
+  },
+);
 
 describe('SalahOS 2026 English meaning', () => {
   it('is transparently derived from the pinned Pickthall baseline', () => {
