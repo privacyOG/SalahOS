@@ -188,7 +188,7 @@ assert(
 const maiyyah2662 = overrideByKey.get('26:62')?.englishMeaning ?? '';
 assert(
   /supports me/iu.test(maiyyah2662),
-  '26:62 must render divine ma\'iyyah as support rather than physical co-location.',
+  "26:62 must render divine ma'iyyah as support rather than physical co-location.",
 );
 const encompassing7228 = overrideByKey.get('72:28')?.englishMeaning ?? '';
 assert(
