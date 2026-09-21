@@ -1,0 +1,51 @@
+name: Temporary PR formatter
+
+on:
+  push:
+    branches:
+      - quran-mutashabih-comprehensive-tawil
+
+permissions:
+  contents: write
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    if: github.actor != 'github-actions[bot]'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: quran-mutashabih-comprehensive-tawil
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Format changed Qur'an audit files
+        run: |
+          npx prettier --write \
+            docs/quran-editorial-policy-v1.6.0.md \
+            docs/quran-salahos-2026-policy.md \
+            scripts/check-quran-salahos-2026.mjs \
+            src/data/quran-mutashabih-policy-triggers.json \
+            src/data/quran-mutashabih-review-register.json \
+            src/data/quran-salahos-2026-source.json \
+            src/domain/quranSalahos2026.test.ts
+      - name: Commit formatting
+        run: |
+          if git diff --quiet; then
+            echo "No formatting changes needed."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            docs/quran-editorial-policy-v1.6.0.md \
+            docs/quran-salahos-2026-policy.md \
+            scripts/check-quran-salahos-2026.mjs \
+            src/data/quran-mutashabih-policy-triggers.json \
+            src/data/quran-mutashabih-review-register.json \
+            src/data/quran-salahos-2026-source.json \
+            src/domain/quranSalahos2026.test.ts
+          git commit -m "Format comprehensive Qur'an audit files"
+          git push origin HEAD:quran-mutashabih-comprehensive-tawil
