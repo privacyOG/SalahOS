@@ -29,11 +29,13 @@ Examples encoded directly from the supplied guide include: 20:5 istiwāʾ as al-
 
 On 2026-09-21 the project owner identified remaining English renderings that could still suggest corporeality, spatiality, direction, movement, bodily parts, physical enclosure, human-style defects or other unbefitting meanings. The audit was therefore reconciled against both the earlier 85-verse pass and the broader policy-trigger inventory.
 
-`src/data/quran-mutashabih-policy-triggers.json` now maintains **122 translation-risk verses**. `src/data/quran-mutashabih-full-audit.json` and `src/data/quran-mutashabih-review-register.json` must contain the same set. **Every one of the 122 trigger verses has an explicit SalahOS 2026 English wording**; no trigger silently falls back to Pickthall.
+`src/data/quran-mutashabih-policy-triggers.json` now maintains **124 translation-risk verses**. `src/data/quran-mutashabih-full-audit.json` and `src/data/quran-mutashabih-review-register.json` must contain the same set. **Every one of the 124 trigger verses has an explicit SalahOS 2026 English wording**; no trigger silently falls back to Pickthall.
+
+The maintained families include **ru’yah** (6:103 and 75:22–23): SalahOS affirms the believers’ seeing of Allah in the Hereafter without direction or modality, while 6:103 is understood as negating encompassing/comprehending Him rather than negating seeing.
 
 The maintained families include istiwāʾ over the Throne and istiwāʾ ilā. For all seven istiwāʾ-over-the-Throne verses, the primary SalahOS English meaning uses **absolute dominion/subjugation** rather than leaving “mounted”, “established Himself”, or an untranslated bodily-sounding construction; yad/yamīn/qabḍah and power language, wajh, ʿayn/aʿyun, sāq, nūr, rūḥ attribution, coming/movement, maʿiyyah, fawqiyyah and heaven/place language, ascent/direction, qurb/nearness, encompassing language, honoured possessives, Kursi wording, preservation language that could be mistranslated as bodily grasping, and reciprocal human-sounding verbs such as mockery, deception, plotting and forgetfulness.
 
-The 122-verse registry is a **translation-risk screen affecting tanzīh**, not a declaration that no other Qur’anic passage can be mutashabih in another sense.
+The 124-verse registry is a **translation-risk screen affecting tanzīh**, not a declaration that no other Qur’anic passage can be mutashabih in another sense.
 
 ## Uthmani Arabic contract
 
@@ -43,6 +45,6 @@ The packaged Arabic Qur’an remains **Uthmani · Medina Mushaf · Hafs**. Every
 
 The 2026-09-09 record in `src/data/quran-scholarly-signoff.json` is an explicit **project-owner editorial/release attestation** over the 114-surah / 6,236-ayah corpus. It is **not** independent qualified scholarly approval.
 
-The owner reopened the Muhkam/Mutashabih review on 2026-09-21. All 122 trigger rows remain `pending-scholar-review` with no fabricated reviewer. Independent qualified whole-corpus scholarly sign-off therefore remains pending.
+The owner reopened the Muhkam/Mutashabih review on 2026-09-21. All 124 trigger rows remain `pending-scholar-review` with no fabricated reviewer. Independent qualified whole-corpus scholarly sign-off therefore remains pending.
 
 Automated tooling may verify corpus completeness, trigger/override/register parity, prohibited literal-risk regressions, SalahOS 2026 identity, Uthmani/Hafs/Medina provenance and rendering safeguards. It may not manufacture scholarly approval. Release refs are fail-closed until `qualifiedScholarReviewStatus` is explicitly approved.
