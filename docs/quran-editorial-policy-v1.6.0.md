@@ -1,60 +1,52 @@
-# SalahOS Qur’an Editorial Policy — V1.6.0 draft
+# SalahOS Qur’an Editorial Policy — expanded V1.6.x review
 
-This policy operationalises the project-owner-supplied guide **The Ayahs of the Qur’an – Muhkam and Mutashabih**. It is a review policy, not an automated tafsir engine and not a substitute for named scholarly approval.
+This policy operationalises the project-owner-supplied guide **The Ayahs of the Qur’an – Muhkam and Mutashabih**. It is a review policy, not an automated tafsir engine and not a substitute for named qualified scholarly approval.
 
 ## Foundations
 
-The review must treat Qur’an 3:7 as the governing Muhkam/Mutashabih method and must continually test proposed readings against the clear foundations represented by 42:11, 112:4 and 19:65. No SalahOS English wording may imply that Allah resembles creation.
+Qur’an 3:7 governs the Muhkam/Mutashabih method. Proposed readings are continually tested against the clear tanzīh foundations represented by 42:11, 112:4 and 19:65. No SalahOS English wording may imply that Allah resembles creation.
 
-The supplied guide defines Muhkam ayat as verses whose meaning is clear or admits one meaning under the rules of Arabic, and Mutashabih ayat as verses that can admit multiple meanings under the rules of Arabic. A proposed meaning for a Mutashabih passage must therefore satisfy all of the following:
+The supplied guide defines Muhkam ayat as verses whose meaning is clear or admits one meaning under the rules of Arabic, and Mutashabih ayat as verses that can admit multiple meanings. A proposed meaning for a Mutashabih passage must therefore:
 
-- it is linguistically possible in Arabic;
-- it conforms to the Religion and does not contradict Muhkam ayat;
-- it does not create a contradiction with another Qur’anic passage or an authentic hadith;
-- it does not attribute bodily, spatial or created characteristics to Allah, including place, shape, limb, movement, sitting, colour, direction or comparable physical implications.
+- be linguistically possible in Arabic;
+- conform to the Religion and not contradict the Muhkam foundations;
+- not create contradiction with another Qur’anic passage or authentic hadith;
+- not attribute bodily, spatial, directional, created, sensuous, deficient or otherwise unbefitting characteristics to Allah, including place, shape, limb, movement, sitting, colour, physical enclosure or comparable created implications.
 
 ## Permitted treatments
 
-SalahOS supports two reviewed treatments for Mutashabih wording, corresponding to the two methodologies recognised in the supplied guide:
+SalahOS supports the two methodologies recognised in the supplied guide:
 
-1. **Tafwīd / general befitting affirmation** — affirm that the revealed wording has a meaning befitting Allah while rejecting sensuous, bodily and spatial meanings, without selecting a specific figurative gloss.
-2. **Contextual ta’wīl** — record a specific meaning only where the reviewer supplies Arabic/contextual justification and a traceable scholarly source. A contextual ta’wīl is verse-specific evidence, never a global search-and-replace rule for the same Arabic word elsewhere.
+1. **Tafwīd / general befitting affirmation with tanzīh** — affirm that the revealed wording has a meaning befitting Allah while rejecting sensuous, bodily, spatial and directional meanings, without selecting a created modality or “how”.
+2. **Contextual taʾwīl** — record a specific meaning only where Arabic/context and traceable evidence support it. A contextual taʾwīl is verse-specific; it is never a global search-and-replace rule for the same Arabic word elsewhere.
 
-The register value `unassigned` means editorial work is incomplete. It must never be rendered to users as an approved translation or commentary.
+## Translation-risk registry
+
+The permanent machine-readable trigger inventory is `src/data/quran-mutashabih-policy-triggers.json`. It currently contains **110 verses** whose English rendering requires explicit review under the supplied tanzīh method. `src/data/quran-mutashabih-full-audit.json`, `src/data/quran-salahos-2026-overrides.json` and `src/data/quran-mutashabih-review-register.json` must remain synchronized with that inventory.
+
+Every trigger receives an explicit SalahOS 2026 meaning. The app must not silently fall back to Pickthall for a maintained trigger, even where the Pickthall wording appears acceptable, because an explicit override provides a stable regression boundary.
+
+The original guide seeds—20:5, 35:10, 28:88, 68:42, 2:115, 66:12, 38:75, 24:35, 89:22, 57:4, 41:54, 37:99, 2:125, 6:61 and 16:128—remain permanent regression fixtures. The broader registry adds related lexical/contextual risk families without treating any one taʾwīl as universally interchangeable.
+
+This registry is a translation-risk audit, not a claim that these 110 verses exhaust every theological category of mutashabih. The supplied guide separately notes matters whose exact realities or times are known only to Allah.
 
 ## Review register requirements
 
-Every screened passage uses `src/data/quran-mutashabih-review-register.json` and records:
+Every foundation and trigger row in `src/data/quran-mutashabih-review-register.json` records:
 
-- verse key;
-- relevant Arabic expression;
-- textual/contextual note;
-- original English wording being reviewed;
-- proposed reviewed meaning, if any;
-- treatment (`tafwid`, `contextual-tawil`, `muhkam-foundation`, or `unassigned`);
-- source/edition/reference evidence;
-- named reviewer;
-- status;
+- verse key and Arabic expression;
+- textual/contextual note and trigger family;
+- pinned Pickthall wording being reviewed;
+- proposed SalahOS 2026 meaning;
+- treatment (`tafwid`, `contextual-tawil`, or `muhkam-foundation`);
+- source/reference evidence;
+- reviewer and status;
 - recognised disagreement notes.
 
-An entry cannot become `approved` unless the relevant fields are complete and a named reviewer has signed off. Machine-generated text, automated scans and CI checks cannot populate the reviewer field.
-
-## Required V1.6.0 seed review
-
-The original register includes 20:5, 35:10, 28:88, 68:42, 2:115, 66:12, 38:75, 24:35, 89:22, 57:4, 41:54, 37:99, 2:125, 6:61 and 16:128, plus the four governing foundation entries. These remain regression seeds. The expanded translation-risk audit is maintained separately in `src/data/quran-mutashabih-full-audit.json` and must stay synchronized with the SalahOS 2026 override layer.
-
-The supplied guide itself includes examples such as 20:5 and 35:10 as Mutashabih passages, explains the Salaf and Khalaf methodologies as valid approaches, and explicitly rejects physical/spatial implications. Other examples in the guide include 28:88, 68:42, 66:12, 38:75 and 24:35. Each must be reviewed in context rather than receiving a universal lexical substitution.
+Automated work may populate proposed editorial data, but it must keep `reviewer: null` and `status: pending-scholar-review` until a real named qualified reviewer acts. Machine-generated text, automated scans and CI checks cannot create scholarly approval.
 
 ## Full-corpus release gate
 
-V1.6.0 Qur’an editorial acceptance requires a documented screening of all 114 surahs / 6,236 ayat, including passages not limited to divine-attribute terminology and passages whose intended meaning may be unknowable. The coverage report must identify every unresolved review item.
+Software validation still verifies all 114 surahs / 6,236 ayat, content identity, Arabic provenance and the 110-trigger parity contract. The prior project-owner whole-corpus attestation is retained as release/editorial provenance, not independent scholarly approval.
 
-No release gate or UI may claim independent qualified whole-corpus scholarly review complete until:
-
-- the review register/coverage report accounts for all 6,236 ayat;
-- all policy-triggered entries are resolved or explicitly dispositioned;
-- the approved English content identity is consistent across reader, search, excerpts, saved reading, copy/share/export and offline/native paths;
-- Uthmani Arabic source/reading/edition/licence/hash and font rendering checks pass; and
-- a named qualified scholar gives the required sign-off.
-
-Until those conditions are met, the V1.6.0 tracker must leave Q03 and Q10 open and the release must not be represented as religiously approved.
+A release ref must fail closed until a named qualified scholar has approved the required whole-corpus scholarly review. Physical/software integrity checks and project-owner attestation cannot substitute for that approval.
