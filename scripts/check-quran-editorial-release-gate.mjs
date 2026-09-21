@@ -123,12 +123,13 @@ for (const entry of register.entries) {
 
 const approvedEntries = [...entriesByKey.values()].filter((entry) => entry.status === 'approved');
 const unresolvedEntries = [...entriesByKey.values()].filter((entry) => entry.status !== 'approved');
-const wholeCorpusSignoffApproved =
+const ownerReleaseAttestationApproved =
   signoff?.status === 'approved' &&
   isNonEmptyString(signoff.reviewerName) &&
   isNonEmptyString(signoff.qualification) &&
   signoff.scope === 'whole-corpus-6236' &&
   isNonEmptyString(signoff.reviewedAt);
+const qualifiedScholarReviewStatus = signoff?.qualifiedScholarReviewStatus ?? 'unknown';
 
 const report = {
   corpusAyat: corpusKeys.size,
@@ -139,15 +140,19 @@ const report = {
   requiredMutashabihSeeds: register.requiredSeedVerses?.length ?? 0,
   scholarlySignoffStatus: signoff?.status ?? null,
   scholarlySignoffReviewer: signoff?.reviewerName ?? null,
-  wholeCorpusSignoffApproved,
+  ownerReleaseAttestationApproved,
+  qualifiedScholarReviewStatus,
   releaseRef: isReleaseRef(),
 };
 
 console.log(`Qur’an editorial coverage: ${JSON.stringify(report)}`);
 
 if (!isReleaseRef()) {
-  if (!wholeCorpusSignoffApproved) {
-    console.log('Qur’an scholarly release gate remains OPEN for development builds.');
+  if (!ownerReleaseAttestationApproved) {
+    console.log('Qur’an owner editorial/release attestation remains OPEN for development builds.');
+  }
+  if (qualifiedScholarReviewStatus !== 'approved') {
+    console.log(`Independent qualified scholarly review remains ${String(qualifiedScholarReviewStatus)}.`);
   }
   process.exit(0);
 }
@@ -174,5 +179,5 @@ assert(
 );
 
 console.log(
-  `Qur’an editorial release gate passed for the complete 6,236-ayah SalahOS 2026 corpus by explicit whole-corpus sign-off from ${signoff.reviewerName}.`,
+  `Qur’an owner editorial/release attestation passed for the complete 6,236-ayah SalahOS 2026 corpus from ${signoff.reviewerName}; independent qualified scholarly review status: ${String(qualifiedScholarReviewStatus)}.`,
 );
