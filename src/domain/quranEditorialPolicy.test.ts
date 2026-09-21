@@ -4,7 +4,7 @@ import triggers from '../data/quran-mutashabih-policy-triggers.json';
 import register from '../data/quran-mutashabih-review-register.json';
 import { validateQuranEditorialRegister } from './quranEditorialPolicy';
 
-const expectedFoundations = ['3:7', '42:11', '112:4', '19:65'] as const;
+const expectedFoundations = ['3:7', '19:65', '42:11', '112:4'] as const;
 const expectedTriggered = [...new Set(Object.values(triggers.groups).flat())].sort((a, b) => {
   const [aSurah = 0, aAyah = 0] = a.split(':').map(Number);
   const [bSurah = 0, bAyah = 0] = b.split(':').map(Number);
