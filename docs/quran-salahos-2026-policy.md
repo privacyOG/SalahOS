@@ -23,7 +23,7 @@ The original guide examples remain permanent regression fixtures, but they are n
 
 The inventory currently covers 88 unique Mutashabih policy-trigger verses across istiwāʾ, wajh, yad, ʿayn, sāq, qabḍ/yamīn, nūr, rūḥ attribution, coming/movement, fawq/spatial language, maʿiyyah, ascent/direction, guide-context examples and reciprocal human-sounding verbs. Four governing foundations—3:7, 42:11, 112:4 and 19:65—are tracked separately. Every trigger has a dedicated SalahOS 2026 English meaning, Salaf/tanzīh treatment, contextual Khalaf taʾwīl note and a row in the review register.
 
-This inventory is an editorial trigger inventory for divine-attribute and related language; it does not pretend that every scholarly use of the category *mutashābih* is exhausted by these lexical groups.
+This inventory is an editorial trigger inventory for divine-attribute and related language; it does not pretend that every scholarly use of the category _mutashābih_ is exhausted by these lexical groups.
 
 ## Uthmani Arabic contract
 
