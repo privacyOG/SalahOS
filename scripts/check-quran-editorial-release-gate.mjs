@@ -152,7 +152,9 @@ if (!isReleaseRef()) {
     console.log('Qur’an owner editorial/release attestation remains OPEN for development builds.');
   }
   if (qualifiedScholarReviewStatus !== 'approved') {
-    console.log(`Independent qualified scholarly review remains ${String(qualifiedScholarReviewStatus)}.`);
+    console.log(
+      `Independent qualified scholarly review remains ${String(qualifiedScholarReviewStatus)}.`,
+    );
   }
   process.exit(0);
 }
