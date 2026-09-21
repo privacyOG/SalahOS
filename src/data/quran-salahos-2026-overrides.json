@@ -11,13 +11,33 @@
   },
   "editorialPrinciples": [
     "Muhkam verses govern the interpretation of mutashabih wording.",
-    "No English wording may attribute bodily, spatial, directional, created, sensuous or deficient characteristics to Allah.",
-    "Salaf-style tafwid with tanzih and context-specific Khalaf-style tawil are both supported where the supplied guide supports them.",
+    "No English wording may attribute bodily, spatial, directional, created, sensuous, deficient or otherwise unbefitting characteristics to Allah.",
+    "Salaf-style tafwid with tanzih and context-specific Khalaf-style tawil are both supported where the supplied guide and Arabic context permit them.",
     "A verse-specific tawil must not be turned into a universal lexical substitution rule.",
-    "Corpus-wide screening must cover the guide's anthropomorphic/spatial trigger families, including istiwa, yad, wajh, ayn, saq, nur, coming/movement, ma'iyyah, fawqiyyah, ascent, heaven/place wording, ruh attribution, honored possessives, proximity, encompassing language and impossible deficiencies such as forgetfulness.",
-    "Qualified scholarly review is required before a whole-corpus religious approval claim."
+    "The maintained corpus-wide translation-risk registry must give every triggered verse an explicit SalahOS 2026 wording and review-register row; baseline wording is not silently trusted for a trigger.",
+    "Qualified scholarly review is required before any whole-corpus religious approval claim."
   ],
   "entries": [
+    {
+      "verseKey": "2:15",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Allah requites their mockery, leaving them to wander blindly in their defiance.",
+      "editorialNote": "The English meaning avoids attributing deficiency, deception, forgetfulness or human-style mockery to Allah; the verb is rendered as a just requital or counteraction appropriate to its context.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or a created modality.",
+      "khalafReading": "Contextual ta’wil: the divine action is a just requital, countermeasure or frustration of the wrongdoers’ act, not the created defect denoted when the same verb is used of people.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "2:19",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Or like a rainstorm from the sky, wherein are darkness, thunder and lightning. They thrust their fingers into their ears at the thunderclaps, fearing death; yet Allah's knowledge and power encompass the disbelievers.",
+      "editorialNote": "The Arabic muhīt is rendered through Allah's knowledge and power, not as bodily or spatial surrounding.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or any created modality.",
+      "khalafReading": "Contextual ta'wil: divine encompassing is understood through perfect knowledge and power, not physical enclosure, extension or location.",
+      "guideSpecificMeaning": null
+    },
     {
       "verseKey": "2:29",
       "classification": "mutashabih",
@@ -99,6 +119,16 @@
       "guideSpecificMeaning": null
     },
     {
+      "verseKey": "2:255",
+      "classification": "mutashabih",
+      "treatment": "tafwid-with-tanzih",
+      "englishMeaning": "Allah—there is no deity except Him, the Ever-Living, the Self-Sustaining. Neither drowsiness nor sleep overtakes Him. To Him belongs whatever is in the heavens and whatever is on the earth. Who can intercede except by His permission? He knows what is before them and what is behind them, and they encompass nothing of His knowledge except what He wills. His Kursi encompasses the heavens and the earth, and preserving them does not weary Him. He is the Most High, the Magnificent.",
+      "editorialNote": "Kursi is retained as the Qur'anic term rather than translated as a throne or seat that could suggest a place occupied by Allah. The wording is governed by tanzih and does not assign bodily seating, containment or location.",
+      "salafReading": "Affirm the revealed Kursi wording with a meaning befitting Allah while denying that Allah sits, is contained, occupies a seat or place, or has any bodily modality.",
+      "khalafReading": "No verse-specific lexical gloss is imposed here from the supplied guide; the English keeps Kursi while explicitly excluding a corporeal or spatial reading.",
+      "guideSpecificMeaning": null
+    },
+    {
       "verseKey": "2:272",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
@@ -109,6 +139,16 @@
       "guideSpecificMeaning": null
     },
     {
+      "verseKey": "3:7",
+      "classification": "muhkam-foundation",
+      "treatment": "muhkam-foundation",
+      "englishMeaning": "He is the One Who sent down to you the Book. In it are clear verses, which are the foundation of the Book, and others that are mutashabih. As for those whose hearts incline to deviation, they follow what is mutashabih, seeking discord and seeking unbefitting interpretations. No one knows their true meanings except Allah and those firmly rooted in knowledge. They say: We believe in it; all of it is from our Lord. Only people of understanding take heed.",
+      "editorialNote": "This is the governing Muhkam/Mutashabih methodology verse in the supplied guide. The SalahOS policy reads all ambiguous divine-attribute wording through the clear tanzih foundations and does not permit a created or bodily meaning for Allah.",
+      "salafReading": null,
+      "khalafReading": null,
+      "guideSpecificMeaning": "The Qur’an contains muhkam verses that are the foundation of the Book and mutashabih verses whose acceptable meanings must agree with Arabic, the Religion and the muhkam foundations."
+    },
+    {
       "verseKey": "3:26",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
@@ -116,6 +156,16 @@
       "editorialNote": "Bi-yadika is rendered as power and disposal, not a bodily hand.",
       "salafReading": "Affirm the revealed expression with a meaning befitting Allah while denying limbs, hands, parts, bodily form or created instruments.",
       "khalafReading": "Yad and related expressions are read contextually as power, authority, generosity, care or disposal according to the verse, not as bodily hands.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "3:54",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "They schemed, and Allah countered their scheme; Allah is the best in bringing schemes to nothing.",
+      "editorialNote": "The English meaning avoids attributing deficiency, deception, forgetfulness or human-style mockery to Allah; the verb is rendered as a just requital or counteraction appropriate to its context.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or a created modality.",
+      "khalafReading": "Contextual ta’wil: the divine action is a just requital, countermeasure or frustration of the wrongdoers’ act, not the created defect denoted when the same verb is used of people.",
       "guideSpecificMeaning": null
     },
     {
@@ -139,6 +189,16 @@
       "guideSpecificMeaning": null
     },
     {
+      "verseKey": "3:120",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "If good touches you, it grieves them; and if hardship strikes you, they rejoice. But if you remain patient and mindful of Allah, their schemes will not harm you. Surely Allah's knowledge encompasses all that they do.",
+      "editorialNote": "Muhīt is rendered as encompassing knowledge, avoiding a physical-surrounding reading.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or any created modality.",
+      "khalafReading": "Contextual ta'wil: divine encompassing here is Allah's complete knowledge of their deeds, not spatial surrounding.",
+      "guideSpecificMeaning": null
+    },
+    {
       "verseKey": "4:108",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
@@ -159,6 +219,46 @@
       "guideSpecificMeaning": null
     },
     {
+      "verseKey": "4:142",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "The hypocrites seek to deceive Allah, but He requites their deception. When they stand for worship they do so lazily, only to be seen by people, and they remember Allah but little.",
+      "editorialNote": "The English meaning avoids attributing deficiency, deception, forgetfulness or human-style mockery to Allah; the verb is rendered as a just requital or counteraction appropriate to its context.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or a created modality.",
+      "khalafReading": "Contextual ta’wil: the divine action is a just requital, countermeasure or frustration of the wrongdoers’ act, not the created defect denoted when the same verb is used of people.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "4:158",
+      "classification": "mutashabih",
+      "treatment": "tafwid-and-contextual-tawil",
+      "englishMeaning": "Rather, Allah raised him up as He willed, without implying that Allah occupies a place or direction. Allah is Almighty, All-Wise.",
+      "editorialNote": "The phrase 'raised him to Him' must not be translated as movement toward a location occupied by Allah. The English preserves the raising while explicitly excluding place and direction.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or any created modality.",
+      "khalafReading": "Contextual ta'wil: the raising is by Allah's power and command and does not make Allah a spatial destination or occupant of a direction.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "4:171",
+      "classification": "mutashabih",
+      "treatment": "tafwid-and-contextual-tawil",
+      "englishMeaning": "O People of the Scripture! Do not exaggerate in your religion nor utter aught concerning Allah save the truth. The Messiah, Jesus son of Mary, was only a messenger of Allah, and His word which He conveyed unto Mary, and a created spirit from Him, brought into being by His command. So believe in Allah and His messengers, and say not \"Three\" - Cease! (it is) better for you! - Allah is only One Allah. Far is it removed from His Transcendent Majesty that He should have a son. His is all that is in the heavens and all that is in the earth. And Allah is sufficient as Defender.",
+      "editorialNote": "Possessive/from-Him spirit language is rendered as a created spirit, an attribution of honour, command or divine support; it never means a part, soul or component of Allah.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or a created modality.",
+      "khalafReading": "Contextual ta’wil: the spirit is created and may be attributed to Allah by honour, command, creation or support; Allah is not composed of parts and has no soul.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "5:12",
+      "classification": "mutashabih",
+      "treatment": "tafwid-and-contextual-tawil",
+      "englishMeaning": "Allah made a covenant of old with the Children of Israel and We raised among them twelve chieftains, and Allah said: Lo! I support you. If ye establish worship and pay the poor-due, and believe in My messengers and support them, and lend unto Allah a kindly loan, surely I shall remit your sins, and surely I shall bring you into Gardens underneath which rivers flow. Whoso among you disbelieveth after this will go astray from a plain road.",
+      "editorialNote": "Divine ma'iyyah is rendered by support, protection, guidance or encompassing knowledge according to context, never physical accompaniment or co-location.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or a created modality.",
+      "khalafReading": "Contextual ta’wil: ma'iyyah denotes Allah’s support, protection, guidance or knowledge as the context requires, not spatial nearness or physical presence.",
+      "guideSpecificMeaning": null
+    },
+    {
       "verseKey": "5:64",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
@@ -166,6 +266,26 @@
       "editorialNote": "Yad and yadahu are rendered through generosity and giving in the immediate context, not bodily hands.",
       "salafReading": "Affirm the revealed expression with a meaning befitting Allah while denying limbs, hands, parts, bodily form or created instruments.",
       "khalafReading": "Yad and related expressions are read contextually as power, authority, generosity, care or disposal according to the verse, not as bodily hands.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "6:3",
+      "classification": "mutashabih",
+      "treatment": "tafwid-and-contextual-tawil",
+      "englishMeaning": "He alone is Allah, worshipped in the heavens and on the earth. He knows your secret and your utterance, and He knows what you earn.",
+      "editorialNote": "Spatial/fawq wording is rendered through worship, authority, dominion or subjugation so the English does not place Allah inside creation or in a physical direction.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or a created modality.",
+      "khalafReading": "Contextual ta’wil: the verse is read through Allah’s authority, dominion, subjugation or being the One worshipped, not bodily location, containment, height or direction.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "6:18",
+      "classification": "mutashabih",
+      "treatment": "tafwid-and-contextual-tawil",
+      "englishMeaning": "He subjugates all His servants under His power. He is the Wise, the Knower.",
+      "editorialNote": "Spatial/fawq wording is rendered through worship, authority, dominion or subjugation so the English does not place Allah inside creation or in a physical direction.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or a created modality.",
+      "khalafReading": "Contextual ta’wil: the verse is read through Allah’s authority, dominion, subjugation or being the One worshipped, not bodily location, containment, height or direction.",
       "guideSpecificMeaning": null
     },
     {
@@ -219,6 +339,16 @@
       "guideSpecificMeaning": null
     },
     {
+      "verseKey": "8:12",
+      "classification": "mutashabih",
+      "treatment": "tafwid-and-contextual-tawil",
+      "englishMeaning": "When thy Lord inspired the angels, (saying): I support you. So make those who believe stand firm. I will throw fear into the hearts of those who disbelieve. Then smite the necks and smite of them each finger.",
+      "editorialNote": "Divine ma'iyyah is rendered by support, protection, guidance or encompassing knowledge according to context, never physical accompaniment or co-location.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or a created modality.",
+      "khalafReading": "Contextual ta’wil: ma'iyyah denotes Allah’s support, protection, guidance or knowledge as the context requires, not spatial nearness or physical presence.",
+      "guideSpecificMeaning": null
+    },
+    {
       "verseKey": "8:19",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
@@ -239,6 +369,16 @@
       "guideSpecificMeaning": null
     },
     {
+      "verseKey": "8:30",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "When those who disbelieved plotted against you to restrain you, kill you or drive you out, they plotted and Allah frustrated their plot. Allah is the best in frustrating plots.",
+      "editorialNote": "The English meaning avoids attributing deficiency, deception, forgetfulness or human-style mockery to Allah; the verb is rendered as a just requital or counteraction appropriate to its context.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or a created modality.",
+      "khalafReading": "Contextual ta’wil: the divine action is a just requital, countermeasure or frustration of the wrongdoers’ act, not the created defect denoted when the same verb is used of people.",
+      "guideSpecificMeaning": null
+    },
+    {
       "verseKey": "8:46",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
@@ -246,6 +386,16 @@
       "editorialNote": "Ma'iyyah is rendered as support.",
       "salafReading": "Affirm divine ma'iyyah with a meaning befitting Allah while denying physical accompaniment, indwelling, proximity by distance or co-location.",
       "khalafReading": "Ma'iyyah is read by context as knowledge, support, aid, protection or witness, never physical presence in a place.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "8:47",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Do not be like those who came out of their homes boastfully and to be seen by people, turning others away from Allah's way. Allah's knowledge encompasses all that they do.",
+      "editorialNote": "Muhīt is rendered as encompassing knowledge rather than physical surrounding.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or any created modality.",
+      "khalafReading": "Contextual ta'wil: Allah encompasses their deeds in knowledge and power, not by bodily or spatial enclosure.",
       "guideSpecificMeaning": null
     },
     {
@@ -289,6 +439,16 @@
       "guideSpecificMeaning": null
     },
     {
+      "verseKey": "9:79",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Those who ridicule the believers who give charity willingly, and those who find nothing to give except their effort—Allah requites their derision. Theirs will be a painful punishment.",
+      "editorialNote": "The English meaning avoids attributing deficiency, deception, forgetfulness or human-style mockery to Allah; the verb is rendered as a just requital or counteraction appropriate to its context.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or a created modality.",
+      "khalafReading": "Contextual ta’wil: the divine action is a just requital, countermeasure or frustration of the wrongdoers’ act, not the created defect denoted when the same verb is used of people.",
+      "guideSpecificMeaning": null
+    },
+    {
       "verseKey": "9:123",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
@@ -316,6 +476,26 @@
       "editorialNote": "Bi-a'yunina is rendered as protection and care.",
       "salafReading": "Affirm the revealed wording while denying eyes as bodily organs, parts or created instruments.",
       "khalafReading": "Ayn and a'yun wording is read contextually as care, protection and oversight, without bodily implication.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "11:61",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "And to Thamud We sent their brother Salih. He said: O my people, worship Allah; you have no deity other than Him. He brought you forth from the earth and enabled you to settle it, so seek His forgiveness and turn to Him in repentance. Indeed, my Lord is near by His knowledge and response, ever Responsive.",
+      "editorialNote": "Divine qurb is rendered non-spatially through knowledge and response, not distance, contact or location.",
+      "salafReading": "Affirm divine nearness with a meaning befitting Allah while denying distance, physical proximity, contact, indwelling or location.",
+      "khalafReading": "Contextual ta'wil: Allah's nearness here is understood through His knowledge and response to those who call upon Him, not spatial distance.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "11:92",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "He said: O my people, is my family more honoured by you than Allah, while you cast His command behind you in neglect? Surely my Lord's knowledge encompasses all that you do.",
+      "editorialNote": "Muhīt is rendered as encompassing knowledge rather than physical surrounding.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or any created modality.",
+      "khalafReading": "Contextual ta'wil: Allah encompasses their deeds in knowledge, not by spatial enclosure.",
       "guideSpecificMeaning": null
     },
     {
@@ -409,6 +589,16 @@
       "guideSpecificMeaning": "Allah subjugated the Throne in al-azal with a subjugation which is without a beginning, like all of the attributes of Allah."
     },
     {
+      "verseKey": "20:39",
+      "classification": "mutashabih",
+      "treatment": "tafwid-and-contextual-tawil",
+      "englishMeaning": "Saying: Throw him into the ark, and throw it into the river, then the river shall throw it on to the bank, and there an enemy to Me and an enemy to him shall take him. And I endued thee with love from Me that thou mightest be trained according to My will,",
+      "editorialNote": "Eye-language is rendered by care, protection, supervision or will according to context so the English does not attribute an organ or bodily eye to Allah.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or a created modality.",
+      "khalafReading": "Contextual ta’wil: the expression indicates Allah’s care, protection, supervision or will, not a bodily eye or organ.",
+      "guideSpecificMeaning": null
+    },
+    {
       "verseKey": "20:46",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
@@ -489,6 +679,16 @@
       "guideSpecificMeaning": null
     },
     {
+      "verseKey": "27:50",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "They plotted a plot, and We countered their plot while they perceived not.",
+      "editorialNote": "The English meaning avoids attributing deficiency, deception, forgetfulness or human-style mockery to Allah; the verb is rendered as a just requital or counteraction appropriate to its context.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or a created modality.",
+      "khalafReading": "Contextual ta’wil: the divine action is a just requital, countermeasure or frustration of the wrongdoers’ act, not the created defect denoted when the same verb is used of people.",
+      "guideSpecificMeaning": null
+    },
+    {
       "verseKey": "28:88",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
@@ -549,6 +749,26 @@
       "guideSpecificMeaning": null
     },
     {
+      "verseKey": "32:9",
+      "classification": "mutashabih",
+      "treatment": "tafwid-and-contextual-tawil",
+      "englishMeaning": "Then He fashioned him and caused the created spirit honoured by Him to enter him; and appointed for you hearing and sight and hearts. Small thanks give ye!",
+      "editorialNote": "Possessive/from-Him spirit language is rendered as a created spirit, an attribution of honour, command or divine support; it never means a part, soul or component of Allah.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or a created modality.",
+      "khalafReading": "Contextual ta’wil: the spirit is created and may be attributed to Allah by honour, command, creation or support; Allah is not composed of parts and has no soul.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "34:50",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Say: If I err, I err only against myself; and if I am guided, it is by what my Lord reveals to me. Surely He is All-Hearing and near by His knowledge and response.",
+      "editorialNote": "Divine qurb is rendered non-spatially through knowledge and response, not physical nearness or location.",
+      "salafReading": "Affirm divine nearness with a meaning befitting Allah while denying distance, physical proximity, contact, indwelling or location.",
+      "khalafReading": "Contextual ta'wil: nearness is understood through Allah's knowledge and response, not spatial distance.",
+      "guideSpecificMeaning": null
+    },
+    {
       "verseKey": "35:10",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
@@ -556,6 +776,26 @@
       "editorialNote": "The supplied guide identifies this verse as mutashabih and requires any assigned meaning to comply with Arabic, the Religion and the muhkam foundations. 'Good words are accepted by Him' prevents a spatial reading of ascent to a location. This wording remains subject to named scholarly review.",
       "salafReading": "Affirm the revealed wording with a meaning befitting Allah while denying spatial movement or location.",
       "khalafReading": "A contextual reading treats the ascent of good words as their acceptance and honouring by Allah, not movement toward a place occupied by Him.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "35:41",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Indeed, Allah preserves the heavens and the earth from ceasing or deviating. If they were to cease, no one after Him could preserve them. Surely He is Most Forbearing, Most Forgiving.",
+      "editorialNote": "The Pickthall baseline uses 'graspeth'. Arabic yumsiku is rendered as preserves/restrains here so the English does not suggest a bodily grasp or hand.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or any created modality.",
+      "khalafReading": "Contextual ta'wil: Allah preserves and restrains the heavens and earth by His power; no bodily grasp, limb or instrument is implied.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "36:71",
+      "classification": "mutashabih",
+      "treatment": "tafwid-and-contextual-tawil",
+      "englishMeaning": "Have they not seen how We have created for them of Our handiwork the cattle, so that they are their owners,",
+      "editorialNote": "The wording is reviewed so that yad-related expressions denote power, disposal, care, generosity, support or authority according to context, without attributing limbs or bodily hands to Allah.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or a created modality.",
+      "khalafReading": "Contextual ta’wil assigns a non-bodily meaning appropriate to the verse—such as power, disposal, care, bounty, support or authority—while the Salaf reading maintains tanzih.",
       "guideSpecificMeaning": null
     },
     {
@@ -599,6 +839,16 @@
       "guideSpecificMeaning": "The care of Allah."
     },
     {
+      "verseKey": "39:56",
+      "classification": "mutashabih",
+      "treatment": "tafwid-and-contextual-tawil",
+      "englishMeaning": "Lest any soul should say: Alas for my grief that I neglected my duty toward Allah, and I was indeed among the scoffers!",
+      "editorialNote": "Janb Allah is rendered as duty/right owed toward Allah rather than a bodily side.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or a created modality.",
+      "khalafReading": "Contextual ta’wil: janb denotes duty, right or obedience toward Allah, not a bodily side.",
+      "guideSpecificMeaning": null
+    },
+    {
       "verseKey": "39:67",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
@@ -606,6 +856,16 @@
       "editorialNote": "Qabdah and yamin are rendered through divine power rather than a handful or right hand.",
       "salafReading": "Affirm the revealed expression with a meaning befitting Allah while denying limbs, hands, parts, bodily form or created instruments.",
       "khalafReading": "Yad and related expressions are read contextually as power, authority, generosity, care or disposal according to the verse, not as bodily hands.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "39:69",
+      "classification": "mutashabih",
+      "treatment": "tafwid-and-contextual-tawil",
+      "englishMeaning": "And the earth will shine with the illumination bestowed by its Lord; the Record will be set forth, the prophets and witnesses will be brought, and judgment will be given between them in truth, and they will not be wronged.",
+      "editorialNote": "The rendering avoids implying that Allah is a physical source of created luminosity.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or a created modality.",
+      "khalafReading": "Contextual ta’wil: the light is illumination created or bestowed by Allah, not Allah being physical light.",
       "guideSpecificMeaning": null
     },
     {
@@ -637,6 +897,16 @@
       "salafReading": null,
       "khalafReading": null,
       "guideSpecificMeaning": "Absolutely there is nothing like Him."
+    },
+    {
+      "verseKey": "43:84",
+      "classification": "mutashabih",
+      "treatment": "tafwid-and-contextual-tawil",
+      "englishMeaning": "He alone is Allah, worshipped in the heaven and on the earth. He is the Wise, the Knower.",
+      "editorialNote": "Spatial/fawq wording is rendered through worship, authority, dominion or subjugation so the English does not place Allah inside creation or in a physical direction.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or a created modality.",
+      "khalafReading": "Contextual ta’wil: the verse is read through Allah’s authority, dominion, subjugation or being the One worshipped, not bodily location, containment, height or direction.",
+      "guideSpecificMeaning": null
     },
     {
       "verseKey": "45:34",
@@ -676,6 +946,16 @@
       "editorialNote": "The verse begins with divine knowledge, so nearness is rendered as nearness of knowledge rather than spatial distance.",
       "salafReading": "Affirm divine nearness with a meaning befitting Allah while denying distance, physical proximity, contact or location.",
       "khalafReading": "Nearness is read contextually through knowledge, response, power, care or the nearness of appointed angels, not spatial distance.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "51:47",
+      "classification": "mutashabih",
+      "treatment": "tafwid-and-contextual-tawil",
+      "englishMeaning": "We have built the heaven with might, and We it is Who make the vast extent (thereof).",
+      "editorialNote": "The wording is reviewed so that yad-related expressions denote power, disposal, care, generosity, support or authority according to context, without attributing limbs or bodily hands to Allah.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or a created modality.",
+      "khalafReading": "Contextual ta’wil assigns a non-bodily meaning appropriate to the verse—such as power, disposal, care, bounty, support or authority—while the Salaf reading maintains tanzih.",
       "guideSpecificMeaning": null
     },
     {
@@ -749,6 +1029,16 @@
       "guideSpecificMeaning": null
     },
     {
+      "verseKey": "58:22",
+      "classification": "mutashabih",
+      "treatment": "tafwid-and-contextual-tawil",
+      "englishMeaning": "Thou wilt not find folk who believe in Allah and the Last Day loving those who oppose Allah and His messenger, even though they be their fathers or their sons or their brethren or their clan. As for such, He hath written faith upon their hearts and hath strengthened them with support granted by Him, and He will bring them into Gardens underneath which rivers flow, wherein they will abide. Allah is well pleased with them, and they are well pleased with Him. They are Allah's party. Lo! is it not Allah's party who are the successful?",
+      "editorialNote": "Possessive/from-Him spirit language is rendered as a created spirit, an attribution of honour, command or divine support; it never means a part, soul or component of Allah.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or a created modality.",
+      "khalafReading": "Contextual ta’wil: the spirit is created and may be attributed to Allah by honour, command, creation or support; Allah is not composed of parts and has no soul.",
+      "guideSpecificMeaning": null
+    },
+    {
       "verseKey": "59:2",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
@@ -819,6 +1109,26 @@
       "guideSpecificMeaning": null
     },
     {
+      "verseKey": "76:9",
+      "classification": "mutashabih",
+      "treatment": "tafwid-and-contextual-tawil",
+      "englishMeaning": "(Saying): We feed you, for the sake of Allah only. We wish for no reward nor thanks from you;",
+      "editorialNote": "The expression is rendered contextually as Allah’s acceptance, pleasure, Dominion, or Allah Himself as the context requires, without attributing a bodily face or created form.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or a created modality.",
+      "khalafReading": "Contextual ta’wil of wajh is selected verse by verse; it may denote qiblah, Dominion, Allah Himself, or seeking Allah’s acceptance and pleasure, never a bodily face.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "85:20",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Yet Allah's knowledge and power encompass them completely.",
+      "editorialNote": "Muhīt is rendered through knowledge and power rather than bodily or spatial surrounding.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or any created modality.",
+      "khalafReading": "Contextual ta'wil: Allah encompasses them in knowledge and power, not by physical enclosure or location.",
+      "guideSpecificMeaning": null
+    },
+    {
       "verseKey": "89:22",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
@@ -827,6 +1137,16 @@
       "salafReading": "Affirm the revealed wording while denying movement, transition, place and direction for Allah.",
       "khalafReading": "The guide reports the meaning: an indication of the Power of Allah has come.",
       "guideSpecificMeaning": "An indication of the Power of Allah has come."
+    },
+    {
+      "verseKey": "92:20",
+      "classification": "mutashabih",
+      "treatment": "tafwid-and-contextual-tawil",
+      "englishMeaning": "Except as seeking (to fulfil) the acceptance and pleasure of his Lord Most High.",
+      "editorialNote": "The expression is rendered contextually as Allah’s acceptance, pleasure, Dominion, or Allah Himself as the context requires, without attributing a bodily face or created form.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while maintaining tanzih: Allah does not resemble creation and is not described by body, limbs, composition, place, direction, movement, change, or a created modality.",
+      "khalafReading": "Contextual ta’wil of wajh is selected verse by verse; it may denote qiblah, Dominion, Allah Himself, or seeking Allah’s acceptance and pleasure, never a bodily face.",
+      "guideSpecificMeaning": null
     },
     {
       "verseKey": "112:4",
