@@ -22,7 +22,7 @@ SalahOS supports the two methodologies recognised in the supplied guide:
 
 ## Translation-risk registry
 
-The permanent machine-readable trigger inventory is `src/data/quran-mutashabih-policy-triggers.json`. It currently contains **124 verses** whose English rendering requires explicit review under the supplied tanzīh method. `src/data/quran-mutashabih-full-audit.json`, `src/data/quran-salahos-2026-overrides.json` and `src/data/quran-mutashabih-review-register.json` must remain synchronized with that inventory.
+The permanent machine-readable trigger inventory is `src/data/quran-mutashabih-policy-triggers.json`. It currently contains **133 verses** whose English rendering requires explicit review under the supplied tanzīh method. `src/data/quran-mutashabih-full-audit.json`, `src/data/quran-salahos-2026-overrides.json` and `src/data/quran-mutashabih-review-register.json` must remain synchronized with that inventory.
 
 Every trigger receives an explicit SalahOS 2026 meaning. The app must not silently fall back to Pickthall for a maintained trigger, even where the Pickthall wording appears acceptable, because an explicit override provides a stable regression boundary.
 
@@ -30,7 +30,7 @@ The original guide seeds—20:5, 35:10, 28:88, 68:42, 2:115, 66:12, 38:75, 24:35
 
 The registry also includes the project’s required **ru’yah pair**: 6:103 is rendered as negating encompassing/comprehending Allah rather than negating seeing, while 75:22–23 affirms the believers’ vision of Allah in the Hereafter without direction or modality.
 
-This registry is a translation-risk audit, not a claim that these 124 verses exhaust every theological category of mutashabih. The supplied guide separately notes matters whose exact realities or times are known only to Allah.
+This registry is a translation-risk audit, not a claim that these 133 verses exhaust every theological category of mutashabih. The supplied guide separately notes matters whose exact realities or times are known only to Allah.
 
 ## Review register requirements
 
@@ -49,6 +49,6 @@ Automated work may populate proposed editorial data, but it must keep `reviewer:
 
 ## Full-corpus release gate
 
-Software validation still verifies all 114 surahs / 6,236 ayat, content identity, Arabic provenance and the 131-trigger parity contract. The prior project-owner whole-corpus attestation is retained as release/editorial provenance, not independent scholarly approval.
+Software validation still verifies all 114 surahs / 6,236 ayat, content identity, Arabic provenance and the 133-trigger parity contract. The prior project-owner whole-corpus attestation is retained as release/editorial provenance, not independent scholarly approval.
 
 A release ref must fail closed until a named qualified scholar has approved the required whole-corpus scholarly review. Physical/software integrity checks and project-owner attestation cannot substitute for that approval.
