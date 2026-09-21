@@ -22,30 +22,6 @@ jobs:
           cache: npm
       - name: Install dependencies from lockfile
         run: npm ci --ignore-scripts
-      - name: One-shot format Qur'an audit files
-        if: github.event_name == 'pull_request'
-        run: |
-          npx prettier --write \
-            scripts/check-quran-salahos-2026.mjs \
-            src/data/quran-mutashabih-full-audit.json \
-            src/data/quran-mutashabih-policy-triggers.json \
-            src/data/quran-mutashabih-review-register.json \
-            src/data/quran-salahos-2026-source.json \
-            src/domain/quranEditorialPolicy.test.ts \
-            src/domain/quranSalahos2026.test.ts
-          for FILE in \
-            scripts/check-quran-salahos-2026.mjs \
-            src/data/quran-mutashabih-full-audit.json \
-            src/data/quran-mutashabih-policy-triggers.json \
-            src/data/quran-mutashabih-review-register.json \
-            src/data/quran-salahos-2026-source.json \
-            src/domain/quranEditorialPolicy.test.ts \
-            src/domain/quranSalahos2026.test.ts; do
-            echo "FORMATTED_FILE_BEGIN:${FILE}"
-            base64 -w0 "${FILE}"
-            echo
-            echo "FORMATTED_FILE_END:${FILE}"
-          done
       - name: Format check
         run: npm run format:check
       - name: Lint
