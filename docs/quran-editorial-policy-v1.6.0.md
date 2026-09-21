@@ -41,7 +41,7 @@ An entry cannot become `approved` unless the relevant fields are complete and a 
 
 ## Required V1.6.0 seed review
 
-The initial register must include 20:5, 35:10, 28:88, 68:42, 2:115, 66:12, 38:75, 24:35, 89:22, 57:4, 41:54, 37:99, 2:125, 6:61 and 16:128, plus the four governing foundation entries. These seeds are starting points only; they do not constitute full-corpus coverage.
+The original register includes 20:5, 35:10, 28:88, 68:42, 2:115, 66:12, 38:75, 24:35, 89:22, 57:4, 41:54, 37:99, 2:125, 6:61 and 16:128, plus the four governing foundation entries. These remain regression seeds. The expanded translation-risk audit is maintained separately in `src/data/quran-mutashabih-full-audit.json` and must stay synchronized with the SalahOS 2026 override layer.
 
 The supplied guide itself includes examples such as 20:5 and 35:10 as Mutashabih passages, explains the Salaf and Khalaf methodologies as valid approaches, and explicitly rejects physical/spatial implications. Other examples in the guide include 28:88, 68:42, 66:12, 38:75 and 24:35. Each must be reviewed in context rather than receiving a universal lexical substitution.
 
@@ -49,7 +49,7 @@ The supplied guide itself includes examples such as 20:5 and 35:10 as Mutashabih
 
 V1.6.0 Qur’an editorial acceptance requires a documented screening of all 114 surahs / 6,236 ayat, including passages not limited to divine-attribute terminology and passages whose intended meaning may be unknowable. The coverage report must identify every unresolved review item.
 
-No release gate may claim the whole-corpus review complete until:
+No release gate or UI may claim independent qualified whole-corpus scholarly review complete until:
 
 - the review register/coverage report accounts for all 6,236 ayat;
 - all policy-triggered entries are resolved or explicitly dispositioned;

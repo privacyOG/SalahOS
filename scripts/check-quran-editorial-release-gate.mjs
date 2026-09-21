@@ -123,12 +123,13 @@ for (const entry of register.entries) {
 
 const approvedEntries = [...entriesByKey.values()].filter((entry) => entry.status === 'approved');
 const unresolvedEntries = [...entriesByKey.values()].filter((entry) => entry.status !== 'approved');
-const wholeCorpusSignoffApproved =
+const ownerReleaseAttestationApproved =
   signoff?.status === 'approved' &&
   isNonEmptyString(signoff.reviewerName) &&
   isNonEmptyString(signoff.qualification) &&
   signoff.scope === 'whole-corpus-6236' &&
   isNonEmptyString(signoff.reviewedAt);
+const qualifiedScholarReviewStatus = signoff?.qualifiedScholarReviewStatus ?? 'unknown';
 
 const report = {
   corpusAyat: corpusKeys.size,
@@ -139,40 +140,46 @@ const report = {
   requiredMutashabihSeeds: register.requiredSeedVerses?.length ?? 0,
   scholarlySignoffStatus: signoff?.status ?? null,
   scholarlySignoffReviewer: signoff?.reviewerName ?? null,
-  wholeCorpusSignoffApproved,
+  ownerReleaseAttestationApproved,
+  qualifiedScholarReviewStatus,
   releaseRef: isReleaseRef(),
 };
 
 console.log(`Qur’an editorial coverage: ${JSON.stringify(report)}`);
 
 if (!isReleaseRef()) {
-  if (!wholeCorpusSignoffApproved) {
-    console.log('Qur’an scholarly release gate remains OPEN for development builds.');
+  if (!ownerReleaseAttestationApproved) {
+    console.log('Qur’an owner editorial/release attestation remains OPEN for development builds.');
+  }
+  if (qualifiedScholarReviewStatus !== 'approved') {
+    console.log(
+      `Independent qualified scholarly review remains ${String(qualifiedScholarReviewStatus)}.`,
+    );
   }
   process.exit(0);
 }
 
 assert(
   signoff?.status === 'approved',
-  'Release blocked: whole-corpus scholarly sign-off is not approved.',
+  'Release blocked: whole-corpus project-owner editorial/release attestation is not approved.',
 );
 assert(
   isNonEmptyString(signoff.reviewerName),
-  'Release blocked: scholarly sign-off has no named reviewer.',
+  'Release blocked: owner editorial/release attestation has no named reviewer.',
 );
 assert(
   isNonEmptyString(signoff.qualification),
-  'Release blocked: scholarly sign-off has no qualification record.',
+  'Release blocked: owner editorial/release attestation has no qualification/context record.',
 );
 assert(
   signoff.scope === 'whole-corpus-6236',
-  'Release blocked: scholarly sign-off does not cover all 6,236 ayat.',
+  'Release blocked: owner editorial/release attestation does not cover all 6,236 ayat.',
 );
 assert(
   isNonEmptyString(signoff.reviewedAt),
-  'Release blocked: scholarly sign-off has no review date.',
+  'Release blocked: owner editorial/release attestation has no review date.',
 );
 
 console.log(
-  `Qur’an editorial release gate passed for the complete 6,236-ayah SalahOS 2026 corpus by explicit whole-corpus sign-off from ${signoff.reviewerName}.`,
+  `Qur’an owner editorial/release attestation passed for the complete 6,236-ayah SalahOS 2026 corpus from ${signoff.reviewerName}; independent qualified scholarly review status: ${String(qualifiedScholarReviewStatus)}.`,
 );

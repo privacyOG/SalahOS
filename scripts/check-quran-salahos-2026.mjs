@@ -27,15 +27,18 @@ const requiredSeeds = [
   '16:128',
 ];
 
-const [manifest, overrides, register, reader, preferences, css, surahIndex] = await Promise.all([
-  readJson('src/data/quran-offline-manifest.json'),
-  readJson('src/data/quran-salahos-2026-overrides.json'),
-  readJson('src/data/quran-mutashabih-review-register.json'),
-  readText('src/ui/QuranOfflineReader.tsx'),
-  readText('src/platform/quranReadingPreferences.ts'),
-  readText('src/quran-offline-reader.css'),
-  readText('src/ui/QuranSurahIndex.tsx'),
-]);
+const [manifest, overrides, register, fullAudit, pack, reader, preferences, css, surahIndex] =
+  await Promise.all([
+    readJson('src/data/quran-offline-manifest.json'),
+    readJson('src/data/quran-salahos-2026-overrides.json'),
+    readJson('src/data/quran-mutashabih-review-register.json'),
+    readJson('src/data/quran-mutashabih-full-audit.json'),
+    readJson('public/data/quran/quran-offline-pack.json'),
+    readText('src/ui/QuranOfflineReader.tsx'),
+    readText('src/platform/quranReadingPreferences.ts'),
+    readText('src/quran-offline-reader.css'),
+    readText('src/ui/QuranSurahIndex.tsx'),
+  ]);
 
 assert(overrides.translationId === 'salahos-2026', 'SalahOS 2026 translation ID changed.');
 assert(
@@ -83,6 +86,74 @@ for (const key of requiredSeeds) {
     register.requiredSeedVerses.includes(key),
     `Editorial review register no longer requires guide seed ${key}.`,
   );
+}
+
+assert(
+  fullAudit?.status === 'expanded-owner-guide-audit-pending-qualified-scholar-review',
+  'Expanded Muhkam/Mutashabih audit status changed unexpectedly.',
+);
+assert(
+  fullAudit?.scope?.screenedVerseCount === 85 &&
+    fullAudit?.scope?.overrideVerseCount === 79 &&
+    fullAudit?.scope?.baselineSafeVerseCount === 6,
+  'Expanded Muhkam/Mutashabih audit coverage changed unexpectedly.',
+);
+
+const corpusByKey = new Map();
+for (const surah of pack.surahs ?? []) {
+  for (const ayah of surah.ayahs ?? []) corpusByKey.set(ayah.key, ayah);
+}
+assert(corpusByKey.size === 6236, 'Expanded audit requires the complete 6,236-ayah pack.');
+
+for (const key of fullAudit.screenedVerseKeys ?? []) {
+  assert(corpusByKey.has(key), `Expanded audit references unknown verse ${key}.`);
+}
+for (const key of fullAudit.overrideVerseKeys ?? []) {
+  const entry = overrides.entries.find((candidate) => candidate.verseKey === key);
+  assert(entry, `Expanded audit requires a SalahOS 2026 override for ${key}.`);
+  assert(entry.classification === 'mutashabih', `${key} must be marked Mutashabih.`);
+  assert(
+    typeof entry.englishMeaning === 'string' && entry.englishMeaning.trim().length > 0,
+    `${key} has no reviewed English meaning.`,
+  );
+}
+
+const baselineSafeExpectations = new Map([
+  ['6:18', 'Omnipotent over His slaves'],
+  ['20:39', 'according to My will'],
+  ['36:71', 'Our handiwork'],
+  ['39:56', 'unmindful of Allah'],
+  ['76:9', 'for the sake of Allah only'],
+  ['92:20', 'purpose of his Lord Most High'],
+]);
+for (const [key, expected] of baselineSafeExpectations) {
+  const baseline = corpusByKey.get(key)?.translations?.['pickthall-1930'] ?? '';
+  assert(
+    baseline.includes(expected),
+    `Baseline-safe disposition for ${key} no longer matches the audited wording.`,
+  );
+}
+
+const overrideByKey = new Map(overrides.entries.map((entry) => [entry.verseKey, entry]));
+const highRiskChecks = [
+  ['7:54', /mounted.*Throne/iu],
+  ['10:3', /established Himself.*Throne/iu],
+  ['5:64', /both His hands/iu],
+  ['38:75', /My hands/iu],
+  ['39:67', /right hand|handful/iu],
+  ['55:27', /Countenance/iu],
+  ['67:16', /in the heaven/iu],
+  ['67:17', /in the heaven/iu],
+  ['89:22', /your Lord (?:shall )?come/iu],
+  ['32:5', /ascendeth unto Him/iu],
+  ['70:4', /ascend unto Him/iu],
+  ['7:51', /We (?:have )?forgotten/iu],
+  ['9:67', /He hath forgotten/iu],
+  ['45:34', /We forget you/iu],
+];
+for (const [key, forbidden] of highRiskChecks) {
+  const wording = overrideByKey.get(key)?.englishMeaning ?? '';
+  assert(!forbidden.test(wording), `${key} reintroduced a corporeal/spatial baseline phrase.`);
 }
 
 assert(

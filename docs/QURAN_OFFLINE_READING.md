@@ -8,7 +8,7 @@ The generated pack contains 114 surahs and 6,236 ayat. Every ayah keeps a canoni
 
 The Arabic source is pinned to `mjmirza/quran-dataset` commit `c0dc86b060b854d03f62848692bf1d2936dba630`, path `data/quran.json`. The pinned dataset records Tanzil Uthmani provenance and is used under the CC BY 4.0 terms applicable at that commit.
 
-The English translation is Mohammed Marmaduke Pickthall's 1930 translation, pinned through `Kristories/quran` commit `3a796d5d7f80c80b83adae5b39affcec2aeb426c`, path `fixtures/en/pickthall/source.json`.
+The byte-pinned English baseline is Mohammed Marmaduke Pickthall's 1930 translation, pinned through `Kristories/quran` commit `3a796d5d7f80c80b83adae5b39affcec2aeb426c`, path `fixtures/en/pickthall/source.json`. The reader's default **SalahOS 2026 (English meaning)** layer is derived from that baseline and applies explicit Ashʿarī–Māturīdī Muhkam/Mutashabih overrides where the baseline could imply corporeality, spatiality, direction, movement or another non-befitting meaning. The expanded audit is recorded in `src/data/quran-mutashabih-full-audit.json`; Pickthall remains separately selectable as the transparent baseline/reference.
 
 The generated pack is accepted only when its SHA-256 equals `fc81a35d049c10cbaa7817ea5546f60a06d10706a75f250c094f79bad73d3070`. Source commits, paths, counts and the expected digest are recorded in `src/data/quran-offline-manifest.json`.
 
