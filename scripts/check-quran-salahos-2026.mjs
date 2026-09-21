@@ -59,8 +59,8 @@ const requiredMutashabih = [...new Set(Object.values(triggers.groups ?? {}).flat
 
 assert(requiredFoundations.length === 4, 'Muhkam/tanzih foundation count changed.');
 assert(
-  requiredMutashabih.length === 110,
-  `Comprehensive Mutashabih trigger inventory must contain 110 verses, found ${String(requiredMutashabih.length)}.`,
+  requiredMutashabih.length === 122,
+  `Comprehensive Mutashabih trigger inventory must contain 122 verses, found ${String(requiredMutashabih.length)}.`,
 );
 
 assert(
@@ -68,8 +68,8 @@ assert(
   'Expanded Muhkam/Mutashabih audit status changed unexpectedly.',
 );
 assert(
-  fullAudit?.scope?.screenedVerseCount === 110 &&
-    fullAudit?.scope?.overrideVerseCount === 110 &&
+  fullAudit?.scope?.screenedVerseCount === 122 &&
+    fullAudit?.scope?.overrideVerseCount === 122 &&
     fullAudit?.scope?.baselineSafeVerseCount === 0,
   'Expanded Muhkam/Mutashabih audit coverage changed unexpectedly.',
 );
@@ -135,8 +135,8 @@ for (const key of requiredMutashabih) {
 }
 
 assert(
-  register.entries.length === 114,
-  'Editorial register must contain 110 triggers + 4 foundations.',
+  register.entries.length === 126,
+  'Editorial register must contain 122 triggers + 4 foundations.',
 );
 assert(
   register.entries.every(
