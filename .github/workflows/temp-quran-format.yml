@@ -4,6 +4,9 @@ on:
   push:
     branches:
       - quran-mutashabih-final-reconcile
+  pull_request:
+    branches:
+      - main
 
 permissions:
   contents: write
