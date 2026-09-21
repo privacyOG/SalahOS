@@ -69,6 +69,16 @@
       "guideSpecificMeaning": "The Ka'bah is a house of a great honor to Allah."
     },
     {
+      "verseKey": "2:138",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "Take on the religion ordained by Allah—and who can ordain a better way of faith than Allah? We worship Him alone.",
+      "editorialNote": "Pickthall's '(We take our) colour from Allah' is not retained. The supplied guide explicitly lists colour among created sensuous meanings that must not be attributed to Allah. The Arabic sibghat Allah is therefore rendered contextually as the religion/way of faith ordained by Allah, not a physical colour.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while denying colour, hue, physical marking, bodily quality or any other created sensuous attribute.",
+      "khalafReading": "Contextual ta'wil: sibghat Allah is understood as Allah's religion, fitrah or the mark of faith He ordains, not a physical colour belonging to Allah.",
+      "guideSpecificMeaning": null
+    },
+    {
       "verseKey": "2:153",
       "classification": "mutashabih",
       "treatment": "contextual-tawil",
@@ -1276,6 +1286,16 @@
       "editorialNote": "The divine kayd is rendered as firm measured requital rather than a human-style scheme or deception.",
       "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while denying deception, deficiency, injustice or any created moral defect.",
       "khalafReading": "Contextual ta'wil: divine kayd is the firm counteraction and measured requital by which wrongdoers are taken to account.",
+      "guideSpecificMeaning": null
+    },
+    {
+      "verseKey": "69:45",
+      "classification": "mutashabih",
+      "treatment": "contextual-tawil",
+      "englishMeaning": "We would certainly have seized him with irresistible power.",
+      "editorialNote": "Pickthall's 'taken him by the right hand' can be read as assigning a bodily right hand to Allah. The Arabic bi-l-yamin is rendered through irresistible power/force in this threat context, in accordance with tanzih.",
+      "salafReading": "Affirm the revealed wording according to a meaning befitting Allah while denying limbs, a bodily right hand, grasping by an organ, place, movement or created modality.",
+      "khalafReading": "Contextual ta'wil: bi-l-yamin is rendered through power and irresistible seizure, not a bodily right hand.",
       "guideSpecificMeaning": null
     },
     {
