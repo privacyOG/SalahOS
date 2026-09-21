@@ -5,9 +5,7 @@ import register from '../data/quran-mutashabih-review-register.json';
 import { validateQuranEditorialRegister } from './quranEditorialPolicy';
 
 const expectedFoundations = ['3:7', '42:11', '112:4', '19:65'] as const;
-const expectedTriggered = [
-  ...new Set(Object.values(triggers.groups).flat()),
-].sort((a, b) => {
+const expectedTriggered = [...new Set(Object.values(triggers.groups).flat())].sort((a, b) => {
   const [aSurah, aAyah] = a.split(':').map(Number);
   const [bSurah, bAyah] = b.split(':').map(Number);
   return aSurah - bSurah || aAyah - bAyah;
