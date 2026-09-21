@@ -28,6 +28,19 @@ jobs:
             src/data/quran-mutashabih-full-audit.json \
             src/data/quran-mutashabih-policy-triggers.json \
             src/data/quran-mutashabih-review-register.json
+      - name: Emit formatted payloads
+        run: |
+          for file in \
+            scripts/check-quran-salahos-2026.mjs \
+            src/data/quran-mutashabih-full-audit.json \
+            src/data/quran-mutashabih-policy-triggers.json \
+            src/data/quran-mutashabih-review-register.json
+          do
+            echo "__SALAHOS_FORMATTED_BEGIN__:$file"
+            base64 -w0 "$file"
+            echo
+            echo "__SALAHOS_FORMATTED_END__:$file"
+          done
       - name: Bundle formatted files
         run: |
           mkdir -p formatted/scripts formatted/src/data
