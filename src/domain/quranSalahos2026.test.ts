@@ -10,9 +10,7 @@ import {
   salahos2026EnglishMeaning,
 } from './quranSalahos2026';
 
-const requiredMutashabihSeeds = [
-  ...new Set(Object.values(triggers.groups).flat()),
-].sort((a, b) => {
+const requiredMutashabihSeeds = [...new Set(Object.values(triggers.groups).flat())].sort((a, b) => {
   const [aSurah, aAyah] = a.split(':').map(Number);
   const [bSurah, bAyah] = b.split(':').map(Number);
   return aSurah - bSurah || aAyah - bAyah;
