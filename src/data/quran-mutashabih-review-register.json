@@ -5,7 +5,12 @@
     "title": "The Ayahs of the Qur’an – Muhkam and Mutashabih",
     "status": "supplied-by-project-owner"
   },
-  "requiredFoundations": ["3:7", "42:11", "112:4", "19:65"],
+  "requiredFoundations": [
+    "3:7",
+    "42:11",
+    "112:4",
+    "19:65"
+  ],
   "requiredSeedVerses": [
     "2:15",
     "2:19",
@@ -36,6 +41,7 @@
     "6:18",
     "6:52",
     "6:61",
+    "6:103",
     "6:158",
     "7:51",
     "7:54",
@@ -124,6 +130,7 @@
     "68:42",
     "68:45",
     "70:4",
+    "75:23",
     "76:9",
     "85:20",
     "86:16",
@@ -610,6 +617,25 @@
       "reviewer": null,
       "status": "pending-scholar-review",
       "disagreements": []
+    },
+    {
+      "verseKey": "6:103",
+      "arabicExpression": "لَّا تُدْرِكُهُ ٱلْأَبْصَٰرُ وَهُوَ يُدْرِكُ ٱلْأَبْصَٰرَ وَهُوَ ٱللَّطِيفُ ٱلْخَبِيرُ",
+      "context": "Policy trigger group: ruyahWithoutDirectionOrModality. The project aqidah guide pairs 6:103 with 75:22–23 and requires that 6:103 not be used to deny the believers' ru'yah of Allah in the Hereafter. Idrak is therefore rendered as encompassing/comprehending, while direction and modality remain negated.",
+      "originalEnglish": "Vision comprehendeth Him not, but He comprehendeth (all) vision. He is the Subtile, the Aware.",
+      "proposedMeaning": "Vision does not encompass Him, while He encompasses all vision. He is the Most Subtle, All-Aware.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide: The Ayahs of the Qur’an – Muhkam and Mutashabih",
+        "SalahOS Ashari/Maturidi aqidah constraint: ru'yah 75:22–23 versus 6:103 must affirm seeing without direction or modality",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": [
+        "The exact lexical relation between ru'yah (seeing) and idrak (encompassing/comprehending) is a theological point requiring qualified scholarly verification before religious approval."
+      ]
     },
     {
       "verseKey": "6:158",
@@ -2052,6 +2078,25 @@
       "disagreements": []
     },
     {
+      "verseKey": "75:23",
+      "arabicExpression": "إِلَىٰ رَبِّهَا نَاظِرَةٌ",
+      "context": "Policy trigger group: ruyahWithoutDirectionOrModality. Read with 75:22, the project aqidah guide requires affirmation that believers will see Allah in the Hereafter without direction or modality; the English must not imply a spatial facing or deny the ru'yah.",
+      "originalEnglish": "Looking toward their Lord;",
+      "proposedMeaning": "Beholding their Lord, without direction or modality.",
+      "treatment": "tafwid-and-contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide: The Ayahs of the Qur’an – Muhkam and Mutashabih",
+        "SalahOS Ashari/Maturidi aqidah constraint: ru'yah 75:22–23 versus 6:103 must affirm seeing without direction or modality",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": [
+        "Primary English wording should affirm ru'yah while avoiding any implication of spatial direction; final phrasing remains subject to qualified scholarly review."
+      ]
+    },
+    {
       "verseKey": "76:9",
       "arabicExpression": "إِنَّمَا نُطْعِمُكُمْ لِوَجْهِ ٱللَّهِ لَا نُرِيدُ مِنكُمْ جَزَآءً وَلَا شُكُورًا",
       "context": "Policy trigger groups: divineWajh. The expression is rendered contextually as Allah’s acceptance, pleasure, Dominion, or Allah Himself as the context requires, without attributing a bodily face or created form.",
@@ -2150,9 +2195,9 @@
   ],
   "coverageScope": {
     "corpusAyat": 6236,
-    "translationRiskVerses": 122,
+    "translationRiskVerses": 124,
     "governingFoundations": 4,
-    "explicitOverrides": 122,
+    "explicitOverrides": 124,
     "qualifiedScholarReview": "pending"
   }
 }
