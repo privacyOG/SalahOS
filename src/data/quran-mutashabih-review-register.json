@@ -81,6 +81,7 @@
     "24:35",
     "25:59",
     "26:15",
+    "26:62",
     "27:50",
     "28:88",
     "29:69",
@@ -125,6 +126,7 @@
     "68:42",
     "68:45",
     "70:4",
+    "72:28",
     "75:23",
     "76:9",
     "85:20",
@@ -1353,6 +1355,22 @@
       "disagreements": []
     },
     {
+      "verseKey": "26:62",
+      "arabicExpression": "قَالَ كَلَّآ إِنَّ مَعِىَ رَبِّى سَيَهْدِينِ",
+      "context": "Policy trigger group: divineMaiyyah. The verse promises Allah's support and guidance to Musa; ma'iyyah is not physical co-location.",
+      "originalEnglish": "He said: Nay, verily! for lo! my Lord is with me. He will guide me.",
+      "proposedMeaning": "He said: No. My Lord supports me; He will guide me.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
       "verseKey": "27:50",
       "arabicExpression": "وَمَكَرُوا۟ مَكْرًا وَمَكَرْنَا مَكْرًا وَهُمْ لَا يَشْعُرُونَ",
       "context": "Policy trigger groups: reciprocalHumanSoundingVerbs. The English meaning avoids attributing deficiency, deception, forgetfulness or human-style mockery to Allah; the verb is rendered as a just requital or counteraction appropriate to its context.",
@@ -2073,6 +2091,22 @@
       "disagreements": []
     },
     {
+      "verseKey": "72:28",
+      "arabicExpression": "لِّيَعْلَمَ أَن قَدْ أَبْلَغُوا۟ رِسَٰلَٰتِ رَبِّهِمْ وَأَحَاطَ بِمَا لَدَيْهِمْ وَأَحْصَىٰ كُلَّ شَىْءٍ عَدَدًۢا",
+      "context": "Policy trigger group: divineEncompassing. The Arabic ahata is rendered through Allah's complete knowledge rather than bodily or spatial surrounding.",
+      "originalEnglish": "That He may know that they have indeed conveyed the messages of their Lord. He surroundeth all their doings, and He keepeth count of all things.",
+      "proposedMeaning": "So that He knows that they have conveyed the messages of their Lord. His knowledge encompasses all that is with them, and He has counted all things exactly.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
       "verseKey": "75:23",
       "arabicExpression": "إِلَىٰ رَبِّهَا نَاظِرَةٌ",
       "context": "Policy trigger group: ruyahWithoutDirectionOrModality. Read with 75:22, the project aqidah guide requires affirmation that believers will see Allah in the Hereafter without direction or modality; the English must not imply a spatial facing or deny the ru'yah.",
@@ -2190,9 +2224,9 @@
   ],
   "coverageScope": {
     "corpusAyat": 6236,
-    "translationRiskVerses": 124,
+    "translationRiskVerses": 126,
     "governingFoundations": 4,
-    "explicitOverrides": 124,
+    "explicitOverrides": 126,
     "qualifiedScholarReview": "pending"
   }
 }
