@@ -2231,7 +2231,7 @@
       "context": "Policy trigger group: ruyahWithoutDirectionOrModality. Read with 75:22, the project aqidah guide requires affirmation that believers will see Allah in the Hereafter without direction or modality; the English must not imply a spatial facing or deny the ru'yah.",
       "originalEnglish": "Looking toward their Lord;",
       "proposedMeaning": "Beholding their Lord, without direction or modality.",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "tafwid",
       "sourceReferences": [
         "Project-owner supplied guide: The Ayahs of the Qur’an – Muhkam and Mutashabih",
         "SalahOS Ashari/Maturidi aqidah constraint: ru'yah 75:22–23 versus 6:103 must affirm seeing without direction or modality",
