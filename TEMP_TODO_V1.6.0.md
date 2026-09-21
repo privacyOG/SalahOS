@@ -34,18 +34,18 @@ This tracker records the V1.6.0 release disposition. Automated checks are eviden
 
 ## 4. Qur’an editorial policy
 
-> **2026-09-21 correction note:** the earlier V1.6.0 whole-corpus entry was a project-owner release attestation, not independent qualified scholarly approval. The owner subsequently identified additional Muhkam/Mutashabih translation issues; the reconciled 122-verse translation-risk audit in `src/data/quran-mutashabih-full-audit.json` supersedes the narrower seed-only disposition. Independent qualified scholarly review remains pending.
+> **2026-09-21 correction note:** the earlier V1.6.0 whole-corpus entry was a project-owner release attestation, not independent qualified scholarly approval. The owner subsequently identified additional Muhkam/Mutashabih translation issues; the reconciled 124-verse translation-risk audit in `src/data/quran-mutashabih-full-audit.json` supersedes the narrower seed-only disposition. Independent qualified scholarly review remains pending.
 
 - [x] Q01 Supplied Muhkam/Mutashabih guide encoded with Qur’an 3:7 methodology and tanzīh foundations.
 - [x] Q02 Verse-specific tafwīd and contextual taʾwīl supported without universal lexical replacement.
 - [x] Q03 Whole 114-surah / 6,236-ayah corpus received an explicit project-owner release attestation on 2026-09-09; this is not independent qualified scholarly approval and was reopened for expanded Mutashabih correction on 2026-09-21.
 - [x] Q04 Verse register schema records key, Arabic expression, context, English wording, treatment, sources, reviewer, status and disagreements.
 - [x] Q05 SalahOS 2026 is the approved English-content identity across reader/search/excerpts/copy-share paths, with Pickthall retained as the transparent baseline/reference.
-- [x] Q06 Required guide seeds remain regression fixtures; the reconciled 122-verse trigger registry gives every maintained translation-risk verse explicit SalahOS 2026 wording without global lexical replacement.
+- [x] Q06 Required guide seeds remain regression fixtures; the reconciled 124-verse trigger registry gives every maintained translation-risk verse explicit SalahOS 2026 wording without global lexical replacement.
 - [x] Q07 Translation identity is preserved; `src/data/quran-scholarly-signoff.json` records the prior project-owner release attestation separately from independent qualified scholarly approval.
 - [x] Q08 Full Uthmani corpus/source/reading/edition/licence/hash contract and separate normalized search are verified.
 - [ ] Q09 Offline font and automated glyph/bundle checks pass; representative physical-device rendering/copy/share/export remains tracked under UI09.
-- [x] Q10 Release gate verifies complete corpus, all 122 trigger treatments, identity/provenance and owner attestation, and now fails closed on release refs until independent qualified scholarly review is approved.
+- [x] Q10 Release gate verifies complete corpus, all 124 trigger treatments, identity/provenance and owner attestation, and now fails closed on release refs until independent qualified scholarly review is approved.
 
 ## 5. Release V1.6.0
 
@@ -59,6 +59,6 @@ This tracker records the V1.6.0 release disposition. Automated checks are eviden
 ## Release disposition
 
 - Project-owner whole-corpus editorial/release attestation: **recorded** on 2026-09-09 for scope `whole-corpus-6236`; this is not independent qualified scholarly sign-off.
-- The verse-level review register now contains all 122 maintained translation-risk verses plus four governing foundations, all explicitly pending qualified scholarly review with no synthetic reviewer.
+- The verse-level review register now contains all 124 maintained translation-risk verses plus four governing foundations, all explicitly pending qualified scholarly review with no synthetic reviewer.
 - Physical Android/iOS acceptance remains unverified and is not claimed; by project-owner release decision it is a post-release hardware-validation item rather than a publication blocker.
 - Final publication requires the exact-main workflow matrix, release signing/archive integrity, published-asset checksum verification **and approved independent qualified scholarly review**.
