@@ -151,7 +151,7 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     translation: 'English meaning',
     salahos2026: SALAHOS_2026_DISPLAY_NAME,
     salahos2026Status: 'Provisional wording · whole-corpus qualified scholarly sign-off pending',
-    ashariGuidance: 'Muhkam / Mutashabih Ashʿarī guidance',
+    ashariGuidance: 'Muhkam / Mutashabih Ashʿarī–Māturīdī guidance',
     salafMethod: 'Salaf method',
     khalafMethod: 'Khalaf contextual taʾwīl',
     pickthall: 'M. M. Pickthall (1930) — baseline/reference',
@@ -179,7 +179,7 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     pageGroupingNote:
       'Groups ayat by the source Mushaf page number in the packaged corpus; this is not a facsimile page.',
     provenance:
-      'Uthmani Arabic · Medina Mushaf · Hafs · SalahOS 2026 English meaning (Ashʿarī-guided; whole-corpus scholarly sign-off pending) · Pickthall 1930 baseline',
+      'Uthmani Arabic · Medina Mushaf · Hafs · SalahOS 2026 English meaning (Ashʿarī–Māturīdī-guided; whole-corpus scholarly sign-off pending) · Pickthall 1930 baseline',
   },
   ar: {
     title: 'القرآن الكامل دون اتصال',
@@ -313,7 +313,7 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     pageGroupingNote:
       'Ayetleri paketlenmiş kaynaktaki mushaf sayfa numarasına göre gruplar; bu görünüm tıpkıbasım bir mushaf sayfası değildir.',
     provenance:
-      'Osmanî Arapça · Medine Mushafı · Hafs · Eşʿarî rehberli SalahOS 2026 İngilizce anlamı (bütün-korpus âlim onayı bekleniyor) · Pickthall 1930 temel metni',
+      'Osmanî Arapça · Medine Mushafı · Hafs · Eşʿarî–Mâtürîdî rehberli SalahOS 2026 İngilizce anlamı (bütün-korpus âlim onayı bekleniyor) · Pickthall 1930 temel metni',
   },
   id: {
     title: 'Qur’an lengkap luring',
