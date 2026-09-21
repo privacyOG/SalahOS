@@ -89,15 +89,7 @@ describe('SalahOS 2026 English meaning', () => {
       expect(entry?.khalafReading?.trim().length ?? 0).toBeGreaterThan(30);
     }
 
-    for (const verseKey of [
-      '7:54',
-      '10:3',
-      '13:2',
-      '20:5',
-      '25:59',
-      '32:4',
-      '57:4',
-    ]) {
+    for (const verseKey of ['7:54', '10:3', '13:2', '20:5', '25:59', '32:4', '57:4']) {
       expect(salahos2026EnglishMeaning(verseKey, 'baseline')).toContain('absolute dominion');
       expect(salahos2026EnglishMeaning(verseKey, 'baseline')).toContain('subjugates the Throne');
       expect(salahos2026EnglishMeaning(verseKey, 'baseline')).not.toMatch(
@@ -122,9 +114,7 @@ describe('SalahOS 2026 English meaning', () => {
       'Beholding their Lord, without direction or modality',
     );
     expect(salahos2026EnglishMeaning('26:62', 'baseline')).toContain('My Lord supports me');
-    expect(salahos2026EnglishMeaning('72:28', 'baseline')).toContain(
-      'His knowledge encompasses',
-    );
+    expect(salahos2026EnglishMeaning('72:28', 'baseline')).toContain('His knowledge encompasses');
     expect(salahos2026EnglishMeaning('2:138', 'baseline')).toContain('religion ordained by Allah');
     expect(salahos2026EnglishMeaning('69:45', 'baseline')).toContain('irresistible power');
   });
