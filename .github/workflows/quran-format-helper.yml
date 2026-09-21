@@ -12,6 +12,9 @@ on:
       - 'docs/quran-salahos-2026-policy.md'
       - '.github/workflows/quran-format-helper.yml'
 
+permissions:
+  contents: write
+
 jobs:
   format:
     runs-on: ubuntu-latest
@@ -24,7 +27,7 @@ jobs:
           node-version: 22
           cache: npm
       - run: npm ci --ignore-scripts
-      - name: Format targeted Qur'an files
+      - name: Apply exact repository formatting
         run: |
           npx prettier --write \
             scripts/check-quran-salahos-2026.mjs \
@@ -34,18 +37,19 @@ jobs:
             src/data/quran-salahos-2026-overrides.json \
             src/domain/quranSalahos2026.test.ts \
             docs/quran-salahos-2026-policy.md
-      - name: Bundle formatted files
+      - name: Publish formatted commit to temporary branch
         run: |
-          mkdir -p formatted/scripts formatted/src/data formatted/src/domain formatted/docs
-          cp scripts/check-quran-salahos-2026.mjs formatted/scripts/
-          cp src/data/quran-mutashabih-full-audit.json formatted/src/data/
-          cp src/data/quran-mutashabih-policy-triggers.json formatted/src/data/
-          cp src/data/quran-mutashabih-review-register.json formatted/src/data/
-          cp src/data/quran-salahos-2026-overrides.json formatted/src/data/
-          cp src/domain/quranSalahos2026.test.ts formatted/src/domain/
-          cp docs/quran-salahos-2026-policy.md formatted/docs/
-      - uses: actions/upload-artifact@v4
-        with:
-          name: quran-prettier-output
-          path: formatted/
-          if-no-files-found: error
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            scripts/check-quran-salahos-2026.mjs \
+            src/data/quran-mutashabih-full-audit.json \
+            src/data/quran-mutashabih-policy-triggers.json \
+            src/data/quran-mutashabih-review-register.json \
+            src/data/quran-salahos-2026-overrides.json \
+            src/domain/quranSalahos2026.test.ts \
+            docs/quran-salahos-2026-policy.md
+          if ! git diff --cached --quiet; then
+            git commit -m "style: apply exact Prettier output for Qur'an governance"
+            git push origin HEAD:quran-prettier-143-pass
+          fi
