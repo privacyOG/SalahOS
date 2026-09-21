@@ -53,7 +53,9 @@ const verseSort = (a, b) => {
   return aSurah - bSurah || aAyah - bAyah;
 };
 const requiredFoundations = [...new Set(triggers.foundations ?? [])].sort(verseSort);
-const requiredMutashabih = [...new Set(Object.values(triggers.groups ?? {}).flat())].sort(verseSort);
+const requiredMutashabih = [...new Set(Object.values(triggers.groups ?? {}).flat())].sort(
+  verseSort,
+);
 
 assert(requiredFoundations.length === 4, 'Muhkam/tanzih foundation count changed.');
 assert(
@@ -132,9 +134,14 @@ for (const key of requiredMutashabih) {
   );
 }
 
-assert(register.entries.length === 114, 'Editorial register must contain 110 triggers + 4 foundations.');
 assert(
-  register.entries.every((entry) => entry.status === 'pending-scholar-review' && entry.reviewer === null),
+  register.entries.length === 114,
+  'Editorial register must contain 110 triggers + 4 foundations.',
+);
+assert(
+  register.entries.every(
+    (entry) => entry.status === 'pending-scholar-review' && entry.reviewer === null,
+  ),
   'Automated editorial data must not fabricate scholarly approval.',
 );
 
