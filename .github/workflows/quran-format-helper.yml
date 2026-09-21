@@ -10,13 +10,16 @@ on:
       - 'src/domain/quranSalahos2026.test.ts'
       - '.github/workflows/quran-format-helper.yml'
 
+permissions:
+  contents: write
+
 jobs:
   format:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.event.pull_request.head.ref }}
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -30,16 +33,17 @@ jobs:
             src/data/quran-mutashabih-policy-triggers.json \
             src/data/quran-mutashabih-review-register.json \
             src/domain/quranSalahos2026.test.ts
-      - name: Bundle formatted files
+      - name: Commit formatting
         run: |
-          mkdir -p formatted/scripts formatted/src/data formatted/src/domain
-          cp scripts/check-quran-salahos-2026.mjs formatted/scripts/
-          cp src/data/quran-mutashabih-full-audit.json formatted/src/data/
-          cp src/data/quran-mutashabih-policy-triggers.json formatted/src/data/
-          cp src/data/quran-mutashabih-review-register.json formatted/src/data/
-          cp src/domain/quranSalahos2026.test.ts formatted/src/domain/
-      - uses: actions/upload-artifact@v4
-        with:
-          name: quran-prettier-output
-          path: formatted/
-          if-no-files-found: error
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add \
+            scripts/check-quran-salahos-2026.mjs \
+            src/data/quran-mutashabih-full-audit.json \
+            src/data/quran-mutashabih-policy-triggers.json \
+            src/data/quran-mutashabih-review-register.json \
+            src/domain/quranSalahos2026.test.ts
+          if ! git diff --cached --quiet; then
+            git commit -m "chore: format Qur'an governance files"
+            git push origin HEAD:${{ github.event.pull_request.head.ref }}
+          fi
