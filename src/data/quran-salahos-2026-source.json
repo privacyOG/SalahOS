@@ -2,9 +2,7 @@
   "id": "quran-salahos-2026",
   "kind": "quran-translation",
   "title": "SalahOS 2026 (English meaning)",
-  "authors": [
-    "SalahOS 2026 editorial project"
-  ],
+  "authors": ["SalahOS 2026 editorial project"],
   "edition": "2026 provisional Ash'ari-Maturidi-guided English meaning; derived from the pinned Pickthall 1930 baseline with verse-specific owner-guide overrides",
   "translator": "SalahOS 2026 editorial project",
   "citation": "Cite SalahOS 2026 plus surah and ayah; disclose that independent qualified whole-corpus scholarly sign-off remains pending.",
@@ -13,13 +11,8 @@
   "trustTier": "project-derived-translation-pending-qualified-scholarly-signoff",
   "reviewedAt": "2026-09-21",
   "madhhabs": [],
-  "creedTraditions": [
-    "ashari",
-    "maturidi"
-  ],
-  "approvedModules": [
-    "quran"
-  ],
+  "creedTraditions": ["ashari", "maturidi"],
+  "approvedModules": ["quran"],
   "displayPresentation": {
     "lang": "en",
     "dir": "ltr"
