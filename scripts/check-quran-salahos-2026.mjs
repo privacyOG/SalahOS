@@ -172,7 +172,7 @@ for (const key of istiwaOverThroneKeys) {
 const ruyah6103 = overrideByKey.get('6:103')?.englishMeaning ?? '';
 assert(
   /does not encompass/iu.test(ruyah6103),
-  '6:103 must negate encompassing/comprehending Allah rather than deny ru\'yah.',
+  "6:103 must negate encompassing/comprehending Allah rather than deny ru'yah.",
 );
 assert(
   !/cannot see|not see|never see/iu.test(ruyah6103),
@@ -182,7 +182,7 @@ const ruyah7523 = overrideByKey.get('75:23')?.englishMeaning ?? '';
 assert(
   /beholding their Lord/iu.test(ruyah7523) &&
     /without direction or modality/iu.test(ruyah7523),
-  '75:23 must affirm ru\'yah while explicitly denying direction and modality.',
+  "75:23 must affirm ru'yah while explicitly denying direction and modality.",
 );
 
 const forbiddenLiteralPhrases = new Map([
