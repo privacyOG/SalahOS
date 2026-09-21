@@ -70,8 +70,8 @@ describe('SalahOS 2026 English meaning', () => {
   });
 
   it('covers all maintained translation-risk triggers with explicit verse-specific wording', () => {
-    expect(policyTriggeredVerseKeys).toHaveLength(122);
-    expect(fullAudit.scope.screenedVerseCount).toBe(122);
+    expect(policyTriggeredVerseKeys).toHaveLength(124);
+    expect(fullAudit.scope.screenedVerseCount).toBe(124);
     expect(fullAudit.scope.overrideVerseCount).toBe(122);
     expect(fullAudit.scope.baselineSafeVerseCount).toBe(0);
     expect(fullAudit.screenedVerseKeys).toEqual(policyTriggeredVerseKeys);
@@ -103,6 +103,13 @@ describe('SalahOS 2026 English meaning', () => {
     expect(salahos2026EnglishMeaning('35:41', 'baseline')).not.toContain('graspeth');
     expect(salahos2026EnglishMeaning('85:20', 'baseline')).toContain(
       "Allah's knowledge and power encompass",
+    );
+    expect(salahos2026EnglishMeaning('6:103', 'baseline')).toContain(
+      'Vision does not encompass Him',
+    );
+    expect(salahos2026EnglishMeaning('6:103', 'baseline')).not.toMatch(/cannot see|not see/iu);
+    expect(salahos2026EnglishMeaning('75:23', 'baseline')).toContain(
+      'Beholding their Lord, without direction or modality',
     );
   });
 
