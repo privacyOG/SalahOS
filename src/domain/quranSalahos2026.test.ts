@@ -11,9 +11,9 @@ import {
 } from './quranSalahos2026';
 
 const requiredMutashabihSeeds = [...new Set(Object.values(triggers.groups).flat())].sort((a, b) => {
-  const [aSurah, aAyah] = a.split(':').map(Number);
-  const [bSurah, bAyah] = b.split(':').map(Number);
-  return aSurah - bSurah || aAyah - bAyah;
+  const [aSurah = '0', aAyah = '0'] = a.split(':');
+  const [bSurah = '0', bAyah = '0'] = b.split(':');
+  return Number(aSurah) - Number(bSurah) || Number(aAyah) - Number(bAyah);
 });
 
 describe('SalahOS 2026 English meaning', () => {
