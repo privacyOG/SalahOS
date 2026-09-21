@@ -89,9 +89,21 @@ describe('SalahOS 2026 English meaning', () => {
       expect(entry?.khalafReading?.trim().length ?? 0).toBeGreaterThan(30);
     }
 
-    for (const verseKey of ['7:54', '10:3', '13:2', '20:5', '25:59', '32:4', '57:4']) {
-      expect(salahos2026EnglishMeaning(verseKey, 'baseline')).toContain('absolute dominion');
-      expect(salahos2026EnglishMeaning(verseKey, 'baseline')).toContain('subjugates the Throne');
+    for (const verseKey of [
+      '7:54',
+      '10:3',
+      '13:2',
+      '20:5',
+      '25:59',
+      '32:4',
+      '57:4',
+    ]) {
+      expect(salahos2026EnglishMeaning(verseKey, 'baseline')).toContain(
+        'absolute dominion',
+      );
+      expect(salahos2026EnglishMeaning(verseKey, 'baseline')).toContain(
+        'subjugates the Throne',
+      );
       expect(salahos2026EnglishMeaning(verseKey, 'baseline')).not.toMatch(
         /mounted.*Throne|established (?:Himself )?(?:on|upon) the Throne|has an istiwa over/iu,
       );
