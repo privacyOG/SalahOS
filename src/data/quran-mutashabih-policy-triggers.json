@@ -1,0 +1,131 @@
+{
+  "schemaVersion": 1,
+  "scope": "Pinned-corpus verses requiring Muhkam/Mutashabih review because their English rendering can imply bodily, spatial, directional, movement, composite, created, or other unbefitting meanings when read literally of Allah.",
+  "sourceGuide": "The Ayahs of the Qur’an – Muhkam and Mutashabih (project-owner supplied)",
+  "methodology": "Ashari/Maturidi tanzih with Salaf-style tafwid/general befitting affirmation and context-specific Khalaf-style ta'wil where supported; no verse-specific gloss becomes a universal lexical substitution.",
+  "foundations": [
+    "3:7",
+    "42:11",
+    "112:4",
+    "19:65"
+  ],
+  "groups": {
+    "istiwaOverThrone": [
+      "7:54",
+      "10:3",
+      "13:2",
+      "20:5",
+      "25:59",
+      "32:4",
+      "57:4"
+    ],
+    "divineWajh": [
+      "2:115",
+      "2:272",
+      "6:52",
+      "13:22",
+      "18:28",
+      "28:88",
+      "30:38",
+      "30:39",
+      "55:27",
+      "76:9",
+      "92:20"
+    ],
+    "divineYadAndPowerLanguage": [
+      "3:26",
+      "3:73",
+      "5:64",
+      "23:88",
+      "36:71",
+      "36:83",
+      "38:75",
+      "48:10",
+      "51:47",
+      "57:29",
+      "67:1"
+    ],
+    "divineAynAndCareLanguage": [
+      "11:37",
+      "20:39",
+      "23:27",
+      "52:48",
+      "54:14"
+    ],
+    "saq": [
+      "68:42"
+    ],
+    "qabdAndYamin": [
+      "39:67"
+    ],
+    "nur": [
+      "24:35",
+      "39:69"
+    ],
+    "ruhAttribution": [
+      "4:171",
+      "15:29",
+      "19:17",
+      "21:91",
+      "32:9",
+      "38:72",
+      "58:22",
+      "66:12"
+    ],
+    "comingAndMovementLanguage": [
+      "2:210",
+      "6:158",
+      "59:2",
+      "89:22"
+    ],
+    "spatialAndFawqLanguage": [
+      "6:3",
+      "6:18",
+      "6:61",
+      "16:50",
+      "43:84",
+      "67:16",
+      "67:17"
+    ],
+    "divineMaiyyah": [
+      "2:153",
+      "2:194",
+      "2:249",
+      "4:108",
+      "5:12",
+      "8:12",
+      "8:19",
+      "8:46",
+      "8:66",
+      "9:36",
+      "9:40",
+      "9:123",
+      "16:128",
+      "20:46",
+      "26:15",
+      "29:69",
+      "47:35",
+      "57:4",
+      "58:7"
+    ],
+    "ascentAndDirectionLanguage": [
+      "35:10",
+      "70:4"
+    ],
+    "guideContextExamples": [
+      "2:125",
+      "37:99",
+      "39:56",
+      "41:54"
+    ],
+    "reciprocalHumanSoundingVerbs": [
+      "2:15",
+      "3:54",
+      "4:142",
+      "8:30",
+      "9:67",
+      "9:79",
+      "27:50"
+    ]
+  }
+}
