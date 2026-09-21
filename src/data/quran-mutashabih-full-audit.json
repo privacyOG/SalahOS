@@ -6,12 +6,17 @@
   "sourceGuide": "The Ayahs of the Qur’an – Muhkam and Mutashabih (project-owner supplied)",
   "scope": {
     "corpusAyat": 6236,
-    "description": "Corpus-wide English-translation risk screening for divine-attribute, anthropomorphic, spatial, directional, movement, honored-possessive, reciprocal-human-sounding and impossible-deficiency wording. The 131 maintained triggers are translation-risk passages requiring explicit SalahOS wording; this is not a claim that these exhaust every other category of mutashabih whose exact reality or timing may be known only to Allah.",
-    "screenedVerseCount": 131,
-    "overrideVerseCount": 131,
+    "description": "Corpus-wide English-translation risk screening for divine-attribute, anthropomorphic, spatial, directional, movement, honored-possessive, reciprocal-human-sounding and impossible-deficiency wording. The 133 maintained triggers are translation-risk passages requiring explicit SalahOS wording; this is not a claim that these exhaust every other category of mutashabih whose exact reality or timing may be known only to Allah.",
+    "screenedVerseCount": 133,
+    "overrideVerseCount": 133,
     "baselineSafeVerseCount": 0
   },
-  "governingFoundations": ["3:7", "42:11", "112:4", "19:65"],
+  "governingFoundations": [
+    "3:7",
+    "42:11",
+    "112:4",
+    "19:65"
+  ],
   "triggerFamilies": [
     "istiwaOverThrone",
     "divineWajh",
@@ -38,7 +43,8 @@
     "divineTakingAndSeizureLanguage",
     "ruyahWithoutDirectionOrModality",
     "divineNafsAndSelfLanguage",
-    "rawhReliefNotRuh"
+    "rawhReliefNotRuh",
+    "divineColorIdiom"
   ],
   "screenedVerseKeys": [
     "2:15",
@@ -46,6 +52,7 @@
     "2:29",
     "2:115",
     "2:125",
+    "2:138",
     "2:153",
     "2:186",
     "2:194",
@@ -164,6 +171,7 @@
     "67:17",
     "68:42",
     "68:45",
+    "69:45",
     "70:4",
     "72:28",
     "75:23",
@@ -179,6 +187,7 @@
     "2:29",
     "2:115",
     "2:125",
+    "2:138",
     "2:153",
     "2:186",
     "2:194",
@@ -297,6 +306,7 @@
     "67:17",
     "68:42",
     "68:45",
+    "69:45",
     "70:4",
     "72:28",
     "75:23",
