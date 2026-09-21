@@ -1195,9 +1195,9 @@
     {
       "verseKey": "20:39",
       "arabicExpression": "أَنِ ٱقْذِفِيهِ فِى ٱلتَّابُوتِ فَٱقْذِفِيهِ فِى ٱلْيَمِّ فَلْيُلْقِهِ ٱلْيَمُّ بِٱلسَّاحِلِ يَأْخُذْهُ عَدُوٌّ لِّى وَعَدُوٌّ لَّهُۥ وَأَلْقَيْتُ عَلَيْكَ مَحَبَّةً مِّنِّى وَلِتُصْنَعَ عَلَىٰ عَيْنِىٓ",
-      "context": "Policy trigger groups: divineAynAndCareLanguage. Eye-language is rendered by care, protection, supervision or will according to context so the English does not attribute an organ or bodily eye to Allah.",
+      "context": "Policy trigger groups: divineAynAndCareLanguage. The project Ashari-Maturidi guide flags 20:39 as an 'ayn passage: a literal 'Eye' rendering is rejected, while care/watchful protection is acceptable. SalahOS therefore renders the expression as being brought up under Allah's care.",
       "originalEnglish": "Saying: Throw him into the ark, and throw it into the river, then the river shall throw it on to the bank, and there an enemy to Me and an enemy to him shall take him. And I endued thee with love from Me that thou mightest be trained according to My will,",
-      "proposedMeaning": "Saying: Throw him into the ark, and throw it into the river, then the river shall throw it on to the bank, and there an enemy to Me and an enemy to him shall take him. And I endued thee with love from Me that thou mightest be trained according to My will,",
+      "proposedMeaning": "Saying: Place him in the chest, then cast it into the river, and the river will cast it onto the bank, where an enemy of Mine and an enemy of his will take him. I bestowed love upon you from Me so that you would be brought up under My care.",
       "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
@@ -1547,9 +1547,9 @@
     {
       "verseKey": "36:71",
       "arabicExpression": "أَوَلَمْ يَرَوْا۟ أَنَّا خَلَقْنَا لَهُم مِّمَّا عَمِلَتْ أَيْدِينَآ أَنْعَٰمًا فَهُمْ لَهَا مَٰلِكُونَ",
-      "context": "Policy trigger groups: divineYadAndPowerLanguage. The wording is reviewed so that yad-related expressions denote power, disposal, care, generosity, support or authority according to context, without attributing limbs or bodily hands to Allah.",
+      "context": "Policy trigger groups: divineYadAndPowerLanguage. The Arabic expression ma 'amilat aydina is rendered through divine power and creation, not bodily hands or created instruments.",
       "originalEnglish": "Have they not seen how We have created for them of Our handiwork the cattle, so that they are their owners,",
-      "proposedMeaning": "Have they not seen how We have created for them of Our handiwork the cattle, so that they are their owners,",
+      "proposedMeaning": "Have they not seen that We created for them, by Our power, livestock of which they are owners?",
       "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
