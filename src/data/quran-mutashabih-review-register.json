@@ -357,7 +357,7 @@
       "context": "Policy trigger groups: kursi. Kursi is retained as the Qur'anic term rather than translated as a throne or seat that could suggest a place occupied by Allah. The wording is governed by tanzih and does not assign bodily seating, containment or location.",
       "originalEnglish": "Allah! There is no deity save Him, the Alive, the Eternal. Neither slumber nor sleep overtaketh Him. Unto Him belongeth whatsoever is in the heavens and whatsoever is in the earth. Who is he that intercedeth with Him save by His leave? He knoweth that which is in front of them and that which is behind them, while they encompass nothing of His knowledge save what He will. His throne includeth the heavens and the earth, and He is never weary of preserving them. He is the Sublime, the Tremendous.",
       "proposedMeaning": "Allah—there is no deity except Him, the Ever-Living, the Self-Sustaining. Neither drowsiness nor sleep overtakes Him. To Him belongs whatever is in the heavens and whatever is on the earth. Who can intercede except by His permission? He knows what is before them and what is behind them, and they encompass nothing of His knowledge except what He wills. His Kursi encompasses the heavens and the earth, and preserving them does not weary Him. He is the Most High, the Magnificent.",
-      "treatment": "tafwid-with-tanzih",
+      "treatment": "tafwid",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
