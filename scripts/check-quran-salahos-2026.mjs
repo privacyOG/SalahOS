@@ -59,8 +59,8 @@ const requiredMutashabih = [...new Set(Object.values(triggers.groups ?? {}).flat
 
 assert(requiredFoundations.length === 4, 'Muhkam/tanzih foundation count changed.');
 assert(
-  requiredMutashabih.length === 124,
-  `Comprehensive Mutashabih trigger inventory must contain 124 verses, found ${String(requiredMutashabih.length)}.`,
+  requiredMutashabih.length === 126,
+  `Comprehensive Mutashabih trigger inventory must contain 126 verses, found ${String(requiredMutashabih.length)}.`,
 );
 
 assert(
@@ -68,8 +68,8 @@ assert(
   'Expanded Muhkam/Mutashabih audit status changed unexpectedly.',
 );
 assert(
-  fullAudit?.scope?.screenedVerseCount === 124 &&
-    fullAudit?.scope?.overrideVerseCount === 124 &&
+  fullAudit?.scope?.screenedVerseCount === 126 &&
+    fullAudit?.scope?.overrideVerseCount === 126 &&
     fullAudit?.scope?.baselineSafeVerseCount === 0,
   'Expanded Muhkam/Mutashabih audit coverage changed unexpectedly.',
 );
@@ -135,8 +135,8 @@ for (const key of requiredMutashabih) {
 }
 
 assert(
-  register.entries.length === 128,
-  'Editorial register must contain 124 triggers + 4 foundations.',
+  register.entries.length === 130,
+  'Editorial register must contain 126 triggers + 4 foundations.',
 );
 assert(
   register.entries.every(
@@ -183,6 +183,17 @@ assert(
   /beholding their Lord/iu.test(ruyah7523) &&
     /without direction or modality/iu.test(ruyah7523),
   "75:23 must affirm ru'yah while explicitly denying direction and modality.",
+);
+
+const maiyyah2662 = overrideByKey.get('26:62')?.englishMeaning ?? '';
+assert(
+  /supports me/iu.test(maiyyah2662),
+  '26:62 must render divine ma\'iyyah as support rather than physical co-location.',
+);
+const encompassing7228 = overrideByKey.get('72:28')?.englishMeaning ?? '';
+assert(
+  /knowledge encompasses/iu.test(encompassing7228),
+  '72:28 must render divine encompassing through knowledge rather than spatial surrounding.',
 );
 
 const forbiddenLiteralPhrases = new Map([
