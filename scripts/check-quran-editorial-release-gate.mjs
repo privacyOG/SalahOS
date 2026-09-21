@@ -179,7 +179,11 @@ assert(
   isNonEmptyString(signoff.reviewedAt),
   'Release blocked: owner editorial/release attestation has no review date.',
 );
+assert(
+  qualifiedScholarReviewStatus === 'approved',
+  'Release blocked: independent qualified whole-corpus scholarly review is still pending.',
+);
 
 console.log(
-  `Qur’an owner editorial/release attestation passed for the complete 6,236-ayah SalahOS 2026 corpus from ${signoff.reviewerName}; independent qualified scholarly review status: ${String(qualifiedScholarReviewStatus)}.`,
+  `Qur’an owner editorial/release attestation and independent qualified scholarly review gates passed for the complete 6,236-ayah SalahOS 2026 corpus.`,
 );

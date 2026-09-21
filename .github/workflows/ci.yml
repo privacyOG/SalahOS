@@ -55,8 +55,14 @@ jobs:
       - name: SalahOS 2026 Qur'an governance
         run: |
           npm run quran:salahos-2026:check
+          npm run quran:editorial:gate
           VERSION=$(node -p "require('./package.json').version")
-          GITHUB_REF_TYPE=branch GITHUB_REF_NAME="release/v${VERSION}" npm run quran:editorial:gate
+          if GITHUB_REF_TYPE=branch GITHUB_REF_NAME="release/v${VERSION}" npm run quran:editorial:gate; then
+            echo "Expected the simulated release ref to remain blocked while qualified scholarly review is pending."
+            exit 1
+          else
+            echo "Release gate correctly remains fail-closed pending qualified scholarly review."
+          fi
       - name: Islamic Knowledge source governance
         run: npm run knowledge:content:check
       - name: Australian mosque directory reproducibility
