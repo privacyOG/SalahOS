@@ -51,5 +51,5 @@ jobs:
             docs/quran-salahos-2026-policy.md
           if ! git diff --cached --quiet; then
             git commit -m "style: apply exact Prettier output for Qur'an governance"
-            git push origin HEAD:quran-prettier-143-pass
+            git push --force origin HEAD:quran-prettier-143-pass
           fi
