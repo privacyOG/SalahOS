@@ -2,17 +2,24 @@
   "id": "quran-salahos-2026",
   "kind": "quran-translation",
   "title": "SalahOS 2026 (English meaning)",
-  "authors": ["SalahOS 2026 editorial project"],
-  "edition": "2026 provisional Ash'ari-Maturidi-guided English meaning; derived from the pinned Pickthall 1930 baseline with verse-specific owner-guide overrides",
+  "authors": [
+    "SalahOS 2026 editorial project"
+  ],
+  "edition": "2026 provisional Ash'ari-Maturidi-guided English meaning; derived from the pinned Pickthall 1930 baseline with explicit wording for all maintained Muhkam/Mutashabih translation-risk triggers",
   "translator": "SalahOS 2026 editorial project",
   "citation": "Cite SalahOS 2026 plus surah and ayah; disclose that independent qualified whole-corpus scholarly sign-off remains pending.",
-  "provenance": "Project English-meaning layer governed by the project-owner-supplied 'The Ayahs of the Qur'an – Muhkam and Mutashabih' guide and an expanded Ash'ari-Maturidi tanzih audit. Pickthall 1930 remains the pinned baseline only where wording has been explicitly dispositioned as safe. Registry approval permits source identity and development use; it is not independent whole-corpus scholarly approval.",
+  "provenance": "Project English-meaning layer governed by the project-owner-supplied 'The Ayahs of the Qur'an – Muhkam and Mutashabih' guide and the reconciled 110-verse Ash'ari-Maturidi tanzih translation-risk audit. Pickthall 1930 remains the pinned baseline/reference for non-trigger verses and is separately selectable. Every maintained trigger has explicit SalahOS wording. Registry approval permits source identity and development use; it is not independent whole-corpus scholarly approval.",
   "reviewStatus": "approved",
   "trustTier": "project-derived-translation-pending-qualified-scholarly-signoff",
   "reviewedAt": "2026-09-21",
   "madhhabs": [],
-  "creedTraditions": ["ashari", "maturidi"],
-  "approvedModules": ["quran"],
+  "creedTraditions": [
+    "ashari",
+    "maturidi"
+  ],
+  "approvedModules": [
+    "quran"
+  ],
   "displayPresentation": {
     "lang": "en",
     "dir": "ltr"
