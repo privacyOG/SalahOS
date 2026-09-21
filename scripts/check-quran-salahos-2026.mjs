@@ -195,7 +195,19 @@ assert(
   '72:28 must render divine encompassing through knowledge rather than spatial surrounding.',
 );
 
-const divineNeedAndTransactionKeys = ["2:245","3:52","5:12","9:111","47:7","57:11","57:18","59:8","61:14","64:17","73:20"];
+const divineNeedAndTransactionKeys = [
+  '2:245',
+  '3:52',
+  '5:12',
+  '9:111',
+  '47:7',
+  '57:11',
+  '57:18',
+  '59:8',
+  '61:14',
+  '64:17',
+  '73:20',
+];
 for (const key of divineNeedAndTransactionKeys) {
   const meaning = overrideByKey.get(key)?.englishMeaning ?? '';
   assert(
