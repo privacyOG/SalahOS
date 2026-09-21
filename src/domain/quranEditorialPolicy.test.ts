@@ -12,11 +12,11 @@ const expectedTriggered = [...new Set(Object.values(triggers.groups).flat())].so
 });
 
 describe('Qur’an Muhkam/Mutashabih editorial register', () => {
-  it('contains all four foundations and all 133 maintained translation-risk verses', () => {
+  it('contains all four foundations and all 143 maintained translation-risk verses', () => {
     expect(register.requiredFoundations).toEqual(expectedFoundations);
     expect(register.requiredSeedVerses).toEqual(expectedTriggered);
-    expect(expectedTriggered).toHaveLength(133);
-    expect(register.entries).toHaveLength(137);
+    expect(expectedTriggered).toHaveLength(143);
+    expect(register.entries).toHaveLength(147);
 
     const keys = new Set(register.entries.map((entry) => entry.verseKey));
     for (const verseKey of [...expectedFoundations, ...expectedTriggered]) {
@@ -26,7 +26,7 @@ describe('Qur’an Muhkam/Mutashabih editorial register', () => {
 
   it('keeps every generated review row pending without fabricating a scholar', () => {
     const entries = validateQuranEditorialRegister(register.entries);
-    expect(entries).toHaveLength(137);
+    expect(entries).toHaveLength(147);
     for (const entry of entries) {
       expect(entry.status).toBe('pending-scholar-review');
       expect(entry.reviewer).toBeNull();
