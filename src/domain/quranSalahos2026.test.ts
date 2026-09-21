@@ -64,8 +64,10 @@ describe('SalahOS 2026 English meaning', () => {
       'He knows you wherever you are',
     );
     expect(salahos2026EnglishMeaning('16:128', 'baseline')).toContain('Allah supports');
+    expect(salahos2026EnglishMeaning('20:5', 'baseline')).toContain('absolute dominion');
+    expect(salahos2026EnglishMeaning('20:5', 'baseline')).toContain('subjugates the Throne');
     expect(salahos2026EnglishMeaning('20:5', 'baseline')).toContain(
-      'without sitting, place, direction',
+      'without beginning',
     );
   });
 
@@ -87,7 +89,13 @@ describe('SalahOS 2026 English meaning', () => {
       expect(entry?.khalafReading?.trim().length ?? 0).toBeGreaterThan(30);
     }
 
-    expect(salahos2026EnglishMeaning('7:54', 'baseline')).not.toMatch(/mounted.*Throne/iu);
+    for (const verseKey of ['7:54', '10:3', '13:2', '20:5', '25:59', '32:4', '57:4']) {
+      expect(salahos2026EnglishMeaning(verseKey, 'baseline')).toContain('absolute dominion');
+      expect(salahos2026EnglishMeaning(verseKey, 'baseline')).toContain('subjugates the Throne');
+      expect(salahos2026EnglishMeaning(verseKey, 'baseline')).not.toMatch(
+        /mounted.*Throne|established (?:Himself )?(?:on|upon) the Throne|has an istiwa over/iu,
+      );
+    }
     expect(salahos2026EnglishMeaning('5:64', 'baseline')).not.toContain('both His hands');
     expect(salahos2026EnglishMeaning('55:27', 'baseline')).not.toContain('Countenance');
     expect(salahos2026EnglishMeaning('67:16', 'baseline')).not.toContain('in the heaven');
