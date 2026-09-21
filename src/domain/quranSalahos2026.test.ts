@@ -72,9 +72,9 @@ describe('SalahOS 2026 English meaning', () => {
   });
 
   it('covers all maintained translation-risk triggers with explicit verse-specific wording', () => {
-    expect(policyTriggeredVerseKeys).toHaveLength(124);
-    expect(fullAudit.scope.screenedVerseCount).toBe(124);
-    expect(fullAudit.scope.overrideVerseCount).toBe(124);
+    expect(policyTriggeredVerseKeys).toHaveLength(126);
+    expect(fullAudit.scope.screenedVerseCount).toBe(126);
+    expect(fullAudit.scope.overrideVerseCount).toBe(126);
     expect(fullAudit.scope.baselineSafeVerseCount).toBe(0);
     expect(fullAudit.screenedVerseKeys).toEqual(policyTriggeredVerseKeys);
     expect(fullAudit.overrideVerseKeys).toEqual(policyTriggeredVerseKeys);
@@ -112,6 +112,10 @@ describe('SalahOS 2026 English meaning', () => {
     expect(salahos2026EnglishMeaning('6:103', 'baseline')).not.toMatch(/cannot see|not see/iu);
     expect(salahos2026EnglishMeaning('75:23', 'baseline')).toContain(
       'Beholding their Lord, without direction or modality',
+    );
+    expect(salahos2026EnglishMeaning('26:62', 'baseline')).toContain('My Lord supports me');
+    expect(salahos2026EnglishMeaning('72:28', 'baseline')).toContain(
+      'His knowledge encompasses',
     );
   });
 
