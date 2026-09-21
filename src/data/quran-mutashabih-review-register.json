@@ -5,7 +5,12 @@
     "title": "The Ayahs of the Qur’an – Muhkam and Mutashabih",
     "status": "supplied-by-project-owner"
   },
-  "requiredFoundations": ["3:7", "19:65", "42:11", "112:4"],
+  "requiredFoundations": [
+    "3:7",
+    "19:65",
+    "42:11",
+    "112:4"
+  ],
   "requiredSeedVerses": [
     "2:15",
     "2:19",
@@ -151,6 +156,13 @@
     "89:22",
     "92:20"
   ],
+  "coverageScope": {
+    "corpusAyat": 6236,
+    "translationRiskVerses": 143,
+    "governingFoundations": 4,
+    "registeredEntries": 147,
+    "qualifiedScholarReview": "pending"
+  },
   "entries": [
     {
       "verseKey": "2:15",
@@ -190,7 +202,7 @@
       "context": "Policy trigger groups: istiwaIla. Istiwa ila here is rendered without movement, place or direction; the wording expresses the divine ordering of the heavens.",
       "originalEnglish": "He it is Who created for you all that is in the earth. Then turned He to the heaven, and fashioned it as seven heavens. And He is knower of all things.",
       "proposedMeaning": "He is the One Who created for you all that is on earth; then He directed His will to the heaven and fashioned it into seven heavens. He knows all things.",
-      "treatment": "contextual-tawil",
+      "treatment": "tafwid-and-contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -208,7 +220,7 @@
       "proposedMeaning": "To Allah belong the east and the west; wherever you turn, there is the qiblah appointed by Allah. Surely Allah is All-Encompassing, All-Knowing.",
       "treatment": "contextual-tawil",
       "sourceReferences": [
-        "Project-owner supplied guide: The Ayahs of the Qur’an – Muhkam and Mutashabih",
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
         "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
       ],
@@ -224,7 +236,7 @@
       "proposedMeaning": "And when We made the House, the Ka'bah, a house greatly honoured by Allah, a place of return for people and a place of safety: take the station of Ibrahim as a place of prayer. We commanded Ibrahim and Ismail: Purify My House for those who perform tawaf, remain there in worship, bow and prostrate.",
       "treatment": "contextual-tawil",
       "sourceReferences": [
-        "Project-owner supplied guide: The Ayahs of the Qur’an – Muhkam and Mutashabih",
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
         "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
       ],
@@ -235,12 +247,12 @@
     {
       "verseKey": "2:138",
       "arabicExpression": "صِبْغَةَ ٱللَّهِ وَمَنْ أَحْسَنُ مِنَ ٱللَّهِ صِبْغَةً وَنَحْنُ لَهُۥ عَٰبِدُونَ",
-      "context": "Policy trigger groups: divineColorIdiom. The supplied guide explicitly rejects attributing created sensuous qualities such as colour to Allah. The Arabic sibghat Allah is therefore rendered contextually as the religion/way of faith ordained by Allah, not a physical colour.",
+      "context": "Policy trigger groups: divineColorIdiom. Pickthall's '(We take our) colour from Allah' is not retained. The supplied guide explicitly lists colour among created sensuous meanings that must not be attributed to Allah. The Arabic sibghat Allah is therefore rendered contextually as the religion/way of faith ordained by Allah, not a physical colour.",
       "originalEnglish": "(We take our) colour from Allah, and who is better than Allah at colouring. We are His worshippers.",
       "proposedMeaning": "Take on the religion ordained by Allah—and who can ordain a better way of faith than Allah? We worship Him alone.",
       "treatment": "contextual-tawil",
       "sourceReferences": [
-        "Project-owner supplied guide methodology: created sensuous qualities such as colour are not attributed to Allah",
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
         "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
       ],
@@ -315,7 +327,7 @@
     {
       "verseKey": "2:245",
       "arabicExpression": "مَّن ذَا ٱلَّذِى يُقْرِضُ ٱللَّهَ قَرْضًا حَسَنًا فَيُضَٰعِفَهُۥ لَهُۥٓ أَضْعَافًا كَثِيرَةً وَٱللَّهُ يَقْبِضُ وَيَبْصُۜطُ وَإِلَيْهِ تُرْجَعُونَ",
-      "context": "Policy trigger groups: divineNeedAndTransactionIdioms. The English meaning applies tanzih to need/dependency or transaction-like wording so no created deficiency is attributed to Allah.",
+      "context": "Policy trigger groups: divineNeedAndTransactionIdioms. The qard ('loan') expression is a Qur'anic exhortation to spend for Allah's sake; it must not imply that Allah borrows, needs wealth, benefits from creation, or is deficient. The closing qabd/bast is also rendered as restricting and expanding provision rather than bodily grasping.",
       "originalEnglish": "Who is it that will lend unto Allah a goodly loan, so that He may give it increase manifold? Allah straiteneth and enlargeth. Unto Him ye will return.",
       "proposedMeaning": "Who is it that will make a goodly expenditure for Allah's sake, so He may multiply it for him many times over? Allah restricts and expands provision, and to Him you will be returned.",
       "treatment": "contextual-tawil",
@@ -350,7 +362,7 @@
       "context": "Policy trigger groups: kursi. Kursi is retained as the Qur'anic term rather than translated as a throne or seat that could suggest a place occupied by Allah. The wording is governed by tanzih and does not assign bodily seating, containment or location.",
       "originalEnglish": "Allah! There is no deity save Him, the Alive, the Eternal. Neither slumber nor sleep overtaketh Him. Unto Him belongeth whatsoever is in the heavens and whatsoever is in the earth. Who is he that intercedeth with Him save by His leave? He knoweth that which is in front of them and that which is behind them, while they encompass nothing of His knowledge save what He will. His throne includeth the heavens and the earth, and He is never weary of preserving them. He is the Sublime, the Tremendous.",
       "proposedMeaning": "Allah—there is no deity except Him, the Ever-Living, the Self-Sustaining. Neither drowsiness nor sleep overtakes Him. To Him belongs whatever is in the heavens and whatever is on the earth. Who can intercede except by His permission? He knows what is before them and what is behind them, and they encompass nothing of His knowledge except what He wills. His Kursi encompasses the heavens and the earth, and preserving them does not weary Him. He is the Most High, the Magnificent.",
-      "treatment": "tafwid",
+      "treatment": "tafwid-with-tanzih",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -379,12 +391,12 @@
     {
       "verseKey": "3:7",
       "arabicExpression": "هُوَ ٱلَّذِىٓ أَنزَلَ عَلَيْكَ ٱلْكِتَٰبَ مِنْهُ ءَايَٰتٌ مُّحْكَمَٰتٌ هُنَّ أُمُّ ٱلْكِتَٰبِ وَأُخَرُ مُتَشَٰبِهَٰتٌ فَأَمَّا ٱلَّذِينَ فِى قُلُوبِهِمْ زَيْغٌ فَيَتَّبِعُونَ مَا تَشَٰبَهَ مِنْهُ ٱبْتِغَآءَ ٱلْفِتْنَةِ وَٱبْتِغَآءَ تَأْوِيلِهِۦ وَمَا يَعْلَمُ تَأْوِيلَهُۥٓ إِلَّا ٱللَّهُ وَٱلرَّٰسِخُونَ فِى ٱلْعِلْمِ يَقُولُونَ ءَامَنَّا بِهِۦ كُلٌّ مِّنْ عِندِ رَبِّنَا وَمَا يَذَّكَّرُ إِلَّآ أُو۟لُوا۟ ٱلْأَلْبَٰبِ",
-      "context": "This is the governing Muhkam/Mutashabih methodology verse in the supplied guide. The SalahOS policy reads all ambiguous divine-attribute wording through the clear tanzih foundations and does not permit a created or bodily meaning for Allah.",
+      "context": "Governing Muhkam/tanzih foundation. This is the governing Muhkam/Mutashabih methodology verse in the supplied guide. The SalahOS policy reads all ambiguous divine-attribute wording through the clear tanzih foundations and does not permit a created or bodily meaning for Allah.",
       "originalEnglish": "He it is Who hath revealed unto thee (Muhammad) the Scripture wherein are clear revelations - they are the substance of the Book - and others (which are) allegorical. But those in whose hearts is doubt pursue, forsooth, that which is allegorical seeking (to cause) dissension by seeking to explain it. None knoweth its explanation save Allah. And those who are of sound instruction say: We believe therein; the whole is from our Lord; but only men of understanding really heed.",
       "proposedMeaning": "He is the One Who sent down to you the Book. In it are clear verses, which are the foundation of the Book, and others that are mutashabih. As for those whose hearts incline to deviation, they follow what is mutashabih, seeking discord and seeking unbefitting interpretations. No one knows their true meanings except Allah and those firmly rooted in knowledge. They say: We believe in it; all of it is from our Lord. Only people of understanding take heed.",
       "treatment": "muhkam-foundation",
       "sourceReferences": [
-        "Project-owner supplied guide: The Ayahs of the Qur’an – Muhkam and Mutashabih",
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
         "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
       ],
@@ -411,7 +423,7 @@
     {
       "verseKey": "3:52",
       "arabicExpression": "فَلَمَّآ أَحَسَّ عِيسَىٰ مِنْهُمُ ٱلْكُفْرَ قَالَ مَنْ أَنصَارِىٓ إِلَى ٱللَّهِ قَالَ ٱلْحَوَارِيُّونَ نَحْنُ أَنصَارُ ٱللَّهِ ءَامَنَّا بِٱللَّهِ وَٱشْهَدْ بِأَنَّا مُسْلِمُونَ",
-      "context": "Policy trigger groups: divineNeedAndTransactionIdioms. The English meaning applies tanzih to need/dependency or transaction-like wording so no created deficiency is attributed to Allah.",
+      "context": "Policy trigger groups: divineNeedAndTransactionIdioms. Ansar Allah is rendered as supporters of Allah's cause, not helpers needed by Allah. Allah is free of need and does not depend on creation.",
       "originalEnglish": "But when Jesus became conscious of their disbelief, he cried: Who will be my helpers in the cause of Allah? The disciples said: We will be Allah's helpers. We believe in Allah, and bear thou witness that we have surrendered (unto Him).",
       "proposedMeaning": "When Jesus sensed disbelief from them, he said: Who will be my helpers in Allah's cause? The disciples said: We are supporters of Allah's cause. We believe in Allah, so bear witness that we submit to Him.",
       "treatment": "contextual-tawil",
@@ -446,7 +458,7 @@
       "context": "Policy trigger groups: ascentAndDirectionLanguage. The baseline phrase 'ascend unto Me' can suggest a spatial destination. The English preserves Allah's raising of Jesus while removing any implication that Allah occupies a place or direction.",
       "originalEnglish": "(And remember) when Allah said: O Jesus! Lo! I am gathering thee and causing thee to ascend unto Me, and am cleansing thee of those who disbelieve and am setting those who follow thee above those who disbelieve until the Day of Resurrection. Then unto Me ye will (all) return, and I shall judge between you as to that wherein ye used to differ.",
       "proposedMeaning": "When Allah said: O Jesus, I will take you and raise you to a place of honour by My command, purify you from those who disbelieve, and place those who follow you above those who disbelieve until the Day of Resurrection. Then to My judgment you will all return, and I will judge between you concerning that over which you differed.",
-      "treatment": "contextual-tawil",
+      "treatment": "tafwid-and-contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -574,7 +586,7 @@
       "context": "Policy trigger groups: ascentAndDirectionLanguage. The phrase 'raised him to Him' must not be translated as movement toward a location occupied by Allah. The English preserves the raising while explicitly excluding place and direction.",
       "originalEnglish": "But Allah took him up unto Himself. Allah was ever Mighty, Wise.",
       "proposedMeaning": "Rather, Allah raised him up as He willed, without implying that Allah occupies a place or direction. Allah is Almighty, All-Wise.",
-      "treatment": "contextual-tawil",
+      "treatment": "tafwid-and-contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -590,7 +602,7 @@
       "context": "Policy trigger groups: ruhAttribution. Possessive/from-Him spirit language is rendered as a created spirit, an attribution of honour, command or divine support; it never means a part, soul or component of Allah.",
       "originalEnglish": "O People of the Scripture! Do not exaggerate in your religion nor utter aught concerning Allah save the truth. The Messiah, Jesus son of Mary, was only a messenger of Allah, and His word which He conveyed unto Mary, and a spirit from Him. So believe in Allah and His messengers, and say not \"Three\" - Cease! (it is) better for you! - Allah is only One Allah. Far is it removed from His Transcendent Majesty that He should have a son. His is all that is in the heavens and all that is in the earth. And Allah is sufficient as Defender.",
       "proposedMeaning": "O People of the Scripture! Do not exaggerate in your religion nor utter aught concerning Allah save the truth. The Messiah, Jesus son of Mary, was only a messenger of Allah, and His word which He conveyed unto Mary, and a created spirit from Him, brought into being by His command. So believe in Allah and His messengers, and say not \"Three\" - Cease! (it is) better for you! - Allah is only One Allah. Far is it removed from His Transcendent Majesty that He should have a son. His is all that is in the heavens and all that is in the earth. And Allah is sufficient as Defender.",
-      "treatment": "contextual-tawil",
+      "treatment": "tafwid-and-contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -603,10 +615,10 @@
     {
       "verseKey": "5:12",
       "arabicExpression": "وَلَقَدْ أَخَذَ ٱللَّهُ مِيثَٰقَ بَنِىٓ إِسْرَٰٓءِيلَ وَبَعَثْنَا مِنْهُمُ ٱثْنَىْ عَشَرَ نَقِيبًا وَقَالَ ٱللَّهُ إِنِّى مَعَكُمْ لَئِنْ أَقَمْتُمُ ٱلصَّلَوٰةَ وَءَاتَيْتُمُ ٱلزَّكَوٰةَ وَءَامَنتُم بِرُسُلِى وَعَزَّرْتُمُوهُمْ وَأَقْرَضْتُمُ ٱللَّهَ قَرْضًا حَسَنًا لَّأُكَفِّرَنَّ عَنكُمْ سَيِّـَٔاتِكُمْ وَلَأُدْخِلَنَّكُمْ جَنَّٰتٍ تَجْرِى مِن تَحْتِهَا ٱلْأَنْهَٰرُ فَمَن كَفَرَ بَعْدَ ذَٰلِكَ مِنكُمْ فَقَدْ ضَلَّ سَوَآءَ ٱلسَّبِيلِ",
-      "context": "Policy trigger groups: divineMaiyyah, divineNeedAndTransactionIdioms. Ma'iyyah is rendered as support rather than physical co-location, and the qard idiom as sincere expenditure for Allah's sake rather than borrowing or need.",
+      "context": "Policy trigger groups: divineMaiyyah, divineNeedAndTransactionIdioms. This verse combines ma'iyyah and the qard ('loan') idiom. Ma'iyyah is rendered as support rather than physical co-location, and the goodly loan as sincere expenditure for Allah's sake rather than borrowing, need or benefit received by Allah.",
       "originalEnglish": "Allah made a covenant of old with the Children of Israel and We raised among them twelve chieftains, and Allah said: Lo! I am with you. If ye establish worship and pay the poor-due, and believe in My messengers and support them, and lend unto Allah a kindly loan, surely I shall remit your sins, and surely I shall bring you into Gardens underneath which rivers flow. Whoso among you disbelieveth after this will go astray from a plain road.",
       "proposedMeaning": "Allah made a covenant with the Children of Israel and raised twelve leaders among them. Allah said: I support you. If you establish prayer, give zakat, believe in My messengers and support them, and make a sincere goodly expenditure for My sake, I will surely erase your sins and admit you into Gardens beneath which rivers flow. Whoever among you disbelieves after that has strayed from the straight way.",
-      "treatment": "contextual-tawil",
+      "treatment": "tafwid-and-contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -654,7 +666,7 @@
       "context": "Policy trigger groups: spatialAndFawqLanguage. Spatial/fawq wording is rendered through worship, authority, dominion or subjugation so the English does not place Allah inside creation or in a physical direction.",
       "originalEnglish": "He is Allah in the heavens and in the earth. He knoweth both your secret and your utterance, and He knoweth what ye earn.",
       "proposedMeaning": "He alone is Allah, worshipped in the heavens and on the earth. He knows your secret and your utterance, and He knows what you earn.",
-      "treatment": "contextual-tawil",
+      "treatment": "tafwid-and-contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -670,7 +682,7 @@
       "context": "Policy trigger groups: spatialAndFawqLanguage. Spatial/fawq wording is rendered through worship, authority, dominion or subjugation so the English does not place Allah inside creation or in a physical direction.",
       "originalEnglish": "He is the Omnipotent over His slaves, and He is the Wise, the Knower.",
       "proposedMeaning": "He subjugates all His servants under His power. He is the Wise, the Knower.",
-      "treatment": "contextual-tawil",
+      "treatment": "tafwid-and-contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -704,7 +716,7 @@
       "proposedMeaning": "He is the One to Whom all His servants are subjugated. He sends guardians over you until, when death comes to one of you, Our messengers take the soul without neglecting their duty.",
       "treatment": "contextual-tawil",
       "sourceReferences": [
-        "Project-owner supplied guide: The Ayahs of the Qur’an – Muhkam and Mutashabih",
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
         "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
       ],
@@ -715,21 +727,18 @@
     {
       "verseKey": "6:103",
       "arabicExpression": "لَّا تُدْرِكُهُ ٱلْأَبْصَٰرُ وَهُوَ يُدْرِكُ ٱلْأَبْصَٰرَ وَهُوَ ٱللَّطِيفُ ٱلْخَبِيرُ",
-      "context": "Policy trigger group: ruyahWithoutDirectionOrModality. The project aqidah guide pairs 6:103 with 75:22–23 and requires that 6:103 not be used to deny the believers' ru'yah of Allah in the Hereafter. Idrak is therefore rendered as encompassing/comprehending, while direction and modality remain negated.",
+      "context": "Policy trigger groups: ruyahWithoutDirectionOrModality. The Ashari-Maturidi project guide explicitly pairs 6:103 with 75:22–23. Here idrak is rendered as encompassing/comprehending, not as a denial that the believers will see Allah in the Hereafter. The promised ru'yah is affirmed without direction, distance, bodily encounter, or modality.",
       "originalEnglish": "Vision comprehendeth Him not, but He comprehendeth (all) vision. He is the Subtile, the Aware.",
       "proposedMeaning": "Vision does not encompass Him, while He encompasses all vision. He is the Most Subtle, All-Aware.",
       "treatment": "contextual-tawil",
       "sourceReferences": [
-        "Project-owner supplied guide: The Ayahs of the Qur’an – Muhkam and Mutashabih",
-        "SalahOS Ashari/Maturidi aqidah constraint: ru'yah 75:22–23 versus 6:103 must affirm seeing without direction or modality",
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
         "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
       ],
       "reviewer": null,
       "status": "pending-scholar-review",
-      "disagreements": [
-        "The exact lexical relation between ru'yah (seeing) and idrak (encompassing/comprehending) is a theological point requiring qualified scholarly verification before religious approval."
-      ]
+      "disagreements": []
     },
     {
       "verseKey": "6:158",
@@ -766,10 +775,10 @@
     {
       "verseKey": "7:54",
       "arabicExpression": "إِنَّ رَبَّكُمُ ٱللَّهُ ٱلَّذِى خَلَقَ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضَ فِى سِتَّةِ أَيَّامٍ ثُمَّ ٱسْتَوَىٰ عَلَى ٱلْعَرْشِ يُغْشِى ٱلَّيْلَ ٱلنَّهَارَ يَطْلُبُهُۥ حَثِيثًا وَٱلشَّمْسَ وَٱلْقَمَرَ وَٱلنُّجُومَ مُسَخَّرَٰتٍۭ بِأَمْرِهِۦٓ أَلَا لَهُ ٱلْخَلْقُ وَٱلْأَمْرُ تَبَارَكَ ٱللَّهُ رَبُّ ٱلْعَٰلَمِينَ",
-      "context": "Policy trigger groups: istiwaOverThrone. The Pickthall baseline says 'mounted He the Throne'; this is replaced because the supplied guide explicitly rejects sitting, mounting, place and movement for Allah.",
+      "context": "Policy trigger groups: istiwaOverThrone. This is one of the Qur'anic istiwa-over-the-Throne passages. Following the supplied guide's treatment of 20:5, the English uses the contextual ta'wil of absolute dominion/subjugation and explicitly rejects sitting, place, direction, movement and bodily modality.",
       "originalEnglish": "Lo! your Lord is Allah Who created the heavens and the earth in six Days, then mounted He the Throne. He covereth the night with the day, which is in haste to follow it, and hath made the sun and the moon and the stars subservient by His command. His verily is all creation and commandment. Blessed be Allah, the Lord of the Worlds!",
-      "proposedMeaning": "Indeed your Lord is Allah, Who created the heavens and the earth in six days; then He has an istiwa over the Throne that befits Him, without sitting, place, direction, movement or bodily modality. He covers the night with the day, each pursuing the other swiftly, and the sun, moon and stars are subjected by His command. Surely creation and command belong to Him. Blessed is Allah, Lord of the worlds.",
-      "treatment": "contextual-tawil",
+      "proposedMeaning": "Indeed your Lord is Allah, Who created the heavens and the earth in six days; then He exercises absolute dominion over and subjugates the Throne, without sitting, place, direction, movement, or bodily modality. He covers the night with the day, each pursuing the other swiftly, and the sun, moon and stars are subjected by His command. Surely creation and command belong to Him. Blessed is Allah, Lord of the worlds.",
+      "treatment": "tafwid-and-contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -817,7 +826,7 @@
       "context": "Policy trigger groups: divineMaiyyah. Divine ma'iyyah is rendered by support, protection, guidance or encompassing knowledge according to context, never physical accompaniment or co-location.",
       "originalEnglish": "When thy Lord inspired the angels, (saying): I am with you. So make those who believe stand firm. I will throw fear into the hearts of those who disbelieve. Then smite the necks and smite of them each finger.",
       "proposedMeaning": "When thy Lord inspired the angels, (saying): I support you. So make those who believe stand firm. I will throw fear into the hearts of those who disbelieve. Then smite the necks and smite of them each finger.",
-      "treatment": "contextual-tawil",
+      "treatment": "tafwid-and-contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -998,3 +1007,1514 @@
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
         "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "9:111",
+      "arabicExpression": "إِنَّ ٱللَّهَ ٱشْتَرَىٰ مِنَ ٱلْمُؤْمِنِينَ أَنفُسَهُمْ وَأَمْوَٰلَهُم بِأَنَّ لَهُمُ ٱلْجَنَّةَ يُقَٰتِلُونَ فِى سَبِيلِ ٱللَّهِ فَيَقْتُلُونَ وَيُقْتَلُونَ وَعْدًا عَلَيْهِ حَقًّا فِى ٱلتَّوْرَىٰةِ وَٱلْإِنجِيلِ وَٱلْقُرْءَانِ وَمَنْ أَوْفَىٰ بِعَهْدِهِۦ مِنَ ٱللَّهِ فَٱسْتَبْشِرُوا۟ بِبَيْعِكُمُ ٱلَّذِى بَايَعْتُم بِهِۦ وَذَٰلِكَ هُوَ ٱلْفَوْزُ ٱلْعَظِيمُ",
+      "context": "Policy trigger groups: divineNeedAndTransactionIdioms. The purchase/bargain language is a Qur'anic commercial metaphor for covenant and promised reward. It is not rendered as Allah acquiring something He lacked or needed from creation.",
+      "originalEnglish": "Lo! Allah hath bought from the believers their lives and their wealth because the Garden will be theirs: they shall fight in the way of Allah and shall slay and be slain. It is a promise which is binding on Him in the Torah and the Gospel and the Qur'an. Who fulfilleth His covenant better than Allah? Rejoice then in your bargain that ye have made, for that is the supreme triumph.",
+      "proposedMeaning": "Indeed, Allah has promised the believers Paradise in return for their lives and wealth: they fight in Allah's cause, killing and being killed. It is a true promise He has made in the Torah, the Gospel and the Qur'an. Who is more faithful to His covenant than Allah? So rejoice in the covenant you have made; that is the supreme triumph.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "9:123",
+      "arabicExpression": "يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ قَٰتِلُوا۟ ٱلَّذِينَ يَلُونَكُم مِّنَ ٱلْكُفَّارِ وَلْيَجِدُوا۟ فِيكُمْ غِلْظَةً وَٱعْلَمُوٓا۟ أَنَّ ٱللَّهَ مَعَ ٱلْمُتَّقِينَ",
+      "context": "Policy trigger groups: divineMaiyyah. Ma'iyyah is rendered as support.",
+      "originalEnglish": "O ye who believe! Fight those of the disbelievers who are near to you, and let them find harshness in you, and know that Allah is with those who keep their duty (unto Him).",
+      "proposedMeaning": "O believers, fight those disbelievers nearest to you and let them find firmness in you; know that Allah supports those who are mindful of Him.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "10:3",
+      "arabicExpression": "إِنَّ رَبَّكُمُ ٱللَّهُ ٱلَّذِى خَلَقَ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضَ فِى سِتَّةِ أَيَّامٍ ثُمَّ ٱسْتَوَىٰ عَلَى ٱلْعَرْشِ يُدَبِّرُ ٱلْأَمْرَ مَا مِن شَفِيعٍ إِلَّا مِنۢ بَعْدِ إِذْنِهِۦ ذَٰلِكُمُ ٱللَّهُ رَبُّكُمْ فَٱعْبُدُوهُ أَفَلَا تَذَكَّرُونَ",
+      "context": "Policy trigger groups: istiwaOverThrone. This is one of the Qur'anic istiwa-over-the-Throne passages. Following the supplied guide's treatment of 20:5, the English uses the contextual ta'wil of absolute dominion/subjugation and explicitly rejects sitting, place, direction, movement and bodily modality.",
+      "originalEnglish": "Lo! your Lord is Allah Who created the heavens and the earth in six Days, then He established Himself upon the Throne, directing all things. There is no intercessor (with Him) save after His permission. That is Allah, your Lord, so worship Him. Oh, will ye not remind?",
+      "proposedMeaning": "Indeed your Lord is Allah, Who created the heavens and the earth in six days; then He exercises absolute dominion over and subjugates the Throne, without sitting, place, direction, movement, or bodily modality, directing all affairs. No intercessor may act except with His permission. That is Allah, your Lord, so worship Him. Will you not take heed?",
+      "treatment": "tafwid-and-contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "10:21",
+      "arabicExpression": "وَإِذَآ أَذَقْنَا ٱلنَّاسَ رَحْمَةً مِّنۢ بَعْدِ ضَرَّآءَ مَسَّتْهُمْ إِذَا لَهُم مَّكْرٌ فِىٓ ءَايَاتِنَا قُلِ ٱللَّهُ أَسْرَعُ مَكْرًا إِنَّ رُسُلَنَا يَكْتُبُونَ مَا تَمْكُرُونَ",
+      "context": "Policy trigger groups: reciprocalHumanSoundingVerbs. The English renders divine makr as countering and frustrating wrongful plots rather than human-style deception.",
+      "originalEnglish": "And when We cause mankind to taste of mercy after some adversity which had afflicted them, behold! they have some plot against Our revelations. Say: Allah is more swift in plotting. Lo! Our messengers write down that which ye plot.",
+      "proposedMeaning": "When We let people taste mercy after hardship has touched them, they immediately plot against Our signs. Say: Allah is swifter in countering their plots. Our messengers record what you plot.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "11:37",
+      "arabicExpression": "وَٱصْنَعِ ٱلْفُلْكَ بِأَعْيُنِنَا وَوَحْيِنَا وَلَا تُخَٰطِبْنِى فِى ٱلَّذِينَ ظَلَمُوٓا۟ إِنَّهُم مُّغْرَقُونَ",
+      "context": "Policy trigger groups: divineAynAndCareLanguage. Bi-a'yunina is rendered as protection and care.",
+      "originalEnglish": "Build the ship under Our eyes and by Our inspiration, and speak not unto Me on behalf of those who do wrong. Lo! they will be drowned.",
+      "proposedMeaning": "Build the Ark under Our protection and by Our revelation, and do not plead with Me for those who have done wrong; they will surely be drowned.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "11:56",
+      "arabicExpression": "إِنِّى تَوَكَّلْتُ عَلَى ٱللَّهِ رَبِّى وَرَبِّكُم مَّا مِن دَآبَّةٍ إِلَّا هُوَ ءَاخِذٌۢ بِنَاصِيَتِهَآ إِنَّ رَبِّى عَلَىٰ صِرَٰطٍ مُّسْتَقِيمٍ",
+      "context": "Policy trigger groups: divineTakingAndSeizureLanguage. The baseline 'grasp it by the forelock' is rendered as complete control, avoiding any bodily grasp, hand or instrument.",
+      "originalEnglish": "Lo! I have put my trust in Allah, my Lord and your Lord. Not an animal but He doth grasp it by the forelock! Lo! my Lord is on a straight path.",
+      "proposedMeaning": "Indeed, I have placed my trust in Allah, my Lord and your Lord. There is no creature except that He has complete control over it. Surely my Lord is upon a straight path of truth and justice.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "11:61",
+      "arabicExpression": "وَإِلَىٰ ثَمُودَ أَخَاهُمْ صَٰلِحًا قَالَ يَٰقَوْمِ ٱعْبُدُوا۟ ٱللَّهَ مَا لَكُم مِّنْ إِلَٰهٍ غَيْرُهُۥ هُوَ أَنشَأَكُم مِّنَ ٱلْأَرْضِ وَٱسْتَعْمَرَكُمْ فِيهَا فَٱسْتَغْفِرُوهُ ثُمَّ تُوبُوٓا۟ إِلَيْهِ إِنَّ رَبِّى قَرِيبٌ مُّجِيبٌ",
+      "context": "Policy trigger groups: divineNearness. Divine qurb is rendered non-spatially through knowledge and response, not distance, contact or location.",
+      "originalEnglish": "And unto (the tribe of) Thamud (We sent) their brother Salih. He said: O my people! Serve Allah, Ye have no other Allah save Him. He brought you forth from the earth and hath made you husband it. So ask forgiveness of Him and turn unto Him repentant. Lo! my Lord is Nigh, Responsive.",
+      "proposedMeaning": "And to Thamud We sent their brother Salih. He said: O my people, worship Allah; you have no deity other than Him. He brought you forth from the earth and enabled you to settle it, so seek His forgiveness and turn to Him in repentance. Indeed, my Lord is near by His knowledge and response, ever Responsive.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "11:92",
+      "arabicExpression": "قَالَ يَٰقَوْمِ أَرَهْطِىٓ أَعَزُّ عَلَيْكُم مِّنَ ٱللَّهِ وَٱتَّخَذْتُمُوهُ وَرَآءَكُمْ ظِهْرِيًّا إِنَّ رَبِّى بِمَا تَعْمَلُونَ مُحِيطٌ",
+      "context": "Policy trigger groups: divineEncompassing. Muhīt is rendered as encompassing knowledge rather than physical surrounding.",
+      "originalEnglish": "He said: O my people! Is my family more to be honoured by you than Allah? and ye put Him behind you, neglected! Lo! my Lord surroundeth what ye do.",
+      "proposedMeaning": "He said: O my people, is my family more honoured by you than Allah, while you cast His command behind you in neglect? Surely my Lord's knowledge encompasses all that you do.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "11:102",
+      "arabicExpression": "وَكَذَٰلِكَ أَخْذُ رَبِّكَ إِذَآ أَخَذَ ٱلْقُرَىٰ وَهِىَ ظَٰلِمَةٌ إِنَّ أَخْذَهُۥٓ أَلِيمٌ شَدِيدٌ",
+      "context": "Policy trigger groups: divineTakingAndSeizureLanguage. The repeated Pickthall 'grasp' wording is rendered as seizure in punishment and taking to account, not a bodily grasp.",
+      "originalEnglish": "Even thus is the grasp of thy Lord when He graspeth the townships while they are doing wrong. Lo! His grasp is painful, very strong.",
+      "proposedMeaning": "Such is your Lord's punishment when He takes wrongdoing towns to account. His punishment is painful and severe.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "12:87",
+      "arabicExpression": "يَٰبَنِىَّ ٱذْهَبُوا۟ فَتَحَسَّسُوا۟ مِن يُوسُفَ وَأَخِيهِ وَلَا تَا۟يْـَٔسُوا۟ مِن رَّوْحِ ٱللَّهِ إِنَّهُۥ لَا يَا۟يْـَٔسُ مِن رَّوْحِ ٱللَّهِ إِلَّا ٱلْقَوْمُ ٱلْكَٰفِرُونَ",
+      "context": "Policy trigger groups: rawhReliefNotRuh. The Arabic here is rawh Allah—relief, mercy or deliverance—not ruh ('spirit'). Pickthall's capitalized 'Spirit of Allah' is therefore replaced to avoid both a lexical error and a possible partitive misunderstanding.",
+      "originalEnglish": "Go, O my sons, and ascertain concerning Joseph and his brother, and despair not of the Spirit of Allah. Lo! none despaireth of the Spirit of Allah save disbelieving folk.",
+      "proposedMeaning": "O my sons, go and search carefully for Joseph and his brother, and do not despair of relief from Allah. Indeed, no one despairs of relief from Allah except the disbelieving people.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "13:2",
+      "arabicExpression": "ٱللَّهُ ٱلَّذِى رَفَعَ ٱلسَّمَٰوَٰتِ بِغَيْرِ عَمَدٍ تَرَوْنَهَا ثُمَّ ٱسْتَوَىٰ عَلَى ٱلْعَرْشِ وَسَخَّرَ ٱلشَّمْسَ وَٱلْقَمَرَ كُلٌّ يَجْرِى لِأَجَلٍ مُّسَمًّى يُدَبِّرُ ٱلْأَمْرَ يُفَصِّلُ ٱلْـَٔايَٰتِ لَعَلَّكُم بِلِقَآءِ رَبِّكُمْ تُوقِنُونَ",
+      "context": "Policy trigger groups: istiwaOverThrone. This is one of the Qur'anic istiwa-over-the-Throne passages. Following the supplied guide's treatment of 20:5, the English uses the contextual ta'wil of absolute dominion/subjugation and explicitly rejects sitting, place, direction, movement and bodily modality.",
+      "originalEnglish": "Allah it is Who raised up the heavens without visible supports, then mounted the Throne, and compelled the sun and the moon to be of service, each runneth unto an appointed term; He ordereth the course; He detaileth the revelations, that haply ye may be certain of the meeting with your Lord.",
+      "proposedMeaning": "Allah is the One Who raised the heavens without visible pillars; then He exercises absolute dominion over and subjugates the Throne, without sitting, place, direction, movement, or bodily modality. He subjected the sun and moon, each running for an appointed term. He directs the affair and explains the signs so that you may be certain of meeting your Lord.",
+      "treatment": "tafwid-and-contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "13:22",
+      "arabicExpression": "وَٱلَّذِينَ صَبَرُوا۟ ٱبْتِغَآءَ وَجْهِ رَبِّهِمْ وَأَقَامُوا۟ ٱلصَّلَوٰةَ وَأَنفَقُوا۟ مِمَّا رَزَقْنَٰهُمْ سِرًّا وَعَلَانِيَةً وَيَدْرَءُونَ بِٱلْحَسَنَةِ ٱلسَّيِّئَةَ أُو۟لَٰٓئِكَ لَهُمْ عُقْبَى ٱلدَّارِ",
+      "context": "Policy trigger groups: divineWajh. Wajh rabbihim is rendered as divine acceptance, not a bodily countenance.",
+      "originalEnglish": "Such as persevere in seeking their Lord's Countenance and are regular in prayer and spend of that which We bestow upon them secretly and openly, and overcome evil with good. Theirs will be the sequel of the (heavenly) Home,",
+      "proposedMeaning": "They are those who remain steadfast, seeking their Lord's acceptance; establish prayer; spend secretly and openly from what We have provided them; and repel evil with good. Theirs is the good end of the Home.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "13:42",
+      "arabicExpression": "وَقَدْ مَكَرَ ٱلَّذِينَ مِن قَبْلِهِمْ فَلِلَّهِ ٱلْمَكْرُ جَمِيعًا يَعْلَمُ مَا تَكْسِبُ كُلُّ نَفْسٍ وَسَيَعْلَمُ ٱلْكُفَّٰرُ لِمَنْ عُقْبَى ٱلدَّارِ",
+      "context": "Policy trigger groups: reciprocalHumanSoundingVerbs. The phrase 'all plotting is Allah's' is rendered through Allah's power to counter and frustrate plots, not deceptive scheming.",
+      "originalEnglish": "Those who were before them plotted; but all plotting is Allah's. He knoweth that which each soul earneth. The disbelievers will come to know for whom will be the sequel of the (heavenly) Home.",
+      "proposedMeaning": "Those before them also plotted, but Allah has complete power to counter every plot. He knows what every soul earns, and the disbelievers will know for whom the final home will be.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "15:29",
+      "arabicExpression": "فَإِذَا سَوَّيْتُهُۥ وَنَفَخْتُ فِيهِ مِن رُّوحِى فَقَعُوا۟ لَهُۥ سَٰجِدِينَ",
+      "context": "Policy trigger groups: ruhAttribution. My Spirit is treated as a created soul honored by attribution to Allah, not a part of Allah.",
+      "originalEnglish": "So, when I have made him and have breathed into him of My Spirit, do ye fall down, prostrating yourselves unto him.",
+      "proposedMeaning": "When I have fashioned him and placed within him a created spirit honored by Me, then fall down before him in prostration.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "16:50",
+      "arabicExpression": "يَخَافُونَ رَبَّهُم مِّن فَوْقِهِمْ وَيَفْعَلُونَ مَا يُؤْمَرُونَ",
+      "context": "Policy trigger groups: spatialAndFawqLanguage. Min fawqihim is rendered through supremacy and authority, not spatial direction.",
+      "originalEnglish": "They fear their Lord above them, and do what they are bidden.",
+      "proposedMeaning": "They fear their Lord's complete authority over them and do what they are commanded.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "16:128",
+      "arabicExpression": "إِنَّ ٱللَّهَ مَعَ ٱلَّذِينَ ٱتَّقَوا۟ وَّٱلَّذِينَ هُم مُّحْسِنُونَ",
+      "context": "Policy trigger groups: divineMaiyyah. The supplied guide explains Allah being 'with' the pious as support, not physical accompaniment, proximity or co-location.",
+      "originalEnglish": "Lo! Allah is with those who keep their duty unto Him and those who are doers of good.",
+      "proposedMeaning": "Indeed, Allah supports those who are mindful of Him and those who do good.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "17:60",
+      "arabicExpression": "وَإِذْ قُلْنَا لَكَ إِنَّ رَبَّكَ أَحَاطَ بِٱلنَّاسِ وَمَا جَعَلْنَا ٱلرُّءْيَا ٱلَّتِىٓ أَرَيْنَٰكَ إِلَّا فِتْنَةً لِّلنَّاسِ وَٱلشَّجَرَةَ ٱلْمَلْعُونَةَ فِى ٱلْقُرْءَانِ وَنُخَوِّفُهُمْ فَمَا يَزِيدُهُمْ إِلَّا طُغْيَٰنًا كَبِيرًا",
+      "context": "Policy trigger groups: divineEncompassing. Divine encompassing is rendered through knowledge and power rather than spatial enclosure or bodily surrounding.",
+      "originalEnglish": "And (it was a warning) when we told thee: Lo! thy Lord encompasseth mankind, and We appointed the sight which We showed thee as an ordeal for mankind, and (likewise) the Accursed Tree in the Qur'an. We warn them, but it increaseth them in naught save gross impiety.",
+      "proposedMeaning": "And when We told you: surely your Lord's knowledge and power encompass mankind. We made the vision We showed you, and the accursed tree in the Qur'an, a test for people. We warn them, but it only increases them in great defiance.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "18:28",
+      "arabicExpression": "وَٱصْبِرْ نَفْسَكَ مَعَ ٱلَّذِينَ يَدْعُونَ رَبَّهُم بِٱلْغَدَوٰةِ وَٱلْعَشِىِّ يُرِيدُونَ وَجْهَهُۥ وَلَا تَعْدُ عَيْنَاكَ عَنْهُمْ تُرِيدُ زِينَةَ ٱلْحَيَوٰةِ ٱلدُّنْيَا وَلَا تُطِعْ مَنْ أَغْفَلْنَا قَلْبَهُۥ عَن ذِكْرِنَا وَٱتَّبَعَ هَوَىٰهُ وَكَانَ أَمْرُهُۥ فُرُطًا",
+      "context": "Policy trigger groups: divineWajh. Wajhahu is rendered non-corporeally.",
+      "originalEnglish": "Restrain thyself along with those who cry unto their Lord at morn and evening, seeking His Countenance; and let not thine eyes overlook them, desiring the pomp of the life of the world; and obey not him whose heart We have made heedless of Our remembrance, who followeth his own lust and whose case hath been abandoned.",
+      "proposedMeaning": "Keep yourself patiently with those who call upon their Lord morning and evening, seeking His acceptance. Do not let your eyes turn away from them, desiring the adornment of worldly life, and do not obey one whose heart We have made heedless of Our remembrance, who follows his desire and whose affair is excessive.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "19:17",
+      "arabicExpression": "فَٱتَّخَذَتْ مِن دُونِهِمْ حِجَابًا فَأَرْسَلْنَآ إِلَيْهَا رُوحَنَا فَتَمَثَّلَ لَهَا بَشَرًا سَوِيًّا",
+      "context": "Policy trigger groups: ruhAttribution. Our Spirit is rendered as the created angelic messenger Gabriel, not a part of Allah.",
+      "originalEnglish": "And had chosen seclusion from them. Then We sent unto her Our Spirit and it assumed for her the likeness of a perfect man.",
+      "proposedMeaning": "She withdrew from them behind a veil, and We sent to her Our honored messenger-spirit, Gabriel, who appeared to her as a well-formed man.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "19:65",
+      "arabicExpression": "رَّبُّ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضِ وَمَا بَيْنَهُمَا فَٱعْبُدْهُ وَٱصْطَبِرْ لِعِبَٰدَتِهِۦ هَلْ تَعْلَمُ لَهُۥ سَمِيًّا",
+      "context": "Governing Muhkam/tanzih foundation. The supplied guide uses this verse as a muhkam foundation negating any similarity to Allah.",
+      "originalEnglish": "Lord of the heavens and the earth and all that is between them! Therefor, worship thou Him and be thou steadfast in His service. Knowest thou one that can be named along with Him?",
+      "proposedMeaning": "Lord of the heavens and the earth and all that is between them: worship Him and remain steadfast in His worship. Do you know anything similar to Him? There is none.",
+      "treatment": "muhkam-foundation",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "20:5",
+      "arabicExpression": "ٱلرَّحْمَٰنُ عَلَى ٱلْعَرْشِ ٱسْتَوَىٰ",
+      "context": "Policy trigger groups: istiwaOverThrone. The supplied guide identifies istiwa over the Throne as mutashabih, explicitly rejects sitting, resting, movement, place, direction, bodies and parts, and records Ibn Rajab al-Hanbali's explanation by al-istila (subjugation). The primary SalahOS English meaning therefore uses the guide's contextual ta'wil rather than leaving a bodily-sounding literal rendering.",
+      "originalEnglish": "The Beneficent One, Who is established on the Throne.",
+      "proposedMeaning": "The All-Merciful exercises absolute dominion over and subjugates the Throne with a subjugation without beginning; this does not mean sitting, place, direction, movement, or any bodily modality.",
+      "treatment": "tafwid-and-contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "20:39",
+      "arabicExpression": "أَنِ ٱقْذِفِيهِ فِى ٱلتَّابُوتِ فَٱقْذِفِيهِ فِى ٱلْيَمِّ فَلْيُلْقِهِ ٱلْيَمُّ بِٱلسَّاحِلِ يَأْخُذْهُ عَدُوٌّ لِّى وَعَدُوٌّ لَّهُۥ وَأَلْقَيْتُ عَلَيْكَ مَحَبَّةً مِّنِّى وَلِتُصْنَعَ عَلَىٰ عَيْنِىٓ",
+      "context": "Policy trigger groups: divineAynAndCareLanguage. The project Ashari-Maturidi guide flags 20:39 as an 'ayn passage: a literal 'Eye' rendering is rejected, while care/watchful protection is acceptable. SalahOS therefore renders the expression as being brought up under Allah's care.",
+      "originalEnglish": "Saying: Throw him into the ark, and throw it into the river, then the river shall throw it on to the bank, and there an enemy to Me and an enemy to him shall take him. And I endued thee with love from Me that thou mightest be trained according to My will,",
+      "proposedMeaning": "Saying: Place him in the chest, then cast it into the river, and the river will cast it onto the bank, where an enemy of Mine and an enemy of his will take him. I bestowed love upon you from Me so that you would be brought up under My care.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "20:46",
+      "arabicExpression": "قَالَ لَا تَخَافَآ إِنَّنِى مَعَكُمَآ أَسْمَعُ وَأَرَىٰ",
+      "context": "Policy trigger groups: divineMaiyyah. The verse's ma'iyyah is explicitly non-spatial and tied to hearing, seeing and support.",
+      "originalEnglish": "He said: Fear not. Lo! I am with you twain, Hearing and Seeing.",
+      "proposedMeaning": "He said: Do not fear. I am with you both by My knowledge and support; I hear and I see.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "20:126",
+      "arabicExpression": "قَالَ كَذَٰلِكَ أَتَتْكَ ءَايَٰتُنَا فَنَسِيتَهَا وَكَذَٰلِكَ ٱلْيَوْمَ تُنسَىٰ",
+      "context": "Policy trigger groups: impossibleDeficiencies. The passive 'you are forgotten' is rendered without attributing forgetfulness to Allah, which the supplied tanzih rule excludes as a deficiency.",
+      "originalEnglish": "He will say: So (it must be). Our revelations came unto thee but thou didst forget them. In like manner thou art forgotten this Day.",
+      "proposedMeaning": "He will say: Thus it is. Our signs came to you, but you neglected them; so today you are left to the consequence of that neglect.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "21:91",
+      "arabicExpression": "وَٱلَّتِىٓ أَحْصَنَتْ فَرْجَهَا فَنَفَخْنَا فِيهَا مِن رُّوحِنَا وَجَعَلْنَٰهَا وَٱبْنَهَآ ءَايَةً لِّلْعَٰلَمِينَ",
+      "context": "Policy trigger groups: ruhAttribution. Our Spirit is explicitly treated as created and honored, consistent with the supplied guide's treatment of 66:12.",
+      "originalEnglish": "And she who was chaste, therefor We breathed into her (something) of Our Spirit and made her and her son a token for (all) peoples.",
+      "proposedMeaning": "And the woman who guarded her chastity: We caused an honored created spirit to be blown into her by Our command, and We made her and her son a sign for all peoples.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "22:26",
+      "arabicExpression": "وَإِذْ بَوَّأْنَا لِإِبْرَٰهِيمَ مَكَانَ ٱلْبَيْتِ أَن لَّا تُشْرِكْ بِى شَيْـًٔا وَطَهِّرْ بَيْتِىَ لِلطَّآئِفِينَ وَٱلْقَآئِمِينَ وَٱلرُّكَّعِ ٱلسُّجُودِ",
+      "context": "Policy trigger groups: honoredPossessives. My House is rendered as a house honored by Allah, not Allah's residence.",
+      "originalEnglish": "And (remember) when We prepared for Abraham the place of the (holy) House, saying: Ascribe thou no thing as partner unto Me, and purify My House for those who make the round (thereof) and those who stand and those who bow and make prostration.",
+      "proposedMeaning": "Remember when We assigned to Ibrahim the site of the House: Do not associate anything with Me, and purify the House honored by Me for those who circle it, stand in worship, bow and prostrate.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "23:27",
+      "arabicExpression": "فَأَوْحَيْنَآ إِلَيْهِ أَنِ ٱصْنَعِ ٱلْفُلْكَ بِأَعْيُنِنَا وَوَحْيِنَا فَإِذَا جَآءَ أَمْرُنَا وَفَارَ ٱلتَّنُّورُ فَٱسْلُكْ فِيهَا مِن كُلٍّ زَوْجَيْنِ ٱثْنَيْنِ وَأَهْلَكَ إِلَّا مَن سَبَقَ عَلَيْهِ ٱلْقَوْلُ مِنْهُمْ وَلَا تُخَٰطِبْنِى فِى ٱلَّذِينَ ظَلَمُوٓا۟ إِنَّهُم مُّغْرَقُونَ",
+      "context": "Policy trigger groups: divineAynAndCareLanguage. Bi-a'yunina is rendered as protection, not bodily eyes.",
+      "originalEnglish": "Then We inspired in him, saying: Make the ship under Our eyes and Our inspiration. Then, when Our command cometh and the oven gusheth water, introduce therein of every (kind) two spouses, and thy household save him thereof against whom the Word hath already gone forth. And plead not with Me on behalf of those who have done wrong. Lo! they will be drowned.",
+      "proposedMeaning": "We revealed to him: Build the Ark under Our protection and by Our revelation. When Our command comes and the oven gushes forth, take aboard a pair of every kind and your household except those against whom the decree has already passed. Do not plead with Me for the wrongdoers; they will surely be drowned.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "23:88",
+      "arabicExpression": "قُلْ مَنۢ بِيَدِهِۦ مَلَكُوتُ كُلِّ شَىْءٍ وَهُوَ يُجِيرُ وَلَا يُجَارُ عَلَيْهِ إِن كُنتُمْ تَعْلَمُونَ",
+      "context": "Policy trigger groups: divineYadAndPowerLanguage. Bi-yadihi is rendered as absolute dominion and control.",
+      "originalEnglish": "Say: In Whose hand is the dominion over all things and He protecteth, while against Him there is no protection, if ye have knowledge?",
+      "proposedMeaning": "Say: Who has absolute dominion over all things, protecting while none can protect against Him, if you truly know?",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "24:35",
+      "arabicExpression": "ٱللَّهُ نُورُ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضِ مَثَلُ نُورِهِۦ كَمِشْكَوٰةٍ فِيهَا مِصْبَاحٌ ٱلْمِصْبَاحُ فِى زُجَاجَةٍ ٱلزُّجَاجَةُ كَأَنَّهَا كَوْكَبٌ دُرِّىٌّ يُوقَدُ مِن شَجَرَةٍ مُّبَٰرَكَةٍ زَيْتُونَةٍ لَّا شَرْقِيَّةٍ وَلَا غَرْبِيَّةٍ يَكَادُ زَيْتُهَا يُضِىٓءُ وَلَوْ لَمْ تَمْسَسْهُ نَارٌ نُّورٌ عَلَىٰ نُورٍ يَهْدِى ٱللَّهُ لِنُورِهِۦ مَن يَشَآءُ وَيَضْرِبُ ٱللَّهُ ٱلْأَمْثَٰلَ لِلنَّاسِ وَٱللَّهُ بِكُلِّ شَىْءٍ عَلِيمٌ",
+      "context": "Policy trigger groups: nur. The supplied guide explicitly rejects understanding Allah as physical light. It gives the meaning that Allah is the Creator of guidance in the occupants of the heavens and the earth.",
+      "originalEnglish": "Allah is the Light of the heavens and the earth. The similitude of His light is as a niche wherein is a lamp. The lamp is in a glass. The glass is as it were a shining star. (This lamp is) kindled from a blessed tree, an olive neither of the East nor of the West, whose oil would almost glow forth (of itself) though no fire touched it. Light upon light. Allah guideth unto His light whom He will. And Allah speaketh to mankind in allegories, for Allah is Knower of all things.",
+      "proposedMeaning": "Allah is the Creator of guidance for the inhabitants of the heavens and the earth. The example of His guidance is like a niche in which there is a lamp; the lamp is in glass, and the glass is as though it were a brilliant star, lit from a blessed olive tree, neither of the east nor of the west, whose oil would almost glow even though no fire touched it: light upon light. Allah guides to His light whom He wills. Allah sets forth examples for people, and Allah knows all things.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "25:59",
+      "arabicExpression": "ٱلَّذِى خَلَقَ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضَ وَمَا بَيْنَهُمَا فِى سِتَّةِ أَيَّامٍ ثُمَّ ٱسْتَوَىٰ عَلَى ٱلْعَرْشِ ٱلرَّحْمَٰنُ فَسْـَٔلْ بِهِۦ خَبِيرًا",
+      "context": "Policy trigger groups: istiwaOverThrone. This is one of the Qur'anic istiwa-over-the-Throne passages. Following the supplied guide's treatment of 20:5, the English uses the contextual ta'wil of absolute dominion/subjugation and explicitly rejects sitting, place, direction, movement and bodily modality.",
+      "originalEnglish": "Who created the heavens and the earth and all that is between them in six Days, then He mounted the Throne. The Beneficent! Ask anyone informed concerning Him!",
+      "proposedMeaning": "He created the heavens and the earth and all between them in six days; then He exercises absolute dominion over and subjugates the Throne, without sitting, place, direction, movement, or bodily modality. He is the All-Merciful; ask one well informed concerning Him.",
+      "treatment": "tafwid-and-contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "26:15",
+      "arabicExpression": "قَالَ كَلَّا فَٱذْهَبَا بِـَٔايَٰتِنَآ إِنَّا مَعَكُم مُّسْتَمِعُونَ",
+      "context": "Policy trigger groups: divineMaiyyah. Ma'iyyah is rendered as knowledge and support.",
+      "originalEnglish": "He said: Nay, verily. So go ye twain with Our tokens. Lo! We shall be with you, Hearing.",
+      "proposedMeaning": "He said: No. Go, both of you, with Our signs. We are with you by Our knowledge and support, hearing.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "26:62",
+      "arabicExpression": "قَالَ كَلَّآ إِنَّ مَعِىَ رَبِّى سَيَهْدِينِ",
+      "context": "Policy trigger groups: divineMaiyyah. The Arabic ma'iyyah here must not be read as physical co-location. In the immediate context of rescue and guidance, SalahOS renders it through Allah's support and guidance.",
+      "originalEnglish": "He said: Nay, verily! for lo! my Lord is with me. He will guide me.",
+      "proposedMeaning": "He said: No. My Lord supports me; He will guide me.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "27:50",
+      "arabicExpression": "وَمَكَرُوا۟ مَكْرًا وَمَكَرْنَا مَكْرًا وَهُمْ لَا يَشْعُرُونَ",
+      "context": "Policy trigger groups: reciprocalHumanSoundingVerbs. The English meaning avoids attributing deficiency, deception, forgetfulness or human-style mockery to Allah; the verb is rendered as a just requital or counteraction appropriate to its context.",
+      "originalEnglish": "So they plotted a plot: and We plotted a plot, while they perceived not.",
+      "proposedMeaning": "They plotted a plot, and We countered their plot while they perceived not.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "28:88",
+      "arabicExpression": "وَلَا تَدْعُ مَعَ ٱللَّهِ إِلَٰهًا ءَاخَرَ لَآ إِلَٰهَ إِلَّا هُوَ كُلُّ شَىْءٍ هَالِكٌ إِلَّا وَجْهَهُۥ لَهُ ٱلْحُكْمُ وَإِلَيْهِ تُرْجَعُونَ",
+      "context": "Policy trigger groups: divineWajh. The supplied guide reports Imam al-Bukhari's explanation of 'illa wajhahu' as 'illa mulkahu': His Dominion. SalahOS therefore does not render wajh here as a bodily face.",
+      "originalEnglish": "And cry not unto any other god along with Allah. There is no Allah save Him. Everything will perish save His countenance. His is the command, and unto Him ye will be brought back.",
+      "proposedMeaning": "Do not invoke another god with Allah. There is no deity except Him. Everything will perish except His Dominion. Judgment belongs to Him, and to Him you will be returned.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "29:69",
+      "arabicExpression": "وَٱلَّذِينَ جَٰهَدُوا۟ فِينَا لَنَهْدِيَنَّهُمْ سُبُلَنَا وَإِنَّ ٱللَّهَ لَمَعَ ٱلْمُحْسِنِينَ",
+      "context": "Policy trigger groups: divineMaiyyah. Ma'iyyah is rendered as support.",
+      "originalEnglish": "As for those who strive in Us, We surely guide them to Our paths, and lo! Allah is with the good.",
+      "proposedMeaning": "Those who strive for Our sake, We will surely guide them to Our ways. Surely Allah supports the doers of good.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "30:38",
+      "arabicExpression": "فَـَٔاتِ ذَا ٱلْقُرْبَىٰ حَقَّهُۥ وَٱلْمِسْكِينَ وَٱبْنَ ٱلسَّبِيلِ ذَٰلِكَ خَيْرٌ لِّلَّذِينَ يُرِيدُونَ وَجْهَ ٱللَّهِ وَأُو۟لَٰٓئِكَ هُمُ ٱلْمُفْلِحُونَ",
+      "context": "Policy trigger groups: divineWajh. Wajh Allah is rendered as seeking divine acceptance.",
+      "originalEnglish": "So give to the kinsman his due, and to the needy, and to the wayfarer. That is best for those who seek Allah's Countenance. And such are they who are successful.",
+      "proposedMeaning": "Give the relative his due, and the needy and the traveler. That is best for those who seek Allah's acceptance, and they are the successful.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "30:39",
+      "arabicExpression": "وَمَآ ءَاتَيْتُم مِّن رِّبًا لِّيَرْبُوَا۟ فِىٓ أَمْوَٰلِ ٱلنَّاسِ فَلَا يَرْبُوا۟ عِندَ ٱللَّهِ وَمَآ ءَاتَيْتُم مِّن زَكَوٰةٍ تُرِيدُونَ وَجْهَ ٱللَّهِ فَأُو۟لَٰٓئِكَ هُمُ ٱلْمُضْعِفُونَ",
+      "context": "Policy trigger groups: divineWajh. Wajh Allah is rendered as divine acceptance rather than a face.",
+      "originalEnglish": "That which ye give in usury in order that it may increase on (other) people's property hath no increase with Allah; but that which ye give in charity, seeking Allah's Countenance, hath increase manifold.",
+      "proposedMeaning": "Whatever you give as usury to increase through people's wealth brings no increase with Allah; but what you give in charity seeking Allah's acceptance—those are the ones whose reward is multiplied.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "32:4",
+      "arabicExpression": "ٱللَّهُ ٱلَّذِى خَلَقَ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضَ وَمَا بَيْنَهُمَا فِى سِتَّةِ أَيَّامٍ ثُمَّ ٱسْتَوَىٰ عَلَى ٱلْعَرْشِ مَا لَكُم مِّن دُونِهِۦ مِن وَلِىٍّ وَلَا شَفِيعٍ أَفَلَا تَتَذَكَّرُونَ",
+      "context": "Policy trigger groups: istiwaOverThrone. This is one of the Qur'anic istiwa-over-the-Throne passages. Following the supplied guide's treatment of 20:5, the English uses the contextual ta'wil of absolute dominion/subjugation and explicitly rejects sitting, place, direction, movement and bodily modality.",
+      "originalEnglish": "Allah it is Who created the heavens and the earth, and that which is between them, in six Days. Then He mounted the Throne. Ye have not, beside Him, a protecting friend or mediator. Will ye not then remember?",
+      "proposedMeaning": "Allah is the One Who created the heavens and the earth and all between them in six days; then He exercises absolute dominion over and subjugates the Throne, without sitting, place, direction, movement, or bodily modality. Besides Him you have no protecting ally or intercessor. Will you not remember?",
+      "treatment": "tafwid-and-contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "32:5",
+      "arabicExpression": "يُدَبِّرُ ٱلْأَمْرَ مِنَ ٱلسَّمَآءِ إِلَى ٱلْأَرْضِ ثُمَّ يَعْرُجُ إِلَيْهِ فِى يَوْمٍ كَانَ مِقْدَارُهُۥٓ أَلْفَ سَنَةٍ مِّمَّا تَعُدُّونَ",
+      "context": "Policy trigger groups: ascentAndDirectionLanguage. The ascent is rendered without locating Allah at a spatial destination.",
+      "originalEnglish": "He directeth the ordinance from the heaven unto the earth; then it ascendeth unto Him in a Day, whereof the measure is a thousand years of that ye reckon.",
+      "proposedMeaning": "He directs the affair from heaven to earth; then the matter is raised for His judgment in a day whose measure is a thousand years by your reckoning.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "32:9",
+      "arabicExpression": "ثُمَّ سَوَّىٰهُ وَنَفَخَ فِيهِ مِن رُّوحِهِۦ وَجَعَلَ لَكُمُ ٱلسَّمْعَ وَٱلْأَبْصَٰرَ وَٱلْأَفْـِٔدَةَ قَلِيلًا مَّا تَشْكُرُونَ",
+      "context": "Policy trigger groups: ruhAttribution. Possessive/from-Him spirit language is rendered as a created spirit, an attribution of honour, command or divine support; it never means a part, soul or component of Allah.",
+      "originalEnglish": "Then He fashioned him and breathed into him of His Spirit; and appointed for you hearing and sight and hearts. Small thanks give ye!",
+      "proposedMeaning": "Then He fashioned him and caused the created spirit honoured by Him to enter him; and appointed for you hearing and sight and hearts. Small thanks give ye!",
+      "treatment": "tafwid-and-contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "32:14",
+      "arabicExpression": "فَذُوقُوا۟ بِمَا نَسِيتُمْ لِقَآءَ يَوْمِكُمْ هَٰذَآ إِنَّا نَسِينَٰكُمْ وَذُوقُوا۟ عَذَابَ ٱلْخُلْدِ بِمَا كُنتُمْ تَعْمَلُونَ",
+      "context": "Policy trigger groups: impossibleDeficiencies. The baseline 'We forget you' is replaced because literal forgetfulness is an impossible deficiency for Allah.",
+      "originalEnglish": "So taste (the evil of your deeds). Forasmuch as ye forgot the meeting of this your day, lo! We forget you. Taste the doom of immortality because of what ye used to do.",
+      "proposedMeaning": "So taste the consequence: because you neglected the meeting of this Day, today We leave you to its punishment. Taste the lasting punishment for what you used to do.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "34:50",
+      "arabicExpression": "قُلْ إِن ضَلَلْتُ فَإِنَّمَآ أَضِلُّ عَلَىٰ نَفْسِى وَإِنِ ٱهْتَدَيْتُ فَبِمَا يُوحِىٓ إِلَىَّ رَبِّىٓ إِنَّهُۥ سَمِيعٌ قَرِيبٌ",
+      "context": "Policy trigger groups: divineNearness. Divine qurb is rendered non-spatially through knowledge and response, not physical nearness or location.",
+      "originalEnglish": "Say: If I err, I err only to my own loss, and if I am rightly guided it is because of that which my Lord hath revealed unto me. Lo! He is Hearer, Nigh.",
+      "proposedMeaning": "Say: If I err, I err only against myself; and if I am guided, it is by what my Lord reveals to me. Surely He is All-Hearing and near by His knowledge and response.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "35:10",
+      "arabicExpression": "مَن كَانَ يُرِيدُ ٱلْعِزَّةَ فَلِلَّهِ ٱلْعِزَّةُ جَمِيعًا إِلَيْهِ يَصْعَدُ ٱلْكَلِمُ ٱلطَّيِّبُ وَٱلْعَمَلُ ٱلصَّٰلِحُ يَرْفَعُهُۥ وَٱلَّذِينَ يَمْكُرُونَ ٱلسَّيِّـَٔاتِ لَهُمْ عَذَابٌ شَدِيدٌ وَمَكْرُ أُو۟لَٰٓئِكَ هُوَ يَبُورُ",
+      "context": "Policy trigger groups: ascentAndDirectionLanguage. The supplied guide identifies this verse as mutashabih and requires any assigned meaning to comply with Arabic, the Religion and the muhkam foundations. 'Good words are accepted by Him' prevents a spatial reading of ascent to a location. This wording remains subject to named scholarly review.",
+      "originalEnglish": "Whoso desireth power (should know that) all power belongeth to Allah. Unto Him good words ascend, and the pious deed doth He exalt; but those who plot iniquities, theirs will be an awful doom; and the plotting of such (folk) will come to naught.",
+      "proposedMeaning": "Whoever seeks honour, then all honour belongs to Allah. Good words are accepted by Him, and He raises the righteous deed in rank. Those who plot evil will have a severe punishment, and their plotting will fail.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "35:41",
+      "arabicExpression": "إِنَّ ٱللَّهَ يُمْسِكُ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضَ أَن تَزُولَا وَلَئِن زَالَتَآ إِنْ أَمْسَكَهُمَا مِنْ أَحَدٍ مِّنۢ بَعْدِهِۦٓ إِنَّهُۥ كَانَ حَلِيمًا غَفُورًا",
+      "context": "Policy trigger groups: divinePreservationWithoutBodilyGrasp. The Pickthall baseline uses 'graspeth'. Arabic yumsiku is rendered as preserves/restrains here so the English does not suggest a bodily grasp or hand.",
+      "originalEnglish": "Lo! Allah graspeth the heavens and the earth that they deviate not, and if they were to deviate there is not one that could grasp them after Him. Lo! He is ever Clement, Forgiving.",
+      "proposedMeaning": "Indeed, Allah preserves the heavens and the earth from ceasing or deviating. If they were to cease, no one after Him could preserve them. Surely He is Most Forbearing, Most Forgiving.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "36:71",
+      "arabicExpression": "أَوَلَمْ يَرَوْا۟ أَنَّا خَلَقْنَا لَهُم مِّمَّا عَمِلَتْ أَيْدِينَآ أَنْعَٰمًا فَهُمْ لَهَا مَٰلِكُونَ",
+      "context": "Policy trigger groups: divineYadAndPowerLanguage. The Arabic expression ma 'amilat aydina is rendered through divine power and creation, not bodily hands or created instruments.",
+      "originalEnglish": "Have they not seen how We have created for them of Our handiwork the cattle, so that they are their owners,",
+      "proposedMeaning": "Have they not seen that We created for them, by Our power, livestock of which they are owners?",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "36:83",
+      "arabicExpression": "فَسُبْحَٰنَ ٱلَّذِى بِيَدِهِۦ مَلَكُوتُ كُلِّ شَىْءٍ وَإِلَيْهِ تُرْجَعُونَ",
+      "context": "Policy trigger groups: divineYadAndPowerLanguage. Bi-yadihi is rendered as dominion, avoiding a bodily-hand reading.",
+      "originalEnglish": "Therefor Glory be to Him in Whose hand is the dominion over all things! Unto Him ye will be brought back.",
+      "proposedMeaning": "So glory be to Him Who has absolute dominion over all things, and to Him you will be returned.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "37:99",
+      "arabicExpression": "وَقَالَ إِنِّى ذَاهِبٌ إِلَىٰ رَبِّى سَيَهْدِينِ",
+      "context": "Policy trigger groups: guideContextExamples. The supplied guide rejects the literalist inference that Ibrahim was travelling to a country in which Allah is located. SalahOS makes the commanded destination explicit rather than implying movement toward Allah's place.",
+      "originalEnglish": "And he said: Lo! I am going unto my Lord Who will guide me.",
+      "proposedMeaning": "And Ibrahim said: I am going to where my Lord has commanded me; He will guide me.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "38:72",
+      "arabicExpression": "فَإِذَا سَوَّيْتُهُۥ وَنَفَخْتُ فِيهِ مِن رُّوحِى فَقَعُوا۟ لَهُۥ سَٰجِدِينَ",
+      "context": "Policy trigger groups: ruhAttribution. My Spirit is an attribution of honor to a created soul, not a part of Allah.",
+      "originalEnglish": "And when I have fashioned him and breathed into him of My Spirit, then fall down before him prostrate,",
+      "proposedMeaning": "When I have fashioned him and placed within him a created spirit honored by Me, then fall down before him in prostration.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "38:75",
+      "arabicExpression": "قَالَ يَٰٓإِبْلِيسُ مَا مَنَعَكَ أَن تَسْجُدَ لِمَا خَلَقْتُ بِيَدَىَّ أَسْتَكْبَرْتَ أَمْ كُنتَ مِنَ ٱلْعَالِينَ",
+      "context": "Policy trigger groups: divineYadAndPowerLanguage. The supplied guide explains yadayn in this verse by Allah's care and rejects a bodily-hands reading.",
+      "originalEnglish": "He said: O Iblis! What hindereth thee from falling prostrate before that which I have created with both My hands? Art thou too proud or art thou of the high exalted?",
+      "proposedMeaning": "He said: O Iblis, what prevented you from prostrating to the one I created with special care? Were you arrogant, or were you among the exalted?",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "39:56",
+      "arabicExpression": "أَن تَقُولَ نَفْسٌ يَٰحَسْرَتَىٰ عَلَىٰ مَا فَرَّطتُ فِى جَنۢبِ ٱللَّهِ وَإِن كُنتُ لَمِنَ ٱلسَّٰخِرِينَ",
+      "context": "Policy trigger groups: guideContextExamples. Janb Allah is rendered as duty/right owed toward Allah rather than a bodily side.",
+      "originalEnglish": "Lest any soul should say: Alas, my grief that I was unmindful of Allah, and I was indeed among the scoffers!",
+      "proposedMeaning": "Lest any soul should say: Alas for my grief that I neglected my duty toward Allah, and I was indeed among the scoffers!",
+      "treatment": "tafwid-and-contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "39:67",
+      "arabicExpression": "وَمَا قَدَرُوا۟ ٱللَّهَ حَقَّ قَدْرِهِۦ وَٱلْأَرْضُ جَمِيعًا قَبْضَتُهُۥ يَوْمَ ٱلْقِيَٰمَةِ وَٱلسَّمَٰوَٰتُ مَطْوِيَّٰتٌۢ بِيَمِينِهِۦ سُبْحَٰنَهُۥ وَتَعَٰلَىٰ عَمَّا يُشْرِكُونَ",
+      "context": "Policy trigger groups: qabdAndYamin. Qabdah and yamin are rendered through divine power rather than a handful or right hand.",
+      "originalEnglish": "And they esteem not Allah as He hath the right to be esteemed, when the whole earth is His handful on the Day of Resurrection, and the heavens are rolled in His right hand. Glorified is He and High Exalted from all that they ascribe as partner (unto Him).",
+      "proposedMeaning": "They did not esteem Allah as He deserves to be esteemed. On the Day of Resurrection the whole earth will be under His absolute power, and the heavens will be folded by His power. Glory be to Him, exalted above what they associate with Him.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "39:69",
+      "arabicExpression": "وَأَشْرَقَتِ ٱلْأَرْضُ بِنُورِ رَبِّهَا وَوُضِعَ ٱلْكِتَٰبُ وَجِا۟ىٓءَ بِٱلنَّبِيِّـۧنَ وَٱلشُّهَدَآءِ وَقُضِىَ بَيْنَهُم بِٱلْحَقِّ وَهُمْ لَا يُظْلَمُونَ",
+      "context": "Policy trigger groups: nur. The rendering avoids implying that Allah is a physical source of created luminosity.",
+      "originalEnglish": "And the earth shineth with the light of her Lord, and the Book is set up, and the prophets and the witnesses are brought, and it is judged between them with truth, and they are not wronged.",
+      "proposedMeaning": "And the earth will shine with the illumination bestowed by its Lord; the Record will be set forth, the prophets and witnesses will be brought, and judgment will be given between them in truth, and they will not be wronged.",
+      "treatment": "tafwid-and-contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "40:34",
+      "arabicExpression": "وَلَقَدْ جَآءَكُمْ يُوسُفُ مِن قَبْلُ بِٱلْبَيِّنَٰتِ فَمَا زِلْتُمْ فِى شَكٍّ مِّمَّا جَآءَكُم بِهِۦ حَتَّىٰٓ إِذَا هَلَكَ قُلْتُمْ لَن يَبْعَثَ ٱللَّهُ مِنۢ بَعْدِهِۦ رَسُولًا كَذَٰلِكَ يُضِلُّ ٱللَّهُ مَنْ هُوَ مُسْرِفٌ مُّرْتَابٌ",
+      "context": "Policy trigger groups: reciprocalHumanSoundingVerbs. The Arabic verb is yudillu (leaves astray/causes to stray), not 'deceives'. Pickthall's 'Allah deceiveth' is replaced because deception is not the meaning of the Arabic here and would attribute an unbefitting defect.",
+      "originalEnglish": "And verily Joseph brought you of old clear proofs, yet ye ceased not to be in doubt concerning what he brought you till, when he died, ye said: Allah will not send any messenger after him. Thus Allah deceiveth him who is a prodigal, a doubter.",
+      "proposedMeaning": "Joseph had already come to you earlier with clear proofs, yet you remained in doubt about what he brought. Then when he died, you said, 'Allah will never send a messenger after him.' In this way Allah leaves astray whoever is a transgressor and persistent doubter.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "41:11",
+      "arabicExpression": "ثُمَّ ٱسْتَوَىٰٓ إِلَى ٱلسَّمَآءِ وَهِىَ دُخَانٌ فَقَالَ لَهَا وَلِلْأَرْضِ ٱئْتِيَا طَوْعًا أَوْ كَرْهًا قَالَتَآ أَتَيْنَا طَآئِعِينَ",
+      "context": "Policy trigger groups: istiwaIla. Istiwa ila is rendered as directing the divine will, not movement toward a spatial destination.",
+      "originalEnglish": "Then turned He to the heaven when it was smoke, and said unto it and unto the earth: Come both of you, willingly or loth. They said: We come, obedient.",
+      "proposedMeaning": "Then He directed His will to the heaven while it was smoke, and said to it and to the earth: Come willingly or unwillingly. They said: We come willingly.",
+      "treatment": "tafwid-and-contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "41:54",
+      "arabicExpression": "أَلَآ إِنَّهُمْ فِى مِرْيَةٍ مِّن لِّقَآءِ رَبِّهِمْ أَلَآ إِنَّهُۥ بِكُلِّ شَىْءٍ مُّحِيطٌۢ",
+      "context": "Policy trigger groups: guideContextExamples, divineEncompassing. The supplied guide rejects a spatial reading in which Allah physically surrounds creation and gives the meaning that Allah knows everything.",
+      "originalEnglish": "How! Are they still in doubt about the meeting with their Lord? Lo! Is not He surrounding all things?",
+      "proposedMeaning": "Indeed, they are in doubt about meeting their Lord. Surely Allah's knowledge encompasses all things.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "42:11",
+      "arabicExpression": "فَاطِرُ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضِ جَعَلَ لَكُم مِّنْ أَنفُسِكُمْ أَزْوَٰجًا وَمِنَ ٱلْأَنْعَٰمِ أَزْوَٰجًا يَذْرَؤُكُمْ فِيهِ لَيْسَ كَمِثْلِهِۦ شَىْءٌ وَهُوَ ٱلسَّمِيعُ ٱلْبَصِيرُ",
+      "context": "Governing Muhkam/tanzih foundation. The supplied guide treats 'Absolutely there is nothing like Him' as a governing muhkam foundation. All mutashabih renderings are checked against this principle.",
+      "originalEnglish": "The Creator of the heavens and the earth. He hath made for you pairs of yourselves, and of the cattle also pairs, whereby He multiplieth you. Naught is as His likeness; and He is the Hearer, the Seer.",
+      "proposedMeaning": "He is the Creator of the heavens and the earth. He made for you mates from yourselves and pairs among the livestock, multiplying you thereby. Absolutely nothing resembles Him. He is the All-Hearing, the All-Seeing.",
+      "treatment": "muhkam-foundation",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "43:84",
+      "arabicExpression": "وَهُوَ ٱلَّذِى فِى ٱلسَّمَآءِ إِلَٰهٌ وَفِى ٱلْأَرْضِ إِلَٰهٌ وَهُوَ ٱلْحَكِيمُ ٱلْعَلِيمُ",
+      "context": "Policy trigger groups: spatialAndFawqLanguage. Spatial/fawq wording is rendered through worship, authority, dominion or subjugation so the English does not place Allah inside creation or in a physical direction.",
+      "originalEnglish": "And He it is Who in the heaven is Allah, and in the earth Allah. He is the Wise, the Knower.",
+      "proposedMeaning": "He alone is Allah, worshipped in the heaven and on the earth. He is the Wise, the Knower.",
+      "treatment": "tafwid-and-contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "45:34",
+      "arabicExpression": "وَقِيلَ ٱلْيَوْمَ نَنسَىٰكُمْ كَمَا نَسِيتُمْ لِقَآءَ يَوْمِكُمْ هَٰذَا وَمَأْوَىٰكُمُ ٱلنَّارُ وَمَا لَكُم مِّن نَّٰصِرِينَ",
+      "context": "Policy trigger groups: impossibleDeficiencies. Nisyan is rendered as abandonment in recompense, consistent with the muhkam statement that the Lord is never forgetful.",
+      "originalEnglish": "And it will be said: This day We forget you, even as ye forgot the meeting of this your day; and your habitation is the Fire, and there is none to help you.",
+      "proposedMeaning": "It will be said: Today We abandon you to your consequence, just as you neglected the meeting of this Day. Your refuge is the Fire, and you will have no helpers.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "47:7",
+      "arabicExpression": "يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوٓا۟ إِن تَنصُرُوا۟ ٱللَّهَ يَنصُرْكُمْ وَيُثَبِّتْ أَقْدَامَكُمْ",
+      "context": "Policy trigger groups: divineNeedAndTransactionIdioms. Helping Allah is rendered as supporting His religion and cause, not supplying assistance to Allah. Allah is free of need and weakness.",
+      "originalEnglish": "O ye who believe! If ye help Allah, He will help you and will make your foothold firm.",
+      "proposedMeaning": "O believers, if you support Allah's religion, He will support you and make your footing firm.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "47:35",
+      "arabicExpression": "فَلَا تَهِنُوا۟ وَتَدْعُوٓا۟ إِلَى ٱلسَّلْمِ وَأَنتُمُ ٱلْأَعْلَوْنَ وَٱللَّهُ مَعَكُمْ وَلَن يَتِرَكُمْ أَعْمَٰلَكُمْ",
+      "context": "Policy trigger groups: divineMaiyyah. Ma'iyyah is rendered as support.",
+      "originalEnglish": "So do not falter and cry out for peace when ye (will be) the uppermost, and Allah is with you, and He will not grudge (the reward of) your actions.",
+      "proposedMeaning": "Do not lose heart or call for peace while you have the upper hand. Allah supports you and will not diminish the reward of your deeds.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "48:10",
+      "arabicExpression": "إِنَّ ٱلَّذِينَ يُبَايِعُونَكَ إِنَّمَا يُبَايِعُونَ ٱللَّهَ يَدُ ٱللَّهِ فَوْقَ أَيْدِيهِمْ فَمَن نَّكَثَ فَإِنَّمَا يَنكُثُ عَلَىٰ نَفْسِهِۦ وَمَنْ أَوْفَىٰ بِمَا عَٰهَدَ عَلَيْهُ ٱللَّهَ فَسَيُؤْتِيهِ أَجْرًا عَظِيمًا",
+      "context": "Policy trigger groups: divineYadAndPowerLanguage. Yad Allah fawqa aydihim is rendered as divine authority over the covenant, not a bodily hand or spatial position.",
+      "originalEnglish": "Lo! those who swear allegiance unto thee (Muhammad), swear allegiance only unto Allah. The Hand of Allah is above their hands. So whosoever breaketh his oath, breaketh it only to his soul's hurt; while whosoever keepeth his covenant with Allah, on him will He bestow immense reward.",
+      "proposedMeaning": "Those who pledge allegiance to you are in truth pledging allegiance to Allah; Allah's authority is over their pledge. Whoever breaks it only harms himself, while whoever fulfills the covenant he made with Allah will be granted an immense reward.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "50:16",
+      "arabicExpression": "وَلَقَدْ خَلَقْنَا ٱلْإِنسَٰنَ وَنَعْلَمُ مَا تُوَسْوِسُ بِهِۦ نَفْسُهُۥ وَنَحْنُ أَقْرَبُ إِلَيْهِ مِنْ حَبْلِ ٱلْوَرِيدِ",
+      "context": "Policy trigger groups: divineNearness. The verse begins with divine knowledge, so nearness is rendered as nearness of knowledge rather than spatial distance.",
+      "originalEnglish": "We verily created man and We know what his soul whispereth to him, and We are nearer to him than his jugular vein.",
+      "proposedMeaning": "We created the human being and know what his soul whispers to him; Our knowledge of him is nearer than his jugular vein.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "51:47",
+      "arabicExpression": "وَٱلسَّمَآءَ بَنَيْنَٰهَا بِأَيْي۟دٍ وَإِنَّا لَمُوسِعُونَ",
+      "context": "Policy trigger groups: divineYadAndPowerLanguage. The wording is reviewed so that yad-related expressions denote power, disposal, care, generosity, support or authority according to context, without attributing limbs or bodily hands to Allah.",
+      "originalEnglish": "We have built the heaven with might, and We it is Who make the vast extent (thereof).",
+      "proposedMeaning": "We have built the heaven with might, and We it is Who make the vast extent (thereof).",
+      "treatment": "tafwid-and-contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "52:48",
+      "arabicExpression": "وَٱصْبِرْ لِحُكْمِ رَبِّكَ فَإِنَّكَ بِأَعْيُنِنَا وَسَبِّحْ بِحَمْدِ رَبِّكَ حِينَ تَقُومُ",
+      "context": "Policy trigger groups: divineAynAndCareLanguage. Bi-a'yunina is rendered as care and protection.",
+      "originalEnglish": "So wait patiently (O Muhammad) for thy Lord's decree, for surely thou art in Our sight; and hymn the praise of thy Lord when thou uprisest,",
+      "proposedMeaning": "Be patient with your Lord's decree, for you are under Our care; glorify your Lord with praise when you rise.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "54:14",
+      "arabicExpression": "تَجْرِى بِأَعْيُنِنَا جَزَآءً لِّمَن كَانَ كُفِرَ",
+      "context": "Policy trigger groups: divineAynAndCareLanguage. Bi-a'yunina is rendered as care, not physical sight organs.",
+      "originalEnglish": "That ran (upon the waters) in Our sight, as a reward for him who was rejected.",
+      "proposedMeaning": "It sailed under Our care, as a reward for the one who had been rejected.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "55:27",
+      "arabicExpression": "وَيَبْقَىٰ وَجْهُ رَبِّكَ ذُو ٱلْجَلَٰلِ وَٱلْإِكْرَامِ",
+      "context": "Policy trigger groups: divineWajh. Wajh rabbika is rendered through Allah Himself, consistent with the guide's allowance of Self as a non-bodily meaning.",
+      "originalEnglish": "There remaineth but the Countenance of thy Lord of Might and Glory.",
+      "proposedMeaning": "Only your Lord, Possessor of Majesty and Honour, remains forever.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "56:85",
+      "arabicExpression": "وَنَحْنُ أَقْرَبُ إِلَيْهِ مِنكُمْ وَلَٰكِن لَّا تُبْصِرُونَ",
+      "context": "Policy trigger groups: divineNearness. The contextual reading avoids attributing spatial proximity to Allah; this remains explicitly provisional pending qualified scholarly review.",
+      "originalEnglish": "- And We are nearer unto him than ye are, but ye see not -",
+      "proposedMeaning": "Our appointed angels are nearer to the dying person than you are, though you do not see them.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "57:4",
+      "arabicExpression": "هُوَ ٱلَّذِى خَلَقَ ٱلسَّمَٰوَٰتِ وَٱلْأَرْضَ فِى سِتَّةِ أَيَّامٍ ثُمَّ ٱسْتَوَىٰ عَلَى ٱلْعَرْشِ يَعْلَمُ مَا يَلِجُ فِى ٱلْأَرْضِ وَمَا يَخْرُجُ مِنْهَا وَمَا يَنزِلُ مِنَ ٱلسَّمَآءِ وَمَا يَعْرُجُ فِيهَا وَهُوَ مَعَكُمْ أَيْنَ مَا كُنتُمْ وَٱللَّهُ بِمَا تَعْمَلُونَ بَصِيرٌ",
+      "context": "Policy trigger groups: istiwaOverThrone, divineMaiyyah. This is one of the Qur'anic istiwa-over-the-Throne passages. Following the supplied guide's treatment of 20:5, the English uses the contextual ta'wil of absolute dominion/subjugation and explicitly rejects sitting, place, direction, movement and bodily modality.",
+      "originalEnglish": "He it is Who created the heavens and the earth in six Days; then He mounted the Throne. He knoweth all that entereth the earth and all that emergeth therefrom and all that cometh down from the sky and all that ascendeth therein; and He is with you wheresoever ye may be. And Allah is Seer of what ye do.",
+      "proposedMeaning": "He is the One Who created the heavens and the earth in six days; then He exercises absolute dominion over and subjugates the Throne, without sitting, place, direction, movement, or bodily modality. He knows what enters the earth and what comes out of it, what descends from the heaven and what ascends into it. He knows you wherever you are. Allah sees all that you do.",
+      "treatment": "tafwid-and-contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "57:11",
+      "arabicExpression": "مَّن ذَا ٱلَّذِى يُقْرِضُ ٱللَّهَ قَرْضًا حَسَنًا فَيُضَٰعِفَهُۥ لَهُۥ وَلَهُۥٓ أَجْرٌ كَرِيمٌ",
+      "context": "Policy trigger groups: divineNeedAndTransactionIdioms. The qard ('loan') expression denotes sincere spending for Allah's sake and His promised multiplication of reward; it does not imply that Allah borrows or needs wealth.",
+      "originalEnglish": "Who is he that will lend unto Allah a goodly loan, that He may double it for him and his may be a rich reward?",
+      "proposedMeaning": "Who is it that will make a goodly expenditure for Allah's sake, so He may multiply it for him and grant him a noble reward?",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "57:18",
+      "arabicExpression": "إِنَّ ٱلْمُصَّدِّقِينَ وَٱلْمُصَّدِّقَٰتِ وَأَقْرَضُوا۟ ٱللَّهَ قَرْضًا حَسَنًا يُضَٰعَفُ لَهُمْ وَلَهُمْ أَجْرٌ كَرِيمٌ",
+      "context": "Policy trigger groups: divineNeedAndTransactionIdioms. The qard ('loan') expression denotes charitable spending for Allah's sake and promised reward, not need or borrowing on Allah's part.",
+      "originalEnglish": "Lo! those who give alms, both men and women, and lend unto Allah a goodly loan, it will be doubled for them, and theirs will be a rich reward.",
+      "proposedMeaning": "Indeed, the charitable men and women who make a goodly expenditure for Allah's sake will have it multiplied for them, and they will have a noble reward.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "57:29",
+      "arabicExpression": "لِّئَلَّا يَعْلَمَ أَهْلُ ٱلْكِتَٰبِ أَلَّا يَقْدِرُونَ عَلَىٰ شَىْءٍ مِّن فَضْلِ ٱللَّهِ وَأَنَّ ٱلْفَضْلَ بِيَدِ ٱللَّهِ يُؤْتِيهِ مَن يَشَآءُ وَٱللَّهُ ذُو ٱلْفَضْلِ ٱلْعَظِيمِ",
+      "context": "Policy trigger groups: divineYadAndPowerLanguage. Bi-yad Allah is rendered as disposal and granting.",
+      "originalEnglish": "That the People of the Scripture may know that they control naught of the bounty of Allah, but that the bounty is in Allah's hand to give to whom He will. And Allah is of Infinite Bounty.",
+      "proposedMeaning": "So that the People of the Scripture may know that they control nothing of Allah's bounty, and that all bounty is in Allah's disposal to grant to whom He wills. Allah is the Possessor of immense bounty.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "58:7",
+      "arabicExpression": "أَلَمْ تَرَ أَنَّ ٱللَّهَ يَعْلَمُ مَا فِى ٱلسَّمَٰوَٰتِ وَمَا فِى ٱلْأَرْضِ مَا يَكُونُ مِن نَّجْوَىٰ ثَلَٰثَةٍ إِلَّا هُوَ رَابِعُهُمْ وَلَا خَمْسَةٍ إِلَّا هُوَ سَادِسُهُمْ وَلَآ أَدْنَىٰ مِن ذَٰلِكَ وَلَآ أَكْثَرَ إِلَّا هُوَ مَعَهُمْ أَيْنَ مَا كَانُوا۟ ثُمَّ يُنَبِّئُهُم بِمَا عَمِلُوا۟ يَوْمَ ٱلْقِيَٰمَةِ إِنَّ ٱللَّهَ بِكُلِّ شَىْءٍ عَلِيمٌ",
+      "context": "Policy trigger groups: divineMaiyyah. The verse itself opens and closes with divine knowledge; 'He is with them' is rendered as knowledge, not physical presence.",
+      "originalEnglish": "Hast thou not seen that Allah knoweth all that is in the heavens and all that is in the earth? There is no secret conference of three but He is their fourth, nor of five but He is their sixth, nor of less than that or more but He is with them wheresoever they may be; and afterward, on the Day of Resurrection, He will inform them of what they did. Lo! Allah is Knower of all things.",
+      "proposedMeaning": "Do you not see that Allah knows whatever is in the heavens and whatever is on earth? No three hold secret counsel except that He knows them completely, nor five except that He knows them completely, nor fewer or more, except that He knows them wherever they are. Then on the Day of Resurrection He will inform them of what they did. Surely Allah knows all things.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "58:22",
+      "arabicExpression": "لَّا تَجِدُ قَوْمًا يُؤْمِنُونَ بِٱللَّهِ وَٱلْيَوْمِ ٱلْـَٔاخِرِ يُوَآدُّونَ مَنْ حَآدَّ ٱللَّهَ وَرَسُولَهُۥ وَلَوْ كَانُوٓا۟ ءَابَآءَهُمْ أَوْ أَبْنَآءَهُمْ أَوْ إِخْوَٰنَهُمْ أَوْ عَشِيرَتَهُمْ أُو۟لَٰٓئِكَ كَتَبَ فِى قُلُوبِهِمُ ٱلْإِيمَٰنَ وَأَيَّدَهُم بِرُوحٍ مِّنْهُ وَيُدْخِلُهُمْ جَنَّٰتٍ تَجْرِى مِن تَحْتِهَا ٱلْأَنْهَٰرُ خَٰلِدِينَ فِيهَا رَضِىَ ٱللَّهُ عَنْهُمْ وَرَضُوا۟ عَنْهُ أُو۟لَٰٓئِكَ حِزْبُ ٱللَّهِ أَلَآ إِنَّ حِزْبَ ٱللَّهِ هُمُ ٱلْمُفْلِحُونَ",
+      "context": "Policy trigger groups: ruhAttribution. Possessive/from-Him spirit language is rendered as a created spirit, an attribution of honour, command or divine support; it never means a part, soul or component of Allah.",
+      "originalEnglish": "Thou wilt not find folk who believe in Allah and the Last Day loving those who oppose Allah and His messenger, even though they be their fathers or their sons or their brethren or their clan. As for such, He hath written faith upon their hearts and hath strengthened them with a Spirit from Him, and He will bring them into Gardens underneath which rivers flow, wherein they will abide. Allah is well pleased with them, and they are well pleased with Him. They are Allah's party. Lo! is it not Allah's party who are the successful?",
+      "proposedMeaning": "Thou wilt not find folk who believe in Allah and the Last Day loving those who oppose Allah and His messenger, even though they be their fathers or their sons or their brethren or their clan. As for such, He hath written faith upon their hearts and hath strengthened them with support granted by Him, and He will bring them into Gardens underneath which rivers flow, wherein they will abide. Allah is well pleased with them, and they are well pleased with Him. They are Allah's party. Lo! is it not Allah's party who are the successful?",
+      "treatment": "tafwid-and-contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "59:2",
+      "arabicExpression": "هُوَ ٱلَّذِىٓ أَخْرَجَ ٱلَّذِينَ كَفَرُوا۟ مِنْ أَهْلِ ٱلْكِتَٰبِ مِن دِيَٰرِهِمْ لِأَوَّلِ ٱلْحَشْرِ مَا ظَنَنتُمْ أَن يَخْرُجُوا۟ وَظَنُّوٓا۟ أَنَّهُم مَّانِعَتُهُمْ حُصُونُهُم مِّنَ ٱللَّهِ فَأَتَىٰهُمُ ٱللَّهُ مِنْ حَيْثُ لَمْ يَحْتَسِبُوا۟ وَقَذَفَ فِى قُلُوبِهِمُ ٱلرُّعْبَ يُخْرِبُونَ بُيُوتَهُم بِأَيْدِيهِمْ وَأَيْدِى ٱلْمُؤْمِنِينَ فَٱعْتَبِرُوا۟ يَٰٓأُو۟لِى ٱلْأَبْصَٰرِ",
+      "context": "Policy trigger groups: comingAndMovementLanguage. The baseline 'Allah reached them from a place' is replaced by the reaching of His decree, removing spatial movement.",
+      "originalEnglish": "He it is Who hath caused those of the People of the Scripture who disbelieved to go forth from their homes unto the first exile. Ye deemed not that they would go forth, while they deemed that their strongholds would protect them from Allah. But Allah reached them from a place whereof they recked not, and cast terror in their hearts so that they ruined their houses with their own hands and the hands of the believers. So learn a lesson, O ye who have eyes!",
+      "proposedMeaning": "He is the One Who expelled from their homes at the first exile those among the People of the Scripture who disbelieved. You did not think they would leave, and they thought their fortresses would protect them from Allah; but Allah's decree reached them from where they did not expect and cast terror into their hearts. They demolished their homes with their own hands and the hands of the believers. So take warning, people of insight.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "59:8",
+      "arabicExpression": "لِلْفُقَرَآءِ ٱلْمُهَٰجِرِينَ ٱلَّذِينَ أُخْرِجُوا۟ مِن دِيَٰرِهِمْ وَأَمْوَٰلِهِمْ يَبْتَغُونَ فَضْلًا مِّنَ ٱللَّهِ وَرِضْوَٰنًا وَيَنصُرُونَ ٱللَّهَ وَرَسُولَهُۥٓ أُو۟لَٰٓئِكَ هُمُ ٱلصَّٰدِقُونَ",
+      "context": "Policy trigger groups: divineNeedAndTransactionIdioms. The verse's nasr language is rendered as support for Allah's religion and His Messenger, not assistance needed by Allah.",
+      "originalEnglish": "And (it is) for the poor fugitives who have been driven out from their homes and their belongings, who seek bounty from Allah and help Allah and His messenger. They are the loyal.",
+      "proposedMeaning": "And for the poor emigrants who were driven from their homes and wealth, seeking bounty from Allah and His acceptance, and supporting Allah's religion and His Messenger. They are the truthful.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "61:14",
+      "arabicExpression": "يَٰٓأَيُّهَا ٱلَّذِينَ ءَامَنُوا۟ كُونُوٓا۟ أَنصَارَ ٱللَّهِ كَمَا قَالَ عِيسَى ٱبْنُ مَرْيَمَ لِلْحَوَارِيِّـۧنَ مَنْ أَنصَارِىٓ إِلَى ٱللَّهِ قَالَ ٱلْحَوَارِيُّونَ نَحْنُ أَنصَارُ ٱللَّهِ فَـَٔامَنَت طَّآئِفَةٌ مِّنۢ بَنِىٓ إِسْرَٰٓءِيلَ وَكَفَرَت طَّآئِفَةٌ فَأَيَّدْنَا ٱلَّذِينَ ءَامَنُوا۟ عَلَىٰ عَدُوِّهِمْ فَأَصْبَحُوا۟ ظَٰهِرِينَ",
+      "context": "Policy trigger groups: divineNeedAndTransactionIdioms. Ansar Allah is rendered as supporters of Allah's cause. The expression must not be understood as Allah needing helpers or depending on creation.",
+      "originalEnglish": "O ye who believe! Be Allah's helpers, even as Jesus son of Mary said unto the disciples: Who are my helpers for Allah? They said: We are Allah's helpers. And a party of the Children of Israel believed, while a party disbelieved. Then We strengthened those who believed against their foe, and they became the uppermost.",
+      "proposedMeaning": "O believers, be supporters of Allah's cause, as Jesus son of Mary said to the disciples: Who are my helpers in Allah's cause? The disciples said: We are supporters of Allah's cause. Then a group of the Children of Israel believed and a group disbelieved, so We strengthened those who believed against their enemy and they became victorious.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "64:17",
+      "arabicExpression": "إِن تُقْرِضُوا۟ ٱللَّهَ قَرْضًا حَسَنًا يُضَٰعِفْهُ لَكُمْ وَيَغْفِرْ لَكُمْ وَٱللَّهُ شَكُورٌ حَلِيمٌ",
+      "context": "Policy trigger groups: divineNeedAndTransactionIdioms. The qard ('loan') expression denotes sincere spending for Allah's sake, not that Allah borrows or needs wealth. Shakur is rendered here through Allah's abundant rewarding of good, without implying a created need to receive benefit.",
+      "originalEnglish": "If ye lend unto Allah a goodly loan, He will double it for you and will forgive you, for Allah is Responsive, Clement,",
+      "proposedMeaning": "If you make a goodly expenditure for Allah's sake, He will multiply it for you and forgive you. Allah abundantly rewards good and is Forbearing.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "66:12",
+      "arabicExpression": "وَمَرْيَمَ ٱبْنَتَ عِمْرَٰنَ ٱلَّتِىٓ أَحْصَنَتْ فَرْجَهَا فَنَفَخْنَا فِيهِ مِن رُّوحِنَا وَصَدَّقَتْ بِكَلِمَٰتِ رَبِّهَا وَكُتُبِهِۦ وَكَانَتْ مِنَ ٱلْقَٰنِتِينَ",
+      "context": "Policy trigger groups: ruhAttribution. The supplied guide rejects any reading in which 'Our spirit' means a part or soul of Allah. It explains the passage through Allah's command to Jibril and a soul honoured by Allah. The SalahOS wording therefore makes createdness and honour explicit.",
+      "originalEnglish": "And Mary, daughter of 'Imran, whose body was chaste, therefor We breathed therein something of Our Spirit. And she put faith in the words of her Lord and His scriptures, and was of the obedient.",
+      "proposedMeaning": "And Mary, daughter of Imran, who guarded her chastity; We caused the honoured created spirit to be blown into her by Our command. She affirmed the words of her Lord and His Books and was among the devout.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "67:1",
+      "arabicExpression": "بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ تَبَٰرَكَ ٱلَّذِى بِيَدِهِ ٱلْمُلْكُ وَهُوَ عَلَىٰ كُلِّ شَىْءٍ قَدِيرٌ",
+      "context": "Policy trigger groups: divineYadAndPowerLanguage. Bi-yadihi al-mulk is rendered as possession and sovereign control.",
+      "originalEnglish": "Blessed is He in Whose hand is the Sovereignty, and, He is Able to do all things.",
+      "proposedMeaning": "Blessed is He Who holds absolute sovereignty over all things, and He is able to do all things.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "67:16",
+      "arabicExpression": "ءَأَمِنتُم مَّن فِى ٱلسَّمَآءِ أَن يَخْسِفَ بِكُمُ ٱلْأَرْضَ فَإِذَا هِىَ تَمُورُ",
+      "context": "Policy trigger groups: spatialAndFawqLanguage. Man fi al-sama is rendered without making the heaven a place for Allah.",
+      "originalEnglish": "Have ye taken security from Him Who is in the heaven that He will not cause the earth to swallow you when lo! it is convulsed?",
+      "proposedMeaning": "Do you feel secure from the One of supreme status and authority that He will not cause the earth to swallow you as it suddenly convulses?",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "67:17",
+      "arabicExpression": "أَمْ أَمِنتُم مَّن فِى ٱلسَّمَآءِ أَن يُرْسِلَ عَلَيْكُمْ حَاصِبًا فَسَتَعْلَمُونَ كَيْفَ نَذِيرِ",
+      "context": "Policy trigger groups: spatialAndFawqLanguage. Man fi al-sama is rendered through supreme status and authority, not residence in the sky.",
+      "originalEnglish": "Or have ye taken security from Him Who is in the heaven that He will not let loose on you a hurricane? But ye shall know the manner of My warning.",
+      "proposedMeaning": "Or do you feel secure from the One of supreme status and authority that He will not send against you a storm of stones? Then you will know how My warning was.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "68:42",
+      "arabicExpression": "يَوْمَ يُكْشَفُ عَن سَاقٍ وَيُدْعَوْنَ إِلَى ٱلسُّجُودِ فَلَا يَسْتَطِيعُونَ",
+      "context": "Policy trigger groups: saq. The supplied guide reports the explanation of saq as hardship and the verse as referring to a day of anguish and hardship; it attributes this explanation to Ibn Abbas and other early scholars.",
+      "originalEnglish": "On the day when it befalleth in earnest, and they are ordered to prostrate themselves but are not able,",
+      "proposedMeaning": "On the Day of anguish and hardship, they will be called to prostrate, but they will not be able.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "68:45",
+      "arabicExpression": "وَأُمْلِى لَهُمْ إِنَّ كَيْدِى مَتِينٌ",
+      "context": "Policy trigger groups: reciprocalHumanSoundingVerbs. The divine kayd is rendered as firm measured requital rather than a human-style scheme or deception.",
+      "originalEnglish": "Yet I bear with them, for lo! My scheme is firm.",
+      "proposedMeaning": "I grant them respite; surely My measured requital is firm.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "69:45",
+      "arabicExpression": "لَأَخَذْنَا مِنْهُ بِٱلْيَمِينِ",
+      "context": "Policy trigger groups: qabdAndYamin. Pickthall's 'taken him by the right hand' can be read as assigning a bodily right hand to Allah. The Arabic bi-l-yamin is rendered through irresistible power/force in this threat context, in accordance with tanzih.",
+      "originalEnglish": "We assuredly had taken him by the right hand",
+      "proposedMeaning": "We would certainly have seized him with irresistible power.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "70:4",
+      "arabicExpression": "تَعْرُجُ ٱلْمَلَٰٓئِكَةُ وَٱلرُّوحُ إِلَيْهِ فِى يَوْمٍ كَانَ مِقْدَارُهُۥ خَمْسِينَ أَلْفَ سَنَةٍ",
+      "context": "Policy trigger groups: ascentAndDirectionLanguage. The ascent is rendered as occurring by Allah's command, without implying that Allah occupies a place.",
+      "originalEnglish": "(Whereby) the angels and the Spirit ascend unto Him in a Day whereof the span is fifty thousand years.",
+      "proposedMeaning": "The angels and the Spirit ascend by His command in a day whose measure is fifty thousand years.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "72:28",
+      "arabicExpression": "لِّيَعْلَمَ أَن قَدْ أَبْلَغُوا۟ رِسَٰلَٰتِ رَبِّهِمْ وَأَحَاطَ بِمَا لَدَيْهِمْ وَأَحْصَىٰ كُلَّ شَىْءٍ عَدَدًۢا",
+      "context": "Policy trigger groups: divineEncompassing. The Arabic ahata is rendered through perfect knowledge, not bodily or spatial surrounding. This follows the same tanzih rule the supplied guide applies to encompassing language such as 41:54.",
+      "originalEnglish": "That He may know that they have indeed conveyed the messages of their Lord. He surroundeth all their doings, and He keepeth count of all things.",
+      "proposedMeaning": "So that He knows that they have conveyed the messages of their Lord. His knowledge encompasses all that is with them, and He has counted all things exactly.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "73:20",
+      "arabicExpression": "إِنَّ رَبَّكَ يَعْلَمُ أَنَّكَ تَقُومُ أَدْنَىٰ مِن ثُلُثَىِ ٱلَّيْلِ وَنِصْفَهُۥ وَثُلُثَهُۥ وَطَآئِفَةٌ مِّنَ ٱلَّذِينَ مَعَكَ وَٱللَّهُ يُقَدِّرُ ٱلَّيْلَ وَٱلنَّهَارَ عَلِمَ أَن لَّن تُحْصُوهُ فَتَابَ عَلَيْكُمْ فَٱقْرَءُوا۟ مَا تَيَسَّرَ مِنَ ٱلْقُرْءَانِ عَلِمَ أَن سَيَكُونُ مِنكُم مَّرْضَىٰ وَءَاخَرُونَ يَضْرِبُونَ فِى ٱلْأَرْضِ يَبْتَغُونَ مِن فَضْلِ ٱللَّهِ وَءَاخَرُونَ يُقَٰتِلُونَ فِى سَبِيلِ ٱللَّهِ فَٱقْرَءُوا۟ مَا تَيَسَّرَ مِنْهُ وَأَقِيمُوا۟ ٱلصَّلَوٰةَ وَءَاتُوا۟ ٱلزَّكَوٰةَ وَأَقْرِضُوا۟ ٱللَّهَ قَرْضًا حَسَنًا وَمَا تُقَدِّمُوا۟ لِأَنفُسِكُم مِّنْ خَيْرٍ تَجِدُوهُ عِندَ ٱللَّهِ هُوَ خَيْرًا وَأَعْظَمَ أَجْرًا وَٱسْتَغْفِرُوا۟ ٱللَّهَ إِنَّ ٱللَّهَ غَفُورٌ رَّحِيمٌۢ",
+      "context": "Policy trigger groups: divineNeedAndTransactionIdioms. The qard ('loan') expression in this worship-and-charity context denotes spending for Allah's sake, not borrowing, need, poverty, or benefit received by Allah.",
+      "originalEnglish": "Lo! thy Lord knoweth how thou keepest vigil sometimes nearly two-thirds of the night, or (sometimes) half or a third thereof, as do a party of those with thee. Allah measureth the night and the day. He knoweth that ye count it not, and turneth unto you in mercy. Recite, then, of the Qur'an that which is easy for you. He knoweth that there are sick folk among you, while others travel in the land in search of Allah's bounty, and others (still) are fighting for the cause of Allah. So recite of it that which is easy (for you), and establish worship and pay the poor-due, and (so) lend unto Allah a goodly loan. Whatsoever good ye send before you for your souls, ye will find it with Allah, better and greater in the recompense. And seek forgiveness of Allah. Lo! Allah is Forgiving, Merciful.",
+      "proposedMeaning": "Indeed your Lord knows that you stand in prayer nearly two-thirds of the night, or half of it, or a third, as does a group of those with you. Allah determines the night and day. He knows that you cannot keep exact count, so He has turned to you in mercy. Recite then what is easy for you from the Qur'an. He knows that some of you will be ill, others traveling through the land seeking Allah's bounty, and others fighting in Allah's cause. So recite what is easy from it, establish prayer, give zakat, and make a goodly expenditure for Allah's sake. Whatever good you send ahead for yourselves, you will find it with Allah, better and greater in reward. Seek Allah's forgiveness; surely Allah is Forgiving, Merciful.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "75:23",
+      "arabicExpression": "إِلَىٰ رَبِّهَا نَاظِرَةٌ",
+      "context": "Policy trigger groups: ruyahWithoutDirectionOrModality. The Ashari-Maturidi project guide specifically requires Qur'an 75:22–23 to affirm the believers' seeing of Allah in the Hereafter while rejecting direction and modality. This wording avoids the directional suggestion that can arise from an unqualified 'looking toward'.",
+      "originalEnglish": "Looking toward their Lord;",
+      "proposedMeaning": "Beholding their Lord, without direction or modality.",
+      "treatment": "tafwid-and-contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "76:9",
+      "arabicExpression": "إِنَّمَا نُطْعِمُكُمْ لِوَجْهِ ٱللَّهِ لَا نُرِيدُ مِنكُمْ جَزَآءً وَلَا شُكُورًا",
+      "context": "Policy trigger groups: divineWajh. The expression is rendered contextually as Allah’s acceptance, pleasure, Dominion, or Allah Himself as the context requires, without attributing a bodily face or created form.",
+      "originalEnglish": "(Saying): We feed you, for the sake of Allah only. We wish for no reward nor thanks from you;",
+      "proposedMeaning": "(Saying): We feed you, for the sake of Allah only. We wish for no reward nor thanks from you;",
+      "treatment": "tafwid-and-contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "85:20",
+      "arabicExpression": "وَٱللَّهُ مِن وَرَآئِهِم مُّحِيطٌۢ",
+      "context": "Policy trigger groups: divineEncompassing. Muhīt is rendered through knowledge and power rather than bodily or spatial surrounding.",
+      "originalEnglish": "And Allah, all unseen, surroundeth them.",
+      "proposedMeaning": "Yet Allah's knowledge and power encompass them completely.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "86:16",
+      "arabicExpression": "وَأَكِيدُ كَيْدًا",
+      "context": "Policy trigger groups: reciprocalHumanSoundingVerbs. The divine response to their plotting is rendered as frustrating it by decree, not human-style deceptive plotting.",
+      "originalEnglish": "And I plot a plot (against them).",
+      "proposedMeaning": "And I frustrate their plot by a decisive decree.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "89:22",
+      "arabicExpression": "وَجَآءَ رَبُّكَ وَٱلْمَلَكُ صَفًّا صَفًّا",
+      "context": "Policy trigger groups: comingAndMovementLanguage. The supplied guide reports an explanation attributed to Imam Ahmad: the coming here is the coming of an indication of Allah's Power, not movement of Allah from one place to another.",
+      "originalEnglish": "And thy Lord shall come with angels, rank on rank,",
+      "proposedMeaning": "And an indication of your Lord's Power comes, and the angels, rank upon rank.",
+      "treatment": "contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "92:20",
+      "arabicExpression": "إِلَّا ٱبْتِغَآءَ وَجْهِ رَبِّهِ ٱلْأَعْلَىٰ",
+      "context": "Policy trigger groups: divineWajh. The expression is rendered contextually as Allah’s acceptance, pleasure, Dominion, or Allah Himself as the context requires, without attributing a bodily face or created form.",
+      "originalEnglish": "Except as seeking (to fulfil) the purpose of his Lord Most High.",
+      "proposedMeaning": "Except as seeking (to fulfil) the acceptance and pleasure of his Lord Most High.",
+      "treatment": "tafwid-and-contextual-tawil",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    },
+    {
+      "verseKey": "112:4",
+      "arabicExpression": "وَلَمْ يَكُن لَّهُۥ كُفُوًا أَحَدٌۢ",
+      "context": "Governing Muhkam/tanzih foundation. A governing muhkam foundation in the supplied guide: nothing is equal to Allah.",
+      "originalEnglish": "And there is none comparable unto Him.",
+      "proposedMeaning": "And there is absolutely nothing equal or comparable to Him.",
+      "treatment": "muhkam-foundation",
+      "sourceReferences": [
+        "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
+        "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
+        "Expanded SalahOS Ashari/Maturidi translation-risk audit; proposed wording pending named qualified scholarly verification"
+      ],
+      "reviewer": null,
+      "status": "pending-scholar-review",
+      "disagreements": []
+    }
+  ]
+}
