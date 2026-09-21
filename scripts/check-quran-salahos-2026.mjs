@@ -27,17 +27,8 @@ const requiredSeeds = [
   '16:128',
 ];
 
-const [
-  manifest,
-  overrides,
-  register,
-  fullAudit,
-  pack,
-  reader,
-  preferences,
-  css,
-  surahIndex,
-] = await Promise.all([
+const [manifest, overrides, register, fullAudit, pack, reader, preferences, css, surahIndex] =
+  await Promise.all([
   readJson('src/data/quran-offline-manifest.json'),
   readJson('src/data/quran-salahos-2026-overrides.json'),
   readJson('src/data/quran-mutashabih-review-register.json'),
