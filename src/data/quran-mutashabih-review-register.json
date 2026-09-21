@@ -197,7 +197,7 @@
       "context": "Policy trigger groups: istiwaIla. Istiwa ila here is rendered without movement, place or direction; the wording expresses the divine ordering of the heavens.",
       "originalEnglish": "He it is Who created for you all that is in the earth. Then turned He to the heaven, and fashioned it as seven heavens. And He is knower of all things.",
       "proposedMeaning": "He is the One Who created for you all that is on earth; then He directed His will to the heaven and fashioned it into seven heavens. He knows all things.",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -453,7 +453,7 @@
       "context": "Policy trigger groups: ascentAndDirectionLanguage. The baseline phrase 'ascend unto Me' can suggest a spatial destination. The English preserves Allah's raising of Jesus while removing any implication that Allah occupies a place or direction.",
       "originalEnglish": "(And remember) when Allah said: O Jesus! Lo! I am gathering thee and causing thee to ascend unto Me, and am cleansing thee of those who disbelieve and am setting those who follow thee above those who disbelieve until the Day of Resurrection. Then unto Me ye will (all) return, and I shall judge between you as to that wherein ye used to differ.",
       "proposedMeaning": "When Allah said: O Jesus, I will take you and raise you to a place of honour by My command, purify you from those who disbelieve, and place those who follow you above those who disbelieve until the Day of Resurrection. Then to My judgment you will all return, and I will judge between you concerning that over which you differed.",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -581,7 +581,7 @@
       "context": "Policy trigger groups: ascentAndDirectionLanguage. The phrase 'raised him to Him' must not be translated as movement toward a location occupied by Allah. The English preserves the raising while explicitly excluding place and direction.",
       "originalEnglish": "But Allah took him up unto Himself. Allah was ever Mighty, Wise.",
       "proposedMeaning": "Rather, Allah raised him up as He willed, without implying that Allah occupies a place or direction. Allah is Almighty, All-Wise.",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -597,7 +597,7 @@
       "context": "Policy trigger groups: ruhAttribution. Possessive/from-Him spirit language is rendered as a created spirit, an attribution of honour, command or divine support; it never means a part, soul or component of Allah.",
       "originalEnglish": "O People of the Scripture! Do not exaggerate in your religion nor utter aught concerning Allah save the truth. The Messiah, Jesus son of Mary, was only a messenger of Allah, and His word which He conveyed unto Mary, and a spirit from Him. So believe in Allah and His messengers, and say not \"Three\" - Cease! (it is) better for you! - Allah is only One Allah. Far is it removed from His Transcendent Majesty that He should have a son. His is all that is in the heavens and all that is in the earth. And Allah is sufficient as Defender.",
       "proposedMeaning": "O People of the Scripture! Do not exaggerate in your religion nor utter aught concerning Allah save the truth. The Messiah, Jesus son of Mary, was only a messenger of Allah, and His word which He conveyed unto Mary, and a created spirit from Him, brought into being by His command. So believe in Allah and His messengers, and say not \"Three\" - Cease! (it is) better for you! - Allah is only One Allah. Far is it removed from His Transcendent Majesty that He should have a son. His is all that is in the heavens and all that is in the earth. And Allah is sufficient as Defender.",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -613,7 +613,7 @@
       "context": "Policy trigger groups: divineMaiyyah, divineNeedAndTransactionIdioms. This verse combines ma'iyyah and the qard ('loan') idiom. Ma'iyyah is rendered as support rather than physical co-location, and the goodly loan as sincere expenditure for Allah's sake rather than borrowing, need or benefit received by Allah.",
       "originalEnglish": "Allah made a covenant of old with the Children of Israel and We raised among them twelve chieftains, and Allah said: Lo! I am with you. If ye establish worship and pay the poor-due, and believe in My messengers and support them, and lend unto Allah a kindly loan, surely I shall remit your sins, and surely I shall bring you into Gardens underneath which rivers flow. Whoso among you disbelieveth after this will go astray from a plain road.",
       "proposedMeaning": "Allah made a covenant with the Children of Israel and raised twelve leaders among them. Allah said: I support you. If you establish prayer, give zakat, believe in My messengers and support them, and make a sincere goodly expenditure for My sake, I will surely erase your sins and admit you into Gardens beneath which rivers flow. Whoever among you disbelieves after that has strayed from the straight way.",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -661,7 +661,7 @@
       "context": "Policy trigger groups: spatialAndFawqLanguage. Spatial/fawq wording is rendered through worship, authority, dominion or subjugation so the English does not place Allah inside creation or in a physical direction.",
       "originalEnglish": "He is Allah in the heavens and in the earth. He knoweth both your secret and your utterance, and He knoweth what ye earn.",
       "proposedMeaning": "He alone is Allah, worshipped in the heavens and on the earth. He knows your secret and your utterance, and He knows what you earn.",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -677,7 +677,7 @@
       "context": "Policy trigger groups: spatialAndFawqLanguage. Spatial/fawq wording is rendered through worship, authority, dominion or subjugation so the English does not place Allah inside creation or in a physical direction.",
       "originalEnglish": "He is the Omnipotent over His slaves, and He is the Wise, the Knower.",
       "proposedMeaning": "He subjugates all His servants under His power. He is the Wise, the Knower.",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -773,7 +773,7 @@
       "context": "Policy trigger groups: istiwaOverThrone. This is one of the Qur'anic istiwa-over-the-Throne passages. Following the supplied guide's treatment of 20:5, the English uses the contextual ta'wil of absolute dominion/subjugation and explicitly rejects sitting, place, direction, movement and bodily modality.",
       "originalEnglish": "Lo! your Lord is Allah Who created the heavens and the earth in six Days, then mounted He the Throne. He covereth the night with the day, which is in haste to follow it, and hath made the sun and the moon and the stars subservient by His command. His verily is all creation and commandment. Blessed be Allah, the Lord of the Worlds!",
       "proposedMeaning": "Indeed your Lord is Allah, Who created the heavens and the earth in six days; then He exercises absolute dominion over and subjugates the Throne, without sitting, place, direction, movement, or bodily modality. He covers the night with the day, each pursuing the other swiftly, and the sun, moon and stars are subjected by His command. Surely creation and command belong to Him. Blessed is Allah, Lord of the worlds.",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -821,7 +821,7 @@
       "context": "Policy trigger groups: divineMaiyyah. Divine ma'iyyah is rendered by support, protection, guidance or encompassing knowledge according to context, never physical accompaniment or co-location.",
       "originalEnglish": "When thy Lord inspired the angels, (saying): I am with you. So make those who believe stand firm. I will throw fear into the hearts of those who disbelieve. Then smite the necks and smite of them each finger.",
       "proposedMeaning": "When thy Lord inspired the angels, (saying): I support you. So make those who believe stand firm. I will throw fear into the hearts of those who disbelieve. Then smite the necks and smite of them each finger.",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -1045,7 +1045,7 @@
       "context": "Policy trigger groups: istiwaOverThrone. This is one of the Qur'anic istiwa-over-the-Throne passages. Following the supplied guide's treatment of 20:5, the English uses the contextual ta'wil of absolute dominion/subjugation and explicitly rejects sitting, place, direction, movement and bodily modality.",
       "originalEnglish": "Lo! your Lord is Allah Who created the heavens and the earth in six Days, then He established Himself upon the Throne, directing all things. There is no intercessor (with Him) save after His permission. That is Allah, your Lord, so worship Him. Oh, will ye not remind?",
       "proposedMeaning": "Indeed your Lord is Allah, Who created the heavens and the earth in six days; then He exercises absolute dominion over and subjugates the Throne, without sitting, place, direction, movement, or bodily modality, directing all affairs. No intercessor may act except with His permission. That is Allah, your Lord, so worship Him. Will you not take heed?",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -1173,7 +1173,7 @@
       "context": "Policy trigger groups: istiwaOverThrone. This is one of the Qur'anic istiwa-over-the-Throne passages. Following the supplied guide's treatment of 20:5, the English uses the contextual ta'wil of absolute dominion/subjugation and explicitly rejects sitting, place, direction, movement and bodily modality.",
       "originalEnglish": "Allah it is Who raised up the heavens without visible supports, then mounted the Throne, and compelled the sun and the moon to be of service, each runneth unto an appointed term; He ordereth the course; He detaileth the revelations, that haply ye may be certain of the meeting with your Lord.",
       "proposedMeaning": "Allah is the One Who raised the heavens without visible pillars; then He exercises absolute dominion over and subjugates the Throne, without sitting, place, direction, movement, or bodily modality. He subjected the sun and moon, each running for an appointed term. He directs the affair and explains the signs so that you may be certain of meeting your Lord.",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -1333,7 +1333,7 @@
       "context": "Policy trigger groups: istiwaOverThrone. The supplied guide identifies istiwa over the Throne as mutashabih, explicitly rejects sitting, resting, movement, place, direction, bodies and parts, and records Ibn Rajab al-Hanbali's explanation by al-istila (subjugation). The primary SalahOS English meaning therefore uses the guide's contextual ta'wil rather than leaving a bodily-sounding literal rendering.",
       "originalEnglish": "The Beneficent One, Who is established on the Throne.",
       "proposedMeaning": "The All-Merciful exercises absolute dominion over and subjugates the Throne with a subjugation without beginning; this does not mean sitting, place, direction, movement, or any bodily modality.",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -1477,7 +1477,7 @@
       "context": "Policy trigger groups: istiwaOverThrone. This is one of the Qur'anic istiwa-over-the-Throne passages. Following the supplied guide's treatment of 20:5, the English uses the contextual ta'wil of absolute dominion/subjugation and explicitly rejects sitting, place, direction, movement and bodily modality.",
       "originalEnglish": "Who created the heavens and the earth and all that is between them in six Days, then He mounted the Throne. The Beneficent! Ask anyone informed concerning Him!",
       "proposedMeaning": "He created the heavens and the earth and all between them in six days; then He exercises absolute dominion over and subjugates the Throne, without sitting, place, direction, movement, or bodily modality. He is the All-Merciful; ask one well informed concerning Him.",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -1605,7 +1605,7 @@
       "context": "Policy trigger groups: istiwaOverThrone. This is one of the Qur'anic istiwa-over-the-Throne passages. Following the supplied guide's treatment of 20:5, the English uses the contextual ta'wil of absolute dominion/subjugation and explicitly rejects sitting, place, direction, movement and bodily modality.",
       "originalEnglish": "Allah it is Who created the heavens and the earth, and that which is between them, in six Days. Then He mounted the Throne. Ye have not, beside Him, a protecting friend or mediator. Will ye not then remember?",
       "proposedMeaning": "Allah is the One Who created the heavens and the earth and all between them in six days; then He exercises absolute dominion over and subjugates the Throne, without sitting, place, direction, movement, or bodily modality. Besides Him you have no protecting ally or intercessor. Will you not remember?",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -1637,7 +1637,7 @@
       "context": "Policy trigger groups: ruhAttribution. Possessive/from-Him spirit language is rendered as a created spirit, an attribution of honour, command or divine support; it never means a part, soul or component of Allah.",
       "originalEnglish": "Then He fashioned him and breathed into him of His Spirit; and appointed for you hearing and sight and hearts. Small thanks give ye!",
       "proposedMeaning": "Then He fashioned him and caused the created spirit honoured by Him to enter him; and appointed for you hearing and sight and hearts. Small thanks give ye!",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -1797,7 +1797,7 @@
       "context": "Policy trigger groups: guideContextExamples. Janb Allah is rendered as duty/right owed toward Allah rather than a bodily side.",
       "originalEnglish": "Lest any soul should say: Alas, my grief that I was unmindful of Allah, and I was indeed among the scoffers!",
       "proposedMeaning": "Lest any soul should say: Alas for my grief that I neglected my duty toward Allah, and I was indeed among the scoffers!",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -1829,7 +1829,7 @@
       "context": "Policy trigger groups: nur. The rendering avoids implying that Allah is a physical source of created luminosity.",
       "originalEnglish": "And the earth shineth with the light of her Lord, and the Book is set up, and the prophets and the witnesses are brought, and it is judged between them with truth, and they are not wronged.",
       "proposedMeaning": "And the earth will shine with the illumination bestowed by its Lord; the Record will be set forth, the prophets and witnesses will be brought, and judgment will be given between them in truth, and they will not be wronged.",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -1861,7 +1861,7 @@
       "context": "Policy trigger groups: istiwaIla. Istiwa ila is rendered as directing the divine will, not movement toward a spatial destination.",
       "originalEnglish": "Then turned He to the heaven when it was smoke, and said unto it and unto the earth: Come both of you, willingly or loth. They said: We come, obedient.",
       "proposedMeaning": "Then He directed His will to the heaven while it was smoke, and said to it and to the earth: Come willingly or unwillingly. They said: We come willingly.",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -1909,7 +1909,7 @@
       "context": "Policy trigger groups: spatialAndFawqLanguage. Spatial/fawq wording is rendered through worship, authority, dominion or subjugation so the English does not place Allah inside creation or in a physical direction.",
       "originalEnglish": "And He it is Who in the heaven is Allah, and in the earth Allah. He is the Wise, the Knower.",
       "proposedMeaning": "He alone is Allah, worshipped in the heaven and on the earth. He is the Wise, the Knower.",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -2005,7 +2005,7 @@
       "context": "Policy trigger groups: divineYadAndPowerLanguage. The wording is reviewed so that yad-related expressions denote power, disposal, care, generosity, support or authority according to context, without attributing limbs or bodily hands to Allah.",
       "originalEnglish": "We have built the heaven with might, and We it is Who make the vast extent (thereof).",
       "proposedMeaning": "We have built the heaven with might, and We it is Who make the vast extent (thereof).",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -2085,7 +2085,7 @@
       "context": "Policy trigger groups: istiwaOverThrone, divineMaiyyah. This is one of the Qur'anic istiwa-over-the-Throne passages. Following the supplied guide's treatment of 20:5, the English uses the contextual ta'wil of absolute dominion/subjugation and explicitly rejects sitting, place, direction, movement and bodily modality.",
       "originalEnglish": "He it is Who created the heavens and the earth in six Days; then He mounted the Throne. He knoweth all that entereth the earth and all that emergeth therefrom and all that cometh down from the sky and all that ascendeth therein; and He is with you wheresoever ye may be. And Allah is Seer of what ye do.",
       "proposedMeaning": "He is the One Who created the heavens and the earth in six days; then He exercises absolute dominion over and subjugates the Throne, without sitting, place, direction, movement, or bodily modality. He knows what enters the earth and what comes out of it, what descends from the heaven and what ascends into it. He knows you wherever you are. Allah sees all that you do.",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -2165,7 +2165,7 @@
       "context": "Policy trigger groups: ruhAttribution. Possessive/from-Him spirit language is rendered as a created spirit, an attribution of honour, command or divine support; it never means a part, soul or component of Allah.",
       "originalEnglish": "Thou wilt not find folk who believe in Allah and the Last Day loving those who oppose Allah and His messenger, even though they be their fathers or their sons or their brethren or their clan. As for such, He hath written faith upon their hearts and hath strengthened them with a Spirit from Him, and He will bring them into Gardens underneath which rivers flow, wherein they will abide. Allah is well pleased with them, and they are well pleased with Him. They are Allah's party. Lo! is it not Allah's party who are the successful?",
       "proposedMeaning": "Thou wilt not find folk who believe in Allah and the Last Day loving those who oppose Allah and His messenger, even though they be their fathers or their sons or their brethren or their clan. As for such, He hath written faith upon their hearts and hath strengthened them with support granted by Him, and He will bring them into Gardens underneath which rivers flow, wherein they will abide. Allah is well pleased with them, and they are well pleased with Him. They are Allah's party. Lo! is it not Allah's party who are the successful?",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -2405,7 +2405,7 @@
       "context": "Policy trigger groups: ruyahWithoutDirectionOrModality. The Ashari-Maturidi project guide specifically requires Qur'an 75:22–23 to affirm the believers' seeing of Allah in the Hereafter while rejecting direction and modality. This wording avoids the directional suggestion that can arise from an unqualified 'looking toward'.",
       "originalEnglish": "Looking toward their Lord;",
       "proposedMeaning": "Beholding their Lord, without direction or modality.",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -2421,7 +2421,7 @@
       "context": "Policy trigger groups: divineWajh. The expression is rendered contextually as Allah’s acceptance, pleasure, Dominion, or Allah Himself as the context requires, without attributing a bodily face or created form.",
       "originalEnglish": "(Saying): We feed you, for the sake of Allah only. We wish for no reward nor thanks from you;",
       "proposedMeaning": "(Saying): We feed you, for the sake of Allah only. We wish for no reward nor thanks from you;",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
@@ -2485,7 +2485,7 @@
       "context": "Policy trigger groups: divineWajh. The expression is rendered contextually as Allah’s acceptance, pleasure, Dominion, or Allah Himself as the context requires, without attributing a bodily face or created form.",
       "originalEnglish": "Except as seeking (to fulfil) the purpose of his Lord Most High.",
       "proposedMeaning": "Except as seeking (to fulfil) the acceptance and pleasure of his Lord Most High.",
-      "treatment": "tafwid-and-contextual-tawil",
+      "treatment": "contextual-tawil",
       "sourceReferences": [
         "Project-owner supplied guide methodology: Muhkam foundations, tanzih, Salaf tafwid and contextual Khalaf ta'wil",
         "Pinned M. M. Pickthall (1930) baseline used by SalahOS",
