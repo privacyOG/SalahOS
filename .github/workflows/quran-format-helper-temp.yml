@@ -1,0 +1,42 @@
+name: Qur'an Format Helper Temp
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/check-quran-salahos-2026.mjs'
+      - 'src/data/quran-mutashabih-full-audit.json'
+      - 'src/data/quran-mutashabih-policy-triggers.json'
+      - 'src/data/quran-mutashabih-review-register.json'
+      - '.github/workflows/quran-format-helper-temp.yml'
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Format targeted Qur'an files
+        run: |
+          npx prettier --write \
+            scripts/check-quran-salahos-2026.mjs \
+            src/data/quran-mutashabih-full-audit.json \
+            src/data/quran-mutashabih-policy-triggers.json \
+            src/data/quran-mutashabih-review-register.json
+      - name: Bundle formatted files
+        run: |
+          mkdir -p formatted/scripts formatted/src/data
+          cp scripts/check-quran-salahos-2026.mjs formatted/scripts/
+          cp src/data/quran-mutashabih-full-audit.json formatted/src/data/
+          cp src/data/quran-mutashabih-policy-triggers.json formatted/src/data/
+          cp src/data/quran-mutashabih-review-register.json formatted/src/data/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: quran-prettier-output
+          path: formatted/
+          if-no-files-found: error
