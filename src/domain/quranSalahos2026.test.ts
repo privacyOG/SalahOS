@@ -72,9 +72,9 @@ describe('SalahOS 2026 English meaning', () => {
   });
 
   it('covers all maintained translation-risk triggers with explicit verse-specific wording', () => {
-    expect(policyTriggeredVerseKeys).toHaveLength(131);
-    expect(fullAudit.scope.screenedVerseCount).toBe(131);
-    expect(fullAudit.scope.overrideVerseCount).toBe(131);
+    expect(policyTriggeredVerseKeys).toHaveLength(133);
+    expect(fullAudit.scope.screenedVerseCount).toBe(133);
+    expect(fullAudit.scope.overrideVerseCount).toBe(133);
     expect(fullAudit.scope.baselineSafeVerseCount).toBe(0);
     expect(fullAudit.screenedVerseKeys).toEqual(policyTriggeredVerseKeys);
     expect(fullAudit.overrideVerseKeys).toEqual(policyTriggeredVerseKeys);
@@ -125,6 +125,8 @@ describe('SalahOS 2026 English meaning', () => {
     expect(salahos2026EnglishMeaning('72:28', 'baseline')).toContain(
       'His knowledge encompasses',
     );
+    expect(salahos2026EnglishMeaning('2:138', 'baseline')).toContain('religion ordained by Allah');
+    expect(salahos2026EnglishMeaning('69:45', 'baseline')).toContain('irresistible power');
   });
 
   it('keeps override keys unique and explicitly provisional', () => {
