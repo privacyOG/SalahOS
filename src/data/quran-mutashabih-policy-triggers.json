@@ -77,10 +77,12 @@
       "13:42",
       "27:50",
       "68:45",
-      "86:16"
+      "86:16",
+      "9:30",
+      "40:34"
     ],
     "istiwaIla": ["2:29", "41:11"],
-    "divineNearness": ["2:186", "11:61", "34:50", "50:16", "56:85"],
+    "divineNearness": ["2:186", "11:61", "34:50", "50:16", "56:85", "4:135"],
     "divineEncompassing": [
       "2:19",
       "3:120",
@@ -98,6 +100,8 @@
     "kursi": ["2:255"],
     "divinePreservationWithoutBodilyGrasp": ["35:41"],
     "divineTakingAndSeizureLanguage": ["11:56", "11:102"],
-    "ruyahWithoutDirectionOrModality": ["6:103", "75:23"]
+    "ruyahWithoutDirectionOrModality": ["6:103", "75:23"],
+    "divineNafsAndSelfLanguage": ["5:116"],
+    "rawhReliefNotRuh": ["12:87"]
   }
 }
