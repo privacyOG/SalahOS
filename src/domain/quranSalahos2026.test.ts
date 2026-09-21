@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import fullAudit from '../data/quran-mutashabih-full-audit.json';
 import overrides from '../data/quran-salahos-2026-overrides.json';
 import {
   SALAHOS_2026_BASE_TRANSLATION_ID,
@@ -57,6 +58,26 @@ describe('SalahOS 2026 English meaning', () => {
     expect(salahos2026EnglishMeaning('20:5', 'baseline')).toContain(
       'without sitting, place, direction',
     );
+  });
+
+  it('covers the expanded owner-guide mutashabih translation-risk audit', () => {
+    expect(fullAudit.scope.screenedVerseCount).toBe(85);
+    expect(fullAudit.scope.overrideVerseCount).toBe(79);
+    expect(fullAudit.scope.baselineSafeVerseCount).toBe(6);
+
+    for (const verseKey of fullAudit.overrideVerseKeys) {
+      const entry = getSalahOS2026EditorialEntry(verseKey);
+      expect(entry, `Missing expanded audit override for ${verseKey}`).not.toBeNull();
+      expect(entry?.classification).toBe('mutashabih');
+      expect(entry?.englishMeaning.trim().length ?? 0).toBeGreaterThan(15);
+      expect(entry?.editorialNote.trim().length ?? 0).toBeGreaterThan(20);
+    }
+
+    expect(salahos2026EnglishMeaning('7:54', 'baseline')).not.toMatch(/mounted.*Throne/iu);
+    expect(salahos2026EnglishMeaning('5:64', 'baseline')).not.toContain('both His hands');
+    expect(salahos2026EnglishMeaning('55:27', 'baseline')).not.toContain('Countenance');
+    expect(salahos2026EnglishMeaning('67:16', 'baseline')).not.toContain('in the heaven');
+    expect(salahos2026EnglishMeaning('7:51', 'baseline')).not.toContain('forgotten');
   });
 
   it('keeps override keys unique and explicitly provisional', () => {
