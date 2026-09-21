@@ -1,0 +1,51 @@
+name: Qur'an Format Helper
+
+on:
+  pull_request:
+    paths:
+      - 'scripts/check-quran-salahos-2026.mjs'
+      - 'src/data/quran-mutashabih-full-audit.json'
+      - 'src/data/quran-mutashabih-policy-triggers.json'
+      - 'src/data/quran-mutashabih-review-register.json'
+      - 'src/data/quran-salahos-2026-overrides.json'
+      - 'src/domain/quranSalahos2026.test.ts'
+      - 'docs/quran-salahos-2026-policy.md'
+      - '.github/workflows/quran-format-helper.yml'
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Format targeted Qur'an files
+        run: |
+          npx prettier --write \
+            scripts/check-quran-salahos-2026.mjs \
+            src/data/quran-mutashabih-full-audit.json \
+            src/data/quran-mutashabih-policy-triggers.json \
+            src/data/quran-mutashabih-review-register.json \
+            src/data/quran-salahos-2026-overrides.json \
+            src/domain/quranSalahos2026.test.ts \
+            docs/quran-salahos-2026-policy.md
+      - name: Bundle formatted files
+        run: |
+          mkdir -p formatted/scripts formatted/src/data formatted/src/domain formatted/docs
+          cp scripts/check-quran-salahos-2026.mjs formatted/scripts/
+          cp src/data/quran-mutashabih-full-audit.json formatted/src/data/
+          cp src/data/quran-mutashabih-policy-triggers.json formatted/src/data/
+          cp src/data/quran-mutashabih-review-register.json formatted/src/data/
+          cp src/data/quran-salahos-2026-overrides.json formatted/src/data/
+          cp src/domain/quranSalahos2026.test.ts formatted/src/domain/
+          cp docs/quran-salahos-2026-policy.md formatted/docs/
+      - uses: actions/upload-artifact@v4
+        with:
+          name: quran-prettier-output
+          path: formatted/
+          if-no-files-found: error
