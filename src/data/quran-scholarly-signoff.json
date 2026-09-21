@@ -1,10 +1,10 @@
 {
   "schemaVersion": 1,
-  "status": "approved",
-  "reviewerName": "privacyOG",
-  "qualification": "Project owner — explicit whole-corpus scholarly sign-off",
+  "status": "reopened-pending-review",
+  "reviewerName": null,
+  "qualification": null,
   "scope": "whole-corpus-6236",
-  "reviewedAt": "2026-09-09",
-  "approvalBasis": "explicit-project-owner-attestation",
-  "notes": "The project owner explicitly signed off the complete 114-surah / 6,236-ayah SalahOS 2026 corpus for V1.6.0 release on 2026-09-09. The verse-level register remains supplemental provenance and is not auto-populated with fabricated individual review records."
+  "reviewedAt": null,
+  "approvalBasis": "owner-reported-remaining-mutashabih-errors-2026-09-21",
+  "notes": "The prior 2026-09-09 project-owner attestation is superseded for current release approval because the project owner reported remaining English Mutashabih translation errors on 2026-09-21. The comprehensive policy-trigger audit is now reopened. Release approval must remain blocked until the revised 6,236-ayah SalahOS 2026 layer receives renewed named qualified scholarly review/sign-off."
 }
