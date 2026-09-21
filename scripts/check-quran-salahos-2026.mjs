@@ -180,8 +180,7 @@ assert(
 );
 const ruyah7523 = overrideByKey.get('75:23')?.englishMeaning ?? '';
 assert(
-  /beholding their Lord/iu.test(ruyah7523) &&
-    /without direction or modality/iu.test(ruyah7523),
+  /beholding their Lord/iu.test(ruyah7523) && /without direction or modality/iu.test(ruyah7523),
   "75:23 must affirm ru'yah while explicitly denying direction and modality.",
 );
 
@@ -283,5 +282,3 @@ assert(
 console.log(
   `SalahOS 2026 Qur’an contract passed: ${String(requiredMutashabih.length)} policy-triggered Mutashabih verses + ${String(requiredFoundations.length)} foundations, all with explicit overrides; Uthmani/Hafs/Medina Arabic and RTL safeguards intact.`,
 );
-
-// quran-format-helper-trigger
