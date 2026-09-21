@@ -2,9 +2,11 @@
   "schemaVersion": 1,
   "status": "approved",
   "reviewerName": "privacyOG",
-  "qualification": "Project owner — explicit whole-corpus scholarly sign-off",
+  "qualification": "Project owner — explicit whole-corpus editorial/release attestation (not independent qualified scholarly approval)",
   "scope": "whole-corpus-6236",
   "reviewedAt": "2026-09-09",
-  "approvalBasis": "explicit-project-owner-attestation",
-  "notes": "The project owner explicitly signed off the complete 114-surah / 6,236-ayah SalahOS 2026 corpus for V1.6.0 release on 2026-09-09. The verse-level register remains supplemental provenance and is not auto-populated with fabricated individual review records."
+  "approvalBasis": "explicit-project-owner-editorial-attestation",
+  "notes": "The project owner previously attested the complete 114-surah / 6,236-ayah SalahOS 2026 corpus for release mechanics. On 2026-09-21 the owner identified remaining Muhkam/Mutashabih translation issues and ordered an expanded Ash'ari-Maturidi review. This record therefore remains an owner editorial/release attestation only; independent qualified scholarly approval is still pending. The expanded audit is recorded in src/data/quran-mutashabih-full-audit.json.",
+  "qualifiedScholarReviewStatus": "pending",
+  "reopenedMutashabihAuditAt": "2026-09-21"
 }
