@@ -9,28 +9,11 @@ function assert(condition, message) {
   if (!condition) throw new Error(message);
 }
 
-const requiredSeeds = [
-  '20:5',
-  '35:10',
-  '28:88',
-  '68:42',
-  '2:115',
-  '66:12',
-  '38:75',
-  '24:35',
-  '89:22',
-  '57:4',
-  '41:54',
-  '37:99',
-  '2:125',
-  '6:61',
-  '16:128',
-];
-
-const [manifest, overrides, register, reader, preferences, css, surahIndex] = await Promise.all([
+const [manifest, overrides, register, triggers, reader, preferences, css, surahIndex] = await Promise.all([
   readJson('src/data/quran-offline-manifest.json'),
   readJson('src/data/quran-salahos-2026-overrides.json'),
   readJson('src/data/quran-mutashabih-review-register.json'),
+  readJson('src/data/quran-mutashabih-policy-triggers.json'),
   readText('src/ui/QuranOfflineReader.tsx'),
   readText('src/platform/quranReadingPreferences.ts'),
   readText('src/quran-offline-reader.css'),
@@ -56,9 +39,35 @@ assert(
   new Set(overrideKeys).size === overrideKeys.length,
   'SalahOS 2026 contains duplicate verse overrides.',
 );
-for (const key of requiredSeeds) {
+
+const requiredFoundations = [...new Set(triggers.foundations ?? [])];
+const requiredMutashabih = [
+  ...new Set(Object.values(triggers.groups ?? {}).flat()),
+].sort((a, b) => {
+  const [aSurah, aAyah] = a.split(':').map(Number);
+  const [bSurah, bAyah] = b.split(':').map(Number);
+  return aSurah - bSurah || aAyah - bAyah;
+});
+
+assert(requiredFoundations.length >= 4, 'Muhkam/tanzih foundations are incomplete.');
+assert(requiredMutashabih.length >= 80, 'Comprehensive Mutashabih trigger inventory unexpectedly shrank.');
+
+for (const key of requiredFoundations) {
   const entry = overrides.entries.find((candidate) => candidate.verseKey === key);
-  assert(entry, `SalahOS 2026 is missing required Mutashabih seed ${key}.`);
+  assert(entry, `SalahOS 2026 is missing required foundation ${key}.`);
+  assert(
+    entry.classification === 'muhkam-foundation',
+    `${key} must be marked as a Muhkam/tanzih foundation.`,
+  );
+  assert(
+    typeof entry.englishMeaning === 'string' && entry.englishMeaning.trim().length > 0,
+    `${key} has no English meaning.`,
+  );
+}
+
+for (const key of requiredMutashabih) {
+  const entry = overrides.entries.find((candidate) => candidate.verseKey === key);
+  assert(entry, `SalahOS 2026 is missing policy-triggered Mutashabih verse ${key}.`);
   assert(entry.classification === 'mutashabih', `${key} must be marked Mutashabih.`);
   assert(
     typeof entry.englishMeaning === 'string' && entry.englishMeaning.trim().length > 0,
@@ -70,19 +79,51 @@ for (const key of requiredSeeds) {
   );
   assert(
     typeof entry.salafReading === 'string' && entry.salafReading.trim().length > 0,
-    `${key} has no Salaf treatment.`,
+    `${key} has no Salaf/tanzih treatment.`,
   );
   assert(
     typeof entry.khalafReading === 'string' && entry.khalafReading.trim().length > 0,
-    `${key} has no Khalaf treatment.`,
+    `${key} has no contextual ta'wil treatment.`,
+  );
+  assert(
+    register.requiredSeedVerses.includes(key),
+    `Editorial review register no longer requires policy-triggered verse ${key}.`,
+  );
+  assert(
+    register.entries.some((candidate) => candidate.verseKey === key),
+    `Editorial review register has no row for policy-triggered verse ${key}.`,
   );
 }
 
-for (const key of requiredSeeds) {
-  assert(
-    register.requiredSeedVerses.includes(key),
-    `Editorial review register no longer requires guide seed ${key}.`,
-  );
+const meaningByKey = new Map(overrides.entries.map((entry) => [entry.verseKey, entry.englishMeaning]));
+const forbiddenLiteralPhrases = new Map([
+  ['7:54', ['mounted He the Throne', 'established Himself upon the Throne']],
+  ['10:3', ['mounted He the Throne', 'established Himself upon the Throne']],
+  ['13:2', ['mounted the Throne', 'established Himself upon the Throne']],
+  ['20:5', ['established on the Throne', 'sits on the Throne']],
+  ['25:59', ['mounted the Throne']],
+  ['32:4', ['mounted the Throne']],
+  ['57:4', ['mounted the Throne', 'He is with you wheresoever']],
+  ['5:64', ['both His hands are spread out']],
+  ['38:75', ['both My hands']],
+  ['48:10', ['The Hand of Allah']],
+  ['39:67', ['His handful', 'His right hand']],
+  ['24:35', ['Allah is the Light of the heavens and the earth']],
+  ['67:16', ['Him Who is in the heaven']],
+  ['67:17', ['Him Who is in the heaven']],
+  ['89:22', ['thy Lord shall come']],
+  ['2:115', ["Allah's Countenance"]],
+  ['28:88', ['His countenance']],
+  ['41:54', ['He surrounding all things']],
+]);
+for (const [key, phrases] of forbiddenLiteralPhrases) {
+  const meaning = meaningByKey.get(key) ?? '';
+  for (const phrase of phrases) {
+    assert(
+      !meaning.toLowerCase().includes(phrase.toLowerCase()),
+      `${key} reintroduced prohibited literal-risk wording: ${phrase}`,
+    );
+  }
 }
 
 assert(
@@ -143,5 +184,5 @@ assert(
 );
 
 console.log(
-  `SalahOS 2026 Qur’an contract passed: ${String(requiredSeeds.length)} Mutashabih seeds, Uthmani/Hafs/Medina Arabic, explicit RTL/right alignment.`,
+  `SalahOS 2026 Qur’an contract passed: ${String(requiredMutashabih.length)} policy-triggered Mutashabih verses + ${String(requiredFoundations.length)} foundations, Uthmani/Hafs/Medina Arabic, explicit RTL/right alignment.`,
 );
