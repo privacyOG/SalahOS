@@ -151,7 +151,7 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     translation: 'English meaning',
     salahos2026: SALAHOS_2026_DISPLAY_NAME,
     salahos2026Status: 'Provisional wording · whole-corpus qualified scholarly sign-off pending',
-    ashariGuidance: 'Muhkam / Mutashabih Ashʿarī guidance',
+    ashariGuidance: 'Muhkam / Mutashabih Ashʿarī–Māturīdī guidance',
     salafMethod: 'Salaf method',
     khalafMethod: 'Khalaf contextual taʾwīl',
     pickthall: 'M. M. Pickthall (1930) — baseline/reference',
@@ -179,7 +179,7 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     pageGroupingNote:
       'Groups ayat by the source Mushaf page number in the packaged corpus; this is not a facsimile page.',
     provenance:
-      'Uthmani Arabic · Medina Mushaf · Hafs · SalahOS 2026 English meaning (Ashʿarī-guided; whole-corpus scholarly sign-off pending) · Pickthall 1930 baseline',
+      'Uthmani Arabic · Medina Mushaf · Hafs · SalahOS 2026 English meaning (Ashʿarī/Māturīdī-guided; renewed whole-corpus scholarly sign-off pending) · Pickthall 1930 baseline',
   },
   ar: {
     title: 'القرآن الكامل دون اتصال',
@@ -218,7 +218,7 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     translation: 'المعنى الإنجليزي',
     salahos2026: 'SalahOS 2026 (English meaning)',
     salahos2026Status: 'صياغة أولية · اعتماد عالم مؤهل لكامل القرآن ما زال مطلوباً',
-    ashariGuidance: 'منهج المحكم والمتشابه الأشعري',
+    ashariGuidance: 'منهج المحكم والمتشابه الأشعري والماتريدي',
     salafMethod: 'منهج السلف',
     khalafMethod: 'التأويل السياقي عند الخلف',
     pickthall: 'م. م. بكتال (1930) — النص الأساس/المرجعي',
@@ -246,7 +246,7 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     pageGroupingNote:
       'تُجمع الآيات حسب رقم صفحة المصحف في المصدر المحفوظ؛ وهذا العرض ليس صورة مطابقة لصفحة المصحف.',
     provenance:
-      'نص عثماني · مصحف المدينة · رواية حفص · معنى SalahOS 2026 الإنجليزي وفق منهج أشعري مع انتظار اعتماد كامل القرآن · بكتال 1930 أساس مرجعي',
+      'نص عثماني · مصحف المدينة · رواية حفص · معنى SalahOS 2026 الإنجليزي وفق المنهج الأشعري والماتريدي مع انتظار اعتماد متجدد لكامل القرآن · بكتال 1930 أساس مرجعي',
   },
   tr: {
     title: 'Tam çevrimdışı Kur’an',
@@ -285,7 +285,7 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     translation: 'İngilizce anlam',
     salahos2026: 'SalahOS 2026 (English meaning)',
     salahos2026Status: 'Geçici metin · bütün Kur’an için nitelikli âlim onayı bekleniyor',
-    ashariGuidance: 'Muhkem / Müteşabih Eşʿarî rehberliği',
+    ashariGuidance: 'Muhkem / Müteşabih Eşʿarî–Mâtürîdî rehberliği',
     salafMethod: 'Selef yöntemi',
     khalafMethod: 'Halef bağlamsal teʾvili',
     pickthall: 'M. M. Pickthall (1930) — temel/referans',
@@ -313,7 +313,7 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     pageGroupingNote:
       'Ayetleri paketlenmiş kaynaktaki mushaf sayfa numarasına göre gruplar; bu görünüm tıpkıbasım bir mushaf sayfası değildir.',
     provenance:
-      'Osmanî Arapça · Medine Mushafı · Hafs · Eşʿarî rehberli SalahOS 2026 İngilizce anlamı (bütün-korpus âlim onayı bekleniyor) · Pickthall 1930 temel metni',
+      'Osmanî Arapça · Medine Mushafı · Hafs · Eşʿarî/Mâtürîdî rehberli SalahOS 2026 İngilizce anlamı (yenilenmiş bütün-korpus âlim onayı bekleniyor) · Pickthall 1930 temel metni',
   },
   id: {
     title: 'Qur’an lengkap luring',
@@ -353,7 +353,7 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     salahos2026: 'SalahOS 2026 (English meaning)',
     salahos2026Status:
       'Redaksi sementara · persetujuan ulama berkualifikasi untuk seluruh korpus masih diperlukan',
-    ashariGuidance: 'Panduan Muhkam / Mutasyabih Asyʿari',
+    ashariGuidance: 'Panduan Muhkam / Mutasyabih Asyʿari–Maturidi',
     salafMethod: 'Metode Salaf',
     khalafMethod: 'Taʾwil kontekstual Khalaf',
     pickthall: 'M. M. Pickthall (1930) — dasar/referensi',
@@ -381,7 +381,7 @@ const copy: Readonly<Record<Locale, QuranReaderCopy>> = {
     pageGroupingNote:
       'Mengelompokkan ayat berdasarkan nomor halaman mushaf pada sumber terkemas; tampilan ini bukan faksimile halaman mushaf.',
     provenance:
-      'Arab Utsmani · Mushaf Madinah · Hafs · makna Inggris SalahOS 2026 berpanduan Asyʿari (persetujuan seluruh korpus masih menunggu) · Pickthall 1930 sebagai dasar',
+      'Arab Utsmani · Mushaf Madinah · Hafs · makna Inggris SalahOS 2026 berpanduan Asyʿari/Maturidi (persetujuan ulang seluruh korpus masih menunggu) · Pickthall 1930 sebagai dasar',
   },
 };
 
