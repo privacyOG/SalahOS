@@ -1,40 +1,42 @@
-# SalahOS v1.6.1 release notes
+# SalahOS v1.6.2 release notes
 
-SalahOS v1.6.1 is a focused post-v1.6.0 update for Qur’an navigation, mobile Arabic/RTL presentation and the Hadith library. It contains the two feature updates merged to `main` after v1.6.0 and keeps the existing exact-main release, signing and checksum safeguards.
+SalahOS v1.6.2 is a focused Qur’an editorial and governance update following the expanded Muhkam/Mutashabih review of the SalahOS 2026 English-meaning layer. It incorporates the reconciled project-guide treatment now on `main` while preserving explicit disclosure that independent qualified scholarly review is still pending.
 
-## Qur’an reader improvements
+> **Release status:** v1.6.2 is published as a project-owner-authorized **prerelease** while independent qualified whole-corpus scholarly review remains pending. This release status is not scholarly certification, and no pending review row has been converted into an approval.
 
-- Adds faster Surah and Ayah navigation in the Knowledge Qur’an reader.
-- Improves mobile layout and deep-verse navigation behavior.
-- Makes translation verse references more explicit and easier to follow.
-- Strengthens wrapped Arabic RTL rendering so Arabic remains right-aligned across wrapped lines and narrow phone widths.
-- Adds dedicated Qur’an navigation and wrapped-Arabic RTL visual acceptance coverage.
+## Qur’an Muhkam/Mutashabih reconciliation
 
-## Hadith library
+- Maintains **143 translation-risk verses** under the supplied Muhkam/Mutashabih and tanzīh review policy.
+- Maintains a **147-row review register**: 143 trigger verses plus four governing Muhkam foundations.
+- Gives every maintained trigger an explicit SalahOS 2026 English meaning instead of silently falling back to the Pickthall baseline.
+- Applies direct non-corporeal contextual taʾwīl to all seven Qur’anic istiwāʾ-over-the-Throne passages, using absolute dominion/subjugation wording and explicitly rejecting sitting, place, direction, movement and bodily modality.
+- Retains the project-guide treatments for expressions including wajh, yad, sāq, nūr, maʿiyyah, fawqiyyah and related translation-risk language without turning verse-specific taʾwīl into global lexical replacement.
+- Includes the ru’yah pair 6:103 and 75:23, preserving the distinction between non-encompassment and the believers’ seeing Allah in the Hereafter without direction or modality.
+- Includes the later need/dependency/transaction idiom pass so expressions such as lending to Allah, helping Allah and commercial imagery do not imply divine need, dependence or gain from deficiency.
 
-- Adds **The Forty Nawawi Hadiths** as a complete offline collection containing all 42 numbered entries supplied for the project.
-- Organises Hadith content by scholar/compiler and collection, including Imam al-Nawawi and the existing curated Imam al-Bukhari and Imam Muslim selections.
-- Adds search across hadith title/text, scholar names, collection names and references.
-- Preserves the existing Bukhari and Muslim entries as clearly identified curated selections rather than representing them as complete Sahih collections.
-- Adds mobile-friendly scholar/collection browsing and dedicated Hadith-library visual acceptance.
-- Enforces Arabic `dir="rtl"`, right alignment, bidi isolation and wrapped-line right alignment in the Hadith reader.
+## Review and provenance status
+
+- All generated review rows remain `status: pending-scholar-review` with `reviewer: null`.
+- The 2026-09-09 project-owner whole-corpus record remains an editorial/release attestation only, not independent qualified scholarly approval.
+- The v1.6.2 release authorization is exact-version and prerelease-only while `qualifiedScholarReviewStatus` remains pending.
+- Stable publication remains gated on independent qualified scholarly approval unless the project policy is explicitly revised with equivalent transparent provenance.
 
 ## Quality and release engineering
 
-- Synchronises npm/package-lock to `1.6.1`, Android to `versionCode 12` / `versionName 1.6.1`, and iOS to build `12` / marketing version `1.6.1`.
+- Synchronises npm/package-lock to `1.6.2`, Android to `versionCode 13` / `versionName 1.6.2`, and iOS to build `13` / marketing version `1.6.2`.
 - Retains formatting, lint, typecheck, unit/coverage, Qur’an integrity/governance, dependency/security, mosque reproducibility, production-build and bundle-budget checks.
 - Retains permanent Quality, Visual Regression, Android emulator lifecycle, iPhone/iPad Simulator and Windows executable workflows.
-- Keeps publication fail-closed on the exact current `main` revision, persistent Android signing, archive integrity, exact final file-set verification and SHA-256 verification.
+- Keeps publication tied to the exact current `main` revision, persistent Android signing, archive integrity, exact final file-set verification and SHA-256 verification.
 
-## Downloadable v1.6.1 assets
+## Downloadable v1.6.2 assets
 
 A successful publication contains:
 
-- `SalahOS-v1.6.1-android.apk`
-- `SalahOS-v1.6.1-android.aab`
-- `SalahOS-v1.6.1-windows-x64.exe`
-- `SalahOS-v1.6.1-web-pwa.zip`
-- `SalahOS-v1.6.1-raspberry-pi-kiosk.tar.gz`
+- `SalahOS-v1.6.2-android.apk`
+- `SalahOS-v1.6.2-android.aab`
+- `SalahOS-v1.6.2-windows-x64.exe`
+- `SalahOS-v1.6.2-web-pwa.zip`
+- `SalahOS-v1.6.2-raspberry-pi-kiosk.tar.gz`
 - `SHA256SUMS.txt`
 
 GitHub also exposes the standard source-code ZIP and tarball for the release tag.
