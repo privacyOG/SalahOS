@@ -18,7 +18,6 @@ All notable SalahOS changes are recorded here.
 - Permit only an exact-version, machine-readable project-owner **prerelease** authorization while qualified scholarly review is pending; stable publication remains gated on qualified scholarly approval.
 - Preserve exact-main release preflight, persistent Android signing, Web/PWA and Raspberry Pi archive verification, Windows executable self-test and SHA-256 reconciliation.
 
-
 ### V1.6.0 candidate
 
 #### Mobile, Today and appearance
