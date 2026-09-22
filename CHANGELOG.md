@@ -4,6 +4,21 @@ All notable SalahOS changes are recorded here.
 
 ## Unreleased
 
+## 1.6.2 — 2026-09-22
+
+### Qur’an editorial reconciliation
+
+- Reconcile the SalahOS 2026 Muhkam/Mutashabih translation-risk screen to 143 maintained verses and a 147-row pending review register covering those triggers plus four governing Muhkam foundations.
+- Give every maintained trigger explicit verse-specific English wording, including direct non-corporeal dominion/subjugation wording for all seven istiwāʾ-over-the-Throne passages, the ru’yah pair 6:103/75:23 and the need/dependency/transaction idiom pass.
+- Preserve all generated review rows as pending with no fabricated reviewer and continue to disclose that independent qualified whole-corpus scholarly review remains pending.
+
+### Release packaging
+
+- Synchronise npm/package-lock to 1.6.2, Android to versionCode 13/versionName 1.6.2 and iOS to build 13/marketing version 1.6.2.
+- Permit only an exact-version, machine-readable project-owner **prerelease** authorization while qualified scholarly review is pending; stable publication remains gated on qualified scholarly approval.
+- Preserve exact-main release preflight, persistent Android signing, Web/PWA and Raspberry Pi archive verification, Windows executable self-test and SHA-256 reconciliation.
+
+
 ### V1.6.0 candidate
 
 #### Mobile, Today and appearance
