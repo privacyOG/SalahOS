@@ -6,6 +6,7 @@ const packPath = resolve(root, 'public/data/quran/quran-offline-pack.json');
 const registerPath = resolve(root, 'src/data/quran-mutashabih-review-register.json');
 const signoffPath = resolve(root, 'src/data/quran-scholarly-signoff.json');
 const salahos2026Path = resolve(root, 'src/data/quran-salahos-2026-overrides.json');
+const packagePath = resolve(root, 'package.json');
 
 function assert(condition, message) {
   if (!condition) throw new Error(message);
@@ -15,17 +16,24 @@ function isNonEmptyString(value) {
   return typeof value === 'string' && value.trim().length > 0;
 }
 
-function isReleaseRef() {
+function releaseRefVersion() {
   const refType = process.env.GITHUB_REF_TYPE ?? '';
   const refName = process.env.GITHUB_REF_NAME ?? '';
-  return (
-    (refType === 'tag' && /^v\d+\.\d+\.\d+(?:[-+].*)?$/u.test(refName)) ||
-    (refType === 'branch' && /^release\/v\d+\.\d+\.\d+(?:[-+].*)?$/u.test(refName))
-  );
+  const match =
+    refType === 'tag'
+      ? /^v(\d+\.\d+\.\d+(?:[-+].*)?)$/u.exec(refName)
+      : refType === 'branch'
+        ? /^release\/v(\d+\.\d+\.\d+(?:[-+].*)?)$/u.exec(refName)
+        : null;
+  return match?.[1] ?? null;
 }
 
-const [pack, register, signoff, salahos2026] = await Promise.all(
-  [packPath, registerPath, signoffPath, salahos2026Path].map(async (path) =>
+function isReleaseRef() {
+  return releaseRefVersion() !== null;
+}
+
+const [pack, register, signoff, salahos2026, packageJson] = await Promise.all(
+  [packPath, registerPath, signoffPath, salahos2026Path, packagePath].map(async (path) =>
     JSON.parse(await readFile(path, 'utf8')),
   ),
 );
@@ -130,6 +138,18 @@ const ownerReleaseAttestationApproved =
   signoff.scope === 'whole-corpus-6236' &&
   isNonEmptyString(signoff.reviewedAt);
 const qualifiedScholarReviewStatus = signoff?.qualifiedScholarReviewStatus ?? 'unknown';
+const currentPackageVersion = packageJson?.version ?? '';
+const currentReleaseRefVersion = releaseRefVersion();
+const releaseAuthorization = signoff?.releaseAuthorization ?? null;
+const ownerPrereleaseAuthorizationApproved =
+  qualifiedScholarReviewStatus !== 'approved' &&
+  releaseAuthorization?.status === 'owner-authorized-prerelease-pending-scholar-review' &&
+  releaseAuthorization?.version === currentPackageVersion &&
+  releaseAuthorization?.version === currentReleaseRefVersion &&
+  releaseAuthorization?.authorizedBy === signoff?.reviewerName &&
+  isNonEmptyString(releaseAuthorization?.authorizedAt) &&
+  isNonEmptyString(releaseAuthorization?.basis) &&
+  releaseAuthorization?.requiresPrerelease === true;
 
 const report = {
   corpusAyat: corpusKeys.size,
@@ -142,6 +162,9 @@ const report = {
   scholarlySignoffReviewer: signoff?.reviewerName ?? null,
   ownerReleaseAttestationApproved,
   qualifiedScholarReviewStatus,
+  packageVersion: currentPackageVersion,
+  releaseRefVersion: currentReleaseRefVersion,
+  ownerPrereleaseAuthorizationApproved,
   releaseRef: isReleaseRef(),
 };
 
@@ -159,6 +182,10 @@ if (!isReleaseRef()) {
   process.exit(0);
 }
 
+assert(
+  currentReleaseRefVersion === currentPackageVersion,
+  `Release blocked: release ref version ${String(currentReleaseRefVersion)} does not match package version ${String(currentPackageVersion)}.`,
+);
 assert(
   signoff?.status === 'approved',
   'Release blocked: whole-corpus project-owner editorial/release attestation is not approved.',
@@ -180,10 +207,16 @@ assert(
   'Release blocked: owner editorial/release attestation has no review date.',
 );
 assert(
-  qualifiedScholarReviewStatus === 'approved',
-  'Release blocked: independent qualified whole-corpus scholarly review is still pending.',
+  qualifiedScholarReviewStatus === 'approved' || ownerPrereleaseAuthorizationApproved,
+  'Release blocked: independent qualified whole-corpus scholarly review is still pending and there is no exact-version project-owner prerelease authorization.',
 );
 
-console.log(
-  `Qur’an owner editorial/release attestation and independent qualified scholarly review gates passed for the complete 6,236-ayah SalahOS 2026 corpus.`,
-);
+if (qualifiedScholarReviewStatus === 'approved') {
+  console.log(
+    'Qur’an owner editorial/release attestation and independent qualified scholarly review gates passed for the complete 6,236-ayah SalahOS 2026 corpus.',
+  );
+} else {
+  console.log(
+    `Qur’an release gate passed for v${currentPackageVersion} under the exact-version project-owner prerelease authorization. Independent qualified scholarly review remains ${String(qualifiedScholarReviewStatus)}; this path must be published as a prerelease and must not be represented as scholarly approval.`,
+  );
+}
