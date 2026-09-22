@@ -8,5 +8,14 @@
   "approvalBasis": "explicit-project-owner-editorial-attestation",
   "notes": "The project owner previously attested the complete 114-surah / 6,236-ayah SalahOS 2026 corpus for release mechanics. On 2026-09-21 the owner identified remaining Muhkam/Mutashabih translation issues and ordered an expanded Ash'ari-Maturidi review. This record therefore remains an owner editorial/release attestation only; independent qualified scholarly approval is still pending. The expanded audit is recorded in src/data/quran-mutashabih-full-audit.json.",
   "qualifiedScholarReviewStatus": "pending",
-  "reopenedMutashabihAuditAt": "2026-09-21"
+  "reopenedMutashabihAuditAt": "2026-09-21",
+  "releaseAuthorization": {
+    "version": "1.6.2",
+    "status": "owner-authorized-prerelease-pending-scholar-review",
+    "authorizedBy": "privacyOG",
+    "authorizedAt": "2026-09-22",
+    "basis": "Explicit project-owner instruction to publish v1.6.2 with all relevant release assets while preserving pending independent scholarly-review status.",
+    "requiresPrerelease": true,
+    "notes": "This authorization is release-scoped only. It is not scholarly approval and does not change qualifiedScholarReviewStatus or any pending verse-review row."
+  }
 }

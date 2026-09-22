@@ -401,12 +401,40 @@ jobs:
               exit 1
             }
           fi
+          QUALIFIED_SCHOLAR_STATUS="$(node -e "const s=require('./src/data/quran-scholarly-signoff.json'); process.stdout.write(String(s.qualifiedScholarReviewStatus || 'unknown'))")"
+          AUTH_VERSION="$(node -e "const s=require('./src/data/quran-scholarly-signoff.json'); process.stdout.write(String(s.releaseAuthorization?.version || ''))")"
+          AUTH_STATUS="$(node -e "const s=require('./src/data/quran-scholarly-signoff.json'); process.stdout.write(String(s.releaseAuthorization?.status || ''))")"
+          AUTH_REQUIRES_PRERELEASE="$(node -e "const s=require('./src/data/quran-scholarly-signoff.json'); process.stdout.write(String(s.releaseAuthorization?.requiresPrerelease === true))")"
+          RELEASE_FLAGS=()
+          if [[ "$QUALIFIED_SCHOLAR_STATUS" != "approved" ]]; then
+            [[ "$AUTH_VERSION" == "$VERSION" ]] || {
+              echo "Pending scholarly review requires an exact-version release authorization for v${VERSION}" >&2
+              exit 1
+            }
+            [[ "$AUTH_STATUS" == "owner-authorized-prerelease-pending-scholar-review" ]] || {
+              echo "Pending scholarly review release authorization has an invalid status" >&2
+              exit 1
+            }
+            [[ "$AUTH_REQUIRES_PRERELEASE" == "true" ]] || {
+              echo "Pending scholarly review authorization must require prerelease publication" >&2
+              exit 1
+            }
+            RELEASE_FLAGS+=(--prerelease)
+          fi
           if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            if [[ "$QUALIFIED_SCHOLAR_STATUS" != "approved" ]]; then
+              EXISTING_PRERELEASE="$(gh release view "$RELEASE_TAG" --json isPrerelease --jq '.isPrerelease')"
+              [[ "$EXISTING_PRERELEASE" == "true" ]] || {
+                echo "Refusing to update a stable release while independent scholarly review is pending" >&2
+                exit 1
+              }
+            fi
             gh release upload "$RELEASE_TAG" release/* --clobber
           else
             gh release create "$RELEASE_TAG" \
               --target "$GITHUB_SHA" \
               --title "SalahOS ${RELEASE_TAG}" \
               --notes-file RELEASE_NOTES.md \
+              "${RELEASE_FLAGS[@]}" \
               release/*
           fi
