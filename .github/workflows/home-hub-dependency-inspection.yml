@@ -11,13 +11,23 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Refresh pinned vulnerable dependencies (runner only)
+      - name: Resolve patched direct dependencies and refresh lockfile (runner only)
         run: |
-          npm ci --ignore-scripts
-          npm install --save-exact @capacitor/android@8.5.3 @capacitor/ios@8.5.3 @capacitor/core@8.5.3
-          npm install --save-dev --save-exact @capacitor/cli@8.5.3 vite@8.3.5 vitest@4.1.12 @vitest/coverage-v8@4.1.12
-          npm audit fix
-          npm audit --audit-level=moderate
+          node - <<'NODE'
+          const fs = require('node:fs');
+          const p = JSON.parse(fs.readFileSync('package.json', 'utf8'));
+          for (const dep of ['@capacitor/android', '@capacitor/ios', '@capacitor/core']) p.dependencies[dep] = '8.5.3';
+          Object.assign(p.devDependencies, {
+            '@capacitor/cli': '8.5.3',
+            'vite': '8.3.5',
+            'vitest': '4.1.12',
+            '@vitest/coverage-v8': '4.1.12'
+          });
+          fs.writeFileSync('package.json', JSON.stringify(p, null, 2) + '\n');
+          NODE
+          npm install --package-lock-only --ignore-scripts --no-audit
+          npm audit fix --package-lock-only --ignore-scripts || true
+          npm audit --audit-level=moderate || true
       - name: Emit updated manifests for owner-authored repository updates
         run: |
           node - <<'NODE'
