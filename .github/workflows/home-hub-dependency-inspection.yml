@@ -18,7 +18,7 @@ jobs:
           const p = JSON.parse(fs.readFileSync('package.json', 'utf8'));
           for (const dep of ['@capacitor/android', '@capacitor/ios', '@capacitor/core']) p.dependencies[dep] = '8.5.3';
           Object.assign(p.devDependencies, {
-            '@capacitor/cli': '8.5.3',
+            '@capacitor/cli': '8.4.3',
             'vite': '8.3.5',
             'vitest': '4.1.12',
             '@vitest/coverage-v8': '4.1.12'
@@ -28,7 +28,7 @@ jobs:
           npm install --global npm@11
           rm package-lock.json
           npm install --package-lock-only --ignore-scripts --no-audit
-          npm audit --audit-level=moderate || true
+          npm audit --audit-level=moderate
       - name: Emit updated manifests for owner-authored repository updates
         run: |
           node - <<'NODE'
