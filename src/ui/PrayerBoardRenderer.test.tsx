@@ -33,6 +33,23 @@ describe('configured prayer-board renderer', () => {
     expect(markup).toContain('data-family-variant="sandstone"');
   });
 
+  it('retains five sourced prayer rows in the selectable home hub design', () => {
+    const config = parsePrayerBoardTemplateConfig({
+      version: 1,
+      templateId: 'home-hub',
+      primaryLocale: 'en',
+      timeFormat: 'h23',
+      accentPreset: 'midnight',
+    });
+    const html = renderToStaticMarkup(
+      <PrayerBoardRenderer data={buildPrayerBoardPreviewData('near-athan')} config={config} />,
+    );
+    expect(html).toContain('data-prayer-board-template="home-hub"');
+    expect(html).toContain('data-structured-variant="midnight"');
+    expect(html.match(/data-prayer="(?:fajr|dhuhr|asr|maghrib|isha)"/g)).toHaveLength(5);
+    expect(html).toContain('home-hub-board__time-label');
+  });
+
   it('maps controlled accent presets onto validated display variants', () => {
     expect(
       displayThemeForPrayerBoardConfig(
