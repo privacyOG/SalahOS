@@ -25,6 +25,7 @@ jobs:
           });
           fs.writeFileSync('package.json', JSON.stringify(p, null, 2) + '\n');
           NODE
+          npm install --global npm@11
           rm package-lock.json
           npm install --package-lock-only --ignore-scripts --no-audit
           npm audit --audit-level=moderate || true
