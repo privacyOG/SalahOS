@@ -469,3 +469,17 @@
     backdrop-filter: none;
   }
 }
+
+.mobile-theme-choice__thumb--home-hub {
+  color: #ffe2a0;
+  background: linear-gradient(165deg, #071b25, #143441);
+}
+
+.mobile-theme-choice__thumb--home-hub .mobile-theme-choice__mini-focus {
+  border: 1px solid rgb(245 203 121 / 60%);
+  background: rgb(245 203 121 / 16%);
+}
+
+.mobile-theme-choice__thumb--home-hub .mobile-theme-choice__mini-row {
+  background: rgb(245 203 121 / 23%);
+}
