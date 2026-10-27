@@ -54,7 +54,7 @@ const displayConfigCopy: Readonly<Record<Locale, DisplayConfigCopy>> = {
   en: {
     title: 'Prayer-board designs',
     subtitle:
-      'Choose one of the six SalahOS display designs, configure presentation-only options, then review the exact full-screen result before applying it to this display.',
+      'Choose a SalahOS display design, configure presentation-only options, then review the exact full-screen result before applying it to this display.',
     selected: 'Selected',
     preview: 'Full-screen preview',
     close: 'Close preview',
@@ -80,7 +80,7 @@ const displayConfigCopy: Readonly<Record<Locale, DisplayConfigCopy>> = {
   ar: {
     title: 'تصاميم لوحة الصلاة',
     subtitle:
-      'اختر أحد تصاميم صلاح أو إس الستة، واضبط خيارات العرض فقط، ثم راجع النتيجة بملء الشاشة قبل تطبيقها على هذه الشاشة.',
+      'اختر أحد تصاميم صلاح أو إس، واضبط خيارات العرض فقط، ثم راجع النتيجة بملء الشاشة قبل تطبيقها على هذه الشاشة.',
     selected: 'محدد',
     preview: 'معاينة بملء الشاشة',
     close: 'إغلاق المعاينة',
@@ -105,7 +105,7 @@ const displayConfigCopy: Readonly<Record<Locale, DisplayConfigCopy>> = {
   tr: {
     title: 'Namaz panosu tasarımları',
     subtitle:
-      'Altı SalahOS ekran tasarımından birini seçin, yalnızca sunum seçeneklerini ayarlayın ve bu ekrana uygulamadan önce tam ekran sonucu inceleyin.',
+      'Bir SalahOS ekran tasarımı seçin, sunum seçeneklerini ayarlayın ve bu ekrana uygulamadan önce tam ekran sonucu inceleyin.',
     selected: 'Seçili',
     preview: 'Tam ekran önizleme',
     close: 'Önizlemeyi kapat',
@@ -130,7 +130,7 @@ const displayConfigCopy: Readonly<Record<Locale, DisplayConfigCopy>> = {
   id: {
     title: 'Desain papan salat',
     subtitle:
-      'Pilih salah satu dari enam desain layar SalahOS, atur opsi presentasi saja, lalu tinjau hasil layar penuh sebelum menerapkannya ke layar ini.',
+      'Pilih desain layar SalahOS, atur opsi presentasi saja, lalu tinjau hasil layar penuh sebelum menerapkannya ke layar ini.',
     selected: 'Dipilih',
     preview: 'Pratinjau layar penuh',
     close: 'Tutup pratinjau',
