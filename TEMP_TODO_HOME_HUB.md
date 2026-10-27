@@ -1,0 +1,50 @@
+# SalahOS — Temporary development checklist: Home Prayer Hub
+
+**Owner/developer:** PrivacyOG  
+**Reviewed:** 2026-10-28 (Australia/Sydney)  
+**Base:** `main` at `99e08c6e91ecece01b08028c392cf627f57ab9f8` (v1.6.2 prerelease, 2026-09-22)  
+**Working branch:** `feature/home-hub-prayer-dashboard`  
+**Rule:** Update this file as work is verified. A committed change is not a successful CI/physical-device test.
+
+## Previously completed and retained
+
+- [x] v1.6.2 prerelease exists; v1.6.0/1.6.2 editorial restrictions remain in force.
+- [x] Offline prayer calculation, five daily prayers, sunrise, next-prayer countdown, method/Asr selections and source provenance.
+- [x] Mosque timetable and Iqamah support in configured prayer-board mode.
+- [x] Android/iOS/PWA/Raspberry Pi and kiosk architecture, with existing validation gates.
+- [x] Six pre-existing prayer-board designs; mobile prayer-theme system.
+- [x] Earlier decision retained: do not restore Iqamah to the ordinary Today screen.
+- [x] Source includes PrivacyOG developer/author metadata; no additional developer is being credited.
+
+## Home Prayer Hub — current branch
+
+- [x] H01 Add **Home Prayer Hub** as a seventh selectable prayer-board template.
+- [x] H02 Add responsive 16:10 smart-display layout optimised for a 1280 × 800 home touchscreen, keeping original SalahOS branding.
+- [x] H03 Use the same source-validated next prayer, countdown, five-prayer times, dates, sunrise/sunset and mosque/Iqamah data; no new network dependency.
+- [x] H04 Add mobile theme colours and thumbnail for the existing Today UI.
+- [x] H05 Accept `?mode=smart-display&template=home-hub` and enable settings-gallery selection.
+- [x] H06 Add focused registry, route and renderer regression-test cases.
+- [x] H07 Set the visible project developer/maintainer and npm author to PrivacyOG.
+- [x] H08 Preserve licence-required third-party content/audio/font attributions, separate from developer credits.
+- [ ] H09 Verify format, lint, TypeScript, unit/integration, accessibility and build checks in GitHub CI on the exact PR head.
+- [ ] H10 Capture and inspect 1280 × 800/1920 × 1080, narrow phone, and Arabic/RTL screenshots; check clock/countdown and five cards for clipping.
+- [ ] H11 Manually test orientation, offline launch, screen sleep/wake, DST/timezone rollover and notifications on actual Android hardware.
+- [ ] H12 Validate physical iOS/iPadOS behaviour and signing/provisioning for distribution.
+- [ ] H13 Inspect all developer-credit metadata and historical GitHub contributor information without altering commit history.
+- [ ] H14 Review merge and prerelease readiness only after required checks pass.
+
+## Existing independent blockers and carry-overs
+
+- [ ] Independent qualified scholarly review of the 143-verse Qur'an translation-risk register; open PRs #288 and #290 require reconciliation. Do not treat a CI pass as scholarly sign-off.
+- [ ] Physical Android/iOS OEM prayer-notification and audio acceptance; no verified consumer iOS IPA yet.
+- [ ] Confirm available Adhan recordings, licence rights and voice count before advertising a comparable multi-voice library.
+- [ ] End-to-end user acceptance of offline city/location modes, dates, prayer methods and mosque sources.
+- [ ] Explicit product-owner review for any new release; this feature branch does not change stable-release gates.
+
+## Reference and scope
+
+Feature benchmark: [IMAN Pro Hub](https://au.iman.com.my/islamic-pro-hub/) advertises location-aware prayer times, a live next-prayer countdown, varied themes, Adhan choices and Iqamah reminder support. SalahOS develops its own visual presentation without copying third-party artwork, logos or proprietary assets. The display shares the existing verified prayer-time engine rather than integrating the referenced vendor's service.
+
+## Workflow
+
+Do not merge merely because code was committed. Update status using recorded CI/job results and physical-device evidence. Keep PrivacyOG as the only SalahOS developer credit; preserve truthful third-party legal/source attributions.
