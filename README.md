@@ -8,6 +8,8 @@ A cross-platform Islamic prayer-time application and smart-display ecosystem for
 
 SalahOS is designed around accurate prayer calculations, selectable calculation methods and madhhab/Asr conventions, local mosque timetables, Adhan alerts and notifications, Hijri dates, Arabic/RTL support, connected mosque/display capabilities, and reliable offline prayer operation.
 
+**Home Prayer Hub development:** [display design and acceptance](docs/HOME_PRAYER_HUB.md) · [temporary progress checklist](TEMP_TODO_HOME_HUB.md).
+
 ## Project principles
 
 - Accurate prayer calculations remain available locally and offline after required application data is installed.
