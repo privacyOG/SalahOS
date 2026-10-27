@@ -2,7 +2,7 @@
   "name": "salahos",
   "version": "1.6.2",
   "private": true,
-  "author": "privacyOG",
+  "author": "PrivacyOG",
   "type": "module",
   "scripts": {
     "dev": "node scripts/prepare-quran-offline-pack.mjs && vite",
