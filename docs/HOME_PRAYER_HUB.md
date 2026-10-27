@@ -21,14 +21,14 @@ The Iqamah column belongs to the dedicated prayer-board mode; the regular mobile
 
 ## Acceptance matrix
 
-| Surface | Viewport | Required acceptance |
-| --- | --- | --- |
-| Home touch display | 1280 × 800 | Large readable clock, hero countdown, five unobstructed prayer cards |
-| Landscape TV | 1920 × 1080 | Balanced scale, no clipped prayer or Iqamah values |
-| Phone and tablet | 390 × 844; 768 × 1024 | Readable stacked schedule without horizontal overflow |
-| Arabic | All above | RTL ordering, correct translations and logical highlighting |
-| Offline/timezone | Relevant platforms | Correct local times and source indication after clock/resume changes |
-| Accessibility | All above | Focus visibility, contrast, reduced motion and forced-colour robustness |
+| Surface            | Viewport              | Required acceptance                                                     |
+| ------------------ | --------------------- | ----------------------------------------------------------------------- |
+| Home touch display | 1280 × 800            | Large readable clock, hero countdown, five unobstructed prayer cards    |
+| Landscape TV       | 1920 × 1080           | Balanced scale, no clipped prayer or Iqamah values                      |
+| Phone and tablet   | 390 × 844; 768 × 1024 | Readable stacked schedule without horizontal overflow                   |
+| Arabic             | All above             | RTL ordering, correct translations and logical highlighting             |
+| Offline/timezone   | Relevant platforms    | Correct local times and source indication after clock/resume changes    |
+| Accessibility      | All above             | Focus visibility, contrast, reduced motion and forced-colour robustness |
 
 Technical CI/visual and physical-device acceptance are recorded separately in `TEMP_TODO_HOME_HUB.md`. Do not claim them complete merely from code review.
 
