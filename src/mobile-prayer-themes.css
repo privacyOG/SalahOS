@@ -545,6 +545,8 @@
   box-shadow: inset 0.25rem 0 0 #f5cb79;
 }
 
-[dir='rtl'] .mobile-prayer-theme-surface[data-mobile-prayer-template='home-hub'] .today-prayer-row.is-next {
+[dir='rtl']
+  .mobile-prayer-theme-surface[data-mobile-prayer-template='home-hub']
+  .today-prayer-row.is-next {
   box-shadow: inset -0.25rem 0 0 #f5cb79;
 }
