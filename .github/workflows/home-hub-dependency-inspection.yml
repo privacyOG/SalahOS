@@ -1,0 +1,33 @@
+name: Home Hub Dependency Inspection
+on:
+  push:
+    branches:
+      - feature/home-hub-prayer-dashboard
+jobs:
+  inspect:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Refresh pinned vulnerable dependencies (runner only)
+        run: |
+          npm ci --ignore-scripts
+          npm install --save-exact @capacitor/android@8.5.3 @capacitor/ios@8.5.3 @capacitor/core@8.5.3
+          npm install --save-dev --save-exact @capacitor/cli@8.5.3 vite@8.3.5 vitest@4.1.12 @vitest/coverage-v8@4.1.12
+          npm audit fix
+          npm audit --audit-level=moderate
+      - name: Emit updated manifests for owner-authored repository updates
+        run: |
+          node - <<'NODE'
+          const fs = require('node:fs');
+          for (const file of ['package.json', 'package-lock.json']) {
+            const content = fs.readFileSync(file, 'utf8');
+            const chunkSize = 4000;
+            for (let offset = 0; offset < content.length; offset += chunkSize) {
+              console.log('DEPCHUNK|' + file + '|' + (offset / chunkSize) + '|' + JSON.stringify(content.slice(offset, offset + chunkSize)));
+            }
+            console.log('DEPFINISH|' + file + '|' + content.length);
+          }
+          NODE
