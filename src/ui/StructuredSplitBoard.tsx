@@ -134,13 +134,17 @@ export function StructuredSplitBoard({
                   </div>
                   <div className="structured-prayer-row__start">
                     {variantId === 'home-hub' && (
-                      <span className="home-hub-board__time-label">{translate(locale, 'prayerStart')}</span>
+                      <span className="home-hub-board__time-label">
+                        {translate(locale, 'prayerStart')}
+                      </span>
                     )}
                     <strong>{displayTime(prayer.startLocalMinutes, locale, timeFormat)}</strong>
                   </div>
                   <div className="structured-prayer-row__iqamah">
                     {variantId === 'home-hub' && (
-                      <span className="home-hub-board__time-label">{translate(locale, 'iqamah')}</span>
+                      <span className="home-hub-board__time-label">
+                        {translate(locale, 'iqamah')}
+                      </span>
                     )}
                     <strong>
                       {prayer.iqamahLocalMinutes === null
