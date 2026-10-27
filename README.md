@@ -1,5 +1,7 @@
 # SalahOS
 
+**Developer and maintainer: PrivacyOG** ([GitHub: privacyOG](https://github.com/privacyOG)).
+
 <p align="center"><img src="public/icons/salahos-512.png" width="180" alt="SalahOS logo" /></p>
 
 A cross-platform Islamic prayer-time application and smart-display ecosystem for Android, iOS/iPadOS, Raspberry Pi, TV, browser/PWA, and kiosk displays.
