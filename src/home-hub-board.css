@@ -17,8 +17,16 @@
   gap: clamp(0.55rem, 1vw, 1rem);
   padding: clamp(0.75rem, 1.3vw, 1.5rem);
   background-image:
-    radial-gradient(circle at 50% -15%, color-mix(in srgb, var(--structured-accent) 17%, transparent), transparent 53%),
-    linear-gradient(155deg, var(--structured-bg), color-mix(in srgb, var(--structured-bg) 85%, black));
+    radial-gradient(
+      circle at 50% -15%,
+      color-mix(in srgb, var(--structured-accent) 17%, transparent),
+      transparent 53%
+    ),
+    linear-gradient(
+      155deg,
+      var(--structured-bg),
+      color-mix(in srgb, var(--structured-bg) 85%, black)
+    );
 }
 
 .home-hub-board .structured-split-board__masthead {
