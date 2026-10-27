@@ -25,8 +25,8 @@ jobs:
           });
           fs.writeFileSync('package.json', JSON.stringify(p, null, 2) + '\n');
           NODE
+          rm package-lock.json
           npm install --package-lock-only --ignore-scripts --no-audit
-          npm audit fix --package-lock-only --ignore-scripts || true
           npm audit --audit-level=moderate || true
       - name: Emit updated manifests for owner-authored repository updates
         run: |
