@@ -73,9 +73,7 @@ describe('SmartDisplay', () => {
     expect(
       smartDisplayTemplateRequested('?mode=smart-display&template=structured-split-board'),
     ).toBe('structured-split-board');
-    expect(smartDisplayTemplateRequested('?mode=smart-display&template=home-hub')).toBe(
-      'home-hub',
-    );
+    expect(smartDisplayTemplateRequested('?mode=smart-display&template=home-hub')).toBe('home-hub');
     expect(smartDisplayTemplateRequested('?mode=smart-display&template=scenic-spiritual')).toBe(
       'scenic-spiritual',
     );
