@@ -32,6 +32,9 @@
 - [ ] H12 Validate physical iOS/iPadOS behaviour and signing/provisioning for distribution.
 - [ ] H13 Inspect all developer-credit metadata and historical GitHub contributor information without altering commit history.
 - [ ] H14 Review merge and prerelease readiness only after required checks pass.
+- [x] H15 Refresh vulnerable Capacitor, Vite and Vitest direct dependencies and npm lockfile; an isolated GitHub runner reported **0 npm audit vulnerabilities** on 2026-10-28.
+- [ ] H16 Confirm the updated lockfile passes complete Quality Gate, Android/iOS build and visual regression on the final feature SHA. Note the audited Capacitor CLI 8.4.3 and runtime 8.5.3 compatibility must be tested.
+- [ ] H17 Review additional Pro Hub-style experiences (Adhan voice selection, theme catalogue, Hijri/date settings, reminder timing and on-device brightness) against existing SalahOS features; ship only verified and properly licensed additions.
 
 ## Existing independent blockers and carry-overs
 
