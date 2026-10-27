@@ -73,6 +73,9 @@ describe('SmartDisplay', () => {
     expect(
       smartDisplayTemplateRequested('?mode=smart-display&template=structured-split-board'),
     ).toBe('structured-split-board');
+    expect(smartDisplayTemplateRequested('?mode=smart-display&template=home-hub')).toBe(
+      'home-hub',
+    );
     expect(smartDisplayTemplateRequested('?mode=smart-display&template=scenic-spiritual')).toBe(
       'scenic-spiritual',
     );
@@ -209,6 +212,32 @@ describe('SmartDisplay', () => {
     expect(html).not.toContain('data-prayer-board-template="heritage-classic"');
     expect(html).not.toContain('data-prayer-board-template="minimal-modern"');
     expect(html).not.toContain('data-prayer-board-template="bold-countdown-focus"');
+  });
+
+  it('renders Home Prayer Hub from the same sourced times, including RTL and optional iqamah', () => {
+    for (const locale of ['en', 'ar'] as const) {
+      const html = renderToStaticMarkup(
+        <SmartDisplay
+          locale={locale}
+          currentClock="4:00:00 pm"
+          dashboard={fridayDashboard()}
+          timeFormat="h12"
+          hijriCorrectionDays={0}
+          offline={false}
+          systemTimeUnavailable={false}
+          calculationUnavailable={false}
+          templateId="home-hub"
+        />,
+      );
+      expect(html).toContain('data-display-template="home-hub"');
+      expect(html).toContain('data-prayer-board-template="home-hub"');
+      expect(html).toContain('home-hub-board');
+      expect(html.match(/data-prayer="(?:fajr|dhuhr|asr|maghrib|isha)"/g)).toHaveLength(5);
+      expect(html).toContain('Central Mosque');
+      expect(html).toContain('First Jumuah');
+      expect(html).toContain('home-hub-board__time-label');
+      expect(html).toContain(locale === 'ar' ? 'dir="rtl"' : 'dir="ltr"');
+    }
   });
 
   it('renders Scenic Spiritual with a usable artwork-disabled mode from the same contract', () => {
