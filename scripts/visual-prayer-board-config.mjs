@@ -42,6 +42,7 @@ function board(templateId, locale, mosqueName) {
     'minimal-modern': 'quiet-grid',
     'bold-countdown-focus': 'countdown-field',
     'structured-split-board': 'structured-lines',
+    'home-hub': 'structured-lines',
     'scenic-spiritual': 'scenic-gradient',
     'family-classroom': 'classroom-pattern',
   }[templateId];
@@ -100,7 +101,7 @@ async function overflowState(page) {
 
 async function validateRuntime(browser, scenario) {
   const context = await browser.newContext({
-    viewport: { width: 1920, height: 1080 },
+    viewport: { width: scenario.width ?? 1920, height: scenario.height ?? 1080 },
     reducedMotion: 'reduce',
     serviceWorkers: 'block',
   });
@@ -195,6 +196,22 @@ const browser = await chromium.launch({ headless: true });
 try {
   const results = [];
   for (const scenario of [
+    {
+      name: 'home-hub-1280x800-en',
+      templateId: 'home-hub',
+      locale: 'en',
+      mosqueName: 'SalahOS Community Masjid',
+      width: 1280,
+      height: 800,
+    },
+    {
+      name: 'home-hub-1280x800-ar-rtl',
+      templateId: 'home-hub',
+      locale: 'ar',
+      mosqueName: 'مسجد صلاح',
+      width: 1280,
+      height: 800,
+    },
     {
       name: 'prayer-board-config-runtime-en',
       templateId: 'minimal-modern',
