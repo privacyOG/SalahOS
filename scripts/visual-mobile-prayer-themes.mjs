@@ -49,6 +49,14 @@ const scenarios = [
     height: 1366,
   },
   {
+    name: 'mobile-theme-home-hub-phone-en',
+    templateId: 'home-hub',
+    accentPreset: 'neutral',
+    locale: 'en',
+    width: 390,
+    height: 844,
+  },
+  {
     name: 'mobile-theme-scenic-large-phone-en',
     templateId: 'scenic-spiritual',
     accentPreset: 'jewel',
@@ -250,8 +258,8 @@ async function validateSelectorFlow(browser) {
     });
     const editor = page.locator('.settings-display-entry .mobile-prayer-theme-settings');
     await editor.waitFor({ state: 'visible' });
-    if ((await editor.locator('[data-mobile-theme-choice]').count()) !== 6) {
-      throw new Error('Phone/Home theme selector must expose exactly six designs');
+    if ((await editor.locator('[data-mobile-theme-choice]').count()) !== 7) {
+      throw new Error('Phone/Home theme selector must expose exactly seven designs');
     }
     if ((await editor.locator('[data-mobile-theme-module]').count()) !== 5) {
       throw new Error('Phone/Home theme selector must expose five supported optional modules');
