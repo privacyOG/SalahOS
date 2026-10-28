@@ -79,7 +79,7 @@ export function StructuredSplitBoard({
   const obligatoryPrayers = data.prayers.filter((prayer) => prayer.name !== 'sunrise');
   const iqamahAvailable =
     obligatoryPrayers.some((prayer) => prayer.iqamahLocalMinutes !== null) ||
-    data.nextPrayer?.iqamahLocalMinutes != null;
+    (data.nextPrayer?.iqamahLocalMinutes ?? null) !== null;
   const nextPrayerLabel =
     data.nextPrayer === null
       ? translate(locale, 'notConfigured')
