@@ -17,7 +17,9 @@ Home Prayer Hub is a seventh SalahOS prayer-board presentation intended for home
 - Optional Jumu'ah sessions, weather and announcements when configured in the existing display system.
 - Existing offline, calculation-source and timezone presentation without a new provider dependency.
 
-The Iqamah column belongs to the dedicated prayer-board mode; the regular mobile Today screen continues to omit Iqamah in line with the previous product decision. Missing prayer values stay unavailable rather than being fabricated.
+The Iqamah column belongs to the dedicated prayer-board mode; the regular mobile Today screen continues to omit Iqamah in line with the previous product decision. When **no** congregation timings are configured, Home Prayer Hub hides the Iqamah-only placeholders while keeping the next-prayer countdown and all five start times visible. As soon as mosque-sourced congregation times are present, those times are displayed. Missing prayer starts stay unavailable rather than being fabricated.
+
+The Home Hub classic colour scheme explicitly maintains contrast for the next-prayer name and countdown; automated visual acceptance checks those computed colours on the English 16:10 scenario.
 
 ## Acceptance matrix
 
