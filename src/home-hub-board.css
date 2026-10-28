@@ -13,6 +13,16 @@
   --structured-shadow: 0 12px 32px rgb(0 0 0 / 20%);
 }
 
+/* Use explicit high-contrast text for the classic home theme. */
+.structured-split-board.home-hub-board[data-structured-variant='classic']
+  .structured-split-board__next-heading strong,
+.structured-split-board.home-hub-board[data-structured-variant='classic']
+  .structured-split-board__countdown strong,
+.structured-split-board.home-hub-board[data-structured-variant='classic']
+  .structured-split-board__brand {
+  color: #ffe2a0;
+}
+
 .home-hub-board {
   gap: clamp(0.55rem, 1vw, 1rem);
   padding: clamp(0.75rem, 1.3vw, 1.5rem);
