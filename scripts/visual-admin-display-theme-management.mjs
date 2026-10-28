@@ -15,6 +15,8 @@ if (!playwrightModule) {
 const { chromium } = await import(pathToFileURL(playwrightModule).href);
 const applicationOrigin = new URL(baseUrl).origin;
 const fixtureOrigin = applicationOrigin;
+const EXPECTED_DISPLAY_TEMPLATES = 7;
+
 const fixtureToken = 'stage24-theme-fixture-token'.padEnd(48, 'x');
 
 function settings(locale) {
@@ -314,8 +316,8 @@ async function captureDesktop(browser) {
     await connectFixture(page);
     await page.getByText('Managed fleet loaded.').waitFor({ state: 'visible' });
 
-    if ((await page.locator('[data-template-card]').count()) !== 6) {
-      throw new Error('Stage 24.3 gallery did not expose all six display themes');
+    if ((await page.locator('[data-template-card]').count()) !== EXPECTED_DISPLAY_TEMPLATES) {
+      throw new Error('Stage 24.3 gallery did not expose all seven display themes');
     }
     if ((await page.locator('.admin-theme-display-card').count()) !== 3) {
       throw new Error('Stage 24.3 fixture fleet did not render all display targets');
@@ -426,7 +428,7 @@ async function captureDesktop(browser) {
     if (pageErrors.length > 0) throw new Error(`desktop page errors: ${pageErrors.join(' | ')}`);
 
     return {
-      galleryThemes: 6,
+      galleryThemes: EXPECTED_DISPLAY_TEMPLATES,
       compatibleTargets: 2,
       blockedTargets: 1,
       bulkPublications: state.displayPublications.length,
@@ -454,7 +456,7 @@ async function captureResponsive(browser, scenario) {
       waitUntil: 'networkidle',
     });
     await connectFixture(page);
-    if ((await page.locator('[data-template-card]').count()) !== 6) {
+    if ((await page.locator('[data-template-card]').count()) !== EXPECTED_DISPLAY_TEMPLATES) {
       throw new Error(`${scenario.name} lost theme gallery entries`);
     }
     if (
