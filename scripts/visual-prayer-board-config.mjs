@@ -150,10 +150,10 @@ async function assertHomeHubGeometry(page, scenario) {
   if (scenario.width >= 1180) {
     if (
       metrics.cards.some((card) => Math.abs(card.top - metrics.cards[0].top) > 3) ||
-      metrics.clock.right > metrics.next.left + 3 &&
+      (metrics.clock.right > metrics.next.left + 3 &&
         metrics.next.right > metrics.clock.left + 3 &&
         metrics.clock.bottom > metrics.next.top + 3 &&
-        metrics.next.bottom > metrics.clock.top + 3
+        metrics.next.bottom > metrics.clock.top + 3)
     ) {
       throw new Error(`${scenario.name} lost its horizontal five-prayer/clock layout`);
     }
