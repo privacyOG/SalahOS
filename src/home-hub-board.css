@@ -178,6 +178,22 @@
   font-weight: 750;
 }
 
+/* Purely calculated schedules have no congregation times to announce.
+   Keep the next prayer and five start times visible without repeated placeholders. */
+.home-hub-board[data-iqamah-available='false'] .structured-prayer-row__iqamah {
+  display: none;
+}
+
+.home-hub-board[data-iqamah-available='false'] .structured-split-board__next-times {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.home-hub-board[data-iqamah-available='false']
+  .structured-split-board__next-times
+  div:last-child {
+  display: none;
+}
+
 .home-hub-board .structured-prayer-row.is-current {
   background: var(--structured-accent-soft);
 }
