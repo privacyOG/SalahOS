@@ -53,9 +53,7 @@ describe('configured prayer-board renderer', () => {
   it('distinguishes mosque Iqamah times from unconfigured calculated schedules', () => {
     const config = parsePrayerBoardTemplateConfig({ version: 1, templateId: 'home-hub' });
     const sourced = buildPrayerBoardPreviewData('near-athan');
-    const withIqamah = renderToStaticMarkup(
-      <PrayerBoardRenderer data={sourced} config={config} />,
-    );
+    const withIqamah = renderToStaticMarkup(<PrayerBoardRenderer data={sourced} config={config} />);
     const withoutIqamah = {
       ...sourced,
       prayers: sourced.prayers.map((prayer) => ({
@@ -63,9 +61,7 @@ describe('configured prayer-board renderer', () => {
         iqamahLocalMinutes: null,
       })),
       nextPrayer:
-        sourced.nextPrayer === null
-          ? null
-          : { ...sourced.nextPrayer, iqamahLocalMinutes: null },
+        sourced.nextPrayer === null ? null : { ...sourced.nextPrayer, iqamahLocalMinutes: null },
     };
     const calculated = renderToStaticMarkup(
       <PrayerBoardRenderer data={withoutIqamah} config={config} />,
