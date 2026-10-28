@@ -118,7 +118,7 @@ async function assertHomeHubGeometry(page, scenario) {
       return Array.from(row.querySelectorAll('strong'))
         .filter((item) => item.getClientRects().length > 0)
         .every((item) => {
-        const rect = bounds(item);
+          const rect = bounds(item);
           return rect.left >= parent.left - 3 && rect.right <= parent.right + 3;
         });
     };
