@@ -120,21 +120,28 @@ async function assertHomeHubGeometry(page, scenario) {
         return rect.left >= parent.left - 3 && rect.right <= parent.right + 3;
       });
     };
-    return board === null || timetable === null || clock === null || next === null ||
-        prayerTitle === null || countdown === null
-      ? null
-      : {
-          viewportWidth: window.innerWidth,
-          variant: board.getAttribute('data-structured-variant'),
-          prayerTitleColor: getComputedStyle(prayerTitle).color,
-          countdownColor: getComputedStyle(countdown).color,
-          root: bounds(board),
-          timetable: bounds(timetable),
-          cards: rows.map(bounds),
-          textFits: rows.map(textFitsRow),
-          clock: bounds(clock),
-          next: bounds(next),
-        };
+    if (
+      board === null ||
+      timetable === null ||
+      clock === null ||
+      next === null ||
+      prayerTitle === null ||
+      countdown === null
+    ) {
+      return null;
+    }
+    return {
+      viewportWidth: window.innerWidth,
+      variant: board.getAttribute('data-structured-variant'),
+      prayerTitleColor: getComputedStyle(prayerTitle).color,
+      countdownColor: getComputedStyle(countdown).color,
+      root: bounds(board),
+      timetable: bounds(timetable),
+      cards: rows.map(bounds),
+      textFits: rows.map(textFitsRow),
+      clock: bounds(clock),
+      next: bounds(next),
+    };
   });
   if (metrics === null || metrics.cards.length !== 5) {
     throw new Error(`${scenario.name} is missing the complete Home Hub prayer layout`);
