@@ -34,7 +34,13 @@
 - [ ] H14 Review merge and prerelease readiness only after required checks pass.
 - [x] H15 Refresh vulnerable Capacitor, Vite and Vitest direct dependencies and npm lockfile; an isolated GitHub runner reported **0 npm audit vulnerabilities** on 2026-10-28.
 - [ ] H16 Confirm the updated lockfile passes complete Quality Gate, Android/iOS build and visual regression on the final feature SHA. Note the audited Capacitor CLI 8.4.3 and runtime 8.5.3 compatibility must be tested.
-- [ ] H17 Review additional Pro Hub-style experiences (Adhan voice selection, theme catalogue, Hijri/date settings, reminder timing and on-device brightness) against existing SalahOS features; ship only verified and properly licensed additions.
+- [x] H17 Review IMAN Pro Hub's published prayer-time feature set (20+ voices, 10+ designs, local times, countdown and Iqamah reminders). SalahOS currently provides 2 licensed packaged Adhans + private upload and 7 first-party prayer-board designs with accent variants; do not falsely claim equivalent catalogue counts.
+- [x] H18 Update managed-display visual acceptance from six to seven templates, keeping all original designs.
+- [x] H19 Add unique Home Hub selector thumbnail and targeted 1280 × 800/1920 × 1080/390 × 844 English/Arabic visual acceptance, including clipped text/card geometry.
+- [x] H20 Inspect initial 1280 × 800 Playwright screenshots; identify English classic next-prayer/countdown contrast issue, commit explicit high-contrast colour fix and regression assertion. Fresh evidence still required before acceptance.
+- [x] H21 Hide repeated unconfigured congregation placeholders in Home Hub when there are no sourced Iqamah times. Preserve real mosque Iqamah and original Structured Split behaviour; automated tests added.
+- [ ] H22 Verify fresh full visual regression and native build acceptance on the exact final PR head, then reconcile screenshot findings and outstanding source-dependent failures.
+- [ ] H23 Evaluate adding further legally cleared Muazzin recordings and optional Iqamah-reminder controls on dedicated home displays only, without claiming vendor feature parity or changing ordinary mobile Today.
 
 ## Existing independent blockers and carry-overs
 
