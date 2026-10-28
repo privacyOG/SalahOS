@@ -324,6 +324,37 @@
   height: 65%;
 }
 
+/* Home Hub thumbnail mirrors its 16:10 clock, hero and five-prayer strip. */
+.prayer-board-template-thumbnail--home-hub {
+  aspect-ratio: 16 / 10;
+  color: #f5cb79;
+  background: radial-gradient(circle at 50% 0, #244553, #071b25 78%);
+}
+
+.prayer-board-template-thumbnail--home-hub .prayer-board-template-thumbnail__clock {
+  inset: 21% auto auto 6%;
+  font-size: clamp(1rem, 2.65vw, 2.35rem);
+}
+
+.prayer-board-template-thumbnail--home-hub .prayer-board-template-thumbnail__focus {
+  inset: 17% 5% auto auto;
+  width: 43%;
+  height: 38%;
+  border-color: #f5cb79;
+  background: rgba(245, 203, 121, 0.13);
+}
+
+.prayer-board-template-thumbnail--home-hub .prayer-board-template-thumbnail__rows {
+  inset: auto 5% 8%;
+  height: 28%;
+}
+
+.prayer-board-template-thumbnail--home-hub .prayer-board-template-thumbnail__rows i {
+  border: 1px solid rgba(245, 203, 121, 0.55);
+  background: rgba(245, 203, 121, 0.18);
+  opacity: 1;
+}
+
 .prayer-board-template-thumbnail--scenic-spiritual {
   color: #fff7e9;
   background:
