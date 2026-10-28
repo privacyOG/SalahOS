@@ -107,6 +107,8 @@ async function assertHomeHubGeometry(page, scenario) {
     const rows = Array.from(board?.querySelectorAll('.structured-prayer-row') ?? []);
     const clock = board?.querySelector('.structured-split-board__clock');
     const next = board?.querySelector('.structured-split-board__next');
+    const prayerTitle = board?.querySelector('.structured-split-board__next-heading strong');
+    const countdown = board?.querySelector('.structured-split-board__countdown strong');
     const bounds = (element) => {
       const rect = element.getBoundingClientRect();
       return { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom };
@@ -118,10 +120,14 @@ async function assertHomeHubGeometry(page, scenario) {
         return rect.left >= parent.left - 3 && rect.right <= parent.right + 3;
       });
     };
-    return board === null || timetable === null || clock === null || next === null
+    return board === null || timetable === null || clock === null || next === null ||
+        prayerTitle === null || countdown === null
       ? null
       : {
           viewportWidth: window.innerWidth,
+          variant: board.getAttribute('data-structured-variant'),
+          prayerTitleColor: getComputedStyle(prayerTitle).color,
+          countdownColor: getComputedStyle(countdown).color,
           root: bounds(board),
           timetable: bounds(timetable),
           cards: rows.map(bounds),
@@ -132,6 +138,13 @@ async function assertHomeHubGeometry(page, scenario) {
   });
   if (metrics === null || metrics.cards.length !== 5) {
     throw new Error(`${scenario.name} is missing the complete Home Hub prayer layout`);
+  }
+  if (
+    metrics.variant === 'classic' &&
+    (metrics.prayerTitleColor !== 'rgb(255, 226, 160)' ||
+      metrics.countdownColor !== 'rgb(255, 226, 160)')
+  ) {
+    throw new Error(`${scenario.name} classic next-prayer text lost its readable gold foreground`);
   }
   if (metrics.textFits.some((fits) => !fits)) {
     throw new Error(`${scenario.name} has a prayer value clipped inside its card`);
