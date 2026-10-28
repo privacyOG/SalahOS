@@ -115,10 +115,12 @@ async function assertHomeHubGeometry(page, scenario) {
     };
     const textFitsRow = (row) => {
       const parent = bounds(row);
-      return Array.from(row.querySelectorAll('strong')).every((item) => {
+      return Array.from(row.querySelectorAll('strong'))
+        .filter((item) => item.getClientRects().length > 0)
+        .every((item) => {
         const rect = bounds(item);
-        return rect.left >= parent.left - 3 && rect.right <= parent.right + 3;
-      });
+          return rect.left >= parent.left - 3 && rect.right <= parent.right + 3;
+        });
     };
     if (
       board === null ||
@@ -133,6 +135,10 @@ async function assertHomeHubGeometry(page, scenario) {
     return {
       viewportWidth: window.innerWidth,
       variant: board.getAttribute('data-structured-variant'),
+      iqamahAvailable: board.getAttribute('data-iqamah-available'),
+      iqamahHidden: Array.from(board.querySelectorAll('.structured-prayer-row__iqamah')).every(
+        (element) => getComputedStyle(element).display === 'none',
+      ),
       prayerTitleColor: getComputedStyle(prayerTitle).color,
       countdownColor: getComputedStyle(countdown).color,
       root: bounds(board),
@@ -152,6 +158,9 @@ async function assertHomeHubGeometry(page, scenario) {
       metrics.countdownColor !== 'rgb(255, 226, 160)')
   ) {
     throw new Error(`${scenario.name} classic next-prayer text lost its readable gold foreground`);
+  }
+  if (metrics.iqamahAvailable === 'false' && !metrics.iqamahHidden) {
+    throw new Error(`${scenario.name} exposed unconfigured congregation placeholders`);
   }
   if (metrics.textFits.some((fits) => !fits)) {
     throw new Error(`${scenario.name} has a prayer value clipped inside its card`);
