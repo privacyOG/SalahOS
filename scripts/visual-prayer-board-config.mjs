@@ -99,6 +99,67 @@ async function overflowState(page) {
   }));
 }
 
+async function assertHomeHubGeometry(page, scenario) {
+  if (scenario.templateId !== 'home-hub') return;
+  const metrics = await page.evaluate(() => {
+    const board = document.querySelector('.home-hub-board');
+    const timetable = board?.querySelector('.structured-split-board__timetable');
+    const rows = Array.from(board?.querySelectorAll('.structured-prayer-row') ?? []);
+    const clock = board?.querySelector('.structured-split-board__clock');
+    const next = board?.querySelector('.structured-split-board__next');
+    const bounds = (element) => {
+      const rect = element.getBoundingClientRect();
+      return { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom };
+    };
+    const textFitsRow = (row) => {
+      const parent = bounds(row);
+      return Array.from(row.querySelectorAll('strong')).every((item) => {
+        const rect = bounds(item);
+        return rect.left >= parent.left - 3 && rect.right <= parent.right + 3;
+      });
+    };
+    return board === null || timetable === null || clock === null || next === null
+      ? null
+      : {
+          viewportWidth: window.innerWidth,
+          root: bounds(board),
+          timetable: bounds(timetable),
+          cards: rows.map(bounds),
+          textFits: rows.map(textFitsRow),
+          clock: bounds(clock),
+          next: bounds(next),
+        };
+  });
+  if (metrics === null || metrics.cards.length !== 5) {
+    throw new Error(`${scenario.name} is missing the complete Home Hub prayer layout`);
+  }
+  if (metrics.textFits.some((fits) => !fits)) {
+    throw new Error(`${scenario.name} has a prayer value clipped inside its card`);
+  }
+  if (
+    metrics.cards.some(
+      (card) =>
+        card.left < metrics.timetable.left - 3 ||
+        card.right > metrics.timetable.right + 3 ||
+        card.top < metrics.timetable.top - 3 ||
+        card.bottom > metrics.timetable.bottom + 3,
+    )
+  ) {
+    throw new Error(`${scenario.name} prayer cards escaped the timetable panel`);
+  }
+  if (scenario.width >= 1180) {
+    if (
+      metrics.cards.some((card) => Math.abs(card.top - metrics.cards[0].top) > 3) ||
+      metrics.clock.right > metrics.next.left + 3 &&
+        metrics.next.right > metrics.clock.left + 3 &&
+        metrics.clock.bottom > metrics.next.top + 3 &&
+        metrics.next.bottom > metrics.clock.top + 3
+    ) {
+      throw new Error(`${scenario.name} lost its horizontal five-prayer/clock layout`);
+    }
+  }
+}
+
 async function validateRuntime(browser, scenario) {
   const context = await browser.newContext({
     viewport: { width: scenario.width ?? 1920, height: scenario.height ?? 1080 },
@@ -179,6 +240,7 @@ async function validateRuntime(browser, scenario) {
       throw new Error(`${scenario.name} external requests: ${JSON.stringify(externalRequests)}`);
     }
 
+    await assertHomeHubGeometry(page, scenario);
     await capture(page, scenario.name);
     return {
       name: scenario.name,
@@ -211,6 +273,22 @@ try {
       mosqueName: 'مسجد صلاح',
       width: 1280,
       height: 800,
+    },
+    {
+      name: 'home-hub-1920x1080-en',
+      templateId: 'home-hub',
+      locale: 'en',
+      mosqueName: 'SalahOS Community Masjid',
+      width: 1920,
+      height: 1080,
+    },
+    {
+      name: 'home-hub-390x844-ar-rtl',
+      templateId: 'home-hub',
+      locale: 'ar',
+      mosqueName: 'مسجد صلاح',
+      width: 390,
+      height: 844,
     },
     {
       name: 'prayer-board-config-runtime-en',
