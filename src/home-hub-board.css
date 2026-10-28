@@ -15,9 +15,11 @@
 
 /* Use explicit high-contrast text for the classic home theme. */
 .structured-split-board.home-hub-board[data-structured-variant='classic']
-  .structured-split-board__next-heading strong,
+  .structured-split-board__next-heading
+  strong,
 .structured-split-board.home-hub-board[data-structured-variant='classic']
-  .structured-split-board__countdown strong,
+  .structured-split-board__countdown
+  strong,
 .structured-split-board.home-hub-board[data-structured-variant='classic']
   .structured-split-board__brand {
   color: #ffe2a0;
