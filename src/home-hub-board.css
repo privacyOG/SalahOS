@@ -188,9 +188,7 @@
   grid-template-columns: minmax(0, 1fr);
 }
 
-.home-hub-board[data-iqamah-available='false']
-  .structured-split-board__next-times
-  div:last-child {
+.home-hub-board[data-iqamah-available='false'] .structured-split-board__next-times div:last-child {
   display: none;
 }
 
