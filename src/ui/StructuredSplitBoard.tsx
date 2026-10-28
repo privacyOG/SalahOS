@@ -77,6 +77,9 @@ export function StructuredSplitBoard({
 }: StructuredSplitBoardProps) {
   const civilDate = new Date(`${data.civilDateIso}T00:00:00.000Z`);
   const obligatoryPrayers = data.prayers.filter((prayer) => prayer.name !== 'sunrise');
+  const iqamahAvailable =
+    obligatoryPrayers.some((prayer) => prayer.iqamahLocalMinutes !== null) ||
+    data.nextPrayer?.iqamahLocalMinutes != null;
   const nextPrayerLabel =
     data.nextPrayer === null
       ? translate(locale, 'notConfigured')
@@ -87,6 +90,7 @@ export function StructuredSplitBoard({
       className={`structured-split-board${variantId === 'home-hub' ? ' home-hub-board' : ''}`}
       data-prayer-board-template={variantId}
       data-structured-variant={displayTheme}
+      data-iqamah-available={iqamahAvailable ? 'true' : 'false'}
     >
       <header className="structured-split-board__masthead">
         <div className="structured-split-board__identity">
