@@ -109,6 +109,9 @@ def simctl(deadline, timeout_seconds, *arguments, check=True):
             timeout=bounded,
         )
     except subprocess.TimeoutExpired:
+        if not check:
+            log('Optional Simulator command timed out; proceeding: {}'.format(printable))
+            return ''
         raise AcceptanceError('{} exceeded {:.0f} seconds.'.format(printable, bounded))
 
     if completed.stderr.strip():
@@ -336,7 +339,7 @@ def exercise_once(deadline, profile, runtime, device_type, app_path, bundle_id, 
 
         # An unavailable appearance preference is a cosmetic limitation of the
         # runtime, not a failure of the application under test.
-        simctl(deadline, 60, 'ui', udid, 'appearance', profile['appearance'], check=False)
+        simctl(deadline, 15, 'ui', udid, 'appearance', profile['appearance'], check=False)
 
         simctl(deadline, 180, 'install', udid, app_path)
         container_path = simctl(deadline, 60, 'get_app_container', udid, bundle_id, 'app')
