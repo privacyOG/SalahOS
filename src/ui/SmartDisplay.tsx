@@ -80,6 +80,7 @@ function smartDisplayTemplateOverride(search: string): SmartDisplayTemplateId | 
     requested === 'minimal-modern' ||
     requested === 'bold-countdown-focus' ||
     requested === 'structured-split-board' ||
+    requested === 'home-hub' ||
     requested === 'scenic-spiritual' ||
     requested === 'family-classroom'
   ) {

@@ -12,6 +12,7 @@ export type PrayerBoardTemplateId =
   | 'minimal-modern'
   | 'bold-countdown-focus'
   | 'structured-split-board'
+  | 'home-hub'
   | 'scenic-spiritual'
   | 'family-classroom';
 
@@ -107,6 +108,7 @@ export const prayerBoardTemplateRegistry: readonly PrayerBoardTemplateDefinition
   definition('minimal-modern', 'Minimal Modern', 'quiet-grid'),
   definition('bold-countdown-focus', 'Bold Countdown Focus', 'countdown-field'),
   definition('structured-split-board', 'Structured Split Board', 'structured-lines'),
+  definition('home-hub', 'Home Prayer Hub', 'structured-lines'),
   definition('scenic-spiritual', 'Scenic Spiritual', 'scenic-gradient'),
   definition('family-classroom', 'Family & Classroom', 'classroom-pattern'),
 ]);

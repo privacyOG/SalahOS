@@ -13,6 +13,7 @@ import type { SmartDisplayThemeId } from '../platform/smartDisplayTheme';
 import { BidiText } from './BidiText';
 
 import '../structured-split-board.css';
+import '../home-hub-board.css';
 
 const prayerTranslationKeys: Readonly<Record<PrayerName, TranslationKey>> = {
   fajr: 'prayerFajr',
@@ -34,6 +35,7 @@ export interface StructuredSplitBoardProps {
   readonly locale: Locale;
   readonly timeFormat: PrayerBoardTimeFormat;
   readonly displayTheme: SmartDisplayThemeId;
+  readonly variantId?: 'structured-split-board' | 'home-hub';
 }
 
 function normalizedDisplayMinutes(minutes: number): number {
@@ -71,9 +73,13 @@ export function StructuredSplitBoard({
   locale,
   timeFormat,
   displayTheme,
+  variantId = 'structured-split-board',
 }: StructuredSplitBoardProps) {
   const civilDate = new Date(`${data.civilDateIso}T00:00:00.000Z`);
   const obligatoryPrayers = data.prayers.filter((prayer) => prayer.name !== 'sunrise');
+  const iqamahAvailable =
+    obligatoryPrayers.some((prayer) => prayer.iqamahLocalMinutes !== null) ||
+    (data.nextPrayer?.iqamahLocalMinutes ?? null) !== null;
   const nextPrayerLabel =
     data.nextPrayer === null
       ? translate(locale, 'notConfigured')
@@ -81,9 +87,10 @@ export function StructuredSplitBoard({
 
   return (
     <div
-      className="structured-split-board"
-      data-prayer-board-template="structured-split-board"
+      className={`structured-split-board${variantId === 'home-hub' ? ' home-hub-board' : ''}`}
+      data-prayer-board-template={variantId}
       data-structured-variant={displayTheme}
+      data-iqamah-available={iqamahAvailable ? 'true' : 'false'}
     >
       <header className="structured-split-board__masthead">
         <div className="structured-split-board__identity">
@@ -130,9 +137,19 @@ export function StructuredSplitBoard({
                     {stateLabel !== null && <span>{stateLabel}</span>}
                   </div>
                   <div className="structured-prayer-row__start">
+                    {variantId === 'home-hub' && (
+                      <span className="home-hub-board__time-label">
+                        {translate(locale, 'prayerStart')}
+                      </span>
+                    )}
                     <strong>{displayTime(prayer.startLocalMinutes, locale, timeFormat)}</strong>
                   </div>
                   <div className="structured-prayer-row__iqamah">
+                    {variantId === 'home-hub' && (
+                      <span className="home-hub-board__time-label">
+                        {translate(locale, 'iqamah')}
+                      </span>
+                    )}
                     <strong>
                       {prayer.iqamahLocalMinutes === null
                         ? translate(locale, 'noIqamah')

@@ -1,0 +1,286 @@
+/* Home Prayer Hub: SalahOS's own 16:10 prayer-clock layout.
+   Works with the existing offline/local mosque time engine and all display accents. */
+.home-hub-board[data-structured-variant='classic'] {
+  --structured-bg: #071b25;
+  --structured-panel: #102c38;
+  --structured-panel-strong: #ffe2a0;
+  --structured-text: #f4f8f8;
+  --structured-muted: #bdd0d3;
+  --structured-line: #385662;
+  --structured-accent: #f5cb79;
+  --structured-accent-soft: rgb(245 203 121 / 12%);
+  --structured-next: #f5cb79;
+  --structured-shadow: 0 12px 32px rgb(0 0 0 / 20%);
+}
+
+/* Use explicit high-contrast text for the classic home theme. */
+.structured-split-board.home-hub-board[data-structured-variant='classic']
+  .structured-split-board__next-heading
+  strong,
+.structured-split-board.home-hub-board[data-structured-variant='classic']
+  .structured-split-board__countdown
+  strong,
+.structured-split-board.home-hub-board[data-structured-variant='classic']
+  .structured-split-board__brand {
+  color: #ffe2a0;
+}
+
+.home-hub-board {
+  gap: clamp(0.55rem, 1vw, 1rem);
+  padding: clamp(0.75rem, 1.3vw, 1.5rem);
+  background-image:
+    radial-gradient(
+      circle at 50% -15%,
+      color-mix(in srgb, var(--structured-accent) 17%, transparent),
+      transparent 53%
+    ),
+    linear-gradient(
+      155deg,
+      var(--structured-bg),
+      color-mix(in srgb, var(--structured-bg) 85%, black)
+    );
+}
+
+.home-hub-board .structured-split-board__masthead {
+  align-items: center;
+  padding-inline: 0.3rem;
+}
+
+.home-hub-board .structured-split-board__identity {
+  align-items: center;
+}
+
+.home-hub-board .structured-split-board__layout {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1.1fr) minmax(14rem, 0.9fr);
+  gap: clamp(0.5rem, 1vw, 0.9rem);
+}
+
+.home-hub-board .structured-split-board__rail {
+  grid-row: 1;
+  grid-template-columns: minmax(0, 0.92fr) minmax(0, 1.14fr) minmax(12rem, 0.67fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: clamp(0.5rem, 0.9vw, 0.85rem);
+}
+
+.home-hub-board .structured-split-board__clock,
+.home-hub-board .structured-split-board__next {
+  padding: clamp(0.8rem, 1.4vw, 1.4rem);
+}
+
+.home-hub-board .structured-split-board__clock > strong {
+  font-size: clamp(2.8rem, 5vw, 6rem);
+  letter-spacing: -0.065em;
+}
+
+.home-hub-board .structured-split-board__next-heading strong {
+  font-size: clamp(1.75rem, 3.2vw, 3.6rem);
+}
+
+.home-hub-board .structured-split-board__countdown {
+  align-items: flex-start;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+
+.home-hub-board .structured-split-board__countdown strong {
+  font-size: clamp(2.4rem, 4.6vw, 5rem);
+}
+
+.home-hub-board .structured-split-board__solar {
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+}
+
+.home-hub-board .structured-split-board__solar > div {
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+}
+
+.home-hub-board .structured-split-board__solar > div + div {
+  border-inline-start: 0;
+  border-block-start: 1px solid var(--structured-line);
+}
+
+.home-hub-board .structured-split-board__jumuah {
+  grid-column: 1 / -1;
+  grid-row: 2;
+}
+
+.home-hub-board .structured-split-board__timetable {
+  grid-row: 2;
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.home-hub-board .structured-prayer-table__head {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  border: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.home-hub-board .structured-prayer-table__rows {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-rows: minmax(0, 1fr);
+}
+
+.home-hub-board .structured-prayer-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+  gap: 0.55rem;
+  padding: clamp(0.6rem, 1.1vw, 1.2rem);
+  border-bottom: 0;
+  border-inline-end: 1px solid var(--structured-line);
+  text-align: center;
+}
+
+.home-hub-board .structured-prayer-row:last-child {
+  border-inline-end: 0;
+}
+
+.home-hub-board .structured-prayer-row__name {
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.home-hub-board .structured-prayer-row__name strong {
+  font-size: clamp(1.25rem, 2vw, 2.4rem);
+}
+
+.home-hub-board .structured-prayer-row__start,
+.home-hub-board .structured-prayer-row__iqamah {
+  display: grid;
+  gap: 0.25rem;
+  min-width: 0;
+}
+
+.home-hub-board .structured-prayer-row__start strong {
+  font-size: clamp(1.5rem, 2.45vw, 3rem);
+}
+
+.home-hub-board .structured-prayer-row__iqamah strong {
+  font-size: clamp(1.2rem, 1.8vw, 2.2rem);
+}
+
+.home-hub-board__time-label {
+  color: var(--structured-muted);
+  font-size: clamp(0.68rem, 0.84vw, 0.95rem);
+  font-weight: 750;
+}
+
+/* Purely calculated schedules have no congregation times to announce.
+   Keep the next prayer and five start times visible without repeated placeholders. */
+.home-hub-board[data-iqamah-available='false'] .structured-prayer-row__iqamah {
+  display: none;
+}
+
+.home-hub-board[data-iqamah-available='false'] .structured-split-board__next-times {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.home-hub-board[data-iqamah-available='false'] .structured-split-board__next-times div:last-child {
+  display: none;
+}
+
+.home-hub-board .structured-prayer-row.is-current {
+  background: var(--structured-accent-soft);
+}
+
+.home-hub-board .structured-prayer-row.is-next {
+  background: color-mix(in srgb, var(--structured-next) 12%, var(--structured-panel));
+  outline: 3px solid var(--structured-next);
+  outline-offset: -3px;
+}
+
+.home-hub-board .structured-split-board__footer {
+  font-size: clamp(0.7rem, 0.9vw, 0.95rem);
+}
+
+@media (max-width: 1100px) {
+  .home-hub-board {
+    min-height: 100%;
+    overflow: visible;
+  }
+
+  .home-hub-board .structured-split-board__layout {
+    grid-template-rows: auto auto;
+  }
+
+  .home-hub-board .structured-split-board__rail {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto;
+  }
+
+  .home-hub-board .structured-split-board__solar {
+    grid-column: 1 / -1;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: auto;
+  }
+
+  .home-hub-board .structured-split-board__solar > div + div {
+    border-block-start: 0;
+    border-inline-start: 1px solid var(--structured-line);
+  }
+
+  .home-hub-board .structured-prayer-row__start strong {
+    font-size: clamp(1.35rem, 2.5vw, 2.3rem);
+  }
+}
+
+@media (max-width: 680px), (max-height: 500px) {
+  .home-hub-board .structured-split-board__rail,
+  .home-hub-board .structured-split-board__solar {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .home-hub-board .structured-split-board__solar > div + div {
+    border-inline-start: 0;
+    border-block-start: 1px solid var(--structured-line);
+  }
+
+  .home-hub-board .structured-prayer-table__rows {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: repeat(5, auto);
+  }
+
+  .home-hub-board .structured-prayer-row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) repeat(2, minmax(0, 0.9fr));
+    padding: 0.85rem 0.7rem;
+    border-bottom: 1px solid var(--structured-line);
+    border-inline-end: 0;
+    text-align: start;
+  }
+
+  .home-hub-board .structured-prayer-row__name {
+    align-items: flex-start;
+  }
+
+  .home-hub-board .structured-prayer-row__start strong,
+  .home-hub-board .structured-prayer-row__iqamah strong {
+    font-size: clamp(1.1rem, 4vw, 1.7rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .home-hub-board * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+@media (forced-colors: active) {
+  .home-hub-board .structured-prayer-row.is-next {
+    outline-color: Highlight;
+  }
+}

@@ -33,6 +33,45 @@ describe('configured prayer-board renderer', () => {
     expect(markup).toContain('data-family-variant="sandstone"');
   });
 
+  it('retains five sourced prayer rows in the selectable home hub design', () => {
+    const config = parsePrayerBoardTemplateConfig({
+      version: 1,
+      templateId: 'home-hub',
+      primaryLocale: 'en',
+      timeFormat: 'h23',
+      accentPreset: 'midnight',
+    });
+    const html = renderToStaticMarkup(
+      <PrayerBoardRenderer data={buildPrayerBoardPreviewData('near-athan')} config={config} />,
+    );
+    expect(html).toContain('data-prayer-board-template="home-hub"');
+    expect(html).toContain('data-structured-variant="midnight"');
+    expect(html.match(/data-prayer="(?:fajr|dhuhr|asr|maghrib|isha)"/g)).toHaveLength(5);
+    expect(html).toContain('home-hub-board__time-label');
+  });
+
+  it('distinguishes mosque Iqamah times from unconfigured calculated schedules', () => {
+    const config = parsePrayerBoardTemplateConfig({ version: 1, templateId: 'home-hub' });
+    const sourced = buildPrayerBoardPreviewData('near-athan');
+    const withIqamah = renderToStaticMarkup(<PrayerBoardRenderer data={sourced} config={config} />);
+    const withoutIqamah = {
+      ...sourced,
+      prayers: sourced.prayers.map((prayer) => ({
+        ...prayer,
+        iqamahLocalMinutes: null,
+      })),
+      nextPrayer:
+        sourced.nextPrayer === null ? null : { ...sourced.nextPrayer, iqamahLocalMinutes: null },
+    };
+    const calculated = renderToStaticMarkup(
+      <PrayerBoardRenderer data={withoutIqamah} config={config} />,
+    );
+
+    expect(withIqamah).toContain('data-iqamah-available="true"');
+    expect(calculated).toContain('data-iqamah-available="false"');
+    expect(calculated.match(/data-prayer="(?:fajr|dhuhr|asr|maghrib|isha)"/g)).toHaveLength(5);
+  });
+
   it('maps controlled accent presets onto validated display variants', () => {
     expect(
       displayThemeForPrayerBoardConfig(

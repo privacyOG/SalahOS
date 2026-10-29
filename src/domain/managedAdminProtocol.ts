@@ -86,6 +86,7 @@ const TEMPLATE_IDS = new Set<PrayerBoardTemplateId>([
   'minimal-modern',
   'bold-countdown-focus',
   'structured-split-board',
+  'home-hub',
   'scenic-spiritual',
   'family-classroom',
 ]);

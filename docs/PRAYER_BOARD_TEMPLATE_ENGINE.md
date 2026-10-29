@@ -10,16 +10,17 @@ The prayer-board layer performs no network access, geolocation, storage reads or
 
 ## Stable template registry
 
-Version 1 reserves six stable identifiers for the required SalahOS designs:
+Version 1 retains the six original stable identifiers and adds a seventh Home Prayer Hub design:
 
 - `heritage-classic`
 - `minimal-modern`
 - `bold-countdown-focus`
 - `structured-split-board`
+- `home-hub`
 - `scenic-spiritual`
 - `family-classroom`
 
-Each registry entry has a template version, the four supported primary locales (`en`, `ar`, `tr`, `id`), English/Arabic bilingual capability, supported modules, default-visible modules and a first-party built-in artwork fallback. The six visual designs consume these identifiers rather than creating independent data models.
+Each registry entry has a template version, the four supported primary locales (`en`, `ar`, `tr`, `id`), English/Arabic bilingual capability, supported modules, default-visible modules and a first-party built-in artwork fallback. The seven visual designs consume these identifiers rather than creating independent data models.
 
 ## Modules
 

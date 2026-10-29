@@ -86,8 +86,10 @@ export function PrayerBoardRenderer({
         timeFormat={timeFormat}
         displayTheme={displayTheme}
       />
-    ) : normalized.templateId === 'structured-split-board' ? (
+    ) : normalized.templateId === 'structured-split-board' ||
+      normalized.templateId === 'home-hub' ? (
       <StructuredSplitBoard
+        variantId={normalized.templateId}
         data={renderedData}
         locale={locale}
         timeFormat={timeFormat}

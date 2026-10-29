@@ -42,6 +42,7 @@ function board(templateId, locale, mosqueName) {
     'minimal-modern': 'quiet-grid',
     'bold-countdown-focus': 'countdown-field',
     'structured-split-board': 'structured-lines',
+    'home-hub': 'structured-lines',
     'scenic-spiritual': 'scenic-gradient',
     'family-classroom': 'classroom-pattern',
   }[templateId];
@@ -98,9 +99,99 @@ async function overflowState(page) {
   }));
 }
 
+async function assertHomeHubGeometry(page, scenario) {
+  if (scenario.templateId !== 'home-hub') return;
+  const metrics = await page.evaluate(() => {
+    const board = document.querySelector('.home-hub-board');
+    const timetable = board?.querySelector('.structured-split-board__timetable');
+    const rows = Array.from(board?.querySelectorAll('.structured-prayer-row') ?? []);
+    const clock = board?.querySelector('.structured-split-board__clock');
+    const next = board?.querySelector('.structured-split-board__next');
+    const prayerTitle = board?.querySelector('.structured-split-board__next-heading strong');
+    const countdown = board?.querySelector('.structured-split-board__countdown strong');
+    const bounds = (element) => {
+      const rect = element.getBoundingClientRect();
+      return { left: rect.left, right: rect.right, top: rect.top, bottom: rect.bottom };
+    };
+    const textFitsRow = (row) => {
+      const parent = bounds(row);
+      return Array.from(row.querySelectorAll('strong'))
+        .filter((item) => item.getClientRects().length > 0)
+        .every((item) => {
+          const rect = bounds(item);
+          return rect.left >= parent.left - 3 && rect.right <= parent.right + 3;
+        });
+    };
+    if (
+      board === null ||
+      timetable === null ||
+      clock === null ||
+      next === null ||
+      prayerTitle === null ||
+      countdown === null
+    ) {
+      return null;
+    }
+    return {
+      viewportWidth: window.innerWidth,
+      variant: board.getAttribute('data-structured-variant'),
+      iqamahAvailable: board.getAttribute('data-iqamah-available'),
+      iqamahHidden: Array.from(board.querySelectorAll('.structured-prayer-row__iqamah')).every(
+        (element) => getComputedStyle(element).display === 'none',
+      ),
+      prayerTitleColor: getComputedStyle(prayerTitle).color,
+      countdownColor: getComputedStyle(countdown).color,
+      root: bounds(board),
+      timetable: bounds(timetable),
+      cards: rows.map(bounds),
+      textFits: rows.map(textFitsRow),
+      clock: bounds(clock),
+      next: bounds(next),
+    };
+  });
+  if (metrics === null || metrics.cards.length !== 5) {
+    throw new Error(`${scenario.name} is missing the complete Home Hub prayer layout`);
+  }
+  if (
+    metrics.variant === 'classic' &&
+    (metrics.prayerTitleColor !== 'rgb(255, 226, 160)' ||
+      metrics.countdownColor !== 'rgb(255, 226, 160)')
+  ) {
+    throw new Error(`${scenario.name} classic next-prayer text lost its readable gold foreground`);
+  }
+  if (metrics.iqamahAvailable === 'false' && !metrics.iqamahHidden) {
+    throw new Error(`${scenario.name} exposed unconfigured congregation placeholders`);
+  }
+  if (metrics.textFits.some((fits) => !fits)) {
+    throw new Error(`${scenario.name} has a prayer value clipped inside its card`);
+  }
+  if (
+    metrics.cards.some(
+      (card) =>
+        card.left < metrics.timetable.left - 3 ||
+        card.right > metrics.timetable.right + 3 ||
+        card.top < metrics.timetable.top - 3 ||
+        card.bottom > metrics.timetable.bottom + 3,
+    )
+  ) {
+    throw new Error(`${scenario.name} prayer cards escaped the timetable panel`);
+  }
+  if (scenario.width >= 1180) {
+    if (
+      metrics.cards.some((card) => Math.abs(card.top - metrics.cards[0].top) > 3) ||
+      (metrics.clock.right > metrics.next.left + 3 &&
+        metrics.next.right > metrics.clock.left + 3 &&
+        metrics.clock.bottom > metrics.next.top + 3 &&
+        metrics.next.bottom > metrics.clock.top + 3)
+    ) {
+      throw new Error(`${scenario.name} lost its horizontal five-prayer/clock layout`);
+    }
+  }
+}
+
 async function validateRuntime(browser, scenario) {
   const context = await browser.newContext({
-    viewport: { width: 1920, height: 1080 },
+    viewport: { width: scenario.width ?? 1920, height: scenario.height ?? 1080 },
     reducedMotion: 'reduce',
     serviceWorkers: 'block',
   });
@@ -178,6 +269,7 @@ async function validateRuntime(browser, scenario) {
       throw new Error(`${scenario.name} external requests: ${JSON.stringify(externalRequests)}`);
     }
 
+    await assertHomeHubGeometry(page, scenario);
     await capture(page, scenario.name);
     return {
       name: scenario.name,
@@ -190,11 +282,106 @@ async function validateRuntime(browser, scenario) {
   }
 }
 
+async function verifyHomeHubTimeTransition(browser, scenario) {
+  const context = await browser.newContext({
+    viewport: { width: 1280, height: 800 },
+    timezoneId: 'Australia/Sydney',
+    reducedMotion: 'reduce',
+    serviceWorkers: 'block',
+  });
+  const page = await context.newPage();
+  try {
+    await page.clock.install({ time: new Date(scenario.initialIso) });
+    await seed(page, 'en', board('home-hub', 'en', 'SalahOS Community Masjid'));
+    await page.goto(`${baseUrl}/?mode=smart-display&template=home-hub`, {
+      waitUntil: 'networkidle',
+    });
+    await page.locator('[data-prayer-board-template="home-hub"]').waitFor({ state: 'visible' });
+    const clock = page.locator('.structured-split-board__clock > strong');
+    const date = page.locator('.structured-split-board__dates span').first();
+    const countdown = page.locator('.structured-split-board__countdown strong');
+    const before = {
+      clock: (await clock.textContent()) ?? '',
+      date: (await date.textContent()) ?? '',
+      countdown: (await countdown.textContent()) ?? '',
+    };
+    await page.clock.fastForward(20_000);
+    await page.waitForFunction((previous) => {
+      const text = document.querySelector('.structured-split-board__clock > strong')?.textContent;
+      return text !== null && text !== previous;
+    }, before.clock);
+    const after = {
+      clock: (await clock.textContent()) ?? '',
+      date: (await date.textContent()) ?? '',
+      countdown: (await countdown.textContent()) ?? '',
+    };
+    if (before.countdown === after.countdown) {
+      throw new Error(`${scenario.name} countdown did not update after clock advancement`);
+    }
+    if (scenario.expectDateChange && before.date === after.date) {
+      throw new Error(`${scenario.name} Gregorian date did not advance at Sydney midnight`);
+    }
+    if (
+      scenario.expectDstBackward &&
+      (!before.clock.includes('02:59') || !after.clock.includes('02:00'))
+    ) {
+      throw new Error(
+        `${scenario.name} did not follow Sydney daylight-saving rollback: ${JSON.stringify({ before, after })}`,
+      );
+    }
+    if (scenario.verifyOffline) {
+      await context.setOffline(true);
+      await page.evaluate(() => window.dispatchEvent(new Event('offline')));
+      await page.locator('.home-hub-board .smart-display-status').waitFor({
+        state: 'visible',
+      });
+      if ((await page.locator('.home-hub-board [data-prayer]').count()) !== 5) {
+        throw new Error('Home Hub lost prayer times when network connectivity was disabled');
+      }
+    }
+    return { name: scenario.name, before, after, offlineWhileOpen: scenario.verifyOffline };
+  } finally {
+    await context.close();
+  }
+}
+
 await mkdir(artifactDirectory, { recursive: true });
 const browser = await chromium.launch({ headless: true });
 try {
   const results = [];
   for (const scenario of [
+    {
+      name: 'home-hub-1280x800-en',
+      templateId: 'home-hub',
+      locale: 'en',
+      mosqueName: 'SalahOS Community Masjid',
+      width: 1280,
+      height: 800,
+    },
+    {
+      name: 'home-hub-1280x800-ar-rtl',
+      templateId: 'home-hub',
+      locale: 'ar',
+      mosqueName: 'مسجد صلاح',
+      width: 1280,
+      height: 800,
+    },
+    {
+      name: 'home-hub-1920x1080-en',
+      templateId: 'home-hub',
+      locale: 'en',
+      mosqueName: 'SalahOS Community Masjid',
+      width: 1920,
+      height: 1080,
+    },
+    {
+      name: 'home-hub-390x844-ar-rtl',
+      templateId: 'home-hub',
+      locale: 'ar',
+      mosqueName: 'مسجد صلاح',
+      width: 390,
+      height: 844,
+    },
     {
       name: 'prayer-board-config-runtime-en',
       templateId: 'minimal-modern',
@@ -209,6 +396,24 @@ try {
     },
   ]) {
     results.push(await validateRuntime(browser, scenario));
+  }
+  for (const scenario of [
+    {
+      name: 'home-hub-sydney-midnight-offline',
+      initialIso: '2026-10-29T12:59:50.000Z',
+      expectDateChange: true,
+      expectDstBackward: false,
+      verifyOffline: true,
+    },
+    {
+      name: 'home-hub-sydney-daylight-saving-rollback',
+      initialIso: '2026-04-04T15:59:50.000Z',
+      expectDateChange: false,
+      expectDstBackward: true,
+      verifyOffline: false,
+    },
+  ]) {
+    results.push(await verifyHomeHubTimeTransition(browser, scenario));
   }
   await writeFile(
     path.join(artifactDirectory, 'prayer-board-config-results.json'),

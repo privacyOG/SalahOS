@@ -1,10 +1,14 @@
 # SalahOS
 
+**Developer and maintainer: PrivacyOG** ([GitHub: privacyOG](https://github.com/privacyOG)).
+
 <p align="center"><img src="public/icons/salahos-512.png" width="180" alt="SalahOS logo" /></p>
 
 A cross-platform Islamic prayer-time application and smart-display ecosystem for Android, iOS/iPadOS, Raspberry Pi, TV, browser/PWA, and kiosk displays.
 
 SalahOS is designed around accurate prayer calculations, selectable calculation methods and madhhab/Asr conventions, local mosque timetables, Adhan alerts and notifications, Hijri dates, Arabic/RTL support, connected mosque/display capabilities, and reliable offline prayer operation.
+
+**Home Prayer Hub development:** [display design and acceptance](docs/HOME_PRAYER_HUB.md) · [temporary progress checklist](TEMP_TODO_HOME_HUB.md).
 
 ## Project principles
 

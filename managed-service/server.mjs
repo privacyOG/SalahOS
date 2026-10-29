@@ -20,6 +20,7 @@ const TEMPLATE_IDS = new Set([
   'minimal-modern',
   'bold-countdown-focus',
   'structured-split-board',
+  'home-hub',
   'scenic-spiritual',
   'family-classroom',
 ]);
@@ -43,6 +44,7 @@ const FALLBACK_ARTWORK = {
   'minimal-modern': 'quiet-grid',
   'bold-countdown-focus': 'countdown-field',
   'structured-split-board': 'structured-lines',
+  'home-hub': 'structured-lines',
   'scenic-spiritual': 'scenic-gradient',
   'family-classroom': 'classroom-pattern',
 };

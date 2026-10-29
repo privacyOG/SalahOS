@@ -26,18 +26,19 @@ function sourcedSydneyDashboard() {
 }
 
 describe('prayer-board template engine', () => {
-  it('publishes the six required stable versioned templates', () => {
+  it('publishes the seven stable versioned templates', () => {
     expect(prayerBoardTemplateRegistry.map((template) => template.id)).toEqual([
       'heritage-classic',
       'minimal-modern',
       'bold-countdown-focus',
       'structured-split-board',
+      'home-hub',
       'scenic-spiritual',
       'family-classroom',
     ]);
-    expect(new Set(prayerBoardTemplateRegistry.map((template) => template.id)).size).toBe(6);
+    expect(new Set(prayerBoardTemplateRegistry.map((template) => template.id)).size).toBe(7);
     expect(prayerBoardTemplateRegistry.map((template) => template.version)).toEqual([
-      1, 1, 1, 1, 1, 1,
+      1, 1, 1, 1, 1, 1, 1,
     ]);
     expect(
       prayerBoardTemplateRegistry.every(

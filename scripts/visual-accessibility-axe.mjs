@@ -39,12 +39,15 @@ function settings(locale = 'en', theme = 'light') {
   };
 }
 
-async function seed(page, locale, theme) {
+async function seed(page, locale, theme, config = null) {
   await page.addInitScript(
-    (persisted) => {
+    ({ persisted, config }) => {
       localStorage.setItem('salahos.settings', JSON.stringify(persisted));
+      if (config !== null) {
+        localStorage.setItem('salahos.prayerBoardDisplayConfig', JSON.stringify(config));
+      }
     },
-    settings(locale, theme),
+    { persisted: settings(locale, theme), config },
   );
 }
 
@@ -111,6 +114,18 @@ async function assertViewportContainment(page, scenario) {
   return metrics;
 }
 
+function homeHubConfig(locale) {
+  return {
+    version: 1,
+    templateId: 'home-hub',
+    primaryLocale: locale,
+    languageMode: 'single',
+    timeFormat: 'h23',
+    accentPreset: locale === 'ar' ? 'midnight' : 'neutral',
+    branding: { mosqueName: { [locale]: locale === 'ar' ? 'مسجد صلاح' : 'SalahOS Masjid' } },
+  };
+}
+
 const scenarios = [
   {
     name: 'axe-today-en',
@@ -133,6 +148,26 @@ const scenarios = [
     locale: 'ar',
     theme: 'dark',
   },
+  {
+    name: 'axe-home-hub-1280x800-en',
+    url: '/?mode=smart-display&template=home-hub',
+    ready: '[data-prayer-board-template="home-hub"]',
+    locale: 'en',
+    theme: 'light',
+    width: 1280,
+    height: 800,
+    boardConfig: homeHubConfig('en'),
+  },
+  {
+    name: 'axe-home-hub-phone-ar-rtl',
+    url: '/?mode=smart-display&template=home-hub',
+    ready: '[data-prayer-board-template="home-hub"]',
+    locale: 'ar',
+    theme: 'dark',
+    width: 390,
+    height: 844,
+    boardConfig: homeHubConfig('ar'),
+  },
 ];
 
 await mkdir(artifactDirectory, { recursive: true });
@@ -141,13 +176,13 @@ const results = [];
 try {
   for (const scenario of scenarios) {
     const context = await browser.newContext({
-      viewport: { width: 390, height: 844 },
+      viewport: { width: scenario.width ?? 390, height: scenario.height ?? 844 },
       reducedMotion: 'reduce',
       serviceWorkers: 'block',
       bypassCSP: true,
     });
     const page = await context.newPage();
-    await seed(page, scenario.locale, scenario.theme);
+    await seed(page, scenario.locale, scenario.theme, scenario.boardConfig ?? null);
     await page.goto(`${baseUrl}${scenario.url}`, { waitUntil: 'networkidle' });
     await page.locator(scenario.ready).waitFor({ state: 'visible' });
     const containment = await assertViewportContainment(page, scenario);
