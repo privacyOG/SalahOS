@@ -282,6 +282,69 @@ async function validateRuntime(browser, scenario) {
   }
 }
 
+async function verifyHomeHubTimeTransition(browser, scenario) {
+  const context = await browser.newContext({
+    viewport: { width: 1280, height: 800 },
+    timezoneId: 'Australia/Sydney',
+    reducedMotion: 'reduce',
+    serviceWorkers: 'block',
+  });
+  const page = await context.newPage();
+  try {
+    await page.clock.install({ time: new Date(scenario.initialIso) });
+    await seed(page, 'en', board('home-hub', 'en', 'SalahOS Community Masjid'));
+    await page.goto(`${baseUrl}/?mode=smart-display&template=home-hub`, {
+      waitUntil: 'networkidle',
+    });
+    await page.locator('[data-prayer-board-template="home-hub"]').waitFor({ state: 'visible' });
+    const clock = page.locator('.structured-split-board__clock > strong');
+    const date = page.locator('.structured-split-board__dates span').first();
+    const countdown = page.locator('.structured-split-board__countdown strong');
+    const before = {
+      clock: (await clock.textContent()) ?? '',
+      date: (await date.textContent()) ?? '',
+      countdown: (await countdown.textContent()) ?? '',
+    };
+    await page.clock.fastForward(20_000);
+    await page.waitForFunction(
+      (previous) => {
+        const text = document.querySelector('.structured-split-board__clock > strong')?.textContent;
+        return text !== null && text !== previous;
+      },
+      before.clock,
+    );
+    const after = {
+      clock: (await clock.textContent()) ?? '',
+      date: (await date.textContent()) ?? '',
+      countdown: (await countdown.textContent()) ?? '',
+    };
+    if (before.countdown === after.countdown) {
+      throw new Error(`${scenario.name} countdown did not update after clock advancement`);
+    }
+    if (scenario.expectDateChange && before.date === after.date) {
+      throw new Error(`${scenario.name} Gregorian date did not advance at Sydney midnight`);
+    }
+    if (scenario.expectDstBackward && (!before.clock.includes('02:59') || !after.clock.includes('02:00'))) {
+      throw new Error(
+        `${scenario.name} did not follow Sydney daylight-saving rollback: ${JSON.stringify({ before, after })}`,
+      );
+    }
+    if (scenario.verifyOffline) {
+      await context.setOffline(true);
+      await page.evaluate(() => window.dispatchEvent(new Event('offline')));
+      await page.locator('.home-hub-board .smart-display-status').waitFor({
+        state: 'visible',
+      });
+      if ((await page.locator('.home-hub-board [data-prayer]').count()) !== 5) {
+        throw new Error('Home Hub lost prayer times when network connectivity was disabled');
+      }
+    }
+    return { name: scenario.name, before, after, offlineWhileOpen: scenario.verifyOffline };
+  } finally {
+    await context.close();
+  }
+}
+
 await mkdir(artifactDirectory, { recursive: true });
 const browser = await chromium.launch({ headless: true });
 try {
@@ -333,6 +396,24 @@ try {
     },
   ]) {
     results.push(await validateRuntime(browser, scenario));
+  }
+  for (const scenario of [
+    {
+      name: 'home-hub-sydney-midnight-offline',
+      initialIso: '2026-10-29T12:59:50.000Z',
+      expectDateChange: true,
+      expectDstBackward: false,
+      verifyOffline: true,
+    },
+    {
+      name: 'home-hub-sydney-daylight-saving-rollback',
+      initialIso: '2026-04-04T15:59:50.000Z',
+      expectDateChange: false,
+      expectDstBackward: true,
+      verifyOffline: false,
+    },
+  ]) {
+    results.push(await verifyHomeHubTimeTransition(browser, scenario));
   }
   await writeFile(
     path.join(artifactDirectory, 'prayer-board-config-results.json'),
