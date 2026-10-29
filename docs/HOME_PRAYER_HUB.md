@@ -32,7 +32,7 @@ The Home Hub classic colour scheme explicitly maintains contrast for the next-pr
 | Offline/timezone   | Relevant platforms    | Correct local times and source indication after clock/resume changes    |
 | Accessibility      | All above             | Focus visibility, contrast, reduced motion and forced-colour robustness |
 
-Technical CI/visual and physical-device acceptance are recorded separately in `TEMP_TODO_HOME_HUB.md`. Do not claim them complete merely from code review.
+Technical CI/visual status is recorded in `TEMP_TODO_HOME_HUB.md`. The device-level test procedures and evidence form are in [Home Hub physical-device acceptance](HOME_HUB_DEVICE_ACCEPTANCE.md). The iOS Simulator build workflow has a separately reported, nonblocking runtime stage; a green Xcode build does not establish successful install/launch/relaunch, signing or physical device acceptance.
 
 ## Implementation
 
