@@ -306,13 +306,10 @@ async function verifyHomeHubTimeTransition(browser, scenario) {
       countdown: (await countdown.textContent()) ?? '',
     };
     await page.clock.fastForward(20_000);
-    await page.waitForFunction(
-      (previous) => {
-        const text = document.querySelector('.structured-split-board__clock > strong')?.textContent;
-        return text !== null && text !== previous;
-      },
-      before.clock,
-    );
+    await page.waitForFunction((previous) => {
+      const text = document.querySelector('.structured-split-board__clock > strong')?.textContent;
+      return text !== null && text !== previous;
+    }, before.clock);
     const after = {
       clock: (await clock.textContent()) ?? '',
       date: (await date.textContent()) ?? '',
@@ -324,7 +321,10 @@ async function verifyHomeHubTimeTransition(browser, scenario) {
     if (scenario.expectDateChange && before.date === after.date) {
       throw new Error(`${scenario.name} Gregorian date did not advance at Sydney midnight`);
     }
-    if (scenario.expectDstBackward && (!before.clock.includes('02:59') || !after.clock.includes('02:00'))) {
+    if (
+      scenario.expectDstBackward &&
+      (!before.clock.includes('02:59') || !after.clock.includes('02:00'))
+    ) {
       throw new Error(
         `${scenario.name} did not follow Sydney daylight-saving rollback: ${JSON.stringify({ before, after })}`,
       );
